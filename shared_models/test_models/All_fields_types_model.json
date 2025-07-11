@@ -1,0 +1,12 @@
+{
+    "name": "AllFieldTypesModel",
+    "fields": {
+      "id": "string",
+      "title": "string",
+      "price": "number",
+      "available": "boolean",
+      "image": "image",
+      "location": "geopoint",
+      "created": "datetime"
+    }
+  }

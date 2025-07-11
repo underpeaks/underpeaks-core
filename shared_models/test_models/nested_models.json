@@ -1,0 +1,21 @@
+[
+  {
+    "name": "NestedModel",
+    "fields": {
+      "id": "string",
+      "author": {
+        "type": "model",
+        "of": "User"
+      },
+      "content": "string"
+    }
+  },
+  {
+    "name": "User",
+    "fields": {
+      "id": "string",
+      "name": "string",
+      "email": { "type": "string", "optional": true }
+    }
+  }
+]

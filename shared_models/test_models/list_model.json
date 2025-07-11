@@ -1,0 +1,12 @@
+ {
+    "name": "ListModelsModel",
+    "fields": {
+      "id": "string",
+      "comments": {
+        "type": "List",
+        "of": "Comment"
+      }
+    }
+  }
+
+  

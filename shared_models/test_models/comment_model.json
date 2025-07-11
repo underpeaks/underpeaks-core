@@ -1,0 +1,12 @@
+{
+    "name": "Comment",
+    "fields": {
+      "id": "string",
+      "text": "string",
+      "author": {
+        "type": "model",
+        "of": "User"
+      },
+      "createdAt": "datetime"
+    }
+  }

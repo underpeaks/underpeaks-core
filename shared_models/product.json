@@ -1,0 +1,13 @@
+{
+  "name": "Product",
+  "fields": {
+    "id": "string",
+    "title": "string",
+    "price": "number",
+    "available": {
+      "type": "boolean",
+      "optional": true
+    },
+    "image": "image"
+  }
+}

@@ -1,0 +1,24 @@
+
+  {
+    "name": "SimpleModel",
+    "fields": {
+      "id": "string",
+      "title": "string",
+      "count": "number",
+      "isActive": "boolean"
+    }
+  }
+
+  
+  
+
+  
+
+ 
+
+  
+
+  
+
+ 
+

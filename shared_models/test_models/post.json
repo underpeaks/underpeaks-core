@@ -1,0 +1,24 @@
+{
+  "name": "Post",
+  "fields": {
+    "id": "string",
+    "author": {
+      "type": "model",
+      "of": "User"
+    },
+    "metadata": {
+      "type": "Object",
+      "fields": {
+        "likes": "number",
+        "shares": {
+          "type": "number",
+          "optional": true
+        }
+      }
+    },
+    "tags": {
+      "type": "List",
+      "of": "string"
+    }
+  }
+}

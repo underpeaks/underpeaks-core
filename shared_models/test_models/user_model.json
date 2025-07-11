@@ -1,0 +1,8 @@
+{
+    "name": "User",
+    "fields": {
+      "id": "string",
+      "name": "string",
+      "email": { "type": "string", "optional": true }
+    }
+  }

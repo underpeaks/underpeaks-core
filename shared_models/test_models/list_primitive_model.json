@@ -1,0 +1,15 @@
+{
+    "name": "ListPrimitivesModel",
+    "fields": {
+      "id": "string",
+      "tags": {
+        "type": "List",
+        "of": "string"
+      },
+      "scores": {
+        "type": "List",
+        "of": "number",
+        "optional": true
+      }
+    }
+  }
