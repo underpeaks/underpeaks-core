@@ -1,0 +1,19 @@
+// /packages/app/db/prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../../generated/client" // adjust path as needed
+}
+
+datasource db {
+  provider = "postgresql" // or "sqlite", "mysql", "mongodb", etc.
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+}

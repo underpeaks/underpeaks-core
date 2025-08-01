@@ -1,0 +1,17 @@
+{
+  "node": {
+    "4036550be825716589b7c00a0fcd7e58652cb2d00b": {
+      "workers": {
+        "app/(auth)/signin/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22%2FUsers%2Fantonwentzel%2Fnxtflutter_core%2Fmain%2Fapp%2Fapp%2F(auth)%2Fsignin%2Factions%2Fsignin.ts%22%2C%5B%7B%22id%22%3A%224036550be825716589b7c00a0fcd7e58652cb2d00b%22%2C%22exportedName%22%3A%22signin%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": false
+        }
+      },
+      "layer": {
+        "app/(auth)/signin/page": "action-browser"
+      }
+    }
+  },
+  "edge": {},
+  "encryptionKey": "In+Veb5zix1dLv04e+4MiDKoUAEiY20pzTZYO/sX3Tw="
+}

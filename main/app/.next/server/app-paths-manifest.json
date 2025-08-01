@@ -1,0 +1,7 @@
+{
+  "/installer/page": "app/installer/page.js",
+  "/installer/demo/page": "app/installer/demo/page.js",
+  "/installer/models/page": "app/installer/models/page.js",
+  "/installer/finalise/page": "app/installer/finalise/page.js",
+  "/installer/ecommerce/page": "app/installer/ecommerce/page.js"
+}

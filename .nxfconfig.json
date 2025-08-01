@@ -3,4 +3,6 @@
   "flutterPath": "./generated/flutter_app",
   "nextPath": "./generated/next_app",
   "database": "postgres"
+  
 }
+
