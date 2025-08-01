@@ -1,0 +1,200 @@
+///***********************************************************************************//
+///TODO*********************************START****************************************///
+///***********************************************************************************//
+
+///----------------------------------------------------------------------------------///
+///CMS*********///
+///----------------------------------------------------------------------------------///
+
+///******DASHBOARD******///
+///TODO 1. CREATE DASHBOARD LAYOUT.
+///TODO 2. FETCH DATA DYNAMICALLY BASED ON MODELS.
+///*********************///
+
+///*******PRODUCTS********///
+///TODO 1. CREATE PRODUCTS LAYOUT.
+///TODO 2. CREATE/EDIT/DELETE PRODUCTS.
+///TODO 3. CREATE PAGE BASED ON PRODUCTS MODELS DYNAMICALLY.
+///TODO 4. VALIDATE PRODUCT FORM FIELDS (NOT NULL, PRICE > 0, ETC).
+///TODO 5. ADD SEO FIELDS (TITLE, META, SLUG, ETC).
+///*********************///
+
+
+///*******ORDERS***********///
+///TODO 1. CREATE ORDERS LAYOUT.
+///TODO 2. CREATE/EDIT/DELETE ORDERS.
+///TODO 3. CREATE PAGE BASED ON ORDERS MODELS DYNAMICALLY.
+///TODO 4. VALIDATE ORDER FORM FIELDS.
+///*********************///
+
+
+///*******USERS************///
+///TODO 1. CREATE USERS LAYOUT.
+///TODO 2. CREATE/EDIT/DELETE USERS.
+///TODO 3. CREATE PAGE BASED ON USERS MODELS DYNAMICALLY.
+///TODO 4. VALIDATE USER FORM (EMAIL, PASSWORD STRENGTH).
+///*********************///
+
+
+///*******CATEGORIES********///
+///TODO 1. CREATE CATEGORIES LAYOUT.
+///TODO 2. CREATE/EDIT/DELETE CATEGORIES.
+///TODO 3. CREATE PAGE BASED ON CATEGORIES MODELS DYNAMICALLY.
+///TODO 4. ADD SEO FIELDS FOR CATEGORY PAGES.
+///*********************///
+
+
+///*******COUPONS************///
+///TODO 1. CREATE COUPONS LAYOUT.
+///TODO 2. CREATE/EDIT/DELETE COUPONS.
+///TODO 3. CREATE PAGE BASED ON COUPONS MODELS DYNAMICALLY.
+///TODO 4. VALIDATE COUPON FIELDS (DATE RANGE, % DISCOUNT ETC).
+///*********************///
+
+
+///********SHIPPING**********///
+///TODO 1. CREATE SHIPPING LAYOUT.
+///TODO 2. CREATE/EDIT/DELETE SHIPPING.
+///TODO 3. CREATE PAGE BASED ON SHIPPING MODELS DYNAMICALLY.
+///*********************///
+
+
+///*********SERVICES**********///
+///TODO 1. CREATE SERVICES LAYOUT.
+///TODO 2. CREATE/EDIT/DELETE SERVICES.
+///TODO 3. CREATE PAGE BASED ON SERVICES MODELS DYNAMICALLY.
+///TODO 4. ADD SEO FIELDS FOR SERVICE PAGES.
+///*********************///
+
+
+///--------------------------------------------------------------------------------------///
+///CONTENT*********///
+///--------------------------------------------------------------------------------------///
+
+///*********MODELS**********///
+///TODO 1. CREATE/EDIT/DELETE MODELS ///DONE
+///TODO 2. VIEW JSON SCHEMA ///DONE
+///TODO 3. FIELD VALIDATIONS ///DONE
+///TODO 4. SUPPORT FOR SEO/SSR FIELDS IN MODEL DEFINITIONS.
+///*********************///
+
+
+///*********LAYOUT***********///
+///TODO 1. CREATE/EDIT/DELETE PAGE LAYOUTS.
+///*********************///
+
+
+///**********PAGES***********///
+///TODO 1. CREATE/EDIT/DELETE PAGES.
+///TODO 2. CONNECT LAYOUTS TO PAGES.
+///TODO 3. ADD SEO FIELDS TO PAGES.
+///TODO 4. TOGGLE SSR + SEO ENABLEMENT FOR STUDIO USERS.
+///*********************///
+
+
+///--------------------------------------------------------------------------------------///
+///ASSETS/CDN*********///
+///--------------------------------------------------------------------------------------///
+
+///**********MEDIA LIBRARY**********///
+///TODO 1. GALLERY VIEW.
+///TODO 2. FILTER & SEARCH MEDIA ITEMS.
+///TODO 3. DRAG AND DROP SUPPORT.
+///*********************///
+
+
+///**********CDN UPLOADS************///
+///TODO 1. IMAGE UPLOADS.
+///TODO 2. MULTIPLE IMAGE UPLOADS.
+///TODO 3. PROGRESS BAR ON UPLOAD.
+///TODO 4. VIDEO/FILE SUPPORT (OPTIONAL).
+///*********************///
+
+
+///--------------------------------------------------------------------------------------///
+///CONFIGURATION*********///
+///--------------------------------------------------------------------------------------///
+
+///********INTEGRATIONS***********///
+///TODO 1. PAYMENT PROCESSORS.
+///TODO 2. DB ADAPTER.
+///TODO 3. MANAGE SIDEBAR MENU ITEMS.
+///TODO 4. CONFIGURE SMTP / EMAIL SERVICE.
+///*********************///
+
+
+///*********APIS AND WEB HOOKS***********///
+///TODO 1. PRODUCT API.
+///TODO 2. USER API.
+///TODO 3. ORDER API.
+///TODO 4. COUPONS API.
+///TODO 5. SHIPPING API.
+///TODO 6. CATEGORIES API.
+///TODO 7. SERVICES API.
+///TODO 8. PAYMENT PROCESSOR APIs.
+///TODO 9. IMAGE API.
+///TODO 10. GENERATE API DOCS (OPENAPI/POSTMAN).
+///TODO 11. WEBHOOKS CONFIG PANEL.
+///*********************///
+
+
+///--------------------------------------------------------------------------------------///
+///SETTINGS*********///
+///--------------------------------------------------------------------------------------///
+///TODO 1. Currency Settings.
+///TODO 2. Language Settings.
+///TODO 3. Timezone & Regional Settings.
+///TODO 4. Environment Variables.
+///TODO 5. Branding Settings (Studio Logo, Colors etc).
+///*********************///
+
+
+///--------------------------------------------------------------------------------------///
+///LOGOUT*********///
+///--------------------------------------------------------------------------------------///
+///TODO 1. Logout Functionality.
+///TODO 2. Confirm Before Logout Modal.
+
+///--------------------------------------------------------------------------------------///
+///NAVBAR*********///
+///--------------------------------------------------------------------------------------///
+///TODO 1. Profile Link/Page.
+///TODO 2. Notification Icon with Dropdown.
+///TODO 3. Help / Docs Link.
+
+///--------------------------------------------------------------------------------------///
+///SIDEBAR*********///
+///--------------------------------------------------------------------------------------///
+///TODO 1. FETCH MENU DYNAMICALLY.
+///TODO 2. ALLOW USERS TO CREATE MENU ITEMS IN THE SIDEBAR.
+///TODO 3. ENABLE DRAG/DROP REORDER.
+///TODO 4. ICON PICKER FOR ITEMS.
+
+///--------------------------------------------------------------------------------------///
+///INSTALLER*********///
+///--------------------------------------------------------------------------------------///
+///TODO 1. INSTALLER GUI.
+///TODO 2. HOSTED VS SELF-HOSTED SWITCH.
+///TODO 3. CODE GEN AND FILE GEN.
+///TODO 4. CLI TOOLING FOR DEPLOYMENT.
+///TODO 5. PREVIEW THEME BEFORE INSTALL.
+///TODO 6. VALIDATION FOR REQUIRED FIELDS (DB, DOMAIN, ETC).
+
+///--------------------------------------------------------------------------------------///
+///AUTH FLOW*********///
+///--------------------------------------------------------------------------------------///
+///TODO 1. MULTI-STEP FORM FLOW.
+///TODO 2. VALIDATE EMAIL/PASSWORD FIELDS.
+///TODO 3. PASSWORD STRENGTH CHECK (8+ CHAR, UPPERCASE, SYMBOL).
+///TODO 4. SHOW LOADER ON CONTINUE.
+///TODO 5. REMEMBER USER / SESSION HANDLING.
+
+///--------------------------------------------------------------------------------------///
+///THEMES AND PLUGINS*********///
+///--------------------------------------------------------------------------------------///
+///TODO 1. UPLOAD THEMES AND PLUGINS.
+///TODO 2. INSTALL THEMES AND PLUGINS.
+
+///***********************************************************************************//
+///TODO*********************************END******************************************///
+///***********************************************************************************//

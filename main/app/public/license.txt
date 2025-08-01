@@ -1,0 +1,199 @@
+
+NEXTFLUTTER STUDIO
+COMPREHENSIVE LICENSE AGREEMENT, TERMS & CONDITIONS, AND PRIVACY POLICY
+
+---------------------------------------------------------
+TABLE OF CONTENTS
+---------------------------------------------------------
+1. Definitions and Interpretation
+2. Grant of License
+3. License Restrictions and Obligations
+4. Intellectual Property Rights
+5. Payment Terms and Fees
+6. User Accounts and Security
+7. User Content and Conduct
+8. Data Privacy and Protection
+9. Confidentiality
+10. Warranties and Disclaimers
+11. Limitation of Liability
+12. Indemnification
+13. Term and Termination
+14. Effects of Termination
+15. Governing Law and Jurisdiction
+16. Dispute Resolution
+17. Force Majeure
+18. Miscellaneous
+19. Privacy Policy
+20. Cookies Policy
+21. Contact Information
+
+---------------------------------------------------------
+1. Definitions and Interpretation
+---------------------------------------------------------
+1.1 Definitions of key terms used in this Agreement.
+1.2 Interpretation rules and references.
+
+---------------------------------------------------------
+2. Grant of License
+---------------------------------------------------------
+2.1 License grant for Self-Hosted Use
+2.2 Conditions for Hosted Services usage
+2.3 Limitations on sublicensing, resale, or redistribution.
+
+---------------------------------------------------------
+3. License Restrictions and Obligations
+---------------------------------------------------------
+3.1 Prohibited uses including reverse engineering, competing products.
+3.2 Obligation to comply with laws and export regulations.
+3.3 Responsibility for compliance with third-party licenses.
+
+---------------------------------------------------------
+4. Intellectual Property Rights
+---------------------------------------------------------
+4.1 Ownership retention by NextFlutter Studio.
+4.2 No transfer of ownership except license.
+4.3 Protection of trademarks, branding, and trade secrets.
+
+---------------------------------------------------------
+5. Payment Terms and Fees
+---------------------------------------------------------
+5.1 Fee structures for hosted services.
+5.2 Billing and payment schedules.
+5.3 Taxes, refunds, and invoicing.
+5.4 Consequences of non-payment.
+
+---------------------------------------------------------
+6. User Accounts and Security
+---------------------------------------------------------
+6.1 Account creation, maintenance, and authentication.
+6.2 User responsibility for account confidentiality.
+6.3 Reporting security incidents.
+6.4 Suspension for security violations.
+
+---------------------------------------------------------
+7. User Content and Conduct
+---------------------------------------------------------
+7.1 Responsibility for all data and content uploaded or generated.
+7.2 Prohibited content and activities.
+7.3 Monitoring and removal of unlawful content.
+7.4 Cooperation with law enforcement.
+
+---------------------------------------------------------
+8. Data Privacy and Protection
+---------------------------------------------------------
+8.1 Data collected, purposes, and retention.
+8.2 Compliance with GDPR, POPIA, and other laws.
+8.3 Data subject rights.
+8.4 Data security measures.
+8.5 Third-party processors and data transfers.
+
+---------------------------------------------------------
+9. Confidentiality
+---------------------------------------------------------
+9.1 Definition and obligations.
+9.2 Exclusions and permitted disclosures.
+9.3 Duration of confidentiality obligations.
+
+---------------------------------------------------------
+10. Warranties and Disclaimers
+---------------------------------------------------------
+10.1 Disclaimer of all warranties, express and implied.
+10.2 No guarantee of uninterrupted operation.
+10.3 Disclaimer regarding third-party integrations.
+
+---------------------------------------------------------
+11. Limitation of Liability
+---------------------------------------------------------
+11.1 Limitation on damages.
+11.2 Cap on total liability.
+11.3 Exclusion of consequential damages.
+11.4 Applicability to claims under statute.
+
+---------------------------------------------------------
+12. Indemnification
+---------------------------------------------------------
+12.1 Indemnity obligations of the User.
+12.2 Procedures for indemnification claims.
+12.3 Survival of indemnity obligations.
+
+---------------------------------------------------------
+13. Term and Termination
+---------------------------------------------------------
+13.1 Effective date and duration.
+13.2 Grounds for termination.
+13.3 Notice and cure periods.
+13.4 Automatic termination provisions.
+
+---------------------------------------------------------
+14. Effects of Termination
+---------------------------------------------------------
+14.1 Cessation of use.
+14.2 Data deletion or return.
+14.3 Survival of certain provisions.
+
+---------------------------------------------------------
+15. Governing Law and Jurisdiction
+---------------------------------------------------------
+15.1 Choice of law: South Africa.
+15.2 Jurisdiction and venue.
+15.3 Waiver of jury trial or other rights (where applicable).
+
+---------------------------------------------------------
+16. Dispute Resolution
+---------------------------------------------------------
+16.1 Good faith negotiations.
+16.2 Mediation and arbitration procedures.
+16.3 Litigation rights and remedies.
+
+---------------------------------------------------------
+17. Force Majeure
+---------------------------------------------------------
+17.1 Definition and examples.
+17.2 Suspension of obligations.
+17.3 Notice requirements.
+
+---------------------------------------------------------
+18. Miscellaneous
+---------------------------------------------------------
+18.1 Entire agreement clause.
+18.2 Amendments and modifications.
+18.3 Assignment and delegation.
+18.4 Severability.
+18.5 No waiver.
+18.6 Notices.
+18.7 Relationship of parties.
+
+---------------------------------------------------------
+19. Privacy Policy
+---------------------------------------------------------
+19.1 Personal information collected.
+19.2 Use of personal data.
+19.3 Data sharing and disclosures.
+19.4 Security of data.
+19.5 User rights to access, correction, deletion.
+19.6 International data transfers.
+19.7 Retention period.
+19.8 Cookies and tracking technologies.
+
+---------------------------------------------------------
+20. Cookies Policy
+---------------------------------------------------------
+20.1 What are cookies.
+20.2 Types of cookies used.
+20.3 Managing cookies.
+20.4 Consent and withdrawal.
+
+---------------------------------------------------------
+21. Contact Information
+---------------------------------------------------------
+For any questions or concerns, please contact:
+
+NextFlutter Studio  
+Legal Department  
+Email: legal@nextflutter.com  
+Website: https://nextflutter.com  
+
+---------------------------------------------------------
+
+© 2025 NextFlutter Studio. All rights reserved.
+
