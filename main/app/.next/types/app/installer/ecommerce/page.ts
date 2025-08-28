@@ -1,8 +1,8 @@
 // File: /Users/antonwentzel/nxtflutter_core/main/app/app/installer/ecommerce/page.tsx
-import * as entry from '../../../../../app/installer/ecommerce/page.js'
+import * as entry from '../../../../../installer/ecommerce/page.jsx'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../../app/installer/ecommerce/page.js')
+type TEntry = typeof import('../../../../../installer/ecommerce/page.jsx')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }

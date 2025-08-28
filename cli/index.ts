@@ -1,8 +1,9 @@
 // cli/index.ts
 
 import { Command } from 'commander'
-import { version } from '../package.json'
-import { generateAllModels, generateModelsByName } from '../generators/generateAll'
+import { version } from 'react'
+import { generateAllModels } from '../generators/generateAll'
+
 
 // Initialize the CLI program
 const program = new Command()
@@ -62,3 +63,7 @@ program
 
 // Parse the CLI arguments
 program.parse()
+function generateModelsByName(arg0: any[], arg1: { flutter: boolean; next: boolean; force: any; format: any; mocks: any }) {
+  throw new Error('Function not implemented.')
+}
+

@@ -1,0 +1,54 @@
+{
+  "table_name": "nxf_shipping",
+  "primary_key": "ship_id",
+  "columns": {
+    "id": {
+      "type": "string"
+    },
+    "order_id": {
+      "type": "string",
+      "references": {
+        "table": "orders",
+        "column": "ord_id",
+        "on_delete": "CASCADE"
+      }
+    },
+    "shipping_method": {
+      "type": "string"
+    },
+    "shipping_address_line1": {
+      "type": "string"
+    },
+    "shipping_address_line2": {
+      "type": "string"
+    },
+    "shipping_city": {
+      "type": "string"
+    },
+    "shipping_state": {
+      "type": "string"
+    },
+    "shipping_postal_code": {
+      "type": "string"
+    },
+    "shipping_country": {
+      "type": "string"
+    },
+    "tracking_number": {
+      "type": "string"
+    },
+    "shipped_at": {
+      "type": "datetime"
+    },
+    "delivered_at": {
+      "type": "datetime"
+    },
+    "created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "updated_at": {
+      "type": "datetime"
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "table_name": "nxf_users",
+  "schema": "public",
+  "columns": [
+    { "name": "user_id", "type": "uuid", "is_primary": true, "nullable": false, "default": "gen_random_uuid()" },
+    { "name": "user_email", "type": "string", "nullable": false, "unique": true },
+    { "name": "password_hash", "type": "string", "nullable": false },
+    { "name": "full_name", "type": "string", "nullable": true },
+    { "name": "role", "type": "string", "nullable": true },
+    { "name": "created_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" },
+    { "name": "updated_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+  ],
+  "tablespace": "pg_default"
+}

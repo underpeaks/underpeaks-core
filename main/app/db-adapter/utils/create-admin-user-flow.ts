@@ -1,0 +1,85 @@
+import crypto from 'crypto';
+import { getAdapter } from '../index';
+import { DBConfig } from '../types';
+
+export async function createAdminUserFlow(
+  config: DBConfig,
+  adminUser: { email: string; password: string; fullName: string },
+  projectName: string,
+  subdomain: string
+) {
+  if (!adminUser.email || !adminUser.password) {
+    throw new Error('Admin user must have email and password');
+  }
+
+  const adapter = getAdapter(config.type, config);
+  if (!adapter) throw new Error(`No adapter found for DB type: ${config.type}`);
+
+  let authUserId: string = crypto.randomUUID();
+  let project_id = '';
+  let tenantId = '';
+
+  console.log('Admin Email:', adminUser.email);
+
+  // 1️⃣ Ensure user exists in Auth
+  let existingAuthUser = adapter.findUserByEmail ? await adapter.findUserByEmail(config, adminUser.email) : null;
+
+  if (existingAuthUser) {
+    authUserId = existingAuthUser.id || existingAuthUser.uid || authUserId;
+    console.log('Existing auth user found:', authUserId);
+  } else if (adapter.registerUserInAuth) {
+    const authUser = await adapter.registerUserInAuth(config, {
+      email: adminUser.email,
+      password: adminUser.password,
+    });
+    authUserId = authUser.id || authUser.uid || authUserId;
+    console.log('Created new auth user:', authUserId);
+  }
+
+  // 2️⃣ Ensure user exists in DB users
+  const existingDbUser = adapter.findUserByEmail ? await adapter.findUserByEmail(config, adminUser.email) : null;
+
+  if (!existingDbUser && adapter.createAdminUser) {
+    console.log('Creating admin user in DB...');
+    await adapter.createAdminUser(config, {
+      user_id: authUserId,
+      user_email: adminUser.email,
+      full_name: adminUser.fullName,
+      password: adminUser.password,
+      role: 'admin',
+      created_at: new Date(),
+    });
+  } else {
+    console.log('User already exists in DB:', existingDbUser?.id || existingDbUser?.uid);
+  }
+
+  // 3️⃣ Projects
+  const existingProject = adapter.findProjectByOwnerId ? await adapter.findProjectByOwnerId(config, authUserId) : null;
+
+  if (existingProject) {
+    project_id = existingProject.id;
+    console.log('Found existing project:', project_id);
+  } else if (adapter.createProject) {
+    project_id = await adapter.createProject(config, {
+      name: projectName || 'defaultproject',
+      user_id: authUserId,
+    });
+    console.log('Created new project:', project_id);
+  }
+
+  // 4️⃣ Tenants
+  const existingTenant = adapter.findTenantByUserEmail ? await adapter.findTenantByUserEmail(config, adminUser.email) : null;
+
+  if (existingTenant) {
+    tenantId = existingTenant.id;
+    console.log('Found existing tenant:', tenantId);
+  } else if (adapter.createTenant) {
+    tenantId = await adapter.createTenant(config, {
+      subdomain: subdomain || 'console',
+      user_email: adminUser.email,
+    });
+    console.log('Created new tenant:', tenantId);
+  }
+
+  return { authUserId, project_id, tenantId };
+}

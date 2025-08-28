@@ -1,0 +1,62 @@
+{
+  "table_name": "nxf_coupons",
+  "primary_key": "coup_id",
+  "columns": {
+    "id": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string",
+      "nullable": false,
+      "unique": true
+    },
+    "description": {
+      "type": "string",
+      "nullable": true
+    },
+    "discount_type": {
+      "type": "string",
+      "nullable": false,
+      "default": "percentage",
+      "enum": ["percentage", "fixed_amount"]
+    },
+    "discount_value": {
+      "type": "double",
+      "nullable": false
+    },
+    "min_purchase_amount": {
+      "type": "double",
+      "nullable": true
+    },
+    "max_uses": {
+      "type": "integer",
+      "nullable": true
+    },
+    "used_count": {
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    "start_date": {
+      "type": "datetime",
+      "nullable": true
+    },
+    "expiry_date": {
+      "type": "datetime",
+      "nullable": true
+    },
+    "active": {
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    "created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "updated_at": {
+      "type": "datetime",
+      "nullable": true
+    }
+  }
+}

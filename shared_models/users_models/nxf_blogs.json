@@ -1,0 +1,66 @@
+{
+  "table_name": "nxf_blogs",
+  "primary_key": "blog_id",
+  "columns": {
+    "id": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string",
+      "nullable": false,
+      "references": {
+        "table": "projects",
+        "column": "project_id",
+        "on_delete": "CASCADE"
+      }
+    },
+    "title": {
+      "type": "string",
+      "nullable": false
+    },
+    "slug": {
+      "type": "string",
+      "nullable": false,
+      "unique": true
+    },
+    "content": {
+      "type": "jsonb",
+      "nullable": false
+    },
+    "author_id": {
+      "type": "string",
+      "nullable": false,
+      "references": {
+        "table": "users",
+        "column": "user_id",
+        "on_delete": "SET NULL"
+      }
+    },
+    "categories": {
+      "type": "array",
+      "nullable": true
+    },
+    "tags": {
+      "type": "array",
+      "nullable": true
+    },
+    "published_at": {
+      "type": "datetime",
+      "nullable": true
+    },
+    "status": {
+      "type": "string",
+      "nullable": false,
+      "default": "draft",
+      "enum": ["draft", "published", "archived"]
+    },
+    "created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "updated_at": {
+      "type": "datetime",
+      "nullable": true
+    }
+  }
+}

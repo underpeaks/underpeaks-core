@@ -1,0 +1,25 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+exports.id = "vendor-chunks/parse-ms";
+exports.ids = ["vendor-chunks/parse-ms"];
+exports.modules = {
+
+/***/ "(rsc)/./node_modules/parse-ms/index.js":
+/*!****************************************!*\
+  !*** ./node_modules/parse-ms/index.js ***!
+  \****************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"default\": () => (/* binding */ parseMilliseconds)\n/* harmony export */ });\nconst toZeroIfInfinity = value => Number.isFinite(value) ? value : 0;\n\nfunction parseNumber(milliseconds) {\n\treturn {\n\t\tdays: Math.trunc(milliseconds / 86_400_000),\n\t\thours: Math.trunc(milliseconds / 3_600_000 % 24),\n\t\tminutes: Math.trunc(milliseconds / 60_000 % 60),\n\t\tseconds: Math.trunc(milliseconds / 1000 % 60),\n\t\tmilliseconds: Math.trunc(milliseconds % 1000),\n\t\tmicroseconds: Math.trunc(toZeroIfInfinity(milliseconds * 1000) % 1000),\n\t\tnanoseconds: Math.trunc(toZeroIfInfinity(milliseconds * 1e6) % 1000),\n\t};\n}\n\nfunction parseBigint(milliseconds) {\n\treturn {\n\t\tdays: milliseconds / 86_400_000n,\n\t\thours: milliseconds / 3_600_000n % 24n,\n\t\tminutes: milliseconds / 60_000n % 60n,\n\t\tseconds: milliseconds / 1000n % 60n,\n\t\tmilliseconds: milliseconds % 1000n,\n\t\tmicroseconds: 0n,\n\t\tnanoseconds: 0n,\n\t};\n}\n\nfunction parseMilliseconds(milliseconds) {\n\tswitch (typeof milliseconds) {\n\t\tcase 'number': {\n\t\t\tif (Number.isFinite(milliseconds)) {\n\t\t\t\treturn parseNumber(milliseconds);\n\t\t\t}\n\n\t\t\tbreak;\n\t\t}\n\n\t\tcase 'bigint': {\n\t\t\treturn parseBigint(milliseconds);\n\t\t}\n\n\t\t// No default\n\t}\n\n\tthrow new TypeError('Expected a finite number or bigint');\n}\n//# sourceURL=[module]\n//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiKHJzYykvLi9ub2RlX21vZHVsZXMvcGFyc2UtbXMvaW5kZXguanMiLCJtYXBwaW5ncyI6Ijs7OztBQUFBOztBQUVBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7QUFDQTs7QUFFZTtBQUNmO0FBQ0E7QUFDQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBO0FBQ0E7O0FBRUE7QUFDQTs7QUFFQTtBQUNBIiwic291cmNlcyI6WyIvVXNlcnMvYW50b253ZW50emVsL254dGZsdXR0ZXJfY29yZS9tYWluL25vZGVfbW9kdWxlcy9wYXJzZS1tcy9pbmRleC5qcyJdLCJzb3VyY2VzQ29udGVudCI6WyJjb25zdCB0b1plcm9JZkluZmluaXR5ID0gdmFsdWUgPT4gTnVtYmVyLmlzRmluaXRlKHZhbHVlKSA/IHZhbHVlIDogMDtcblxuZnVuY3Rpb24gcGFyc2VOdW1iZXIobWlsbGlzZWNvbmRzKSB7XG5cdHJldHVybiB7XG5cdFx0ZGF5czogTWF0aC50cnVuYyhtaWxsaXNlY29uZHMgLyA4Nl80MDBfMDAwKSxcblx0XHRob3VyczogTWF0aC50cnVuYyhtaWxsaXNlY29uZHMgLyAzXzYwMF8wMDAgJSAyNCksXG5cdFx0bWludXRlczogTWF0aC50cnVuYyhtaWxsaXNlY29uZHMgLyA2MF8wMDAgJSA2MCksXG5cdFx0c2Vjb25kczogTWF0aC50cnVuYyhtaWxsaXNlY29uZHMgLyAxMDAwICUgNjApLFxuXHRcdG1pbGxpc2Vjb25kczogTWF0aC50cnVuYyhtaWxsaXNlY29uZHMgJSAxMDAwKSxcblx0XHRtaWNyb3NlY29uZHM6IE1hdGgudHJ1bmModG9aZXJvSWZJbmZpbml0eShtaWxsaXNlY29uZHMgKiAxMDAwKSAlIDEwMDApLFxuXHRcdG5hbm9zZWNvbmRzOiBNYXRoLnRydW5jKHRvWmVyb0lmSW5maW5pdHkobWlsbGlzZWNvbmRzICogMWU2KSAlIDEwMDApLFxuXHR9O1xufVxuXG5mdW5jdGlvbiBwYXJzZUJpZ2ludChtaWxsaXNlY29uZHMpIHtcblx0cmV0dXJuIHtcblx0XHRkYXlzOiBtaWxsaXNlY29uZHMgLyA4Nl80MDBfMDAwbixcblx0XHRob3VyczogbWlsbGlzZWNvbmRzIC8gM182MDBfMDAwbiAlIDI0bixcblx0XHRtaW51dGVzOiBtaWxsaXNlY29uZHMgLyA2MF8wMDBuICUgNjBuLFxuXHRcdHNlY29uZHM6IG1pbGxpc2Vjb25kcyAvIDEwMDBuICUgNjBuLFxuXHRcdG1pbGxpc2Vjb25kczogbWlsbGlzZWNvbmRzICUgMTAwMG4sXG5cdFx0bWljcm9zZWNvbmRzOiAwbixcblx0XHRuYW5vc2Vjb25kczogMG4sXG5cdH07XG59XG5cbmV4cG9ydCBkZWZhdWx0IGZ1bmN0aW9uIHBhcnNlTWlsbGlzZWNvbmRzKG1pbGxpc2Vjb25kcykge1xuXHRzd2l0Y2ggKHR5cGVvZiBtaWxsaXNlY29uZHMpIHtcblx0XHRjYXNlICdudW1iZXInOiB7XG5cdFx0XHRpZiAoTnVtYmVyLmlzRmluaXRlKG1pbGxpc2Vjb25kcykpIHtcblx0XHRcdFx0cmV0dXJuIHBhcnNlTnVtYmVyKG1pbGxpc2Vjb25kcyk7XG5cdFx0XHR9XG5cblx0XHRcdGJyZWFrO1xuXHRcdH1cblxuXHRcdGNhc2UgJ2JpZ2ludCc6IHtcblx0XHRcdHJldHVybiBwYXJzZUJpZ2ludChtaWxsaXNlY29uZHMpO1xuXHRcdH1cblxuXHRcdC8vIE5vIGRlZmF1bHRcblx0fVxuXG5cdHRocm93IG5ldyBUeXBlRXJyb3IoJ0V4cGVjdGVkIGEgZmluaXRlIG51bWJlciBvciBiaWdpbnQnKTtcbn1cbiJdLCJuYW1lcyI6W10sImlnbm9yZUxpc3QiOlswXSwic291cmNlUm9vdCI6IiJ9\n//# sourceURL=webpack-internal:///(rsc)/./node_modules/parse-ms/index.js\n");
+
+/***/ })
+
+};
+;

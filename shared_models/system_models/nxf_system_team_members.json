@@ -1,0 +1,57 @@
+{
+  "table_name": "nxf_system_team_members",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "tm_id",
+      "type": "uuid",
+      "primary_key": true,
+      "default": "gen_random_uuid()"
+    },
+    {
+      "name": "team_id",
+      "type": "uuid",
+      "nullable": false
+    },
+    {
+      "name": "user_id",
+      "type": "uuid",
+      "nullable": false
+    },
+    {
+      "name": "role",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "default": "now()"
+    }
+  ],
+  "constraints": [
+    {
+      "type": "primary_key",
+      "columns": ["id"]
+    },
+    {
+      "type": "unique",
+      "columns": ["team_id", "user_id"]
+    },
+    {
+      "type": "foreign_key",
+      "columns": ["team_id"],
+      "references": {
+        "table": "nxf_system_teams",
+        "schema": "public",
+        "columns": ["st_id"]
+      },
+      "on_delete": "CASCADE"
+    }
+  ]
+}

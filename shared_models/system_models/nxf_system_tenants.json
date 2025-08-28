@@ -1,0 +1,31 @@
+{
+  "table_name": "nxf_system_tenants",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "ten_id",
+      "type": "uuid",
+      "nullable": false,
+      "default": "extensions.uuid_generate_v4()",
+      "is_primary": true
+    },
+    {
+      "name": "subdomain",
+      "type": "string",
+      "nullable": true,
+      "unique": true
+    },
+    {
+      "name": "user_email",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": true,
+      "default": "now()"
+    }
+  ],
+  "constraints": []
+}

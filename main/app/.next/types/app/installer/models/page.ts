@@ -1,8 +1,8 @@
 // File: /Users/antonwentzel/nxtflutter_core/main/app/app/installer/models/page.tsx
-import * as entry from '../../../../../app/installer/models/page.js'
+import * as entry from '../../../../../installer/models/page.jsx'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../../app/installer/models/page.js')
+type TEntry = typeof import('../../../../../installer/models/page.jsx')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }

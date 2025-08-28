@@ -1,0 +1,12 @@
+{
+  "table_name": "nxf_system_projects",
+  "schema": "public",
+  "columns": [
+    { "name": "project_id", "type": "uuid", "primary_key": true,"unique":true ,"nullable": false },
+    { "name": "name", "type": "string", "nullable": false },
+    { "name": "user_id", "type": "uuid", "nullable": false,"unique":true ,"foreign_key": { "references": "nxf_users(user_id)" } },
+    { "name": "created_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" },
+    { "name": "updated_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+  ],
+  "tablespace": "pg_default"
+}

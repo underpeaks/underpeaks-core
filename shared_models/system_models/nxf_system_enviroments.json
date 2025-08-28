@@ -1,0 +1,16 @@
+{
+  "table_name": "nxf_system_environments",
+  "schema": "public",
+  "columns": {
+    "se_id": { "type": "uuid", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
+    "project_id": { "type": "uuid", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
+    "name": { "type": "string", "nullable": false },
+    "is_default": { "type": "boolean", "nullable": false, "default": "false" },
+    "variables": { "type": "jsonb", "nullable": true },
+    "created_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" },
+    "updated_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+  },
+  "constraints": {
+    "primary_key": ["se_id"]
+  }
+}

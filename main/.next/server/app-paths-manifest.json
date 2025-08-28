@@ -1,0 +1,11 @@
+{
+  "/api/create-system-tables/route": "app/api/create-system-tables/route.js",
+  "/api/nextjs/create/route": "app/api/nextjs/create/route.js",
+  "/api/create-admin-user/route": "app/api/create-admin-user/route.js",
+  "/api/flutter/create/route": "app/api/flutter/create/route.js",
+  "/installer/database/page": "app/installer/database/page.js",
+  "/installer/ecommerce/page": "app/installer/ecommerce/page.js",
+  "/installer/demo/page": "app/installer/demo/page.js",
+  "/installer/finalise/page": "app/installer/finalise/page.js",
+  "/installer/models/page": "app/installer/models/page.js"
+}
