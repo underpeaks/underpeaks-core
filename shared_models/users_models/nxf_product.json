@@ -1,0 +1,106 @@
+{
+  "table_name": "nxf_products",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "prod_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "price",
+      "type": "double",
+      "nullable": false
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "vendor",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "options",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "main_sku",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "variants",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]"
+    },
+    {
+      "name": "available",
+      "type": "boolean",
+      "nullable": true,
+      "default": true
+    },
+    {
+      "name": "image_url",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "categories",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "product_type",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "is_digital_product",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "discount_expires_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "discount_percentage",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    }
+  ],
+  "constraints": []
+}

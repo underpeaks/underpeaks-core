@@ -1,0 +1,57 @@
+{
+  "table_name": "nxf_messages",
+  "primary_key": "mes_id",
+  "columns": {
+    "id": {
+      "type": "string"
+    },
+    "conversation_id": {
+      "type": "string",
+      "nullable": false,
+      "references": {
+        "table": "conversations",
+        "column": "con_id",
+        "on_delete": "CASCADE"
+      }
+    },
+    "sender_id": {
+      "type": "string",
+      "nullable": false,
+      "references": {
+        "table": "users",
+        "column": "user_id",
+        "on_delete": "SET NULL"
+      }
+    },
+    "recipient_id": {
+      "type": "string",
+      "nullable": true,
+      "references": {
+        "table": "users",
+        "column": "user_id",
+        "on_delete": "SET NULL"
+      }
+    },
+    "content": {
+      "type": "string",
+      "nullable": false
+    },
+    "read": {
+      "type": "boolean",
+      "default": false,
+      "nullable": false
+    },
+    "sent_at": {
+      "type": "datetime",
+      "nullable": false
+    },
+    "created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "updated_at": {
+      "type": "datetime",
+      "nullable": true
+    }
+  }
+}

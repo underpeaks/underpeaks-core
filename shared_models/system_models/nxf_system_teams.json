@@ -1,0 +1,22 @@
+{
+  "table_name": "nxf_system_teams",
+  "schema": "public",
+  "columns": [
+    { "name": "st_id", "type": "uuid", "nullable": false, "default": "gen_random_uuid()" },
+    { "name": "project_id", "type": "uuid", "nullable": false },
+    { "name": "name", "type": "string", "nullable": false },
+    { "name": "created_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" },
+    { "name": "updated_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+  ],
+  "primary_key": ["st_id"],
+  "foreign_keys": [
+    {
+      "column": "project_id",
+      "references": {
+        "table": "nxf_system_projects",
+        "column": "project_id",
+        "on_delete": "CASCADE"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "table_name": "nxf_transactions",
+  "primary_key": "tran_id",
+  "columns": {
+    "id": { "type": "string" },
+    "order_id": {
+      "type": "string",
+      "references": {
+        "table": "orders",
+        "column": "ord_id",
+        "on_delete": "CASCADE"
+      }
+    },
+    "user_id": { "type": "string" },
+    "transaction_status": { "type": "string" },
+    "payment_method": { "type": "string" },
+    "payment_gateway_response": { "type": "jsonb" },
+    "amount": { "type": "double" },
+    "currency": { "type": "string" },
+    "transaction_date": { "type": "datetime", "required": true },
+    "transaction_reference": { "type": "string" },
+    "created_at": { "type": "datetime", "required": true },
+    "updated_at": { "type": "datetime" }
+  }
+}

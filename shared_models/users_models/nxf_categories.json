@@ -1,0 +1,36 @@
+{
+  "table_name": "nxf_categories",
+  "primary_key": "cat_id",
+  "columns": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "parent_id": {
+      "type": "string",
+      "nullable": true,
+      "references": {
+        "table": "categories",
+        "column": "cat_id",
+        "on_delete": "SET NULL"
+      }
+    },
+    "created_at": {
+      "type": "datetime",
+      "required": true
+    },
+    "updated_at": {
+      "type": "datetime"
+    }
+  }
+}

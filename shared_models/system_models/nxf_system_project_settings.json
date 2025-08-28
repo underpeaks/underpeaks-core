@@ -1,0 +1,42 @@
+{
+  "table_name": "nxf_system_project_settings",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "sp_id",
+      "type": "uuid",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "project_id",
+      "type": "uuid",
+      "nullable": true
+    },
+    {
+      "name": "app_type",
+      "type": "string",
+      "nullable": true,
+      "default": "ecommerce"
+    },
+    {
+      "name": "menu_config",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}",
+      "description": "JSONB field that can hold an array or object for menu configuration"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": true,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}
