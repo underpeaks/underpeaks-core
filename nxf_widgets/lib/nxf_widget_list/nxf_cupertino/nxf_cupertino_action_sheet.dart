@@ -21,12 +21,10 @@ class NxfCupertinoActionSheet extends StatelessWidget {
       title: Text(title),
       message: Text(message),
       actions: actions,
-      cancelButton: onCancel != null
-          ? CupertinoActionSheetAction(
-              onPressed: onCancel,
-              child: const Text('Cancel'),
-            )
-          : null,
+      cancelButton: CupertinoActionSheetAction(
+        onPressed: onCancel,
+        child: const Text('Cancel'),
+      ),
     );
   }
 }

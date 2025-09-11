@@ -17,12 +17,12 @@ Future<void> showNxfCupertinoAlertDialog({
       content: Text(content),
       actions: [
         CupertinoDialogAction(
-          child: Text(cancelText),
           onPressed: onCancel ?? () => Navigator.of(context).pop(),
+          child: Text(cancelText),
         ),
         CupertinoDialogAction(
-          child: Text(confirmText),
           onPressed: onConfirm ?? () => Navigator.of(context).pop(),
+          child: Text(confirmText),
         ),
       ],
     ),

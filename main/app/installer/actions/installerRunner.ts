@@ -11,7 +11,6 @@ function delay(ms: number) {
 async function runDatabaseMigrations() { console.log('Running database migrations...'); await delay(1000); }
 async function seedInitialData() { console.log('Seeding initial data...'); await delay(1000); }
 async function createApiEndpoints() { console.log('Creating API endpoints...'); await delay(1000); }
-async function createDataModels() { console.log('Creating data models...'); await delay(1000); }
 async function installEcommerceTables() { console.log('Installing e-commerce tables...'); await delay(1000); }
 async function installDemoContent() { console.log('Installing demo content...'); await delay(1000); }
 async function writeConfigFile() { console.log('Writing config.json...'); await delay(1000); }
@@ -60,6 +59,34 @@ async function createAdminUser(dbConfig: any, adminUser: any, projectName: strin
   console.log('Admin user created:', data);
   return data;
 }
+
+// Inside your installer page or component
+
+async function createModels() {
+  const { adminUser, dbConfig } = useInstallerStore.getState();
+
+  if (!adminUser?.email) {
+    console.error('Admin user email missing in store');
+    return;
+  }
+
+  const res = await fetch('/api/create-models', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      config: dbConfig,
+      adminUser: {
+        email: adminUser.email,
+        fullName: adminUser.fullName,
+        password: adminUser.password
+      }
+    }),
+  });
+
+  const data = await res.json();
+  console.log('Create models response:', data);
+}
+
 
 export const INSTALL_STEPS = [
   'Installing Flutter project',
@@ -122,7 +149,7 @@ export async function runInstallerSteps(onProgress: (stepIndex: number) => void)
           break;
 
         case 'Creating data models':
-          await createDataModels();
+          await createModels();
           break;
 
         case 'Installing e-commerce related tables':

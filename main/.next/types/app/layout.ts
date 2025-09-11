@@ -1,4 +1,4 @@
-// File: /Users/antonwentzel/nxtflutter_core/main/app/layout.tsx
+// File: C:\Users\AntonWentzel\Desktop\nxt_flutter\NXTFlutter_Core\main\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

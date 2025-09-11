@@ -12,6 +12,11 @@
       "static/css/app/installer/layout.css",
       "static/chunks/app/installer/layout.js"
     ],
+    "/installer/database/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/installer/database/page.js"
+    ],
     "/installer/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -31,11 +36,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/installer/config/page.js"
-    ],
-    "/installer/database/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/database/page.js"
     ],
     "/api/save-db-config/route": [
       "static/chunks/webpack.js",
@@ -86,6 +86,11 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/create-admin-user/route.js"
+    ],
+    "/api/create-models/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/create-models/route.js"
     ]
   }
 }

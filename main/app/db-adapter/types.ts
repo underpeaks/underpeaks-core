@@ -36,6 +36,7 @@ export interface DBConfig {
 }
 
 export interface DBAdapter {
+  createDataModelsFromUserEmail: any;
   testConnection?(): Promise<{ success: boolean; message: string }>;
   createTable?(tableName: string, schema: any): Promise<any>;
   create?(config: DBConfig, collection: string, data: any): Promise<any>;
@@ -51,4 +52,5 @@ export interface DBAdapter {
   findUserByEmail?(config: DBConfig, email: string): Promise<any | null>;
   findProjectByOwnerId?(config: DBConfig, ownerId: string): Promise<any | null>;
   findTenantByUserEmail?(config: DBConfig, email: string): Promise<any | null>;
+  createDataModels?(): Promise<any>;
 }

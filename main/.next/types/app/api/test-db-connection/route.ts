@@ -1,4 +1,4 @@
-// File: /Users/antonwentzel/nxtflutter_core/main/app/api/test-db-connection/route.ts
+// File: C:\Users\AntonWentzel\Desktop\nxt_flutter\NXTFlutter_Core\main\app\api\test-db-connection\route.ts
 import * as entry from '../../../../../app/api/test-db-connection/route.js'
 import type { NextRequest } from 'next/server.js'
 

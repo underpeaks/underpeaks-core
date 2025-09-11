@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class NxfCupertinoCheckbox extends StatelessWidget {
   final bool value;
@@ -17,7 +16,9 @@ class NxfCupertinoCheckbox extends StatelessWidget {
       onTap: () => onChanged(!value),
       child: Icon(
         value ? CupertinoIcons.check_mark_circled_solid : CupertinoIcons.circle,
-        color: value ? CupertinoColors.activeBlue : CupertinoColors.inactiveGray,
+        color: value
+            ? CupertinoColors.activeBlue
+            : CupertinoColors.inactiveGray,
       ),
     );
   }

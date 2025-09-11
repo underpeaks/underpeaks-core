@@ -1,4 +1,4 @@
-// File: /Users/antonwentzel/nxtflutter_core/main/app/installer/ecommerce/page.tsx
+// File: C:\Users\AntonWentzel\Desktop\nxt_flutter\NXTFlutter_Core\main\app\installer\ecommerce\page.tsx
 import * as entry from '../../../../../app/installer/ecommerce/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

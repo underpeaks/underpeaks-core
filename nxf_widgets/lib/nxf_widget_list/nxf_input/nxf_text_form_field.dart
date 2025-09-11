@@ -6,11 +6,11 @@ class NxfTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
 
   const NxfTextFormField({
-    Key? key,
+    super.key,
     required this.label,
     required this.controller,
     this.validator,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

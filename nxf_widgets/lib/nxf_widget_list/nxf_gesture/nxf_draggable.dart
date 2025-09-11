@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class NxfDraggable<T> extends StatelessWidget {
@@ -15,10 +14,6 @@ class NxfDraggable<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Draggable(
-      data: data,
-      child: child,
-      feedback: feedback,
-    );
+    return Draggable(data: data, feedback: feedback, child: child);
   }
 }
