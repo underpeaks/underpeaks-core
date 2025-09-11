@@ -80,7 +80,10 @@
     "@types/react-dom": "^19.0.0-alpha",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
-    "tailwindcss": "^4.1.11",
+    "stylelint": "^16.24.0",
+    "stylelint-config-standard": "^39.0.0",
+    "stylelint-config-tailwindcss": "^1.0.0",
+    "tailwindcss": "^4.1.13",
     "typescript": "^5.8.3"
   }
 }

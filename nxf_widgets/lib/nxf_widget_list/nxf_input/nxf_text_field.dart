@@ -6,11 +6,11 @@ class NxfTextField extends StatelessWidget {
   final ValueChanged<String>? onChanged;
 
   const NxfTextField({
-    Key? key,
+    super.key,
     required this.label,
     this.initialValue,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

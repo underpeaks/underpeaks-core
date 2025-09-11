@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class NxfLongPressDraggable<T> extends StatelessWidget {
@@ -15,10 +14,6 @@ class NxfLongPressDraggable<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LongPressDraggable(
-      data: data,
-      child: child,
-      feedback: feedback,
-    );
+    return LongPressDraggable(data: data, feedback: feedback, child: child);
   }
 }

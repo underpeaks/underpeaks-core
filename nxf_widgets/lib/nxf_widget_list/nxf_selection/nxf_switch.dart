@@ -17,7 +17,7 @@ class NxfSwitch extends StatelessWidget {
     return Switch(
       value: value,
       onChanged: onChanged,
-      activeColor: activeColor,
+      activeThumbColor: activeColor,
     );
   }
 }

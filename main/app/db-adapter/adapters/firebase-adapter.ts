@@ -1,19 +1,22 @@
 import admin from 'firebase-admin';
 import { DBAdapter, DBConfig } from '../types';
 import bcrypt from 'bcryptjs';
+import { CreateDataModels } from '../utils/create-data-models';
+
 
 export class FirebaseAdapter implements DBAdapter {
   private firestore: admin.firestore.Firestore;
 
-  constructor(private config: DBConfig) {
+  constructor(private _config: DBConfig) {
     if (!admin.apps.length) {
-      if (!config.firebaseConfigJson) {
+      if (!_config.firebaseConfigJson) {
         throw new Error('Firebase config JSON is required');
       }
 
-      const firebaseConfig = typeof config.firebaseConfigJson === 'string'
-        ? JSON.parse(config.firebaseConfigJson)
-        : config.firebaseConfigJson;
+      const firebaseConfig =
+        typeof _config.firebaseConfigJson === 'string'
+          ? JSON.parse(_config.firebaseConfigJson)
+          : _config.firebaseConfigJson;
 
       admin.initializeApp({
         credential: admin.credential.cert(firebaseConfig as admin.ServiceAccount),
@@ -26,6 +29,23 @@ export class FirebaseAdapter implements DBAdapter {
     }
   }
 
+  // Public getter to expose config
+  get config(): DBConfig {
+    return this._config;
+  }
+
+  async testConnection() {
+    try {
+      await this.firestore.listCollections();
+      return { success: true, message: 'Connected to Firebase Firestore' };
+    } catch (err: any) {
+      return {
+        success: false,
+        message: `Failed to connect to Firebase: ${err.message}`,
+      };
+    }
+  }
+
   async create(config: DBConfig, collection: string, data: any): Promise<string> {
     const docRef = await this.firestore.collection(collection).add(data);
     return docRef.id;
@@ -33,7 +53,7 @@ export class FirebaseAdapter implements DBAdapter {
 
   async read(config: DBConfig, collection: string, query: any = {}) {
     const snapshot = await this.firestore.collection(collection).get();
-    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
   }
 
   async update(config: DBConfig, collection: string, id: string, data: any) {
@@ -60,10 +80,15 @@ export class FirebaseAdapter implements DBAdapter {
     return { id: userRecord.uid };
   }
 
-  async createAdminUser(config: DBConfig, data: { user_id: string; user_email: string; full_name: string; password: string; role: string }) {
+  async createAdminUser(config: DBConfig, data: {
+    user_id: string;
+    user_email: string;
+    full_name: string;
+    password: string;
+    role: string;
+  }) {
     const hashedPassword = await this.hashPassword(data.password || '');
 
-    // ONLY write to Firestore; do NOT create Auth user again
     await this.firestore.collection('nxf_users').doc(data.user_id).set({
       uid: data.user_id,
       email: data.user_email || '',
@@ -79,12 +104,14 @@ export class FirebaseAdapter implements DBAdapter {
   async findUserByEmail(config: DBConfig, email: string) {
     if (!email) return null;
 
-    const snapshot = await this.firestore.collection('nxf_users')
+    const snapshot = await this.firestore
+      .collection('nxf_users')
       .where('email', '==', email)
       .limit(1)
       .get();
 
     if (snapshot.empty) return null;
+
     const doc = snapshot.docs[0];
     return { id: doc.id, ...doc.data() };
   }
@@ -98,18 +125,21 @@ export class FirebaseAdapter implements DBAdapter {
       user_id: data.user_id || '',
       created_at: new Date().toISOString(),
     });
+
     return docRef.id;
   }
 
   async findProjectByOwnerId(config: DBConfig, ownerId: string) {
     if (!ownerId) return null;
 
-    const snapshot = await this.firestore.collection('nxf_system_projects')
+    const snapshot = await this.firestore
+      .collection('nxf_system_projects')
       .where('user_id', '==', ownerId)
       .limit(1)
       .get();
 
     if (snapshot.empty) return null;
+
     const doc = snapshot.docs[0];
     return { id: doc.id, ...doc.data() };
   }
@@ -120,23 +150,53 @@ export class FirebaseAdapter implements DBAdapter {
       user_email: data.user_email || '',
       created_at: new Date().toISOString(),
     });
+
     return docRef.id;
   }
 
   async findTenantByUserEmail(config: DBConfig, email: string) {
     if (!email) return null;
 
-    const snapshot = await this.firestore.collection('nxf_system_tenants')
+    const snapshot = await this.firestore
+      .collection('nxf_system_tenants')
       .where('user_email', '==', email)
       .limit(1)
       .get();
 
     if (snapshot.empty) return null;
+
     const doc = snapshot.docs[0];
     return { id: doc.id, ...doc.data() };
   }
 
   async hashPassword(password: string) {
     return await bcrypt.hash(password, 10);
+  }
+
+  // -----------------------------
+  // Data Models
+  // -----------------------------
+  async CreateDataModels(projectId: string) {
+    if (!this.config || !projectId) {
+      throw new Error('Missing DB config or projectId');
+    }
+    return CreateDataModels(this, projectId);
+  }
+
+  async createDataModelsFromUserEmail(email: string): Promise<any> {
+    if (!this.config) {
+      throw new Error('Missing DB config');
+    }
+    if (!email) {
+      throw new Error('Missing User Email');
+    }
+
+    const user = await this.findUserByEmail(this.config, email);
+    if (!user?.id) throw new Error('User not found');
+
+    const project = await this.findProjectByOwnerId(this.config, user.id);
+    if (!project?.id) throw new Error('Project not found');
+
+    return this.CreateDataModels(project.id);
   }
 }
