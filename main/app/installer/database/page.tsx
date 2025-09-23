@@ -153,7 +153,7 @@ export default function DatabaseConfigPage() {
       setInstallerValue('dbConfig', dbConfigToSave);
 
       setTimeout(() => {
-        router.push('/installer/models');
+        router.push('/installer/demo');
       }, 800);
     } catch (err) {
       console.error(err);
