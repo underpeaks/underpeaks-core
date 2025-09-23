@@ -1,24 +1,32 @@
 // lib/db-adapter/adapters/mongodb-adapter.ts
 import { MongoClient, Db, ObjectId } from 'mongodb';
-import { DBAdapter, DBConfig } from '../types';
+import { DBAdapter, DBConfig, ColumnDef } from '../types';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
+import { CreateDataModels } from '../utils/create-data-models';
 
 export class MongoDBAdapter implements DBAdapter {
+  private _config: DBConfig;
   private client: MongoClient;
   private db?: Db;
 
-  constructor(private config: DBConfig) {
+  constructor(config: DBConfig) {
     if (!config.connectionString) {
       throw new Error('MongoDB connection string is required');
     }
+    this._config = config;
     this.client = new MongoClient(config.connectionString);
+  }
+
+  // ✅ Public getter for config (fixes TS compatibility issue)
+  get config(): DBConfig {
+    return this._config;
   }
 
   private async getDb(): Promise<Db> {
     if (!this.db) {
       await this.client.connect();
-      this.db = this.client.db(this.config.database);
+      this.db = this.client.db(this._config.database);
     }
     return this.db;
   }
@@ -42,7 +50,6 @@ export class MongoDBAdapter implements DBAdapter {
   /** Generic CRUD methods **/
   async create(config: DBConfig, collection: string, data: any): Promise<any> {
     const db = await this.getDb();
-    // Insert using any-typed collection to avoid strict _id typing issues
     const result = await db.collection<any>(collection).insertOne(data as any);
     return result.insertedId?.toString();
   }
@@ -67,43 +74,42 @@ export class MongoDBAdapter implements DBAdapter {
     return result.deletedCount > 0;
   }
 
-  /** Installer-specific helpers (tenant/project/user creation) **/
-
+  /** Installer-specific helpers **/
   async createTenant(config: DBConfig, data: { subdomain: string; user_email: string }) {
     const db = await this.getDb();
     const tenant = {
-      _id: crypto.randomUUID(), // use string UUID (keeps parity with Firebase)
+      ten_id: crypto.randomUUID(),
       subdomain: data.subdomain,
       user_email: data.user_email,
       created_at: new Date(),
     };
     await db.collection<any>('system_tenants').insertOne(tenant as any);
-    return tenant._id;
+    return tenant.ten_id;
   }
 
-  async createProject(config: DBConfig, data: { name: string; owner_id: string }) {
+  async createProject(config: DBConfig, data: { name: string; user_id: string }) {
     const db = await this.getDb();
     const project = {
-      _id: crypto.randomUUID(),
+      project_id: crypto.randomUUID(),
       name: data.name,
-      owner_id: data.owner_id,
+      user_id: data.user_id,
       created_at: new Date(),
     };
     await db.collection<any>('system_projects').insertOne(project as any);
-    return project._id;
+    return project.project_id;
   }
 
   async registerUserInAuth(config: DBConfig, data: { email: string; password: string }) {
     const db = await this.getDb();
     const hashedPassword = await this.hashPassword(data.password);
     const user = {
-      _id: crypto.randomUUID(),
-      email: data.email,
+      user_id: crypto.randomUUID(),
+      user_email: data.email,
       password: hashedPassword,
       created_at: new Date(),
     };
-    await db.collection<any>('users').insertOne(user as any);
-    return { id: user._id };
+    await db.collection<any>('nxf_users').insertOne(user as any);
+    return { id: user.user_id };
   }
 
   async hashPassword(password: string) {
@@ -111,43 +117,93 @@ export class MongoDBAdapter implements DBAdapter {
   }
 
   async createAdminUser(config: DBConfig, data: any) {
-  const db = await this.getDb();
+    const db = await this.getDb();
 
-  // Check if user already exists by _id
-  const existingUser = await db.collection('users').findOne({ _id: data.id });
+    const existingUser = await db.collection('nxf_users').findOne({ user_id: data.user_id });
 
-  if (existingUser) {
-    // Update existing user document
-    await db.collection('users').updateOne(
-      { _id: data.id },
-      {
-        $set: {
-          email: data.email,
-          password: data.password,
-          tenant_id: data.tenant_id,
-          project_id: data.project_id,
-          role: data.role || 'admin',
-          updated_at: new Date(),
-          ...data,
-        },
-      }
-    );
-    return data.id;
-  } else {
-    // Insert new user document
-    const adminUser = {
-      _id: data.id || crypto.randomUUID(),
-      email: data.email,
-      password: data.password,
-      tenant_id: data.tenant_id,
-      project_id: data.project_id,
-      role: data.role || 'admin',
-      created_at: new Date(),
-      ...data,
-    };
-    await db.collection('users').insertOne(adminUser);
-    return adminUser._id;
+    if (existingUser) {
+      await db.collection('nxf_users').updateOne(
+        { user_id: data.user_id },
+        {
+          $set: {
+            user_email: data.user_email,
+            password: data.password,
+            tenant_id: data.ten_id,
+            project_id: data.project_id,
+            role: data.role || 'admin',
+            updated_at: new Date(),
+            ...data,
+          },
+        }
+      );
+      return data.user_id;
+    } else {
+      const adminUser = {
+        user_id: data.user_id || crypto.randomUUID(),
+        user_email: data.user_email,
+        password: data.password,
+        tenant_id: data.ten_id,
+        project_id: data.project_id,
+        role: data.role || 'admin',
+        created_at: new Date(),
+        ...data,
+      };
+      await db.collection('nxf_users').insertOne(adminUser);
+      return adminUser.user_id;
+    }
+  }
+
+  /** Finder helpers **/
+  async findUserByEmail(config: DBConfig, user_email: string) {
+    const db = await this.getDb();
+    return db.collection('nxf_users').findOne({ user_email });
+  }
+
+  async findProjectByOwnerId(config: DBConfig, user_Id: string) {
+    const db = await this.getDb();
+    return db.collection('system_projects').findOne({ user_id: user_Id });
+  }
+
+  async findTenantByUserEmail(config: DBConfig, email: string) {
+    const db = await this.getDb();
+    return db.collection('system_tenants').findOne({ user_email: email });
+  }
+
+  /** Data models **/
+  async CreateDataModels(projectId: string) {
+    if (!this.config || !projectId) {
+      throw new Error('Missing DB config or projectId');
+    }
+    return CreateDataModels(this, projectId);
+  }
+
+  async createDataModelsFromUserEmail(email: string): Promise<any> {
+    if (!this.config) throw new Error('Missing DB config');
+    if (!email) throw new Error('Missing User Email');
+
+    const user = await this.findUserByEmail(this.config, email);
+    if (!user?.user_id) throw new Error('User not found');
+
+    const project = await this.findProjectByOwnerId(this.config, user.user_id);
+    if (!project?.project_id) throw new Error('Project not found');
+
+    return this.CreateDataModels(project.project_id);
+  }
+
+  /** ✅ Added for compatibility with SQL-based adapters */
+  async createTable(tableName: string, schema: { columns: ColumnDef[]; schema?: string }) {
+    const db = await this.getDb();
+    // Mongo just creates collections, schema enforcement is minimal
+    const exists = await db.listCollections({ name: tableName }).hasNext();
+    if (!exists) {
+      await db.createCollection(tableName);
+    }
+    return { collection: tableName };
   }
 }
 
+/** Factory */
+export function getMongoDBAdapter(config: DBConfig) {
+  if (!config?.connectionString) throw new Error('MongoDB config is undefined');
+  return new MongoDBAdapter(config);
 }
