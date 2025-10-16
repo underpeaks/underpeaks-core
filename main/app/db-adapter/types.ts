@@ -2,7 +2,6 @@ export type DBType =
   | 'postgres'
   | 'mysql'
   | 'mongodb'
-  | 'mariadb'
   | 'supabase'
   | 'firebase';
 
@@ -53,4 +52,12 @@ export interface DBAdapter {
   findProjectByOwnerId?(config: DBConfig, ownerId: string): Promise<any | null>;
   findTenantByUserEmail?(config: DBConfig, email: string): Promise<any | null>;
   createDataModels?(): Promise<any>;
+    createBucket?(bucketName: string): Promise<void>;
+  listBuckets?(): Promise<string[]>;
+  deleteBucket?(bucketName: string): Promise<void>;
+    setupStorageBuckets?(): Promise<string[] | { success: boolean; buckets: string[] }>;
+
 }
+
+
+

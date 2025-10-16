@@ -578,6 +578,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/create-storage-buckets/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/create-storage-buckets">> = Specific
+  const handler = {} as typeof import("../../app/api/create-storage-buckets/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/create-system-tables/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/create-system-tables">> = Specific
@@ -627,6 +636,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/test-db-connection">> = Specific
   const handler = {} as typeof import("../../app/api/test-db-connection/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/write-config/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/write-config">> = Specific
+  const handler = {} as typeof import("../../app/api/write-config/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

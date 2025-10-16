@@ -9,7 +9,7 @@ export async function POST(req: Request) {
   try {
     const config: DBConfig = await req.json()
     const adapter = getAdapter(config.type, config)
-    const result = await adapter.testConnection(config)
+const result = await adapter.testConnection!();
     return NextResponse.json(result)
   } catch (err: any) {
     return NextResponse.json({ success: false, message: err.message }, { status: 500 })
