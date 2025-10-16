@@ -4,8 +4,11 @@ import bcrypt from 'bcryptjs';
 import { CreateDataModels } from '../utils/create-data-models';
 
 
+const DEFAULT_BUCKETS = ['uploads', 'products', 'avatars', 'reports'];
+
 export class FirebaseAdapter implements DBAdapter {
   private firestore: admin.firestore.Firestore;
+  private storage: admin.storage.Storage;
 
   constructor(private _config: DBConfig) {
     if (!admin.apps.length) {
@@ -20,12 +23,15 @@ export class FirebaseAdapter implements DBAdapter {
 
       admin.initializeApp({
         credential: admin.credential.cert(firebaseConfig as admin.ServiceAccount),
+        storageBucket: firebaseConfig.storageBucket, // required for storage
       });
 
       this.firestore = admin.firestore();
       this.firestore.settings({ ignoreUndefinedProperties: true });
+      this.storage = admin.storage();
     } else {
       this.firestore = admin.firestore();
+      this.storage = admin.storage();
     }
   }
 
@@ -199,4 +205,44 @@ export class FirebaseAdapter implements DBAdapter {
 
     return this.CreateDataModels(project.id);
   }
+
+
+  async createTable(tableName: string, schema: any) {
+  console.log(`[FirebaseAdapter] Skipping createTable for ${tableName} (Firestore does not have tables)`);
+  return true;
+}
+  // -----------------------------
+  // Firebase Storage
+  // -----------------------------
+ 
+async setupStorageBuckets(retries = 10, delayMs = 5000) {
+  if (!this._config.firebaseConfigJson) {
+    throw new Error('Firebase config JSON is required for storage setup');
+  }
+
+  const firebaseConfig =
+    typeof this._config.firebaseConfigJson === 'string'
+      ? JSON.parse(this._config.firebaseConfigJson)
+      : this._config.firebaseConfigJson;
+
+  // Removed storageBucket check to simplify setup for users
+
+  const bucket = this.storage.bucket(firebaseConfig.storageBucket);
+
+  for (let i = 0; i < retries; i++) {
+    try {
+      for (const folder of DEFAULT_BUCKETS) {
+        const file = bucket.file(`${folder}/.keep`);
+        await file.save('', { resumable: false }); // placeholder file
+        console.log(`[FirebaseAdapter] Created storage folder: ${folder}/`);
+      }
+      return { success: true, buckets: DEFAULT_BUCKETS };
+    } catch (err: any) {
+      console.log(`[FirebaseAdapter] Storage not ready, retrying in ${delayMs / 1000}s...`, err.message);
+      await new Promise((res) => setTimeout(res, delayMs));
+    }
+  }
+
+  throw new Error('Firebase Storage was not enabled after waiting.');
+}
 }

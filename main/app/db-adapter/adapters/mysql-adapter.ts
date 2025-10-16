@@ -23,9 +23,9 @@ export class MySQLAdapter implements DBAdapter {
       port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
     };
 
-    if (!this.config.host || !this.config.user || !this.config.password || !this.config.database) {
-      throw new Error("MySQLAdapter requires host, user, password, and database in config");
-    }
+    // if (!this.config.host || !this.config.user || !this.config.password || !this.config.database) {
+    //   throw new Error("MySQLAdapter requires host, user, password, and database in config");
+    // }
 
     this.pool = mysql.createPool({
   host: this.config.host,

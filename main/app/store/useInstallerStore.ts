@@ -1,13 +1,13 @@
-import { create } from 'zustand';
-import { DBType, DBConfig } from '../db-adapter/types';
+import { create } from "zustand";
+import { DBType, DBConfig } from "../db-adapter/types";
 
-type InstallerState = {
+export type InstallerState = {
   projectName: string;
   subdomain: string;
   ecommerceEnabled: boolean;
   demoContentEnabled: boolean;
   selectedPages: string[];
-  selectedStack: 'next' | 'flutter' | 'both';
+  selectedStack: "next" | "flutter" | "both";
   selectedDb: DBType | null;
   dbConfig: DBConfig;
   adminUser: {
@@ -21,18 +21,18 @@ type InstallerState = {
 };
 
 export const useInstallerStore = create<InstallerState>((set) => ({
-  projectName: '',
-  subdomain: '',
+  projectName: "",
+  subdomain: "",
   ecommerceEnabled: false,
   demoContentEnabled: false,
   selectedPages: [],
-  selectedStack: 'next',
+  selectedStack: "next",
   selectedDb: null,
-  dbConfig: { type: 'supabase' }, // default with type set
+  dbConfig: { type: "supabase" }, // default with type set
   adminUser: {
-    fullName: '',
-    email: '',
-    password: '',
+    fullName: "",
+    email: "",
+    password: "",
   },
   models: [],
   setInstallerValue: (key, value) =>
@@ -42,18 +42,18 @@ export const useInstallerStore = create<InstallerState>((set) => ({
     })),
   resetInstaller: () =>
     set(() => ({
-      projectName: '',
-      subdomain: '',
+      projectName: "",
+      subdomain: "",
       ecommerceEnabled: false,
       demoContentEnabled: false,
       selectedPages: [],
-      selectedStack: 'next',
+      selectedStack: "next",
       selectedDb: null,
-      dbConfig: { type: 'supabase' },
+      dbConfig: { type: "supabase" },
       adminUser: {
-        fullName: '',
-        email: '',
-        password: '',
+        fullName: "",
+        email: "",
+        password: "",
       },
       models: [],
     })),

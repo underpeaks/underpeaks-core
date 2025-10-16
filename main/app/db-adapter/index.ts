@@ -3,7 +3,6 @@ import { PostgresAdapter } from './adapters/postgres-adapter';
 import { MongoDBAdapter } from './adapters/mongodb-adapter';
 import { FirebaseAdapter } from './adapters/firebase-adapter';
 import { SupabaseAdapter } from './adapters/supabase-adapter';
-import { MariaDBAdapter } from './adapters/mariadb-adapter';
 import { MySQLAdapter } from './adapters/mysql-adapter';
 
 export function getAdapter(type: string, config: DBConfig): DBAdapter {
@@ -12,8 +11,6 @@ export function getAdapter(type: string, config: DBConfig): DBAdapter {
       return new PostgresAdapter(config);
     case 'mysql':
       return new MySQLAdapter(config);
-    case 'mariadb':
-      return new MariaDBAdapter(config);
     case 'mongodb':
       return new MongoDBAdapter(config);
     case 'firebase':
