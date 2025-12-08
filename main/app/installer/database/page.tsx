@@ -18,8 +18,6 @@ import {
   SiPostgresql,
   SiMysql,
   SiMongodb,
-  SiMariadb,
-  SiPlanetscale,
 } from 'react-icons/si';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { useInstallerStore } from '../../store/useInstallerStore';
@@ -47,6 +45,13 @@ const DATABASES = [
     fields: [
       { key: 'url', label: 'Supabase URL', placeholder: 'https://xyzcompany.supabase.co' },
       { key: 'anonKey', label: 'Supabase Anon Key', placeholder: 'eyJhbGciOiJIUzI1NiIsInR...' },
+      {
+        key: 'storageUrl',
+        label: 'Supabase Storage URL',
+        placeholder: 'https://<your-project>.supabase.co/storage/v1/object/public/nxt_storage',
+        description:
+          'Provide the URL of your storage bucket. This allows NXT_Flutter to upload files and serve them correctly.',
+      },
     ],
   },
   {
@@ -60,6 +65,13 @@ const DATABASES = [
         label: 'Firebase Service Account JSON',
         placeholder: 'Paste full Firebase service account JSON here',
         isJson: true,
+      },
+      {
+        key: 'storageUrl',
+        label: 'Firebase Storage URL',
+        placeholder: 'https://firebasestorage.googleapis.com/v0/b/<your-project>.appspot.com/o',
+        description:
+          'Provide the URL of your Firebase storage bucket. This is required for file uploads and media storage.',
       },
     ],
   },
@@ -119,7 +131,6 @@ export default function DatabaseConfigPage() {
   const [connectionSucceeded, setConnectionSucceeded] = useState(false);
   const setInstallerValue = useInstallerStore((s) => s.setInstallerValue);
 
-  // For Firebase, track Firestore vs Realtime choice
   const [firebaseDbType, setFirebaseDbType] = useState<'firestore' | 'realtime'>('firestore');
 
   const selectedDbConfig = DATABASES.find((db) => db.value === selectedDb);
@@ -130,7 +141,7 @@ export default function DatabaseConfigPage() {
     setTestSteps([]);
     setConnectionSucceeded(false);
     if (value !== 'firebase') {
-      setFirebaseDbType('firestore'); // reset on other dbs
+      setFirebaseDbType('firestore');
     }
   }
 
@@ -143,7 +154,6 @@ export default function DatabaseConfigPage() {
   async function handleContinue() {
     setLoading(true);
     try {
-      // Build dbConfig including required `type` and firebaseDbType if needed
       const dbConfigToSave = {
         type: selectedDb,
         ...formData,
@@ -296,14 +306,6 @@ export default function DatabaseConfigPage() {
               <p className="mt-2 italic text-xs text-yellow-700">
                 ⚠️ Keep this file secure and never share it publicly.
               </p>
-              <p className="mt-2 italic text-xs text-yellow-700">
-                <strong>Important:</strong> Ensure you have enabled Firebase Authentication with{' '}
-                <code>Email/Password</code> sign-in method in your Firebase Console. 
-              </p>
-              <p className="mt-2 italic text-xs text-yellow-700">
-                <strong>Important:</strong> Ensure you have enabled the DB of your choice.{' '}
-               
-              </p>
             </div>
 
             <fieldset className="mb-6">
@@ -359,6 +361,10 @@ export default function DatabaseConfigPage() {
                 {field.label}{' '}
                 <span className="text-gray-400 italic text-xs">(e.g. {field.placeholder})</span>
               </label>
+
+              {field.description && (
+                <p className="text-xs text-gray-600 mb-2">{field.description}</p>
+              )}
 
               {'isJson' in field && field.isJson ? (
                 <Textarea

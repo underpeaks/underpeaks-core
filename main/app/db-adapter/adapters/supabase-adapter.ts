@@ -320,6 +320,71 @@ async registerUserInAuth(
 
     return this.CreateDataModels(project.project_id);
   }
+
+   // -----------------------------
+  //  Supabase Storage Setup
+  // -----------------------------
+
+async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
+  try {
+    // ⭐ Default Supabase bucket name for NXTFlutter
+    const bucketName = "NXT_Flutter_storage";
+
+    // ⭐ Default root folders (same as FirebaseAdapter)
+    const DEFAULT_BUCKETS = [
+      "system",
+      "themes",
+      "extensions",
+      "projects",
+      "avatars",
+      "logos",
+      "uploads"
+    ];
+
+    // Create bucket if it doesn't exist
+    const { error: bucketError } = await this.adminClient.storage.createBucket(bucketName, {
+      public: false,
+      fileSizeLimit: 1024 * 1024 * 10 // 10 MB limit
+    });
+
+    // Ignore duplicate key error (bucket already exists)
+    if (bucketError && !bucketError.message.includes("duplicate key")) {
+      throw bucketError;
+    }
+
+    // ⭐ Create folder structure using .keep placeholder files
+    for (const folder of DEFAULT_BUCKETS) {
+      const filePath = `${folder}/.keep`;
+
+      const { error: uploadError } = await this.adminClient.storage
+        .from(bucketName)
+        .upload(filePath, new Blob([""]), {
+          upsert: true,
+          contentType: "text/plain"
+        });
+
+      // Ignore "already exists" errors
+      if (uploadError && !uploadError.message.includes("exists")) {
+        console.error(`[SupabaseAdapter] Failed to create folder "${folder}":`, uploadError.message);
+        throw uploadError;
+      }
+
+      console.log(`[SupabaseAdapter] Created folder: ${folder}/`);
+    }
+
+    return {
+      success: true,
+      buckets: DEFAULT_BUCKETS
+    };
+
+  } catch (e: any) {
+    console.error("[SupabaseAdapter] setupStorageBuckets error:", e.message);
+    return {
+      success: false,
+      buckets: []
+    };
+  }
+}
 }
 
 /** Factory */

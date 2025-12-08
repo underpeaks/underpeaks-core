@@ -2,10 +2,10 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "firebase",
+  "selectedDb": "supabase",
   "deploymentType": "self-hosted",
   "dbConfig": {
-    "type": "firebase"
+    "type": "supabase"
   },
   "ecommerceEnabled": false,
   "demoContentEnabled": true,
