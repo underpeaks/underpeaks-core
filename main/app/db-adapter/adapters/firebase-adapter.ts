@@ -211,23 +211,27 @@ export class FirebaseAdapter implements DBAdapter {
   console.log(`[FirebaseAdapter] Skipping createTable for ${tableName} (Firestore does not have tables)`);
   return true;
 }
-  // -----------------------------
-  // Firebase Storage
-  // -----------------------------
- 
+ // -----------------------------
+// Firebase Storage
+// -----------------------------
 async setupStorageBuckets(retries = 10, delayMs = 5000) {
-  if (!this._config.firebaseConfigJson) {
-    throw new Error('Firebase config JSON is required for storage setup');
+  // read the storage URL from .env
+  const storageUrl = process.env.DB_STORAGEURL;
+  if (!storageUrl) {
+    throw new Error("DB_STORAGEURL is missing in your .env file");
   }
 
-  const firebaseConfig =
-    typeof this._config.firebaseConfigJson === 'string'
-      ? JSON.parse(this._config.firebaseConfigJson)
-      : this._config.firebaseConfigJson;
+  // extract bucket name from gs:// URL
+  const extractBucketName = (url: string) => {
+    url = url.trim();
+    if (url.startsWith("gs://")) return url.replace("gs://", "").split("/")[0];
+    return url.split("/")[0]; // fallback
+  };
 
-  // Removed storageBucket check to simplify setup for users
+  const bucketName = extractBucketName(storageUrl);
+  if (!bucketName) throw new Error(`Cannot extract bucket name from URL: ${storageUrl}`);
 
-  const bucket = this.storage.bucket(firebaseConfig.storageBucket);
+  const bucket = this.storage.bucket(bucketName);
 
   for (let i = 0; i < retries; i++) {
     try {
@@ -245,4 +249,5 @@ async setupStorageBuckets(retries = 10, delayMs = 5000) {
 
   throw new Error('Firebase Storage was not enabled after waiting.');
 }
+
 }

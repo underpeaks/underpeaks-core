@@ -1,4 +1,4 @@
-// File: C:\Users\AntonWentzel\Desktop\nxt_flutter\NXTFlutter_Core\main\app\api\create-models\route.ts
+// File: D:\NXTFLUTTER_CORE\NXTFlutter_Core\main\app\api\create-models\route.ts
 import * as entry from '../../../../../app/api/create-models/route.js'
 import type { NextRequest } from 'next/server.js'
 

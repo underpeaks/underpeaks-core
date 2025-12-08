@@ -1,4 +1,4 @@
-// File: C:\Users\AntonWentzel\Desktop\nxt_flutter\NXTFlutter_Core\main\app\api\create-admin-user\route.ts
+// File: D:\NXTFLUTTER_CORE\NXTFlutter_Core\main\app\api\create-admin-user\route.ts
 import * as entry from '../../../../../app/api/create-admin-user/route.js'
 import type { NextRequest } from 'next/server.js'
 
