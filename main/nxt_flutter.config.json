@@ -2,17 +2,17 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "supabase",
+  "selectedDb": "mongodb",
   "deploymentType": "self-hosted",
   "dbConfig": {
-    "type": "supabase"
+    "type": "mongodb"
   },
   "ecommerceEnabled": false,
   "demoContentEnabled": true,
   "selectedPages": [],
   "models": [],
   "adminUser": {
-    "fullName": "Anton Wentzel",
+    "fullName": "ANTON WENTZEL",
     "email": "anton@her.co.za"
   },
   "featureFlags": {

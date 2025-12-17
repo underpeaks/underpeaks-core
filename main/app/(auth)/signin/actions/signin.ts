@@ -1,21 +1,51 @@
-// app/actions/signin.ts
 'use server'
 
-import { createServerActionClient } from '@supabase/auth-helpers-nextjs'
-import { cookies } from 'next/headers'
+import { DBAdapter, DBConfig } from '@/app/db-adapter/types'
+import { AuthService } from '@/app/(auth)/auth-service'
+import bcrypt from 'bcryptjs'
 
-export async function signin({ email, password }: { email: string; password: string }) {
-  const supabase = createServerActionClient({ cookies })
-  
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password
-  })
+interface SigninInput {
+  email: string
+  password: string
+}
 
-  if (error) {
-    console.error('SignIn Error:', error.message)
-    return { error: error.message }
+// ❗ Pass adapter and config when calling this function
+export async function signin(
+  input: SigninInput,
+  adapter: DBAdapter,
+  config: DBConfig
+) {
+  const { email, password } = input
+  const authService = new AuthService(adapter, config)
+
+  // 1. Find user by email
+  const user = await adapter.findUserByEmail?.(config, email)
+  if (!user) {
+    return { error: 'Invalid email or password.' }
   }
 
-  return { success: true }
+  // 2. Verify password
+  const isValidPassword = await bcrypt.compare(password, user.password_hash)
+  if (!isValidPassword) {
+    return { error: 'Invalid email or password.' }
+  }
+
+  // 3. Find a project for the user (if needed)
+  const project = await adapter.findProjectByOwnerId?.(config, user.user_id)
+  const projectId = project?.project_id || null
+
+  // 4. Issue access & refresh tokens
+  const tokens = await authService.issueTokens({
+    userId: user.user_id,
+    projectId,
+  })
+
+  return {
+    success: true,
+    data: {
+      userId: user.user_id,
+      projectId,
+      tokens,
+    },
+  }
 }

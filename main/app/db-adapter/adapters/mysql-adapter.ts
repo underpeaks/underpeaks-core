@@ -291,6 +291,36 @@ async createDataModelsFromUserEmail(userEmail: string) {
   return this.CreateDataModels(projectId);
 }
 
+///STORAGE ADAPTER
+async setupStorageBuckets(): Promise<string[] | { success: boolean; buckets: string[] }> {
+  try {
+    const DEFAULT_BUCKETS = ["uploads", "avatars", "products", "reports"]; // adjust as needed
+
+    for (const folder of DEFAULT_BUCKETS) {
+      const storage_id = crypto.randomUUID();
+
+      // Insert into nxf_storage if not exists
+      const existing = await this.read(this.config, "nxf_storage", { folder });
+      if (!existing || existing.length === 0) {
+        await this.create(this.config, "nxf_storage", {
+          storage_id,
+          folder,
+          file_name: "",   // placeholder
+          file_path: folder, // just the folder path
+          created_at: new Date()
+        });
+        console.log(`[MySQLAdapter] Created storage folder record: ${folder}`);
+      }
+    }
+
+    return { success: true, buckets: DEFAULT_BUCKETS };
+  } catch (err: any) {
+    console.error("[MySQLAdapter] Failed to setup storage buckets:", err.message);
+    return { success: false, buckets: [] };
+  }
+}
+
+
 }
 
 // -----------------------

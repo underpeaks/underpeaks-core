@@ -1,7 +1,7 @@
 'use server'
 
-
-import bcrypt from 'bcryptjs'
+import { DBAdapter, DBConfig } from '@/app/db-adapter/types'
+import { AuthService } from '@/app/(auth)/auth-service'
 
 interface SignupInput {
   full_name: string
@@ -10,57 +10,66 @@ interface SignupInput {
   tenant_id?: string | null
 }
 
-export async function signup({
-  full_name,
-  email,
-  password,
-  tenant_id = null,
-}: SignupInput) {
-  // 1. Create user in Supabase Auth
-  // const { data: authData, error: authError } = await supabase.auth.signUp({
-  //   email,
-  //   password,
-  // })
+// ❗ Pass adapter and config when calling this function
+export async function signup(
+  input: SignupInput,
+  adapter: DBAdapter,
+  config: DBConfig
+) {
+  const { full_name, email, password, tenant_id = null } = input
 
-  // if (authError) {
-  //   return { error: authError.message }
-  // }
+  const authService = new AuthService(adapter, config)
 
-  // if (!authData.user?.id) {
-  //   return { error: 'Failed to get user ID from Supabase Auth.' }
-  // }
+  // 1. Check if user already exists
+  const existingUser = await adapter.findUserByEmail?.(config, email)
+  if (existingUser) {
+    return { error: 'User with this email already exists.' }
+  }
 
-  // 2. Hash password
-  const password_hash = await bcrypt.hash(password, 12)
+  // 2. Create tenant if tenant_id not provided
+  let finalTenantId = tenant_id
+  if (!finalTenantId && adapter.createTenant) {
+    finalTenantId = await adapter.createTenant(config, {
+      subdomain: email.split('@')[0],
+      user_email: email,
+    })
+  }
 
-  // 3. Fetch the first available project_id
-  // const { data: projectData, error: projectError } = await supabase
-  //   .from('projects')
-  //   .select('id')
-  //   .limit(1)
-  //   .single()
+  // 3. Create project for the new user
+  const projectId = adapter.createProject
+    ? await adapter.createProject(config, {
+        name: 'Default Project',
+        user_id: '', // no user yet, will assign later if needed
+      })
+    : null
 
-  // if (projectError || !projectData?.id) {
-  //   return { error: 'Failed to fetch project ID.' }
-  // }
+  // 4. Create user in nxf_users table
+  const userId = adapter.createAdminUser
+    ? await adapter.createAdminUser(config, {
+        user_email: email,
+        full_name,
+        role: 'admin',
+        password, // adapter handles hashing
+        tenant_id: finalTenantId,
+      })
+    : null
 
-  // const project_id = projectData.id
+  if (!userId) {
+    return { error: 'Failed to create user.' }
+  }
 
-  // 4. Insert user into your users table
-  // const { error: dbError } = await supabase.from('users').insert([
-  //   {
-  //     id: authData.user.id,
-  //     full_name,
-  //     email,
-  //     password_hash,
-  //     tenant_id,
-  //     project_id, // 👈 assigned here
-  //   },
-  // ])
+  // 5. Issue access & refresh tokens
+  const tokens = await authService.issueTokens({
+    userId,
+    projectId,
+  })
 
-  // if (dbError) {
-  //   return { error: dbError.message }
-  // }
-
-  // return { data: authData }
+  return {
+    data: {
+      userId,
+      projectId,
+      tenantId: finalTenantId,
+      tokens,
+    },
+  }
 }

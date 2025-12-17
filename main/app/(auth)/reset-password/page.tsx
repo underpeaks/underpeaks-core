@@ -2,63 +2,56 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { Label } from '@/components/ui/label'
+import { DBAdapter, DBConfig } from '@/app/db-adapter/types'
 
-export default function ResetPasswordPage() {
-  const supabase = createClientComponentClient()
+interface ResetPasswordProps {
+  adapter: DBAdapter
+  config: DBConfig
+}
+
+export default function ResetPasswordPage({ adapter, config }: ResetPasswordProps) {
   const router = useRouter()
 
-  const [accessToken, setAccessToken] = useState<string | null>(null)
-  const [refreshToken, setRefreshToken] = useState<string | null>(null)
+  const [token, setToken] = useState<string | null>(null)
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const hash = window.location.hash
-    const params = new URLSearchParams(hash.substring(1))
-
-    const token = params.get('access_token')
-    const refresh = params.get('refresh_token')
-    const type = params.get('type')
-
-    if (token && refresh && type === 'recovery') {
-      setAccessToken(token)
-      setRefreshToken(refresh)
-
-      supabase.auth.setSession({
-        access_token: token,
-        refresh_token: refresh,
-      }).then(({ error }) => {
-        if (error) setError('Could not restore session: ' + error.message)
-      })
-    } else {
-      setError('Invalid or missing token.')
-    }
+    const params = new URLSearchParams(window.location.search)
+    const resetToken = params.get('token')
+    if (resetToken) setToken(resetToken)
+    else setError('Invalid or missing token.')
   }, [])
 
   const handleReset = async () => {
     if (!password) return setError('Please enter a new password.')
+    if (!token) return setError('Missing reset token.')
 
     setLoading(true)
     setError(null)
 
-    const { error: updateError } = await supabase.auth.updateUser({ password })
+    try {
+      const { resetPassword } = await import('@/app/(auth)/reset-password/actions/reset-password')
+      const result = await resetPassword({ token, newPassword: password, adapter, config })
 
-    if (updateError) {
-      setError(updateError.message)
+      if (result.error) {
+        setError(result.error)
+      } else {
+        setSubmitted(true)
+        setTimeout(() => router.push('/signin'), 2000)
+      }
+    } catch (err: any) {
+      console.error(err)
+      setError('Failed to reset password. Please try again.')
+    } finally {
       setLoading(false)
-      return
     }
-
-    setSubmitted(true)
-    setLoading(false)
-    router.push('/signin')
   }
 
   if (submitted) {

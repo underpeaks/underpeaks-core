@@ -200,7 +200,39 @@ export class MongoDBAdapter implements DBAdapter {
     }
     return { collection: tableName };
   }
+   // -----------------------
+  // STORAGE ADAPTER (MongoDB)
+  // -----------------------
+  async setupStorageBuckets(): Promise<string[] | { success: boolean; buckets: string[] }> {
+    try {
+      const db = await this.getDb();
+      const DEFAULT_BUCKETS = ['uploads', 'avatars', 'products', 'reports'];
+
+      for (const folder of DEFAULT_BUCKETS) {
+        const existing = await db.collection('nxf_storage').findOne({ folder });
+
+        if (!existing) {
+          await db.collection('nxf_storage').insertOne({
+            storage_id: crypto.randomUUID(),
+            folder,
+            file_name: '',
+            file_path: folder,
+            created_at: new Date(),
+          });
+
+          console.log(`[MongoDBAdapter] Created storage folder record: ${folder}`);
+        }
+      }
+
+      return { success: true, buckets: DEFAULT_BUCKETS };
+    } catch (err: any) {
+      console.error('[MongoDBAdapter] Failed to setup storage buckets:', err.message);
+      return { success: false, buckets: [] };
+    }
+  }
 }
+
+
 
 /** Factory */
 export function getMongoDBAdapter(config: DBConfig) {

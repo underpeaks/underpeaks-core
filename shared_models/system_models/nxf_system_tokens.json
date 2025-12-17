@@ -1,0 +1,73 @@
+{
+  "table_name": "nxf_system_tokens",
+  "schema": "public",
+  "columns": {
+    "token_id": {
+      "type": "uuid",
+      "default": "gen_random_uuid()",
+      "primary_key": true,
+      "nullable": false
+    },
+    "user_id": {
+      "type": "uuid",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_users(user_id)",
+        "on_delete": "CASCADE"
+      }
+    },
+    "project_id": {
+      "type": "uuid",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_projects(project_id)",
+        "on_delete": "CASCADE"
+      }
+    },
+    "access_token": {
+      "type": "string",
+      "nullable": false,
+      "unique": true
+    },
+    "refresh_token": {
+      "type": "string",
+      "nullable": false,
+      "unique": true
+    },
+    "token_type": {
+      "type": "string",
+      "nullable": false
+    },
+    "expires_at": {
+      "type": "timestamp with time zone",
+      "nullable": false
+    },
+    "refresh_expires_at": {
+      "type": "timestamp with time zone",
+      "nullable": false
+    },
+    "ip_address": {
+      "type": "string",
+      "nullable": true
+    },
+    "user_agent": {
+      "type": "text",
+      "nullable": true
+    },
+    "revoked": {
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    "created_at": {
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    "updated_at": {
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  }
+}
