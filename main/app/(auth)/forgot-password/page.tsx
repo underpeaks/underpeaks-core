@@ -6,42 +6,45 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { FiMail } from 'react-icons/fi'
+import { DBAdapter, DBConfig } from '@/app/db-adapter/types'
 
-export default function ForgotPasswordPage() {
+interface ForgotPasswordProps {
+  adapter: DBAdapter
+  config: DBConfig
+}
+
+export default function ForgotPasswordPage({ adapter, config }: ForgotPasswordProps) {
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
 
   const handleSubmit = async () => {
-  if (!email) {
-    setError('Please enter your email address.')
-    return
+    if (!email) {
+      setError('Please enter your email address.')
+      return
+    }
+
+    setLoading(true)
+    setError(null)
+    setSuccess(false)
+
+    try {
+      const { forgotPassword } = await import('@/app//(auth)/forgot-password/actions/forgot-password')
+      const result = await forgotPassword({ email, adapter, config })
+
+      if (result.error) {
+        setError(result.error)
+      } else {
+        setSuccess(true)
+      }
+    } catch (err: any) {
+      console.error(err)
+      setError('Failed to send reset email. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
-
-  setLoading(true)
-  setError(null)
-  setSuccess(false)
-
-  // try {
-  //   const { error } = await supabase.auth.resetPasswordForEmail(email, {
-  //     redirectTo: `${window.location.origin}/reset-password` // your reset password page
-  //   })
-
-  //   if (error) {
-  //     setError(error.message)
-  //     setLoading(false)
-  //     return
-  //   }
-
-  //   setSuccess(true)
-   
-  // } catch (err) {
-  //   setError('Failed to send reset email. Please try again.')
-  // } finally {
-  //   setLoading(false)
-  // }
-}
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
@@ -95,85 +98,3 @@ export default function ForgotPasswordPage() {
     </div>
   )
 }
-
-
-// 'use client'
-
-// import { useState } from 'react'
-
-// import { colors } from '@/lib/colours/colours'
-
-// export default function ForgotPasswordPage() {
-//   const [email, setEmail] = useState('')
-//   const [message] = useState('')
-//   const [loading, setLoading] = useState(false)
-//   const [, setSent] = useState(false)
-
-//   const handleSubmit = async () => {
-//     if (!email) return alert('Enter your email')
-//     setLoading(true)
-//     try {
-//       const res = await fetch('/api/auth/forgot-password', {
-//         method: 'POST',
-//         body: JSON.stringify({ email }),
-//         headers: { 'Content-Type': 'application/json' },
-//       })
-
-//       if (!res.ok) throw new Error('Failed to send reset link')
-//       setSent(true)
-//     } catch (err) {
-//       alert('Error sending reset email' + err)
-//     } finally {
-//       setLoading(false)
-//     }
-//   }
-
-//   return (
-//     <>
-     
-//       <div
-//         className="min-h-screen flex items-center justify-center"
-//         style={{ backgroundColor: colors.primaryBlue }}
-//       >
-//         <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 mx-4">
-
-//           <h1
-//             className="text-3xl font-bold mb-6"
-//             style={{ color: colors.primaryBlue }}
-//           >
-//             Forgot Password
-//           </h1>
-
-//           {message ? (
-//             <p className="text-gray-700">{message}</p>
-//           ) : (
-//             <>
-//               <label
-//                 className="block text-sm font-medium mb-1"
-//                 style={{ color: colors.primaryBlue }}
-//               >
-//                 Email
-//               </label>
-//               <input
-//                 type="email"
-//                 placeholder="you@example.com"
-//                 className="w-full border border-gray-400 rounded px-3 py-2 mb-4 outline-none text-sm text-black"
-//                 value={email}
-//                 onChange={e => setEmail(e.target.value)}
-//               />
-
-//               <button
-//                 onClick={handleSubmit}
-//                 disabled={loading}
-//                 className="w-full py-2 text-white font-semibold rounded hover:bg-[#013760] transition"
-//                 style={{ backgroundColor: colors.primaryBlueHover }}
-//               >
-//                 {loading ? 'Sending...' : 'Send Reset Email'}
-//               </button>
-//             </>
-//           )}
-//         </div>
-//       </div>
-//     </>
-//   )
-// }

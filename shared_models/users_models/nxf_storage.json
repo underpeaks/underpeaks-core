@@ -1,0 +1,13 @@
+{
+  "table_name": "nxf_storage",
+  "schema": "public",
+  "columns": [
+    { "name": "storage_id", "type": "uuid", "primary_key": true, "unique": true, "nullable": false },
+    { "name": "folder", "type": "string", "nullable": false },              
+    { "name": "file_name", "type": "string", "nullable": false },           
+    { "name": "file_path", "type": "string", "nullable": false },           
+    { "name": "mime_type", "type": "string", "nullable": true },            
+    { "name": "size", "type": "bigint", "nullable": true },                 
+    { "name": "created_at", "type": "timestamp", "nullable": false, "default": "now()" }
+  ]
+}
