@@ -23,13 +23,42 @@ export class SupabaseAdapter implements DBAdapter {
     this.adminClient = createClient(config.url, serviceRoleKey);
   }
 
-  // ✅ Public getter for config (fixes TS error)
+  // ✅ Public getter for config
   get config(): DBConfig {
     return this._config;
   }
 
+  /** ---------------------------
+   * Login (using built-in Supabase Auth)
+   * --------------------------- */
+  async login(
+    config: DBConfig,
+    email: string,
+    password: string
+  ): Promise<{ user?: any; error?: string }> {
+    // Supabase server SDK cannot sign in directly
+    // The client should log in and pass the session token to the backend
+    return {
+      error:
+        'login() via Supabase server SDK not supported. Use client Supabase SDK to sign in and pass access token to validateBuiltInSession().'
+    };
+  }
+
+  /** Validate Supabase built-in session */
+  async validateBuiltInSession(config: DBConfig, token: string): Promise<any | null> {
+    try {
+      const { data: user, error } = await this.adminClient.auth.getUser(token);
+      if (error) return null;
+      return user || null;
+    } catch {
+      return null;
+    }
+  }
+
   /** Normalize columns */
-  private normalizeColumns(columns: ColumnDef[] | Record<string, Omit<ColumnDef, 'name'>>): ColumnDef[] {
+  private normalizeColumns(
+    columns: ColumnDef[] | Record<string, Omit<ColumnDef, 'name'>>
+  ): ColumnDef[] {
     if (Array.isArray(columns)) return columns;
     return Object.entries(columns).map(([name, def]: [string, any]) => ({
       name,
@@ -67,7 +96,7 @@ export class SupabaseAdapter implements DBAdapter {
 
   async read(config: DBConfig, table: string, query?: any): Promise<any> {
     let qb = this.client.from(table).select('*');
-    if (query) Object.entries(query).forEach(([key, value]) => qb = qb.eq(key, value as string));
+    if (query) Object.entries(query).forEach(([key, value]) => (qb = qb.eq(key, value as string)));
     const { data, error } = await qb;
     if (error) throw error;
     return data;
@@ -85,33 +114,60 @@ export class SupabaseAdapter implements DBAdapter {
     return deleted;
   }
 
-  /** Create table with foreign keys */
+  /** Create table */
   async createTable(tableName: string, schema: { columns: ColumnDef[]; schema?: string }) {
     const columnsArray = this.normalizeColumns(schema.columns);
 
     const columnsSql = columnsArray
-      .map(col => {
-        let typeSql = '', defaultValue = '';
+      .map((col) => {
+        let typeSql = '',
+          defaultValue = '';
         const constraints: string[] = [];
 
         switch (col.type) {
-          case 'uuid': typeSql = 'UUID'; if (col.default === 'gen_random_uuid()') defaultValue = ' DEFAULT gen_random_uuid()'; break;
+          case 'uuid':
+            typeSql = 'UUID';
+            if (col.default === 'gen_random_uuid()') defaultValue = ' DEFAULT gen_random_uuid()';
+            break;
           case 'string':
-          case 'text': typeSql = 'TEXT'; break;
-          case 'jsonb': typeSql = 'JSONB'; break;
+          case 'text':
+            typeSql = 'TEXT';
+            break;
+          case 'jsonb':
+            typeSql = 'JSONB';
+            break;
           case 'datetime':
-          case 'timestamp with time zone': typeSql = 'TIMESTAMPTZ'; if (col.default === 'now()') defaultValue = ' DEFAULT now()'; break;
-          case 'integer': typeSql = 'INTEGER'; break;
-          case 'bigint': typeSql = 'BIGINT'; break;
-          case 'boolean': typeSql = 'BOOLEAN'; break;
-          case 'float': typeSql = 'REAL'; break;
-          case 'double': typeSql = 'DOUBLE PRECISION'; break;
-          case 'array': typeSql = 'TEXT[]'; break;
-          default: throw new Error(`Unsupported column type: ${col.type}`);
+          case 'timestamp with time zone':
+            typeSql = 'TIMESTAMPTZ';
+            if (col.default === 'now()') defaultValue = ' DEFAULT now()';
+            break;
+          case 'integer':
+            typeSql = 'INTEGER';
+            break;
+          case 'bigint':
+            typeSql = 'BIGINT';
+            break;
+          case 'boolean':
+            typeSql = 'BOOLEAN';
+            break;
+          case 'float':
+            typeSql = 'REAL';
+            break;
+          case 'double':
+            typeSql = 'DOUBLE PRECISION';
+            break;
+          case 'array':
+            typeSql = 'TEXT[]';
+            break;
+          default:
+            throw new Error(`Unsupported column type: ${col.type}`);
         }
 
         if (col.default && !['UUID', 'TIMESTAMPTZ'].includes(typeSql)) {
-          defaultValue = typeof col.default === 'string' ? ` DEFAULT '${col.default.replace(/'/g, "''")}'` : ` DEFAULT ${col.default}`;
+          defaultValue =
+            typeof col.default === 'string'
+              ? ` DEFAULT '${col.default.replace(/'/g, "''")}'`
+              : ` DEFAULT ${col.default}`;
         }
         if (col.is_primary) constraints.push('PRIMARY KEY');
         if (col.nullable === false) constraints.push('NOT NULL');
@@ -129,6 +185,7 @@ export class SupabaseAdapter implements DBAdapter {
     if (error) throw new Error(`Failed to create table: ${error.message}`);
   }
 
+  /** Run raw SQL */
   async runSQL(config: DBConfig, sql: string): Promise<any> {
     const { data, error } = await this.adminClient.rpc('pg_execute_sql', { sql } as any);
     if (error) throw new Error(`Failed to execute SQL: ${error.message}`);
@@ -136,49 +193,19 @@ export class SupabaseAdapter implements DBAdapter {
   }
 
   /** Finders */
-  async findUserByEmailWithRetry(config: DBConfig, email: string, retries = 5, delay = 300) {
-  for (let i = 0; i < retries; i++) {
-    const user = await this.findUserByEmail(config, email);
-    if (user) return user;
-
-    console.log(`⏳ Retry ${i + 1}/${retries}: User ${email} not found, waiting...`);
-    await new Promise(res => setTimeout(res, delay));
-  }
-  return null;
-}
-
   async findUserByEmail(config: DBConfig, email: string) {
-  console.log('📧 EMAIL:', email);
-
-  const { data, error } = await this.client
-    .from('nxf_users')
-    .select('*')
-    .eq('user_email', email)
-    .maybeSingle();
-
-  if (error) {
-    console.error('❌ Error in findUserByEmail:', error);
+    const { data, error } = await this.client.from('nxf_users').select('*').eq('user_email', email).maybeSingle();
+    if (error) throw error;
+    return data || null;
   }
 
-  console.log('🔍 FIND USER BY EMAIL result:', JSON.stringify(data, null, 2));
-
-  return data || null;
-}
-
-
-  async findUserByEmailinAuth(config: DBConfig, email: string) {
-    try {
-      const { data, error } = await (this.adminClient as any).auth.admin.listUsers({
-        page: 1,
-        perPage: 1000
-      });
-
-      if (error) return null;
-      const usersArray = data?.users || [];
-      return usersArray.find((u: any) => (u.email || '').toLowerCase() === email.toLowerCase()) || null;
-    } catch {
-      return null;
+  async findUserByEmailWithRetry(config: DBConfig, email: string, retries = 5, delay = 300) {
+    for (let i = 0; i < retries; i++) {
+      const user = await this.findUserByEmail(config, email);
+      if (user) return user;
+      await new Promise((res) => setTimeout(res, delay));
     }
+    return null;
   }
 
   async findProjectByOwnerId(config: DBConfig, ownerId: string) {
@@ -198,15 +225,9 @@ export class SupabaseAdapter implements DBAdapter {
     const ten_id = crypto.randomUUID();
     const { data: inserted, error } = await this.client
       .from('nxf_system_tenants')
-      .insert({
-        ten_id,
-        subdomain: data.subdomain,
-        user_email: data.user_email,
-        created_at: new Date().toISOString(),
-      })
+      .insert({ ten_id, subdomain: data.subdomain, user_email: data.user_email, created_at: new Date().toISOString() })
       .select()
       .single();
-
     if (error) throw error;
     return inserted.id as string;
   }
@@ -215,33 +236,18 @@ export class SupabaseAdapter implements DBAdapter {
     const project_id = crypto.randomUUID();
     const { data: inserted, error } = await this.client
       .from('nxf_system_projects')
-      .insert({
-        project_id,
-        name: data.name,
-        user_id: data.user_id,
-        created_at: new Date().toISOString(),
-      })
+      .insert({ project_id, name: data.name, user_id: data.user_id, created_at: new Date().toISOString() })
       .select()
       .single();
-
     if (error) throw error;
     return inserted.id as string;
   }
 
   async createAdminUser(config: DBConfig, data: any) {
-    const {
-      user_id,
-      user_email,
-      password,
-      role = 'admin',
-      ...rest
-    } = data;
-
-    if (!user_email) throw new Error("Admin user must have an email");
-    if (!password) throw new Error("Admin user must have a password");
-
+    const { user_id, user_email, password, role = 'admin', ...rest } = data;
+    if (!user_email) throw new Error('Admin user must have an email');
+    if (!password) throw new Error('Admin user must have a password');
     const hashed = await this.hashPassword(password);
-
     const payload: any = {
       user_id,
       user_email,
@@ -249,68 +255,49 @@ export class SupabaseAdapter implements DBAdapter {
       password_hash: hashed,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      ...rest,
+      ...rest
     };
-
-    const { error } = await this.client.from("nxf_users").upsert(payload, { onConflict: "user_id" });
+    const { error } = await this.client.from('nxf_users').upsert(payload, { onConflict: 'user_id' });
     if (error) throw new Error(`Failed to create admin user: ${error.message}`);
     return user_id;
   }
 
-  /** Auth */
-async registerUserInAuth(
-  config: DBConfig,
-  data: { email: string; password: string; fullName?: string }
-) {
-  try {
-    const anyAdmin: any = this.adminClient;
-    const { data: userData, error } = await anyAdmin.auth.admin.createUser({
-      email: data.email,
-      password: data.password,
-      email_confirm: true,
-      user_metadata: { full_name: data.fullName || '' },
-    });
-
-    if (error) throw error;
-
-    const userId = (userData?.user?.id ?? userData?.id) as string;
-    if (!userId) throw new Error('Failed to get user ID from Supabase response');
-    return { id: userId };
-  } catch (e: any) {
-    // 👇 catch Supabase duplicate user error
-    if (e?.message?.includes('already been registered')) {
-      console.log('⚠️ User already exists in Auth, fetching details...');
-      const existing = await this.findUserByEmailinAuth(config, data.email);
-      if (!existing) throw new Error('User exists in Auth but cannot be fetched');
-      return { id: existing.id };
+  async registerUserInAuth(config: DBConfig, data: { email: string; password: string; fullName?: string }) {
+    try {
+      const anyAdmin: any = this.adminClient;
+      const { data: userData, error } = await anyAdmin.auth.admin.createUser({
+        email: data.email,
+        password: data.password,
+        email_confirm: true,
+        user_metadata: { full_name: data.fullName || '' }
+      });
+      if (error) throw error;
+      const userId = (userData?.user?.id ?? userData?.id) as string;
+      if (!userId) throw new Error('Failed to get user ID from Supabase response');
+      return { id: userId };
+    } catch (e: any) {
+      if (e?.message?.includes('already been registered')) {
+        const existing = await this.findUserByEmailWithRetry(config, data.email);
+        if (!existing) throw new Error('User exists in Auth but cannot be fetched');
+        return { id: existing.id };
+      }
+      throw e;
     }
-    throw e;
   }
-}
 
-
-  /** Password hashing */
   async hashPassword(password: string) {
     return bcrypt.hash(password, 10);
   }
 
-  // -----------------------------
-  // Data Models (same as FirebaseAdapter)
-  // -----------------------------
+  /** Data models */
   async CreateDataModels(projectId: string) {
-    if (!this.config || !projectId) {
-      throw new Error('Missing DB config or projectId');
-    }
+    if (!this.config || !projectId) throw new Error('Missing DB config or projectId');
     return CreateDataModels(this, projectId);
   }
 
   async createDataModelsFromUserEmail(email: string): Promise<any> {
-    if (!this.config) {
-      throw new Error('Missing DB config');
-    }
-    if (!email) {
-      throw new Error('Missing User Email');
-    }
+    if (!this.config) throw new Error('Missing DB config');
+    if (!email) throw new Error('Missing User Email');
 
     const user = await this.findUserByEmailWithRetry(this.config, email);
     if (!user?.user_id) throw new Error('User not found');
@@ -321,70 +308,33 @@ async registerUserInAuth(
     return this.CreateDataModels(project.project_id);
   }
 
-   // -----------------------------
-  //  Supabase Storage Setup
-  // -----------------------------
+  /** Supabase storage setup */
+  async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
+    try {
+      const bucketName = 'NXT_Flutter_storage';
+      const DEFAULT_BUCKETS = ['system', 'themes', 'extensions', 'projects', 'avatars', 'logos', 'uploads'];
 
-async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
-  try {
-    // ⭐ Default Supabase bucket name for NXTFlutter
-    const bucketName = "NXT_Flutter_storage";
+      const { error: bucketError } = await this.adminClient.storage.createBucket(bucketName, {
+        public: false,
+        fileSizeLimit: 1024 * 1024 * 10
+      });
+      if (bucketError && !bucketError.message.includes('duplicate key')) throw bucketError;
 
-    // ⭐ Default root folders (same as FirebaseAdapter)
-    const DEFAULT_BUCKETS = [
-      "system",
-      "themes",
-      "extensions",
-      "projects",
-      "avatars",
-      "logos",
-      "uploads"
-    ];
-
-    // Create bucket if it doesn't exist
-    const { error: bucketError } = await this.adminClient.storage.createBucket(bucketName, {
-      public: false,
-      fileSizeLimit: 1024 * 1024 * 10 // 10 MB limit
-    });
-
-    // Ignore duplicate key error (bucket already exists)
-    if (bucketError && !bucketError.message.includes("duplicate key")) {
-      throw bucketError;
-    }
-
-    // ⭐ Create folder structure using .keep placeholder files
-    for (const folder of DEFAULT_BUCKETS) {
-      const filePath = `${folder}/.keep`;
-
-      const { error: uploadError } = await this.adminClient.storage
-        .from(bucketName)
-        .upload(filePath, new Blob([""]), {
-          upsert: true,
-          contentType: "text/plain"
-        });
-
-      // Ignore "already exists" errors
-      if (uploadError && !uploadError.message.includes("exists")) {
-        console.error(`[SupabaseAdapter] Failed to create folder "${folder}":`, uploadError.message);
-        throw uploadError;
+      for (const folder of DEFAULT_BUCKETS) {
+        const filePath = `${folder}/.keep`;
+        const { error: uploadError } = await this.adminClient.storage
+          .from(bucketName)
+          .upload(filePath, new Blob(['']), { upsert: true, contentType: 'text/plain' });
+        if (uploadError && !uploadError.message.includes('exists')) throw uploadError;
+        console.log(`[SupabaseAdapter] Created folder: ${folder}/`);
       }
 
-      console.log(`[SupabaseAdapter] Created folder: ${folder}/`);
+      return { success: true, buckets: DEFAULT_BUCKETS };
+    } catch (e: any) {
+      console.error('[SupabaseAdapter] setupStorageBuckets error:', e.message);
+      return { success: false, buckets: [] };
     }
-
-    return {
-      success: true,
-      buckets: DEFAULT_BUCKETS
-    };
-
-  } catch (e: any) {
-    console.error("[SupabaseAdapter] setupStorageBuckets error:", e.message);
-    return {
-      success: false,
-      buckets: []
-    };
   }
-}
 }
 
 /** Factory */

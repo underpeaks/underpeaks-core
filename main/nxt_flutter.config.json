@@ -2,10 +2,10 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "mongodb",
+  "selectedDb": "firebase",
   "deploymentType": "self-hosted",
   "dbConfig": {
-    "type": "mongodb"
+    "type": "firebase"
   },
   "ecommerceEnabled": false,
   "demoContentEnabled": true,

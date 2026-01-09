@@ -28,7 +28,7 @@ export async function authGuard(req: NextRequest, adapter: DBAdapter, config: DB
     }
 
     // Optional: Extend token if hybrid approach is used
-    await authService.extendToken(user.tokenId);
+    await authService.extendToken(user.token_id || user.tokenId);
 
     // Attach user to request for downstream handlers
     (req as any).user = user;

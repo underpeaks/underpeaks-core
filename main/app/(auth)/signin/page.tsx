@@ -10,42 +10,60 @@ import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { FiMail, FiLock } from 'react-icons/fi'
 import { signin } from './actions/signin'
 
+// 🔹 Correct import path for client Firebase service
+import { getFirebaseAuth } from '@/app/lib/firebase-service'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 
 export default function SignInPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectedFrom = searchParams.get('redirectedFrom') || '/console'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const searchParams = useSearchParams()
-  const redirectedFrom = searchParams.get('redirectedFrom') || '/console'
-  
-  // ... existing state
 
   async function handleSignin() {
     setLoading(true)
     setError(null)
 
+    // STEP 1: Standard email/password signin (server-side)
     const result = await signin({ email, password })
 
-    if (result.error) {
+    // STEP 2: If missing token, use Firebase client login
+    if (result?.error === 'Missing authentication token') {
+      try {
+        const auth = await getFirebaseAuth()
+        const cred = await signInWithEmailAndPassword(auth, email, password)
+        const token = await cred.user.getIdToken()
+
+        // Retry server signin with Firebase token
+        const tokenResult = await signin({ token })
+
+        if (tokenResult?.error) {
+          setError(tokenResult.error)
+          setLoading(false)
+          return
+        }
+      } catch (err: any) {
+        console.error('Firebase client login failed:', err)
+        setError(err.message || 'Authentication failed')
+        setLoading(false)
+        return
+      }
+    } else if (result?.error) {
       setError(result.error)
       setLoading(false)
       return
     }
 
-    // Critical fix: Refresh the router to update session state
+    // ✅ Success
     router.refresh()
-    
-    // Use setTimeout to allow session state to update
     setTimeout(() => {
       router.push(redirectedFrom)
-    }, 300) // 300ms delay to ensure session is updated
+    }, 300)
   }
-
-  // ... rest of your component
-
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
@@ -61,7 +79,9 @@ export default function SignInPage() {
           </Alert>
         )}
 
-        <Label htmlFor="email" className="mb-1 text-black">Email</Label>
+        <Label htmlFor="email" className="mb-1 text-black">
+          Email
+        </Label>
         <div className="flex items-center gap-2 mb-4">
           <FiMail className="text-gray-500" />
           <Input
@@ -73,7 +93,9 @@ export default function SignInPage() {
           />
         </div>
 
-        <Label htmlFor="password" className="mb-1 text-black">Password</Label>
+        <Label htmlFor="password" className="mb-1 text-black">
+          Password
+        </Label>
         <div className="flex items-center gap-2 mb-6">
           <FiLock className="text-gray-500" />
           <Input
@@ -84,14 +106,12 @@ export default function SignInPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        {/* Add this below password input and before the Sign In button */}
 
-<p className="mb-4 text-right text-sm">
-  <Link href="/forgot-password" className="text-blue-600 hover:underline">
-    Forgot password?
-  </Link>
-</p>
-
+        <p className="mb-4 text-right text-sm">
+          <Link href="/forgot-password" className="text-blue-600 hover:underline">
+            Forgot password?
+          </Link>
+        </p>
 
         <Button
           className="w-full mb-4"

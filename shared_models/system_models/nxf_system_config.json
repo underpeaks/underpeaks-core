@@ -1,0 +1,99 @@
+{
+  "table_name": "nxf_system_config",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "config_id",
+      "type": "uuid",
+      "default": "gen_random_uuid()",
+      "primary_key": true,
+      "nullable": false
+    },
+    {
+      "name": "project_id",
+      "type": "uuid",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_projects(project_id)",
+        "on_delete": "CASCADE"
+      }
+    },
+    {
+      "name": "deployment_type",
+      "type": "string",
+      "nullable": false,
+      "comment": "self_hosted | hosted"
+    },
+    {
+      "name": "hosted_api_key",
+      "type": "string",
+      "nullable": true,
+      "comment": "Platform-issued key used when hosted"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "draft",
+      "comment": "draft | configured | generated | deployed | disabled"
+    },
+    {
+      "name": "selected_stack",
+      "type": "string",
+      "nullable": false,
+      "comment": "next | flutter | both"
+    },
+    {
+      "name": "selected_db",
+      "type": "string",
+      "nullable": false,
+      "comment": "firebase | supabase | postgres | mysql | mongodb"
+    },
+    {
+      "name": "db_config",
+      "type": "jsonb",
+      "nullable": false,
+      "comment": "Encrypted database configuration"
+    },
+    {
+      "name": "feature_flags",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "{}"
+    },
+    {
+      "name": "models_version",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "generator_version",
+      "type": "string",
+      "nullable": false,
+      "comment": "Version of generator used"
+    },
+    {
+      "name": "last_generated_at",
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    }
+  ]
+}
