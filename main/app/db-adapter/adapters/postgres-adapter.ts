@@ -37,18 +37,18 @@ export class PostgresAdapter implements DBAdapter {
     }
   }
 
-  /** Basic CRUD with JSON serialization */
+  /** Basic CRUD */
   async create(_config: DBConfig, table: string, data: any): Promise<any> {
     await this.connect();
     const keys = Object.keys(data);
-    const values = Object.values(data).map(v => (typeof v === "object" && v !== null ? JSON.stringify(v) : v));
+    const values = Object.values(data).map((v) => (typeof v === "object" && v !== null ? JSON.stringify(v) : v));
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(", ");
     const sql = `INSERT INTO ${table} (${keys.join(", ")}) VALUES (${placeholders}) RETURNING *`;
     const res = await this.client.query(sql, values);
     return res.rows[0];
   }
 
-  async read(_config: DBConfig, table: string, query?: any): Promise<any> {
+  async read(_config: DBConfig, table: string, query?: any): Promise<any[]> {
     await this.connect();
     let sql = `SELECT * FROM ${table}`;
     const values: any[] = [];
@@ -68,7 +68,7 @@ export class PostgresAdapter implements DBAdapter {
   async update(_config: DBConfig, table: string, id: string, data: any): Promise<any> {
     await this.connect();
     const keys = Object.keys(data);
-    const values = Object.values(data).map(v => (typeof v === "object" && v !== null ? JSON.stringify(v) : v));
+    const values = Object.values(data).map((v) => (typeof v === "object" && v !== null ? JSON.stringify(v) : v));
     const set = keys.map((k, i) => `${k} = $${i + 1}`).join(", ");
     const sql = `UPDATE ${table} SET ${set} WHERE id = $${keys.length + 1} RETURNING *`;
     const res = await this.client.query(sql, [...values, id]);
@@ -85,26 +85,19 @@ export class PostgresAdapter implements DBAdapter {
   /** Create table from schema */
   async createTable(tableName: string, schema: { columns: ColumnDef[] | Record<string, ColumnDef>; schema?: string }) {
     await this.connect();
-    // Enable necessary extensions
     await this.client.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
     await this.client.query(`CREATE EXTENSION IF NOT EXISTS "pgcrypto";`);
 
-    // Normalize columns to array
     let columnsArray: ColumnDef[] = [];
-    if (Array.isArray(schema.columns)) {
-      columnsArray = schema.columns;
-    } else if (typeof schema.columns === "object" && schema.columns !== null) {
+    if (Array.isArray(schema.columns)) columnsArray = schema.columns;
+    else if (typeof schema.columns === "object" && schema.columns !== null)
       columnsArray = Object.entries(schema.columns).map(([name, col]) => ({ ...col, name }));
-    } else {
-      throw new Error(`PostgresAdapter.createTable: "columns" must be an array or object for table "${tableName}"`);
-    }
+    else throw new Error(`PostgresAdapter.createTable: "columns" must be array or object for table "${tableName}"`);
 
-    if (columnsArray.length === 0) {
-      throw new Error(`PostgresAdapter.createTable: "columns" cannot be empty for table "${tableName}"`);
-    }
+    if (!columnsArray.length) throw new Error(`PostgresAdapter.createTable: "columns" cannot be empty`);
 
     const colsSQL = columnsArray
-      .map(col => {
+      .map((col) => {
         let typeSql = "";
         let defaultValue = "";
         const constraints: string[] = [];
@@ -150,11 +143,8 @@ export class PostgresAdapter implements DBAdapter {
 
         if (col.default) {
           let def = col.default.toString().replace(/^extensions\./i, "");
-          if (/\(\)$/.test(def)) {
-            defaultValue = ` DEFAULT ${def}`;
-          } else {
-            defaultValue = typeof col.default === "string" ? ` DEFAULT '${def.replace(/'/g, "''")}'` : ` DEFAULT ${def}`;
-          }
+          if (/\(\)$/.test(def)) defaultValue = ` DEFAULT ${def}`;
+          else defaultValue = typeof col.default === "string" ? ` DEFAULT '${def.replace(/'/g, "''")}'` : ` DEFAULT ${def}`;
         }
 
         if (col.is_primary || (col.primary_key ?? false)) constraints.push("PRIMARY KEY");
@@ -235,11 +225,65 @@ export class PostgresAdapter implements DBAdapter {
 
   /** Auth */
   async registerUserInAuth(_config: DBConfig, data: { email: string; password: string }) {
-    return { id: crypto.randomUUID() };
+    const hashed = await this.hashPassword(data.password);
+    const user_id = crypto.randomUUID();
+    await this.create(this.config, "nxf_users", {
+      user_id,
+      user_email: data.email,
+      password_hash: hashed,
+      created_at: new Date(),
+    });
+    return { id: user_id };
   }
 
   async hashPassword(password: string) {
     return bcrypt.hash(password, 10);
+  }
+
+  /** Update / Delete for tokens and users */
+  async updateTokenOrUser(table: string, key: string, keyValue: string, data: any) {
+    await this.connect();
+    const keys = Object.keys(data);
+    const values = Object.values(data);
+    const set = keys.map((k, i) => `${k} = $${i + 1}`).join(", ");
+    const sql = `UPDATE ${table} SET ${set} WHERE ${key} = $${keys.length + 1} RETURNING *`;
+    const res = await this.client.query(sql, [...values, keyValue]);
+    return res.rows[0];
+  }
+
+  async deleteTokenOrUser(table: string, key: string, keyValue: string) {
+    await this.connect();
+    const sql = `DELETE FROM ${table} WHERE ${key} = $1 RETURNING *`;
+    const res = await this.client.query(sql, [keyValue]);
+    return res.rows[0];
+  }
+
+  /** Token / Password Helpers */
+  async resetPassword(config: DBConfig, token: string, newPassword: string) {
+    const tokens = await this.read(config, "nxf_tokens", { token, type: "password_reset" });
+    if (!tokens.length) return { success: false, error: "Invalid token" };
+
+    const email = tokens[0].user_email;
+    const hashed = await this.hashPassword(newPassword);
+
+    const users = await this.read(config, "nxf_users", { user_email: email });
+    if (!users.length) return { success: false, error: "User not found" };
+
+    return await this.updateTokenOrUser("nxf_users", "user_id", users[0].user_id, { password_hash: hashed })
+      ? { success: true }
+      : { success: false, error: "Failed to update password" };
+  }
+
+  async extendToken(tokenId: string, data: any) {
+    const tokens = await this.read(this.config, "nxf_tokens", { token_id: tokenId });
+    if (!tokens.length) throw new Error("Token not found");
+    return this.updateTokenOrUser("nxf_tokens", "token_id", tokenId, data);
+  }
+
+  async revokeToken(tokenId: string) {
+    const tokens = await this.read(this.config, "nxf_tokens", { token_id: tokenId });
+    if (!tokens.length) return;
+    return this.deleteTokenOrUser("nxf_tokens", "token_id", tokenId);
   }
 
   /** Create data models */
@@ -248,7 +292,6 @@ export class PostgresAdapter implements DBAdapter {
     return CreateDataModels(this, projectId);
   }
 
-  /** Create data models from user email */
   async createDataModelsFromUserEmail(userEmail: string) {
     if (!userEmail) throw new Error("Missing userEmail");
 
@@ -262,30 +305,24 @@ export class PostgresAdapter implements DBAdapter {
 
     return this.CreateDataModels(projectId);
   }
-   /** -------------------------
-   * Storage Setup
-   * ------------------------- */
+
+  /** Storage Setup */
   async setupStorageBuckets(): Promise<string[] | { success: boolean; buckets: string[] }> {
     try {
-      const DEFAULT_BUCKETS = ["uploads", "avatars", "products", "reports"]; // adjust as needed
-
+      const DEFAULT_BUCKETS = ["uploads", "avatars", "products", "reports"];
       for (const folder of DEFAULT_BUCKETS) {
-        const storage_id = crypto.randomUUID();
-
-        // Insert into nxf_storage if not exists
         const existing = await this.read(this.config, "nxf_storage", { folder });
         if (!existing || existing.length === 0) {
           await this.create(this.config, "nxf_storage", {
-            storage_id,
+            storage_id: crypto.randomUUID(),
             folder,
-            file_name: "",   // placeholder
-            file_path: folder, // just the folder path
-            created_at: new Date()
+            file_name: "",
+            file_path: folder,
+            created_at: new Date(),
           });
           console.log(`[PostgresAdapter] Created storage folder record: ${folder}`);
         }
       }
-
       return { success: true, buckets: DEFAULT_BUCKETS };
     } catch (err: any) {
       console.error("[PostgresAdapter] Failed to setup storage buckets:", err.message);
@@ -293,7 +330,6 @@ export class PostgresAdapter implements DBAdapter {
     }
   }
 }
-
 
 /** Factory */
 export function getPostgresAdapter(config: DBConfig) {

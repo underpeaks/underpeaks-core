@@ -1,133 +1,126 @@
+import { DBAdapter, DBConfig } from "../db-adapter/types";
 import crypto from "crypto";
-import { DBAdapter, DBConfig } from '../db-adapter/types';
-
-const ACCESS_TOKEN_TTL_MS = 60 * 60 * 1000; // 1 hour
-const REFRESH_TOKEN_TTL_MS = 8 * 60 * 60 * 1000; // 8 hours
-const AUTO_REFRESH_THRESHOLD_MS = 10 * 60 * 1000; // 10 minutes
-
-export interface IssuedTokens {
-  accessToken: string;
-  refreshToken: string;
-  expiresAt: Date;
-}
 
 export class AuthService {
-  constructor(private adapter: DBAdapter, private config: DBConfig) {}
+  constructor(
+    private readonly adapter: DBAdapter,
+    private readonly config: DBConfig
+  ) {}
 
-  /* ------------------------------------------------------------------ */
-  /* Token creation                                                     */
-  /* ------------------------------------------------------------------ */
+  async login(email: string, password: string) {
+    if (!this.adapter.login) throw new Error("Login not supported for this adapter");
+    return this.adapter.login(this.config, email, password);
+  }
 
-  async issueTokens(params: {
-    userId: string;
-    projectId: string;
-    ipAddress?: string;
-    userAgent?: string;
-  }): Promise<IssuedTokens> {
-    const now = Date.now();
+  async register(data: { email: string; password: string; full_name?: string }) {
+    if (!this.adapter.register) throw new Error("Register not supported for this adapter");
+    return this.adapter.register(this.config, data);
+  }
 
-    const tokenId = crypto.randomUUID();
-    const accessToken = this.generateToken();
-    const refreshToken = this.generateToken();
+  async getCurrentUser(token?: string) {
+    if (!this.adapter.getCurrentUser) return null;
+    return this.adapter.getCurrentUser(this.config, token);
+  }
 
-    const accessExpiresAt = new Date(now + ACCESS_TOKEN_TTL_MS);
-    const refreshExpiresAt = new Date(now + REFRESH_TOKEN_TTL_MS);
+  async logout(token?: string) {
+    if (!this.adapter.logout) return { success: true };
+    return this.adapter.logout(this.config, token);
+  }
+
+  async sendResetEmail(email: string, redirectUrl: string) {
+    if (!this.adapter.sendResetEmail) {
+      throw new Error("Password reset not supported for this adapter");
+    }
+    return this.adapter.sendResetEmail(this.config, email, redirectUrl);
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    if (!this.adapter.resetPassword) {
+      throw new Error("Password reset not supported for this adapter");
+    }
+    return this.adapter.resetPassword(this.config, token, newPassword);
+  }
+
+  /**
+   * Extend token expiry (only for token-based adapters)
+   */
+  async extendToken(
+    tokenId: string,
+    data?: { access_expires_at?: Date; refresh_expires_at?: Date }
+  ) {
+    if (!this.adapter.extendToken) return;
+
+    const payload = {
+      access_expires_at:
+        data?.access_expires_at ??
+        new Date(Date.now() + 60 * 60 * 1000), // 1 hour
+      refresh_expires_at:
+        data?.refresh_expires_at ??
+        new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
+    };
+
+    return this.adapter.extendToken(tokenId, payload);
+  }
+
+  /**
+   * Convenience method to validate access token
+   */
+  async validateAccessToken(token: string) {
+    if (!this.adapter.findTokenByAccessToken) return null;
+    const tokenData = await this.adapter.findTokenByAccessToken(token);
+    if (!tokenData || tokenData.revoked) return null;
+    return tokenData;
+  }
+
+  /**
+   * ----------------------------------
+   * ISSUE ACCESS + REFRESH TOKENS
+   * ----------------------------------
+   * Used by SQL & Mongo adapters
+   * Firebase / Supabase still auth users,
+   * but tokens are issued here.
+   */
+  async issueTokens(input: { userId: string; projectId?: string | null }) {
+    if (!this.adapter.createToken) {
+      throw new Error("Token issuing not supported for this adapter");
+    }
+
+    const accessToken = crypto.randomUUID();
+    const refreshToken = crypto.randomUUID();
+
+    const accessTokenHash = crypto
+      .createHash("sha256")
+      .update(accessToken)
+      .digest("hex");
+
+    const refreshTokenHash = crypto
+      .createHash("sha256")
+      .update(refreshToken)
+      .digest("hex");
+
+    const now = new Date();
+
+    const accessExpiresAt = new Date(now.getTime() + 15 * 60 * 1000); // 15 min
+    const refreshExpiresAt = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000); // 30 days
 
     await this.adapter.createToken({
-      token_id: tokenId,
-      user_id: params.userId,
-      project_id: params.projectId,
-      access_token_hash: this.hash(accessToken),
-      refresh_token_hash: this.hash(refreshToken),
+      token_id: crypto.randomUUID(),
+      user_id: input.userId,
+      project_id: input.projectId ?? null,
+      access_token_hash: accessTokenHash,
+      refresh_token_hash: refreshTokenHash,
       access_expires_at: accessExpiresAt,
       refresh_expires_at: refreshExpiresAt,
       revoked: false,
-      ip_address: params.ipAddress || null,
-      user_agent: params.userAgent || null,
-      created_at: new Date(),
-      updated_at: new Date(),
+      created_at: now,
+      updated_at: now,
     });
 
     return {
       accessToken,
       refreshToken,
-      expiresAt: accessExpiresAt,
+      accessExpiresAt,
+      refreshExpiresAt,
     };
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Access token validation + auto refresh                              */
-  /* ------------------------------------------------------------------ */
-
-  async validateAccessToken(accessToken: string) {
-    const tokenHash = this.hash(accessToken);
-    const token = await this.adapter.findTokenByAccessToken(tokenHash);
-
-    if (!token) return null;
-    if (token.revoked) return null;
-    if (new Date(token.access_expires_at).getTime() < Date.now()) return null;
-
-    // Sliding refresh
-    const remaining = new Date(token.access_expires_at).getTime() - Date.now();
-    if (remaining < AUTO_REFRESH_THRESHOLD_MS) {
-      await this.extendToken(token.token_id);
-    }
-
-    return {
-      userId: token.user_id,
-      projectId: token.project_id,
-      tokenId: token.token_id,
-    };
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Refresh token exchange                                             */
-  /* ------------------------------------------------------------------ */
-
-  async refreshTokens(refreshToken: string): Promise<IssuedTokens | null> {
-    const tokenHash = this.hash(refreshToken);
-    const token = await this.adapter.findTokenByRefreshToken(tokenHash);
-
-    if (!token) return null;
-    if (token.revoked) return null;
-    if (new Date(token.refresh_expires_at).getTime() < Date.now()) return null;
-
-    // Revoke old token
-    await this.adapter.revokeToken(token.token_id);
-
-    // Issue new token pair
-    return this.issueTokens({
-      userId: token.user_id,
-      projectId: token.project_id,
-    });
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Logout / revoke                                                    */
-  /* ------------------------------------------------------------------ */
-
-  async revokeToken(tokenId: string): Promise<void> {
-    await this.adapter.revokeToken(tokenId);
-  }
-
-  /* ------------------------------------------------------------------ */
-  /* Internal helpers                                                   */
-  /* ------------------------------------------------------------------ */
-
-   async extendToken(tokenId: string) {
-    const now = Date.now();
-    await this.adapter.extendToken(tokenId, {
-      access_expires_at: new Date(now + ACCESS_TOKEN_TTL_MS),
-      refresh_expires_at: new Date(now + REFRESH_TOKEN_TTL_MS),
-      updated_at: new Date(),
-    });
-  }
-
-  private generateToken(): string {
-    return crypto.randomBytes(48).toString("hex");
-  }
-
-  private hash(value: string): string {
-    return crypto.createHash("sha256").update(value).digest("hex");
   }
 }
