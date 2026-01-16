@@ -3,36 +3,30 @@ import mysql from "mysql2/promise";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { DBConfig, DBAdapter, ColumnDef, DBType } from "../types";
-import { config as loadEnv } from "dotenv";
 import { CreateDataModels } from "../utils/create-data-models";
 
-// Load .env variables
-loadEnv();
-
+// -----------------------
+// MySQL Adapter
+// -----------------------
 export class MySQLAdapter implements DBAdapter {
   private pool: mysql.Pool;
   public config: DBConfig;
 
-  constructor(config?: DBConfig) {
-    this.config = config || {
-      type: (process.env.DB_TYPE as DBType) || "mysql",
-      host: process.env.DB_HOST!,
-      user: process.env.DB_USER!,
-      password: process.env.DB_PASSWORD!,
-      database: process.env.DB_DATABASE!,
-      port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
-    };
+  constructor(config: DBConfig) {
+    if (!config) throw new Error("DBConfig must be provided via Zustand store");
+    this.config = config;
 
     this.pool = mysql.createPool({
-      host: this.config.host,
-      user: this.config.user,
-      password: this.config.password,
-      database: this.config.database,
-      port: this.config.port ? Number(this.config.port) : undefined,
-      waitForConnections: true,
-      connectionLimit: 10,
-      queueLimit: 0,
-    });
+  host: this.config.host,
+  user: this.config.user,
+  password: this.config.password,
+  database: this.config.database,
+  port: this.config.port ? Number(this.config.port) : undefined, // <-- cast to number
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+});
+
   }
 
   // -----------------------
@@ -93,9 +87,9 @@ export class MySQLAdapter implements DBAdapter {
 
     const keys = Object.keys(preparedData);
     const values = keys.map((k) => preparedData[k]);
-    const placeholders = keys.map(() => "?").join(", ");
+    const placeholders = keys.map(() => "?").join(",");
 
-    const sql = `INSERT INTO \`${table}\` (${keys.join(", ")}) VALUES (${placeholders})`;
+    const sql = `INSERT INTO \`${table}\` (${keys.join(",")}) VALUES (${placeholders})`;
     const [result] = await this.pool.query(sql, values);
     return result;
   }
@@ -132,6 +126,9 @@ export class MySQLAdapter implements DBAdapter {
     return result;
   }
 
+  // -----------------------
+  // TABLE MANAGEMENT
+  // -----------------------
   async createTable(
     tableName: string,
     schema: { columns: ColumnDef[] | Record<string, Omit<ColumnDef, "name">> }
@@ -237,107 +234,7 @@ export class MySQLAdapter implements DBAdapter {
   }
 
   // -----------------------
-  // Auth methods
-  // -----------------------
-  async login(config: DBConfig, email: string, password: string) {
-    const user = await this.findUserByEmail(config, email);
-    if (!user) return { error: "User not found" };
-    const isValid = await this.comparePassword(password, user.password_hash);
-    if (!isValid) return { error: "Invalid password" };
-    const { password_hash, ...userSafe } = user;
-    return { user: userSafe };
-  }
-
-  async register(config: DBConfig, data: { email: string; password: string; full_name?: string }) {
-    const hashed = await this.hashPassword(data.password);
-    const userId = crypto.randomUUID();
-    await this.create(config, "nxf_users", {
-      user_id: userId,
-      user_email: data.email,
-      password_hash: hashed,
-      full_name: data.full_name || null,
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-    return { userId };
-  }
-
-  async logout(_config: DBConfig, _token?: string) {
-    // Token revocation handled in SQL token table if implemented
-    return { success: true };
-  }
-
-  async getCurrentUser(config: DBConfig, token?: string) {
-    if (!token) return null;
-    const row: any = await this.read(config, "nxf_tokens", { access_token: token });
-    if (!row || row.length === 0) return null;
-    const user = await this.findUserByEmail(config, row[0].user_email);
-    if (!user) return null;
-    const { password_hash, ...userSafe } = user;
-    return userSafe;
-  }
-
-  async sendResetEmail(config: DBConfig, email: string, redirectUrl: string) {
-    // Placeholder: in production, integrate with email service
-    const user = await this.findUserByEmail(config, email);
-    if (!user) return { success: false, error: "User not found" };
-    const resetToken = crypto.randomUUID();
-    await this.create(config, "nxf_tokens", {
-      token: resetToken,
-      type: "password_reset",
-      user_email: email,
-      redirect_url: redirectUrl,
-      created_at: new Date(),
-      expires_at: new Date(Date.now() + 3600 * 1000), // 1 hour expiry
-    });
-    return { success: true };
-  }
-
-  async resetPassword(config: DBConfig, token: string, newPassword: string) {
-    const rows: any = await this.read(config, "nxf_tokens", { token, type: "password_reset" });
-    if (!rows || rows.length === 0) return { success: false, error: "Invalid token" };
-    const email = rows[0].user_email;
-    const hashed = await this.hashPassword(newPassword);
-    await this.update(config, "nxf_users", rows[0].user_id, { password_hash: hashed });
-    return { success: true };
-  }
-
-  async createToken(data: any) {
-    const tokenId = crypto.randomUUID();
-    const accessToken = crypto.randomUUID();
-    const refreshToken = crypto.randomUUID();
-    await this.create(this.config, "nxf_tokens", {
-      token_id: tokenId,
-      access_token: accessToken,
-      refresh_token: refreshToken,
-      user_email: data.user_email,
-      created_at: new Date(),
-      expires_at: new Date(Date.now() + 7 * 24 * 3600 * 1000), // 7 days
-    });
-    return { token_id: tokenId, access_token: accessToken, refresh_token: refreshToken };
-  }
-
-  async findTokenByAccessToken(hash: string) {
-    const rows: any = await this.read(this.config, "nxf_tokens", { access_token: hash });
-    return rows && rows.length ? rows[0] : null;
-  }
-
-  async findTokenByRefreshToken(hash: string) {
-    const rows: any = await this.read(this.config, "nxf_tokens", { refresh_token: hash });
-    return rows && rows.length ? rows[0] : null;
-  }
-
-  async extendToken(tokenId: string, data: any) {
-    await this.update(this.config, "nxf_tokens", tokenId, data);
-    return await this.read(this.config, "nxf_tokens", { token_id: tokenId });
-  }
-
-  async revokeToken(tokenId: string) {
-    await this.delete(this.config, "nxf_tokens", tokenId);
-  }
-
-  // -----------------------
-  // Admin & User helpers
+  // Users / Auth
   // -----------------------
   async createAdminUser(config: DBConfig, data: any) {
     const { user_id, user_email, password, role = "admin", ...rest } = data;
@@ -359,6 +256,29 @@ export class MySQLAdapter implements DBAdapter {
     return rows && rows.length ? rows[0] : null;
   }
 
+  async findUserByEmailWithRetry(config: DBConfig, email: string, retries = 5, delay = 300) {
+    for (let i = 0; i < retries; i++) {
+      const user = await this.findUserByEmail(config, email);
+      if (user) return user;
+      await new Promise((r) => setTimeout(r, delay));
+    }
+    return null;
+  }
+
+  // -----------------------
+  // Installer config
+  // -----------------------
+  async saveInstallerConfig(config: DBConfig, data: any): Promise<string> {
+    const config_id = crypto.randomUUID();
+    await this.create(config, "nxf_system_config", {
+      config_id,
+      ...data,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+    return config_id;
+  }
+
   // -----------------------
   // Data Models
   // -----------------------
@@ -368,46 +288,42 @@ export class MySQLAdapter implements DBAdapter {
   }
 
   async createDataModelsFromUserEmail(userEmail: string) {
-    if (!userEmail) throw new Error("Missing userEmail");
+    const user = await this.findUserByEmailWithRetry(this.config, userEmail);
+    if (!user?.user_id) throw new Error(`User not found: ${userEmail}`);
 
-    const users: any = await this.read(this.config, "nxf_users", { user_email: userEmail });
-    if (!users || users.length === 0) throw new Error(`User not found: ${userEmail}`);
-    const user = users[0];
-
-    const projects: any = await this.read(this.config, "nxf_system_projects", { user_id: user.user_id });
-    if (!projects || projects.length === 0) throw new Error(`No project found for user ${userEmail}`);
-    const projectId = projects[0].project_id;
-
-    return this.CreateDataModels(projectId);
+    const project = await this.findProjectByOwnerId(this.config, user.user_id);
+    if (!project?.project_id) throw new Error(`No project found for user ${userEmail}`);
+    return this.CreateDataModels(project.project_id);
   }
 
   // -----------------------
   // Storage
   // -----------------------
-  async setupStorageBuckets(): Promise<string[] | { success: boolean; buckets: string[] }> {
-    try {
-      const DEFAULT_BUCKETS = ["uploads", "avatars", "products", "reports"];
+  async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
+    const DEFAULT_BUCKETS = [
+      "system",
+      "themes",
+      "extensions",
+      "projects",
+      "avatars",
+      "logos",
+      "uploads",
+    ];
 
-      for (const folder of DEFAULT_BUCKETS) {
-        const storage_id = crypto.randomUUID();
-        const existing = await this.read(this.config, "nxf_storage", { folder });
-        if (!existing || existing.length === 0) {
-          await this.create(this.config, "nxf_storage", {
-            storage_id,
-            folder,
-            file_name: "",
-            file_path: folder,
-            created_at: new Date(),
-          });
-          console.log(`[MySQLAdapter] Created storage folder record: ${folder}`);
-        }
+    for (const folder of DEFAULT_BUCKETS) {
+      const existing = await this.read(this.config, "nxf_storage", { folder });
+      if (!existing || existing.length === 0) {
+        await this.create(this.config, "nxf_storage", {
+          storage_id: crypto.randomUUID(),
+          folder,
+          file_name: "",
+          file_path: folder,
+          created_at: new Date(),
+        });
       }
-
-      return { success: true, buckets: DEFAULT_BUCKETS };
-    } catch (err: any) {
-      console.error("[MySQLAdapter] Failed to setup storage buckets:", err.message);
-      return { success: false, buckets: [] };
     }
+
+    return { success: true, buckets: DEFAULT_BUCKETS };
   }
 
   async createBucket(bucketName: string) {
@@ -433,15 +349,6 @@ export class MySQLAdapter implements DBAdapter {
 // -----------------------
 // Factory
 // -----------------------
-export function getMySQLAdapter(config?: DBConfig) {
+export function getMySQLAdapter(config: DBConfig) {
   return new MySQLAdapter(config);
 }
-
-// -----------------------
-// Test connection
-// -----------------------
-(async () => {
-  const adapter = getMySQLAdapter();
-  const result = await adapter.testConnection();
-  console.log(result);
-})();

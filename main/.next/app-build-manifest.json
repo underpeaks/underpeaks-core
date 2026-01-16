@@ -37,11 +37,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/installer/database/page.js"
     ],
-    "/api/save-db-config/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/save-db-config/route.js"
-    ],
     "/api/test-db-connection/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -91,6 +86,21 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/create-storage-buckets/route.js"
+    ],
+    "/api/save-config/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/save-config/route.js"
+    ],
+    "/installer/done/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/installer/done/page.js"
+    ],
+    "/(auth)/signin/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/signin/page.js"
     ]
   }
 }

@@ -1,5 +1,45 @@
 {
-  "node": {},
+  "node": {
+    "006c6194462b529820229c09a48ad6772dcdbf4c20": {
+      "workers": {
+        "app/(auth)/signin/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%2C%5B%7B%22id%22%3A%22006c6194462b529820229c09a48ad6772dcdbf4c20%22%2C%22exportedName%22%3A%22loadConfig%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%2C%7B%22id%22%3A%2200e5161cc754235efff0d018aa826737249b61c490%22%2C%22exportedName%22%3A%22getFinalConfig%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%2C%7B%22id%22%3A%22603917cf91d272b5fcf67211647db81d409898412a%22%2C%22exportedName%22%3A%22signin%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/(auth)/signin/page": "action-browser"
+      },
+      "filename": "../D:\\NXTFLUTTER_CORE\\NXTFlutter_Core\\main\\app\\(auth)\\signin\\actions\\signin.ts",
+      "exportedName": "loadConfig"
+    },
+    "00e5161cc754235efff0d018aa826737249b61c490": {
+      "workers": {
+        "app/(auth)/signin/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%2C%5B%7B%22id%22%3A%22006c6194462b529820229c09a48ad6772dcdbf4c20%22%2C%22exportedName%22%3A%22loadConfig%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%2C%7B%22id%22%3A%2200e5161cc754235efff0d018aa826737249b61c490%22%2C%22exportedName%22%3A%22getFinalConfig%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%2C%7B%22id%22%3A%22603917cf91d272b5fcf67211647db81d409898412a%22%2C%22exportedName%22%3A%22signin%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/(auth)/signin/page": "action-browser"
+      },
+      "filename": "../D:\\NXTFLUTTER_CORE\\NXTFlutter_Core\\main\\app\\(auth)\\signin\\actions\\signin.ts",
+      "exportedName": "getFinalConfig"
+    },
+    "603917cf91d272b5fcf67211647db81d409898412a": {
+      "workers": {
+        "app/(auth)/signin/page": {
+          "moduleId": "(action-browser)/./node_modules/next/dist/build/webpack/loaders/next-flight-action-entry-loader.js?actions=%5B%5B%22D%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%2C%5B%7B%22id%22%3A%22006c6194462b529820229c09a48ad6772dcdbf4c20%22%2C%22exportedName%22%3A%22loadConfig%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%2C%7B%22id%22%3A%2200e5161cc754235efff0d018aa826737249b61c490%22%2C%22exportedName%22%3A%22getFinalConfig%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%2C%7B%22id%22%3A%22603917cf91d272b5fcf67211647db81d409898412a%22%2C%22exportedName%22%3A%22signin%22%2C%22filename%22%3A%22..%2FD%3A%5C%5CNXTFLUTTER_CORE%5C%5CNXTFlutter_Core%5C%5Cmain%5C%5Capp%5C%5C(auth)%5C%5Csignin%5C%5Cactions%5C%5Csignin.ts%22%7D%5D%5D%5D&__client_imported__=true!",
+          "async": true
+        }
+      },
+      "layer": {
+        "app/(auth)/signin/page": "action-browser"
+      },
+      "filename": "../D:\\NXTFLUTTER_CORE\\NXTFlutter_Core\\main\\app\\(auth)\\signin\\actions\\signin.ts",
+      "exportedName": "signin"
+    }
+  },
   "edge": {},
   "encryptionKey": "In+Veb5zix1dLv04e+4MiDKoUAEiY20pzTZYO/sX3Tw="
 }

@@ -16,8 +16,16 @@
       "foreign_key": {
         "references": "nxf_system_projects(project_id)",
         "on_delete": "CASCADE"
-      }
+      },
+      "comment": "Every config must belong to a project"
     },
+    {
+  "name": "user_id",
+  "type": "string",
+  "nullable": false,
+  "comment": "Owner user ID for auditing, tracing"
+},
+
     {
       "name": "deployment_type",
       "type": "string",
@@ -53,7 +61,13 @@
       "name": "db_config",
       "type": "jsonb",
       "nullable": false,
-      "comment": "Encrypted database configuration"
+      "comment": "Encrypted database configuration (passwords excluded!)"
+    },
+    {
+      "name": "admin_user",
+      "type": "jsonb",
+      "nullable": true,
+      "comment": "Admin user details (email, full_name, firebase_uid; password excluded)"
     },
     {
       "name": "feature_flags",

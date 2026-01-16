@@ -23,19 +23,6 @@ import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { useInstallerStore } from '../../store/useInstallerStore';
 import { DBType } from '@/app/db-adapter/types';
 
-type Field =
-  | {
-      label: string;
-      placeholder: string;
-      key: string;
-    }
-  | {
-      label: string;
-      placeholder: string;
-      key: string;
-      isJson: boolean;
-    };
-
 const DATABASES = [
   {
     value: 'supabase',
@@ -48,9 +35,7 @@ const DATABASES = [
       {
         key: 'storageUrl',
         label: 'Supabase Storage URL',
-        placeholder: 'https://<your-project>.supabase.co/storage/v1/object/public/nxt_storage',
-        description:
-          'Provide the URL of your storage bucket. This allows NXT_Flutter to upload files and serve them correctly.',
+        placeholder: 'https://<project>.supabase.co/storage/v1/object/public/nxt_storage',
       },
     ],
   },
@@ -69,9 +54,7 @@ const DATABASES = [
       {
         key: 'storageUrl',
         label: 'Firebase Storage URL',
-        placeholder: 'https://firebasestorage.googleapis.com/v0/b/<your-project>.appspot.com/o',
-        description:
-          'Provide the URL of your Firebase storage bucket. This is required for file uploads and media storage.',
+        placeholder: 'https://firebasestorage.googleapis.com/v0/b/<project>.appspot.com/o',
       },
     ],
   },
@@ -110,7 +93,7 @@ const DATABASES = [
       {
         key: 'connectionString',
         label: 'Connection String',
-        placeholder: 'mongodb+srv://user:<db_password>@cluster.mongodb.net/mydb',
+        placeholder: 'mongodb+srv://user:<password>@cluster.mongodb.net/mydb',
       },
     ],
   },
@@ -129,10 +112,9 @@ export default function DatabaseConfigPage() {
   const [loading, setLoading] = useState(false);
   const [testSteps, setTestSteps] = useState<TestStep[]>([]);
   const [connectionSucceeded, setConnectionSucceeded] = useState(false);
-  const setInstallerValue = useInstallerStore((s) => s.setInstallerValue);
-
   const [firebaseDbType, setFirebaseDbType] = useState<'firestore' | 'realtime'>('firestore');
-
+  const installerState = useInstallerStore((state) => state);
+  const setInstallerValue = useInstallerStore((s) => s.setInstallerValue);
   const selectedDbConfig = DATABASES.find((db) => db.value === selectedDb);
 
   function handleSelect(value: string) {
@@ -140,9 +122,6 @@ export default function DatabaseConfigPage() {
     setFormData({});
     setTestSteps([]);
     setConnectionSucceeded(false);
-    if (value !== 'firebase') {
-      setFirebaseDbType('firestore');
-    }
   }
 
   function handleInputChange(key: string, value: string) {
@@ -151,97 +130,87 @@ export default function DatabaseConfigPage() {
     setConnectionSucceeded(false);
   }
 
-  async function handleContinue() {
-    setLoading(true);
-    try {
-      const dbConfigToSave = {
-        type: selectedDb,
-        ...formData,
-        ...(selectedDb === 'firebase' ? { firebaseDbType } : {}),
-      };
-      setInstallerValue('selectedDb', selectedDb);
-      setInstallerValue('dbConfig', dbConfigToSave);
-
-      setTimeout(() => {
-        router.push('/installer/demo');
-      }, 800);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   async function handleTestConnection() {
-    setLoading(true);
-    setConnectionSucceeded(false);
-    setTestSteps([
-      { label: 'Validating config...', status: 'pending' },
-      { label: 'Saving DB config to .env.local...', status: 'pending' },
-      { label: 'Pinging database server...', status: 'pending' },
-      { label: 'Finalizing connection check...', status: 'pending' },
-    ]);
+  console.log('[DEBUG] handleTestConnection START');
+  setLoading(true);
+  setConnectionSucceeded(false);
 
-    try {
-      setTestSteps((steps) => steps.map((s, i) => (i === 0 ? { ...s, status: 'success' } : s)));
+  setTestSteps([
+    { label: 'Validating configuration...', status: 'pending' },
+    { label: 'Sending config to server...', status: 'pending' },
+    { label: 'Testing database connection...', status: 'pending' },
+    { label: 'Finalizing connection check...', status: 'pending' },
+  ]);
 
-      const saveResponse = await fetch('/api/save-db-config', {
-        method: 'POST',
-        body: JSON.stringify({
-          type: selectedDb,
-          ...formData,
-          ...(selectedDb === 'firebase' ? { firebaseDbType } : {}),
-        }),
-      });
+  try {
+    console.log('[DEBUG] Step 0: Validating configuration');
+    setTestSteps((s) => s.map((x, i) => (i === 0 ? { ...x, status: 'success' } : x)));
 
-      if (!saveResponse.ok) {
-        setTestSteps((steps) =>
-          steps.map((s, i) =>
-            i === 1 ? { ...s, status: 'error', errorMessage: 'Failed to write .env.local' } : s
-          )
-        );
-        setLoading(false);
-        return;
-      }
+    const dbConfigToSend = {
+      type: selectedDb,
+      ...formData,
+      ...(selectedDb === 'firebase'
+        ? { firebaseDbType, storageBucket: formData['storageUrl'] }
+        : {}),
+    };
 
-      setTestSteps((steps) => steps.map((s, i) => (i === 1 ? { ...s, status: 'success' } : s)));
+    console.log('[DEBUG] Step 1: Config to send:', dbConfigToSend);
 
-      const testResponse = await fetch('/api/test-db-connection', {
-        method: 'POST',
-        body: JSON.stringify({
-          type: selectedDb,
-          ...formData,
-          ...(selectedDb === 'firebase' ? { firebaseDbType } : {}),
-        }),
-      });
+    const response = await fetch('/api/test-db-connection', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(dbConfigToSend),
+    });
 
-      const result = await testResponse.json();
+    console.log('[DEBUG] Step 2: Response received', response);
 
-      if (result.success) {
-        setTestSteps((steps) =>
-          steps.map((s, i) => (i === 2 || i === 3 ? { ...s, status: 'success' } : s))
-        );
-        setConnectionSucceeded(true);
-      } else {
-        setTestSteps((steps) =>
-          steps.map((s, i) =>
-            i === 2
-              ? { ...s, status: 'error', errorMessage: result.message }
-              : i === 3
-              ? { ...s, status: 'error' }
-              : s
-          )
-        );
-      }
-    } catch (err: any) {
-      setTestSteps((steps) =>
-        steps.map((s, i) =>
-          i === 2 ? { ...s, status: 'error', errorMessage: err.message || 'Unknown error' } : s
-        )
-      );
-    } finally {
-      setLoading(false);
+    if (!response.ok) {
+      console.error('[DEBUG] Response not OK', response.status, await response.text());
+      throw new Error(`Server rejected connection with status ${response.status}`);
     }
+
+    const result = await response.json();
+    console.log('[DEBUG] Step 3: Parsed result:', result);
+
+    if (!result.success) {
+      throw new Error(result.message || 'Connection failed');
+    }
+
+    setTestSteps((s) => s.map((x, i) => (i >= 1 ? { ...x, status: 'success' } : x)));
+    setConnectionSucceeded(true);
+    console.log('[DEBUG] Step 4: Connection succeeded');
+  } catch (err: any) {
+    console.error('[DEBUG] Step ERROR', err);
+    setTestSteps((s) =>
+      s.map((x, i) =>
+        i === 2 ? { ...x, status: 'error', errorMessage: err.message } : x
+      )
+    );
+  } finally {
+    setLoading(false);
+    console.log('[DEBUG] handleTestConnection END');
+  }
+}
+
+
+  async function handleContinue() {
+    const dbConfigToSave = {
+      type: selectedDb,
+      ...formData,
+      ...(selectedDb === 'firebase'
+        ? { firebaseDbType, storageBucket: formData['storageUrl'] }
+        : {}),
+    };
+
+
+    
+
+// Whenever you want to debug:
+     console.log('[DEBUG] Full Installer State:', installerState);
+    setInstallerValue('selectedDb', selectedDb);
+    setInstallerValue('dbConfig', dbConfigToSave);
+
+    router.push('/installer/demo');
   }
 
   return (
@@ -336,35 +305,13 @@ export default function DatabaseConfigPage() {
           </>
         )}
 
-        {/* MongoDB Instructions */}
-        {selectedDb === 'mongodb' && (
-          <div className="mb-6 p-4 bg-green-50 border-l-4 border-green-400 text-green-700 text-sm">
-            <h3 className="font-semibold mb-2">MongoDB Connection Instructions</h3>
-            <p>
-              In your connection string, replace <code>&lt;db_password&gt;</code> with your actual password.
-            </p>
-            <p className="mt-1">
-              If your password contains special characters (e.g. <code>@</code>, <code>%</code>,{' '}
-              <code>/</code>), they must be URL-encoded. For example, <code>@</code> becomes{' '}
-              <code>%40</code>.
-            </p>
-            <p className="mt-2 italic text-xs">
-              Example: <code>mongodb+srv://user:%40secret@cluster.mongodb.net/mydb</code>
-            </p>
-          </div>
-        )}
-
         <form className="space-y-4">
-          {selectedDbConfig?.fields.map((field) => (
+          {selectedDbConfig?.fields.map((field: any) => (
             <div key={field.key}>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 {field.label}{' '}
                 <span className="text-gray-400 italic text-xs">(e.g. {field.placeholder})</span>
               </label>
-
-              {field.description && (
-                <p className="text-xs text-gray-600 mb-2">{field.description}</p>
-              )}
 
               {'isJson' in field && field.isJson ? (
                 <Textarea
