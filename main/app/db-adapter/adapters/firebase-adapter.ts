@@ -12,46 +12,55 @@ export class FirebaseAdapter implements DBAdapter {
   private storage: admin.storage.Storage
 
   constructor(private _config: DBConfig) {
-  // Initialize Firebase Admin only once
-  if (!admin.apps.length) {
-    if (!_config.firebaseConfigJson) throw new Error('Firebase config JSON is required')
-
-    const rawConfig =
-      typeof _config.firebaseConfigJson === 'string'
-        ? JSON.parse(_config.firebaseConfigJson)
-        : _config.firebaseConfigJson
-
-    if (!rawConfig.private_key) throw new Error('Firebase private_key missing in config')
-
-    const fixedConfig: admin.ServiceAccount = {
-      ...rawConfig,
-      private_key: rawConfig.private_key.replace(/\\n/g, '\n'),
+    if (!this._config) {
+      throw new Error('[FirebaseAdapter] DBConfig is required')
     }
 
-    const storageBucket = _config.storageBucket || process.env.DB_STORAGEURL
-    if (!storageBucket) throw new Error('DB_STORAGEURL is missing for Firebase Storage')
-
-    admin.initializeApp({
-      credential: admin.credential.cert(fixedConfig),
-      storageBucket,
-    })
-  }
-
-  this.firestore = admin.firestore()
-
-  // ✅ Only apply settings once
-  try {
-    this.firestore.settings({ ignoreUndefinedProperties: true })
-  } catch (err: any) {
-    if (!err.message.includes('Firestore has already been initialized')) {
-      throw err
+    if (!this._config.firebaseConfigJson) {
+      throw new Error('[FirebaseAdapter] firebaseConfigJson is required')
     }
-    // else ignore
+
+    if (!this._config.storageBucket) {
+      throw new Error('[FirebaseAdapter] storageBucket is required (gs://...)')
+    }
+
+    // -----------------------------
+    // INIT FIREBASE ADMIN (ONCE)
+    // -----------------------------
+    if (!admin.apps.length) {
+      const rawConfig =
+        typeof this._config.firebaseConfigJson === 'string'
+          ? JSON.parse(this._config.firebaseConfigJson)
+          : this._config.firebaseConfigJson
+
+      if (!rawConfig.private_key) {
+        throw new Error('[FirebaseAdapter] private_key missing in firebaseConfigJson')
+      }
+
+      const fixedConfig: admin.ServiceAccount = {
+        ...rawConfig,
+        private_key: rawConfig.private_key.replace(/\\n/g, '\n'),
+      }
+
+      admin.initializeApp({
+        credential: admin.credential.cert(fixedConfig),
+        storageBucket: this._config.storageBucket,
+      })
+    }
+
+    this.firestore = admin.firestore()
+
+    // Firestore settings must only be applied once
+    try {
+      this.firestore.settings({ ignoreUndefinedProperties: true })
+    } catch (err: any) {
+      if (!err.message.includes('already been initialized')) {
+        throw err
+      }
+    }
+
+    this.storage = admin.storage()
   }
-
-  this.storage = admin.storage()
-}
-
 
   get config(): DBConfig {
     return this._config
@@ -80,7 +89,7 @@ export class FirebaseAdapter implements DBAdapter {
     return docRef.id
   }
 
-  async read(config: DBConfig, collection: string, query: any = {}) {
+  async read(config: DBConfig, collection: string) {
     const snapshot = await this.firestore.collection(collection).get()
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
   }
@@ -99,7 +108,9 @@ export class FirebaseAdapter implements DBAdapter {
   // AUTH & USERS
   // -----------------------------
   async registerUserInAuth(config: DBConfig, data: { email: string; password: string }) {
-    if (!data.email || !data.password) throw new Error('Email and password required')
+    if (!data.email || !data.password) {
+      throw new Error('Email and password required')
+    }
 
     const userRecord = await admin.auth().createUser({
       email: data.email,
@@ -215,8 +226,7 @@ export class FirebaseAdapter implements DBAdapter {
     return CreateDataModels(this, projectId)
   }
 
-  async createDataModelsFromUserEmail(email: string): Promise<any> {
-    if (!this.config) throw new Error('Missing DB config')
+  async createDataModelsFromUserEmail(email: string) {
     if (!email) throw new Error('Missing User Email')
 
     const user = await this.findUserByEmail(this.config, email)
@@ -228,38 +238,86 @@ export class FirebaseAdapter implements DBAdapter {
     return this.CreateDataModels(project.id)
   }
 
-  async createTable(tableName: string, schema: any) {
+  async createTable(tableName: string) {
     console.log(
-      `[FirebaseAdapter] Skipping createTable for ${tableName} (Firestore does not have tables)`
+      `[FirebaseAdapter] Skipping createTable for ${tableName} (Firestore has no tables)`
     )
     return true
   }
 
-  // -----------------------------
-  // STORAGE
-  // -----------------------------
-  async setupStorageBuckets(retries = 10, delayMs = 5000) {
-    const storageUrl = this._config.storageBucket || process.env.DB_STORAGEURL
-    if (!storageUrl) throw new Error('DB_STORAGEURL is missing')
-
-    const bucketName = storageUrl.replace('gs://', '').split('/')[0]
-    const bucket = this.storage.bucket(bucketName)
-
-    for (let i = 0; i < retries; i++) {
-      try {
-        for (const folder of DEFAULT_BUCKETS) {
-          await bucket.file(`${folder}/.keep`).save('', { resumable: false })
-          console.log(`[FirebaseAdapter] Created storage folder: ${folder}/`)
-        }
-        return { success: true, buckets: DEFAULT_BUCKETS }
-      } catch (err: any) {
-        console.log('[FirebaseAdapter] Storage not ready, retrying...')
-        await new Promise((res) => setTimeout(res, delayMs))
-      }
+ // -----------------------------
+// RETRY WRAPPER
+// -----------------------------
+async findUserByEmailWithRetry(
+  config: DBConfig,
+  email: string,
+  retries = 3,
+  delayMs = 1000
+) {
+  let lastError: any;
+  for (let i = 0; i < retries; i++) {
+    try {
+      const user = await this.findUserByEmail(config, email);
+      return user;
+    } catch (err) {
+      lastError = err;
+      await new Promise((res) => setTimeout(res, delayMs));
     }
-
-    throw new Error('Firebase Storage was not enabled after waiting.')
   }
+  throw lastError;
+}
+
+ // -----------------------------
+// STORAGE
+// -----------------------------
+async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
+  const retries = 10
+  const delayMs = 5000
+
+  // Use the default bucket from initializeApp
+  // If the user pasted "gs://..." we strip it internally
+  let bucketName = this._config.storageBucket
+  if (!bucketName) {
+    throw new Error('[FirebaseAdapter] storageBucket is required')
+  }
+  bucketName = bucketName.replace(/^gs:\/\//, '').split('/')[0]
+
+  const bucket = this.storage.bucket(bucketName)
+
+  for (let i = 0; i < retries; i++) {
+    try {
+      // Create "folders" by writing a .keep file
+      for (const folder of DEFAULT_BUCKETS) {
+        await bucket.file(`${folder}/.keep`).save('', {
+          resumable: false,
+          contentType: 'text/plain',
+        })
+      }
+
+      return { success: true, buckets: DEFAULT_BUCKETS }
+    } catch (err: any) {
+      console.error(
+        `[FirebaseAdapter][Storage] Attempt ${i + 1} failed:`,
+        err?.message || err
+      )
+
+      if (i === retries - 1) {
+        throw new Error(
+          `Failed to setup Firebase Storage: ${err?.message || err}`
+        )
+      }
+
+      // wait before retrying
+      await new Promise((res) => setTimeout(res, delayMs))
+    }
+  }
+
+  // Should never reach here, but satisfies TS exhaustiveness
+  throw new Error('Unexpected storage setup failure')
+}
+
+
+
 
   // -----------------------------
   // BUILT-IN AUTH
@@ -286,10 +344,28 @@ export class FirebaseAdapter implements DBAdapter {
     }
   }
 
-  async login(): Promise<{ error?: string }> {
+  async login() {
     return {
       error:
         'login() via Firebase Admin SDK not supported. Use client SDK and pass ID token.',
     }
   }
+
+  async saveInstallerConfig(config: DBConfig, data: any): Promise<string> {
+  if (!data.project_id) {
+    throw new Error('project_id is required');
+  }
+
+  const docRef = await this.firestore
+    .collection('nxf_system_config')
+    .add({
+      ...data,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    });
+
+  return docRef.id;
+}
+
+
 }

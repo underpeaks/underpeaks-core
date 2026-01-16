@@ -10,19 +10,29 @@ import { useInstallerStore } from '../../store/useInstallerStore';
 
 export default function FinalizePage() {
   const router = useRouter();
-  const selectedStack = useInstallerStore((state) => state.selectedStack); // string: 'next' | 'flutter' | 'both'
+  const selectedStack = useInstallerStore((state) => state.selectedStack);
+  const installerState = useInstallerStore((state) => state);
+
   const [installing, setInstalling] = useState(false);
   const [progress, setProgress] = useState(0);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // Check if step is skipped based on selectedStack and step text
+  // Step labels with skipped logic (UNCHANGED)
   const stepLabels = useMemo(() => {
     return INSTALL_STEPS.map((step) => {
-      if (step === 'Installing Flutter project' && selectedStack !== 'flutter' && selectedStack !== 'both') {
+      if (
+        step === 'Installing Flutter project' &&
+        selectedStack !== 'flutter' &&
+        selectedStack !== 'both'
+      ) {
         return { label: step, skipped: true };
       }
-      if (step === 'Installing Next.js project' && selectedStack !== 'next' && selectedStack !== 'both') {
+      if (
+        step === 'Installing Next.js project' &&
+        selectedStack !== 'next' &&
+        selectedStack !== 'both'
+      ) {
         return { label: step, skipped: true };
       }
       return { label: step, skipped: false };
@@ -32,21 +42,58 @@ export default function FinalizePage() {
   async function startInstall() {
     setInstalling(true);
     setErrorMessage(null);
+
     try {
       await runInstallerSteps((stepIndex) => {
-        setProgress(((stepIndex) / INSTALL_STEPS.length) * 100);
+        setProgress((stepIndex / INSTALL_STEPS.length) * 100);
         setCurrentStepIndex(stepIndex - 1);
       });
-      // router.push('/installer/done');
+
+      // === SAVE CONFIG (SERVER CREATES PROJECT + ENCRYPTS) ===
+      if (!installerState.selectedDb) {
+        throw new Error('No database selected, cannot save config.');
+      }
+
+      console.log('[DEBUG] Sending installer config to server:', installerState);
+
+      const res = await fetch('/api/save-config', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          projectName: installerState.projectName,
+          subdomain: installerState.subdomain,
+          selectedStack: installerState.selectedStack,
+          selectedDb: installerState.selectedDb,
+          dbConfig: installerState.dbConfig,
+
+          // ⛔ NO PASSWORD — Firebase Auth owns this
+          adminUser: installerState.adminUser
+            ? {
+                email: installerState.adminUser.email,
+                full_name: installerState.adminUser.fullName,
+              }
+            : null,
+        }),
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || 'Failed to save installer config');
+      }
+
+      const data = await res.json();
+      console.log('[DEBUG] Installer config saved:', data);
+
+      router.push('/installer/done');
     } catch (error: unknown) {
       setInstalling(false);
+
       let message = 'Unknown error occurred';
       if (error instanceof Error) message = error.message;
       else if (typeof error === 'string') message = error;
-      else if (error && typeof error === 'object' && 'message' in error) {
-        // @ts-ignore
-        message = error.message;
-      }
+
       setErrorMessage(message);
       console.error('Installation error:', message);
     }
@@ -54,9 +101,13 @@ export default function FinalizePage() {
 
   return (
     <div className="max-w-xl mx-auto px-6 py-12 space-y-8">
-     <header className="mb-8 text-center">
-        <h1 className="text-4xl font-extrabold text-black tracking-tight">🚀 NXT_Flutter</h1>
-        <p className="text-xl text-gray-700 mt-2">Build once. Run anywhere.</p>
+      <header className="mb-8 text-center">
+        <h1 className="text-4xl font-extrabold text-black tracking-tight">
+          🚀 NXT_Flutter
+        </h1>
+        <p className="text-xl text-gray-700 mt-2">
+          Build once. Run anywhere.
+        </p>
       </header>
 
       <Card>
@@ -66,9 +117,20 @@ export default function FinalizePage() {
 
         <CardContent className="space-y-6">
           <div className="bg-gray-100 text-gray-900 p-4 rounded-md space-y-1 font-mono text-sm border border-gray-300">
-            <p><strong>Project:</strong> MyApp</p>
-            <p><strong>Stack:</strong> {selectedStack === 'both' ? 'Flutter + Next.js' : selectedStack}</p>
-            <p><strong>Database:</strong> Supabase</p>
+            <p>
+              <strong>Project:</strong>{' '}
+              {installerState.projectName || 'MyApp'}
+            </p>
+            <p>
+              <strong>Stack:</strong>{' '}
+              {selectedStack === 'both'
+                ? 'Flutter + Next.js'
+                : selectedStack}
+            </p>
+            <p>
+              <strong>Database:</strong>{' '}
+              {installerState.selectedDb || 'Not selected'}
+            </p>
           </div>
 
           <div className="bg-gray-50 border border-gray-300 rounded-md p-4 text-gray-700 text-sm">
@@ -76,13 +138,16 @@ export default function FinalizePage() {
             <ul className="list-disc list-inside space-y-2">
               {stepLabels.map(({ label, skipped }, i) => {
                 const done = i < currentStepIndex || progress === 100;
-                const isCurrent = i === currentStepIndex && progress < 100;
+                const isCurrent =
+                  i === currentStepIndex && progress < 100;
 
                 return (
                   <li
                     key={label}
                     className={`flex items-center space-x-2 ${
-                      done ? 'text-gray-900 font-semibold' : 'text-gray-600'
+                      done
+                        ? 'text-gray-900 font-semibold'
+                        : 'text-gray-600'
                     }`}
                   >
                     {done ? (
@@ -90,20 +155,21 @@ export default function FinalizePage() {
                     ) : (
                       <span
                         className={`inline-block w-4 h-4 rounded-full border-2 flex-shrink-0 ${
-                          isCurrent ? 'border-gray-900 bg-gray-900 animate-pulse' : 'border-gray-400'
+                          isCurrent
+                            ? 'border-gray-900 bg-gray-900 animate-pulse'
+                            : 'border-gray-400'
                         }`}
                       />
                     )}
-           <span>
-  {label}
-  {skipped && (
-    <span className="text-green-600 font-semibold ml-2 inline-flex items-center space-x-1">
-      
-      <CheckCircle2 className="w-4 h-4" />
-      <span> skipped!</span>
-    </span>
-  )}
-</span>
+                    <span>
+                      {label}
+                      {skipped && (
+                        <span className="text-green-600 font-semibold ml-2 inline-flex items-center space-x-1">
+                          <CheckCircle2 className="w-4 h-4" />
+                          <span> skipped!</span>
+                        </span>
+                      )}
+                    </span>
                   </li>
                 );
               })}

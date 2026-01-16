@@ -9,14 +9,17 @@ export type InstallerState = {
   selectedPages: string[];
   selectedStack: "next" | "flutter" | "both";
   selectedDb: DBType | null;
-  dbConfig: DBConfig;
+  dbConfig: DBConfig & { storageBucket?: string }; // added storageBucket optional
   adminUser: {
     fullName: string;
     email: string;
     password: string;
   };
   models: any[];
-  setInstallerValue: <T extends keyof InstallerState>(key: T, value: InstallerState[T]) => void;
+  setInstallerValue: <T extends keyof InstallerState>(
+    key: T,
+    value: InstallerState[T]
+  ) => void;
   resetInstaller: () => void;
 };
 
@@ -28,7 +31,7 @@ export const useInstallerStore = create<InstallerState>((set) => ({
   selectedPages: [],
   selectedStack: "next",
   selectedDb: null,
-  dbConfig: { type: "supabase" }, // default with type set
+  dbConfig: { type: "supabase", storageBucket: "" }, // default with storageBucket field
   adminUser: {
     fullName: "",
     email: "",
@@ -49,7 +52,7 @@ export const useInstallerStore = create<InstallerState>((set) => ({
       selectedPages: [],
       selectedStack: "next",
       selectedDb: null,
-      dbConfig: { type: "supabase" },
+      dbConfig: { type: "supabase", storageBucket: "" }, // reset with storageBucket
       adminUser: {
         fullName: "",
         email: "",

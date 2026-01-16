@@ -1,0 +1,199 @@
+import { NextResponse } from 'next/server';
+import { getAdapter } from '@/app/db-adapter';
+import { DBConfig } from '@/app/db-adapter/types';
+import crypto from 'crypto';
+
+const IV_LENGTH = 16;
+
+// Helper: derive encryption key from project_id, config_id, user_id, and created_at
+function deriveEncryptionKey({
+  projectId,
+  configId,
+  userId,
+  createdAt,
+}: {
+  projectId: string;
+  configId: string;
+  userId: string;
+  createdAt: string;
+}) {
+  const rawKey = projectId + configId + userId + createdAt;
+  return crypto.createHash('sha256').update(rawKey).digest();
+}
+
+// Encrypt function with dynamic key
+function encrypt(data: any, key: Buffer) {
+  const iv = crypto.randomBytes(IV_LENGTH);
+  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
+
+  const encrypted = Buffer.concat([
+    cipher.update(JSON.stringify(data), 'utf8'),
+    cipher.final(),
+  ]);
+
+  return {
+    iv: iv.toString('hex'),
+    content: encrypted.toString('hex'),
+    tag: cipher.getAuthTag().toString('hex'),
+  };
+}
+
+// ----------------------
+// New helper: detect missing fields
+// ----------------------
+function getMissingFields(fields: Record<string, any>) {
+  return Object.entries(fields)
+    .filter(([_, value]) => value === undefined || value === null || value === '')
+    .map(([key]) => key);
+}
+
+export async function POST(req: Request) {
+  try {
+    const {
+      selectedStack,
+      selectedDb,
+      dbConfig,
+      adminUser,
+      featureFlags = {},
+    } = await req.json();
+
+    // ----------------------
+    // Determine if password is required
+    // ----------------------
+    const requirePassword = !(selectedDb === 'supabase' || selectedDb === 'firebase' || selectedDb === 'mongodb' || selectedDb === 'mysql' || selectedDb === 'postgres');
+
+    // ----------------------
+    // Check missing fields with logging
+    // ----------------------
+    const missingFields = getMissingFields({
+      selectedStack,
+      selectedDb,
+      dbConfig,
+      adminUserEmail: adminUser?.email,
+      ...(requirePassword && { adminUserPassword: adminUser?.password }),
+    });
+
+    if (missingFields.length > 0) {
+      console.error('[SAVE CONFIG] Missing fields:', missingFields);
+
+      return NextResponse.json(
+        {
+          error: 'Missing required fields',
+          missingFields,
+          received: {
+            selectedStack,
+            selectedDb,
+            hasDbConfig: !!dbConfig,
+            adminUser: {
+              email: adminUser?.email ?? null,
+              hasPassword: !!adminUser?.password,
+            },
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    // 1️⃣ Get adapter dynamically (Firebase or Supabase)
+    const adapter = getAdapter(selectedDb, dbConfig as DBConfig);
+
+    if (!adapter.findUserByEmailWithRetry || !adapter.createAdminUser) {
+      return NextResponse.json(
+        { error: 'Adapter does not support required methods' },
+        { status: 400 }
+      );
+    }
+
+    // 2️⃣ Fetch the admin user with retry
+    let user = await adapter.findUserByEmailWithRetry(adapter.config, adminUser.email);
+
+    // 3️⃣ If user doesn't exist, create it
+    if (!user?.user_id && !user?.id) {
+      const userId = crypto.randomUUID();
+      await adapter.createAdminUser(adapter.config, {
+        user_id: userId,
+        user_email: adminUser.email,
+        password: adminUser.password ?? '', // still pass empty string if none
+        full_name: adminUser.full_name,
+        role: 'admin',
+      });
+
+      // Fetch again to confirm
+      user = await adapter.findUserByEmailWithRetry(adapter.config, adminUser.email);
+    }
+
+    // 4️⃣ Ensure we have a user ID
+    const userId = user.user_id || user.id;
+    if (!userId) {
+      return NextResponse.json(
+        { error: 'Admin user could not be created or found' },
+        { status: 404 }
+      );
+    }
+
+    // 5️⃣ Find or create the project for this user
+    let project = await adapter.findProjectByOwnerId(adapter.config, userId);
+
+    if (!project?.project_id && !project?.id) {
+      const projectId = await adapter.createProject(adapter.config, {
+        name: `${adminUser.full_name}'s Project`,
+        user_id: userId,
+      });
+
+      project = { project_id: projectId };
+    }
+
+    const projectId = project.project_id || project.id;
+
+    // 6️⃣ Prepare created_at and config_id for key derivation
+    const createdAt = new Date().toISOString();
+    const configIdForKey = crypto.randomUUID();
+
+    const encryptionKey = deriveEncryptionKey({
+      projectId,
+      configId: configIdForKey,
+      userId,
+      createdAt,
+    });
+
+    // 7️⃣ Encrypt DB config
+    const encryptedDbConfig = encrypt(dbConfig, encryptionKey);
+
+    // 8️⃣ Save installer config
+    const configId = await adapter.saveInstallerConfig(adapter.config, {
+      config_id: configIdForKey,
+      project_id: projectId,
+      user_id: userId,
+      deployment_type: 'self_hosted',
+      status: 'configured',
+      selected_stack: selectedStack,
+      selected_db: selectedDb,
+      db_config: encryptedDbConfig,
+      admin_user: {
+        email: adminUser.email,
+        full_name: adminUser.full_name,
+        user_id: userId,
+        // password is omitted for Supabase/Firebase
+        ...(requirePassword && { password: adminUser.password }),
+      },
+      feature_flags: featureFlags,
+      generator_version: '1.0.0',
+      is_active: true,
+      created_at: createdAt,
+      updated_at: createdAt,
+    });
+
+    return NextResponse.json({
+      success: true,
+      project_id: projectId,
+      config_id: configId,
+    });
+  } catch (err: any) {
+    console.error('[SAVE CONFIG ERROR]', err);
+
+    return NextResponse.json(
+      { error: err.message ?? 'Internal Server Error' },
+      { status: 500 }
+    );
+  }
+}
