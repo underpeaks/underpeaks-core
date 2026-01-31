@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
-import { getAllModels, deleteModel } from '../../../nxf-ui/lib/supabase/model';
 import {ConfirmDialog }from '../../components_cus/confirmDialog';
 
 interface Field {
@@ -33,33 +32,33 @@ export default function ModelsListPage() {
   async function loadModels() {
     setLoading(true);
     try {
-      const data = await getAllModels();
+     // const data = await getAllModels();
 
-      const transformed = data?.map((model: any) => ({
-        ...model,
-        project_id: model.project_id,
-        fields: Object.entries(model.schema || {}).map(([name, value]) => {
-          if (
-            typeof value === 'object' &&
-            value !== null &&
-            'type' in value
-          ) {
-            return {
-              name,
+      // const transformed = data?.map((model: any) => ({
+      //   ...model,
+      //   project_id: model.project_id,
+      //   fields: Object.entries(model.schema || {}).map(([name, value]) => {
+      //     if (
+      //       typeof value === 'object' &&
+      //       value !== null &&
+      //       'type' in value
+      //     ) {
+      //       return {
+      //         name,
 
-              type: (value as { type: string }).type,
-              required: (value as { required?: boolean }).required === true,
-            };
-          }
-          return {
-            name,
-            type: typeof value === 'string' ? value : 'unknown',
-            required: false,
-          };
-        }),
-      })) || [];
+      //         type: (value as { type: string }).type,
+      //         required: (value as { required?: boolean }).required === true,
+      //       };
+      //     }
+      //     return {
+      //       name,
+      //       type: typeof value === 'string' ? value : 'unknown',
+      //       required: false,
+      //     };
+      //   }),
+      // })) || [];
 
-      setModels(transformed);
+      // setModels(transformed);
     } catch (err) {
       console.error('Failed to fetch models:', err);
       setModels([]);
@@ -77,10 +76,10 @@ export default function ModelsListPage() {
   if (!modelToDelete) return;
   setDeleting(true);
   try {
-    await deleteModel(modelToDelete.id, modelToDelete.project_id); // pass both id and project_id
-    setModels((prev) => prev.filter((m) => m.id !== modelToDelete.id));
-    setConfirmOpen(false);
-    setModelToDelete(null);
+    // await deleteModel(modelToDelete.id, modelToDelete.project_id); // pass both id and project_id
+    // setModels((prev) => prev.filter((m) => m.id !== modelToDelete.id));
+    // setConfirmOpen(false);
+    // setModelToDelete(null);
   } catch (err) {
     console.error('Failed to delete model:', err);
     // Optionally show error to user here

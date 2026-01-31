@@ -21,7 +21,7 @@ import {
 } from 'react-icons/si';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { useInstallerStore } from '../../store/useInstallerStore';
-import { DBType } from '@/app/db-adapter/types';
+import { DBType, DBConfig } from '@/app/db-adapter/types';
 
 const DATABASES = [
   {
@@ -52,9 +52,10 @@ const DATABASES = [
         isJson: true,
       },
       {
-        key: 'storageUrl',
-        label: 'Firebase Storage URL',
-        placeholder: 'https://firebasestorage.googleapis.com/v0/b/<project>.appspot.com/o',
+        key: 'firebaseWebConfig',
+        label: 'Firebase Web Config (firebaseConfig)',
+        placeholder: 'Paste the firebaseConfig object here',
+        isJson: true,
       },
     ],
   },
@@ -113,7 +114,6 @@ export default function DatabaseConfigPage() {
   const [testSteps, setTestSteps] = useState<TestStep[]>([]);
   const [connectionSucceeded, setConnectionSucceeded] = useState(false);
   const [firebaseDbType, setFirebaseDbType] = useState<'firestore' | 'realtime'>('firestore');
-  const installerState = useInstallerStore((state) => state);
   const setInstallerValue = useInstallerStore((s) => s.setInstallerValue);
   const selectedDbConfig = DATABASES.find((db) => db.value === selectedDb);
 
@@ -131,10 +131,8 @@ export default function DatabaseConfigPage() {
   }
 
   async function handleTestConnection() {
-  console.log('[DEBUG] handleTestConnection START');
   setLoading(true);
   setConnectionSucceeded(false);
-
   setTestSteps([
     { label: 'Validating configuration...', status: 'pending' },
     { label: 'Sending config to server...', status: 'pending' },
@@ -143,18 +141,60 @@ export default function DatabaseConfigPage() {
   ]);
 
   try {
-    console.log('[DEBUG] Step 0: Validating configuration');
-    setTestSteps((s) => s.map((x, i) => (i === 0 ? { ...x, status: 'success' } : x)));
+    setTestSteps((s) =>
+      s.map((x, i) => (i === 0 ? { ...x, status: 'success' } : x))
+    );
 
-    const dbConfigToSend = {
-      type: selectedDb,
-      ...formData,
-      ...(selectedDb === 'firebase'
-        ? { firebaseDbType, storageBucket: formData['storageUrl'] }
-        : {}),
-    };
+    let dbConfigToSend: any;
 
-    console.log('[DEBUG] Step 1: Config to send:', dbConfigToSend);
+    if (selectedDb === 'firebase') {
+      let webConfigJson = formData['firebaseWebConfig'] || '';
+
+      // Try parsing as JSON first
+      let webConfig: any = {};
+      try {
+        webConfig = JSON.parse(webConfigJson);
+      } catch {
+        // If parsing fails, try cleaning JS object to JSON
+        try {
+          // Remove "const firebaseConfig =" and trailing semicolon if present
+          webConfigJson = webConfigJson
+            .replace(/const\s+\w+\s*=\s*/, '')
+            .replace(/;$/, '');
+
+          // Replace unquoted keys with quoted keys
+          webConfigJson = webConfigJson.replace(
+            /([{,]\s*)([a-zA-Z0-9_]+)\s*:/g,
+            '$1"$2":'
+          );
+
+          webConfig = JSON.parse(webConfigJson);
+        } catch (e) {
+          throw new Error(
+            'Invalid Firebase Web Config JSON. Make sure you pasted the firebaseConfig object correctly.'
+          );
+        }
+      }
+
+      // Optional: automatically pull storageBucket if missing
+      if (!webConfig.storageBucket) {
+        console.warn(
+          '[Firebase Adapter] storageBucket missing in web config, ignoring...'
+        );
+      }
+
+      dbConfigToSend = {
+        type: 'firebase',
+        firebaseConfigJson: formData['firebaseConfigJson'],
+        firebaseDbType,
+        storageBucket: webConfig.storageBucket || undefined,
+        firebaseWebConfig: webConfig, // <- this is now guaranteed to be a valid JSON object
+      };
+    } else {
+      dbConfigToSend = { type: selectedDb, ...formData };
+    }
+
+    console.log('📝 Testing with payload:', dbConfigToSend);
 
     const response = await fetch('/api/test-db-connection', {
       method: 'POST',
@@ -162,55 +202,66 @@ export default function DatabaseConfigPage() {
       body: JSON.stringify(dbConfigToSend),
     });
 
-    console.log('[DEBUG] Step 2: Response received', response);
-
-    if (!response.ok) {
-      console.error('[DEBUG] Response not OK', response.status, await response.text());
-      throw new Error(`Server rejected connection with status ${response.status}`);
-    }
+    if (!response.ok)
+      throw new Error(`Server rejected connection: ${response.status}`);
 
     const result = await response.json();
-    console.log('[DEBUG] Step 3: Parsed result:', result);
+    if (!result.success) throw new Error(result.message || 'Connection failed');
 
-    if (!result.success) {
-      throw new Error(result.message || 'Connection failed');
-    }
-
-    setTestSteps((s) => s.map((x, i) => (i >= 1 ? { ...x, status: 'success' } : x)));
+    setTestSteps((s) =>
+      s.map((x, i) => (i >= 1 ? { ...x, status: 'success' } : x))
+    );
     setConnectionSucceeded(true);
-    console.log('[DEBUG] Step 4: Connection succeeded');
   } catch (err: any) {
-    console.error('[DEBUG] Step ERROR', err);
     setTestSteps((s) =>
       s.map((x, i) =>
         i === 2 ? { ...x, status: 'error', errorMessage: err.message } : x
       )
     );
+    console.error('❌ Test connection error:', err);
   } finally {
     setLoading(false);
-    console.log('[DEBUG] handleTestConnection END');
   }
 }
 
 
+
   async function handleContinue() {
-    const dbConfigToSave = {
-      type: selectedDb,
-      ...formData,
-      ...(selectedDb === 'firebase'
-        ? { firebaseDbType, storageBucket: formData['storageUrl'] }
-        : {}),
-    };
+    setLoading(true);
 
+    try {
+      const envPayload: DBConfig = {
+        type: selectedDb,
+        ...formData,
+        ...(selectedDb === 'firebase' ? { firebaseDbType } : {}),
+      };
 
-    
+      setInstallerValue('selectedDb', selectedDb);
+      setInstallerValue('dbConfig', envPayload);
 
-// Whenever you want to debug:
-     console.log('[DEBUG] Full Installer State:', installerState);
-    setInstallerValue('selectedDb', selectedDb);
-    setInstallerValue('dbConfig', dbConfigToSave);
+      const res = await fetch('/api/save-db-config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(envPayload),
+      });
 
-    router.push('/installer/demo');
+      const text = await res.text();
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        throw new Error(`Invalid JSON response: ${text}`);
+      }
+
+      if (!res.ok || !data.success) throw new Error(data.error || 'Failed to save configuration');
+
+      router.push('/installer/demo');
+    } catch (err: any) {
+      console.error('❌ Failed to save configuration:', err);
+      alert(`Failed to save configuration: ${err.message}`);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -248,10 +299,9 @@ export default function DatabaseConfigPage() {
           </Select>
         </div>
 
-        {/* Firebase Instructions and DB type selector */}
         {selectedDb === 'firebase' && (
           <>
-            <div className="mb-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700">
+            <div className="mb-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 rounded">
               <h3 className="font-semibold mb-2">How to get Firebase Service Account JSON</h3>
               <ol className="list-decimal list-inside space-y-1 text-sm">
                 <li>
@@ -267,7 +317,7 @@ export default function DatabaseConfigPage() {
                   and open your project.
                 </li>
                 <li>
-                  Navigate to <strong>Project Settings</strong> → <strong>Service Accounts</strong>.
+                  Navigate to <strong>Project Settings → Service Accounts</strong>.
                 </li>
                 <li>Click <strong>Generate new private key</strong> to download the JSON file.</li>
                 <li>Open it and paste its full contents below.</li>
@@ -277,7 +327,7 @@ export default function DatabaseConfigPage() {
               </p>
             </div>
 
-            <fieldset className="mb-6">
+            {/* <fieldset className="mb-6">
               <legend className="font-semibold mb-2 text-gray-700">Firebase Database Type</legend>
               <label className="inline-flex items-center mr-6 cursor-pointer">
                 <input
@@ -301,7 +351,7 @@ export default function DatabaseConfigPage() {
                 />
                 <span className="ml-2">Realtime Database</span>
               </label>
-            </fieldset>
+            </fieldset> */}
           </>
         )}
 
@@ -312,6 +362,30 @@ export default function DatabaseConfigPage() {
                 {field.label}{' '}
                 <span className="text-gray-400 italic text-xs">(e.g. {field.placeholder})</span>
               </label>
+
+              {/* Firebase Web Config instructions */}
+              {field.key === 'firebaseWebConfig' && (
+                <div className="mb-2 p-2 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 rounded text-xs">
+                  <p className="mb-1 font-semibold">Firebase Web Config Instructions:</p>
+                  <p className="mb-1">Go to Project Settings → General → Your Apps → Web app.</p>
+                  <p className="mb-1">Copy the entire <code>firebaseConfig</code> object.</p>
+                  <p className="mb-1">Paste it into the field below.</p>
+                  <p className="font-mono bg-gray-100 p-2 rounded overflow-x-auto mb-1">
+{`{
+  apiKey: "AIzaSyExample",
+  authDomain: "your-app.firebaseapp.com",
+  projectId: "your-app",
+  storageBucket: "your-app.appspot.com",
+  messagingSenderId: "1234567890",
+  appId: "1:1234567890:web:abcdef123456",
+  measurementId: "G-ABCDEFG123"
+}`}
+                  </p>
+                  <p className="italic text-yellow-700 text-xs">
+                    ⚠️ Only copy this object, do not include any extra code.
+                  </p>
+                </div>
+              )}
 
               {'isJson' in field && field.isJson ? (
                 <Textarea
@@ -324,6 +398,7 @@ export default function DatabaseConfigPage() {
               ) : (
                 <Input
                   placeholder={field.placeholder}
+                  
                   value={formData[field.key] || ''}
                   onChange={(e) => handleInputChange(field.key, e.target.value)}
                   className="w-full"
@@ -333,7 +408,6 @@ export default function DatabaseConfigPage() {
           ))}
         </form>
 
-        {/* Test steps list */}
         {testSteps.length > 0 && (
           <ul className="mt-4 space-y-2">
             {testSteps.map((step, idx) => (

@@ -24,13 +24,17 @@ export default function SignUpPage() {
     setError(null)
 
     try {
-      const result = await signup({
-        full_name,
-        email,
-        password,
-        // ❗ Placeholder: Replace with actual tenant ID later
-        tenant_id: null
-      })
+      const result = await signup(
+  {
+    full_name,
+    email,
+    password,
+    tenant_id: null
+  },
+  null as any,
+  null as any
+)
+
 
       // if ('error' in result) {
       //   setError(result.error ?? 'Error')

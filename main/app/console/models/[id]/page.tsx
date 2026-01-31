@@ -7,10 +7,8 @@ import {
   NxfElevatedButton,
   NxfSnackbar,
   NxfForm,
-} from '../../../../nxf-ui/widgets';
-import { getModelById, updateModel } from '../../../../nxf-ui/lib/supabase/model';
+} from '@nxf/widgets';
 import { useUser } from '@supabase/auth-helpers-react';
-import { getProjectIdForUser } from '../../../../nxf-ui/lib/supabase/utils';
 import { FiSave, FiEye } from 'react-icons/fi';
 
 import { ConfirmDialog } from '../../../components_cus/confirmDialog';
@@ -59,11 +57,11 @@ export default function EditModelPage() {
   useEffect(() => {
     async function fetchModels() {
       try {
-        const models = await import('../../../../nxf-ui/lib/supabase/model').then(
-          (mod) => mod.getAllModels()
-        );
-        const modelNames = models?.map((m: any) => m.name) || [];
-        setExistingModels(modelNames);
+        // const models = await import('../../../../nxf-ui/lib/supabase/model').then(
+        //   (mod) => mod.getAllModels()
+        // );
+        //const modelNames = models?.map((m: any) => m.name) || [];
+        //setExistingModels(modelNames);
       } catch (error) {
         console.error('Failed to fetch models:', error);
       }
@@ -75,8 +73,8 @@ export default function EditModelPage() {
     async function loadProject() {
       if (!user) return;
       try {
-        const projId = await getProjectIdForUser(user.id);
-        setProjectId(projId);
+        // const projId = await getProjectIdForUser(user.id);
+        // setProjectId(projId);
       } catch (error) {
         console.error('Failed to load project:', error);
         setSnackbarMessage('Error loading project information');
@@ -103,35 +101,35 @@ export default function EditModelPage() {
       if (!id || !projectId) return;
 
       try {
-        const model = await getModelById(id as string, projectId);
+        // const model = await getModelById(id as string, projectId);
 
-        if (!model) {
-          setSnackbarMessage('Model not found');
-          setShowSnackbar(true);
-          router.push('/console/models');
-          return;
-        }
+        // if (!model) {
+        //   setSnackbarMessage('Model not found');
+        //   setShowSnackbar(true);
+        //   router.push('/console/models');
+        //   return;
+        // }
 
-        setModelName(model.name);
-        setOriginalModelName(model.name);
+        // setModelName(model.name);
+        // setOriginalModelName(model.name);
 
-        const fieldList = Object.entries(model.schema).map(([name, value]) => {
-          if (typeof value === 'object' && value !== null && 'type' in value) {
-            const { type, elementType } = parseFieldType((value as any).type);
-            return {
-              name,
-              type,
-              elementType,
-              meta: { required: (value as any).required === true },
-            };
-          } else if (typeof value === 'string') {
-            const { type, elementType } = parseFieldType(value);
-            return { name, type, elementType, meta: { required: false } };
-          }
-          return { name, type: 'unknown', meta: { required: false } };
-        });
+        // const fieldList = Object.entries(model.schema).map(([name, value]) => {
+        //   if (typeof value === 'object' && value !== null && 'type' in value) {
+        //     const { type, elementType } = parseFieldType((value as any).type);
+        //     return {
+        //       name,
+        //       type,
+        //       elementType,
+        //       meta: { required: (value as any).required === true },
+        //     };
+        //   } else if (typeof value === 'string') {
+        //     const { type, elementType } = parseFieldType(value);
+        //     return { name, type, elementType, meta: { required: false } };
+        //   }
+        //   return { name, type: 'unknown', meta: { required: false } };
+        // });
 
-        setFields(fieldList);
+       // setFields(fieldList);
       } catch (error) {
         console.error('Failed to load model:', error);
         setSnackbarMessage('Error loading model');
@@ -249,10 +247,10 @@ export default function EditModelPage() {
     }, {} as Record<string, { type: string; required?: boolean }>);
 
     try {
-      await updateModel(id as string, projectId, {
-        name: modelName,
-        schema,
-      });
+      // await updateModel(id as string, projectId, {
+      //   name: modelName,
+      //   schema,
+      // });
 
       setSnackbarMessage('Model updated successfully.');
       setShowSnackbar(true);

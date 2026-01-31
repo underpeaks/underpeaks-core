@@ -14,7 +14,18 @@ export async function POST(request: Request) {
     }
 
     const adapter: DBAdapter = getAdapter(config.type, config);
-    const result = await adapter.createDataModelsFromUserEmail(adminUser.email);
+
+if (!adapter.createDataModelsFromUserEmail) {
+  return NextResponse.json(
+    {
+      success: false,
+      message: 'This database adapter does not support data model creation',
+    },
+    { status: 400 }
+  );
+}
+
+const result = await adapter.createDataModelsFromUserEmail(adminUser.email);
 
     return NextResponse.json(
       { success: true, message: 'Data models inserted successfully', data: result },

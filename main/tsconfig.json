@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "ignoreDeprecations": "6.0",
+    
     "target": "esnext",
     "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -25,7 +25,8 @@
       "@components/*": ["app/components_cus/*"],
       "@shadcn/*": ["components/ui/*"],
       "@lib/*": ["app/lib/*"],
-      "@hooks/*": ["app/hooks/*"]
+      "@hooks/*": ["app/hooks/*"],
+      "@nxf/*": ["nxf-ui/*"]
     },
     "plugins": [
       {
@@ -39,6 +40,7 @@
     ".next/types/**/*.ts"
 , "postcss.config.js"  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+     ".next"
   ]
 }

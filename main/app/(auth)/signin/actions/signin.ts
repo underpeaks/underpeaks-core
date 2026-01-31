@@ -1,166 +1,71 @@
-'use server';
+'use server'
 
-import fs from 'fs/promises';
-import path from 'path';
-import { DBAdapter, DBConfig } from '@/app/db-adapter/types';
-import { AuthService } from '@/app/(auth)/auth-service';
-import { FirebaseAdapter } from '@/app/db-adapter/adapters/firebase-adapter';
-import { PostgresAdapter } from '@/app/db-adapter/adapters/postgres-adapter';
-import { MongoDBAdapter } from '@/app/db-adapter/adapters/mongodb-adapter';
-import { SupabaseAdapter } from '@/app/db-adapter/adapters/supabase-adapter';
-import { MySQLAdapter } from '@/app/db-adapter/adapters/mysql-adapter';
+import { DBAdapter, DBConfig } from '@/app/db-adapter/types'
+import { FirebaseAdapter } from '@/app/db-adapter/adapters/firebase-adapter'
+import { PostgresAdapter } from '@/app/db-adapter/adapters/postgres-adapter'
+import { MongoDBAdapter } from '@/app/db-adapter/adapters/mongodb-adapter'
+import { SupabaseAdapter } from '@/app/db-adapter/adapters/supabase-adapter'
+import { MySQLAdapter } from '@/app/db-adapter/adapters/mysql-adapter'
+
+import { loadDbFromEnv } from '@/app/lib/loadDbFromEnv'
+import { getFirebaseAdminAuth } from '@/app/lib/firebase-service'
 
 interface SigninInput {
-  email?: string;
-  password?: string;
-  token?: string;
+  email?: string
+  password?: string
+  token?: string
 }
 
-/**
- * Load DB config from nxt_flutter.config.json
- */
-export async function loadConfig(): Promise<DBConfig> {
-  const configPath = path.join(process.cwd(), 'nxt_flutter.config.json');
-
-  console.log('📄 Loading installer config:', configPath);
-
-  const file = await fs.readFile(configPath, 'utf-8');
-  const parsed = JSON.parse(file);
-
-  if (!parsed.dbConfig || !parsed.dbConfig.type) {
-    throw new Error('dbConfig.type is missing in nxt_flutter.config.json');
-  }
-
-  return {
-    type: parsed.dbConfig.type,
-  };
-}
-
-/**
- * Merge installer config + env secrets
- */
-export async function getFinalConfig(): Promise<DBConfig> {
-  const baseConfig = await loadConfig();
-  console.log('🔥 DB_FIREBASECONFIGJSON =', process.env.DB_FIREBASECONFIGJSON);
-
-  if (baseConfig.type === 'firebase') {
-    const firebaseJsonString = process.env.DB_FIREBASECONFIGJSON;
-    console.log('🔥 DB_FIREBASECONFIGJSON =', process.env.DB_FIREBASECONFIGJSON);
-    if (!firebaseJsonString) {
-      throw new Error('DB_FIREBASECONFIGJSON missing');
-    }
-
-    let firebaseJson;
-    try {
-      firebaseJson = JSON.parse(firebaseJsonString);
-    } catch {
-      throw new Error('Invalid JSON in DB_FIREBASECONFIGJSON');
-    }
-
-    const storageBucket = process.env.DB_STORAGEURL;
-    if (!storageBucket) {
-      throw new Error('DB_STORAGEURL missing');
-    }
-
-    return {
-      ...baseConfig,
-      firebaseConfigJson: firebaseJson,
-      storageBucket,
-    };
-  }
-
-  return baseConfig;
-}
-
-/**
- * DB adapter factory
- */
+// DB adapter factory
 function getAdapter(config: DBConfig): DBAdapter {
   switch (config.type) {
     case 'firebase':
-      return new FirebaseAdapter(config);
+      return new FirebaseAdapter(config)
     case 'postgres':
-      return new PostgresAdapter(config);
+      return new PostgresAdapter(config)
     case 'mongodb':
-      return new MongoDBAdapter(config);
+      return new MongoDBAdapter(config)
     case 'supabase':
-      return new SupabaseAdapter(config);
+      return new SupabaseAdapter(config)
     case 'mysql':
-      return new MySQLAdapter(config);
+      return new MySQLAdapter(config)
     default:
-      throw new Error(`Unsupported DB type: ${config.type}`);
+      throw new Error(`Unsupported DB type: ${config.type}`)
   }
 }
 
-/**
- * Unified signin
- */
-export async function signin(input: SigninInput, config?: DBConfig) {
-  try {
-    const finalConfig = config || (await getFinalConfig());
-    const adapter = getAdapter(finalConfig);
-    const authService = new AuthService(adapter, finalConfig);
+// Unified signin
+export async function signin(input: SigninInput) {
+  if (!input.token) return { error: 'Missing authentication token' }
 
-    if (adapter.supportsBuiltInAuth) {
-      if (!input.token) return { error: 'Missing authentication token' };
+  // ✅ Load DB config from env
+  const config: DBConfig = loadDbFromEnv()  // <- named import
 
-      const sessionUser = await adapter.validateBuiltInSession?.(
-        finalConfig,
-        input.token
-      );
-      if (!sessionUser) return { error: 'Invalid or expired session' };
+  // Get adapter
+  const adapter: DBAdapter = getAdapter(config)
 
-      const userId = sessionUser.uid || sessionUser.id;
-      const project = await adapter.findProjectByOwnerId?.(
-        finalConfig,
-        userId
-      );
-
-      const tokens = await authService.issueTokens?.({
-        userId,
-        projectId: project?.id || null,
-      });
-
-      return {
-        success: true,
-        data: { userId, projectId: project?.id || null, tokens },
-      };
+  let session = null
+  if (adapter.validateBuiltInSession) {
+    session = await adapter.validateBuiltInSession(config, input.token)
+  } else {
+    if (config.type !== 'firebase') {
+      return { error: `Built-in session not supported for DB type: ${config.type}` }
     }
+    try {
+      const adminAuth = getFirebaseAdminAuth(JSON.parse(config.firebaseConfigJson!))
+      session = await adminAuth.verifyIdToken(input.token)
+    } catch (err: any) {
+      return { error: err.message || 'Invalid token' }
+    }
+  }
 
-    const { email, password } = input;
-    if (!email || !password) return { error: 'Email and password required' };
+  if (!session) return { error: 'Invalid session' }
 
-    const user = await adapter.findUserByEmail?.(finalConfig, email);
-    if (!user) return { error: 'Invalid email or password.' };
-
-    const valid = await adapter.comparePassword?.(
-      password,
-      user.password || user.password_hash
-    );
-    if (!valid) return { error: 'Invalid email or password.' };
-
-    const project = await adapter.findProjectByOwnerId?.(
-      finalConfig,
-      user.user_id
-    );
-
-    const tokens = await authService.issueTokens?.({
-      userId: user.user_id,
-      projectId: project?.id || null,
-    });
-
-    return {
-      success: true,
-      data: {
-        userId: user.user_id,
-        projectId: project?.id || null,
-        tokens,
-      },
-    };
-  } catch (err: any) {
-    console.error('❌ Signin failed:', err);
-    return {
-      error: err?.message || 'Internal server error',
-    };
+  return {
+    success: true,
+    data: {
+      uid: session.uid,
+      email: session.email,
+    },
   }
 }

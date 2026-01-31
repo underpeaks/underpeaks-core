@@ -1,70 +1,128 @@
+// app/api/write-env/route.ts
 import { writeFile } from 'fs/promises';
 import path from 'path';
 
 const ENV_FILE_PATH = path.resolve(process.cwd(), '.env.local');
+console.log('📝 Writing .env.local to:', ENV_FILE_PATH);
 
 /**
- * Serialize any value for .env file.
- * - For Firebase JSON, escape private_key newlines
- * - Convert object to single-line JSON (removes ALL newlines)
+ * Serialize Firebase Service Account JSON for .env
+ * - Escapes private_key newlines
  */
-function serializeJsonValue(value: any): string {
-  if (typeof value === 'object' && value !== null) {
-    const clone = JSON.parse(JSON.stringify(value));
+function serializeServiceAccount(value: any): string {
+  let obj: any;
 
-    if ('private_key' in clone && typeof clone.private_key === 'string') {
-      clone.private_key = clone.private_key.replace(/\n/g, '\\n');
+  if (typeof value === 'string') {
+    try {
+      obj = JSON.parse(value);
+    } catch {
+      throw new Error('Invalid Firebase Service Account JSON');
     }
-
-    // Convert to fully single-line JSON
-    return JSON.stringify(clone).replace(/\s*(\r\n|\n|\r)\s*/g, '');
+  } else if (typeof value === 'object' && value !== null) {
+    obj = value;
+  } else {
+    throw new Error('Firebase Service Account must be an object or JSON string');
   }
 
-  return String(value);
+  if ('private_key' in obj && typeof obj.private_key === 'string') {
+    obj.private_key = obj.private_key.replace(/\r?\n/g, '\\n');
+  }
+
+  return JSON.stringify(obj);
+}
+
+
+/**
+ * Serialize Firebase Web Config for .env
+ * - Ensures valid JSON on a single line
+ * - Accepts JS object or JS-style pasted string
+ */
+function serializeFirebaseWebConfig(value: string | object): string {
+  let obj: any;
+
+  if (typeof value === 'string') {
+    // Remove trailing semicolon if pasted from JS
+    value = value.trim().replace(/;$/, '');
+    try {
+      // Evaluate JS object string safely
+      obj = eval('(' + value + ')'); // converts JS object to real object
+    } catch {
+      throw new Error('Invalid Firebase Web Config. Make sure it is a valid JS object.');
+    }
+  } else if (typeof value === 'object' && value !== null) {
+    obj = value;
+  } else {
+    throw new Error('Firebase Web Config must be an object or valid JS string.');
+  }
+
+  // Return JSON string (keys wrapped in double quotes, single line)
+  return JSON.stringify(obj);
 }
 
 /**
- * Write environment variables from object to .env.local
- * - Keeps all keys exactly as provided
- * - Avoids duplicate keys
-
+ * Convert env object into .env.local content
  */
-export async function writeEnvFileFromObject(envObject: Record<string, any>) {
+async function writeEnvFileFromObject(env: Record<string, any>) {
   const lines: string[] = [];
-  const seenKeys = new Set<string>();
 
-  for (const [key, value] of Object.entries(envObject)) {
-    if (value === undefined || value === null) continue;
+  // REQUIRED DB type
+  if (!env.type) throw new Error('Missing "type" in env payload');
+  lines.push(`NEXT_DB_TYPE=${env.type}`);
 
-    let serialized = value;
-    if (typeof value === 'object') serialized = serializeJsonValue(value);
+  // RELATIONAL DBs
+  if (env.host) lines.push(`NEXT_DB_HOST=${env.host}`);
+  if (env.port) lines.push(`NEXT_DB_PORT=${env.port}`);
+  if (env.database) lines.push(`NEXT_DB_NAME=${env.database}`);
+  if (env.user) lines.push(`NEXT_DB_USER=${env.user}`);
+  if (env.password) lines.push(`NEXT_DB_PASSWORD=${env.password}`);
 
-    if (!seenKeys.has(key)) {
-      lines.push(`${key}=${serialized}`);
-      seenKeys.add(key);
-    }
+  // SUPABASE
+  if (env.url) lines.push(`NEXT_DB_URL=${env.url}`);
+  if (env.anonKey) lines.push(`NEXT_DB_ANON_KEY=${env.anonKey}`);
+
+  // FIREBASE
+  if (env.firebaseConfigJson) {
+    lines.push(`NEXT_DB_FIREBASE_SERVICE_ACCOUNT=${serializeServiceAccount(env.firebaseConfigJson)}`);
   }
 
-  
-  if (!seenKeys.has('DB_STORAGEURL')) {
-    lines.push(`DB_STORAGEURL=${envObject.storageUrl}`);
-    seenKeys.add('DB_STORAGEURL');
+  if (env.firebaseWebConfig) {
+    lines.push(`NEXT_PUBLIC_FIREBASE_CONFIG=${serializeFirebaseWebConfig(env.firebaseWebConfig)}`);
   }
 
-  await writeFile(ENV_FILE_PATH, lines.join('\n'), 'utf-8');
-  console.log(`✅ Written .env.local with ${lines.length} variables`);
+  if (env.firebaseDbType) {
+    lines.push(`NEXT_DB_FIREBASE_DB_TYPE=${env.firebaseDbType}`);
+  }
+
+  if (env.storageUrl) {
+    lines.push(`NEXT_DB_STORAGE_URL=${env.storageUrl}`);
+  }
+
+  try {
+    // Ensure final newline
+    await writeFile(ENV_FILE_PATH, lines.join('\n') + '\n', 'utf-8');
+    console.log(`✅ .env.local written successfully (${lines.length} vars)`);
+  } catch (err) {
+    console.error('❌ Failed writing .env.local', err);
+    throw err;
+  }
 }
 
 /**
- * Next.js POST handler for dynamically updating .env.local
+ * API route for writing env variables
  */
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    console.log('[DEBUG] Received env payload:', body);
+
     await writeEnvFileFromObject(body);
+
     return new Response(JSON.stringify({ success: true }), { status: 200 });
-  } catch (error: any) {
-    console.error('Error writing .env.local:', error);
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
+  } catch (err: any) {
+    console.error('❌ ENV write failed', err);
+    return new Response(
+      JSON.stringify({ success: false, error: err.message }),
+      { status: 500 }
+    );
   }
 }

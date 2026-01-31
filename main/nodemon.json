@@ -1,0 +1,6 @@
+{
+  "watch": ["app", "components", "nxf-ui", ".env"],
+  "ext": "ts,tsx,js,json,css",
+  "ignore": ["node_modules", ".next"],
+  "exec": "node -r dotenv/config ./server.js"
+}

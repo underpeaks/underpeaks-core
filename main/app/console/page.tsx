@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import './globals.css';
+import '@/app/layout';
 export default function ConsoleIndexRedirect() {
   const router = useRouter();
 
