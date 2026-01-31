@@ -7,9 +7,9 @@ import {
   NxfElevatedButton,
   NxfSnackbar,
   NxfForm,
-} from '../../../../nxf-ui/widgets';
-import { createModel, getAllModels } from '../../../../nxf-ui/lib/supabase/model';
-import { getProjectIdForUser } from '../../../../nxf-ui/lib/supabase/utils';
+} from '@nxf/widgets';
+// import { createModel, getAllModels } from '../../../../nxf-ui/lib/supabase/model';
+// import { getProjectIdForUser } from '../../../../nxf-ui/lib/supabase/utils';
 import { FiSave } from 'react-icons/fi';
 import { v4 as uuidv4 } from 'uuid';
 import { useUser } from '@supabase/auth-helpers-react';
@@ -61,9 +61,9 @@ export default function CreateModelPage() {
   useEffect(() => {
     async function fetchModels() {
       try {
-        const models = await getAllModels();
-        const modelNames = models?.map((m: any) => m.name) || [];
-        setExistingModels(modelNames);
+        // const models = await getAllModels();
+        // const modelNames = models?.map((m: any) => m.name) || [];
+        // setExistingModels(modelNames);
       } catch (error) {
         console.error('Failed to fetch models:', error);
       }
@@ -83,16 +83,16 @@ export default function CreateModelPage() {
           return;
         }
 
-        const projId = await getProjectIdForUser(user.id);
+        // const projId = await getProjectIdForUser(user.id);
 
-        if (!projId) {
-          setSnackbarMessage('No project found for your account. Create a project first.');
-          setShowSnackbar(true);
-          setProjectId(null);
-          return;
-        }
+        // if (!projId) {
+        //   setSnackbarMessage('No project found for your account. Create a project first.');
+        //   setShowSnackbar(true);
+        //   setProjectId(null);
+        //   return;
+        // }
 
-        setProjectId(projId);
+        // setProjectId(projId);
       } catch (err) {
         console.error('Unexpected error fetching project:', err);
         setSnackbarMessage('Failed to load project info.' + err);
@@ -211,7 +211,7 @@ export default function CreateModelPage() {
     };
 
     try {
-      await createModel(modelToCreate);
+      //await createModel(modelToCreate);
       setSnackbarMessage('Model created successfully!');
       setShowSnackbar(true);
 

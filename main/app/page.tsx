@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
-import { hasValidConfig } from '../config';
-import './globals.css';
+import { hasValidConfig } from './config';
+import '@/app/layout';
 
 
 export default function Home() {

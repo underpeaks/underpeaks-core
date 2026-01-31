@@ -198,3 +198,21 @@
 ///***********************************************************************************//
 ///TODO*********************************END******************************************///
 ///***********************************************************************************//
+
+
+
+//CORE///////////////////////////////////////////////////////////////
+//1.  'Setting up authentication system',
+//2.  'Configuring session management',
+//3.  'Creating API endpoints',
+//4.  'cms front end ',
+//5.  'code gen for flutter',
+//6.  'code gen for nextjs',
+//7.  'Installing demo content',
+//8.  'Running tests to verify installation',
+//9.  'Finalizing installer and cleanup',
+//10. 'switch between self hosted and hosted with api keys',
+//11. 'model generation',
+
+
+

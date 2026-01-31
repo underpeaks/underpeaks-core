@@ -1,14 +1,4 @@
 {
-  "/api/create-system-tables/route": "app/api/create-system-tables/route.js",
-  "/api/create-admin-user/route": "app/api/create-admin-user/route.js",
-  "/api/create-models/route": "app/api/create-models/route.js",
-  "/api/write-config/route": "app/api/write-config/route.js",
-  "/api/create-storage-buckets/route": "app/api/create-storage-buckets/route.js",
-  "/api/save-config/route": "app/api/save-config/route.js",
-  "/(auth)/signin/page": "app/(auth)/signin/page.js",
-  "/installer/config/page": "app/installer/config/page.js",
-  "/installer/database/page": "app/installer/database/page.js",
-  "/installer/demo/page": "app/installer/demo/page.js",
-  "/installer/finalise/page": "app/installer/finalise/page.js",
-  "/installer/done/page": "app/installer/done/page.js"
+  "/page": "app/page.js",
+  "/installer/page": "app/installer/page.js"
 }

@@ -1,8 +1,0 @@
-{
-  "/_not-found/page": "app/_not-found/page.js",
-  "/installer/database/page": "app/installer/database/page.js",
-  "/installer/ecommerce/page": "app/installer/ecommerce/page.js",
-  "/installer/demo/page": "app/installer/demo/page.js",
-  "/installer/finalise/page": "app/installer/finalise/page.js",
-  "/installer/models/page": "app/installer/models/page.js"
-}

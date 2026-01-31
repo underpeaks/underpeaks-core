@@ -92,51 +92,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
-// Validate ../../app/.next/types/app/installer/database/page.ts
-{
-  type __IsExpected<Specific extends AppPageConfig<"/.next/types/app/installer/database">> = Specific
-  const handler = {} as typeof import("../../app/.next/types/app/installer/database/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
-// Validate ../../app/.next/types/app/installer/demo/page.ts
-{
-  type __IsExpected<Specific extends AppPageConfig<"/.next/types/app/installer/demo">> = Specific
-  const handler = {} as typeof import("../../app/.next/types/app/installer/demo/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
-// Validate ../../app/.next/types/app/installer/ecommerce/page.ts
-{
-  type __IsExpected<Specific extends AppPageConfig<"/.next/types/app/installer/ecommerce">> = Specific
-  const handler = {} as typeof import("../../app/.next/types/app/installer/ecommerce/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
-// Validate ../../app/.next/types/app/installer/finalise/page.ts
-{
-  type __IsExpected<Specific extends AppPageConfig<"/.next/types/app/installer/finalise">> = Specific
-  const handler = {} as typeof import("../../app/.next/types/app/installer/finalise/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
-// Validate ../../app/.next/types/app/installer/models/page.ts
-{
-  type __IsExpected<Specific extends AppPageConfig<"/.next/types/app/installer/models">> = Specific
-  const handler = {} as typeof import("../../app/.next/types/app/installer/models/page.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
 // Validate ../../app/console/api-hooks/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/console/api-hooks">> = Specific
@@ -650,6 +605,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/api/session/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/session">> = Specific
+  const handler = {} as typeof import("../../app/api/session/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/signin/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/signin">> = Specific
+  const handler = {} as typeof import("../../app/api/signin/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/api/test-db-connection/route.ts
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/test-db-connection">> = Specific
@@ -671,24 +644,6 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 
 
 
-
-// Validate ../../app/.next/types/app/installer/layout.ts
-{
-  type __IsExpected<Specific extends LayoutConfig<"/.next/types/app/installer">> = Specific
-  const handler = {} as typeof import("../../app/.next/types/app/installer/layout.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
-
-// Validate ../../app/.next/types/app/layout.ts
-{
-  type __IsExpected<Specific extends LayoutConfig<"/.next/types/app">> = Specific
-  const handler = {} as typeof import("../../app/.next/types/app/layout.js")
-  type __Check = __IsExpected<typeof handler>
-  // @ts-ignore
-  type __Unused = __Check
-}
 
 // Validate ../../app/console/layout.tsx
 {

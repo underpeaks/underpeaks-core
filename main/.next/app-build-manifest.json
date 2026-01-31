@@ -6,6 +6,12 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/page.css",
+      "static/chunks/app/page.js"
+    ],
     "/installer/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -16,91 +22,6 @@
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/installer/page.js"
-    ],
-    "/installer/project/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/project/page.js"
-    ],
-    "/installer/admin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/admin/page.js"
-    ],
-    "/installer/config/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/config/page.js"
-    ],
-    "/installer/database/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/database/page.js"
-    ],
-    "/api/test-db-connection/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/test-db-connection/route.js"
-    ],
-    "/installer/demo/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/demo/page.js"
-    ],
-    "/installer/finalise/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/finalise/page.js"
-    ],
-    "/api/flutter/create/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/flutter/create/route.js"
-    ],
-    "/api/nextjs/create/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/nextjs/create/route.js"
-    ],
-    "/api/create-system-tables/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/create-system-tables/route.js"
-    ],
-    "/api/create-admin-user/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/create-admin-user/route.js"
-    ],
-    "/api/create-models/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/create-models/route.js"
-    ],
-    "/api/write-config/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/write-config/route.js"
-    ],
-    "/api/create-storage-buckets/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/create-storage-buckets/route.js"
-    ],
-    "/api/save-config/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/save-config/route.js"
-    ],
-    "/installer/done/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/done/page.js"
-    ],
-    "/(auth)/signin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/signin/page.js"
     ]
   }
 }
