@@ -20,6 +20,7 @@ export async function createAdminUserFlow(
   let tenantId = '';
 
   console.log('🔑 Admin Email:', adminUser.email);
+  console.log('Admin FULL NAME: ',adminUser.fullName);
 
   // 1️⃣ Ensure user in Supabase Auth
   let existingAuthUser = adapter.findUserByEmail
@@ -33,7 +34,7 @@ export async function createAdminUserFlow(
     const authUser = await adapter.registerUserInAuth(config, {
       email: adminUser.email,
       password: adminUser.password,
-      fullName: adminUser.fullName, // 👈 pass to user_metadata
+      full_name: adminUser.fullName, // 👈 pass to user_metadata
     });
     authUserId = authUser.id || authUser.uid || authUserId;
     console.log('✅ Created new auth user:', authUserId);
@@ -46,6 +47,7 @@ export async function createAdminUserFlow(
 
   if (!existingDbUser && adapter.createAdminUser) {
     console.log('🆕 Creating admin user in DB...');
+   
     await adapter.createAdminUser(config, {
       user_id: authUserId,
       user_email: adminUser.email,

@@ -31,6 +31,7 @@ async function createDatabaseSchemaAndTables() {
 }
 
 async function createAdminUser(dbConfig: any, adminUser: any, projectName: string, subdomain: string) {
+  console.log(adminUser);
   if (!dbConfig) throw new Error('DB config is missing');
   if (!adminUser?.email) throw new Error('Admin user email is missing');
 
@@ -151,9 +152,9 @@ export const INSTALL_STEPS = [
   'Creating data models',
   'Writing config.json file',
   'Setting up storage',
-  'Creating API endpoints',
   'Setting up authentication system',
   'Configuring session management',
+  'Creating API endpoints',
   'Installing demo content',
   'Running tests to verify installation',
   'Finalizing installer and cleanup',
@@ -184,6 +185,7 @@ export async function runInstallerSteps(onProgress: (stepIndex: number) => void)
           break;
 
         case 'Creating admin user':
+          console.log(adminUser);
           await createAdminUser(dbConfig, adminUser, projectName, subdomain);
           break;
 

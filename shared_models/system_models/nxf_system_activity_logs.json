@@ -1,5 +1,5 @@
 {
-  "table_name": "systemactivitylogs",
+  "table_name": "nxf_system_activity_logs",
   "schema": "public",
   "columns": [
     { "name": "sal_id", "type": "uuid", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },

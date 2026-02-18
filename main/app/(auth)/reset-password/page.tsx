@@ -1,33 +1,31 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { Label } from '@/components/ui/label'
-import { DBAdapter, DBConfig } from '@/app/db-adapter/types'
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 
-interface ResetPasswordProps {
-  adapter: DBAdapter
-  config: DBConfig
-}
-
-export default function ResetPasswordPage({ adapter, config }: ResetPasswordProps) {
+export default function ResetPasswordPage() {
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   const [token, setToken] = useState<string | null>(null)
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [tokenExpired, setTokenExpired] = useState(false)
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const resetToken = params.get('token')
-    if (resetToken) setToken(resetToken)
-    else setError('Invalid or missing token.')
-  }, [])
+    const t = searchParams.get('token')
+    if (!t) {
+      setError('Invalid or missing reset link.')
+      return
+    }
+    setToken(t)
+  }, [searchParams])
 
   const handleReset = async () => {
     if (!password) return setError('Please enter a new password.')
@@ -37,21 +35,43 @@ export default function ResetPasswordPage({ adapter, config }: ResetPasswordProp
     setError(null)
 
     try {
-      const { resetPassword } = await import('@/app/(auth)/reset-password/actions/reset-password')
-      const result = await resetPassword({ token, newPassword: password, adapter, config })
+      const res = await fetch('/api/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token, password }),
+      })
+      const data = await res.json()
 
-      if (result.error) {
-        setError(result.error)
-      } else {
-        setSubmitted(true)
-        setTimeout(() => router.push('/signin'), 2000)
+      if (!res.ok) {
+        if (data.error?.toLowerCase().includes('expired')) {
+          setTokenExpired(true)
+          setTimeout(() => router.push('/forgot-password'), 3000)
+        } else {
+          throw new Error(data.error || 'Failed to reset password.')
+        }
+        return
       }
+
+      setSubmitted(true)
+      setTimeout(() => router.push('/signin'), 2000)
     } catch (err: any) {
-      console.error(err)
-      setError('Failed to reset password. Please try again.')
+      setError(err.message || 'Failed to reset password. Please try again.')
     } finally {
       setLoading(false)
     }
+  }
+
+  if (tokenExpired) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white px-4">
+        <div className="w-full max-w-md border border-gray-200 bg-white rounded-lg shadow-sm p-8 text-center">
+          <h1 className="text-2xl font-bold text-black mb-4">Reset Link Expired</h1>
+          <p className="text-gray-600">
+            Your password reset link has expired. Redirecting you to the forgot password page...
+          </p>
+        </div>
+      </div>
+    )
   }
 
   if (submitted) {
@@ -95,11 +115,7 @@ export default function ResetPasswordPage({ adapter, config }: ResetPasswordProp
           className="mb-4"
         />
 
-        <Button
-          onClick={handleReset}
-          disabled={loading}
-          className="w-full"
-        >
+        <Button onClick={handleReset} disabled={loading || !token} className="w-full">
           {loading ? 'Resetting...' : 'Reset Password'}
         </Button>
       </div>

@@ -4,17 +4,25 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { DBAdapter, DBConfig, ColumnDef } from "../types";
 import { CreateDataModels } from "../utils/create-data-models";
+import { Client as PgClient } from 'pg'
 
-// -----------------------
-// Postgres Adapter
-// -----------------------
 export class PostgresAdapter implements DBAdapter {
   private client: Client;
   private isConnected = false;
   public config: DBConfig;
 
+  private readonly DEFAULT_BUCKETS = [
+    "system",
+    "themes",
+    "extensions",
+    "projects",
+    "avatars",
+    "logos",
+    "uploads",
+  ];
+
   constructor(config: DBConfig) {
-    if (!config) throw new Error("DBConfig must be provided via Zustand store");
+    if (!config) throw new Error("DBConfig must be provided via adapter");
     this.config = config;
 
     const pgConfig: ClientConfig = {
@@ -24,119 +32,151 @@ export class PostgresAdapter implements DBAdapter {
       database: config.database,
       port: config.port ? Number(config.port) : undefined,
     };
+
     this.client = new Client(pgConfig);
   }
 
-  // -----------------------
-  // Connection
-  // -----------------------
+  // ---------------- CONNECTION ----------------
   async connect() {
     if (this.isConnected) return;
+    console.log("🟢 Connecting to Postgres...");
     await this.client.connect();
     this.isConnected = true;
+    console.log("🟢 Postgres connected");
   }
 
-  async testConnection(): Promise<{ success: boolean; message: string }> {
+  async testConnection() {
     try {
       await this.connect();
       await this.client.query("SELECT 1");
       return { success: true, message: "Connected to Postgres successfully." };
     } catch (err: any) {
-      return { success: false, message: err.message || "Failed to connect to Postgres." };
+      return { success: false, message: err.message || "Failed to connect" };
     }
   }
 
-  // -----------------------
-  // Password helpers
-  // -----------------------
+  // ---------------- PASSWORD ----------------
   async hashPassword(password: string) {
-    return bcrypt.hash(password, 10);
+    console.log("🔑 Hashing password...");
+    const hashed = await bcrypt.hash(password, 10);
+    console.log("🔑 Password hashed:", hashed);
+    return hashed;
   }
 
-  async comparePassword(password: string, hash: string) {
-    return bcrypt.compare(password, hash);
-  }
+ async comparePassword(password: string, hash: string) {
+  
+  // Trim just in case
+  const valid = await bcrypt.compare(password.trim(), hash.trim());
 
-  // -----------------------
-  // CRUD
-  // -----------------------
-  async create(_config: DBConfig, table: string, data: Record<string, any>): Promise<any> {
+  console.log("✅ Password match result:", valid);
+  return valid;
+}
+
+
+  // ---------------- BASIC CRUD ----------------
+  async create(_config: DBConfig, table: string, data: Record<string, any>) {
     await this.connect();
-    const keys = Object.keys(data);
-    const values = Object.values(data).map((v) =>
-      typeof v === "object" && v !== null ? JSON.stringify(v) : v
-    );
-    const placeholders = keys.map((_, i) => `$${i + 1}`).join(", ");
-    const sql = `INSERT INTO "${table}" (${keys.join(",")}) VALUES (${placeholders}) RETURNING *`;
+
+    const cleaned: Record<string, any> = {};
+    for (const key in data) {
+      let value = data[key];
+      if (value === undefined && key.toLowerCase().includes("id"))
+        value = crypto.randomUUID();
+      if (value instanceof Date) cleaned[key] = value.toISOString();
+      else if (typeof value === "object" && value !== null)
+        cleaned[key] = JSON.stringify(value);
+      else cleaned[key] = value;
+    }
+
+    const keys = Object.keys(cleaned);
+    const values = Object.values(cleaned);
+    const placeholders = keys.map((_, i) => `$${i + 1}`).join(",");
+
+    const sql = `INSERT INTO "${table}" (${keys.join(
+      ","
+    )}) VALUES (${placeholders}) RETURNING *`;
+
     const res = await this.client.query(sql, values);
     return res.rows[0];
   }
 
-  async read(_config: DBConfig, table: string, query?: any): Promise<any[]> {
+  async read(_config: DBConfig, table: string, query?: any) {
     await this.connect();
+
     let sql = `SELECT * FROM "${table}"`;
     const values: any[] = [];
-    if (query && Object.keys(query).length > 0) {
-      const where = Object.entries(query)
-        .map(([k, v], i) => {
-          values.push(v);
+
+    if (query && Object.keys(query).length) {
+      const where = Object.keys(query)
+        .map((k, i) => {
+          values.push(query[k]);
           return `"${k}" = $${i + 1}`;
         })
         .join(" AND ");
       sql += ` WHERE ${where}`;
     }
+
     const res = await this.client.query(sql, values);
     return res.rows;
   }
 
-  async update(_config: DBConfig, table: string, id: string, data: any): Promise<any> {
+  async update(
+    _config: DBConfig,
+    table: string,
+    id: string,
+    data: any,
+    idColumn: string = "id"
+  ) {
     await this.connect();
+
     const keys = Object.keys(data);
     const values = Object.values(data).map((v) =>
-      typeof v === "object" && v !== null ? JSON.stringify(v) : v
+      v instanceof Date ? v.toISOString() : v
     );
-    const setClause = keys.map((k, i) => `"${k}" = $${i + 1}`).join(", ");
-    const sql = `UPDATE "${table}" SET ${setClause} WHERE id = $${keys.length + 1} RETURNING *`;
+
+    const setClause = keys
+      .map((k, i) => `"${k}" = $${i + 1}`)
+      .join(", ");
+
+    const sql = `UPDATE "${table}" SET ${setClause} WHERE "${idColumn}" = $${
+      keys.length + 1
+    } RETURNING *`;
+
     const res = await this.client.query(sql, [...values, id]);
     return res.rows[0];
   }
 
-  async delete(_config: DBConfig, table: string, id: string): Promise<any> {
+  async delete(_config: DBConfig, table: string, id: string) {
     await this.connect();
-    const sql = `DELETE FROM "${table}" WHERE id = $1 RETURNING *`;
-    const res = await this.client.query(sql, [id]);
+    const res = await this.client.query(
+      `DELETE FROM "${table}" WHERE id=$1 RETURNING *`,
+      [id]
+    );
     return res.rows[0];
   }
 
-  // -----------------------
-  // TABLE MANAGEMENT
-  // -----------------------
+  // ---------------- TABLE CREATION ----------------
   async createTable(
     tableName: string,
-    schema: { columns: ColumnDef[] | Record<string, ColumnDef>; schema?: string }
+    schema: { columns: ColumnDef[] | Record<string, ColumnDef> }
   ) {
     await this.connect();
-    await this.client.query(`CREATE EXTENSION IF NOT EXISTS "uuid-ossp";`);
-    await this.client.query(`CREATE EXTENSION IF NOT EXISTS "pgcrypto";`);
 
     let columnsArray: ColumnDef[] = [];
+
     if (Array.isArray(schema.columns)) columnsArray = schema.columns;
-    else if (typeof schema.columns === "object" && schema.columns !== null)
-      columnsArray = Object.entries(schema.columns).map(([name, col]) => ({ ...col, name }));
-    else throw new Error(`PostgresAdapter.createTable: "columns" must be array or object`);
+    else if (typeof schema.columns === "object")
+      columnsArray = Object.entries(schema.columns).map(([name, col]) => ({
+        ...col,
+        name,
+      }));
 
-    if (!columnsArray.length) throw new Error(`PostgresAdapter.createTable: "columns" cannot be empty`);
-
-    const colsSQL = columnsArray
+    const columnsSql = columnsArray
       .map((col) => {
         let typeSql = "";
-        let defaultValue = "";
-        const constraints: string[] = [];
-
-        switch (col.type) {
+        switch (col.type.toLowerCase()) {
           case "uuid":
             typeSql = "UUID";
-            if (!col.default) defaultValue = " DEFAULT gen_random_uuid()";
             break;
           case "string":
           case "text":
@@ -144,14 +184,16 @@ export class PostgresAdapter implements DBAdapter {
             break;
           case "json":
           case "jsonb":
+          case "array":
             typeSql = "JSONB";
             break;
-          case "timestamp":
           case "datetime":
+          case "timestamp":
           case "timestamp with time zone":
-            typeSql = "TIMESTAMPTZ";
+            typeSql = "TIMESTAMP";
             break;
           case "integer":
+          case "int":
             typeSql = "INTEGER";
             break;
           case "bigint":
@@ -161,135 +203,455 @@ export class PostgresAdapter implements DBAdapter {
             typeSql = "BOOLEAN";
             break;
           case "float":
-            typeSql = "REAL";
-            break;
           case "double":
             typeSql = "DOUBLE PRECISION";
-            break;
-          case "array":
-            typeSql = "TEXT[]";
             break;
           default:
             throw new Error(`Unsupported Postgres column type: ${col.type}`);
         }
 
-        if (col.default) {
-          if (typeof col.default === "string" && /\(\)$/.test(col.default)) {
-            defaultValue = ` DEFAULT ${col.default.replace(/^extensions\./i, "")}`;
-          } else if (typeof col.default === "string") {
-            defaultValue = ` DEFAULT '${col.default.replace(/'/g, "''")}'`;
-          } else {
-            defaultValue = ` DEFAULT ${col.default}`;
-          }
-        }
-
-        if (col.is_primary || col.primary_key) constraints.push("PRIMARY KEY");
-        if (col.nullable === false) constraints.push("NOT NULL");
+        const constraints: string[] = [];
+        if (col.is_primary) constraints.push("PRIMARY KEY");
         if (col.unique) constraints.push("UNIQUE");
-        if (col.foreign_key) {
-          const fk = col.foreign_key;
-          constraints.push(`REFERENCES ${fk.references} ON DELETE ${fk.on_delete || "NO ACTION"}`);
-        }
+        if (col.nullable === false) constraints.push("NOT NULL");
 
-        return `"${col.name}" ${typeSql}${defaultValue} ${constraints.join(" ")}`.trim();
+        return `"${col.name}" ${typeSql} ${constraints.join(" ")}`;
       })
-      .join(", ");
+      .join(",");
 
-    const sql = `CREATE TABLE IF NOT EXISTS "${schema.schema || "public"}"."${tableName}" (${colsSQL});`;
-    await this.client.query(sql);
-  }
-
-  async runSQL(_config: DBConfig, sql: string): Promise<any> {
-    await this.connect();
-    const res = await this.client.query(sql);
-    return res.rows;
-  }
-
-  // -----------------------
-  // TENANTS & PROJECTS
-  // -----------------------
-  async createTenant(_config: DBConfig, data: { subdomain: string; user_email: string }) {
-    await this.connect();
-    const ten_id = crypto.randomUUID();
-    const sql = `INSERT INTO nxf_system_tenants (ten_id, subdomain, user_email, created_at)
-                 VALUES ($1, $2, $3, now()) RETURNING ten_id`;
-    const res = await this.client.query(sql, [ten_id, data.subdomain, data.user_email]);
-    return res.rows[0].ten_id;
-  }
-
-  async createProject(_config: DBConfig, data: { name: string; user_id: string }) {
-    await this.connect();
-    const project_id = crypto.randomUUID();
-    const sql = `INSERT INTO nxf_system_projects (project_id, name, user_id, created_at, updated_at)
-                 VALUES ($1, $2, $3, now(), now()) RETURNING project_id`;
-    const res = await this.client.query(sql, [project_id, data.name, data.user_id]);
-    return res.rows[0].project_id;
-  }
-
-  async findProjectByOwnerId(_config: DBConfig, ownerId: string) {
-    await this.connect();
-    const res = await this.client.query(
-      `SELECT * FROM nxf_system_projects WHERE user_id = $1 LIMIT 1`,
-      [ownerId]
+    await this.client.query(
+      `CREATE TABLE IF NOT EXISTS "${tableName}" (${columnsSql})`
     );
-    return res.rows[0] || null;
   }
 
-  async findTenantByUserEmail(_config: DBConfig, email: string) {
-    await this.connect();
-    const res = await this.client.query(
-      `SELECT * FROM nxf_system_tenants WHERE user_email = $1 LIMIT 1`,
-      [email]
-    );
-    return res.rows[0] || null;
-  }
+  // ---------------- DATA MODELS ----------------
+  async CreateDataModels(projectId: string) {
+    const result = await CreateDataModels(this, projectId);
 
-  // -----------------------
-  // USERS / AUTH
-  // -----------------------
-  async createAdminUser(_config: DBConfig, data: any) {
-    await this.connect();
-    const hashed = data.password ? await this.hashPassword(data.password) : null;
-    const sql = `INSERT INTO nxf_users (user_id, user_email, full_name, role, password_hash, created_at, updated_at)
-                 VALUES ($1, $2, $3, $4, $5, now(), now())
-                 ON CONFLICT (user_id) DO UPDATE SET
-                   user_email = EXCLUDED.user_email,
-                   full_name = EXCLUDED.full_name,
-                   role = EXCLUDED.role,
-                   password_hash = EXCLUDED.password_hash,
-                   updated_at = now()
-                 RETURNING user_id`;
-    const res = await this.client.query(sql, [
-      data.user_id || crypto.randomUUID(),
-      data.user_email,
-      data.full_name || "",
-      data.role || "admin",
-      hashed,
-    ]);
-    return res.rows[0].user_id;
-  }
-
-  async findUserByEmail(_config: DBConfig, email: string) {
-    await this.connect();
-    const res = await this.client.query(`SELECT * FROM nxf_users WHERE user_email = $1 LIMIT 1`, [email]);
-    return res.rows[0] || null;
-  }
-
-  async findUserByEmailWithRetry(_config: DBConfig, email: string, retries = 5, delay = 300) {
-    for (let i = 0; i < retries; i++) {
-      const user = await this.findUserByEmail(_config, email);
-      if (user) return user;
-      await new Promise((r) => setTimeout(r, delay));
+    for (const table of result) {
+      await this.create(this.config, "nxf_system_models", {
+        sm_id: crypto.randomUUID(),
+        project_id: projectId,
+        name: table.name,
+        schema: JSON.stringify(table.columns),
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
     }
-    return null;
+
+    return result;
   }
 
-  // -----------------------
-  // INSTALLER CONFIG
-  // -----------------------
-  async saveInstallerConfig(_config: DBConfig, data: any) {
+  async createDataModelsFromUserEmail(email: string) {
+    const user = await this.findUserByEmail(this.config, email);
+    const project = await this.findProjectByOwnerId(
+      this.config,
+      user.user_id
+    );
+    return this.CreateDataModels(project.project_id);
+  }
+
+  // ---------------- USER HELPERS ----------------
+  async createAdminUser(config: DBConfig, data: any) {
+    const { user_id, user_email, password, role = "admin", ...rest } = data;
+    const hashed = await this.hashPassword(password);
+
+    return this.create(config, "nxf_users", {
+      user_id: user_id || crypto.randomUUID(),
+      user_email,
+      password_hash: hashed,
+      full_name: rest.full_name || null,
+      role,
+      status: "active",
+      email_verified: true,
+      token: null,
+      token_ttl: null,
+      notes: rest.notes || null,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+  }
+
+  async findUserByEmail(config: DBConfig, email: string) {
+    console.log("🔍 Finding user by email:", email);
+    const rows = await this.read(config, "nxf_users", {
+      user_email: email,
+    });
+    console.log("🔍 Found user rows:", rows.length);
+    return rows?.[0] || null;
+  }
+
+  async findUserByToken(token: string) {
+    await this.connect();
+
+    const res = await this.client.query(
+      `SELECT * FROM nxf_users WHERE token=$1 AND token_ttl > NOW() LIMIT 1`,
+      [token]
+    );
+    return res.rows[0] || null;
+  }
+
+  async verifyEmail(token: string) {
+    const user = await this.findUserByToken(token);
+    if (!user) throw new Error("Invalid or expired verification token");
+
+    await this.client.query(
+      `UPDATE nxf_users 
+       SET email_verified=true, token=NULL, token_ttl=NULL, updated_at=NOW()
+       WHERE user_id=$1`,
+      [user.user_id]
+    );
+
+    return { success: true };
+  }
+
+  async resendVerificationEmail(config: DBConfig, email: string) {
+    console.log("RESEND VERIFICATION EMAIL")
+    const user = await this.findUserByEmail(config, email);
+    console.log(user);
+
+    if (!user) throw new Error("User not found");
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const ttl = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    console.log(token);
+    console.log(ttl);
+
+    await this.client.query(
+      `UPDATE nxf_users 
+       SET token=$1, token_ttl=$2, updated_at=NOW()
+       WHERE user_id=$3`,
+      [token, ttl, user.user_id]
+    );
+
+    console.log("END OF VERFICATION")
+
+    return { success: true, token };
+  }
+
+  async updatePasswordByToken(token: string, newPassword: string) {
+    const user = await this.findUserByToken(token);
+    if (!user) throw new Error("Invalid or expired token");
+
+    //const hashed = await this.hashPassword(newPassword);
+
+    console.log(newPassword);
+
+    await this.client.query(
+      `UPDATE nxf_users
+       SET password_hash=$1, token=NULL, token_ttl=NULL, updated_at=NOW()
+       WHERE user_id=$2`,
+      [newPassword, user.user_id]
+    );
+
+    return { success: true };
+  }
+
+  // ---------------- LOGIN ----------------
+  async loginBasic(
+  config: DBConfig,
+  email: string,
+  password: string,
+  emailVerifiedRequired: boolean = true
+) {
+ 
+
+  // 1️⃣ Find the user by email
+  const user = await this.findUserByEmail(config, email);
+  if (!user) {
+    console.log("❌ User not found");
+    return { success: false, error: "User not found." };
+  }
+  console.log("🔍 User found:", user.user_email);
+
+  // // 2️⃣ Make sure the password hash exists
+  if (!user.password_hash) {
+    console.log("❌ Incorrect password - ");
+    return { success: false, error: "Invalid password" };
+  }
+
+ 
+
+  // 4️⃣ Compare password using bcrypt
+  // Note: NEVER hash the input password here — just compare
+  let valid = false;
+  //try {
+ try{
+    valid = await bcrypt.compare(password.trim(), user.password_hash.trim());
+  } catch (err) {
+    console.error("❌ bcrypt.compare error:", err);
+    return { success: false, error: "Invalid email or password - Could not validate password" };
+  }
+
+  console.log("✅ Password match result:", valid);
+  if (!valid) {
+    console.log("❌ Password invalid for user:", user.user_email);
+    return { success: false, error: "Invalid email or password - password do not match" };
+  }
+
+  // 5️⃣ Optional: check email verification
+  if (emailVerifiedRequired && !user.email_verified) {
+    console.log("⚠️ Email not verified for user:", user.user_email);
+    return { success: false, error: "Please verify your email", user };
+  }
+
+  // 6️⃣ Success: return user object
+  console.log("🎉 Login successful for user:", user.user_email);
+  return {
+    success: true,
+    user: {
+      user_id: user.user_id,
+      user_email: user.user_email,
+      full_name: user.full_name,
+      role: user.role,
+      status: user.status,
+      email_verified: user.email_verified,
+      emailVerifiedRequired: emailVerifiedRequired,
+    },
+  };
+}
+
+
+  async loginWithPostgres(
+    config: DBConfig,
+    email: string,
+    password: string,
+    ip?: string,
+    ua?: string
+  ) {
+    console.log("REACHED LOGIN WITH POSTGRES");
+    const basic = await this.loginBasic(config, email, password);
+
+    console.log("💻 loginBasic result:", basic);
+
+    if (!basic.success || !basic.user) {
+      console.log("❌ Basic login failed");
+      return { success: false, error: basic.error };
+    }
+
+    if (basic.user.emailVerifiedRequired && !basic.user.email_verified) {
+      console.log("VERIFICATION REQUIRED");
+      return { success: false, error: "Please verify your email", user: basic.user };
+    }
+
+    const project = await this.findProjectByOwnerId(config, basic.user.user_id);
+    if (!project) return { success: false, error: "No project found for user" };
+
+    const accessToken = crypto.randomUUID();
+    const refreshToken = crypto.randomUUID();
+
+    await this.create(config, "nxf_system_tokens", {
+      token_id: crypto.randomUUID(),
+      user_id: basic.user.user_id,
+      project_id: project.project_id,
+      access_token: accessToken,
+      refresh_token: refreshToken,
+      token_type: "bearer",
+      expires_at: new Date(Date.now() + 3600 * 1000),
+      refresh_expires_at: new Date(Date.now() + 7 * 86400 * 1000),
+      ip_address: ip || null,
+      user_agent: ua || null,
+      revoked: false,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+
+    return {
+      success: true,
+      user: basic.user,
+      accessToken,
+      refreshToken,
+      projectId: project.project_id,
+    };
+  }
+
+  // ---------------- REGISTRATION ----------------
+  async registerUser(
+    config: DBConfig,
+    data: {
+      email: string
+      password: string
+      full_name?: string
+      token: string
+      token_ttl: Date
+    }
+  ) {
+    const existing = await this.findUserByEmail(config, data.email)
+    if (existing) throw new Error('User exists')
+
+    const user_id = crypto.randomUUID()
+    const password_hash = await this.hashPassword(data.password)
+
+    await this.create(config, 'nxf_users', {
+      user_id,
+      user_email: data.email,
+      password_hash,
+      full_name: data.full_name || null,
+      role: 'user',
+      status: 'active',
+      email_verified: false,
+      token: data.token,
+      token_ttl: data.token_ttl,
+      created_at: new Date(),
+      updated_at: new Date(),
+    })
+
+    const project_id = await this.createProject(config, {
+      name: `Default Project`,
+      user_id,
+    })
+
+    return { success: true, user_id, project_id, token: data.token, token_ttl: data.token_ttl }
+  }
+
+  // ---------------- TOKENS ----------------
+  async findTokenByAccessToken(accessToken: string) {
+    console.log('🐘 [PG] findTokenByAccessToken called')
+    console.log('🐘 token:', accessToken)
+
+    const client = new PgClient({
+      host: this.config.host,
+      port: Number(this.config.port),
+      database: this.config.database,
+      user: this.config.user,
+      password: this.config.password,
+    })
+
+    try {
+      console.log('🐘 connecting to postgres...')
+      await client.connect()
+      console.log('🐘 connected')
+
+      const query = `SELECT * FROM nxf_system_tokens WHERE access_token=$1 LIMIT 1`
+      console.log('🐘 running query:', query)
+
+      const res = await client.query(query, [accessToken])
+
+      console.log('🐘 query result rows:', res.rows.length)
+      console.log('🐘 row data:', res.rows[0])
+
+      return res.rows[0] || null
+    } catch (err) {
+      console.error('❌ [PG] findTokenByAccessToken error:', err)
+      return null
+    } finally {
+      console.log('🐘 closing postgres connection')
+      await client.end().catch(() => {})
+    }
+  }
+
+  async findTokenByRefreshToken(refreshToken: string) {
+    const res = await this.client.query(
+      `SELECT * FROM nxf_system_tokens WHERE refresh_token=$1`,
+      [refreshToken]
+    );
+    return res.rows[0] || null;
+  }
+
+  async extendToken(tokenId: string, updates: Partial<{ revoked: boolean; updated_at: string }>) {
+    console.log('🐘 [PG] extendToken called for:', tokenId)
+    const client = new PgClient({
+      host: this.config.host,
+      port: Number(this.config.port),
+      database: this.config.database,
+      user: this.config.user,
+      password: this.config.password,
+    })
+
+    try {
+      await client.connect()
+      console.log('🐘 connected for extendToken')
+
+      const setClauses: string[] = []
+      const values: any[] = []
+
+      let i = 1
+      if (updates.revoked !== undefined) {
+        setClauses.push(`revoked = $${i++}`)
+        values.push(updates.revoked)
+      }
+      if (updates.updated_at) {
+        setClauses.push(`updated_at = $${i++}`)
+        values.push(updates.updated_at)
+      }
+
+      if (setClauses.length === 0) return
+
+      const query = `UPDATE nxf_system_tokens SET ${setClauses.join(', ')} WHERE token_id = $${i}`
+      values.push(tokenId)
+
+      console.log('🐘 running query:', query, 'with values:', values)
+      await client.query(query, values)
+      console.log('🐘 token updated successfully')
+
+    } finally {
+      await client.end()
+      console.log('🐘 closed connection for extendToken')
+    }
+  }
+
+  async createPasswordResetToken(email: string) {
+    await this.connect();
+
+    const user = await this.findUserByEmail(this.config, email);
+    if (!user) throw new Error("User not found");
+
+    const token = crypto.randomBytes(32).toString("hex");
+    const ttl = new Date(Date.now() + 60 * 60 * 1000);
+
+    await this.client.query(
+      `UPDATE nxf_users 
+       SET token=$1, token_ttl=$2, updated_at=NOW()
+       WHERE user_id=$3`,
+      [token, ttl, user.user_id]
+    );
+
+    return token;
+  }
+
+  // ---------------- PROJECTS ----------------
+  async createProject(config: DBConfig, data: { name: string; user_id: string }) {
+    const project_id = crypto.randomUUID();
+    await this.create(config, "nxf_system_projects", {
+      project_id,
+      name: data.name,
+      user_id: data.user_id,
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+    return project_id;
+  }
+
+  async findProjectByOwnerId(config: DBConfig, ownerId: string) {
+    const rows = await this.read(config, "nxf_system_projects", {
+      user_id: ownerId,
+    });
+    return rows?.[0] || null;
+  }
+
+  // ---------------- TENANTS ----------------
+  async createTenant(config: DBConfig, data: { subdomain: string; user_email: string }) {
+    const ten_id = crypto.randomUUID();
+    await this.create(config, "nxf_system_tenants", {
+      ten_id,
+      subdomain: data.subdomain,
+      user_email: data.user_email,
+      created_at: new Date(),
+    });
+    return ten_id;
+  }
+
+  async findTenantByUserEmail(config: DBConfig, email: string) {
+    const rows = await this.read(config, "nxf_system_tenants", {
+      user_email: email,
+    });
+    return rows?.[0] || null;
+  }
+
+  async saveInstallerConfig(config: DBConfig, data: any) {
     const config_id = crypto.randomUUID();
-    await this.create(_config, "nxf_system_config", {
+    await this.create(config, "nxf_system_config", {
       config_id,
       ...data,
       created_at: new Date(),
@@ -298,32 +660,13 @@ export class PostgresAdapter implements DBAdapter {
     return config_id;
   }
 
-  // -----------------------
-  // DATA MODELS
-  // -----------------------
-  async CreateDataModels(projectId: string) {
-    if (!this.config || !projectId) throw new Error("Missing DB config or projectId");
-    return CreateDataModels(this, projectId);
-  }
-
-  async createDataModelsFromUserEmail(userEmail: string) {
-    const user = await this.findUserByEmailWithRetry(this.config, userEmail);
-    if (!user?.user_id) throw new Error(`User not found: ${userEmail}`);
-
-    const project = await this.findProjectByOwnerId(this.config, user.user_id);
-    if (!project?.project_id) throw new Error(`No project found for user ${userEmail}`);
-
-    return this.CreateDataModels(project.project_id);
-  }
-
-  // -----------------------
-  // STORAGE
-  // -----------------------
-  async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
-    const DEFAULT_BUCKETS = ["system", "themes", "extensions", "projects", "avatars", "logos", "uploads"];
-    for (const folder of DEFAULT_BUCKETS) {
-      const existing = await this.read(this.config, "nxf_storage", { folder });
-      if (!existing || existing.length === 0) {
+  // ---------------- STORAGE ----------------
+  async setupStorageBuckets() {
+    for (const folder of this.DEFAULT_BUCKETS) {
+      const existing = await this.read(this.config, "nxf_storage", {
+        folder,
+      });
+      if (!existing?.length) {
         await this.create(this.config, "nxf_storage", {
           storage_id: crypto.randomUUID(),
           folder,
@@ -333,35 +676,21 @@ export class PostgresAdapter implements DBAdapter {
         });
       }
     }
-    return { success: true, buckets: DEFAULT_BUCKETS };
+    return { success: true, buckets: this.DEFAULT_BUCKETS };
   }
 
-  async createBucket(bucketName: string) {
-    await this.create(this.config, "nxf_storage", {
+  async createBucket(folder: string) {
+    return this.create(this.config, "nxf_storage", {
       storage_id: crypto.randomUUID(),
-      folder: bucketName,
+      folder,
       file_name: "",
-      file_path: bucketName,
+      file_path: folder,
       created_at: new Date(),
     });
   }
-
-  async listBuckets(): Promise<string[]> {
-    const rows = await this.read(this.config, "nxf_storage");
-    return rows.map((r: any) => r.folder);
-  }
-
-  async deleteBucket(bucketName: string) {
-    const rows = await this.read(this.config, "nxf_storage", { folder: bucketName });
-    if (!rows.length) return;
-    return this.delete(this.config, "nxf_storage", rows[0].storage_id);
-  }
 }
 
-// -----------------------
-// Factory
-// -----------------------
+// factory
 export function getPostgresAdapter(config: DBConfig) {
-  if (!config) throw new Error("Postgres config is undefined");
   return new PostgresAdapter(config);
 }

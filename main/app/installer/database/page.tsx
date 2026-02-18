@@ -255,7 +255,10 @@ export default function DatabaseConfigPage() {
 
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to save configuration');
 
-      router.push('/installer/demo');
+     
+      setTimeout(() => {
+       router.push('/installer/demo');
+    }, 500)
     } catch (err: any) {
       console.error('❌ Failed to save configuration:', err);
       alert(`Failed to save configuration: ${err.message}`);
