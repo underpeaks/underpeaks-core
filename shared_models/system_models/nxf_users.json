@@ -7,6 +7,11 @@
     { "name": "password_hash", "type": "string", "nullable": false },
     { "name": "full_name", "type": "string", "nullable": true },
     { "name": "role", "type": "string", "nullable": true },
+    { "name": "email_verified", "type": "boolean", "nullable": true, "default": false },
+    { "name": "token", "type": "string", "nullable": true },
+    { "name": "token_ttl", "type": "timestamp with time zone", "nullable": true, "default": "now()" },
+    { "name": "status", "type": "string", "nullable": false, "default": "active" },
+    { "name": "notes", "type": "text", "nullable": true },
     { "name": "created_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" },
     { "name": "updated_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" }
   ],

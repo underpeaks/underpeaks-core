@@ -6,6 +6,8 @@ export async function POST(request: Request) {
   try {
     const { config, adminUser, projectName ,subdomain } = await request.json();
 
+    console.log(adminUser);
+
     if (!config) {
       return NextResponse.json({ success: false, message: 'Missing DB config' }, { status: 400 });
     }
@@ -14,7 +16,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, message: 'Missing admin user data' }, { status: 400 });
     }
 
-    console.log('API PASSWORD CHECK '+config.password,+' ----'+ config.password_hash);
+    console.log('API PASSWORD CHECK '+adminUser.password,+' ----'+ adminUser.password_hash);
+    
     await createAdminUserFlow(config, adminUser,projectName,subdomain);
 
     return NextResponse.json({ success: true, message: 'Admin user created successfully' });

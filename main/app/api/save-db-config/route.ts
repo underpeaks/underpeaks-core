@@ -1,92 +1,122 @@
-// app/api/write-env/route.ts
 import { writeFile } from 'fs/promises';
 import path from 'path';
 
 const ENV_FILE_PATH = path.resolve(process.cwd(), '.env.local');
 console.log('📝 Writing .env.local to:', ENV_FILE_PATH);
 
-/**
- * Serialize Firebase Service Account JSON for .env
- * - Escapes private_key newlines
- */
+/** Extract Mongo DB name from connection string */
+function extractMongoDbName(uri: string): string | null {
+  try {
+    const afterSlash = uri.split('.net/')[1];
+    if (!afterSlash) return null;
+    return afterSlash.split('?')[0];
+  } catch {
+    return null;
+  }
+}
+
+/** Serialize Firebase Service Account JSON */
 function serializeServiceAccount(value: any): string {
   let obj: any;
 
   if (typeof value === 'string') {
-    try {
-      obj = JSON.parse(value);
-    } catch {
-      throw new Error('Invalid Firebase Service Account JSON');
-    }
-  } else if (typeof value === 'object' && value !== null) {
-    obj = value;
+    obj = JSON.parse(value);
   } else {
-    throw new Error('Firebase Service Account must be an object or JSON string');
+    obj = value;
   }
 
-  if ('private_key' in obj && typeof obj.private_key === 'string') {
+  if (obj.private_key) {
     obj.private_key = obj.private_key.replace(/\r?\n/g, '\\n');
   }
 
   return JSON.stringify(obj);
 }
 
-
-/**
- * Serialize Firebase Web Config for .env
- * - Ensures valid JSON on a single line
- * - Accepts JS object or JS-style pasted string
- */
+/** Serialize Firebase Web Config */
 function serializeFirebaseWebConfig(value: string | object): string {
   let obj: any;
 
   if (typeof value === 'string') {
-    // Remove trailing semicolon if pasted from JS
     value = value.trim().replace(/;$/, '');
-    try {
-      // Evaluate JS object string safely
-      obj = eval('(' + value + ')'); // converts JS object to real object
-    } catch {
-      throw new Error('Invalid Firebase Web Config. Make sure it is a valid JS object.');
-    }
-  } else if (typeof value === 'object' && value !== null) {
-    obj = value;
+    obj = eval('(' + value + ')');
   } else {
-    throw new Error('Firebase Web Config must be an object or valid JS string.');
+    obj = value;
   }
 
-  // Return JSON string (keys wrapped in double quotes, single line)
   return JSON.stringify(obj);
 }
 
-/**
- * Convert env object into .env.local content
- */
 async function writeEnvFileFromObject(env: Record<string, any>) {
   const lines: string[] = [];
 
-  // REQUIRED DB type
   if (!env.type) throw new Error('Missing "type" in env payload');
+
   lines.push(`NEXT_DB_TYPE=${env.type}`);
+  lines.push(`NEXT_PUBLIC_DB_TYPE=${env.type}`);
 
-  // RELATIONAL DBs
-  if (env.host) lines.push(`NEXT_DB_HOST=${env.host}`);
-  if (env.port) lines.push(`NEXT_DB_PORT=${env.port}`);
-  if (env.database) lines.push(`NEXT_DB_NAME=${env.database}`);
-  if (env.user) lines.push(`NEXT_DB_USER=${env.user}`);
-  if (env.password) lines.push(`NEXT_DB_PASSWORD=${env.password}`);
+  // -----------------------------
+  // MongoDB
+  // -----------------------------
+  if (env.type === 'mongodb' && env.connectionString) {
+    lines.push(`NEXT_DB_MONGO_URI=${env.connectionString}`);
 
-  // SUPABASE
-  if (env.url) lines.push(`NEXT_DB_URL=${env.url}`);
-  if (env.anonKey) lines.push(`NEXT_DB_ANON_KEY=${env.anonKey}`);
+    const dbName = extractMongoDbName(env.connectionString);
+    if (dbName) {
+      lines.push(`NEXT_DB_MONGO_DB_NAME=${dbName}`);
+    }
+  }
 
-  // FIREBASE
+  // -----------------------------
+  // MySQL
+  // -----------------------------
+  if (env.type === 'mysql') {
+    if (!env.host || !env.database || !env.user || !env.password) {
+      throw new Error('MySQL config missing host, database, user, or password');
+    }
+
+    lines.push(`NEXT_DB_MYSQL_HOST=${env.host}`);
+    lines.push(`NEXT_DB_MYSQL_PORT=${env.port || 3306}`);
+    lines.push(`NEXT_DB_MYSQL_DATABASE=${env.database}`);
+    lines.push(`NEXT_DB_MYSQL_USER=${env.user}`);
+    lines.push(`NEXT_DB_MYSQL_PASSWORD=${env.password}`);
+  }
+
+  // -----------------------------
+  // PostgreSQL
+  // -----------------------------
+  if (env.type === 'postgres') {
+    if (!env.host || !env.database || !env.user || !env.password) {
+      throw new Error('Postgres config missing host, database, user, or password');
+    }
+
+    lines.push(`NEXT_DB_POSTGRES_HOST=${env.host}`);
+    lines.push(`NEXT_DB_POSTGRES_PORT=${env.port || 5432}`);
+    lines.push(`NEXT_DB_POSTGRES_DATABASE=${env.database}`);
+    lines.push(`NEXT_DB_POSTGRES_USER=${env.user}`);
+    lines.push(`NEXT_DB_POSTGRES_PASSWORD=${env.password}`);
+  }
+
+  // -----------------------------
+  // Supabase
+  // -----------------------------
+  if (env.url) lines.push(`NEXT_PUBLIC_SUPABASE_URL=${env.url}`);
+  if (env.anonKey) lines.push(`NEXT_PUBLIC_SUPABASE_ANON_KEY=${env.anonKey}`);
+
+  // -----------------------------
+  // Firebase
+  // -----------------------------
   if (env.firebaseConfigJson) {
-    lines.push(`NEXT_DB_FIREBASE_SERVICE_ACCOUNT=${serializeServiceAccount(env.firebaseConfigJson)}`);
+    lines.push(
+      `NEXT_DB_FIREBASE_SERVICE_ACCOUNT=${serializeServiceAccount(
+        env.firebaseConfigJson
+      )}`
+    );
   }
 
   if (env.firebaseWebConfig) {
-    lines.push(`NEXT_PUBLIC_FIREBASE_CONFIG=${serializeFirebaseWebConfig(env.firebaseWebConfig)}`);
+    lines.push(
+      `NEXT_PUBLIC_FIREBASE_CONFIG=${serializeFirebaseWebConfig(env.firebaseWebConfig)}`
+    );
   }
 
   if (env.firebaseDbType) {
@@ -97,26 +127,14 @@ async function writeEnvFileFromObject(env: Record<string, any>) {
     lines.push(`NEXT_DB_STORAGE_URL=${env.storageUrl}`);
   }
 
-  try {
-    // Ensure final newline
-    await writeFile(ENV_FILE_PATH, lines.join('\n') + '\n', 'utf-8');
-    console.log(`✅ .env.local written successfully (${lines.length} vars)`);
-  } catch (err) {
-    console.error('❌ Failed writing .env.local', err);
-    throw err;
-  }
+  await writeFile(ENV_FILE_PATH, lines.join('\n') + '\n', 'utf-8');
+  console.log('✅ .env.local written successfully');
 }
 
-/**
- * API route for writing env variables
- */
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log('[DEBUG] Received env payload:', body);
-
     await writeEnvFileFromObject(body);
-
     return new Response(JSON.stringify({ success: true }), { status: 200 });
   } catch (err: any) {
     console.error('❌ ENV write failed', err);

@@ -69,12 +69,14 @@ export default function FinalizePage() {
           dbConfig: installerState.dbConfig,
 
           // ⛔ NO PASSWORD — Firebase Auth owns this
-          adminUser: installerState.adminUser
-            ? {
-                email: installerState.adminUser.email,
-                full_name: installerState.adminUser.fullName,
-              }
-            : null,
+        adminUser: installerState.adminUser
+  ? {
+      email: installerState.adminUser.email,
+      full_name: installerState.adminUser.fullName,
+     
+    }
+  : null,
+
         }),
       });
 

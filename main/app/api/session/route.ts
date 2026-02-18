@@ -1,19 +1,208 @@
+// app/api/sessions/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdapter } from '@/app/db-adapter'
 import type { DBType, DBConfig } from '@/app/db-adapter/types'
+import mysql from 'mysql2/promise'
+import { Client as PgClient } from 'pg'
 
 export async function POST(req: NextRequest) {
-  const { token } = await req.json()
-  const dbType = process.env.NEXT_DB_TYPE as DBType
-  const serviceAccount = JSON.parse(process.env.NEXT_DB_FIREBASE_SERVICE_ACCOUNT!)
+  console.log('🔐 [SESSIONS API] Request received')
 
-  const dbConfig: DBConfig = {
-    type: dbType,
-    firebaseConfigJson: JSON.stringify(serviceAccount),
-    storageBucket: 'gs://' + serviceAccount.storageBucket,
+  try {
+    const body = await req.json().catch(() => ({}))
+    let { token, refreshToken } = body
+    console.log('Request body:', body)
+
+    // fallback: Authorization header
+    if (!token) {
+      const authHeader = req.headers.get('Authorization')
+      if (authHeader?.startsWith('Bearer ')) {
+        token = authHeader.replace('Bearer ', '')
+        console.log('Token extracted from Authorization header')
+      }
+    }
+
+    console.log('Received token:', token)
+    if (!token) {
+      return NextResponse.json({ user: null, error: 'Token is required' }, { status: 401 })
+    }
+
+    const dbType = process.env.NEXT_DB_TYPE as DBType
+    console.log('Using DB type:', dbType)
+    if (!dbType) throw new Error('NEXT_DB_TYPE is not set')
+
+    let dbConfig: DBConfig
+
+    // ======================= FIREBASE =======================
+    if (dbType === 'firebase') {
+      const serviceAccount = process.env.NEXT_DB_FIREBASE_SERVICE_ACCOUNT
+      if (!serviceAccount) throw new Error('Firebase service account missing')
+      const parsedAccount = JSON.parse(serviceAccount)
+      dbConfig = {
+        type: dbType,
+        firebaseConfigJson: JSON.stringify(parsedAccount),
+        storageBucket: 'gs://' + parsedAccount.storageBucket,
+      }
+      console.log('Firebase config prepared')
+    }
+
+    // ======================= SUPABASE =======================
+    else if (dbType === 'supabase') {
+      dbConfig = {
+        type: dbType,
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      }
+      console.log('Supabase config prepared')
+    }
+
+    // ======================= MONGODB =======================
+    else if (dbType === 'mongodb') {
+      dbConfig = {
+        type: dbType,
+        connectionString: process.env.NEXT_DB_MONGO_URI!,
+        database: process.env.NEXT_DB_MONGO_DB_NAME!,
+      }
+      console.log('MongoDB config prepared')
+    }
+
+    // ======================= MYSQL =======================
+    else if (dbType === 'mysql') {
+      const host = process.env.NEXT_DB_MYSQL_HOST
+      const port = process.env.NEXT_DB_MYSQL_PORT ? Number(process.env.NEXT_DB_MYSQL_PORT) : 3306
+      const database = process.env.NEXT_DB_MYSQL_DATABASE
+      const user = process.env.NEXT_DB_MYSQL_USER
+      const password = process.env.NEXT_DB_MYSQL_PASSWORD
+
+      if (!host || !database || !user || !password)
+        throw new Error('MySQL environment variables missing')
+
+      dbConfig = { type: 'mysql', host, port, database, user, password }
+
+      // Test connection with 5s timeout
+      const conn: mysql.Connection = await Promise.race([
+        mysql.createConnection({ host, port, user, password, database }),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('MySQL connection timeout')), 5000)
+        ),
+      ])
+      await conn.end()
+      console.log('MySQL connection OK')
+    }
+
+    // ======================= POSTGRESQL =======================
+    else if (dbType === 'postgres') {
+      const host = process.env.NEXT_DB_POSTGRES_HOST
+      const port = process.env.NEXT_DB_POSTGRES_PORT ? Number(process.env.NEXT_DB_POSTGRES_PORT) : 5432
+      const database = process.env.NEXT_DB_POSTGRES_DATABASE
+      const user = process.env.NEXT_DB_POSTGRES_USER
+      const password = process.env.NEXT_DB_POSTGRES_PASSWORD
+
+      if (!host || !database || !user || !password)
+        throw new Error('Postgres environment variables missing')
+
+      dbConfig = { type: 'postgres', host, port, database, user, password }
+
+      // Test connection with 5s timeout
+      const client = new PgClient({ host, port, database, user, password })
+      await Promise.race([
+        client.connect(),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Postgres connection timeout')), 5000)
+        ),
+      ])
+      await client.end()
+      console.log('Postgres connection OK')
+    }
+
+    else {
+      throw new Error(`Unsupported DB type: ${dbType}`)
+    }
+
+    const adapter = getAdapter(dbType, dbConfig)
+    console.log('🚀 Adapter ready')
+
+    let user: any = null
+
+    // ================= BUILT-IN AUTH (Firebase/Supabase) =================
+    if (adapter.supportsBuiltInAuth) {
+      console.log('Using built-in auth')
+      user = await adapter.validateBuiltInSession?.(dbConfig, token)
+      console.log('Built-in session validation result:', user)
+
+      // Supabase auto refresh
+      if (!user && dbType === 'supabase' && refreshToken) {
+        try {
+          console.log('Attempting Supabase refresh...')
+          const { data, error } = await adapter.client.auth.refreshSession({
+            refresh_token: refreshToken,
+          })
+          if (!error && data?.session) {
+            user = data.session.user
+            console.log('Supabase refresh success, user:', user)
+          }
+        } catch (e) {
+          console.error('Supabase refresh exception:', e)
+        }
+      }
+    }
+
+    // ================= CUSTOM TOKEN AUTH (Mongo/MySQL/Postgres) =================
+    else {
+      console.log('Using custom token auth')
+
+      // Wrap DB query in try/catch with timeout
+      try {
+        const storedToken = await Promise.race([
+          adapter.findTokenByAccessToken?.(token) ?? Promise.resolve(null),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error('DB query timeout')), 3000)
+          ),
+        ])
+        console.log('Stored token lookup result:', storedToken)
+
+        if (!storedToken) {
+          console.warn('❌ Token not found in DB')
+        } else if (storedToken.revoked) {
+          console.warn('❌ Token revoked')
+        } else if (new Date(storedToken.expires_at) < new Date()) {
+          console.log('⏰ Access token expired')
+
+          if (refreshToken) {
+            const refresh = await adapter.findTokenByRefreshToken?.(refreshToken)
+            if (refresh && new Date(refresh.refresh_expires_at) > new Date() && !refresh.revoked) {
+              console.log('Refresh token valid, extending access token')
+              const newExpiry = new Date(Date.now() + 60 * 60 * 1000).toISOString()
+              await adapter.extendToken?.(refresh.token_id, {
+                expires_at: newExpiry,
+                updated_at: new Date().toISOString(),
+              })
+              user = { user_id: refresh.user_id }
+            } else {
+              console.warn('❌ Refresh token invalid or expired')
+            }
+          }
+        } else {
+          user = { user_id: storedToken.user_id }
+          console.log('✅ Access token valid, user:', user)
+        }
+      } catch (err) {
+        console.error('❌ Token query failed:', err)
+      }
+    }
+
+    if (!user) {
+      console.warn('❌ Session invalid or expired')
+      return NextResponse.json(
+        { user: null, error: 'Invalid or expired session' },
+        { status: 401 }
+      )
+    }
+
+    console.log('✅ Session valid:', user)
+    return NextResponse.json({ user })
+  } catch (err: any) {
+    console.error('🔥 SESSION API ERROR:', err)
+    return NextResponse.json({ user: null, error: err.message }, { status: 500 })
   }
-
-  const adapter = getAdapter(dbType, dbConfig)
-  const user = await adapter.validateBuiltInSession!(dbConfig, token)
-  return NextResponse.json({ user })
 }

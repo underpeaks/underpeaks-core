@@ -1,10 +1,10 @@
-import { createClient, SupabaseClient } from '@supabase/supabase-js';
+// import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
-let supabase: SupabaseClient | null = null;
+// let supabase: SupabaseClient | null = null;
 
-export function getSupabaseClient(supabaseUrl: string, supabaseAnonKey: string) {
-  if (!supabase) {
-    supabase = createClient(supabaseUrl, supabaseAnonKey);
-  }
-  return supabase;
-}
+// export function getSupabaseClient(supabaseUrl: string, supabaseAnonKey: string) {
+//   if (!supabase) {
+//     supabase = createClient(supabaseUrl, supabaseAnonKey);
+//   }
+//   return supabase;
+// }

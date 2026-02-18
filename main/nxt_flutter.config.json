@@ -2,10 +2,10 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "firebase",
+  "selectedDb": "postgres",
   "deploymentType": "self-hosted",
   "dbConfig": {
-    "type": "firebase"
+    "type": "postgres"
   },
   "ecommerceEnabled": false,
   "demoContentEnabled": true,
@@ -13,7 +13,7 @@
   "models": [],
   "adminUser": {
     "fullName": "ANTON WENTZEL",
-    "email": "anton@her.co.za"
+    "email": "anton@idigisol.co.za"
   },
   "featureFlags": {
     "ecommerce": false,

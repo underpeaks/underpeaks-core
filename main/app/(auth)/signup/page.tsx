@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { FiMail, FiLock, FiUser } from 'react-icons/fi'
-import { signup } from './actions/signup'
 
 export default function SignUpPage() {
   const router = useRouter()
@@ -18,33 +17,31 @@ export default function SignUpPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [successMsg, setSuccessMsg] = useState<string | null>(null)
 
   async function handleSignup() {
-    setLoading(true)
     setError(null)
+    setSuccessMsg(null)
+
+    if (!full_name.trim()) return setError('Full name is required')
+    if (!email.trim()) return setError('Email is required')
+    if (!password.trim()) return setError('Password is required')
+
+    setLoading(true)
 
     try {
-      const result = await signup(
-  {
-    full_name,
-    email,
-    password,
-    tenant_id: null
-  },
-  null as any,
-  null as any
-)
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ full_name, email, password }),
+      }).then(r => r.json())
 
+      if (res.error) throw new Error(res.error)
 
-      // if ('error' in result) {
-      //   setError(result.error ?? 'Error')
-      //   setLoading(false)
-      //   return
-      // }
-
-      router.push('/signin')
-    } catch {
-      setError('Unexpected error, please try again.')
+      setSuccessMsg('Account created! Please check your email to verify your account.')
+      setTimeout(() => router.push('/signin'), 2000)
+    } catch (err: any) {
+      setError(err.message || 'Signup failed')
     } finally {
       setLoading(false)
     }
@@ -64,55 +61,38 @@ export default function SignUpPage() {
           </Alert>
         )}
 
+        {successMsg && (
+          <Alert variant="default" className="mb-4">
+            <AlertTitle>Success</AlertTitle>
+            <AlertDescription>{successMsg}</AlertDescription>
+          </Alert>
+        )}
+
         <Label htmlFor="fullName" className="mb-1 text-black">Full Name</Label>
         <div className="flex items-center gap-2 mb-4">
           <FiUser className="text-gray-500" />
-          <Input
-            id="fullName"
-            type="text"
-            placeholder="Your full name"
-            value={full_name}
-            onChange={(e) => setFullName(e.target.value)}
-          />
+          <Input id="fullName" type="text" placeholder="Your full name" value={full_name} onChange={(e) => setFullName(e.target.value)} />
         </div>
 
         <Label htmlFor="email" className="mb-1 text-black">Email</Label>
         <div className="flex items-center gap-2 mb-4">
           <FiMail className="text-gray-500" />
-          <Input
-            id="email"
-            type="email"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+          <Input id="email" type="email" placeholder="you@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
         </div>
 
         <Label htmlFor="password" className="mb-1 text-black">Password</Label>
         <div className="flex items-center gap-2 mb-6">
           <FiLock className="text-gray-500" />
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <Input id="password" type="password" placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} />
         </div>
 
-        <Button
-          className="w-full mb-4"
-          onClick={handleSignup}
-          disabled={loading}
-        >
+        <Button className="w-full mb-4" onClick={handleSignup} disabled={loading}>
           {loading ? 'Creating...' : 'Sign Up'}
         </Button>
 
         <p className="text-center text-sm text-gray-600">
           Already have an account?{' '}
-          <Link href="/signin" className="text-blue-600 hover:underline">
-            Login now
-          </Link>
+          <Link href="/signin" className="text-blue-600 hover:underline">Login now</Link>
         </p>
       </div>
     </div>

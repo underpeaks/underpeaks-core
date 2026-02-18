@@ -202,17 +202,48 @@
 
 
 //CORE///////////////////////////////////////////////////////////////
-//1.  'Setting up authentication system',
-//2.  'Configuring session management',
-//3.  'Creating API endpoints',
-//4.  'cms front end ',
-//5.  'code gen for flutter',
-//6.  'code gen for nextjs',
-//7.  'Installing demo content',
-//8.  'Running tests to verify installation',
-//9.  'Finalizing installer and cleanup',
-//10. 'switch between self hosted and hosted with api keys',
-//11. 'model generation',
+
+
+
+//1.  'Setting up authentication system', - DONE
+//2.  'Configuring session management', - DONE
+//3.  'Creating API endpoints', 2 days
+//4.  'cms front end ', 4 days
+//5.  'code gen for flutter', 2 days
+//6.  'code gen for nextjs', 2 days
+//7.  'Installing demo content', 2 days
+//8.  'Running tests to verify installation', 0.5 dyas
+//9.  'Finalizing installer and cleanup', 0.5 days
+//10. 'switch between self hosted and hosted with api keys', 1 days
+//11. 'model generation', 2 days
+
+// TOTAL DAYS - 17 Days 
+
+
+///FEATURES I WANT TO ADD
+///1. ADMIN MUST ENABLE EMAIL VERIFICATION AND THEN PROVIDE SMTP DETAILS
+///2. ENABLE SOCIAL LOGIN AND CODE GEN FOR THAT IN THE FLUTTER APP AND NEXTJS APP
+///3. integrate 2fa 
+///4. email and sms integration
+///widget, themes and extensions marketplace
+///api builder
+///integration with 3rd party api's
+
+
+
+///TODO LIST 17/02/2026
+
+
+
+///1 Day
+//0.0 update installer so that user can create their own db name in mongo 
+//0.0 have the create a domain that we save to .env 
+//0.0 make sure no duplicate entries can go in to the database if it already exists
+///0.0 add smtp details to the .env 
+///normal users cannot login to console
+///check if flutter and nextjs is installed if it is skip install
+
+
 
 
 
