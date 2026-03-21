@@ -132,10 +132,10 @@ export async function POST(req: Request) {
     }
 
     // 5️⃣ Find or create the project for this user
-    let project = await adapter.findProjectByOwnerId(adapter.config, userId);
+    let project = await adapter.findProjectByOwnerId!(adapter.config, userId);
 
     if (!project?.project_id && !project?.id) {
-      const projectId = await adapter.createProject(adapter.config, {
+      const projectId = await adapter.createProject!(adapter.config, {
         name: `${adminUser.full_name}'s Project`,
         user_id: userId,
       });
@@ -160,7 +160,7 @@ export async function POST(req: Request) {
     const encryptedDbConfig = encrypt(dbConfig, encryptionKey);
 
     // 8️⃣ Save installer config
-    const configId = await adapter.saveInstallerConfig(adapter.config, {
+    const configId = await adapter.saveInstallerConfig!(adapter.config, {
       config_id: configIdForKey,
       project_id: projectId,
       user_id: userId,

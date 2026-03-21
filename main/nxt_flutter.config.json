@@ -2,18 +2,18 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "postgres",
+  "selectedDb": "supabase",
   "deploymentType": "self-hosted",
   "dbConfig": {
-    "type": "postgres"
+    "type": "supabase"
   },
   "ecommerceEnabled": false,
   "demoContentEnabled": true,
   "selectedPages": [],
   "models": [],
   "adminUser": {
-    "fullName": "ANTON WENTZEL",
-    "email": "anton@idigisol.co.za"
+    "fullName": "Anton Wentzel",
+    "email": "anton@her.co.za"
   },
   "featureFlags": {
     "ecommerce": false,

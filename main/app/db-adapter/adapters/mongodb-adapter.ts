@@ -28,6 +28,7 @@ export class MongoDBAdapter implements DBAdapter {
       await this.client.connect()
       this.db = this.client.db(this._config.database)
     }
+    this.db = this.client.db(this.config.databaseName)
     return this.db
   }
 
@@ -208,46 +209,63 @@ export class MongoDBAdapter implements DBAdapter {
 }
 
   // ---------------- LOGIN WITH TOKEN ----------------
-  async loginWithMongo(config: DBConfig, email: string, password: string, ipAddress?: string, userAgent?: string) {
-    const basicLogin = await this.loginBasic(config, email, password)
-    if (!basicLogin.success || !basicLogin.user) return { success: false, error: basicLogin.error }
+  async loginWithMongo(
+  config: DBConfig,
+  email: string,
+  password: string,
+  ipAddress?: string,
+  userAgent?: string
+) {
+  const basicLogin = await this.loginBasic(config, email, password);
+  if (!basicLogin.success || !basicLogin.user) 
+    return { success: false, error: basicLogin.error };
 
-    const project = await this.findProjectByOwnerId(config, basicLogin.user.user_id)
-    if (!project) return { success: false, error: 'No project found for user' }
-
-    const accessToken = crypto.randomUUID()
-    const refreshToken = crypto.randomUUID()
-    const tokenId = crypto.randomUUID()
-    const now = new Date()
-    const expiresAt = new Date(now.getTime() + 60 * 60 * 1000)
-    const refreshExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000)
-
-    await this.create(config, 'nxf_system_tokens', {
-      token_id: tokenId,
-      user_id: basicLogin.user.user_id,
-      project_id: project.project_id,
-      access_token: accessToken,
-      refresh_token: refreshToken,
-      token_type: 'bearer',
-      expires_at: expiresAt.toISOString(),
-      refresh_expires_at: refreshExpiresAt.toISOString(),
-      ip_address: ipAddress || null,
-      user_agent: userAgent || null,
-      revoked: false,
-      created_at: now.toISOString(),
-      updated_at: now.toISOString(),
-    })
-
+  // Only admins can access the console
+  if (basicLogin.user.role !== "admin") {
     return {
-      success: true,
+      success: false,
+      error: "You do not have admin rights to access the console",
       user: basicLogin.user,
-      accessToken,
-      refreshToken,
-      projectId: project.project_id,
-    }
+    };
   }
 
-  async registerUser(config: DBConfig, data: { email: string; password: string; full_name?: string }) {
+  const project = await this.findProjectByOwnerId(config, basicLogin.user.user_id);
+  if (!project) return { success: false, error: "No project found for user" };
+
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour
+  const refreshExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+  const accessToken = crypto.randomUUID();
+  const refreshToken = crypto.randomUUID();
+  const tokenId = crypto.randomUUID();
+
+  await this.create(config, "nxf_system_tokens", {
+    token_id: tokenId,
+    user_id: basicLogin.user.user_id,
+    project_id: project.project_id,
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    token_type: "bearer",
+    expires_at: expiresAt.toISOString(),
+    refresh_expires_at: refreshExpiresAt.toISOString(),
+    ip_address: ipAddress || null,
+    user_agent: userAgent || null,
+    revoked: false,
+    created_at: now.toISOString(),
+    updated_at: now.toISOString(),
+  });
+
+  return {
+    success: true,
+    user: basicLogin.user,
+    accessToken,
+    refreshToken,
+    projectId: project.project_id,
+  };
+}
+
+
+  async registerMongoUser(config: DBConfig, data: { email: string; password: string; full_name?: string }) {
     const { email, password, full_name } = data
     if (!email || !password) throw new Error('Email and password are required')
 
@@ -371,32 +389,50 @@ export class MongoDBAdapter implements DBAdapter {
   }
 
   // ---------------- TABLE CREATION ----------------
-  async createTable(tableName: string, schema: { columns: ColumnDef[] | Record<string, Omit<ColumnDef, 'name'>> }) {
+  async createTable(
+    tableName: string,
+    schema: { columns: ColumnDef[] | Record<string, Omit<ColumnDef, 'name'>> }
+  ) {
     const db = await this.getDb()
+
     const exists = await db.listCollections({ name: tableName }).toArray()
     if (!exists.length) await db.createCollection(tableName)
 
     const columnsArray: ColumnDef[] = Array.isArray(schema.columns)
       ? schema.columns
-      : Object.entries(schema.columns).map(([name, def]: any) => ({ name, ...def }))
+      : Object.entries(schema.columns).map(([name, def]: any) => ({
+          name,
+          ...def,
+        }))
 
     for (const col of columnsArray) {
       if (col.unique || col.is_primary) {
-        await db.collection(tableName).createIndex({ [col.name]: 1 }, { unique: true })
+        await db.collection(tableName).createIndex(
+          { [col.name]: 1 },
+          { unique: true }
+        )
       }
     }
   }
 
-  // ---------------- DATA MODELS ----------------
-  async CreateDataModels(projectId: string) { return CreateDataModels(this, projectId) }
 
-  async createDataModelsFromUserEmail(email: string) {
-    const user = await this.findUserByEmail(this.config, email)
-    if (!user?.user_id) throw new Error('User not found')
-    const project = await this.findProjectByOwnerId(this.config, user.user_id)
-    if (!project?.project_id) throw new Error('Project not found')
-    return this.CreateDataModels(project.project_id)
-  }
+  // ---------------- DATA MODELS ----------------
+ async CreateDataModels(projectId: string) {
+  return CreateDataModels(this, projectId);
+}
+
+async createDataModelsFromUserEmail(email: string) {
+  if (!email) throw new Error('Missing User Email');
+
+  const user = await this.findUserByEmail(this.config, email);
+  if (!user?.user_id) throw new Error('User not found');
+
+  const project = await this.findProjectByOwnerId(this.config, user.user_id);
+  if (!project?.project_id) throw new Error('Project not found');
+
+  return this.CreateDataModels(project.project_id);
+}
+
 
   // ---------------- STORAGE ----------------
   async setupStorageBuckets() {

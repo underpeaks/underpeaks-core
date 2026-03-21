@@ -4,21 +4,27 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../../components/ui/button'
 import { Checkbox } from '../../components/ui/checkbox'
-
-
+import { Loader2 } from 'lucide-react' // optional spinner icon
 
 export default function WelcomePage() {
   const [accepted, setAccepted] = useState(false)
   const [licenseText, setLicenseText] = useState('')
+  const [loading, setLoading] = useState(false) // ✅ loading state
   const router = useRouter()
 
   useEffect(() => {
-  fetch('/license.txt') // ✅ Correct public path
-    .then((res) => res.text())
-    .then((text) => setLicenseText(text))
-    .catch(() => setLicenseText('Failed to load license agreement.'))
-}, [])
+    fetch('/license.txt')
+      .then((res) => res.text())
+      .then((text) => setLicenseText(text))
+      .catch(() => setLicenseText('Failed to load license agreement.'))
+  }, [])
 
+  const handleContinue = () => {
+    setLoading(true) // ✅ show spinner and disable button
+    setTimeout(() => {
+      router.push('/installer/project')
+    }, 100) // tiny delay so spinner renders
+  }
 
   return (
     <div className="min-h-screen bg-white flex flex-col px-6 py-12">
@@ -66,8 +72,15 @@ export default function WelcomePage() {
 
       {/* Continue Button */}
       <div className="flex justify-end mt-auto max-w-4xl mx-auto">
-        <Button disabled={!accepted} onClick={() => router.push('/installer/project')}>
-          Continue →
+        <Button disabled={!accepted || loading} onClick={handleContinue}>
+          {loading ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="w-4 h-4 animate-spin" />
+              Loading...
+            </span>
+          ) : (
+            'Continue →'
+          )}
         </Button>
       </div>
     </div>

@@ -209,28 +209,44 @@ export class MySQLAdapter implements DBAdapter {
 
   // ---------------- DATA MODELS ----------------
   async CreateDataModels(projectId: string) {
-    const result = await CreateDataModels(this, projectId);
-    if (!result || !Array.isArray(result)) throw new Error("Failed to create models: invalid schema returned");
+  const result = await CreateDataModels(this, projectId);
+  if (!result || !Array.isArray(result))
+    throw new Error("Failed to create models: invalid schema returned");
 
-    for (const table of result) {
-      if (!table.name) throw new Error("Invalid table definition: missing name");
+  for (const table of result) {
+    if (!table.name) throw new Error("Invalid table definition: missing name");
 
-      if (!table.columns) table.columns = [];
-      else if (typeof table.columns === "object" && !Array.isArray(table.columns))
-        table.columns = Object.entries(table.columns).map(([name, col]: any) => ({ ...col, name }));
+    if (!table.columns) table.columns = [];
+    else if (typeof table.columns === "object" && !Array.isArray(table.columns))
+      table.columns = Object.entries(table.columns).map(([name, col]: any) => ({ ...col, name }));
 
-      await this.create(this.config, "nxf_system_models", {
-        sm_id: crypto.randomUUID(),
-        project_id: projectId,
-        name: table.name,
-        schema: JSON.stringify(table.columns),
-        created_at: new Date(),
-        updated_at: new Date(),
-      });
+    // -------------------
+    // INLINE DUPLICATE CHECK
+    // -------------------
+    const [rows]: any = await this.config.connection.execute(
+      "SELECT 1 FROM nxf_system_models WHERE project_id = ? AND name = ? LIMIT 1",
+      [projectId, table.name]
+    );
+
+    if (rows.length > 0) {
+      console.log(`⚠️ Skipping duplicate model: ${table.name}`);
+      continue; // skip creating this model
     }
 
-    return result;
+    // Create the model
+    await this.create(this.config, "nxf_system_models", {
+      sm_id: crypto.randomUUID(),
+      project_id: projectId,
+      name: table.name,
+      schema: JSON.stringify(table.columns),
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
   }
+
+  return result;
+}
+
 
   async createDataModelsFromUserEmail(email: string) {
     const user = await this.findUserByEmail(this.config, email);
@@ -267,6 +283,20 @@ export class MySQLAdapter implements DBAdapter {
     const rows: any = await this.read(config, "nxf_users", { user_email: email });
     return rows?.length ? rows[0] : null;
   }
+  async findUserByEmailWithRetry(
+  config: DBConfig,
+  email: string,
+  retries = 5,
+  delay = 300
+) {
+  for (let i = 0; i < retries; i++) {
+    const user = await this.findUserByEmail(config, email);
+    if (user) return user;
+    await new Promise((r) => setTimeout(r, delay));
+  }
+  return null;
+}
+
 
   async loginBasic(config: DBConfig, email: string, password: string) {
     const user = await this.findUserByEmail(config, email);
@@ -288,40 +318,62 @@ export class MySQLAdapter implements DBAdapter {
     };
   }
 
-  async loginWithMySQL(config: DBConfig, email: string, password: string, ipAddress?: string, userAgent?: string) {
-    const basicLogin = await this.loginBasic(config, email, password);
-    if (!basicLogin.success || !basicLogin.user)
-      return { success: false, error: basicLogin.error };
+ async loginWithMySQL(
+  config: DBConfig,
+  email: string,
+  password: string,
+  ipAddress?: string,
+  userAgent?: string
+) {
+  const basicLogin = await this.loginBasic(config, email, password);
+  if (!basicLogin.success || !basicLogin.user)
+    return { success: false, error: basicLogin.error };
 
-    const projectRows: any = await this.read(config, "nxf_system_projects", { user_id: basicLogin.user.user_id });
-    const project = projectRows?.length ? projectRows[0] : null;
-    if (!project) return { success: false, error: "No project found for user" };
-
-    const now = new Date();
-    const expiresAt = new Date(now.getTime() + 60 * 60 * 1000);
-    const refreshExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000);
-
-    const accessToken = crypto.randomUUID();
-    const refreshToken = crypto.randomUUID();
-
-    await this.create(config, "nxf_system_tokens", {
-      token_id: crypto.randomUUID(),
-      user_id: basicLogin.user.user_id,
-      project_id: project.project_id,
-      access_token: accessToken,
-      refresh_token: refreshToken,
-      token_type: "bearer",
-      expires_at: expiresAt,
-      refresh_expires_at: refreshExpiresAt,
-      ip_address: ipAddress || null,
-      user_agent: userAgent || null,
-      revoked: 0,
-      created_at: now,
-      updated_at: now,
-    });
-
-    return { success: true, user: basicLogin.user, accessToken, refreshToken, projectId: project.project_id };
+  // Only admins can access the console
+  if (basicLogin.user.role !== "admin") {
+    return {
+      success: false,
+      error: "You do not have admin rights to access the console",
+      user: basicLogin.user,
+    };
   }
+
+  const projectRows: any = await this.read(config, "nxf_system_projects", { user_id: basicLogin.user.user_id });
+  const project = projectRows?.length ? projectRows[0] : null;
+  if (!project) return { success: false, error: "No project found for user" };
+
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour
+  const refreshExpiresAt = new Date(now.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days
+
+  const accessToken = crypto.randomUUID();
+  const refreshToken = crypto.randomUUID();
+
+  await this.create(config, "nxf_system_tokens", {
+    token_id: crypto.randomUUID(),
+    user_id: basicLogin.user.user_id,
+    project_id: project.project_id,
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    token_type: "bearer",
+    expires_at: expiresAt,
+    refresh_expires_at: refreshExpiresAt,
+    ip_address: ipAddress || null,
+    user_agent: userAgent || null,
+    revoked: 0,
+    created_at: now,
+    updated_at: now,
+  });
+
+  return {
+    success: true,
+    user: basicLogin.user,
+    accessToken,
+    refreshToken,
+    projectId: project.project_id,
+  };
+}
+
 
   // ---------------- PASSWORD RESET ----------------
   async createPasswordResetToken(email: string) {

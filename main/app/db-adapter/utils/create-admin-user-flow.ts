@@ -29,8 +29,10 @@ export async function createAdminUserFlow(
 
   if (existingAuthUser) {
     authUserId = existingAuthUser.id || existingAuthUser.uid || authUserId;
+    console.log("EXISTING  IN AUTH API HIT");
     console.log('✅ Existing auth user found:', authUserId);
   } else if (adapter.registerUserInAuth) {
+    console.log("REGISTER  IN AUTH API HIT");
     const authUser = await adapter.registerUserInAuth(config, {
       email: adminUser.email,
       password: adminUser.password,
@@ -55,6 +57,9 @@ export async function createAdminUserFlow(
       password: adminUser.password,
       role: 'admin',
       created_at: new Date(),
+      is_logged_in:false,
+      last_login:null
+
     });
   } else {
     console.log('ℹ️ User already exists in DB:', existingDbUser?.id || existingDbUser?.uid);

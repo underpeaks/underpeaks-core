@@ -20,24 +20,25 @@ export default function FinalizePage() {
 
   // Step labels with skipped logic (UNCHANGED)
   const stepLabels = useMemo(() => {
-    return INSTALL_STEPS.map((step) => {
-      if (
-        step === 'Installing Flutter project' &&
-        selectedStack !== 'flutter' &&
-        selectedStack !== 'both'
-      ) {
-        return { label: step, skipped: true };
-      }
-      if (
-        step === 'Installing Next.js project' &&
-        selectedStack !== 'next' &&
-        selectedStack !== 'both'
-      ) {
-        return { label: step, skipped: true };
-      }
-      return { label: step, skipped: false };
-    });
-  }, [selectedStack]);
+  return INSTALL_STEPS.map((step) => {
+  
+    if (
+      step === 'Installing Flutter project' &&
+      selectedStack !== 'flutter' &&
+      selectedStack !== 'both'
+    ) {
+      return { label: step, skipped: true };
+    }
+    if (
+      step === 'Installing Next.js project' &&
+      selectedStack !== 'next' &&
+      selectedStack !== 'both'
+    ) {
+      return { label: step, skipped: true };
+    }
+    return { label: step, skipped: false };
+  });
+}, [selectedStack]);
 
   async function startInstall() {
     setInstalling(true);
@@ -68,7 +69,7 @@ export default function FinalizePage() {
           selectedDb: installerState.selectedDb,
           dbConfig: installerState.dbConfig,
 
-          // ⛔ NO PASSWORD — Firebase Auth owns this
+        
         adminUser: installerState.adminUser
   ? {
       email: installerState.adminUser.email,

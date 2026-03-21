@@ -18,28 +18,70 @@ export default function ResetPasswordPage() {
   const [error, setError] = useState<string | null>(null)
   const [tokenExpired, setTokenExpired] = useState(false)
 
+  // ✅ DB detection
+  const dbType = process.env.NEXT_PUBLIC_DB_TYPE
+  const isSupabase = dbType === 'supabase'
+
+  // ✅ Supabase client (only when needed)
+  let supabase: any = null
+  if (isSupabase) {
+    const { createClient } = require('@supabase/supabase-js')
+
+    supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
+  }
+
   useEffect(() => {
+    // ✅ FIX: Do NOT validate token for Supabase
+    if (isSupabase) {
+      setToken(null)
+      setError(null) // 🔥 prevent stale error from showing
+      return
+    }
+
     const t = searchParams.get('token')
+
     if (!t) {
       setError('Invalid or missing reset link.')
       return
     }
+
     setToken(t)
-  }, [searchParams])
+  }, [searchParams, isSupabase])
 
   const handleReset = async () => {
     if (!password) return setError('Please enter a new password.')
-    if (!token) return setError('Missing reset token.')
 
     setLoading(true)
     setError(null)
 
     try {
+      // ✅ SUPABASE FLOW (UNCHANGED)
+      if (isSupabase && supabase) {
+        const { error } = await supabase.auth.updateUser({
+          password: password,
+        })
+
+        if (error) {
+          throw new Error(error.message)
+        }
+
+        setSubmitted(true)
+        setTimeout(() => router.push('/signin'), 2000)
+        return
+      }
+
+      // ---- EXISTING FLOW (UNCHANGED) ----
+      if (!token) return setError('Missing reset token.')
+
       const res = await fetch('/api/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ token, password }),
       })
+
       const data = await res.json()
 
       if (!res.ok) {
@@ -115,7 +157,7 @@ export default function ResetPasswordPage() {
           className="mb-4"
         />
 
-        <Button onClick={handleReset} disabled={loading || !token} className="w-full">
+        <Button onClick={handleReset} disabled={loading} className="w-full">
           {loading ? 'Resetting...' : 'Reset Password'}
         </Button>
       </div>

@@ -27,10 +27,16 @@ if (!adapter.createDataModelsFromUserEmail) {
 
 const result = await adapter.createDataModelsFromUserEmail(adminUser.email);
 
-    return NextResponse.json(
-      { success: true, message: 'Data models inserted successfully', data: result },
-      { status: 200 }
-    );
+return NextResponse.json(
+  {
+    success: true,
+    skipped: result.skipped || false,
+    message: result.message,
+    data: result.data || null,
+  },
+  { status: 200 }
+);
+
   } catch (error: any) {
     console.error('Error in create-data-models API:', error);
     return NextResponse.json(

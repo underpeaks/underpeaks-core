@@ -43,18 +43,23 @@ export async function POST(req: NextRequest) {
       console.log('🟢 Using Supabase adapter')
 
       const adapter = getAdapter(dbType, {
-        type: 'supabase',
-        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      })
+  type: 'supabase',
+  supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+})
 
-      if (!adapter.sendPasswordReset)
-        throw new Error('Supabase adapter missing sendPasswordReset method')
+if (!adapter.sendResetEmail) {
+  throw new Error('Supabase adapter missing sendResetEmail method')
+}
 
-      await adapter.sendPasswordReset(email)
+const redirectUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/reset-password`
 
-      console.log('✅ Supabase reset email sent')
-      return NextResponse.json({ success: true })
+await adapter.sendResetEmail(dbConfig, email, redirectUrl)
+
+console.log('✅ Supabase reset email sent')
+
+return NextResponse.json({ success: true })
+      
     }
 
     // ---------------- MONGODB ----------------

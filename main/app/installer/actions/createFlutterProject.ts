@@ -1,10 +1,7 @@
-// app/installer/actions/createFlutterProject.ts
 export async function createFlutterProject(projectName: string) {
-  const res = await fetch('/api/flutter/create', {  // <-- use absolute path here
+  const res = await fetch('/api/flutter/create', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ projectName }),
   });
 
@@ -12,6 +9,12 @@ export async function createFlutterProject(projectName: string) {
 
   if (!res.ok || !data.success) {
     throw new Error(data.error || 'Flutter project creation failed');
+  }
+
+  if (data.skipped) {
+    console.log(`Flutter project creation skipped: ${data.output}`);
+  } else {
+    console.log(`Flutter project created: ${data.output}`);
   }
 
   return data.output;

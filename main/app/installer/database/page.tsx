@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -21,7 +21,7 @@ import {
 } from 'react-icons/si';
 import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
 import { useInstallerStore } from '../../store/useInstallerStore';
-import { DBType, DBConfig } from '@/app/db-adapter/types';
+import { DBType } from '@/app/db-adapter/types';
 
 const DATABASES = [
   {
@@ -30,13 +30,9 @@ const DATABASES = [
     description: 'Postgres-based with built-in Auth, Storage, Realtime.',
     icon: <SiSupabase className="w-5 h-5 text-blue-600" />,
     fields: [
-      { key: 'url', label: 'Supabase URL', placeholder: 'https://xyzcompany.supabase.co' },
+      { key: 'supabaseUrl', label: 'Supabase URL', placeholder: 'https://xyzcompany.supabase.co' },
       { key: 'anonKey', label: 'Supabase Anon Key', placeholder: 'eyJhbGciOiJIUzI1NiIsInR...' },
-      {
-        key: 'storageUrl',
-        label: 'Supabase Storage URL',
-        placeholder: 'https://<project>.supabase.co/storage/v1/object/public/nxt_storage',
-      },
+      { key: 'storageUrl', label: 'Supabase Storage URL', placeholder: 'https://<project>.supabase.co/storage/v1/object/public/nxt_storage' },
     ],
   },
   {
@@ -45,18 +41,8 @@ const DATABASES = [
     description: 'Mobile-first apps, real-time DB & auth.',
     icon: <SiFirebase className="w-5 h-5 text-yellow-600" />,
     fields: [
-      {
-        key: 'firebaseConfigJson',
-        label: 'Firebase Service Account JSON',
-        placeholder: 'Paste full Firebase service account JSON here',
-        isJson: true,
-      },
-      {
-        key: 'firebaseWebConfig',
-        label: 'Firebase Web Config (firebaseConfig)',
-        placeholder: 'Paste the firebaseConfig object here',
-        isJson: true,
-      },
+      { key: 'firebaseConfigJson', label: 'Firebase Service Account JSON', placeholder: 'Paste full Firebase service account JSON here', isJson: true },
+      { key: 'firebaseWebConfig', label: 'Firebase Web Config (firebaseConfig)', placeholder: 'Paste the firebaseConfig object here', isJson: true },
     ],
   },
   {
@@ -91,20 +77,13 @@ const DATABASES = [
     description: 'NoSQL, great for unstructured data.',
     icon: <SiMongodb className="w-5 h-5 text-green-600" />,
     fields: [
-      {
-        key: 'connectionString',
-        label: 'Connection String',
-        placeholder: 'mongodb+srv://user:<password>@cluster.mongodb.net/mydb',
-      },
+      { key: 'connectionString', label: 'Connection String', placeholder: 'mongodb+srv://user:<password>@cluster.mongodb.net' },
+      { key: 'databaseName', label: 'Database Name', placeholder: 'nxt_flutter' },
     ],
   },
 ];
 
-type TestStep = {
-  label: string;
-  status: 'pending' | 'success' | 'error';
-  errorMessage?: string;
-};
+type TestStep = { label: string; status: 'pending' | 'success' | 'error'; errorMessage?: string };
 
 export default function DatabaseConfigPage() {
   const router = useRouter();
@@ -116,125 +95,136 @@ export default function DatabaseConfigPage() {
   const [firebaseDbType, setFirebaseDbType] = useState<'firestore' | 'realtime'>('firestore');
   const setInstallerValue = useInstallerStore((s) => s.setInstallerValue);
   const selectedDbConfig = DATABASES.find((db) => db.value === selectedDb);
+  const [showSavingWarning, setShowSavingWarning] = useState(false);
+  const loadingRef = useRef(false);
+
+  function logStep(step: string, data?: any) {
+    const time = new Date().toISOString();
+    console.log(`⏱ [${time}] ${step}`, data ?? '');
+  }
 
   function handleSelect(value: string) {
-    setSelectedDb(value as DBType);
+    const dbType = value as DBType;
+    logStep('Database selected', dbType);
+    setSelectedDb(dbType);
     setFormData({});
     setTestSteps([]);
     setConnectionSucceeded(false);
+    setInstallerValue('selectedDb', dbType);
   }
 
   function handleInputChange(key: string, value: string) {
-    setFormData((prev) => ({ ...prev, [key]: value }));
+    logStep('Input changed', { key, value });
+    setFormData((prev) => {
+      const updated = { ...prev, [key]: value };
+      setInstallerValue('dbConfig', {
+        type: selectedDb,
+        ...updated,
+        ...(selectedDb === 'firebase' ? { firebaseDbType } : {}),
+      });
+      return updated;
+    });
     setTestSteps([]);
     setConnectionSucceeded(false);
   }
 
   async function handleTestConnection() {
-  setLoading(true);
-  setConnectionSucceeded(false);
-  setTestSteps([
-    { label: 'Validating configuration...', status: 'pending' },
-    { label: 'Sending config to server...', status: 'pending' },
-    { label: 'Testing database connection...', status: 'pending' },
-    { label: 'Finalizing connection check...', status: 'pending' },
-  ]);
-
-  try {
-    setTestSteps((s) =>
-      s.map((x, i) => (i === 0 ? { ...x, status: 'success' } : x))
-    );
-
-    let dbConfigToSend: any;
-
-    if (selectedDb === 'firebase') {
-      let webConfigJson = formData['firebaseWebConfig'] || '';
-
-      // Try parsing as JSON first
-      let webConfig: any = {};
-      try {
-        webConfig = JSON.parse(webConfigJson);
-      } catch {
-        // If parsing fails, try cleaning JS object to JSON
-        try {
-          // Remove "const firebaseConfig =" and trailing semicolon if present
-          webConfigJson = webConfigJson
-            .replace(/const\s+\w+\s*=\s*/, '')
-            .replace(/;$/, '');
-
-          // Replace unquoted keys with quoted keys
-          webConfigJson = webConfigJson.replace(
-            /([{,]\s*)([a-zA-Z0-9_]+)\s*:/g,
-            '$1"$2":'
-          );
-
-          webConfig = JSON.parse(webConfigJson);
-        } catch (e) {
-          throw new Error(
-            'Invalid Firebase Web Config JSON. Make sure you pasted the firebaseConfig object correctly.'
-          );
-        }
-      }
-
-      // Optional: automatically pull storageBucket if missing
-      if (!webConfig.storageBucket) {
-        console.warn(
-          '[Firebase Adapter] storageBucket missing in web config, ignoring...'
-        );
-      }
-
-      dbConfigToSend = {
-        type: 'firebase',
-        firebaseConfigJson: formData['firebaseConfigJson'],
-        firebaseDbType,
-        storageBucket: webConfig.storageBucket || undefined,
-        firebaseWebConfig: webConfig, // <- this is now guaranteed to be a valid JSON object
-      };
-    } else {
-      dbConfigToSend = { type: selectedDb, ...formData };
-    }
-
-    console.log('📝 Testing with payload:', dbConfigToSend);
-
-    const response = await fetch('/api/test-db-connection', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(dbConfigToSend),
-    });
-
-    if (!response.ok)
-      throw new Error(`Server rejected connection: ${response.status}`);
-
-    const result = await response.json();
-    if (!result.success) throw new Error(result.message || 'Connection failed');
-
-    setTestSteps((s) =>
-      s.map((x, i) => (i >= 1 ? { ...x, status: 'success' } : x))
-    );
-    setConnectionSucceeded(true);
-  } catch (err: any) {
-    setTestSteps((s) =>
-      s.map((x, i) =>
-        i === 2 ? { ...x, status: 'error', errorMessage: err.message } : x
-      )
-    );
-    console.error('❌ Test connection error:', err);
-  } finally {
-    setLoading(false);
-  }
-}
-
-
-
-  async function handleContinue() {
+    logStep('Starting test connection');
     setLoading(true);
+    loadingRef.current = true;
+    setConnectionSucceeded(false);
+    setTestSteps([
+      { label: 'Validating configuration...', status: 'pending' },
+      { label: 'Sending config to server...', status: 'pending' },
+      { label: 'Testing database connection...', status: 'pending' },
+      { label: 'Finalizing connection check...', status: 'pending' },
+    ]);
 
     try {
-      const envPayload: DBConfig = {
-        type: selectedDb,
-        ...formData,
-        ...(selectedDb === 'firebase' ? { firebaseDbType } : {}),
-      };
+      setTestSteps((s) => s.map((x, i) => (i === 0 ? { ...x, status: 'success' } : x)));
+
+      let dbConfigToSend: any;
+      if (selectedDb === 'firebase') {
+        let webConfigJson = formData['firebaseWebConfig'] || '';
+        let webConfig: any = {};
+        try {
+          webConfig = JSON.parse(webConfigJson);
+        } catch {
+          webConfigJson = webConfigJson.replace(/const\s+\w+\s*=\s*/, '').replace(/;$/, '');
+          webConfigJson = webConfigJson.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":');
+          webConfig = JSON.parse(webConfigJson);
+        }
+        dbConfigToSend = {
+          type: 'firebase',
+          firebaseConfigJson: formData['firebaseConfigJson'],
+          firebaseDbType,
+          storageBucket: webConfig.storageBucket || undefined,
+          firebaseWebConfig: webConfig,
+        };
+      } else {
+        dbConfigToSend = { type: selectedDb, ...formData };
+      }
+
+      logStep('Sending test connection request', dbConfigToSend);
+
+      const response = await fetch('/api/test-db-connection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(dbConfigToSend),
+      });
+
+      logStep('Server responded', { status: response.status });
+      if (!response.ok) throw new Error(`Server rejected connection: ${response.status}`);
+
+      const result = await response.json();
+      logStep('Server result', result);
+      if (!result.success) throw new Error(result.error || 'Connection failed');
+
+      setTestSteps((s) => s.map((x, i) => (i >= 1 ? { ...x, status: 'success' } : x)));
+      setConnectionSucceeded(true);
+      logStep('Test connection succeeded');
+    } catch (err: any) {
+      setTestSteps((s) => s.map((x, i) => (i === 2 ? { ...x, status: 'error', errorMessage: err.message } : x)));
+      console.error('❌ Test connection failed', err);
+    } finally {
+      setLoading(false);
+      loadingRef.current = false;
+    }
+  }
+
+  async function handleContinue() {
+    logStep('Starting continue/save process');
+    setShowSavingWarning(true);
+    setLoading(true);
+    loadingRef.current = true;
+
+    try {
+      const installerStore = useInstallerStore.getState();
+      let envPayload: any;
+
+      if (selectedDb === 'firebase') {
+        let webConfigJson = formData['firebaseWebConfig'] || '';
+        let webConfig: any = {};
+        try {
+          webConfig = JSON.parse(webConfigJson);
+        } catch {
+          webConfigJson = webConfigJson.replace(/const\s+\w+\s*=\s*/, '').replace(/;$/, '');
+          webConfigJson = webConfigJson.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":');
+          webConfig = JSON.parse(webConfigJson);
+        }
+        envPayload = {
+          type: 'firebase',
+          domain: installerStore.domain,
+          firebaseConfigJson: formData['firebaseConfigJson'],
+          firebaseWebConfig: webConfig,
+          firebaseDbType,
+          storageBucket: webConfig.storageBucket || undefined,
+        };
+      } else {
+        envPayload = { type: selectedDb, domain: installerStore.domain, ...formData };
+      }
+
+      logStep('Payload to save', envPayload);
 
       setInstallerValue('selectedDb', selectedDb);
       setInstallerValue('dbConfig', envPayload);
@@ -245,25 +235,21 @@ export default function DatabaseConfigPage() {
         body: JSON.stringify(envPayload),
       });
 
-      const text = await res.text();
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        throw new Error(`Invalid JSON response: ${text}`);
-      }
+      logStep('Save config response status', res.status);
+      const data = await res.json();
+      logStep('Save config response body', data);
 
       if (!res.ok || !data.success) throw new Error(data.error || 'Failed to save configuration');
 
-     
-      setTimeout(() => {
-       router.push('/installer/demo');
-    }, 500)
+      localStorage.setItem('dbConfigured', 'true');
+      await Promise.resolve();
+      logStep('Navigating to demo page');
+      router.push('/installer/demo');
     } catch (err: any) {
-      console.error('❌ Failed to save configuration:', err);
+      console.error('❌ Failed to save configuration', err);
       alert(`Failed to save configuration: ${err.message}`);
-    } finally {
       setLoading(false);
+      loadingRef.current = false;
     }
   }
 
@@ -277,8 +263,7 @@ export default function DatabaseConfigPage() {
       <div className="w-full max-w-xl p-8 bg-gray-50 rounded-2xl shadow-xl border space-y-6">
         <h2 className="text-2xl font-bold text-gray-900">Database Configuration</h2>
         <p className="text-sm text-gray-600 mb-6">
-          Select your database and provide the necessary connection details. You can test your
-          connection before continuing.
+          Select your database and provide the necessary connection details. You can test your connection before continuing.
         </p>
 
         <div className="mb-6">
@@ -302,114 +287,30 @@ export default function DatabaseConfigPage() {
           </Select>
         </div>
 
-        {selectedDb === 'firebase' && (
-          <>
-            <div className="mb-4 p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 rounded">
-              <h3 className="font-semibold mb-2">How to get Firebase Service Account JSON</h3>
-              <ol className="list-decimal list-inside space-y-1 text-sm">
-                <li>
-                  Go to{' '}
-                  <a
-                    href="https://console.firebase.google.com/"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="underline"
-                  >
-                    Firebase Console
-                  </a>{' '}
-                  and open your project.
-                </li>
-                <li>
-                  Navigate to <strong>Project Settings → Service Accounts</strong>.
-                </li>
-                <li>Click <strong>Generate new private key</strong> to download the JSON file.</li>
-                <li>Open it and paste its full contents below.</li>
-              </ol>
-              <p className="mt-2 italic text-xs text-yellow-700">
-                ⚠️ Keep this file secure and never share it publicly.
-              </p>
-            </div>
-
-            {/* <fieldset className="mb-6">
-              <legend className="font-semibold mb-2 text-gray-700">Firebase Database Type</legend>
-              <label className="inline-flex items-center mr-6 cursor-pointer">
-                <input
-                  type="radio"
-                  name="firebaseDbType"
-                  value="firestore"
-                  checked={firebaseDbType === 'firestore'}
-                  onChange={() => setFirebaseDbType('firestore')}
-                  className="form-radio text-yellow-600"
-                />
-                <span className="ml-2">Firestore (recommended)</span>
-              </label>
-              <label className="inline-flex items-center cursor-pointer">
-                <input
-                  type="radio"
-                  name="firebaseDbType"
-                  value="realtime"
-                  checked={firebaseDbType === 'realtime'}
-                  onChange={() => setFirebaseDbType('realtime')}
-                  className="form-radio text-yellow-600"
-                />
-                <span className="ml-2">Realtime Database</span>
-              </label>
-            </fieldset> */}
-          </>
-        )}
-
-        <form className="space-y-4">
-          {selectedDbConfig?.fields.map((field: any) => (
-            <div key={field.key}>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {field.label}{' '}
-                <span className="text-gray-400 italic text-xs">(e.g. {field.placeholder})</span>
-              </label>
-
-              {/* Firebase Web Config instructions */}
-              {field.key === 'firebaseWebConfig' && (
-                <div className="mb-2 p-2 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-700 rounded text-xs">
-                  <p className="mb-1 font-semibold">Firebase Web Config Instructions:</p>
-                  <p className="mb-1">Go to Project Settings → General → Your Apps → Web app.</p>
-                  <p className="mb-1">Copy the entire <code>firebaseConfig</code> object.</p>
-                  <p className="mb-1">Paste it into the field below.</p>
-                  <p className="font-mono bg-gray-100 p-2 rounded overflow-x-auto mb-1">
-{`{
-  apiKey: "AIzaSyExample",
-  authDomain: "your-app.firebaseapp.com",
-  projectId: "your-app",
-  storageBucket: "your-app.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:1234567890:web:abcdef123456",
-  measurementId: "G-ABCDEFG123"
-}`}
-                  </p>
-                  <p className="italic text-yellow-700 text-xs">
-                    ⚠️ Only copy this object, do not include any extra code.
-                  </p>
-                </div>
-              )}
-
-              {'isJson' in field && field.isJson ? (
-                <Textarea
-                  rows={8}
-                  placeholder={field.placeholder}
-                  value={formData[field.key] || ''}
-                  onChange={(e) => handleInputChange(field.key, e.target.value)}
-                  className="w-full border border-gray-300 rounded p-2 text-sm font-mono"
-                />
-              ) : (
-                <Input
-                  placeholder={field.placeholder}
-                  
-                  value={formData[field.key] || ''}
-                  onChange={(e) => handleInputChange(field.key, e.target.value)}
-                  className="w-full"
-                />
-              )}
-            </div>
-          ))}
-        </form>
+        {selectedDbConfig?.fields.map((field: any) => (
+          <div key={field.key}>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              {field.label}{' '}
+              <span className="text-gray-400 italic text-xs">(e.g. {field.placeholder})</span>
+            </label>
+            {'isJson' in field && field.isJson ? (
+              <Textarea
+                rows={8}
+                placeholder={field.placeholder}
+                value={formData[field.key] || ''}
+                onChange={(e) => handleInputChange(field.key, e.target.value)}
+                className="w-full border border-gray-300 rounded p-2 text-sm font-mono"
+              />
+            ) : (
+              <Input
+                placeholder={field.placeholder}
+                value={formData[field.key] || ''}
+                onChange={(e) => handleInputChange(field.key, e.target.value)}
+                className="w-full"
+              />
+            )}
+          </div>
+        ))}
 
         {testSteps.length > 0 && (
           <ul className="mt-4 space-y-2">
@@ -418,9 +319,7 @@ export default function DatabaseConfigPage() {
                 {step.status === 'pending' && <Loader2 className="w-4 h-4 animate-spin text-gray-500" />}
                 {step.status === 'success' && <CheckCircle2 className="w-5 h-5 text-green-600" />}
                 {step.status === 'error' && <XCircle className="w-5 h-5 text-red-600" />}
-                <span className={step.status === 'error' ? 'text-red-600' : 'text-gray-800'}>
-                  {step.label}
-                </span>
+                <span className={step.status === 'error' ? 'text-red-600' : 'text-gray-800'}>{step.label}</span>
                 {step.status === 'error' && step.errorMessage && (
                   <span className="ml-2 italic text-red-500 text-xs">— {step.errorMessage}</span>
                 )}
@@ -429,36 +328,43 @@ export default function DatabaseConfigPage() {
           </ul>
         )}
 
-        <div className="flex space-x-4 pt-4">
-          <Button
-            onClick={handleTestConnection}
-            variant="outline"
-            className="bg-green-600 text-white hover:bg-green-700"
-            disabled={loading}
-          >
-            {loading ? (
-              <span className="flex items-center gap-2 justify-center">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Testing...
-              </span>
-            ) : (
-              'Test Connection'
-            )}
-          </Button>
-          <Button
-            onClick={handleContinue}
-            className="flex-1"
-            disabled={!connectionSucceeded || loading}
-          >
-            {loading && connectionSucceeded ? (
-              <span className="flex items-center gap-2 justify-center">
-                <Loader2 className="w-4 h-4 animate-spin" />
-                Saving...
-              </span>
-            ) : (
-              'Continue'
-            )}
-          </Button>
+        <div className="flex flex-col space-y-2 pt-4">
+          {showSavingWarning && (
+            <div className="p-4 bg-yellow-100 text-yellow-800 rounded text-sm font-mono">
+              ⚠️ Please be patient, this might take a while...
+            </div>
+          )}
+
+          <div className="flex space-x-4">
+            <Button
+              onClick={handleTestConnection}
+              variant="outline"
+              className="bg-green-600 text-white hover:bg-green-700"
+              disabled={loading || loadingRef.current}
+            >
+              {loading && !connectionSucceeded ? (
+                <span className="flex items-center gap-2 justify-center">
+                  <Loader2 className="w-4 h-4 animate-spin" /> Testing...
+                </span>
+              ) : (
+                'Test Connection'
+              )}
+            </Button>
+
+            <Button
+              onClick={handleContinue}
+              className="flex-1"
+              disabled={!connectionSucceeded || loading || loadingRef.current}
+            >
+              {loading && connectionSucceeded ? (
+                <span className="flex items-center gap-2 justify-center">
+                  <Loader2 className="w-4 h-4 animate-spin" /> Saving...
+                </span>
+              ) : (
+                'Continue'
+              )}
+            </Button>
+          </div>
         </div>
       </div>
     </div>

@@ -3,6 +3,7 @@ import { DBType, DBConfig } from "../db-adapter/types";
 
 export type InstallerState = {
   projectName: string;
+  domain: string; // <-- add this
   subdomain: string;
   ecommerceEnabled: boolean;
   demoContentEnabled: boolean;
@@ -25,6 +26,7 @@ export type InstallerState = {
 
 export const useInstallerStore = create<InstallerState>((set) => ({
   projectName: "",
+  domain: "",
   subdomain: "",
   ecommerceEnabled: false,
   demoContentEnabled: false,

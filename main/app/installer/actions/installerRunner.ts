@@ -185,13 +185,17 @@ export async function runInstallerSteps(onProgress: (stepIndex: number) => void)
           break;
 
         case 'Creating admin user':
-          console.log(adminUser);
+         
           await createAdminUser(dbConfig, adminUser, projectName, subdomain);
           break;
 
         case 'Creating data models':
-          await createModels();
-          break;
+  const modelsResult = await createModels();
+  if (modelsResult.skipped) {
+    console.log('Models creation skipped:', modelsResult.message);
+  }
+  break;
+
 
         case 'Writing config.json file':
           await writeConfigFile();

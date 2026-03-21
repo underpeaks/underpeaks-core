@@ -1,6 +1,5 @@
-// app/installer/actions/createFlutterProject.ts
 export async function createNextJSProject(projectName: string) {
-  const res = await fetch('/api/nextjs/create', {  // <-- use absolute path here
+  const res = await fetch('/api/nextjs/create', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -14,8 +13,9 @@ export async function createNextJSProject(projectName: string) {
     throw new Error(data.error || 'NextJS project creation failed');
   }
 
-  return data;
+  // Return skipped info for the installer UI
+  return {
+    ...data,
+    skipped: data.skipped || false,
+  };
 }
-
-
-

@@ -3,6 +3,7 @@ import { getAdapter } from '@/app/db-adapter'
 import type { DBType, DBConfig } from '@/app/db-adapter/types'
 import crypto from 'crypto'
 import nodemailer from 'nodemailer'
+import admin from 'firebase-admin'
 
 export async function POST(req: NextRequest) {
   console.log('🆕 [SIGNUP API] Request received')
@@ -12,7 +13,7 @@ export async function POST(req: NextRequest) {
     if (!full_name || !email || !password)
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
 
-    const dbType = process.env.NEXT_DB_TYPE as DBType
+    const dbType = process.env.NEXT_PUBLIC_DB_TYPE as DBType
     if (!dbType) throw new Error('NEXT_DB_TYPE not set')
 
     let dbConfig: DBConfig
@@ -25,17 +26,66 @@ export async function POST(req: NextRequest) {
         firebaseConfigJson: JSON.stringify(serviceAccount),
         storageBucket: 'gs://' + serviceAccount.storageBucket,
       }
-      console.log('🟠 Using Firebase adapter')
+      console.log('🟠 Using Firebase adapter (API will skip email verification)')
     }
 
     // --------------------------- SUPABASE ---------------------------
     else if (dbType === 'supabase') {
+    
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+
+    
+ 
+ 
+      if (!supabaseUrl || !anonKey ) {
+        throw new Error(
+          'SupabaseAdapter requires supabaseUrl, anonKey, and serviceRoleKey in config'
+        )
+      }
+
       dbConfig = {
         type: 'supabase',
-        url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        supabaseUrl:supabaseUrl,
+        anonKey:anonKey,
       }
-      console.log('🟢 Using Supabase adapter')
+
+      console.log('TYPE:: '+dbType);
+      console.log('DBCONFIG URL:: '+dbConfig.supabaseUrl);
+       console.log('DBCONFIG KEY:: '+dbConfig.anonKey);
+      
+       const supaadapter = getAdapter(dbType, dbConfig) // <-- call only once here
+      console.log('🟢 Using Supabase adapter (server-side keys)')
+      
+
+      
+
+      if (!supaadapter.registerSupabaseUser) {
+        throw new Error('registerUserInSupabase not implemented in this adapter')
+      }
+
+      // 1️⃣ Check if email already exists in your users table
+      const existingUser = await supaadapter.findUserByEmail!(dbConfig, email)
+      if (existingUser) {
+        return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
+      }
+
+      // 2️⃣ Call Supabase signup function (server-side)
+     try{
+    const result = await supaadapter.registerSupabaseUser(dbConfig, {
+        full_name,
+        email,
+        password,
+      })
+
+       console.log('✅ Supabase user created:', result)
+      return NextResponse.json({ success: true, userId: result.id })
+    }catch(e){
+      console.log(e)
+    }
+      
+
+     
     }
 
     // --------------------------- MONGODB ---------------------------
@@ -69,18 +119,14 @@ export async function POST(req: NextRequest) {
         user: process.env.NEXT_DB_POSTGRES_USER!,
         password: process.env.NEXT_DB_POSTGRES_PASSWORD!,
         database: process.env.NEXT_DB_POSTGRES_DATABASE!,
-        port: process.env.NEXT_DB_POSTGRES_PORT
-          ? Number(process.env.NEXT_DB_POSTGRES_PORT)
-          : 5432,
+        port: process.env.NEXT_DB_POSTGRES_PORT ? Number(process.env.NEXT_DB_POSTGRES_PORT) : 5432,
       }
       console.log('🟣 Using Postgres adapter')
     } else {
       throw new Error(`Unsupported DB type: ${dbType}`)
     }
 
-    const adapter = getAdapter(dbType, dbConfig)
-    if (!adapter.registerUser)
-      return NextResponse.json({ error: 'Adapter does not support signup' }, { status: 400 })
+    
 
     // --------------------------- SMTP CONFIG ---------------------------
     const smtpHost = process.env.NEXT_SMTP_HOST
@@ -100,23 +146,27 @@ export async function POST(req: NextRequest) {
 
     // --------------------------- SQL SIGNUP (MySQL / Postgres) ---------------------------
     if (dbType === 'mysql' || dbType === 'postgres') {
+      const adapter = getAdapter(dbType, dbConfig)
+    if (!adapter.registerUser)
+      return NextResponse.json({ error: 'Adapter does not support signup' }, { status: 400 })
       const existingUser = await adapter.findUserByEmail!(dbConfig, email)
       if (existingUser)
         return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
 
-      // 🔹 FIXED: generate token once and use for both DB & email
       const emailToken = crypto.randomBytes(32).toString('hex')
       const emailTTL = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24h
 
-      const result = await adapter.registerUser(dbConfig, {
+      const result = await adapter.registerMysqlUser(dbConfig, {
         full_name,
         email,
         password,
-        token: emailToken,       // SAME token saved
+        token: emailToken,
         token_ttl: emailTTL.toISOString(),
       })
 
-      const verifyUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${emailToken}&email=${encodeURIComponent(email)}`
+      const verifyUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${emailToken}&email=${encodeURIComponent(
+        email
+      )}`
 
       await transporter.sendMail({
         from: smtpFromEmail,
@@ -133,49 +183,66 @@ export async function POST(req: NextRequest) {
 
     // --------------------------- MongoDB SIGNUP ---------------------------
     if (dbType === 'mongodb') {
+      const adapter = getAdapter(dbType, dbConfig)
+    if (!adapter.registerUser)
+      return NextResponse.json({ error: 'Adapter does not support signup' }, { status: 400 })
       const existingUser = await adapter.findUserByEmail!(dbConfig, email)
       if (existingUser)
         return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
 
-      // 🔹 FIXED: generate token once and use for both DB & email
-      const emailToken = crypto.randomBytes(32).toString('hex')
-      const emailTTL = new Date(Date.now() + 5 * 60 * 1000) // 5 min
+      if (!adapter.registerMongoUser) {
+        throw new Error('registerMongoUser is not implemented in this adapter')
+      }
 
-      const result = await adapter.registerUser(dbConfig, {
+      const result = await adapter.registerMongoUser(dbConfig, {
         full_name,
         email,
         password,
         email_verified: false,
-        email_verification_token: emailToken,    // SAME token saved
-        email_verification_ttl: emailTTL.toISOString(),
       })
 
-      const verifyUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${result.emailToken}&email=${encodeURIComponent(email)}`
+      return NextResponse.json({ ...result })
+    }
+
+    // --------------------------- FIREBASE SIGNUP (API SKIPS EMAIL) ---------------------------
+    if (dbType === 'firebase') {
+      console.log('🔥 Firebase API branch: using Admin SDK for email verification')
+const adapter = getAdapter(dbType, dbConfig)
+    if (!adapter.registerUser)
+      return NextResponse.json({ error: 'Adapter does not support signup' }, { status: 400 })
+      // 1️⃣ Register user in Firebase Auth & Firestore
+      const result = await adapter.registerUser(dbConfig, {
+        full_name,
+        email,
+        password,
+      })
+
+      // 2️⃣ Generate email verification link using Admin SDK
+      const link = await admin.auth().generateEmailVerificationLink(email, {
+        url: `${process.env.NEXT_PUBLIC_APP_DOMAIN}/signin`,
+      })
+
+      // 3️⃣ Send the link via SMTP
+      const transporter = nodemailer.createTransport({
+        host: process.env.NEXT_SMTP_HOST,
+        port: Number(process.env.NEXT_SMTP_PORT),
+        secure: process.env.NEXT_SMTP_SECURE === 'true',
+        auth: { user: process.env.NEXT_SMTP_USER, pass: process.env.NEXT_SMTP_PASS?.replace(/\\#/g, '#') },
+      })
 
       await transporter.sendMail({
-        from: smtpFromEmail,
+        from: process.env.NEXT_SMTP_FROM || 'Your App <no-reply@example.com>',
         to: email,
         subject: 'Verify your email',
         html: `<p>Hi ${full_name},</p>
-               <p>Click the link below to verify your email:</p>
-               <a href="${verifyUrl}">${verifyUrl}</a>`,
+               <p>Click below to verify your email:</p>
+               <a href="${link}">${link}</a>`,
       })
 
-      return NextResponse.json({ success: true, ...result })
+      console.log('✅ Firebase verification email sent to:', email)
+
+      return NextResponse.json({ success: true, userId: result.userId })
     }
-
-    // --------------------------- Firebase / Supabase SIGNUP ---------------------------
-    if (!adapter.registerUserInAuth)
-      return NextResponse.json({ error: 'Adapter does not support signup' }, { status: 400 })
-
-    const result = await adapter.registerUserInAuth(dbConfig, {
-      full_name,
-      email,
-      password,
-    })
-
-    console.log('✅ Signup success:', result.id)
-    return NextResponse.json({ success: true, userId: result.id })
   } catch (err: any) {
     console.error('🔥 SIGNUP ERROR:', err)
     return NextResponse.json({ error: err.message || 'Signup failed' }, { status: 500 })

@@ -15,6 +15,21 @@ export default function VerifyEmailPage() {
   useEffect(() => {
     const token = searchParams.get("token");
 
+    // ✅ Supabase check (ONLY ADDITION)
+    const isSupabase = process.env.NEXT_PUBLIC_DB_TYPE === "supabase";
+
+    if (isSupabase) {
+      setStatus("success");
+      setMessage("Redirecting to password setup...");
+
+      setTimeout(() => {
+        router.push("/reset-password");
+      }, 2000);
+
+      return;
+    }
+
+    // ---- EXISTING LOGIC (UNCHANGED) ----
     if (!token) {
       setStatus("error");
       setMessage("Invalid or missing verification token.");

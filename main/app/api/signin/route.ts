@@ -1,3 +1,4 @@
+// app/api/signin/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdapter } from '@/app/db-adapter'
 import type { DBType, DBConfig } from '@/app/db-adapter/types'
@@ -8,10 +9,15 @@ export async function POST(req: NextRequest) {
   console.log('🆕 [SIGNIN API] Request received')
 
   try {
-    const { email, password } = await req.json()
-    console.log('📥 Payload:', { email, password: password ? '***' : null })
+    const body = await req.json()
+    const { email, password, idToken } = body
+    console.log('📥 Payload:', {
+      email,
+      password: password ? '***' : null,
+      idToken: idToken ? '***' : null,
+    })
 
-    if (!email || !password) {
+    if (!email && !idToken) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
@@ -28,11 +34,10 @@ export async function POST(req: NextRequest) {
         storageBucket: 'gs://' + serviceAccount.storageBucket,
       }
     } else if (dbType === 'supabase') {
-      dbConfig = {
-        type: 'supabase',
-        url: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      }
+      const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      if (!url || !anonKey) throw new Error('Supabase env vars missing')
+      dbConfig = { type: 'supabase', supabaseUrl: url, anonKey }
     } else if (dbType === 'mongodb') {
       dbConfig = {
         type: 'mongodb',
@@ -61,6 +66,7 @@ export async function POST(req: NextRequest) {
       throw new Error(`Unsupported DB type: ${dbType}`)
     }
 
+    console.log('🔍 dbConfig before getAdapter:', dbConfig)
     const adapter = getAdapter(dbType, dbConfig)
     if (!adapter) throw new Error('Adapter not found')
 
@@ -69,64 +75,94 @@ export async function POST(req: NextRequest) {
     let loginResult: any
     let user: any
 
-    if (dbType === 'firebase' || dbType === 'supabase') {
-      if (!adapter.loginUserInAuth) throw new Error('Adapter does not support login')
-      loginResult = await adapter.loginUserInAuth(dbConfig, email, password)
-      user = loginResult.user
-    } else if (dbType === 'mongodb') {
-      loginResult = await adapter.loginWithMongo!(dbConfig, email, password)
+    // ---------------- FIREBASE LOGIN ----------------
+    if (dbType === 'firebase') {
+      const idTokenFromHeader = req.headers.get('authorization')?.replace('Bearer ', '') || idToken
+      if (!idTokenFromHeader)
+        return NextResponse.json({ success: false, error: 'No ID token provided' }, { status: 401 })
+
+      let decodedToken: any
+      try {
+        decodedToken = await adapter.admin.auth().verifyIdToken(idTokenFromHeader)
+      } catch (err) {
+        console.error('❌ Invalid Firebase ID token', err)
+        return NextResponse.json({ success: false, error: 'Invalid Firebase ID token' }, { status: 401 })
+      }
+
+      const uid = decodedToken.uid
+      const userDoc = await adapter.admin.firestore().collection('nxf_users').doc(uid).get()
+      if (!userDoc.exists) return NextResponse.json({ success: false, error: 'User not found in Firestore' }, { status: 401 })
+      user = userDoc.data()
+      if (!user) return NextResponse.json({ success: false, error: 'User data missing' }, { status: 401 })
+
+      loginResult = { success: true, user, accessToken: idTokenFromHeader, refreshToken: null }
+
+      if (!user.email_verified) {
+        console.log('VERIFICATION REQUIRED')
+        const emailToken = crypto.randomBytes(32).toString('hex')
+        const emailTTL = new Date(Date.now() + 24 * 60 * 60 * 1000)
+        if (adapter.resendVerificationEmail) await adapter.resendVerificationEmail(dbConfig, email, emailToken, emailTTL)
+        if (process.env.NEXT_ENABLE_SMTP === 'true') await sendVerificationEmail(user.full_name, email, emailToken)
+
+        return NextResponse.json({
+          success: false,
+          error: 'Please verify your email',
+          user: { ...user, emailVerifiedRequired: true },
+        })
+      }
+    }
+
+    // ---------------- SUPABASE LOGIN (FIXED PURE JWT) ----------------
+    else if (dbType === 'supabase') {
+      console.log('💻 Logging in via Supabase...')
+
+      const { createClient } = await import('@supabase/supabase-js')
+      const supabase = createClient(dbConfig.supabaseUrl!, dbConfig.anonKey!)
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email!,
+        password: password!,
+      })
+
+      if (error || !data.session) {
+        console.log('❌ Supabase auth failed:', error?.message)
+        return NextResponse.json(
+          { success: false, error: error?.message || 'Invalid credentials' },
+          { status: 401 }
+        )
+      }
+
+      const session = data.session
+      user = data.user
+
+      loginResult = {
+        success: true,
+        user,
+        accessToken: session.access_token,   // ✅ REAL JWT
+        refreshToken: session.refresh_token, // ✅ REAL refresh
+        projectId: null,
+      }
+    }
+
+    // ---------------- SQL / MONGO LOGIN ----------------
+    else if (dbType === 'mongodb') {
+      loginResult = await adapter.loginWithMongo!(dbConfig, email!, password!)
       user = loginResult.user
     } else if (dbType === 'mysql') {
-      loginResult = await adapter.loginWithMysql!(dbConfig, email, password)
+      loginResult = await adapter.loginWithMysql!(dbConfig, email!, password!)
       user = loginResult.user
     } else if (dbType === 'postgres') {
-      loginResult = await adapter.loginWithPostgres!(dbConfig, email, password)
+      loginResult = await adapter.loginWithPostgres!(dbConfig, email!, password!)
       user = loginResult.user
     }
 
-    // --------------------------- LOGIN FAILURE ---------------------------
     if (!loginResult.success) {
       console.log('❌ Login failed:', loginResult.error)
-      return NextResponse.json(
-        { success: false, error: loginResult.error || 'Signin failed' },
-        { status: 401 }
-      )
+      return NextResponse.json({ success: false, error: loginResult.error || 'Signin failed' }, { status: 401 })
     }
 
-    console.log('VALID PASS:', !!user)
-
-    // --------------------------- EMAIL VERIFICATION ---------------------------
-    if (!user.email_verified) {
-      console.log('VERIFICATION REQUIRED')
-
-      const emailToken = crypto.randomBytes(32).toString('hex')
-      const emailTTL = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24h
-
-      if (adapter.resendVerificationEmail) {
-        await adapter.resendVerificationEmail(dbConfig, email, emailToken, emailTTL)
-        console.log('✅ Token updated for verification email:', emailToken)
-      }
-
-      if (process.env.NEXT_ENABLE_SMTP === 'true') {
-        await sendVerificationEmail(user.full_name, email, emailToken)
-        console.log('✅ Verification email sent with token:', emailToken)
-      }
-
-      return NextResponse.json({
-        success: false,
-        error: 'Please verify your email',
-        user: { ...user, emailVerifiedRequired: true },
-      })
-    }
-
-    // --------------------------- SUCCESS ---------------------------
-    // Generate accessToken / refreshToken for SQL/Mongo users if missing
-    const accessToken =
-      loginResult.accessToken ??
-      crypto.randomUUID() // fallback token
-    const refreshToken =
-      loginResult.refreshToken ??
-      crypto.randomUUID() // fallback token
+    const accessToken = loginResult.accessToken ?? crypto.randomUUID()
+    const refreshToken = loginResult.refreshToken ?? crypto.randomUUID()
 
     console.log('✅ Login successful')
     return NextResponse.json({
@@ -134,6 +170,7 @@ export async function POST(req: NextRequest) {
       user,
       accessToken,
       refreshToken,
+      projectId: loginResult.projectId,
     })
   } catch (err: any) {
     console.error('🔥 SIGNIN ERROR:', err)
@@ -156,9 +193,7 @@ async function sendVerificationEmail(fullName: string, email: string, token: str
       debug: true,
     })
 
-    const verifyUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}&email=${encodeURIComponent(
-      email
-    )}`
+    const verifyUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}&email=${encodeURIComponent(email)}`
 
     const info = await transporter.sendMail({
       from: process.env.NEXT_SMTP_FROM,

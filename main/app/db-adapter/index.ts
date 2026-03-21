@@ -16,9 +16,6 @@ export function getAdapter(type: DBType, config: DBConfig): DBAdapter {
     case 'firebase':
       return new FirebaseAdapter(config);
     case 'supabase':
-      if (!config.supabaseUrl || !config.anonKey) {
-        throw new Error('SupabaseAdapter requires both supabaseUrl and anonKey in config');
-      }
       return new SupabaseAdapter(config);
     default:
       throw new Error(`Unsupported DB type: ${type}`);

@@ -4,7 +4,6 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { DBAdapter, DBConfig, ColumnDef } from "../types";
 import { CreateDataModels } from "../utils/create-data-models";
-import { Client as PgClient } from 'pg'
 
 export class PostgresAdapter implements DBAdapter {
   private client: Client;
@@ -63,20 +62,15 @@ export class PostgresAdapter implements DBAdapter {
     return hashed;
   }
 
- async comparePassword(password: string, hash: string) {
-  
-  // Trim just in case
-  const valid = await bcrypt.compare(password.trim(), hash.trim());
-
-  console.log("✅ Password match result:", valid);
-  return valid;
-}
-
+  async comparePassword(password: string, hash: string) {
+    const valid = await bcrypt.compare(password.trim(), hash.trim());
+    console.log("✅ Password match result:", valid);
+    return valid;
+  }
 
   // ---------------- BASIC CRUD ----------------
   async create(_config: DBConfig, table: string, data: Record<string, any>) {
     await this.connect();
-
     const cleaned: Record<string, any> = {};
     for (const key in data) {
       let value = data[key];
@@ -87,38 +81,44 @@ export class PostgresAdapter implements DBAdapter {
         cleaned[key] = JSON.stringify(value);
       else cleaned[key] = value;
     }
-
     const keys = Object.keys(cleaned);
     const values = Object.values(cleaned);
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(",");
-
     const sql = `INSERT INTO "${table}" (${keys.join(
       ","
     )}) VALUES (${placeholders}) RETURNING *`;
-
     const res = await this.client.query(sql, values);
     return res.rows[0];
   }
 
   async read(_config: DBConfig, table: string, query?: any) {
-    await this.connect();
+  await this.connect();
 
-    let sql = `SELECT * FROM "${table}"`;
-    const values: any[] = [];
+  let sql = `SELECT * FROM "${table}"`;
+  const values: any[] = [];
 
-    if (query && Object.keys(query).length) {
-      const where = Object.keys(query)
-        .map((k, i) => {
-          values.push(query[k]);
-          return `"${k}" = $${i + 1}`;
-        })
-        .join(" AND ");
-      sql += ` WHERE ${where}`;
-    }
+  if (query && Object.keys(query).length) {
+    // Ignore non-column keys
+    const ignoredKeys = ['limit', 'offset', 'order'];
+    const where = Object.keys(query)
+      .filter(k => !ignoredKeys.includes(k))
+      .map((k, i) => {
+        values.push(query[k]);
+        return `"${k}" = $${i + 1}`;
+      })
+      .join(" AND ");
 
-    const res = await this.client.query(sql, values);
-    return res.rows;
+    if (where) sql += ` WHERE ${where}`;
   }
+
+  // Apply limit/offset if present
+  if (query?.limit) sql += ` LIMIT ${Number(query.limit)}`;
+  if (query?.offset) sql += ` OFFSET ${Number(query.offset)}`;
+
+  const res = await this.client.query(sql, values);
+  return res.rows;
+}
+
 
   async update(
     _config: DBConfig,
@@ -128,20 +128,14 @@ export class PostgresAdapter implements DBAdapter {
     idColumn: string = "id"
   ) {
     await this.connect();
-
     const keys = Object.keys(data);
     const values = Object.values(data).map((v) =>
       v instanceof Date ? v.toISOString() : v
     );
-
-    const setClause = keys
-      .map((k, i) => `"${k}" = $${i + 1}`)
-      .join(", ");
-
+    const setClause = keys.map((k, i) => `"${k}" = $${i + 1}`).join(", ");
     const sql = `UPDATE "${table}" SET ${setClause} WHERE "${idColumn}" = $${
       keys.length + 1
     } RETURNING *`;
-
     const res = await this.client.query(sql, [...values, id]);
     return res.rows[0];
   }
@@ -161,9 +155,7 @@ export class PostgresAdapter implements DBAdapter {
     schema: { columns: ColumnDef[] | Record<string, ColumnDef> }
   ) {
     await this.connect();
-
     let columnsArray: ColumnDef[] = [];
-
     if (Array.isArray(schema.columns)) columnsArray = schema.columns;
     else if (typeof schema.columns === "object")
       columnsArray = Object.entries(schema.columns).map(([name, col]) => ({
@@ -209,16 +201,13 @@ export class PostgresAdapter implements DBAdapter {
           default:
             throw new Error(`Unsupported Postgres column type: ${col.type}`);
         }
-
         const constraints: string[] = [];
         if (col.is_primary) constraints.push("PRIMARY KEY");
         if (col.unique) constraints.push("UNIQUE");
         if (col.nullable === false) constraints.push("NOT NULL");
-
         return `"${col.name}" ${typeSql} ${constraints.join(" ")}`;
       })
       .join(",");
-
     await this.client.query(
       `CREATE TABLE IF NOT EXISTS "${tableName}" (${columnsSql})`
     );
@@ -226,28 +215,46 @@ export class PostgresAdapter implements DBAdapter {
 
   // ---------------- DATA MODELS ----------------
   async CreateDataModels(projectId: string) {
-    const result = await CreateDataModels(this, projectId);
+  if (!projectId) throw new Error('Project ID is required');
 
-    for (const table of result) {
-      await this.create(this.config, "nxf_system_models", {
-        sm_id: crypto.randomUUID(),
-        project_id: projectId,
-        name: table.name,
-        schema: JSON.stringify(table.columns),
-        created_at: new Date(),
-        updated_at: new Date(),
-      });
-    }
+  const result = await CreateDataModels(this, projectId); // existing model generator
+  console.log("[DEBUG] CreateDataModels result:", result);
 
-    return result;
+  // Handle 'skipped' case gracefully
+  if (result?.skipped) {
+    console.log(`[PostgresAdapter] ${result.message}`);
+    return result; // or return [] if you expect an array downstream
   }
+
+  if (!result || !Array.isArray(result)) {
+    throw new Error('Failed to create models');
+  }
+
+  for (const table of result) {
+    if (!table.name) continue;
+
+    // Insert models as before
+    await this.create(this.config, 'nxf_system_models', {
+      sm_id: crypto.randomUUID(),
+      project_id: projectId,
+      name: table.name,
+      schema: JSON.stringify(table.columns || []),
+      created_at: new Date(),
+      updated_at: new Date(),
+    });
+  }
+
+  return result;
+}
+
 
   async createDataModelsFromUserEmail(email: string) {
     const user = await this.findUserByEmail(this.config, email);
-    const project = await this.findProjectByOwnerId(
-      this.config,
-      user.user_id
-    );
+    if (!user?.user_id) throw new Error("User not found");
+
+    const project = await this.findProjectByOwnerId(this.config, user.user_id);
+    if (!project?.project_id) throw new Error("Project not found");
+
     return this.CreateDataModels(project.project_id);
   }
 
@@ -269,21 +276,18 @@ export class PostgresAdapter implements DBAdapter {
       notes: rest.notes || null,
       created_at: new Date(),
       updated_at: new Date(),
+      is_logged_in: false,
+      last_login: new Date(),
     });
   }
 
   async findUserByEmail(config: DBConfig, email: string) {
-    console.log("🔍 Finding user by email:", email);
-    const rows = await this.read(config, "nxf_users", {
-      user_email: email,
-    });
-    console.log("🔍 Found user rows:", rows.length);
+    const rows = await this.read(config, "nxf_users", { user_email: email });
     return rows?.[0] || null;
   }
 
   async findUserByToken(token: string) {
     await this.connect();
-
     const res = await this.client.query(
       `SELECT * FROM nxf_users WHERE token=$1 AND token_ttl > NOW() LIMIT 1`,
       [token]
@@ -306,17 +310,11 @@ export class PostgresAdapter implements DBAdapter {
   }
 
   async resendVerificationEmail(config: DBConfig, email: string) {
-    console.log("RESEND VERIFICATION EMAIL")
     const user = await this.findUserByEmail(config, email);
-    console.log(user);
-
     if (!user) throw new Error("User not found");
 
     const token = crypto.randomBytes(32).toString("hex");
     const ttl = new Date(Date.now() + 24 * 60 * 60 * 1000);
-
-    console.log(token);
-    console.log(ttl);
 
     await this.client.query(
       `UPDATE nxf_users 
@@ -325,8 +323,6 @@ export class PostgresAdapter implements DBAdapter {
       [token, ttl, user.user_id]
     );
 
-    console.log("END OF VERFICATION")
-
     return { success: true, token };
   }
 
@@ -334,15 +330,13 @@ export class PostgresAdapter implements DBAdapter {
     const user = await this.findUserByToken(token);
     if (!user) throw new Error("Invalid or expired token");
 
-    //const hashed = await this.hashPassword(newPassword);
-
-    console.log(newPassword);
+    const hashed = await this.hashPassword(newPassword);
 
     await this.client.query(
       `UPDATE nxf_users
        SET password_hash=$1, token=NULL, token_ttl=NULL, updated_at=NOW()
        WHERE user_id=$2`,
-      [newPassword, user.user_id]
+      [hashed, user.user_id]
     );
 
     return { success: true };
@@ -350,195 +344,131 @@ export class PostgresAdapter implements DBAdapter {
 
   // ---------------- LOGIN ----------------
   async loginBasic(
+    config: DBConfig,
+    email: string,
+    password: string,
+    emailVerifiedRequired: boolean = true
+  ) {
+    const user = await this.findUserByEmail(config, email);
+    if (!user) return { success: false, error: "User not found." };
+
+    if (!user.password_hash) return { success: false, error: "Invalid password" };
+
+    const valid = await bcrypt.compare(password.trim(), user.password_hash.trim());
+    if (!valid) return { success: false, error: "Invalid email or password" };
+
+    if (emailVerifiedRequired && !user.email_verified) {
+      return { success: false, error: "Please verify your email", user };
+    }
+
+    return {
+      success: true,
+      user: {
+        user_id: user.user_id,
+        user_email: user.user_email,
+        full_name: user.full_name,
+        role: user.role,
+        status: user.status,
+        email_verified: user.email_verified,
+      },
+    };
+  }
+
+ async loginWithPostgres(
   config: DBConfig,
   email: string,
   password: string,
-  emailVerifiedRequired: boolean = true
+  ip?: string,
+  ua?: string
 ) {
- 
+  const basic = await this.loginBasic(config, email, password);
+  if (!basic.success || !basic.user) return { success: false, error: basic.error };
 
-  // 1️⃣ Find the user by email
-  const user = await this.findUserByEmail(config, email);
-  if (!user) {
-    console.log("❌ User not found");
-    return { success: false, error: "User not found." };
-  }
-  console.log("🔍 User found:", user.user_email);
-
-  // // 2️⃣ Make sure the password hash exists
-  if (!user.password_hash) {
-    console.log("❌ Incorrect password - ");
-    return { success: false, error: "Invalid password" };
+  // Only admins can access the console
+  if (basic.user.role !== "admin") {
+    return { 
+      success: false, 
+      error: "You do not have admin rights to access the console", 
+      user: basic.user 
+    };
   }
 
- 
+  const project = await this.findProjectByOwnerId(config, basic.user.user_id);
+  if (!project) return { success: false, error: "No project found for user" };
 
-  // 4️⃣ Compare password using bcrypt
-  // Note: NEVER hash the input password here — just compare
-  let valid = false;
-  //try {
- try{
-    valid = await bcrypt.compare(password.trim(), user.password_hash.trim());
-  } catch (err) {
-    console.error("❌ bcrypt.compare error:", err);
-    return { success: false, error: "Invalid email or password - Could not validate password" };
-  }
+  const accessToken = crypto.randomUUID();
+  const refreshToken = crypto.randomUUID();
 
-  console.log("✅ Password match result:", valid);
-  if (!valid) {
-    console.log("❌ Password invalid for user:", user.user_email);
-    return { success: false, error: "Invalid email or password - password do not match" };
-  }
+  await this.create(config, "nxf_system_tokens", {
+    token_id: crypto.randomUUID(),
+    user_id: basic.user.user_id,
+    project_id: project.project_id,
+    access_token: accessToken,
+    refresh_token: refreshToken,
+    token_type: "bearer",
+    expires_at: new Date(Date.now() + 3600 * 1000),
+    refresh_expires_at: new Date(Date.now() + 7 * 86400 * 1000),
+    ip_address: ip || null,
+    user_agent: ua || null,
+    revoked: false,
+    created_at: new Date(),
+    updated_at: new Date(),
+  });
 
-  // 5️⃣ Optional: check email verification
-  if (emailVerifiedRequired && !user.email_verified) {
-    console.log("⚠️ Email not verified for user:", user.user_email);
-    return { success: false, error: "Please verify your email", user };
-  }
-
-  // 6️⃣ Success: return user object
-  console.log("🎉 Login successful for user:", user.user_email);
-  return {
-    success: true,
-    user: {
-      user_id: user.user_id,
-      user_email: user.user_email,
-      full_name: user.full_name,
-      role: user.role,
-      status: user.status,
-      email_verified: user.email_verified,
-      emailVerifiedRequired: emailVerifiedRequired,
-    },
+  return { 
+    success: true, 
+    user: basic.user, 
+    accessToken, 
+    refreshToken, 
+    projectId: project.project_id 
   };
 }
 
 
-  async loginWithPostgres(
-    config: DBConfig,
-    email: string,
-    password: string,
-    ip?: string,
-    ua?: string
-  ) {
-    console.log("REACHED LOGIN WITH POSTGRES");
-    const basic = await this.loginBasic(config, email, password);
-
-    console.log("💻 loginBasic result:", basic);
-
-    if (!basic.success || !basic.user) {
-      console.log("❌ Basic login failed");
-      return { success: false, error: basic.error };
-    }
-
-    if (basic.user.emailVerifiedRequired && !basic.user.email_verified) {
-      console.log("VERIFICATION REQUIRED");
-      return { success: false, error: "Please verify your email", user: basic.user };
-    }
-
-    const project = await this.findProjectByOwnerId(config, basic.user.user_id);
-    if (!project) return { success: false, error: "No project found for user" };
-
-    const accessToken = crypto.randomUUID();
-    const refreshToken = crypto.randomUUID();
-
-    await this.create(config, "nxf_system_tokens", {
-      token_id: crypto.randomUUID(),
-      user_id: basic.user.user_id,
-      project_id: project.project_id,
-      access_token: accessToken,
-      refresh_token: refreshToken,
-      token_type: "bearer",
-      expires_at: new Date(Date.now() + 3600 * 1000),
-      refresh_expires_at: new Date(Date.now() + 7 * 86400 * 1000),
-      ip_address: ip || null,
-      user_agent: ua || null,
-      revoked: false,
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-
-    return {
-      success: true,
-      user: basic.user,
-      accessToken,
-      refreshToken,
-      projectId: project.project_id,
-    };
-  }
-
-  // ---------------- REGISTRATION ----------------
   async registerUser(
     config: DBConfig,
     data: {
-      email: string
-      password: string
-      full_name?: string
-      token: string
-      token_ttl: Date
+      email: string;
+      password: string;
+      full_name?: string;
+      token: string;
+      token_ttl: Date;
     }
   ) {
-    const existing = await this.findUserByEmail(config, data.email)
-    if (existing) throw new Error('User exists')
+    const existing = await this.findUserByEmail(config, data.email);
+    if (existing) throw new Error("User exists");
 
-    const user_id = crypto.randomUUID()
-    const password_hash = await this.hashPassword(data.password)
+    const user_id = crypto.randomUUID();
+    const password_hash = await this.hashPassword(data.password);
 
-    await this.create(config, 'nxf_users', {
+    await this.create(config, "nxf_users", {
       user_id,
       user_email: data.email,
       password_hash,
       full_name: data.full_name || null,
-      role: 'user',
-      status: 'active',
+      role: "user",
+      status: "active",
       email_verified: false,
       token: data.token,
       token_ttl: data.token_ttl,
       created_at: new Date(),
       updated_at: new Date(),
-    })
+    });
 
     const project_id = await this.createProject(config, {
-      name: `Default Project`,
+      name: "Default Project",
       user_id,
-    })
+    });
 
-    return { success: true, user_id, project_id, token: data.token, token_ttl: data.token_ttl }
+    return { success: true, user_id, project_id, token: data.token, token_ttl: data.token_ttl };
   }
 
-  // ---------------- TOKENS ----------------
   async findTokenByAccessToken(accessToken: string) {
-    console.log('🐘 [PG] findTokenByAccessToken called')
-    console.log('🐘 token:', accessToken)
-
-    const client = new PgClient({
-      host: this.config.host,
-      port: Number(this.config.port),
-      database: this.config.database,
-      user: this.config.user,
-      password: this.config.password,
-    })
-
-    try {
-      console.log('🐘 connecting to postgres...')
-      await client.connect()
-      console.log('🐘 connected')
-
-      const query = `SELECT * FROM nxf_system_tokens WHERE access_token=$1 LIMIT 1`
-      console.log('🐘 running query:', query)
-
-      const res = await client.query(query, [accessToken])
-
-      console.log('🐘 query result rows:', res.rows.length)
-      console.log('🐘 row data:', res.rows[0])
-
-      return res.rows[0] || null
-    } catch (err) {
-      console.error('❌ [PG] findTokenByAccessToken error:', err)
-      return null
-    } finally {
-      console.log('🐘 closing postgres connection')
-      await client.end().catch(() => {})
-    }
+    const res = await this.client.query(
+      `SELECT * FROM nxf_system_tokens WHERE access_token=$1 LIMIT 1`,
+      [accessToken]
+    );
+    return res.rows[0] || null;
   }
 
   async findTokenByRefreshToken(refreshToken: string) {
@@ -550,50 +480,26 @@ export class PostgresAdapter implements DBAdapter {
   }
 
   async extendToken(tokenId: string, updates: Partial<{ revoked: boolean; updated_at: string }>) {
-    console.log('🐘 [PG] extendToken called for:', tokenId)
-    const client = new PgClient({
-      host: this.config.host,
-      port: Number(this.config.port),
-      database: this.config.database,
-      user: this.config.user,
-      password: this.config.password,
-    })
-
-    try {
-      await client.connect()
-      console.log('🐘 connected for extendToken')
-
-      const setClauses: string[] = []
-      const values: any[] = []
-
-      let i = 1
-      if (updates.revoked !== undefined) {
-        setClauses.push(`revoked = $${i++}`)
-        values.push(updates.revoked)
-      }
-      if (updates.updated_at) {
-        setClauses.push(`updated_at = $${i++}`)
-        values.push(updates.updated_at)
-      }
-
-      if (setClauses.length === 0) return
-
-      const query = `UPDATE nxf_system_tokens SET ${setClauses.join(', ')} WHERE token_id = $${i}`
-      values.push(tokenId)
-
-      console.log('🐘 running query:', query, 'with values:', values)
-      await client.query(query, values)
-      console.log('🐘 token updated successfully')
-
-    } finally {
-      await client.end()
-      console.log('🐘 closed connection for extendToken')
+    const setClauses: string[] = [];
+    const values: any[] = [];
+    let i = 1;
+    if (updates.revoked !== undefined) {
+      setClauses.push(`revoked = $${i++}`);
+      values.push(updates.revoked);
     }
+    if (updates.updated_at) {
+      setClauses.push(`updated_at = $${i++}`);
+      values.push(updates.updated_at);
+    }
+    if (setClauses.length === 0) return;
+
+    const query = `UPDATE nxf_system_tokens SET ${setClauses.join(", ")} WHERE token_id = $${i}`;
+    values.push(tokenId);
+
+    await this.client.query(query, values);
   }
 
   async createPasswordResetToken(email: string) {
-    await this.connect();
-
     const user = await this.findUserByEmail(this.config, email);
     if (!user) throw new Error("User not found");
 
@@ -610,7 +516,6 @@ export class PostgresAdapter implements DBAdapter {
     return token;
   }
 
-  // ---------------- PROJECTS ----------------
   async createProject(config: DBConfig, data: { name: string; user_id: string }) {
     const project_id = crypto.randomUUID();
     await this.create(config, "nxf_system_projects", {
@@ -624,13 +529,10 @@ export class PostgresAdapter implements DBAdapter {
   }
 
   async findProjectByOwnerId(config: DBConfig, ownerId: string) {
-    const rows = await this.read(config, "nxf_system_projects", {
-      user_id: ownerId,
-    });
+    const rows = await this.read(config, "nxf_system_projects", { user_id: ownerId });
     return rows?.[0] || null;
   }
 
-  // ---------------- TENANTS ----------------
   async createTenant(config: DBConfig, data: { subdomain: string; user_email: string }) {
     const ten_id = crypto.randomUUID();
     await this.create(config, "nxf_system_tenants", {
@@ -641,11 +543,24 @@ export class PostgresAdapter implements DBAdapter {
     });
     return ten_id;
   }
+  // ---------------- USER HELPERS ----------------
+async findUserByEmailWithRetry(
+  config: DBConfig,
+  email: string,
+  retries = 5,
+  delay = 300
+) {
+  for (let i = 0; i < retries; i++) {
+    const user = await this.findUserByEmail(config, email);
+    if (user) return user;
+    await new Promise((r) => setTimeout(r, delay));
+  }
+  return null;
+}
+
 
   async findTenantByUserEmail(config: DBConfig, email: string) {
-    const rows = await this.read(config, "nxf_system_tenants", {
-      user_email: email,
-    });
+    const rows = await this.read(config, "nxf_system_tenants", { user_email: email });
     return rows?.[0] || null;
   }
 
@@ -659,6 +574,11 @@ export class PostgresAdapter implements DBAdapter {
     });
     return config_id;
   }
+
+
+
+
+
 
   // ---------------- STORAGE ----------------
   async setupStorageBuckets() {
