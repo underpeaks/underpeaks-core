@@ -15,10 +15,9 @@
     --color-red-500: oklch(63.7% 0.237 25.331);
     --color-red-600: oklch(57.7% 0.245 27.325);
     --color-red-700: oklch(50.5% 0.213 27.518);
-    --color-yellow-50: oklch(98.7% 0.026 102.212);
-    --color-yellow-400: oklch(85.2% 0.199 91.936);
+    --color-yellow-100: oklch(97.3% 0.071 103.193);
     --color-yellow-600: oklch(68.1% 0.162 75.834);
-    --color-yellow-700: oklch(55.4% 0.135 66.442);
+    --color-yellow-800: oklch(47.6% 0.114 61.907);
     --color-green-500: oklch(72.3% 0.219 149.579);
     --color-green-600: oklch(62.7% 0.194 149.214);
     --color-green-700: oklch(52.7% 0.154 150.069);
@@ -435,9 +434,6 @@
   .mr-3 {
     margin-right: calc(var(--spacing) * 3);
   }
-  .mr-6 {
-    margin-right: calc(var(--spacing) * 6);
-  }
   .mb-1 {
     margin-bottom: calc(var(--spacing) * 1);
   }
@@ -774,9 +770,6 @@
   .list-inside {
     list-style-position: inside;
   }
-  .list-decimal {
-    list-style-type: decimal;
-  }
   .list-disc {
     list-style-type: disc;
   }
@@ -995,10 +988,6 @@
     border-left-style: var(--tw-border-style);
     border-left-width: 1px;
   }
-  .border-l-4 {
-    border-left-style: var(--tw-border-style);
-    border-left-width: 4px;
-  }
   .border-dashed {
     --tw-border-style: dashed;
     border-style: dashed;
@@ -1043,11 +1032,14 @@
   .border-transparent {
     border-color: transparent;
   }
-  .border-yellow-400 {
-    border-color: var(--color-yellow-400);
+  .border-white {
+    border-color: var(--color-white);
   }
   .border-t-gray-800 {
     border-top-color: var(--color-gray-800);
+  }
+  .border-t-transparent {
+    border-top-color: transparent;
   }
   .\!bg-black {
     background-color: var(--color-black) !important;
@@ -1151,8 +1143,8 @@
   .bg-white {
     background-color: var(--color-white);
   }
-  .bg-yellow-50 {
-    background-color: var(--color-yellow-50);
+  .bg-yellow-100 {
+    background-color: var(--color-yellow-100);
   }
   .fill-current {
     fill: currentcolor;
@@ -1425,8 +1417,8 @@
   .text-yellow-600 {
     color: var(--color-yellow-600);
   }
-  .text-yellow-700 {
-    color: var(--color-yellow-700);
+  .text-yellow-800 {
+    color: var(--color-yellow-800);
   }
   .lowercase {
     text-transform: lowercase;

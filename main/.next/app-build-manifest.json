@@ -6,15 +6,25 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
+    "/(auth)/forgot-password/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/forgot-password/page.js"
+    ],
+    "/api/forgot-password/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/forgot-password/route.js"
+    ],
+    "/(auth)/reset-password/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(auth)/reset-password/page.js"
+    ],
     "/(auth)/signin/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/signin/page.js"
-    ],
-    "/api/session/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/session/route.js"
     ],
     "/api/signin/route": [
       "static/chunks/webpack.js",
@@ -32,55 +42,20 @@
       "static/css/app/console/page.css",
       "static/chunks/app/console/page.js"
     ],
-    "/api/logout/route": [
+    "/api/session/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/logout/route.js"
+      "static/chunks/app/api/session/route.js"
     ],
     "/console/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/console/dashboard/page.js"
     ],
-    "/(auth)/signup/page": [
+    "/api/logout/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/signup/page.js"
-    ],
-    "/api/signup/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/signup/route.js"
-    ],
-    "/(auth)/verify-email/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/verify-email/page.js"
-    ],
-    "/api/verify-email/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/verify-email/route.js"
-    ],
-    "/(auth)/forgot-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/forgot-password/page.js"
-    ],
-    "/api/forgot-password/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/forgot-password/route.js"
-    ],
-    "/(auth)/reset-password/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/reset-password/page.js"
-    ],
-    "/api/reset-password/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/reset-password/route.js"
+      "static/chunks/app/api/logout/route.js"
     ]
   }
 }

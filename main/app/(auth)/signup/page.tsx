@@ -9,6 +9,51 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { FiMail, FiLock, FiUser } from 'react-icons/fi'
 
+// Firebase client SDK
+import { initializeApp, getApps } from 'firebase/app'
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  sendEmailVerification,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from 'firebase/auth'
+
+// Supabase client
+import { createClient } from '@supabase/supabase-js'
+
+// ✅ Detect DB type FIRST
+const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE
+
+// ---------------- SAFE INITIALIZATION ----------------
+let auth: any = null
+let supabase: any = null
+
+// ✅ Firebase only if needed
+if (DB_TYPE === 'firebase' && process.env.NEXT_PUBLIC_FIREBASE_CONFIG) {
+  const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
+  const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
+  auth = getAuth(app)
+}
+
+// ✅ Supabase only if needed (FIXED HARD GUARD)
+if (
+  DB_TYPE === 'supabase' &&
+  process.env.NEXT_PUBLIC_SUPABASE_URL &&
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+) {
+  
+  supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY as string
+  )
+
+  console.log(supabase);
+
+} else if (DB_TYPE === 'supabase') {
+  console.error('❌ Supabase env vars missing')
+}
+
 export default function SignUpPage() {
   const router = useRouter()
 
@@ -30,6 +75,8 @@ export default function SignUpPage() {
     setLoading(true)
 
     try {
+      // ---------------- API CALL ----------------
+       console.log('I REACH HERE6');
       const res = await fetch('/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -38,10 +85,68 @@ export default function SignUpPage() {
 
       if (res.error) throw new Error(res.error)
 
-      setSuccessMsg('Account created! Please check your email to verify your account.')
+      console.log(res)
+      setSuccessMsg('Account created successfully!')
+
+      // ---------------- FIREBASE FLOW ----------------
+      if (DB_TYPE === 'firebase' && auth) {
+        try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, password)
+
+          await sendEmailVerification(userCredential.user, {
+            url: `${process.env.NEXT_PUBLIC_APP_DOMAIN}/signin`,
+          })
+
+          await auth.signOut()
+
+          console.log('✅ Firebase verification email sent')
+          setTimeout(() => router.push('/signin'), 2000)
+        } catch (firebaseErr: any) {
+          console.error('❌ Firebase email verification failed:', firebaseErr)
+        }
+      }
+
+      // ---------------- SUPABASE FLOW ----------------
+      if (DB_TYPE === 'supabase' && supabase) {
+         console.log('I REACH HERE 5');
+        try {
+          const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+              data: { full_name },
+              emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_DOMAIN}/signin`,
+            },
+          })
+
+          if (error) throw error
+
+          console.log('✅ Supabase signup success:', data)
+
+          await supabase.auth.signOut()
+
+          console.log('📧 Supabase verification email sent')
+
+          setTimeout(() => router.push('/signin'), 2000)
+        } catch (supabaseErr: any) {
+          console.error('❌ Supabase signup failed:', supabaseErr)
+          setError(supabaseErr.message || 'Supabase signup failed')
+        }
+      }
+
+      // fallback redirect
       setTimeout(() => router.push('/signin'), 2000)
+
     } catch (err: any) {
-      setError(err.message || 'Signup failed')
+      if (err.code === 'auth/email-already-in-use') {
+        setError('Email is already registered. Try logging in instead.')
+      } else if (err.code === 'auth/invalid-email') {
+        setError('Please enter a valid email address.')
+      } else if (err.code === 'auth/weak-password') {
+        setError('Password is too weak. Minimum 6 characters.')
+      } else {
+        setError(err.message || 'Signup failed')
+      }
     } finally {
       setLoading(false)
     }

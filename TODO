@@ -216,6 +216,8 @@
 //9.  'Finalizing installer and cleanup', 0.5 days
 //10. 'switch between self hosted and hosted with api keys', 1 days
 //11. 'model generation', 2 days
+//12. FIX SUPABASE EMAIL VERIFIED 
+//13. UPDATE SO THAT WE TRACK WHEN A USER IS LOGGED IN AND ON WHICH DATE 
 
 // TOTAL DAYS - 17 Days 
 
@@ -235,15 +237,12 @@
 
 
 
-///1 Day
-//0.0 update installer so that user can create their own db name in mongo 
-//0.0 have the create a domain that we save to .env 
-//0.0 make sure no duplicate entries can go in to the database if it already exists
-///0.0 add smtp details to the .env 
-///normal users cannot login to console
-///check if flutter and nextjs is installed if it is skip install
+///2 Day
 
-
+///test user login
+///update the field in user if user is logged in
+///test all db's with install and login
+//7.  'Installing demo content', 2 days
 
 
 

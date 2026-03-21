@@ -2,11 +2,14 @@ import admin from 'firebase-admin'
 import { DBAdapter, DBConfig } from '../types'
 import bcrypt from 'bcryptjs'
 import { CreateDataModels } from '../utils/create-data-models'
+import { getFirestore } from 'firebase-admin/firestore';
+import { sendEmailVerification } from 'firebase/auth';
 
 const DEFAULT_BUCKETS = ['uploads', 'products', 'avatars', 'reports']
 
 export class FirebaseAdapter implements DBAdapter {
   supportsBuiltInAuth = true
+  firebaseAdmin: admin.app.App   // ✅ ADDED
 
   private firestore: admin.firestore.Firestore
   private storage: admin.storage.Storage
@@ -56,15 +59,16 @@ export class FirebaseAdapter implements DBAdapter {
         private_key: rawConfig.private_key.replace(/\\n/g, '\n'),
       }
 
-      admin.initializeApp({
+      this.firebaseAdmin = admin.initializeApp({
         credential: admin.credential.cert(fixedConfig),
         storageBucket: _config.storageBucket,
       })
+    } else {
+      this.firebaseAdmin = admin.app()
     }
 
     this.firestore = admin.firestore()
 
-    // Firestore settings must only be applied once
     try {
       this.firestore.settings({ ignoreUndefinedProperties: true })
     } catch (err: any) {
@@ -74,13 +78,14 @@ export class FirebaseAdapter implements DBAdapter {
     this.storage = admin.storage()
   }
 
+  getFirestoreInstance() {
+    return getFirestore();
+  }
+
   get config(): DBConfig {
     return this._config
   }
 
-  // -----------------------------
-  // CONNECTION
-  // -----------------------------
   async testConnection() {
     try {
       await this.firestore.listCollections()
@@ -90,9 +95,6 @@ export class FirebaseAdapter implements DBAdapter {
     }
   }
 
-  // -----------------------------
-  // CRUD
-  // -----------------------------
   async create(config: DBConfig, collection: string, data: any): Promise<string> {
     const docRef = await this.firestore.collection(collection).add(data)
     return docRef.id
@@ -113,41 +115,99 @@ export class FirebaseAdapter implements DBAdapter {
     return true
   }
 
-  // -----------------------------
-  // AUTH & USERS
-  // -----------------------------
   async registerUserInAuth(
     config: DBConfig,
     data: { email: string; password: string; full_name: string; notes?: string }
   ) {
-    if (!data.email) throw new Error('REGISTER IN AUTH - Email is required')
-    if (!data.password) throw new Error('REGISTER IN AUTH - Password is required')
-    if (!data.full_name) throw new Error('REGISTER IN AUTH - Full Name is required')
+    if (!data.email) throw new Error('Email is required');
+    if (!data.password) throw new Error('Password is required');
+    if (!data.full_name) throw new Error('Full Name is required');
 
-    const userRecord = await admin.auth().createUser({
+    let userRecord;
+    try {
+      userRecord = await admin.auth().getUserByEmail(data.email);
+      throw new Error('User already exists in Firebase Auth');
+    } catch (err: any) {
+      if (err.code !== 'auth/user-not-found') {
+        throw err;
+      }
+    }
+
+    userRecord = await admin.auth().createUser({
       email: data.email,
       password: data.password,
       displayName: data.full_name,
-    })
+    });
 
-    const hashedPassword = await this.hashPassword(data.password)
+    const hashedPassword = await this.hashPassword(data.password);
 
     await this.firestore.collection('nxf_users').doc(userRecord.uid).set({
       user_id: userRecord.uid,
       user_email: data.email,
       full_name: data.full_name,
       password_hash: hashedPassword,
-      role: 'user',
-      status: 'active', // DEFAULT
+      role: 'admin',
+      status: 'active',
       notes: data.notes || '',
       email_verified: false,
       token: null,
       token_ttl: null,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-    })
+    });
 
-    return { id: userRecord.uid }
+    return { id: userRecord.uid };
+  }
+
+  async registerUser(
+    config: DBConfig,
+    data: { email: string; password: string; full_name: string; notes?: string }
+  ): Promise<{ userId?: string; error?: string }> {
+    try {
+      if (!data.email) throw new Error('Email is required')
+      if (!data.password) throw new Error('Password is required')
+      if (!data.full_name) throw new Error('Full Name is required')
+
+      let userRecord
+      try {
+        userRecord = await admin.auth().getUserByEmail(data.email)
+        return { error: 'User already exists in Firebase Auth' }
+      } catch (err: any) {
+        if (err.code !== 'auth/user-not-found') {
+          throw err
+        }
+      }
+
+       let userRec = await admin.auth().createUser({
+        email: data.email,
+        password: data.password,
+        displayName: data.full_name,
+      })
+
+      const hashedPassword = await this.hashPassword(data.password)
+
+      await this.firestore.collection('nxf_users').doc(userRec.uid).set({
+        user_id: userRec.uid,
+        user_email: data.email,
+        full_name: data.full_name,
+        password_hash: hashedPassword,
+        role: 'user',
+        status: 'active',
+        notes: data.notes || '',
+        email_verified: false,
+        token: null,
+        token_ttl: null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+
+      
+
+      return { userId: userRec.uid }
+    } catch (err: any) {
+      console.error('registerUser error:', err)
+      return { error: err.message || 'Registration failed' }
+    }
   }
 
   async syncAuthUserToDatabase(
@@ -166,7 +226,7 @@ export class FirebaseAdapter implements DBAdapter {
         user_email: user.email || '',
         full_name: user.full_name,
         role: 'user',
-        status: 'active', // DEFAULT
+        status: 'active',
         notes: user.notes || '',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -198,7 +258,7 @@ export class FirebaseAdapter implements DBAdapter {
       full_name: data.full_name,
       password_hash: hashedPassword,
       role: data.role || 'admin',
-      status: 'active', // DEFAULT
+      status: 'active',
       notes: data.notes || '',
       email_verified: false,
       token: null,
@@ -242,9 +302,6 @@ export class FirebaseAdapter implements DBAdapter {
     return { success: true }
   }
 
-  // -----------------------------
-  // PROJECTS & TENANTS
-  // -----------------------------
   async createProject(config: DBConfig, data: { name: string; user_id: string }) {
     const docRef = await this.firestore.collection('nxf_system_projects').add({
       name: data.name || 'defaultproject',
@@ -279,21 +336,38 @@ export class FirebaseAdapter implements DBAdapter {
     return { id: doc.id, ...doc.data() }
   }
 
-  // -----------------------------
-  // DATA MODELS
-  // -----------------------------
   async CreateDataModels(projectId: string) {
     if (!this.config || !projectId) throw new Error('Missing DB config or projectId')
     return CreateDataModels(this, projectId)
   }
 
   async createDataModelsFromUserEmail(email: string) {
-    if (!email) throw new Error('Missing User Email')
-    const user = await this.findUserByEmail(this.config, email)
-    if (!user?.id) throw new Error('User not found')
-    const project = await this.findProjectByOwnerId(this.config, user.id)
-    if (!project?.id) throw new Error('Project not found')
-    return this.CreateDataModels(project.id)
+    if (!email) throw new Error('Missing User Email');
+
+    const user = await this.findUserByEmail(this.config, email);
+    if (!user?.id) throw new Error('User not found');
+
+    const project = await this.findProjectByOwnerId(this.config, user.id);
+    if (!project?.id) throw new Error('Project not found');
+
+    const db = this.getFirestoreInstance();
+
+    const modelsCollection = db.collection(`projects/${project.id}/models`);
+    const snapshot = await modelsCollection.limit(1).get();
+
+    if (!snapshot.empty) {
+      return {
+        skipped: true,
+        message: 'Data models already exist for this project, skipping.',
+      };
+    }
+
+    const result = await this.CreateDataModels(project.id);
+    return {
+      skipped: false,
+      message: 'Data models inserted successfully',
+      data: result,
+    };
   }
 
   async createTable(tableName: string) {
@@ -315,9 +389,6 @@ export class FirebaseAdapter implements DBAdapter {
     throw lastError
   }
 
-  // -----------------------------
-  // STORAGE
-  // -----------------------------
   async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
     const retries = 10
     const delayMs = 5000
@@ -340,9 +411,6 @@ export class FirebaseAdapter implements DBAdapter {
     throw new Error('Unexpected storage setup failure')
   }
 
-  // -----------------------------
-  // BUILT-IN AUTH
-  // -----------------------------
   async validateBuiltInSession(config: DBConfig, token: string) {
     try {
       return await admin.auth().verifyIdToken(token)

@@ -12,6 +12,8 @@
     { "name": "token_ttl", "type": "timestamp with time zone", "nullable": true, "default": "now()" },
     { "name": "status", "type": "string", "nullable": false, "default": "active" },
     { "name": "notes", "type": "text", "nullable": true },
+    { "name": "is_logged_in", "type": "boolean", "nullable": false, "default": false },
+    { "name": "last_login", "type": "timestamp with time zone", "nullable": true },
     { "name": "created_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" },
     { "name": "updated_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" }
   ],

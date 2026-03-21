@@ -1,118 +1,169 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getAdapter } from "@/app/db-adapter";
-import type { DBType, DBConfig } from "@/app/db-adapter/types";
+import { NextRequest, NextResponse } from 'next/server'
+import { getAdapter } from '@/app/db-adapter'
+import type { DBType, DBConfig } from '@/app/db-adapter/types'
 
 export async function GET(req: NextRequest) {
-  try {
-    const url = new URL(req.url);
-    const token = url.searchParams.get("token");
+  console.log('📩 [VERIFY EMAIL API] Request received')
 
-    if (!token) {
-      return NextResponse.json(
-        { success: false, message: "No verification token provided." },
-        { status: 400 }
-      );
+  try {
+    const { searchParams } = new URL(req.url)
+    const token = searchParams.get('token')
+    const email = searchParams.get('email')
+
+    if (!token && !email) {
+      return NextResponse.json({ error: 'Missing token or email' }, { status: 400 })
     }
 
-    const dbType = process.env.NEXT_DB_TYPE as DBType;
-    if (!dbType) throw new Error("NEXT_DB_TYPE not set");
+    const dbType = process.env.NEXT_PUBLIC_DB_TYPE as DBType
+    if (!dbType) throw new Error('NEXT_DB_TYPE not set')
 
-    let dbConfig: DBConfig;
+    let dbConfig: DBConfig
 
-    // ---------------- MYSQL ----------------
-    if (dbType === "mysql") {
+    // --------------------------- FIREBASE ---------------------------
+    if (dbType === 'firebase') {
+      const serviceAccount = JSON.parse(process.env.NEXT_DB_FIREBASE_SERVICE_ACCOUNT!)
       dbConfig = {
-        type: "mysql",
+        type: 'firebase',
+        firebaseConfigJson: JSON.stringify(serviceAccount),
+        storageBucket: 'gs://' + serviceAccount.storageBucket,
+      }
+    }
+
+    // --------------------------- SUPABASE ---------------------------
+    else if (dbType === 'supabase') {
+      dbConfig = {
+        type: 'supabase',
+        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        anonKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      }
+    }
+
+    // --------------------------- MONGODB ---------------------------
+    else if (dbType === 'mongodb') {
+      dbConfig = {
+        type: 'mongodb',
+        connectionString: process.env.NEXT_DB_MONGO_URI!,
+        database: process.env.NEXT_DB_MONGO_DB_NAME!,
+      }
+    }
+
+    // --------------------------- MYSQL ---------------------------
+    else if (dbType === 'mysql') {
+      dbConfig = {
+        type: 'mysql',
         host: process.env.NEXT_DB_MYSQL_HOST!,
         user: process.env.NEXT_DB_MYSQL_USER!,
         password: process.env.NEXT_DB_MYSQL_PASSWORD!,
         database: process.env.NEXT_DB_MYSQL_DATABASE!,
-        port: process.env.NEXT_DB_MYSQL_PORT
-          ? Number(process.env.NEXT_DB_MYSQL_PORT)
-          : 3306,
-      };
+        port: process.env.NEXT_DB_MYSQL_PORT ? Number(process.env.NEXT_DB_MYSQL_PORT) : 3306,
+      }
     }
 
-    // ---------------- POSTGRES ----------------
-    else if (dbType === "postgres") {
+    // --------------------------- POSTGRES ---------------------------
+    else if (dbType === 'postgres') {
       dbConfig = {
-        type: "postgres",
+        type: 'postgres',
         host: process.env.NEXT_DB_POSTGRES_HOST!,
         user: process.env.NEXT_DB_POSTGRES_USER!,
         password: process.env.NEXT_DB_POSTGRES_PASSWORD!,
-        database: process.env.NEXT_DB_POSTGRES_DB!,
-        port: process.env.NEXT_DB_POSTGRES_PORT
-          ? Number(process.env.NEXT_DB_POSTGRES_PORT)
-          : 5432,
-      };
-    }
-
-    // ---------------- MONGODB ----------------
-    else if (dbType === "mongodb") {
-      dbConfig = {
-        type: "mongodb",
-        connectionString: process.env.NEXT_DB_MONGO_URI!,
-        database: process.env.NEXT_DB_MONGO_DB_NAME!,
-      };
-    }
-
-    else {
-      throw new Error(`Unsupported DB type: ${dbType}`);
-    }
-
-    const adapter = getAdapter(dbType, dbConfig);
-
-    if (!adapter.findUserByToken)
-      throw new Error("Adapter does not support token lookup");
-
-    // Lookup user by token (MySQL/Postgres: token, MongoDB: email_verification_token)
-    const user = await adapter.findUserByToken(token);
-    if (!user) {
-      return NextResponse.json(
-        { success: false, message: "Invalid or expired token." },
-        { status: 400 }
-      );
-    }
-
-    // ---------- UPDATE USER ----------
-    if (adapter.update) {
-      // Standardize fields to clear verification token after successful verification
-      const updateData: any = {
-        email_verified: 1,
-        updated_at: new Date(),
-      };
-
-      // MySQL/Postgres use `token` fields
-      if ("token" in user) {
-        updateData.token = null;
-        updateData.token_ttl = null;
+        database: process.env.NEXT_DB_POSTGRES_DATABASE!,
+        port: process.env.NEXT_DB_POSTGRES_PORT ? Number(process.env.NEXT_DB_POSTGRES_PORT) : 5432,
       }
-
-      // MongoDB uses `email_verification_token` and `email_verification_ttl`
-      if ("email_verification_token" in user) {
-        updateData.email_verification_token = null;
-        updateData.email_verification_ttl = null;
-      }
-
-      await adapter.update(
-        dbConfig,
-        "nxf_users",
-        user.user_id,
-        updateData,
-        "user_id"
-      );
     } else {
-      throw new Error("Adapter does not support update");
+      throw new Error(`Unsupported DB type: ${dbType}`)
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Email verified successfully! Redirecting to Sign In...",
-    });
-  } catch (err: any) {
+    const adapter = getAdapter(dbType, dbConfig)
+
+    // ============================================================
+    // ✅ NEW GENERIC VERIFICATION HANDLER (NON-DESTRUCTIVE)
+    // ============================================================
+
+    // 1️⃣ Preferred: unified adapter method
+    if (adapter.verifyEmail) {
+      const result = await adapter.verifyEmail(dbConfig, {
+        token,
+        email,
+      })
+
+      return NextResponse.json({ success: true, ...result })
+    }
+
+    // ============================================================
+    // 🔁 FALLBACKS PER DB (ONLY IF verifyEmail NOT IMPLEMENTED)
+    // ============================================================
+
+    // --------------------------- SQL (MySQL / Postgres) ---------------------------
+    if (dbType === 'mysql' || dbType === 'postgres') {
+      if (!adapter.findUserByToken || !adapter.updateUser) {
+        throw new Error('SQL adapter missing required methods')
+      }
+
+      const user = await adapter.findUserByToken( token!)
+
+      if (!user) {
+        return NextResponse.json({ error: 'Invalid token' }, { status: 400 })
+      }
+
+      if (new Date(user.token_ttl) < new Date()) {
+        return NextResponse.json({ error: 'Token expired' }, { status: 400 })
+      }
+
+      await adapter.updateUser(dbConfig, user.id, {
+        email_verified: true,
+        token: null,
+        token_ttl: null,
+      })
+
+      return NextResponse.json({ success: true })
+    }
+
+    // --------------------------- MongoDB ---------------------------
+    if (dbType === 'mongodb') {
+      if (!adapter.verifyMongoEmail) {
+        throw new Error('Mongo adapter missing verifyMongoEmail')
+      }
+
+      const result = await adapter.verifyMongoEmail(dbConfig, token!)
+      return NextResponse.json({ success: true, ...result })
+    }
+
+    // --------------------------- Firebase ---------------------------
+    if (dbType === 'firebase') {
+      // Firebase already verifies via link itself
+      // Here we just mark DB as verified
+
+      if (!adapter.updateUser || !email) {
+        throw new Error('Firebase adapter missing updateUser or email')
+      }
+
+      const user = await adapter.findUserByEmail!(dbConfig, email)
+
+      if (!user) {
+        return NextResponse.json({ error: 'User not found' }, { status: 400 })
+      }
+
+      await adapter.updateUser(dbConfig, user.id, {
+        email_verified: true,
+      })
+
+      return NextResponse.json({ success: true })
+    }
+
+    // ============================================================
+    // ❌ FINAL FALLBACK
+    // ============================================================
+
     return NextResponse.json(
-      { success: false, message: err.message || "Verification failed." },
+      { error: 'Verification not supported for this adapter' },
+      { status: 400 }
+    )
+
+  } catch (err: any) {
+    console.error('🔥 VERIFY EMAIL ERROR:', err)
+    return NextResponse.json(
+      { error: err.message || 'Verification failed' },
       { status: 500 }
-    );
+    )
   }
 }

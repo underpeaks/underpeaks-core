@@ -15,51 +15,47 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid project name." }, { status: 400 });
     }
 
-    // Create the install directory — here you want to install under your project folder, e.g. inside your repo
-    // Adjust this path to where you want projects installed — **absolute path, writable**
-    const installDir = path.join(process.cwd(),'..', "nextjs");
-
-    // Ensure installDir exists
+    const installDir = path.join(process.cwd(), '..', "nextjs");
     await mkdirp(installDir);
-
-    // Destination project folder
     const projectPath = path.join(installDir, projectName);
 
+    // ✅ Skip creation if project already exists
     if (fsSync.existsSync(projectPath)) {
-      return NextResponse.json(
-        { error: `Project folder "${projectName}" already exists.` },
-        { status: 400 }
-      );
+      return NextResponse.json({
+        success: true,
+        skipped: true,
+        message: `Next.js project "${projectName}" already exists. Skipping.`,
+        path: projectPath,
+      });
     }
 
-    // FIX: Delete npm _npx cache folder to avoid ENOTEMPTY errors
+    // Clear npx cache to avoid ENOTEMPTY errors
     const npxCache = path.join(os.homedir(), ".npm", "_npx");
     try {
       await fs.rm(npxCache, { recursive: true, force: true });
     } catch (err) {
       console.warn("Failed to clear npx cache folder:", err);
     }
-
-    // FIX: Clean npm cache forcibly
     await execaCommand("npm cache clean --force");
 
-    // Run create-next-app in the installDir
+    // Create the Next.js project
     const { stdout } = await execaCommand(`npx create-next-app@latest ${projectName} --yes`, {
       cwd: installDir,
       shell: true,
     });
 
-    return NextResponse.json({
-  success: true,
-  message: `Project "${projectName}" created successfully.`,
-  stdout,
-  path: projectPath,
-});
+   if (fsSync.existsSync(projectPath)) {
+  return NextResponse.json({
+    success: true,
+    skipped: true,
+    message: `Next.js project "${projectName}" already exists. Skipping.`,
+    path: projectPath,
+  });
+}
 
-   } catch (error: any) {
+
+  } catch (error: any) {
     console.error('NextJS create failed:', error);
-
-    // Send back detailed error info
     return NextResponse.json({
       error: `Step failed: Creating NextJS project - ${error.message || error}`,
       details: error.stderr || error.stdout || error,

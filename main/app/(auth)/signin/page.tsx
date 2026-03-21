@@ -41,8 +41,7 @@ function SignInPage() {
       const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE
       if (!DB_TYPE) throw new Error('NEXT_PUBLIC_DB_TYPE is not set')
 
-      let token: string | null = null
-      let refreshToken: string | null = null
+      let bodyPayload: any = { email, password, userAgent: navigator.userAgent }
 
       // 🔥 FIREBASE LOGIN
       if (DB_TYPE === 'firebase') {
@@ -61,53 +60,65 @@ function SignInPage() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${idToken}`,
           },
+          body: JSON.stringify({ email, idToken, userAgent: navigator.userAgent }),
         })
 
         const data = await res.json()
         console.log('[FIREBASE SIGNIN RESPONSE]', data)
 
         if (!res.ok || !data.success) throw new Error(data.error || 'Signin failed')
-
-        token = idToken
+        localStorage.setItem('authToken', data.accessToken)
+        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
       }
 
-      
-      // 🟢 SUPABASE OR 🍃 MONGODB OR POSTGRES
-else {
-  const res = await fetch('/api/signin', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email,
-      password,
-      ipAddress: '',
-      userAgent: navigator.userAgent,
-    }),
-  })
+      // 🔥 SUPABASE FIXED
+      else if (DB_TYPE === 'supabase') {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!.trim()
+        const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!.trim()
+        const { createClient } = await import('@supabase/supabase-js')
+        const supabase = createClient(supabaseUrl, anonKey)
 
-  const data = await res.json()
-  console.log('[CUSTOM SIGNIN RESPONSE]', data)
+        // Call Supabase sign-in via API route
+        const res = await fetch('/api/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password }),
+        })
 
-  // Updated check to match API
-  if (!res.ok || !data.success || !data.accessToken) {
-    throw new Error(data.error || 'Signin failed')
-  }
+        const data = await res.json()
+        console.log('[SUPABASE SIGNIN RESPONSE]', data)
 
-  token = data.accessToken
-  refreshToken = data.refreshToken
-}
+        if (!res.ok || !data.success) throw new Error(data.error || 'Signin failed')
 
-      if (!token) throw new Error('No token returned from login')
+        // Save tokens
+        localStorage.setItem('authToken', data.accessToken)
+        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
+      }
 
-      localStorage.setItem('authToken', token)
-      if (refreshToken) localStorage.setItem('refreshToken', refreshToken)
+      // 🔹 MONGO / SQL CUSTOM LOGIN
+      else {
+        const res = await fetch('/api/signin', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(bodyPayload),
+        })
 
-      router.replace(redirectedFrom)
+        const data = await res.json()
+        console.log('[CUSTOM SIGNIN RESPONSE]', data)
+
+        if (!res.ok || !data.success || !data.accessToken) {
+          throw new Error(data.error || 'Signin failed')
+        }
+        localStorage.setItem('authToken', data.accessToken)
+        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
+      }
+
+      await router.replace(redirectedFrom)
     } catch (err: any) {
       console.error('Signin error:', err)
       setError(err.message || 'Authentication failed')
     } finally {
-      setLoading(false)
+      setTimeout(() => setLoading(false), 300)
     }
   }
 
@@ -128,13 +139,23 @@ else {
         <Label htmlFor="email" className="mb-1 text-black">Email</Label>
         <div className="flex items-center gap-2 mb-4">
           <FiMail className="text-gray-500" />
-          <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input
+            id="email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
 
         <Label htmlFor="password" className="mb-1 text-black">Password</Label>
         <div className="flex items-center gap-2 mb-6">
           <FiLock className="text-gray-500" />
-          <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          <Input
+            id="password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </div>
 
         <p className="mb-4 text-right text-sm">
@@ -144,7 +165,14 @@ else {
         </p>
 
         <Button className="w-full mb-4" onClick={handleSignin} disabled={loading}>
-          {loading ? 'Signing in...' : 'Sign In'}
+          {loading ? (
+            <div className="flex items-center justify-center gap-2">
+              <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
+              Signing in...
+            </div>
+          ) : (
+            'Sign In'
+          )}
         </Button>
 
         <p className="text-center text-sm text-gray-600">

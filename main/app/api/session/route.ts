@@ -48,11 +48,19 @@ export async function POST(req: NextRequest) {
 
     // ======================= SUPABASE =======================
     else if (dbType === 'supabase') {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+      const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+      const { createClient } = await import('@supabase/supabase-js')
+      const supabase = createClient(supabaseUrl, anonKey)
+
       dbConfig = {
         type: dbType,
-        supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+        supabaseUrl,
+        anonKey,
+        client: supabase,
       }
+
       console.log('Supabase config prepared')
     }
 
@@ -127,31 +135,37 @@ export async function POST(req: NextRequest) {
     // ================= BUILT-IN AUTH (Firebase/Supabase) =================
     if (adapter.supportsBuiltInAuth) {
       console.log('Using built-in auth')
-      user = await adapter.validateBuiltInSession?.(dbConfig, token)
-      console.log('Built-in session validation result:', user)
 
-      // Supabase auto refresh
-      if (!user && dbType === 'supabase' && refreshToken) {
-        try {
-          console.log('Attempting Supabase refresh...')
-          const { data, error } = await adapter.client.auth.refreshSession({
-            refresh_token: refreshToken,
-          })
-          if (!error && data?.session) {
-            user = data.session.user
-            console.log('Supabase refresh success, user:', user)
+      // Only attempt Supabase JWT validation if token looks like a JWT (3 segments)
+      const isJwt = token.split('.').length === 3
+
+      if (dbType === 'supabase' && isJwt) {
+        user = await adapter.validateBuiltInSession?.(dbConfig, token)
+        console.log('Built-in session validation result:', user)
+
+        // Supabase auto refresh if JWT is invalid or expired
+        if (!user && refreshToken) {
+          try {
+            console.log('Attempting Supabase refresh via adapter...')
+            const { data, error } = await adapter.client.auth.refreshSession({
+              refresh_token: refreshToken,
+            })
+            if (!error && data?.session) {
+              user = data.session.user
+              console.log('Supabase refresh success, user:', user)
+            }
+          } catch (e) {
+            console.error('Supabase refresh exception:', e)
           }
-        } catch (e) {
-          console.error('Supabase refresh exception:', e)
         }
+      } else {
+        console.log('Skipping built-in session validation for non-JWT token')
       }
     }
 
     // ================= CUSTOM TOKEN AUTH (Mongo/MySQL/Postgres) =================
     else {
       console.log('Using custom token auth')
-
-      // Wrap DB query in try/catch with timeout
       try {
         const storedToken = await Promise.race([
           adapter.findTokenByAccessToken?.(token) ?? Promise.resolve(null),
