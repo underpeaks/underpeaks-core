@@ -3,6 +3,7 @@ import { ColumnDef, DBAdapter, DBConfig } from '../types'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
 import { CreateDataModels } from '../utils/create-data-models'
+import { use } from 'react'
 
 const DEFAULT_BUCKETS = ['system', 'themes', 'extensions', 'projects', 'avatars', 'logos', 'uploads']
 
@@ -23,14 +24,19 @@ export class MongoDBAdapter implements DBAdapter {
     return this._config
   }
 
-  private async getDb(): Promise<Db> {
-    if (!this.db) {
-      await this.client.connect()
-      this.db = this.client.db(this._config.database)
+ private async getDb(): Promise<Db> {
+  if (!this.db) {
+    await this.client.connect()
+
+    if (!this._config.database) {
+      throw new Error('[MongoDBAdapter] Missing database name in config')
     }
-    this.db = this.client.db(this.config.databaseName)
-    return this.db
+
+    this.db = this.client.db(this._config.database)
   }
+
+  return this.db
+}
 
   async testConnection() {
     try {
@@ -47,6 +53,8 @@ export class MongoDBAdapter implements DBAdapter {
   }
 
   async comparePassword(password: string, hash: string) {
+    console.log(password);
+    console.log(hash);
     return bcrypt.compare(password, hash)
   }
 
@@ -97,14 +105,24 @@ export class MongoDBAdapter implements DBAdapter {
     })
   }
 
-  async findUserByEmail(config: DBConfig, email: string) {
-    const users = await this.read(config, 'nxf_users', { user_email: email })
-    return users[0] || null
-  }
+async findUserByEmail(config: DBConfig, email: string) {
+  const db = await this.getDb()
+
+  const normalizedEmail = email.trim().toLowerCase()
+
+  const user = await db.collection('nxf_users').findOne({
+    $expr: {
+      $eq: [{ $toLower: '$user_email' }, normalizedEmail],
+    },
+  })
+
+  return user || null
+}
 
   async findUserByEmailWithRetry(config: DBConfig, email: string, retries = 5, delay = 300) {
     for (let i = 0; i < retries; i++) {
       const user = await this.findUserByEmail(config, email)
+      console.log(user);
       if (user) return user
       await new Promise(r => setTimeout(r, delay))
     }
@@ -112,13 +130,22 @@ export class MongoDBAdapter implements DBAdapter {
   }
 
   async loginBasic(config: DBConfig, email: string, password: string) {
+    console.log("FINDING USER")
     const user = await this.findUserByEmail(config, email)
+   console.log("FOUND USER" );
+   console.log(user);
     if (!user) return { success: false, error: 'Invalid email or password' }
+    console.log("USER CHECK PASSED" );
     if (!user.email_verified) return { success: false, error: 'Please verify your email before logging in' }
-
-    const valid = await this.comparePassword(password, user.password_hash)
+console.log("EMAIL CHECK PASSED" );
+console.log(password);
+console.log(user.password_hash);
+    const valid = await this.comparePassword( password, user.password_hash)
+ console.log("PASSWORD CHECK" );
+ console.log(valid);
     if (!valid) return { success: false, error: 'Invalid email or password' }
-
+    console.log("PASSWORD CHECK PASSED" );
+console.log("USER COMPLETE PASSED" );
     return {
       success: true,
       user: {
@@ -189,14 +216,14 @@ export class MongoDBAdapter implements DBAdapter {
   if (!user) throw new Error('Invalid or expired token')
 
   // 2️⃣ Hash new password
-  const hashed = await this.hashPassword(newPassword)
+  //const hashed = await this.hashPassword(newPassword)
 
   // 3️⃣ Update password and clear token
   await db.collection('nxf_users').updateOne(
     { _id: user._id },
     {
       $set: {
-        password_hash: hashed,
+        password_hash: newPassword,
         token: null,
         token_ttl: null,
         updated_at: now,
@@ -296,27 +323,54 @@ export class MongoDBAdapter implements DBAdapter {
     return { success: true, user_id, project_id, token: emailToken }
   }
 
-  async verifyEmail(token: string) {
-    if (!token) throw new Error('Verification token required')
+ async verifyEmail(
+  config: DBConfig,
+  { token, email }: { token: string; email: string }
+) {
+  console.log("REACH 1")
+  if (!token) throw new Error('Verification token required')
+console.log("REACH 2")
+  const db = await this.getDb()
+console.log("REACH 3")
+  const cleanToken = token.trim()
+console.log("REACH 4")
+  console.log('🔍 VERIFY TOKEN:', cleanToken)
+console.log("REACH 5")
+  const user = await db.collection('nxf_users').findOne({
+    token: cleanToken,
+  })
+console.log("REACH 6")
+  if (!user) {
+    console.log("REACH 7")
+    const debugUsers = await db.collection('nxf_users')
+      .find({}, { projection: { user_email: 1, token: 1 } })
+      .toArray()
+console.log("REACH 8")
+    console.log('❌ TOKEN NOT FOUND. USERS:', debugUsers)
 
-    const db = await this.getDb()
-    const user = await db.collection('nxf_users').findOne({ token })
-    if (!user) throw new Error('Invalid verification token')
-    if (user.token_ttl && new Date(user.token_ttl) < new Date()) throw new Error('Verification token expired')
-
-    await db.collection('nxf_users').updateOne(
-      { _id: user._id },
-      {
-        $set: {
-          email_verified: true,
-          token: null,
-          token_ttl: null,
-          updated_at: new Date().toISOString(),
-        },
-      }
-    )
-    return { success: true }
+    throw new Error('Invalid verification token')
   }
+console.log("REACH 9")
+  if (user.token_ttl && new Date(user.token_ttl) < new Date()) {
+    throw new Error('Verification token expired')
+  }
+console.log("REACH 10")
+  await db.collection('nxf_users').updateOne(
+    { _id: user._id },
+    {
+      $set: {
+        email_verified: true,
+        token: null,
+        token_ttl: null,
+        updated_at: new Date().toISOString(),
+      },
+    }
+  )
+console.log("REACH 11")
+  console.log('✅ EMAIL VERIFIED:', user.user_email)
+console.log("REACH 12")
+  return { success: true }
+}
 
   async resendVerificationEmail(config: DBConfig, email: string) {
     const user = await this.findUserByEmail(config, email)

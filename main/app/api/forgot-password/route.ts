@@ -69,7 +69,8 @@ return NextResponse.json({ success: true })
       dbConfig = {
         type: 'mongodb',
         connectionString: process.env.NEXT_DB_MONGO_URI!,
-        database: process.env.NEXT_DB_NAME!,
+        database: process.env.NEXT_DB_MONGO_DB_NAME!,
+        
       }
     }
 
@@ -125,7 +126,7 @@ return NextResponse.json({ success: true })
     const token = await adapter.createPasswordResetToken(email)
     console.log('🔑 Reset token created:', token)
 
-    const resetLink = `${process.env.NEXT_PUBLIC_BASE_URL}/reset-password?token=${token}`
+    const resetLink = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/reset-password?token=${token}`
     console.log('🔗 Reset link:', resetLink)
 
     if (SMTP_ENABLED) {

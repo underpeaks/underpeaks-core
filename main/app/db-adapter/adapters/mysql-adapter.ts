@@ -96,33 +96,49 @@ export class MySQLAdapter implements DBAdapter {
     return result;
   }
 
-  async read(config: DBConfig, table: string, query?: any): Promise<any> {
-    const pool = await this.getPool(config);
-    let sql = `SELECT * FROM \`${table}\``;
-    const values: any[] = [];
+ 
+async read(config: DBConfig, table: string, query?: any): Promise<any> {
+  const pool = await this.getPool(config);
 
-    if (query && Object.keys(query).length) {
-      const where = Object.keys(query)
-        .map((k) => {
-          values.push(query[k]);
-          return `\`${k}\` = ?`;
-        })
-        .join(" AND ");
-      sql += ` WHERE ${where}`;
+  let sql = `SELECT * FROM \`${table}\``;
+  const values: any[] = [];
+
+  let limitClause = "";
+
+  if (query && Object.keys(query).length) {
+    const whereParts: string[] = [];
+
+    for (const key of Object.keys(query)) {
+      if (key === "limit") {
+        limitClause = ` LIMIT ${Number(query[key])}`;
+        continue;
+      }
+
+      whereParts.push(`\`${key}\` = ?`);
+      values.push(query[key]);
     }
 
-    const [rows]: any = await pool.query(sql, values);
-
-    return rows.map((row: any) => {
-      for (const key in row) {
-        const val = row[key];
-        if (typeof val === "string" && (val.startsWith("{") || val.startsWith("["))) {
-          try { row[key] = JSON.parse(val); } catch {}
-        }
-      }
-      return row;
-    });
+    if (whereParts.length) {
+      sql += ` WHERE ${whereParts.join(" AND ")}`;
+    }
   }
+
+  sql += limitClause;
+
+  const [rows]: any = await pool.query(sql, values);
+
+  return rows.map((row: any) => {
+    for (const key in row) {
+      const val = row[key];
+      if (typeof val === "string" && (val.startsWith("{") || val.startsWith("["))) {
+        try {
+          row[key] = JSON.parse(val);
+        } catch {}
+      }
+    }
+    return row;
+  });
+}
 
   async update(
   config: DBConfig,
@@ -208,32 +224,60 @@ export class MySQLAdapter implements DBAdapter {
   }
 
   // ---------------- DATA MODELS ----------------
-  async CreateDataModels(projectId: string) {
-  const result = await CreateDataModels(this, projectId);
-  if (!result || !Array.isArray(result))
+ // =========================
+// CREATE DATA MODELS (FIXED)
+// =========================
+async CreateDataModels(projectId: string) {
+  const raw = await CreateDataModels(this, projectId);
+
+  // ✅ Proper type narrowing
+  if (!raw) {
+    throw new Error("Failed to create models: empty response");
+  }
+
+  let result: any[] = [];
+
+  if (Array.isArray(raw)) {
+    result = raw;
+  } else if ("data" in raw && Array.isArray(raw.data)) {
+    result = raw.data;
+  } else if ("skipped" in raw && raw.skipped) {
+    console.log("⚡ Skipped model creation:", raw.message);
+    return [];
+  } else {
+    console.error("❌ Invalid CreateDataModels output:", raw);
     throw new Error("Failed to create models: invalid schema returned");
+  }
+
+  const pool = await this.getPool(this.config);
 
   for (const table of result) {
-    if (!table.name) throw new Error("Invalid table definition: missing name");
+    if (!table || !table.name) {
+      throw new Error("Invalid table definition: missing name");
+    }
 
-    if (!table.columns) table.columns = [];
-    else if (typeof table.columns === "object" && !Array.isArray(table.columns))
-      table.columns = Object.entries(table.columns).map(([name, col]: any) => ({ ...col, name }));
+    // Normalize columns
+    if (!table.columns) {
+      table.columns = [];
+    } else if (typeof table.columns === "object" && !Array.isArray(table.columns)) {
+      table.columns = Object.entries(table.columns).map(([name, col]: any) => ({
+        ...col,
+        name,
+      }));
+    }
 
-    // -------------------
-    // INLINE DUPLICATE CHECK
-    // -------------------
-    const [rows]: any = await this.config.connection.execute(
+    // Duplicate check
+    const [rows]: any = await pool.query(
       "SELECT 1 FROM nxf_system_models WHERE project_id = ? AND name = ? LIMIT 1",
       [projectId, table.name]
     );
 
     if (rows.length > 0) {
       console.log(`⚠️ Skipping duplicate model: ${table.name}`);
-      continue; // skip creating this model
+      continue;
     }
 
-    // Create the model
+    // Insert model
     await this.create(this.config, "nxf_system_models", {
       sm_id: crypto.randomUUID(),
       project_id: projectId,
@@ -246,7 +290,6 @@ export class MySQLAdapter implements DBAdapter {
 
   return result;
 }
-
 
   async createDataModelsFromUserEmail(email: string) {
     const user = await this.findUserByEmail(this.config, email);
@@ -409,15 +452,43 @@ export class MySQLAdapter implements DBAdapter {
 /**
  * Verify user email by token
  */
-async verifyEmail(token: string) {
-  const user = await this.findUserByToken(token);
-  if (!user) throw new Error("Invalid or expired verification token");
+// =========================
+// VERIFY EMAIL (FIXED SIGNATURE)
+// =========================
+async verifyEmail(
+  config: DBConfig,
+  data: { token: string; email?: string }
+): Promise<{ success: boolean; message?: string }> {
+  const { token } = data;
 
-  await this.pool.query(
-    `UPDATE nxf_users 
-     SET email_verified=1, token=NULL, token_ttl=NULL, updated_at=? 
-     WHERE user_id=?`,
-    [new Date().toISOString().slice(0, 19).replace("T", " "), user.user_id]
+  if (!token) throw new Error("Verification token required");
+
+  const pool = await this.getPool(config);
+
+  const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+  const [rows]: any = await pool.query(
+    `SELECT * FROM nxf_users
+     WHERE token = ?
+       AND token_ttl > ?
+     LIMIT 1`,
+    [token, now]
+  );
+
+  const user = rows?.[0];
+
+  if (!user) {
+    throw new Error("Invalid or expired verification token");
+  }
+
+  await pool.query(
+    `UPDATE nxf_users
+     SET email_verified = 1,
+         token = NULL,
+         token_ttl = NULL,
+         updated_at = ?
+     WHERE user_id = ?`,
+    [now, user.user_id]
   );
 
   return { success: true, message: "Email verified successfully" };
@@ -535,7 +606,7 @@ async updatePasswordByToken(token: string, newPassword: string) {
   if (!user) throw new Error("Invalid or expired token");
 
   // 2️⃣ hash password
-  const hashed = await this.hashPassword(newPassword);
+  //const hashed = await this.hashPassword(newPassword);
 
   // 3️⃣ update + clear token
   await pool.query(
@@ -545,7 +616,7 @@ async updatePasswordByToken(token: string, newPassword: string) {
          token_ttl = NULL,
          updated_at = ?
      WHERE user_id = ?`,
-    [hashed, now, user.user_id]
+    [newPassword, now, user.user_id]
   );
 
   return { success: true };

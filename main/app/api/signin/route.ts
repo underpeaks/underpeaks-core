@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
     }
 
-    const dbType = process.env.NEXT_DB_TYPE as DBType
+    const dbType = process.env.NEXT_PUBLIC_DB_TYPE as DBType
     if (!dbType) throw new Error('NEXT_DB_TYPE not set')
 
     // --------------------------- DB CONFIG ---------------------------
@@ -146,10 +146,15 @@ export async function POST(req: NextRequest) {
 
     // ---------------- SQL / MONGO LOGIN ----------------
     else if (dbType === 'mongodb') {
+      
       loginResult = await adapter.loginWithMongo!(dbConfig, email!, password!)
+     
       user = loginResult.user
+      
+     
     } else if (dbType === 'mysql') {
-      loginResult = await adapter.loginWithMysql!(dbConfig, email!, password!)
+      console.log("SQL API REACHED")
+      loginResult = await adapter.loginWithMySQL!(dbConfig, email!, password!)
       user = loginResult.user
     } else if (dbType === 'postgres') {
       loginResult = await adapter.loginWithPostgres!(dbConfig, email!, password!)
@@ -193,7 +198,7 @@ async function sendVerificationEmail(fullName: string, email: string, token: str
       debug: true,
     })
 
-    const verifyUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${token}&email=${encodeURIComponent(email)}`
+    const verifyUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/verify-email?token=${token}&email=${encodeURIComponent(email)}`
 
     const info = await transporter.sendMail({
       from: process.env.NEXT_SMTP_FROM,
