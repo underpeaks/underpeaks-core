@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
       const emailToken = crypto.randomBytes(32).toString('hex')
       const emailTTL = new Date(Date.now() + 24 * 60 * 60 * 1000) // 24h
 
-      const result = await adapter.registerMysqlUser(dbConfig, {
+      const result = await adapter.registerUser(dbConfig, {
         full_name,
         email,
         password,
@@ -164,7 +164,7 @@ export async function POST(req: NextRequest) {
         token_ttl: emailTTL.toISOString(),
       })
 
-      const verifyUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/verify-email?token=${emailToken}&email=${encodeURIComponent(
+      const verifyUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/verify-email?token=${emailToken}&email=${encodeURIComponent(
         email
       )}`
 
@@ -182,27 +182,50 @@ export async function POST(req: NextRequest) {
     }
 
     // --------------------------- MongoDB SIGNUP ---------------------------
-    if (dbType === 'mongodb') {
-      const adapter = getAdapter(dbType, dbConfig)
-    if (!adapter.registerUser)
-      return NextResponse.json({ error: 'Adapter does not support signup' }, { status: 400 })
-      const existingUser = await adapter.findUserByEmail!(dbConfig, email)
-      if (existingUser)
-        return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
+   
+if (dbType === 'mongodb') {
+  const adapter = getAdapter(dbType, dbConfig)
 
-      if (!adapter.registerMongoUser) {
-        throw new Error('registerMongoUser is not implemented in this adapter')
-      }
+  if (!adapter.registerMongoUser)
+    return NextResponse.json({ error: 'Adapter does not support signup' }, { status: 400 })
 
-      const result = await adapter.registerMongoUser(dbConfig, {
-        full_name,
-        email,
-        password,
-        email_verified: false,
-      })
+  const existingUser = await adapter.findUserByEmail!(dbConfig, email)
+  if (existingUser)
+    return NextResponse.json({ error: 'Email already exists' }, { status: 400 })
 
-      return NextResponse.json({ ...result })
-    }
+  // 1️⃣ Register user (this already creates token + ttl)
+  const result = await adapter.registerMongoUser(dbConfig, {
+    full_name,
+    email,
+    password,
+    email_verified: false,
+  })
+
+  // 2️⃣ Build verification URL using token returned
+  const verifyUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/verify-email?token=${result.token}&email=${encodeURIComponent(email)}`
+
+  console.log('🔗 VERIFY URL:', verifyUrl)
+
+  // 3️⃣ Send email
+  await transporter.sendMail({
+    from: smtpFromEmail,
+    to: email,
+    subject: 'Verify your email',
+    html: `
+      <p>Hi ${full_name},</p>
+      <p>Click the link below to verify your email (expires in 24h):</p>
+      <a href="${verifyUrl}">${verifyUrl}</a>
+    `,
+  })
+
+  console.log('📧 Verification email sent to:', email)
+
+  // 4️⃣ Return success
+  return NextResponse.json({
+    success: true,
+    user_id: result.user_id,
+  })
+}
 
     // --------------------------- FIREBASE SIGNUP (API SKIPS EMAIL) ---------------------------
     if (dbType === 'firebase') {

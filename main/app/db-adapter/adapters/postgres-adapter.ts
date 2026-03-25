@@ -36,13 +36,26 @@ export class PostgresAdapter implements DBAdapter {
   }
 
   // ---------------- CONNECTION ----------------
-  async connect() {
-    if (this.isConnected) return;
+  private connecting: Promise<void> | null = null;
+
+async connect() {
+  if (this.isConnected) return;
+
+  if (!this.connecting) {
     console.log("🟢 Connecting to Postgres...");
-    await this.client.connect();
-    this.isConnected = true;
-    console.log("🟢 Postgres connected");
+    this.connecting = this.client.connect()
+      .then(() => {
+        this.isConnected = true;
+        console.log("🟢 Postgres connected");
+      })
+      .catch(err => {
+        this.connecting = null;
+        throw err;
+      });
   }
+
+  return this.connecting;
+}
 
   async testConnection() {
     try {
@@ -214,37 +227,46 @@ export class PostgresAdapter implements DBAdapter {
   }
 
   // ---------------- DATA MODELS ----------------
-  async CreateDataModels(projectId: string) {
+ async CreateDataModels(projectId: string) {
   if (!projectId) throw new Error('Project ID is required');
 
-  const result = await CreateDataModels(this, projectId); // existing model generator
-  console.log("[DEBUG] CreateDataModels result:", result);
+  const raw = await CreateDataModels(this, projectId);
 
-  // Handle 'skipped' case gracefully
-  if (result?.skipped) {
-    console.log(`[PostgresAdapter] ${result.message}`);
-    return result; // or return [] if you expect an array downstream
+  console.log('[DEBUG RAW MODELS]:', raw);
+
+  // ✅ Handle skipped
+  if (raw?.skipped) {
+    console.log('⚡ Skipped:', raw.message);
+    return [];
   }
 
-  if (!result || !Array.isArray(result)) {
-    throw new Error('Failed to create models');
+  // ✅ Extract actual models
+  const result = raw?.data;
+
+  if (!Array.isArray(result)) {
+    throw new Error(
+      `Invalid models format: ${JSON.stringify(raw)}`
+    );
   }
+
+  const createdModels: any[] = [];
 
   for (const table of result) {
-    if (!table.name) continue;
+    if (!table?.name) continue;
 
-    // Insert models as before
-    await this.create(this.config, 'nxf_system_models', {
+    await this.create(this.config, "nxf_system_models", {
       sm_id: crypto.randomUUID(),
       project_id: projectId,
       name: table.name,
-      schema: JSON.stringify(table.columns || []),
+      schema: JSON.stringify(table.schema || table.columns || []),
       created_at: new Date(),
       updated_at: new Date(),
     });
+
+    createdModels.push(table);
   }
 
-  return result;
+  return createdModels;
 }
 
 
@@ -295,8 +317,11 @@ export class PostgresAdapter implements DBAdapter {
     return res.rows[0] || null;
   }
 
-  async verifyEmail(token: string) {
-    const user = await this.findUserByToken(token);
+  async verifyEmail(
+  config: DBConfig,
+  data: { token: string; email?: string }
+): Promise<{ success: boolean; message?: string }> {
+    const user = await this.findUserByToken(data.token);
     if (!user) throw new Error("Invalid or expired verification token");
 
     await this.client.query(
@@ -330,13 +355,13 @@ export class PostgresAdapter implements DBAdapter {
     const user = await this.findUserByToken(token);
     if (!user) throw new Error("Invalid or expired token");
 
-    const hashed = await this.hashPassword(newPassword);
+    //const hashed = await this.hashPassword(newPassword);
 
     await this.client.query(
       `UPDATE nxf_users
        SET password_hash=$1, token=NULL, token_ttl=NULL, updated_at=NOW()
        WHERE user_id=$2`,
-      [hashed, user.user_id]
+      [newPassword, user.user_id]
     );
 
     return { success: true };
@@ -451,6 +476,7 @@ export class PostgresAdapter implements DBAdapter {
       email_verified: false,
       token: data.token,
       token_ttl: data.token_ttl,
+      is_logged_in: false,
       created_at: new Date(),
       updated_at: new Date(),
     });
@@ -464,40 +490,66 @@ export class PostgresAdapter implements DBAdapter {
   }
 
   async findTokenByAccessToken(accessToken: string) {
-    const res = await this.client.query(
-      `SELECT * FROM nxf_system_tokens WHERE access_token=$1 LIMIT 1`,
-      [accessToken]
-    );
-    return res.rows[0] || null;
+  await this.connect();
+
+  console.log("🔍 Looking for token:", accessToken);
+
+  const res = await this.client.query(
+    `SELECT * FROM nxf_system_tokens WHERE access_token=$1 LIMIT 1`,
+    [accessToken]
+  );
+
+  console.log("🔍 Token result:", res.rows[0]);
+
+  return res.rows?.[0] || null;
+}
+
+async findTokenByRefreshToken(refreshToken: string) {
+  await this.connect(); // ✅ REQUIRED
+
+  const res = await this.client.query(
+    `SELECT * FROM nxf_system_tokens WHERE refresh_token=$1 LIMIT 1`,
+    [refreshToken]
+  );
+
+  return res.rows?.[0] || null;
+}
+
+  async extendToken(
+  tokenId: string,
+  updates: Partial<{ revoked: boolean; updated_at: string; expires_at: string }>
+) {
+  const setClauses: string[] = [];
+  const values: any[] = [];
+  let i = 1;
+
+  if (updates.revoked !== undefined) {
+    setClauses.push(`revoked = $${i++}`);
+    values.push(updates.revoked);
   }
 
-  async findTokenByRefreshToken(refreshToken: string) {
-    const res = await this.client.query(
-      `SELECT * FROM nxf_system_tokens WHERE refresh_token=$1`,
-      [refreshToken]
-    );
-    return res.rows[0] || null;
+  if (updates.expires_at) {
+    setClauses.push(`expires_at = $${i++}`);
+    values.push(updates.expires_at);
   }
 
-  async extendToken(tokenId: string, updates: Partial<{ revoked: boolean; updated_at: string }>) {
-    const setClauses: string[] = [];
-    const values: any[] = [];
-    let i = 1;
-    if (updates.revoked !== undefined) {
-      setClauses.push(`revoked = $${i++}`);
-      values.push(updates.revoked);
-    }
-    if (updates.updated_at) {
-      setClauses.push(`updated_at = $${i++}`);
-      values.push(updates.updated_at);
-    }
-    if (setClauses.length === 0) return;
-
-    const query = `UPDATE nxf_system_tokens SET ${setClauses.join(", ")} WHERE token_id = $${i}`;
-    values.push(tokenId);
-
-    await this.client.query(query, values);
+  if (updates.updated_at) {
+    setClauses.push(`updated_at = $${i++}`);
+    values.push(updates.updated_at);
   }
+
+  if (!setClauses.length) return;
+
+  const query = `
+    UPDATE nxf_system_tokens 
+    SET ${setClauses.join(", ")} 
+    WHERE token_id = $${i}
+  `;
+
+  values.push(tokenId);
+
+  await this.client.query(query, values);
+}
 
   async createPasswordResetToken(email: string) {
     const user = await this.findUserByEmail(this.config, email);

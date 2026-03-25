@@ -2,10 +2,10 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "supabase",
+  "selectedDb": "postgres",
   "deploymentType": "self-hosted",
   "dbConfig": {
-    "type": "supabase"
+    "type": "postgres"
   },
   "ecommerceEnabled": false,
   "demoContentEnabled": true,

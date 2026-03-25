@@ -68,7 +68,7 @@ export interface DBAdapter {
     error?: string;
   }>;
 
-  loginWithMysql?(
+  loginWithMySQL?(
     config: DBConfig,
     email: string,
     password: string,
@@ -164,6 +164,10 @@ export interface DBAdapter {
   createPasswordResetToken?(email: string): Promise<string>;
   findUserByToken?(token: string): Promise<any | null>;
   updatePasswordByToken?(token: string, newPassword: string): Promise<any | null>;
+ verifyEmail?(
+  config: DBConfig,
+  data: { token: string; email?: string }
+): Promise<{ success: boolean }>
 
   /** ------------------- TOKEN SYSTEM ------------------- */
   createToken?(data: any): Promise<any>;
