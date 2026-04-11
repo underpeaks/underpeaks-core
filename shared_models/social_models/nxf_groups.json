@@ -1,0 +1,139 @@
+{
+  "table_name": "nxf_groups",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "group_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "created_by",
+      "type": "string",
+      "nullable": false,
+      "description": "user_id of group creator"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "group_type",
+      "type": "string",
+      "nullable": false,
+      "description": "public, private, hidden, org_group, interest"
+    },
+    {
+      "name": "visibility",
+      "type": "string",
+      "nullable": false,
+      "default": "public",
+      "description": "public, private, restricted"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, archived, banned, deleted"
+    },
+    {
+      "name": "avatar_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "cover_image_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "owner_user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "group owner"
+    },
+    {
+      "name": "member_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "post_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "rules",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]",
+      "description": "group rules or moderation guidelines"
+    },
+    {
+      "name": "tags",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]"
+    },
+    {
+      "name": "settings",
+      "type": "jsonb",
+      "nullable": true,
+      "description": "join approval, posting rights, moderation settings"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_groups_org",
+      "fields": ["organisation_id"]
+    },
+    {
+      "name": "idx_groups_owner",
+      "fields": ["owner_user_id"]
+    },
+    {
+      "name": "idx_groups_visibility",
+      "fields": ["visibility"]
+    },
+    {
+      "name": "idx_groups_status",
+      "fields": ["status"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "foreign_key",
+      "fields": ["owner_user_id"],
+      "references": {
+        "table": "nxf_saas_users",
+        "field": "user_id"
+      }
+    }
+  ]
+}

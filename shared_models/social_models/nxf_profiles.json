@@ -1,0 +1,160 @@
+{
+  "table_name": "nxf_profiles",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "profile_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "linked to nxf_saas_users.user_id"
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional SaaS tenant scope"
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "display_name",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "bio",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "avatar_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "cover_image_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "website_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "phone_number",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "date_of_birth",
+      "type": "date",
+      "nullable": true
+    },
+    {
+      "name": "gender",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "is_verified",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "follower_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "following_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "post_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "account_type",
+      "type": "string",
+      "nullable": false,
+      "default": "personal",
+      "description": "personal, business, creator"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, suspended, deleted"
+    },
+    {
+      "name": "last_active_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_profiles_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_profiles_username",
+      "fields": ["username"]
+    },
+    {
+      "name": "idx_profiles_org",
+      "fields": ["organisation_id"]
+    },
+    {
+      "name": "idx_profiles_status",
+      "fields": ["status"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id"]
+    },
+    {
+      "type": "unique",
+      "fields": ["username"]
+    }
+  ]
+}

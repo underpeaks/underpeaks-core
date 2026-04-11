@@ -1,0 +1,105 @@
+{
+  "table_name": "nxf_organisations",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "owner_user_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "phone",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "logo_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "nullable": true,
+      "description": "company, individual, vendor_group, enterprise"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active"
+    },
+    {
+      "name": "billing_email",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "address",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "settings",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "subscription_plan",
+      "type": "string",
+      "nullable": true,
+      "description": "plan_id or tier name"
+    },
+    {
+      "name": "is_verified",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "member_count",
+      "type": "int",
+      "nullable": true,
+      "default": 1
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["slug"]
+    }
+  ]
+}

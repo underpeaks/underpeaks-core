@@ -31,6 +31,7 @@ export async function writeConfigFromStore(store: InstallerState) {
       ecommerce: store.ecommerceEnabled,
       demoContent: store.demoContentEnabled,
     },
+    selectedProjectType: store.selectedProjectType
   };
 
   fs.writeFileSync(filePath, JSON.stringify(config, null, 2), "utf-8");

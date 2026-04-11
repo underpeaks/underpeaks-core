@@ -5,6 +5,7 @@ import { writeConfigFromStore } from "@/app/db-adapter/utils/writeConfigFiles";
 export async function POST(req: NextRequest) {
   try {
     const body: InstallerState = await req.json();
+    
     const result = await writeConfigFromStore(body);
     return NextResponse.json(result);
   } catch (err: any) {

@@ -2,7 +2,7 @@ import { MongoClient, Db, ObjectId } from 'mongodb'
 import { ColumnDef, DBAdapter, DBConfig } from '../types'
 import bcrypt from 'bcryptjs'
 import crypto from 'crypto'
-import { CreateDataModels } from '../utils/create-data-models'
+import { CreateUserDataModels } from '../utils/create-data-models'
 import { use } from 'react'
 
 const DEFAULT_BUCKETS = ['system', 'themes', 'extensions', 'projects', 'avatars', 'logos', 'uploads']
@@ -18,6 +18,7 @@ export class MongoDBAdapter implements DBAdapter {
     if (!config.connectionString) throw new Error('[MongoDBAdapter] connectionString is required')
     this._config = config
     this.client = new MongoClient(config.connectionString)
+   
   }
 
   get config(): DBConfig {
@@ -28,11 +29,12 @@ export class MongoDBAdapter implements DBAdapter {
   if (!this.db) {
     await this.client.connect()
 
-    if (!this._config.database) {
+    if (!this._config.databaseName) {
       throw new Error('[MongoDBAdapter] Missing database name in config')
     }
 
-    this.db = this.client.db(this._config.database)
+    this.db = this.client.db(this._config.databaseName)
+     console.log(this.db.databaseName);
   }
 
   return this.db
@@ -449,6 +451,8 @@ console.log("REACH 12")
   ) {
     const db = await this.getDb()
 
+   
+
     const exists = await db.listCollections({ name: tableName }).toArray()
     if (!exists.length) await db.createCollection(tableName)
 
@@ -471,11 +475,11 @@ console.log("REACH 12")
 
 
   // ---------------- DATA MODELS ----------------
- async CreateDataModels(projectId: string) {
-  return CreateDataModels(this, projectId);
+ async CreateDataModels(projectId: string,selectedProjectType:string) {
+  return CreateUserDataModels(this, projectId,selectedProjectType,[]);
 }
 
-async createDataModelsFromUserEmail(email: string) {
+async createDataModelsFromUserEmail(email: string,selectedProjectType:string) {
   if (!email) throw new Error('Missing User Email');
 
   const user = await this.findUserByEmail(this.config, email);
@@ -484,7 +488,7 @@ async createDataModelsFromUserEmail(email: string) {
   const project = await this.findProjectByOwnerId(this.config, user.user_id);
   if (!project?.project_id) throw new Error('Project not found');
 
-  return this.CreateDataModels(project.project_id);
+  return this.CreateDataModels(project.project_id,selectedProjectType);
 }
 
 

@@ -1,0 +1,85 @@
+{
+  "table_name": "nxf_preferences",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "preference_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional: organisation/vendor scope for SaaS preferences"
+    },
+    {
+      "name": "key",
+      "type": "string",
+      "nullable": false,
+      "description": "e.g. theme, language, notifications.email, dashboard.layout"
+    },
+    {
+      "name": "value",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "{}",
+      "description": "flexible value (string, bool, object, array)"
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "nullable": true,
+      "description": "ui, notification, privacy, system"
+    },
+    {
+      "name": "scope",
+      "type": "string",
+      "nullable": false,
+      "default": "user",
+      "description": "user, tenant, system"
+    },
+    {
+      "name": "is_sensitive",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_preferences_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_preferences_tenant",
+      "fields": ["tenant_id"]
+    },
+    {
+      "name": "idx_preferences_key",
+      "fields": ["key"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "tenant_id", "key"]
+    }
+  ]
+}

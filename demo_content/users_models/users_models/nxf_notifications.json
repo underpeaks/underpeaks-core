@@ -1,0 +1,98 @@
+[
+  {
+    "notification_id": "not_1",
+    "organisation_id": "org_1",
+    "recipient_user_id": "user_1",
+    "actor_user_id": "user_2",
+    "type": "message",
+    "title": "New Message",
+    "message": "You have received a new message from John.",
+    "entity_type": "conversation",
+    "entity_id": "con_1",
+    "action_url": "/messages/con_1",
+    "priority": "normal",
+    "status": "unread",
+    "channel": "in_app",
+    "metadata": {
+      "avatar": "user_2.png"
+    },
+    "read_at": null,
+    "created_at": "2026-01-01T10:00:00Z"
+  },
+  {
+    "notification_id": "not_2",
+    "organisation_id": "org_1",
+    "recipient_user_id": "user_1",
+    "actor_user_id": null,
+    "type": "order",
+    "title": "Order Shipped",
+    "message": "Your order #1234 has been shipped.",
+    "entity_type": "order",
+    "entity_id": "order_1234",
+    "action_url": "/orders/1234",
+    "priority": "high",
+    "status": "unread",
+    "channel": "email",
+    "metadata": {
+      "tracking_number": "TRACK123"
+    },
+    "read_at": null,
+    "created_at": "2026-01-02T08:00:00Z"
+  },
+  {
+    "notification_id": "not_3",
+    "organisation_id": null,
+    "recipient_user_id": "user_2",
+    "actor_user_id": null,
+    "type": "system",
+    "title": "Maintenance Scheduled",
+    "message": "System maintenance will occur tonight at 23:00.",
+    "entity_type": null,
+    "entity_id": null,
+    "action_url": null,
+    "priority": "urgent",
+    "status": "unread",
+    "channel": "push",
+    "metadata": {},
+    "read_at": null,
+    "created_at": "2026-01-03T18:00:00Z"
+  },
+  {
+    "notification_id": "not_4",
+    "organisation_id": "org_1",
+    "recipient_user_id": "user_3",
+    "actor_user_id": "user_1",
+    "type": "like",
+    "title": "New Like",
+    "message": "Alice liked your product.",
+    "entity_type": "product",
+    "entity_id": "prod_1",
+    "action_url": "/products/prod_1",
+    "priority": "low",
+    "status": "read",
+    "channel": "in_app",
+    "metadata": {},
+    "read_at": "2026-01-04T09:00:00Z",
+    "created_at": "2026-01-04T08:50:00Z"
+  },
+  {
+    "notification_id": "not_5",
+    "organisation_id": "org_1",
+    "recipient_user_id": "user_4",
+    "actor_user_id": null,
+    "type": "security",
+    "title": "New Login Detected",
+    "message": "A new login was detected from a new device.",
+    "entity_type": "user",
+    "entity_id": "user_4",
+    "action_url": "/security",
+    "priority": "urgent",
+    "status": "unread",
+    "channel": "sms",
+    "metadata": {
+      "ip": "192.168.1.1"
+    },
+    "read_at": null,
+    "created_at": "2026-01-05T07:30:00Z"
+  }
+]

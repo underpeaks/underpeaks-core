@@ -1,0 +1,150 @@
+{
+  "table_name": "nxf_pages",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "page_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional tenant scope (null = global page)"
+    },
+    {
+      "name": "created_by",
+      "type": "string",
+      "nullable": false,
+      "description": "user_id of page creator"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false,
+      "description": "unique URL identifier"
+    },
+    {
+      "name": "content",
+      "type": "jsonb",
+      "nullable": true,
+      "description": "flexible page builder blocks / structured content"
+    },
+    {
+      "name": "template_type",
+      "type": "string",
+      "nullable": false,
+      "default": "custom",
+      "description": "custom, landing, blog, profile, legal, marketing"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "draft",
+      "description": "draft, published, archived"
+    },
+    {
+      "name": "visibility",
+      "type": "string",
+      "nullable": false,
+      "default": "public",
+      "description": "public, private, org_only, unlisted"
+    },
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_description",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "seo_keywords",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]"
+    },
+    {
+      "name": "featured_image",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "custom_css",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "custom_js",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "view_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "published_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_pages_org",
+      "fields": ["organisation_id"]
+    },
+    {
+      "name": "idx_pages_slug",
+      "fields": ["slug"]
+    },
+    {
+      "name": "idx_pages_status",
+      "fields": ["status"]
+    },
+    {
+      "name": "idx_pages_visibility",
+      "fields": ["visibility"]
+    },
+    {
+      "name": "idx_pages_creator",
+      "fields": ["created_by"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["organisation_id", "slug"]
+    },
+    {
+      "type": "foreign_key",
+      "fields": ["created_by"],
+      "references": {
+        "table": "nxf_saas_users",
+        "field": "user_id"
+      }
+    }
+  ]
+}

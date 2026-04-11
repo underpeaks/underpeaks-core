@@ -1,0 +1,106 @@
+{
+  "table_name": "nxf_activity_logs",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "activity_log_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": true,
+      "description": "user who triggered the activity"
+    },
+    {
+      "name": "actor_type",
+      "type": "string",
+      "nullable": false,
+      "description": "user, system, admin, webhook"
+    },
+    {
+      "name": "actor_id",
+      "type": "string",
+      "nullable": true,
+      "description": "id of actor (user/system/service)"
+    },
+    {
+      "name": "action",
+      "type": "string",
+      "nullable": false,
+      "description": "e.g. login, create_post, update_product, delete_order"
+    },
+    {
+      "name": "entity_type",
+      "type": "string",
+      "nullable": true,
+      "description": "table/entity affected (post, order, product, user, etc.)"
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": true,
+      "description": "id of affected entity"
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}",
+      "description": "extra context (IP, device, payload diff, etc.)"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "user_agent",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "severity",
+      "type": "string",
+      "nullable": false,
+      "default": "info",
+      "description": "info, warning, critical, security"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_activity_org",
+      "fields": ["organisation_id"]
+    },
+    {
+      "name": "idx_activity_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_activity_entity",
+      "fields": ["entity_type", "entity_id"]
+    },
+    {
+      "name": "idx_activity_action",
+      "fields": ["action"]
+    },
+    {
+      "name": "idx_activity_created",
+      "fields": ["created_at"]
+    }
+  ],
+  "constraints": []
+}

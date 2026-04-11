@@ -1,0 +1,128 @@
+{
+  "table_name": "nxf_vendors",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "vendor_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "business_name",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "phone",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "logo_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "banner_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "pending"
+    },
+    {
+      "name": "verification_status",
+      "type": "string",
+      "nullable": false,
+      "default": "unverified"
+    },
+    {
+      "name": "commission_rate",
+      "type": "double",
+      "nullable": false,
+      "default": 10
+    },
+    {
+      "name": "payout_schedule",
+      "type": "string",
+      "nullable": true,
+      "default": "weekly"
+    },
+    {
+      "name": "bank_details",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "address",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "rating",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "total_sales",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "total_orders",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "is_featured",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["slug"]
+    }
+  ]
+}

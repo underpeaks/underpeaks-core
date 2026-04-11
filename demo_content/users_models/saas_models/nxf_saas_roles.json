@@ -1,0 +1,110 @@
+[
+  {
+    "role_id": "role_1001",
+    "name": "Owner",
+    "key": "org_owner",
+    "description": "Full control of organisation including billing, users, and settings",
+    "scope": "organisation",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "org.*",
+      "billing.*",
+      "users.*",
+      "roles.*",
+      "settings.*"
+    ],
+    "hierarchy_level": 0,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "role_id": "role_1002",
+    "name": "Admin",
+    "key": "org_admin",
+    "description": "Manages users, settings, and most organisation features",
+    "scope": "organisation",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "users.read",
+      "users.write",
+      "billing.read",
+      "settings.read",
+      "settings.write",
+      "roles.read"
+    ],
+    "hierarchy_level": 1,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "role_id": "role_1003",
+    "name": "Manager",
+    "key": "org_manager",
+    "description": "Manages operational features like orders, invoices, and team activity",
+    "scope": "organisation",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "orders.read",
+      "orders.write",
+      "invoices.read",
+      "invoices.write",
+      "reports.read"
+    ],
+    "hierarchy_level": 2,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "role_id": "role_1004",
+    "name": "Support",
+    "key": "org_support",
+    "description": "Handles customer support and ticket resolution",
+    "scope": "organisation",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "tickets.read",
+      "tickets.write",
+      "users.read",
+      "logs.read"
+    ],
+    "hierarchy_level": 3,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "role_id": "role_1005",
+    "name": "Viewer",
+    "key": "org_viewer",
+    "description": "Read-only access to organisation data",
+    "scope": "organisation",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "orders.read",
+      "invoices.read",
+      "reports.read"
+    ],
+    "hierarchy_level": 4,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "role_id": "role_1006",
+    "name": "System Admin",
+    "key": "system_admin",
+    "description": "Platform-level administrator across all tenants",
+    "scope": "system",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "*"
+    ],
+    "hierarchy_level": -1,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  }
+]

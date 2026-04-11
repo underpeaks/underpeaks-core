@@ -3,7 +3,7 @@ import { Client, ClientConfig } from "pg";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { DBAdapter, DBConfig, ColumnDef } from "../types";
-import { CreateDataModels } from "../utils/create-data-models";
+import { CreateUserDataModels } from "../utils/create-data-models";
 
 export class PostgresAdapter implements DBAdapter {
   private client: Client;
@@ -193,6 +193,7 @@ async connect() {
             typeSql = "JSONB";
             break;
           case "datetime":
+            case "date":
           case "timestamp":
           case "timestamp with time zone":
             typeSql = "TIMESTAMP";
@@ -208,6 +209,8 @@ async connect() {
             typeSql = "BOOLEAN";
             break;
           case "float":
+            case "number":
+              case "decimal":
           case "double":
             typeSql = "DOUBLE PRECISION";
             break;
@@ -227,10 +230,10 @@ async connect() {
   }
 
   // ---------------- DATA MODELS ----------------
- async CreateDataModels(projectId: string) {
+ async CreateDataModels(projectId: string,selectedProjectType:string) {
   if (!projectId) throw new Error('Project ID is required');
 
-  const raw = await CreateDataModels(this, projectId);
+  const raw = await CreateUserDataModels(this, projectId,selectedProjectType,[]);
 
   console.log('[DEBUG RAW MODELS]:', raw);
 
@@ -270,14 +273,14 @@ async connect() {
 }
 
 
-  async createDataModelsFromUserEmail(email: string) {
+  async createDataModelsFromUserEmail(email: string,selectedProjectType:string) {
     const user = await this.findUserByEmail(this.config, email);
     if (!user?.user_id) throw new Error("User not found");
 
     const project = await this.findProjectByOwnerId(this.config, user.user_id);
     if (!project?.project_id) throw new Error("Project not found");
 
-    return this.CreateDataModels(project.project_id);
+    return this.CreateDataModels(project.project_id,selectedProjectType);
   }
 
   // ---------------- USER HELPERS ----------------

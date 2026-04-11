@@ -1,0 +1,79 @@
+{
+  "table_name": "nxf_likes",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "like_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "user who liked the entity"
+    },
+    {
+      "name": "entity_type",
+      "type": "string",
+      "nullable": false,
+      "description": "post, comment, product, event, group, etc."
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "reaction_type",
+      "type": "string",
+      "nullable": false,
+      "default": "like",
+      "description": "like, love, laugh, wow, angry, sad"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, removed"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_likes_entity",
+      "fields": ["entity_type", "entity_id"]
+    },
+    {
+      "name": "idx_likes_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_likes_reaction",
+      "fields": ["reaction_type"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "entity_type", "entity_id"]
+    }
+  ]
+}

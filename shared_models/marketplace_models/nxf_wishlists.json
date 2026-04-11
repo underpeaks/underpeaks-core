@@ -1,0 +1,77 @@
+{
+  "table_name": "nxf_wishlist",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "wishlist_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "product_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "variant_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "notes",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "nullable": true,
+      "default": "normal"
+    },
+    {
+      "name": "price_when_added",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": false,
+      "default": "USD"
+    },
+    {
+      "name": "is_available",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "reminder_enabled",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "added_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "product_id", "variant_id"]
+    }
+  ]
+}

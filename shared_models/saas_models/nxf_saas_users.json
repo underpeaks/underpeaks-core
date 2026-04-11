@@ -1,0 +1,103 @@
+{
+  "table_name": "nxf_saas_users",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "saas_user_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "reference to auth/user table"
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional org membership (multi-org support)"
+    },
+    {
+      "name": "vendor_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional vendor scope if user belongs to a vendor account"
+    },
+    {
+      "name": "role_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, invited, suspended, deleted"
+    },
+    {
+      "name": "permissions_override",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]",
+      "description": "extra permissions beyond role"
+    },
+    {
+      "name": "last_active_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "invited_by",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "invited_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "accepted_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_saas_users_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_saas_users_org",
+      "fields": ["organisation_id"]
+    },
+    {
+      "name": "idx_saas_users_vendor",
+      "fields": ["vendor_id"]
+    },
+    {
+      "name": "idx_saas_users_role",
+      "fields": ["role_id"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "organisation_id", "vendor_id"]
+    }
+  ]
+}

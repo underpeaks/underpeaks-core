@@ -1,0 +1,153 @@
+{
+  "table_name": "nxf_brands",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "brand_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false
+    },
+
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+
+    {
+      "name": "description",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "logo_url",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "cover_image",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "website_url",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "phone",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "country",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": true,
+      "default": "active"
+    },
+
+    {
+      "name": "verified",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "rating",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "reviews_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "product_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "social_links",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    {
+      "name": "tags",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "seo_description",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "seo_keywords",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    {
+      "name": "canonical_url",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

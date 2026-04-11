@@ -1,0 +1,157 @@
+{
+  "table_name": "nxf_reviews",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "review_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+
+   
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
+    },
+
+    
+    {
+      "name": "entity_type",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": false
+    },
+
+   
+    {
+      "name": "rating",
+      "type": "int",
+      "nullable": false
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "content",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "images",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "pending"
+    },
+    {
+      "name": "is_verified_purchase",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_edited",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_deleted",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_flagged",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "flag_reason",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "helpful_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "not_helpful_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+
+   
+    {
+      "name": "parent_review_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "schema_markup",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    
+    {
+      "name": "ip_address",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "user_agent",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "deleted_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "entity_type", "entity_id"]
+    }
+  ]
+}

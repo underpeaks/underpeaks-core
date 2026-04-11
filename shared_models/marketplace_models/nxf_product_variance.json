@@ -1,0 +1,109 @@
+{
+  "table_name": "nxf_product_variance",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "variant_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "product_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "sku",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "attributes",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "{}"
+    },
+    {
+      "name": "price",
+      "type": "double",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "compare_at_price",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "cost_price",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": false,
+      "default": "USD"
+    },
+    {
+      "name": "stock_quantity",
+      "type": "int",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "reserved_quantity",
+      "type": "int",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "image_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "barcode",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "weight",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "weight_unit",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["product_id", "sku"]
+    }
+  ]
+}

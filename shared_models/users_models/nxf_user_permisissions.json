@@ -1,0 +1,103 @@
+[
+  {
+    "table_name": "nxf_users_permissions",
+    "schema": "public",
+    "columns": [
+      {
+        "name": "user_permission_id",
+        "type": "string",
+        "nullable": false,
+        "is_primary": true
+      },
+      {
+        "name": "organisation_id",
+        "type": "string",
+        "nullable": true,
+        "description": "optional SaaS tenant scope (null = global)"
+      },
+      {
+        "name": "user_id",
+        "type": "string",
+        "nullable": false,
+        "description": "user receiving the permission"
+      },
+      {
+        "name": "permission_key",
+        "type": "string",
+        "nullable": false,
+        "description": "e.g. post.create, post.delete, user.ban"
+      },
+      {
+        "name": "scope_type",
+        "type": "string",
+        "nullable": true,
+        "description": "global, organisation, group, own_resource"
+      },
+      {
+        "name": "scope_id",
+        "type": "string",
+        "nullable": true,
+        "description": "id of scoped entity (org_id, group_id, etc.)"
+      },
+      {
+        "name": "effect",
+        "type": "string",
+        "nullable": false,
+        "default": "allow",
+        "description": "allow or deny (deny overrides allow)"
+      },
+      {
+        "name": "source",
+        "type": "string",
+        "nullable": false,
+        "description": "role, direct, system, override"
+      },
+      {
+        "name": "expires_at",
+        "type": "datetime",
+        "nullable": true,
+        "description": "optional time-limited permission"
+      },
+      {
+        "name": "created_by",
+        "type": "string",
+        "nullable": true,
+        "description": "admin/system user who granted permission"
+      },
+      {
+        "name": "created_at",
+        "type": "datetime",
+        "nullable": false
+      },
+      {
+        "name": "updated_at",
+        "type": "datetime",
+        "nullable": true
+      }
+    ],
+    "indexes": [
+      {
+        "name": "idx_user_permissions_user",
+        "fields": ["user_id"]
+      },
+      {
+        "name": "idx_user_permissions_key",
+        "fields": ["permission_key"]
+      },
+      {
+        "name": "idx_user_permissions_scope",
+        "fields": ["scope_type", "scope_id"]
+      },
+      {
+        "name": "idx_user_permissions_org",
+        "fields": ["organisation_id"]
+      }
+    ],
+    "constraints": [
+      {
+        "type": "unique",
+        "fields": ["user_id", "permission_key", "scope_type", "scope_id"]
+      }
+    ]
+  }
+]

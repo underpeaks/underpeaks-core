@@ -1,0 +1,150 @@
+{
+  "table_name": "nxf_invoices",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "invoice_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "invoice_number",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "order_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "vendor_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "customer_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "draft",
+      "description": "draft, issued, paid, overdue, cancelled"
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": false,
+      "default": "USD"
+    },
+    {
+      "name": "subtotal",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "discount_total",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "tax_total",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "shipping_total",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "total",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "amount_paid",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "balance_due",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "billing_address",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "line_items",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "[]"
+    },
+    {
+      "name": "payment_method",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "payment_reference",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "issued_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "due_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "paid_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "cancelled_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "notes",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["invoice_number"]
+    }
+  ]
+}

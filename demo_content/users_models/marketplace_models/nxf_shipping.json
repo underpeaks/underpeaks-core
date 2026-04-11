@@ -1,0 +1,177 @@
+[
+  {
+    "shipping_id": "ship_001",
+    "order_id": "ord_1001",
+    "vendor_id": "vend_001",
+    "customer_id": "cust_001",
+    "carrier": "DHL",
+    "service_level": "express",
+    "tracking_number": "DHL123456789ZA",
+    "status": "delivered",
+    "origin_address": {
+      "line1": "12 Vendor Street",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "8001"
+    },
+    "destination_address": {
+      "line1": "45 Customer Ave",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "7700"
+    },
+    "weight": 0.3,
+    "dimensions": {
+      "length": 30,
+      "width": 20,
+      "height": 5
+    },
+    "shipping_cost": 89.99,
+    "currency": "USD",
+    "estimated_delivery_at": "2025-03-05T12:00:00Z",
+    "shipped_at": "2025-03-03T08:00:00Z",
+    "delivered_at": "2025-03-05T11:30:00Z",
+    "created_at": "2025-03-02T09:00:00Z",
+    "updated_at": "2025-03-05T11:30:00Z"
+  },
+  {
+    "shipping_id": "ship_002",
+    "order_id": "ord_1002",
+    "vendor_id": "vend_001",
+    "customer_id": "cust_002",
+    "carrier": "FedEx",
+    "service_level": "standard",
+    "tracking_number": "FDX987654321",
+    "status": "in_transit",
+    "origin_address": {
+      "line1": "88 Warehouse Road",
+      "city": "Johannesburg",
+      "country": "South Africa",
+      "postal_code": "2000"
+    },
+    "destination_address": {
+      "line1": "12 Beach Road",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "8005"
+    },
+    "weight": 1.2,
+    "dimensions": {
+      "length": 40,
+      "width": 30,
+      "height": 10
+    },
+    "shipping_cost": 149.5,
+    "currency": "USD",
+    "estimated_delivery_at": "2025-03-08T15:00:00Z",
+    "shipped_at": "2025-03-04T10:00:00Z",
+    "delivered_at": null,
+    "created_at": "2025-03-03T09:00:00Z",
+    "updated_at": "2025-03-04T10:00:00Z"
+  },
+  {
+    "shipping_id": "ship_003",
+    "order_id": "ord_1003",
+    "vendor_id": "vend_002",
+    "customer_id": "cust_003",
+    "carrier": "Aramex",
+    "service_level": "economy",
+    "tracking_number": "ARM555666777",
+    "status": "pending",
+    "origin_address": {
+      "line1": "5 Industrial Park",
+      "city": "Durban",
+      "country": "South Africa",
+      "postal_code": "4001"
+    },
+    "destination_address": {
+      "line1": "99 Hill Street",
+      "city": "Pretoria",
+      "country": "South Africa",
+      "postal_code": "0002"
+    },
+    "weight": 2.5,
+    "dimensions": {
+      "length": 50,
+      "width": 40,
+      "height": 20
+    },
+    "shipping_cost": 199.0,
+    "currency": "USD",
+    "estimated_delivery_at": "2025-03-10T18:00:00Z",
+    "shipped_at": null,
+    "delivered_at": null,
+    "created_at": "2025-03-05T07:00:00Z",
+    "updated_at": "2025-03-05T07:00:00Z"
+  },
+  {
+    "shipping_id": "ship_004",
+    "order_id": "ord_1004",
+    "vendor_id": "vend_003",
+    "customer_id": "cust_004",
+    "carrier": "PostNet",
+    "service_level": "standard",
+    "tracking_number": "PN123000999",
+    "status": "delayed",
+    "origin_address": {
+      "line1": "21 Tech Hub",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "8001"
+    },
+    "destination_address": {
+      "line1": "77 Ocean Drive",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "8005"
+    },
+    "weight": 0.8,
+    "dimensions": {
+      "length": 25,
+      "width": 25,
+      "height": 10
+    },
+    "shipping_cost": 59.99,
+    "currency": "USD",
+    "estimated_delivery_at": "2025-03-07T14:00:00Z",
+    "shipped_at": "2025-03-05T09:00:00Z",
+    "delivered_at": null,
+    "created_at": "2025-03-04T08:00:00Z",
+    "updated_at": "2025-03-06T10:00:00Z"
+  },
+  {
+    "shipping_id": "ship_005",
+    "order_id": "ord_1005",
+    "vendor_id": "vend_001",
+    "customer_id": "cust_001",
+    "carrier": "DHL",
+    "service_level": "express",
+    "tracking_number": "DHL000111222",
+    "status": "returned",
+    "origin_address": {
+      "line1": "12 Vendor Street",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "8001"
+    },
+    "destination_address": {
+      "line1": "45 Customer Ave",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "7700"
+    },
+    "weight": 0.3,
+    "dimensions": {
+      "length": 30,
+      "width": 20,
+      "height": 5
+    },
+    "shipping_cost": 89.99,
+    "currency": "USD",
+    "estimated_delivery_at": "2025-03-06T12:00:00Z",
+    "shipped_at": "2025-03-03T08:00:00Z",
+    "delivered_at": null,
+    "created_at": "2025-03-02T09:00:00Z",
+    "updated_at": "2025-03-06T12:00:00Z"
+  }
+]

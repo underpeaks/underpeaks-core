@@ -152,8 +152,8 @@
 ///--------------------------------------------------------------------------------------///
 ///LOGOUT*********///
 ///--------------------------------------------------------------------------------------///
-///TODO 1. Logout Functionality.
-///TODO 2. Confirm Before Logout Modal.
+///TODO 1. Logout Functionality. DONE
+///TODO 2. Confirm Before Logout Modal. DONE
 
 ///--------------------------------------------------------------------------------------///
 ///NAVBAR*********///
@@ -183,11 +183,11 @@
 ///--------------------------------------------------------------------------------------///
 ///AUTH FLOW*********///
 ///--------------------------------------------------------------------------------------///
-///TODO 1. MULTI-STEP FORM FLOW.
+///TODO 1. MULTI-STEP FORM FLOW. DONE
 ///TODO 2. VALIDATE EMAIL/PASSWORD FIELDS.
 ///TODO 3. PASSWORD STRENGTH CHECK (8+ CHAR, UPPERCASE, SYMBOL).
-///TODO 4. SHOW LOADER ON CONTINUE.
-///TODO 5. REMEMBER USER / SESSION HANDLING.
+///TODO 4. SHOW LOADER ON CONTINUE. DONE
+///TODO 5. REMEMBER USER / SESSION HANDLING. DONE
 
 ///--------------------------------------------------------------------------------------///
 ///THEMES AND PLUGINS*********///
@@ -216,7 +216,7 @@
 //9.  'Finalizing installer and cleanup', 0.5 days
 //10. 'switch between self hosted and hosted with api keys', 1 days
 //11. 'model generation', 2 days
-//12. FIX SUPABASE EMAIL VERIFIED 
+//12. FIX SUPABASE EMAIL VERIFIED - DONE
 //13. UPDATE SO THAT WE TRACK WHEN A USER IS LOGGED IN AND ON WHICH DATE 
 
 // TOTAL DAYS - 17 Days 
@@ -237,11 +237,8 @@
 
 
 
-///2 Day
+///3 Day
 
-///test user login
-///update the field in user if user is logged in
-///test all db's with install and login
 //7.  'Installing demo content', 2 days
 
 

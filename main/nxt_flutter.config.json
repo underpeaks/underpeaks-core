@@ -8,15 +8,16 @@
     "type": "postgres"
   },
   "ecommerceEnabled": false,
-  "demoContentEnabled": true,
+  "demoContentEnabled": false,
   "selectedPages": [],
   "models": [],
   "adminUser": {
-    "fullName": "Anton Wentzel",
+    "fullName": "ANTON WENTZEL",
     "email": "anton@her.co.za"
   },
   "featureFlags": {
     "ecommerce": false,
-    "demoContent": true
-  }
+    "demoContent": false
+  },
+  "selectedProjectType": "blank"
 }

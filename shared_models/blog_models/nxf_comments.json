@@ -1,0 +1,165 @@
+{
+  "table_name": "nxf_comments",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "comment_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "post_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "author_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "guest_name",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "guest_email",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "parent_comment_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "depth_level",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+
+  
+    {
+      "name": "content",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "content_html",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "attachments",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+
+  
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "pending"
+    },
+    {
+      "name": "is_edited",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_deleted",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_flagged",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "flag_reason",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "likes_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "dislikes_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "replies_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+
+    
+    {
+      "name": "entity_type",
+      "type": "string",
+      "nullable": false,
+      "default": "blog_post"
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": false
+    },
+
+    
+    {
+      "name": "schema_markup",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+
+  
+    {
+      "name": "ip_address",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "user_agent",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "deleted_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

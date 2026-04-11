@@ -1,0 +1,156 @@
+{
+  "table_name": "nxf_posts",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "post_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "author of the post"
+    },
+    {
+      "name": "group_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional group post"
+    },
+    {
+      "name": "post_type",
+      "type": "string",
+      "nullable": false,
+      "description": "text, image, video, link, poll, event"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "content",
+      "type": "text",
+      "nullable": true,
+      "description": "main post body"
+    },
+    {
+      "name": "media",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]",
+      "description": "images/videos/files"
+    },
+    {
+      "name": "link_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "tags",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]"
+    },
+    {
+      "name": "visibility",
+      "type": "string",
+      "nullable": false,
+      "default": "public",
+      "description": "public, private, followers, group_only"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, hidden, deleted, flagged"
+    },
+    {
+      "name": "like_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "comment_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "share_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "is_pinned",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "is_edited",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "edited_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_posts_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_posts_group",
+      "fields": ["group_id"]
+    },
+    {
+      "name": "idx_posts_visibility",
+      "fields": ["visibility"]
+    },
+    {
+      "name": "idx_posts_status",
+      "fields": ["status"]
+    },
+    {
+      "name": "idx_posts_created",
+      "fields": ["created_at"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "foreign_key",
+      "fields": ["user_id"],
+      "references": {
+        "table": "nxf_saas_users",
+        "field": "user_id"
+      }
+    }
+  ]
+}

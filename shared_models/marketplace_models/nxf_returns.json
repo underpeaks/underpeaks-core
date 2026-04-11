@@ -1,0 +1,107 @@
+{
+  "table_name": "nxf_returns",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "return_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "order_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "customer_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "vendor_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "requested"
+    },
+    {
+      "name": "reason",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "items",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "[]"
+    },
+    {
+      "name": "refund_amount",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "refund_status",
+      "type": "string",
+      "nullable": false,
+      "default": "pending"
+    },
+    {
+      "name": "return_method",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "tracking_number",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "images",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]"
+    },
+    {
+      "name": "approved_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "rejected_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "received_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "refunded_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ]
+}

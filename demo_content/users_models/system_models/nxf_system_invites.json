@@ -1,0 +1,29 @@
+[
+  {
+    "si_id": "i1000000-aaaa-bbbb-cccc-000000000001",
+    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
+    "email": "dev1@company.com",
+    "role": "admin",
+    "token": "inv_tok_8f3a9c1d2b7e",
+    "accepted_at": "2026-03-01T09:30:00Z",
+    "created_at": "2026-03-01T09:00:00Z"
+  },
+  {
+    "si_id": "i1000000-aaaa-bbbb-cccc-000000000002",
+    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
+    "email": "designer@company.com",
+    "role": "editor",
+    "token": "inv_tok_1c9d4e7f2a11",
+    "accepted_at": null,
+    "created_at": "2026-03-01T09:10:00Z"
+  },
+  {
+    "si_id": "i1000000-aaaa-bbbb-cccc-000000000003",
+    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
+    "email": "client@business.com",
+    "role": "viewer",
+    "token": "inv_tok_55aa99bb33cc",
+    "accepted_at": null,
+    "created_at": "2026-03-01T09:20:00Z"
+  }
+]

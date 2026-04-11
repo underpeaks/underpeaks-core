@@ -1,0 +1,125 @@
+{
+  "table_name": "nxf_system_apis",
+  "records": [
+    {
+      "api_id": "api_001",
+      "name": "Authentication API",
+      "key": "auth_api",
+      "base_url": "https://api.nxf.io/auth",
+      "method": "POST",
+      "endpoint": "/login",
+      "is_active": true,
+      "requires_auth": false,
+      "rate_limit_per_minute": 100,
+      "created_at": "2026-02-01T08:00:00Z"
+    },
+    {
+      "api_id": "api_002",
+      "name": "User Profile API",
+      "key": "user_profile_api",
+      "base_url": "https://api.nxf.io/users",
+      "method": "GET",
+      "endpoint": "/profile",
+      "is_active": true,
+      "requires_auth": true,
+      "rate_limit_per_minute": 200,
+      "created_at": "2026-02-01T08:05:00Z"
+    },
+    {
+      "api_id": "api_003",
+      "name": "Create Project API",
+      "key": "create_project",
+      "base_url": "https://api.nxf.io/projects",
+      "method": "POST",
+      "endpoint": "/create",
+      "is_active": true,
+      "requires_auth": true,
+      "rate_limit_per_minute": 50,
+      "created_at": "2026-02-01T08:10:00Z"
+    },
+    {
+      "api_id": "api_004",
+      "name": "Update Project API",
+      "key": "update_project",
+      "base_url": "https://api.nxf.io/projects",
+      "method": "PUT",
+      "endpoint": "/update",
+      "is_active": true,
+      "requires_auth": true,
+      "rate_limit_per_minute": 50,
+      "created_at": "2026-02-01T08:15:00Z"
+    },
+    {
+      "api_id": "api_005",
+      "name": "Delete Project API",
+      "key": "delete_project",
+      "base_url": "https://api.nxf.io/projects",
+      "method": "DELETE",
+      "endpoint": "/delete",
+      "is_active": true,
+      "requires_auth": true,
+      "rate_limit_per_minute": 20,
+      "created_at": "2026-02-01T08:20:00Z"
+    },
+    {
+      "api_id": "api_006",
+      "name": "Payment Gateway API",
+      "key": "payment_api",
+      "base_url": "https://api.nxf.io/payments",
+      "method": "POST",
+      "endpoint": "/charge",
+      "is_active": true,
+      "requires_auth": true,
+      "rate_limit_per_minute": 30,
+      "created_at": "2026-02-01T08:25:00Z"
+    },
+    {
+      "api_id": "api_007",
+      "name": "Notifications API",
+      "key": "notifications_api",
+      "base_url": "https://api.nxf.io/notifications",
+      "method": "POST",
+      "endpoint": "/send",
+      "is_active": true,
+      "requires_auth": true,
+      "rate_limit_per_minute": 150,
+      "created_at": "2026-02-01T08:30:00Z"
+    },
+    {
+      "api_id": "api_008",
+      "name": "Analytics API",
+      "key": "analytics_api",
+      "base_url": "https://api.nxf.io/analytics",
+      "method": "GET",
+      "endpoint": "/events",
+      "is_active": true,
+      "requires_auth": true,
+      "rate_limit_per_minute": 300,
+      "created_at": "2026-02-01T08:35:00Z"
+    },
+    {
+      "api_id": "api_009",
+      "name": "File Upload API",
+      "key": "upload_api",
+      "base_url": "https://api.nxf.io/files",
+      "method": "POST",
+      "endpoint": "/upload",
+      "is_active": true,
+      "requires_auth": true,
+      "rate_limit_per_minute": 100,
+      "created_at": "2026-02-01T08:40:00Z"
+    },
+    {
+      "api_id": "api_010",
+      "name": "Webhook Listener API",
+      "key": "webhook_listener",
+      "base_url": "https://api.nxf.io/webhooks",
+      "method": "POST",
+      "endpoint": "/receive",
+      "is_active": true,
+      "requires_auth": false,
+      "rate_limit_per_minute": 500,
+      "created_at": "2026-02-01T08:45:00Z"
+    }
+  ]
+}

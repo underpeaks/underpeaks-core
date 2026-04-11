@@ -1,0 +1,149 @@
+{
+  "table_name": "nxf_product",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "product_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "vendor_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "description",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "short_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "category_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "brand",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "draft"
+    },
+    {
+      "name": "visibility",
+      "type": "string",
+      "nullable": false,
+      "default": "public"
+    },
+    {
+      "name": "base_price",
+      "type": "double",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "compare_at_price",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": false,
+      "default": "USD"
+    },
+    {
+      "name": "stock_quantity",
+      "type": "int",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "track_inventory",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "allow_backorder",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "images",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]"
+    },
+    {
+      "name": "tags",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]"
+    },
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "rating",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "review_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "published_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["slug"]
+    }
+  ]
+}

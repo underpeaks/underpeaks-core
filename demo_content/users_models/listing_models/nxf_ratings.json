@@ -1,0 +1,95 @@
+[
+  {
+    "rating_id": "rating_001",
+    "user_id": "user_002",
+    "listing_id": "listing_001",
+    "review_id": "review_001",
+    "rating": 4.8,
+    "title": "Excellent condition and well maintained",
+    "comment": "The catamaran is exactly as described. Everything works perfectly and the onboarding process was smooth.",
+    "categories": ["condition", "seller", "accuracy"],
+    "is_verified_purchase": true,
+    "status": "active",
+    "helpful_count": 12,
+    "report_count": 0,
+    "images": [
+      "https://example.com/reviews/catamaran-review1.jpg"
+    ],
+    "metadata": {
+      "communication": 5,
+      "value_for_money": 4.5,
+      "cleanliness": 5
+    },
+    "created_at": "2026-03-21T10:00:00Z",
+    "updated_at": "2026-03-21T10:00:00Z"
+  },
+  {
+    "rating_id": "rating_002",
+    "user_id": "user_003",
+    "listing_id": "listing_001",
+    "review_id": null,
+    "rating": 4.5,
+    "title": "Great experience overall",
+    "comment": "Very solid vessel. Minor maintenance issues but nothing unexpected for its age.",
+    "categories": ["experience", "maintenance"],
+    "is_verified_purchase": false,
+    "status": "active",
+    "helpful_count": 5,
+    "report_count": 0,
+    "images": [],
+    "metadata": {
+      "communication": 4,
+      "value_for_money": 4,
+      "accuracy": 4.5
+    },
+    "created_at": "2026-03-22T14:30:00Z",
+    "updated_at": "2026-03-22T14:30:00Z"
+  },
+  {
+    "rating_id": "rating_003",
+    "user_id": "user_001",
+    "listing_id": "listing_002",
+    "review_id": "review_002",
+    "rating": 5.0,
+    "title": "Top-tier aircraft",
+    "comment": "Incredible jet, flawless maintenance records and smooth transaction with seller.",
+    "categories": ["aircraft", "quality", "seller"],
+    "is_verified_purchase": true,
+    "status": "active",
+    "helpful_count": 18,
+    "report_count": 0,
+    "images": [
+      "https://example.com/reviews/jet-review1.jpg",
+      "https://example.com/reviews/jet-review2.jpg"
+    ],
+    "metadata": {
+      "communication": 5,
+      "value_for_money": 5,
+      "condition": 5
+    },
+    "created_at": "2026-03-19T09:15:00Z",
+    "updated_at": "2026-03-19T09:15:00Z"
+  },
+  {
+    "rating_id": "rating_004",
+    "user_id": "user_002",
+    "listing_id": "listing_003",
+    "review_id": null,
+    "rating": 4.2,
+    "title": "Good investment opportunity",
+    "comment": "Solid business with real cash flow. Some operational inefficiencies but overall promising.",
+    "categories": ["business", "investment", "cashflow"],
+    "is_verified_purchase": false,
+    "status": "active",
+    "helpful_count": 7,
+    "report_count": 1,
+    "images": [],
+    "metadata": {
+      "roi_potential": 4.5,
+      "risk_level": 3,
+      "stability": 4
+    },
+    "created_at": "2026-03-23T08:00:00Z",
+    "updated_at": "2026-03-23T08:00:00Z"
+  }
+]

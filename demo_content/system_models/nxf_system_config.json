@@ -1,0 +1,268 @@
+{
+  "table_name": "nxf_system_config",
+  "records": [
+    {
+      "config_id": "44444444-4444-4444-4444-444444444001",
+      "project_id": "proj_001",
+      "user_id": "user_001",
+      "deployment_type": "hosted",
+      "hosted_api_key": "nxf_live_key_001",
+      "status": "deployed",
+      "selected_stack": "both",
+      "selected_db": "supabase",
+      "db_config": {
+        "provider": "supabase",
+        "url": "https://xyz.supabase.co",
+        "region": "eu-west-1"
+      },
+      "admin_user": {
+        "email": "admin1@nxf.io",
+        "full_name": "Admin One",
+        "firebase_uid": "firebase_001"
+      },
+      "feature_flags": {
+        "marketplace": true,
+        "social": true,
+        "analytics": true
+      },
+      "models_version": "v1.0.0",
+      "generator_version": "gen_2.1.0",
+      "last_generated_at": "2026-02-01T08:00:00Z",
+      "is_active": true,
+      "created_at": "2026-02-01T07:50:00Z",
+      "updated_at": "2026-02-01T08:00:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444002",
+      "project_id": "proj_002",
+      "user_id": "user_002",
+      "deployment_type": "self_hosted",
+      "hosted_api_key": null,
+      "status": "configured",
+      "selected_stack": "next",
+      "selected_db": "postgres",
+      "db_config": {
+        "host": "localhost",
+        "port": 5432,
+        "database": "nxf_db"
+      },
+      "admin_user": {
+        "email": "admin2@nxf.io",
+        "full_name": "Admin Two"
+      },
+      "feature_flags": {
+        "saas": true,
+        "billing": true
+      },
+      "models_version": "v1.0.0",
+      "generator_version": "gen_2.1.0",
+      "last_generated_at": null,
+      "is_active": true,
+      "created_at": "2026-02-01T08:10:00Z",
+      "updated_at": "2026-02-01T08:10:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444003",
+      "project_id": "proj_003",
+      "user_id": "user_003",
+      "deployment_type": "hosted",
+      "hosted_api_key": "nxf_live_key_002",
+      "status": "generated",
+      "selected_stack": "flutter",
+      "selected_db": "firebase",
+      "db_config": {
+        "project_id": "firebase_proj_001",
+        "region": "us-central"
+      },
+      "admin_user": {
+        "email": "admin3@nxf.io",
+        "full_name": "Admin Three"
+      },
+      "feature_flags": {
+        "chat": true,
+        "notifications": true
+      },
+      "models_version": "v1.1.0",
+      "generator_version": "gen_2.2.0",
+      "last_generated_at": "2026-02-01T08:30:00Z",
+      "is_active": true,
+      "created_at": "2026-02-01T08:20:00Z",
+      "updated_at": "2026-02-01T08:30:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444004",
+      "project_id": "proj_004",
+      "user_id": "user_004",
+      "deployment_type": "hosted",
+      "hosted_api_key": "nxf_live_key_003",
+      "status": "draft",
+      "selected_stack": "both",
+      "selected_db": "mongodb",
+      "db_config": {
+        "cluster": "cluster0.mongodb.net",
+        "database": "nxf"
+      },
+      "admin_user": null,
+      "feature_flags": {},
+      "models_version": null,
+      "generator_version": "gen_2.2.0",
+      "last_generated_at": null,
+      "is_active": true,
+      "created_at": "2026-02-01T08:40:00Z",
+      "updated_at": "2026-02-01T08:40:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444005",
+      "project_id": "proj_005",
+      "user_id": "user_005",
+      "deployment_type": "self_hosted",
+      "hosted_api_key": null,
+      "status": "deployed",
+      "selected_stack": "next",
+      "selected_db": "mysql",
+      "db_config": {
+        "host": "db.internal",
+        "port": 3306,
+        "database": "prod_db"
+      },
+      "admin_user": {
+        "email": "admin5@nxf.io",
+        "full_name": "Admin Five"
+      },
+      "feature_flags": {
+        "ecommerce": true,
+        "payments": true
+      },
+      "models_version": "v1.2.0",
+      "generator_version": "gen_2.3.0",
+      "last_generated_at": "2026-02-01T09:00:00Z",
+      "is_active": true,
+      "created_at": "2026-02-01T08:50:00Z",
+      "updated_at": "2026-02-01T09:00:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444006",
+      "project_id": "proj_006",
+      "user_id": "user_006",
+      "deployment_type": "hosted",
+      "hosted_api_key": "nxf_live_key_004",
+      "status": "disabled",
+      "selected_stack": "flutter",
+      "selected_db": "firebase",
+      "db_config": {
+        "project_id": "firebase_proj_002"
+      },
+      "admin_user": {
+        "email": "admin6@nxf.io"
+      },
+      "feature_flags": {
+        "social": true
+      },
+      "models_version": "v1.1.0",
+      "generator_version": "gen_2.2.0",
+      "last_generated_at": "2026-02-01T09:10:00Z",
+      "is_active": false,
+      "created_at": "2026-02-01T09:00:00Z",
+      "updated_at": "2026-02-01T09:10:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444007",
+      "project_id": "proj_007",
+      "user_id": "user_007",
+      "deployment_type": "hosted",
+      "hosted_api_key": "nxf_live_key_005",
+      "status": "configured",
+      "selected_stack": "both",
+      "selected_db": "supabase",
+      "db_config": {
+        "url": "https://abc.supabase.co"
+      },
+      "admin_user": {
+        "email": "admin7@nxf.io"
+      },
+      "feature_flags": {
+        "analytics": true,
+        "logs": true
+      },
+      "models_version": "v1.3.0",
+      "generator_version": "gen_2.3.1",
+      "last_generated_at": null,
+      "is_active": true,
+      "created_at": "2026-02-01T09:15:00Z",
+      "updated_at": "2026-02-01T09:15:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444008",
+      "project_id": "proj_008",
+      "user_id": "user_008",
+      "deployment_type": "self_hosted",
+      "hosted_api_key": null,
+      "status": "generated",
+      "selected_stack": "next",
+      "selected_db": "postgres",
+      "db_config": {
+        "host": "prod-db",
+        "database": "nxf_prod"
+      },
+      "admin_user": {
+        "email": "admin8@nxf.io"
+      },
+      "feature_flags": {
+        "marketplace": true
+      },
+      "models_version": "v1.2.0",
+      "generator_version": "gen_2.3.0",
+      "last_generated_at": "2026-02-01T09:25:00Z",
+      "is_active": true,
+      "created_at": "2026-02-01T09:20:00Z",
+      "updated_at": "2026-02-01T09:25:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444009",
+      "project_id": "proj_009",
+      "user_id": "user_009",
+      "deployment_type": "hosted",
+      "hosted_api_key": "nxf_live_key_006",
+      "status": "deployed",
+      "selected_stack": "flutter",
+      "selected_db": "firebase",
+      "db_config": {
+        "project_id": "firebase_proj_003"
+      },
+      "admin_user": {
+        "email": "admin9@nxf.io"
+      },
+      "feature_flags": {
+        "notifications": true,
+        "chat": true
+      },
+      "models_version": "v1.3.0",
+      "generator_version": "gen_2.4.0",
+      "last_generated_at": "2026-02-01T09:40:00Z",
+      "is_active": true,
+      "created_at": "2026-02-01T09:30:00Z",
+      "updated_at": "2026-02-01T09:40:00Z"
+    },
+    {
+      "config_id": "44444444-4444-4444-4444-444444444010",
+      "project_id": "proj_010",
+      "user_id": "user_010",
+      "deployment_type": "self_hosted",
+      "hosted_api_key": null,
+      "status": "draft",
+      "selected_stack": "both",
+      "selected_db": "mysql",
+      "db_config": {
+        "host": "localhost"
+      },
+      "admin_user": null,
+      "feature_flags": {},
+      "models_version": null,
+      "generator_version": "gen_2.4.0",
+      "last_generated_at": null,
+      "is_active": true,
+      "created_at": "2026-02-01T09:45:00Z",
+      "updated_at": "2026-02-01T09:45:00Z"
+    }
+  ]
+}

@@ -1,0 +1,128 @@
+[
+  {
+    "id": "cat_001",
+    "name": "Construction",
+    "slug": "construction",
+    "description": "Materials, tools, and services for construction projects.",
+    "parent_id": null,
+    "created_at": "2026-03-01T08:00:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_002",
+    "name": "Building Materials",
+    "slug": "building-materials",
+    "description": "Cement, bricks, steel, and other construction materials.",
+    "parent_id": "cat_001",
+    "created_at": "2026-03-01T08:10:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_003",
+    "name": "Heavy Equipment",
+    "slug": "heavy-equipment",
+    "description": "Machinery and equipment for construction and industrial use.",
+    "parent_id": "cat_001",
+    "created_at": "2026-03-01T08:15:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_004",
+    "name": "Digital Services",
+    "slug": "digital-services",
+    "description": "Online and freelance services for businesses.",
+    "parent_id": null,
+    "created_at": "2026-03-02T09:00:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_005",
+    "name": "Web Development",
+    "slug": "web-development",
+    "description": "Website and web app development services.",
+    "parent_id": "cat_004",
+    "created_at": "2026-03-02T09:10:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_006",
+    "name": "Design Services",
+    "slug": "design-services",
+    "description": "Graphic design, branding, and UI/UX services.",
+    "parent_id": "cat_004",
+    "created_at": "2026-03-02T09:15:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_007",
+    "name": "Logistics",
+    "slug": "logistics",
+    "description": "Transport, freight, and logistics solutions.",
+    "parent_id": null,
+    "created_at": "2026-03-03T07:30:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_008",
+    "name": "Freight Services",
+    "slug": "freight-services",
+    "description": "Local and international freight transport.",
+    "parent_id": "cat_007",
+    "created_at": "2026-03-03T07:45:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_009",
+    "name": "Warehousing",
+    "slug": "warehousing",
+    "description": "Storage and warehouse management services.",
+    "parent_id": "cat_007",
+    "created_at": "2026-03-03T07:50:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_010",
+    "name": "Electronics",
+    "slug": "electronics",
+    "description": "Consumer and industrial electronic products.",
+    "parent_id": null,
+    "created_at": "2026-03-04T10:00:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_011",
+    "name": "Wholesale Electronics",
+    "slug": "wholesale-electronics",
+    "description": "Bulk electronics for retailers and resellers.",
+    "parent_id": "cat_010",
+    "created_at": "2026-03-04T10:15:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_012",
+    "name": "Agriculture",
+    "slug": "agriculture",
+    "description": "Farming products, tools, and services.",
+    "parent_id": null,
+    "created_at": "2026-03-05T06:45:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_013",
+    "name": "Farming Equipment",
+    "slug": "farming-equipment",
+    "description": "Machinery and tools for farming operations.",
+    "parent_id": "cat_012",
+    "created_at": "2026-03-05T07:00:00Z",
+    "updated_at": null
+  },
+  {
+    "id": "cat_014",
+    "name": "Bulk Produce",
+    "slug": "bulk-produce",
+    "description": "Grains, seeds, and agricultural bulk goods.",
+    "parent_id": "cat_012",
+    "created_at": "2026-03-05T07:05:00Z",
+    "updated_at": null
+  }
+]

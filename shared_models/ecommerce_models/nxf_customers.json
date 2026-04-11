@@ -1,0 +1,234 @@
+{
+  "table_name": "nxf_customers",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "customer_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "phone",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "first_name",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "last_name",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "full_name",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "avatar_url",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "date_of_birth",
+      "type": "datetime",
+      "nullable": true
+    },
+
+    {
+      "name": "gender",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "country",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "city",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "address_line_1",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "address_line_2",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "postal_code",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "customer_segment",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "lifetime_value",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "total_orders",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "average_order_value",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "last_order_at",
+      "type": "datetime",
+      "nullable": true
+    },
+
+    {
+      "name": "first_order_at",
+      "type": "datetime",
+      "nullable": true
+    },
+
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": true,
+      "default": true
+    },
+
+    {
+      "name": "is_blocked",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "email_verified",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "phone_verified",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "marketing_opt_in",
+      "type": "boolean",
+      "nullable": true,
+      "default": true
+    },
+
+    {
+      "name": "preferred_language",
+      "type": "string",
+      "nullable": true,
+      "default": "en"
+    },
+
+    {
+      "name": "preferred_currency",
+      "type": "string",
+      "nullable": true,
+      "default": "ZAR"
+    },
+
+    {
+      "name": "tags",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    {
+      "name": "notes",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "source",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "utm_source",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "utm_medium",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "utm_campaign",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

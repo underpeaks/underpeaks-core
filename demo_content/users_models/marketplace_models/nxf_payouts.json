@@ -1,0 +1,83 @@
+[
+  {
+    "payout_id": "pay_001",
+    "vendor_id": "ven_001",
+    "amount": 12500.00,
+    "currency": "ZAR",
+    "status": "pending",
+    "method": "bank_transfer",
+    "reference": "PAYOUT-2026-0001",
+    "bank_details": {
+      "bank_name": "Standard Bank",
+      "account_holder": "Vendor One Pty Ltd",
+      "account_number": "1234567890",
+      "branch_code": "051001"
+    },
+    "scheduled_at": "2026-04-10T09:00:00Z",
+    "processed_at": null,
+    "paid_at": null,
+    "failure_reason": null,
+    "fee_amount": 250.00,
+    "net_amount": 12250.00,
+    "currency_rate": 1.0,
+    "external_provider": "manual",
+    "external_payout_id": null,
+    "notes": "First weekly payout cycle",
+    "created_at": "2026-04-07T08:00:00Z",
+    "updated_at": "2026-04-07T08:00:00Z"
+  },
+  {
+    "payout_id": "pay_002",
+    "vendor_id": "ven_002",
+    "amount": 8450.50,
+    "currency": "ZAR",
+    "status": "processed",
+    "method": "bank_transfer",
+    "reference": "PAYOUT-2026-0002",
+    "bank_details": {
+      "bank_name": "FNB",
+      "account_holder": "Vendor Two Trading",
+      "account_number": "9876543210",
+      "branch_code": "250655"
+    },
+    "scheduled_at": "2026-04-01T09:00:00Z",
+    "processed_at": "2026-04-01T12:30:00Z",
+    "paid_at": "2026-04-01T14:00:00Z",
+    "failure_reason": null,
+    "fee_amount": 169.01,
+    "net_amount": 8281.49,
+    "currency_rate": 1.0,
+    "external_provider": "manual",
+    "external_payout_id": "ext_pay_7788",
+    "notes": "Weekly payout completed successfully",
+    "created_at": "2026-03-31T08:00:00Z",
+    "updated_at": "2026-04-01T14:00:00Z"
+  },
+  {
+    "payout_id": "pay_003",
+    "vendor_id": "ven_003",
+    "amount": 5300.00,
+    "currency": "ZAR",
+    "status": "failed",
+    "method": "bank_transfer",
+    "reference": "PAYOUT-2026-0003",
+    "bank_details": {
+      "bank_name": "ABSA",
+      "account_holder": "Vendor Three LLC",
+      "account_number": "111222333",
+      "branch_code": "632005"
+    },
+    "scheduled_at": "2026-03-28T09:00:00Z",
+    "processed_at": "2026-03-28T10:00:00Z",
+    "paid_at": null,
+    "failure_reason": "Invalid account number",
+    "fee_amount": 106.00,
+    "net_amount": 5194.00,
+    "currency_rate": 1.0,
+    "external_provider": "manual",
+    "external_payout_id": null,
+    "notes": "Bank rejected transfer",
+    "created_at": "2026-03-27T08:00:00Z",
+    "updated_at": "2026-03-28T10:05:00Z"
+  }
+]

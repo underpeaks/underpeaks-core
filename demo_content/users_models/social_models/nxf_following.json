@@ -1,0 +1,98 @@
+[
+  {
+    "follow_id": "fol_1001",
+    "organisation_id": "org_1",
+    "follower_user_id": "user_1",
+    "following_user_id": "user_2",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_scope": "user",
+    "status": "active",
+    "created_at": "2026-04-01T10:15:00Z",
+    "updated_at": "2026-04-01T10:15:00Z"
+  },
+  {
+    "follow_id": "fol_1002",
+    "organisation_id": "org_1",
+    "follower_user_id": "user_1",
+    "following_user_id": null,
+    "following_entity_type": "event",
+    "following_entity_id": "event_55",
+    "follow_scope": "entity",
+    "status": "active",
+    "created_at": "2026-04-02T08:00:00Z",
+    "updated_at": "2026-04-02T08:00:00Z"
+  },
+  {
+    "follow_id": "fol_1003",
+    "organisation_id": "org_1",
+    "follower_user_id": "user_3",
+    "following_user_id": "user_1",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_scope": "user",
+    "status": "active",
+    "created_at": "2026-04-02T09:30:00Z",
+    "updated_at": "2026-04-02T09:30:00Z"
+  },
+  {
+    "follow_id": "fol_1004",
+    "organisation_id": "org_2",
+    "follower_user_id": "user_4",
+    "following_user_id": null,
+    "following_entity_type": "product",
+    "following_entity_id": "prod_12",
+    "follow_scope": "entity",
+    "status": "active",
+    "created_at": "2026-04-03T11:45:00Z",
+    "updated_at": "2026-04-03T11:45:00Z"
+  },
+  {
+    "follow_id": "fol_1005",
+    "organisation_id": "org_2",
+    "follower_user_id": "user_2",
+    "following_user_id": "user_5",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_scope": "user",
+    "status": "active",
+    "created_at": "2026-04-03T12:10:00Z",
+    "updated_at": "2026-04-03T12:10:00Z"
+  },
+  {
+    "follow_id": "fol_1006",
+    "organisation_id": "org_1",
+    "follower_user_id": "user_1",
+    "following_user_id": null,
+    "following_entity_type": "organization",
+    "following_entity_id": "org_2",
+    "follow_scope": "entity",
+    "status": "active",
+    "created_at": "2026-04-04T07:20:00Z",
+    "updated_at": "2026-04-04T07:20:00Z"
+  },
+  {
+    "follow_id": "fol_1007",
+    "organisation_id": "org_3",
+    "follower_user_id": "user_6",
+    "following_user_id": "user_1",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_scope": "user",
+    "status": "active",
+    "created_at": "2026-04-04T14:00:00Z",
+    "updated_at": "2026-04-04T14:00:00Z"
+  },
+  {
+    "follow_id": "fol_1008",
+    "organisation_id": "org_3",
+    "follower_user_id": "user_2",
+    "following_user_id": null,
+    "following_entity_type": "post",
+    "following_entity_id": "post_901",
+    "follow_scope": "entity",
+    "status": "active",
+    "created_at": "2026-04-05T16:30:00Z",
+    "updated_at": "2026-04-05T16:30:00Z"
+  }
+]

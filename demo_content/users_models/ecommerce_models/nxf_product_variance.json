@@ -1,0 +1,113 @@
+[
+  {
+    "pv_id": "pv_001",
+    "sku": "TSHIRT-BLK-M",
+    "price": 199.99,
+    "title": "Basic T-Shirt - Black (M)",
+    "vendor": "iDigiSol Apparel",
+    "weight": 0.25,
+    "barcode": "600100100001",
+    "available": true,
+    "image_url": [
+      "https://example.com/images/tshirt-black-front.jpg",
+      "https://example.com/images/tshirt-black-back.jpg"
+    ],
+    "is_default": true,
+    "created_at": "2026-01-01T10:00:00Z",
+    "updated_at": "2026-01-10T12:00:00Z",
+    "option_value": ["Black", "M"],
+    "product_type": "clothing",
+    "stock_on_hand": 120,
+    "min_order_quantity": 1,
+    "discount_expires_at": "2026-02-01T00:00:00Z",
+    "discount_percentage": 10
+  },
+  {
+    "pv_id": "pv_002",
+    "sku": "TSHIRT-BLK-L",
+    "price": 199.99,
+    "title": "Basic T-Shirt - Black (L)",
+    "vendor": "iDigiSol Apparel",
+    "weight": 0.26,
+    "barcode": "600100100002",
+    "available": true,
+    "image_url": [
+      "https://example.com/images/tshirt-black-front.jpg"
+    ],
+    "is_default": false,
+    "created_at": "2026-01-01T10:00:00Z",
+    "updated_at": "2026-01-10T12:00:00Z",
+    "option_value": ["Black", "L"],
+    "product_type": "clothing",
+    "stock_on_hand": 80,
+    "min_order_quantity": 1,
+    "discount_expires_at": null,
+    "discount_percentage": 0
+  },
+  {
+    "pv_id": "pv_003",
+    "sku": "HOODIE-GRY-M",
+    "price": 499.99,
+    "title": "Hoodie - Grey (M)",
+    "vendor": "UrbanWear SA",
+    "weight": 0.6,
+    "barcode": "600100200001",
+    "available": true,
+    "image_url": [
+      "https://example.com/images/hoodie-grey.jpg"
+    ],
+    "is_default": true,
+    "created_at": "2026-01-05T09:00:00Z",
+    "updated_at": null,
+    "option_value": ["Grey", "M"],
+    "product_type": "clothing",
+    "stock_on_hand": 45,
+    "min_order_quantity": 1,
+    "discount_expires_at": "2026-03-01T00:00:00Z",
+    "discount_percentage": 15
+  },
+  {
+    "pv_id": "pv_004",
+    "sku": "SNKR-WHT-42",
+    "price": 1299.99,
+    "title": "Sneakers - White (Size 42)",
+    "vendor": "StepUp",
+    "weight": 0.9,
+    "barcode": "600100300001",
+    "available": true,
+    "image_url": [
+      "https://example.com/images/sneakers-white.jpg"
+    ],
+    "is_default": true,
+    "created_at": "2026-01-08T14:00:00Z",
+    "updated_at": "2026-01-12T08:00:00Z",
+    "option_value": ["White", "42"],
+    "product_type": "footwear",
+    "stock_on_hand": 30,
+    "min_order_quantity": 1,
+    "discount_expires_at": null,
+    "discount_percentage": 0
+  },
+  {
+    "pv_id": "pv_005",
+    "sku": "CAP-BLK-ONE",
+    "price": 149.99,
+    "title": "Baseball Cap - Black",
+    "vendor": "UrbanWear SA",
+    "weight": 0.15,
+    "barcode": "600100400001",
+    "available": false,
+    "image_url": [
+      "https://example.com/images/cap-black.jpg"
+    ],
+    "is_default": true,
+    "created_at": "2026-01-15T11:00:00Z",
+    "updated_at": "2026-01-20T11:00:00Z",
+    "option_value": ["Black"],
+    "product_type": "accessories",
+    "stock_on_hand": 0,
+    "min_order_quantity": 1,
+    "discount_expires_at": null,
+    "discount_percentage": 0
+  }
+]

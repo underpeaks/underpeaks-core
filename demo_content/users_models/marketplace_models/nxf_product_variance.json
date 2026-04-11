@@ -1,0 +1,74 @@
+[
+  {
+    "variant_id": "var_001",
+    "product_id": "prod_001",
+    "sku": "TSHIRT-BLK-M",
+    "title": "Black T-Shirt - Medium",
+    "attributes": {
+      "color": "black",
+      "size": "M",
+      "material": "cotton"
+    },
+    "price": 149.99,
+    "compare_at_price": 199.99,
+    "cost_price": 80.00,
+    "currency": "ZAR",
+    "stock_quantity": 120,
+    "reserved_quantity": 10,
+    "is_active": true,
+    "image_url": "https://example.com/images/tshirt-black-m.jpg",
+    "barcode": "1234567890123",
+    "weight": 0.25,
+    "weight_unit": "kg",
+    "created_at": "2026-01-10T09:00:00Z",
+    "updated_at": "2026-04-06T12:00:00Z"
+  },
+  {
+    "variant_id": "var_002",
+    "product_id": "prod_002",
+    "sku": "SNEAKER-WHT-42",
+    "title": "White Sneakers - Size 42",
+    "attributes": {
+      "color": "white",
+      "size": "42",
+      "material": "leather"
+    },
+    "price": 799.99,
+    "compare_at_price": 999.99,
+    "cost_price": 450.00,
+    "currency": "ZAR",
+    "stock_quantity": 45,
+    "reserved_quantity": 5,
+    "is_active": true,
+    "image_url": "https://example.com/images/sneaker-white-42.jpg",
+    "barcode": "9876543210987",
+    "weight": 0.9,
+    "weight_unit": "kg",
+    "created_at": "2025-11-01T10:00:00Z",
+    "updated_at": "2026-04-05T08:30:00Z"
+  },
+  {
+    "variant_id": "var_003",
+    "product_id": "prod_003",
+    "sku": "COFFEE-BEAN-1KG",
+    "title": "Premium Coffee Beans 1kg",
+    "attributes": {
+      "roast": "medium",
+      "origin": "Ethiopia",
+      "grind": "whole bean"
+    },
+    "price": 199.99,
+    "compare_at_price": null,
+    "cost_price": 120.00,
+    "currency": "ZAR",
+    "stock_quantity": 0,
+    "reserved_quantity": 0,
+    "is_active": false,
+    "image_url": "https://example.com/images/coffee-beans.jpg",
+    "barcode": "4567891234567",
+    "weight": 1.0,
+    "weight_unit": "kg",
+    "created_at": "2025-09-15T08:00:00Z",
+    "updated_at": "2026-04-01T09:15:00Z"
+  }
+]

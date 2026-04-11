@@ -1,9 +1,11 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 import bcrypt from 'bcrypt';
 import { ColumnDef, DBAdapter, DBConfig } from '../types';
-import { CreateDataModels } from '../utils/create-data-models';
+//import { CreateDataModels } from '../utils/create-data-models';
 import { randomBytes } from 'crypto';
 import nodemailer from 'nodemailer';
+import { loadAllModels } from '../utils/load-model';
+
 
 const DEFAULT_BUCKETS = ['system', 'themes', 'extensions', 'projects', 'avatars', 'logos', 'uploads'];
 
@@ -482,8 +484,11 @@ async findUserByToken(token: string) {
   return data || null;
 }
 
-async verifyEmail(token: string) {
-  const user = await this.findUserByToken(token);
+async verifyEmail?(
+  config: DBConfig,
+  data: { token: string; email?: string }
+) {
+  const user = await this.findUserByToken(data.token);
   if (!user) throw new Error('Invalid or expired verification token');
 
   await this.update(this.config, 'nxf_users', user.user_id, {
@@ -744,69 +749,63 @@ async findTenantByUserEmail(config: DBConfig, email: string) {
     }
   }
 
-  /* -----------------------------
-     DATA MODELS
-  ----------------------------- */
- async CreateDataModels(projectId: string) {
+
+
+
+async CreateDataModels(projectId: string, selectedProjectType: string) {
   if (!projectId) throw new Error('Project ID is required');
 
-  console.log('🧩 Creating models for project (Supabase):', projectId);
+  console.log('🧩 Creating models (adapter-controlled)');
 
-  // Generate models
-  const result = await (async () => {
-    try {
-      return await CreateDataModels(this as any, projectId);
-    } catch (e: any) {
-      console.error('❌ Error generating models:', e.message, e.stack);
-      return { skipped: true, message: 'Model generation failed' };
-    }
-  })();
+  const models = await loadAllModels(selectedProjectType);
 
-  console.log('[DEBUG] Generated models:', result);
+  const results = [];
 
-  // Handle skipped / null / unsupported case
-  if (!result || result.skipped) {
-    console.warn(`[SupabaseAdapter] Skipping model creation: ${result?.message || 'No models returned'}`);
-    return [];
-  }
+  for (const model of models) {
+    console.log(`📦 Creating model: ${model.name}`);
 
-  // Only iterate over data array if it exists
-  const tables = Array.isArray(result.data) ? result.data : [];
-  for (const table of tables) {
-    if (!table.name) continue;
+    // ✅ 1. CREATE TABLE
+    await this.createTable(model.name, {
+      columns: model.columns,
+    });
 
+    // ✅ 2. INSERT METADATA (ONLY PLACE IT HAPPENS)
     const { error } = await this.client
       .from('nxf_system_models')
       .insert({
         sm_id: crypto.randomUUID(),
         project_id: projectId,
-        name: table.name,
-        schema: JSON.stringify(table.columns || []),
+        name: model.name,
+        schema: model.columns, // ✅ CORRECT
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
       });
 
     if (error) {
-      console.error('❌ Failed to insert model:', table.name, error.message);
-      throw new Error(`Failed to insert model ${table.name}: ${error.message}`);
+      console.error('❌ Insert failed:', error.message);
+      throw error;
     }
+
+    results.push(model);
   }
 
-  console.log('✅ Data models created successfully for project:', projectId);
-  return result;
+  return {
+    success: true,
+    data: results,
+  };
 }
 
 
 
 // Helper to create models from user email (no change needed)
-async createDataModelsFromUserEmail(email: string) {
+async createDataModelsFromUserEmail(email: string,selectedProjectType:string) {
   const user = await this.findUserByEmail(this.config, email);
   if (!user?.user_id) throw new Error("User not found");
 
   const project = await this.findProjectByOwnerId(this.config, user.user_id);
   if (!project?.project_id) throw new Error("Project not found");
 
-  return this.CreateDataModels(project.project_id);
+  return this.CreateDataModels(project.project_id,selectedProjectType);
 }
 
 
@@ -881,6 +880,7 @@ async createDataModelsFromUserEmail(email: string) {
           typeSql = "JSONB";
           break;
         case "datetime":
+          case "date":
         case "timestamp":
         case "timestamp with time zone":
           typeSql = "TIMESTAMP";
@@ -896,6 +896,8 @@ async createDataModelsFromUserEmail(email: string) {
           typeSql = "BOOLEAN";
           break;
         case "float":
+          case "number":
+            case "decimal":
         case "double":
           typeSql = "DOUBLE PRECISION";
           break;

@@ -1,0 +1,32 @@
+{
+  "table_name": "nxf_subscriptions",
+  "schema": "public",
+  "columns": [
+    { "name": "subscription_id", "type": "string", "nullable": false, "is_primary": true },
+
+    { "name": "user_id", "type": "string", "nullable": false },
+
+    { "name": "author_id", "type": "string", "nullable": true },
+    { "name": "post_category_id", "type": "string", "nullable": true },
+
+    { "name": "subscription_type", "type": "string", "nullable": false },
+    { "name": "plan", "type": "string", "nullable": true },
+
+    { "name": "status", "type": "string", "nullable": true, "default": "active" },
+
+    { "name": "price", "type": "double", "nullable": true, "default": 0 },
+
+    { "name": "start_date", "type": "datetime", "nullable": false },
+    { "name": "end_date", "type": "datetime", "nullable": true },
+
+    { "name": "auto_renew", "type": "boolean", "nullable": true, "default": true },
+
+    { "name": "payment_provider", "type": "string", "nullable": true },
+
+    { "name": "last_billed_at", "type": "datetime", "nullable": true },
+
+    { "name": "created_at", "type": "datetime", "nullable": false },
+    { "name": "updated_at", "type": "datetime", "nullable": true }
+  ],
+  "constraints": []
+}

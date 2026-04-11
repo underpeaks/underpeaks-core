@@ -1,0 +1,144 @@
+[
+  {
+    "return_id": "ret_001",
+    "order_id": "ord_1001",
+    "customer_id": "cust_001",
+    "vendor_id": "vend_001",
+    "status": "requested",
+    "reason": "wrong_size",
+    "description": "The t-shirt is too small. I need a larger size.",
+    "items": [
+      {
+        "product_id": "prod_001",
+        "variant_id": "var_001",
+        "quantity": 1
+      }
+    ],
+    "refund_amount": 299.99,
+    "refund_status": "pending",
+    "return_method": "courier_pickup",
+    "tracking_number": null,
+    "images": [
+      "https://demo.com/returns/ret_001_img1.jpg"
+    ],
+    "approved_at": null,
+    "rejected_at": null,
+    "received_at": null,
+    "refunded_at": null,
+    "created_at": "2025-03-01T10:00:00Z",
+    "updated_at": "2025-03-01T10:00:00Z"
+  },
+  {
+    "return_id": "ret_002",
+    "order_id": "ord_1002",
+    "customer_id": "cust_002",
+    "vendor_id": "vend_001",
+    "status": "approved",
+    "reason": "damaged_item",
+    "description": "Headphones arrived with a broken ear cup.",
+    "items": [
+      {
+        "product_id": "prod_002",
+        "variant_id": "var_010",
+        "quantity": 1
+      }
+    ],
+    "refund_amount": 1499.0,
+    "refund_status": "processing",
+    "return_method": "drop_off",
+    "tracking_number": "TRK123456789",
+    "images": [
+      "https://demo.com/returns/ret_002_img1.jpg",
+      "https://demo.com/returns/ret_002_img2.jpg"
+    ],
+    "approved_at": "2025-03-02T09:00:00Z",
+    "rejected_at": null,
+    "received_at": null,
+    "refunded_at": null,
+    "created_at": "2025-03-02T08:00:00Z",
+    "updated_at": "2025-03-02T09:00:00Z"
+  },
+  {
+    "return_id": "ret_003",
+    "order_id": "ord_1003",
+    "customer_id": "cust_003",
+    "vendor_id": "vend_002",
+    "status": "received",
+    "reason": "changed_mind",
+    "description": "No longer need the water bottle.",
+    "items": [
+      {
+        "product_id": "prod_003",
+        "variant_id": "var_020",
+        "quantity": 2
+      }
+    ],
+    "refund_amount": 398.0,
+    "refund_status": "processing",
+    "return_method": "postal_return",
+    "tracking_number": "TRK987654321",
+    "images": [],
+    "approved_at": "2025-03-03T10:00:00Z",
+    "rejected_at": null,
+    "received_at": "2025-03-06T12:00:00Z",
+    "refunded_at": null,
+    "created_at": "2025-03-03T09:00:00Z",
+    "updated_at": "2025-03-06T12:00:00Z"
+  },
+  {
+    "return_id": "ret_004",
+    "order_id": "ord_1004",
+    "customer_id": "cust_004",
+    "vendor_id": "vend_003",
+    "status": "rejected",
+    "reason": "used_item",
+    "description": "Watch shows clear signs of heavy usage and scratches.",
+    "items": [
+      {
+        "product_id": "prod_004",
+        "variant_id": "var_030",
+        "quantity": 1
+      }
+    ],
+    "refund_amount": 0,
+    "refund_status": "rejected",
+    "return_method": null,
+    "tracking_number": null,
+    "images": [
+      "https://demo.com/returns/ret_004_img1.jpg"
+    ],
+    "approved_at": null,
+    "rejected_at": "2025-03-04T11:00:00Z",
+    "received_at": null,
+    "refunded_at": null,
+    "created_at": "2025-03-04T10:00:00Z",
+    "updated_at": "2025-03-04T11:00:00Z"
+  },
+  {
+    "return_id": "ret_005",
+    "order_id": "ord_1005",
+    "customer_id": "cust_001",
+    "vendor_id": "vend_001",
+    "status": "completed",
+    "reason": "wrong_item_sent",
+    "description": "Received wrong color variant.",
+    "items": [
+      {
+        "product_id": "prod_001",
+        "variant_id": "var_002",
+        "quantity": 1
+      }
+    ],
+    "refund_amount": 299.99,
+    "refund_status": "refunded",
+    "return_method": "courier_pickup",
+    "tracking_number": "TRK111222333",
+    "images": [],
+    "approved_at": "2025-03-05T09:00:00Z",
+    "rejected_at": null,
+    "received_at": "2025-03-06T10:00:00Z",
+    "refunded_at": "2025-03-06T14:00:00Z",
+    "created_at": "2025-03-05T08:00:00Z",
+    "updated_at": "2025-03-06T14:00:00Z"
+  }
+]

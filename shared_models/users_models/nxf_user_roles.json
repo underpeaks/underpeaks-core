@@ -1,0 +1,98 @@
+{
+  "table_name": "nxf_user_roles",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "user_role_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional SaaS tenant scope (null = global role assignment)"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "role_key",
+      "type": "string",
+      "nullable": false,
+      "description": "e.g. admin, moderator, editor, user"
+    },
+    {
+      "name": "scope_type",
+      "type": "string",
+      "nullable": true,
+      "description": "global, organisation, group, resource"
+    },
+    {
+      "name": "scope_id",
+      "type": "string",
+      "nullable": true,
+      "description": "id of scoped entity (org_id, group_id, etc.)"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, suspended, revoked"
+    },
+    {
+      "name": "assigned_by",
+      "type": "string",
+      "nullable": true,
+      "description": "admin/system user who assigned role"
+    },
+    {
+      "name": "assigned_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "expires_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_user_roles_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_user_roles_role",
+      "fields": ["role_key"]
+    },
+    {
+      "name": "idx_user_roles_scope",
+      "fields": ["scope_type", "scope_id"]
+    },
+    {
+      "name": "idx_user_roles_org",
+      "fields": ["organisation_id"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "role_key", "scope_type", "scope_id"]
+    }
+  ]
+}

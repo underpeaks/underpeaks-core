@@ -1,0 +1,116 @@
+[
+  {
+    "preference_id": "pref_1001",
+    "user_id": "usr_9001",
+    "tenant_id": null,
+    "key": "theme",
+    "value": "dark",
+    "category": "ui",
+    "scope": "user",
+    "is_sensitive": false,
+    "created_at": "2026-01-10T09:00:00Z",
+    "updated_at": "2026-03-01T10:00:00Z"
+  },
+  {
+    "preference_id": "pref_1002",
+    "user_id": "usr_9001",
+    "tenant_id": null,
+    "key": "language",
+    "value": "en",
+    "category": "ui",
+    "scope": "user",
+    "is_sensitive": false,
+    "created_at": "2026-01-10T09:05:00Z",
+    "updated_at": "2026-01-10T09:05:00Z"
+  },
+  {
+    "preference_id": "pref_1003",
+    "user_id": "usr_9002",
+    "tenant_id": "ten_1001",
+    "key": "notifications.email",
+    "value": {
+      "enabled": true,
+      "frequency": "instant",
+      "marketing": false
+    },
+    "category": "notification",
+    "scope": "tenant",
+    "is_sensitive": false,
+    "created_at": "2026-02-01T08:00:00Z",
+    "updated_at": "2026-02-15T09:30:00Z"
+  },
+  {
+    "preference_id": "pref_1004",
+    "user_id": "usr_9003",
+    "tenant_id": null,
+    "key": "dashboard.layout",
+    "value": {
+      "widgets": [
+        "revenue_chart",
+        "recent_invoices",
+        "activity_feed"
+      ],
+      "density": "compact"
+    },
+    "category": "ui",
+    "scope": "user",
+    "is_sensitive": false,
+    "created_at": "2026-03-10T12:00:00Z",
+    "updated_at": "2026-03-10T12:00:00Z"
+  },
+  {
+    "preference_id": "pref_1005",
+    "user_id": "usr_9004",
+    "tenant_id": "ten_1002",
+    "key": "privacy.data_sharing",
+    "value": {
+      "share_analytics": false,
+      "share_usage": false
+    },
+    "category": "privacy",
+    "scope": "tenant",
+    "is_sensitive": true,
+    "created_at": "2026-02-20T11:00:00Z",
+    "updated_at": "2026-04-01T10:00:00Z"
+  },
+  {
+    "preference_id": "pref_1006",
+    "user_id": "usr_9001",
+    "tenant_id": null,
+    "key": "system.auto_save",
+    "value": true,
+    "category": "system",
+    "scope": "user",
+    "is_sensitive": false,
+    "created_at": "2026-01-15T09:00:00Z",
+    "updated_at": "2026-01-15T09:00:00Z"
+  },
+  {
+    "preference_id": "pref_1007",
+    "user_id": "usr_9002",
+    "tenant_id": null,
+    "key": "theme",
+    "value": "light",
+    "category": "ui",
+    "scope": "user",
+    "is_sensitive": false,
+    "created_at": "2026-02-01T08:10:00Z",
+    "updated_at": "2026-02-01T08:10:00Z"
+  },
+  {
+    "preference_id": "pref_1008",
+    "user_id": "usr_9003",
+    "tenant_id": "ten_1003",
+    "key": "notifications.push",
+    "value": {
+      "enabled": true,
+      "sound": true,
+      "priority_only": false
+    },
+    "category": "notification",
+    "scope": "tenant",
+    "is_sensitive": false,
+    "created_at": "2026-03-15T14:00:00Z",
+    "updated_at": "2026-03-15T14:00:00Z"
+  }
+]

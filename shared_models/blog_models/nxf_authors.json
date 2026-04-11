@@ -1,0 +1,115 @@
+{
+  "table_name": "nxf_authors",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "author_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "full_name",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "bio",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "avatar_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "cover_image_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "website_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "social_links",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "roles",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "is_verified",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": true,
+      "default": true
+    },
+    {
+      "name": "seo_slug",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_keywords",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "total_posts",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "total_views",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

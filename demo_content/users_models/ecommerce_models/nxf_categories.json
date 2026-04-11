@@ -1,0 +1,94 @@
+[
+  {
+    "id": "cat_001",
+    "name": "Electronics",
+    "slug": "electronics",
+    "description": "All electronic devices and gadgets",
+    "parent_id": null,
+    "created_at": "2026-01-01T10:00:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+  {
+    "id": "cat_002",
+    "name": "Smartphones",
+    "slug": "smartphones",
+    "description": "Mobile phones and smartphones",
+    "parent_id": "cat_001",
+    "created_at": "2026-01-02T10:00:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+  {
+    "id": "cat_003",
+    "name": "Laptops",
+    "slug": "laptops",
+    "description": "Portable computers and notebooks",
+    "parent_id": "cat_001",
+    "created_at": "2026-01-02T11:00:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+  {
+    "id": "cat_004",
+    "name": "Accessories",
+    "slug": "electronics-accessories",
+    "description": "Electronic accessories and peripherals",
+    "parent_id": "cat_001",
+    "created_at": "2026-01-03T09:00:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+
+  {
+    "id": "cat_005",
+    "name": "Fashion",
+    "slug": "fashion",
+    "description": "Clothing and apparel",
+    "parent_id": null,
+    "created_at": "2026-01-01T10:00:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+  {
+    "id": "cat_006",
+    "name": "Men's Clothing",
+    "slug": "mens-clothing",
+    "description": "Clothing for men",
+    "parent_id": "cat_005",
+    "created_at": "2026-01-02T10:30:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+  {
+    "id": "cat_007",
+    "name": "Women's Clothing",
+    "slug": "womens-clothing",
+    "description": "Clothing for women",
+    "parent_id": "cat_005",
+    "created_at": "2026-01-02T10:45:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+
+  {
+    "id": "cat_008",
+    "name": "Home & Living",
+    "slug": "home-living",
+    "description": "Furniture and home products",
+    "parent_id": null,
+    "created_at": "2026-01-01T10:00:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+  {
+    "id": "cat_009",
+    "name": "Furniture",
+    "slug": "furniture",
+    "description": "Home and office furniture",
+    "parent_id": "cat_008",
+    "created_at": "2026-01-02T09:00:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  },
+  {
+    "id": "cat_010",
+    "name": "Kitchen Appliances",
+    "slug": "kitchen-appliances",
+    "description": "Appliances for kitchen use",
+    "parent_id": "cat_008",
+    "created_at": "2026-01-02T09:30:00Z",
+    "updated_at": "2026-01-10T10:00:00Z"
+  }
+]

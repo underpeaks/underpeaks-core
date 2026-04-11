@@ -1,0 +1,75 @@
+{
+  "table_name": "nxf_bookmarks",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "bookmark_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "entity_type",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "title_snapshot",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "image_snapshot",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "note",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "folder",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "is_favorite",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "entity_type", "entity_id"]
+    }
+  ]
+}

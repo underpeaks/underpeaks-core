@@ -1,0 +1,147 @@
+{
+  "table_name": "nxf_blogs",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "blog_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "author_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "excerpt",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "content",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "categories",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "featured_image",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "draft"
+    },
+    {
+      "name": "is_featured",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "views",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "likes_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "comments_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_keywords",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "canonical_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "og_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "og_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "og_image",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "structured_data",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "published_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["slug"]
+    }
+  ]
+}

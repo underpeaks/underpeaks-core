@@ -1,0 +1,147 @@
+{
+  "table_name": "nxf_customers",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "customer_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "auth_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "first_name",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "last_name",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "phone",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "avatar_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "date_of_birth",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "gender",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "billing_address",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "shipping_address",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "country",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "postal_code",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "loyalty_points",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "total_spent",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": true,
+      "default": "USD"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active"
+    },
+    {
+      "name": "is_verified",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "marketing_opt_in",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "preferences",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "last_login_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["email"]
+    }
+  ]
+}

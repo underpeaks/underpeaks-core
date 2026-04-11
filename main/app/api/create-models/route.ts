@@ -4,7 +4,7 @@ import { DBAdapter } from '@/app/db-adapter/types';
 
 export async function POST(request: Request) {
   try {
-    const { config, adminUser } = await request.json();
+    const { config, adminUser,selectedProjectType } = await request.json();
 
     if (!config || !adminUser?.email) {
       return NextResponse.json(
@@ -24,8 +24,8 @@ if (!adapter.createDataModelsFromUserEmail) {
     { status: 400 }
   );
 }
-
-const result = await adapter.createDataModelsFromUserEmail(adminUser.email);
+console.log(`API(create-models) - SELECTED PROJECT TYPE - ${selectedProjectType}`);
+const result = await adapter.createDataModelsFromUserEmail(adminUser.email,selectedProjectType);
 
 return NextResponse.json(
   {
