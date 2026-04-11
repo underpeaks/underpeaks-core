@@ -1,0 +1,122 @@
+{
+  "table_name": "nxf_comments",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "comment_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "author of the comment"
+    },
+    {
+      "name": "entity_type",
+      "type": "string",
+      "nullable": false,
+      "description": "post, product, order, blog, etc."
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": false,
+      "description": "id of the entity being commented on"
+    },
+    {
+      "name": "parent_comment_id",
+      "type": "string",
+      "nullable": true,
+      "description": "for threaded replies"
+    },
+    {
+      "name": "content",
+      "type": "text",
+      "nullable": false
+    },
+    {
+      "name": "attachments",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]",
+      "description": "images, files, links"
+    },
+    {
+      "name": "like_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "reply_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, hidden, deleted, flagged"
+    },
+    {
+      "name": "is_edited",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "edited_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_comments_entity",
+      "fields": ["entity_type", "entity_id"]
+    },
+    {
+      "name": "idx_comments_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_comments_parent",
+      "fields": ["parent_comment_id"]
+    },
+    {
+      "name": "idx_comments_created",
+      "fields": ["created_at"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "foreign_key",
+      "fields": ["parent_comment_id"],
+      "references": {
+        "table": "nxf_comments",
+        "field": "comment_id"
+      }
+    }
+  ]
+}

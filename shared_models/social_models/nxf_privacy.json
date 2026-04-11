@@ -1,0 +1,121 @@
+{
+  "table_name": "nxf_privacy",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "privacy_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "owner of privacy settings"
+    },
+    {
+      "name": "profile_visibility",
+      "type": "string",
+      "nullable": false,
+      "default": "public",
+      "description": "public, followers, private, org_only"
+    },
+    {
+      "name": "post_visibility_default",
+      "type": "string",
+      "nullable": false,
+      "default": "public",
+      "description": "default visibility for new posts"
+    },
+    {
+      "name": "message_privacy",
+      "type": "string",
+      "nullable": false,
+      "default": "everyone",
+      "description": "everyone, followers, none"
+    },
+    {
+      "name": "allow_follow_requests",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "allow_tagging",
+      "type": "string",
+      "nullable": false,
+      "default": "everyone",
+      "description": "everyone, followers, none"
+    },
+    {
+      "name": "show_activity_status",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "search_engine_indexing",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "blocked_users",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]",
+      "description": "list of user_ids blocked by this user"
+    },
+    {
+      "name": "muted_users",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]"
+    },
+    {
+      "name": "data_download_enabled",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "ad_personalization",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_privacy_user",
+      "fields": ["user_id"]
+    },
+    {
+      "name": "idx_privacy_org",
+      "fields": ["organisation_id"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id"]
+    }
+  ]
+}

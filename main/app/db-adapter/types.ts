@@ -23,7 +23,7 @@ export interface DBConfig {
   user?: string;
   password?: string;
   connectionString?: string;
-
+  databaseName?: string;
   // Firebase
   firebaseDbType?: 'firestore' | 'realtime';
   firebaseConfigJson?: string;
@@ -180,7 +180,7 @@ export interface DBAdapter {
   comparePassword?(password: string, hash: string): Promise<boolean>;
 
   /** ------------------- DATA MODELS ------------------- */
-  createDataModelsFromUserEmail?(email: string): Promise<any>;
+  createDataModelsFromUserEmail?(email: string,selectedProjectType:string): Promise<any>;
   createDataModels?(projectId: string): Promise<any>;
 
   /** ------------------- CRUD ------------------- */

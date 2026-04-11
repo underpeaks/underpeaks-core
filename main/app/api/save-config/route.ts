@@ -39,7 +39,7 @@ function encrypt(data: any, key: Buffer) {
 }
 
 // ----------------------
-// New helper: detect missing fields
+// Helper: detect missing fields
 // ----------------------
 function getMissingFields(fields: Record<string, any>) {
   return Object.entries(fields)
@@ -55,12 +55,13 @@ export async function POST(req: Request) {
       dbConfig,
       adminUser,
       featureFlags = {},
+      selectedProjectType, // <-- NEW
     } = await req.json();
 
     // ----------------------
     // Determine if password is required
     // ----------------------
-    const requirePassword = !(selectedDb === 'supabase' || selectedDb === 'firebase' || selectedDb === 'mongodb' || selectedDb === 'mysql' || selectedDb === 'postgres');
+    const requirePassword = !['supabase','firebase','mongodb','mysql','postgres'].includes(selectedDb);
 
     // ----------------------
     // Check missing fields with logging
@@ -71,6 +72,7 @@ export async function POST(req: Request) {
       dbConfig,
       adminUserEmail: adminUser?.email,
       ...(requirePassword && { adminUserPassword: adminUser?.password }),
+      selectedProjectType, // <-- NEW: validate project type
     });
 
     if (missingFields.length > 0) {
@@ -88,13 +90,14 @@ export async function POST(req: Request) {
               email: adminUser?.email ?? null,
               hasPassword: !!adminUser?.password,
             },
+            selectedProjectType,
           },
         },
         { status: 400 }
       );
     }
 
-    // 1️⃣ Get adapter dynamically (Firebase or Supabase)
+    // 1️⃣ Get adapter dynamically (Firebase, Supabase, etc.)
     const adapter = getAdapter(selectedDb, dbConfig as DBConfig);
 
     if (!adapter.findUserByEmailWithRetry || !adapter.createAdminUser) {
@@ -113,7 +116,7 @@ export async function POST(req: Request) {
       await adapter.createAdminUser(adapter.config, {
         user_id: userId,
         user_email: adminUser.email,
-        password: adminUser.password ?? '', // still pass empty string if none
+        password: adminUser.password ?? '',
         full_name: adminUser.full_name,
         role: 'admin',
       });
@@ -122,7 +125,6 @@ export async function POST(req: Request) {
       user = await adapter.findUserByEmailWithRetry(adapter.config, adminUser.email);
     }
 
-    // 4️⃣ Ensure we have a user ID
     const userId = user.user_id || user.id;
     if (!userId) {
       return NextResponse.json(
@@ -131,7 +133,7 @@ export async function POST(req: Request) {
       );
     }
 
-    // 5️⃣ Find or create the project for this user
+    // 4️⃣ Find or create the project for this user
     let project = await adapter.findProjectByOwnerId!(adapter.config, userId);
 
     if (!project?.project_id && !project?.id) {
@@ -145,7 +147,7 @@ export async function POST(req: Request) {
 
     const projectId = project.project_id || project.id;
 
-    // 6️⃣ Prepare created_at and config_id for key derivation
+    // 5️⃣ Prepare created_at and config_id for key derivation
     const createdAt = new Date().toISOString();
     const configIdForKey = crypto.randomUUID();
 
@@ -156,10 +158,10 @@ export async function POST(req: Request) {
       createdAt,
     });
 
-    // 7️⃣ Encrypt DB config
+    // 6️⃣ Encrypt DB config
     const encryptedDbConfig = encrypt(dbConfig, encryptionKey);
 
-    // 8️⃣ Save installer config
+    // 7️⃣ Save installer config
     const configId = await adapter.saveInstallerConfig!(adapter.config, {
       config_id: configIdForKey,
       project_id: projectId,
@@ -168,12 +170,12 @@ export async function POST(req: Request) {
       status: 'configured',
       selected_stack: selectedStack,
       selected_db: selectedDb,
+      selected_project_type: selectedProjectType, // <-- NEW
       db_config: encryptedDbConfig,
       admin_user: {
         email: adminUser.email,
         full_name: adminUser.full_name,
         user_id: userId,
-        // password is omitted for Supabase/Firebase
         ...(requirePassword && { password: adminUser.password }),
       },
       feature_flags: featureFlags,

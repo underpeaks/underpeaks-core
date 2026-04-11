@@ -1,0 +1,89 @@
+{
+  "table_name": "nxf_followers",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "follow_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "follower_user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "user who follows"
+    },
+    {
+      "name": "following_user_id",
+      "type": "string",
+      "nullable": true,
+      "description": "user being followed (if user-to-user)"
+    },
+    {
+      "name": "following_entity_type",
+      "type": "string",
+      "nullable": true,
+      "description": "optional: vendor, product, event, organization, post"
+    },
+    {
+      "name": "following_entity_id",
+      "type": "string",
+      "nullable": true,
+      "description": "id of entity being followed"
+    },
+    {
+      "name": "follow_type",
+      "type": "string",
+      "nullable": false,
+      "description": "user, vendor, product, event, organization"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, unfollowed, blocked"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_follow_follower",
+      "fields": ["follower_user_id"]
+    },
+    {
+      "name": "idx_follow_following_user",
+      "fields": ["following_user_id"]
+    },
+    {
+      "name": "idx_follow_entity",
+      "fields": ["following_entity_type", "following_entity_id"]
+    },
+    {
+      "name": "idx_follow_type",
+      "fields": ["follow_type"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["follower_user_id", "following_user_id", "following_entity_type", "following_entity_id"]
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "table_name": "nxf_system_activity_logs",
+  "records": [
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111111",
+      "user_id": "user_001",
+      "project_id": null,
+      "action": "user_login",
+      "context": { "ip": "102.134.22.1", "device": "chrome_desktop" },
+      "created_at": "2026-02-01T08:10:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111112",
+      "user_id": "user_002",
+      "project_id": "proj_001",
+      "action": "project_created",
+      "context": { "name": "Marketplace MVP" },
+      "created_at": "2026-02-01T09:00:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111113",
+      "user_id": "user_003",
+      "project_id": "proj_001",
+      "action": "project_updated",
+      "context": { "field": "status", "old": "draft", "new": "active" },
+      "created_at": "2026-02-01T09:30:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111114",
+      "user_id": "user_001",
+      "project_id": null,
+      "action": "password_changed",
+      "context": { "method": "email_reset" },
+      "created_at": "2026-02-01T10:00:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111115",
+      "user_id": "user_004",
+      "project_id": "proj_002",
+      "action": "project_deleted",
+      "context": { "reason": "duplicate_project" },
+      "created_at": "2026-02-01T10:45:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111116",
+      "user_id": "user_002",
+      "project_id": null,
+      "action": "user_logout",
+      "context": { "duration_minutes": 45 },
+      "created_at": "2026-02-01T11:00:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111117",
+      "user_id": "user_005",
+      "project_id": "proj_003",
+      "action": "project_access_granted",
+      "context": { "granted_to": "user_006", "role": "editor" },
+      "created_at": "2026-02-01T11:30:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111118",
+      "user_id": "user_006",
+      "project_id": "proj_003",
+      "action": "project_viewed",
+      "context": { "section": "dashboard" },
+      "created_at": "2026-02-01T12:00:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111119",
+      "user_id": "user_007",
+      "project_id": null,
+      "action": "api_key_generated",
+      "context": { "service": "payments" },
+      "created_at": "2026-02-01T12:30:00Z"
+    },
+    {
+      "sal_id": "11111111-1111-1111-1111-111111111120",
+      "user_id": "user_001",
+      "project_id": "proj_001",
+      "action": "project_settings_updated",
+      "context": { "field": "visibility", "new": "private" },
+      "created_at": "2026-02-01T13:00:00Z"
+    }
+  ]
+}

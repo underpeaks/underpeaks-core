@@ -1,0 +1,159 @@
+[
+  {
+    "order_id": "ord_1001",
+    "order_number": "ORD-2026-0001",
+    "customer_id": "cus_001",
+    "user_id": "usr_001",
+    "status": "processing",
+    "payment_status": "paid",
+    "fulfillment_status": "unfulfilled",
+    "currency": "ZAR",
+    "subtotal": 1499.99,
+    "discount_total": 100.00,
+    "tax_total": 0,
+    "shipping_total": 75.00,
+    "total": 1474.99,
+    "coupon_code": "SAVE10",
+    "billing_address": {
+      "line1": "12 Long Street",
+      "city": "Cape Town",
+      "postal_code": "8001",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "line1": "12 Long Street",
+      "city": "Cape Town",
+      "postal_code": "8001",
+      "country": "South Africa"
+    },
+    "items": [
+      {
+        "product_id": "prod_001",
+        "variant_id": "var_001",
+        "name": "Black T-Shirt",
+        "quantity": 2,
+        "price": 149.99
+      },
+      {
+        "product_id": "prod_002",
+        "variant_id": "var_002",
+        "name": "White Sneakers",
+        "quantity": 1,
+        "price": 1199.99
+      }
+    ],
+    "payment_method": "card",
+    "payment_reference": "pay_abc123",
+    "tracking_number": "TRK123456789ZA",
+    "shipping_carrier": "DHL",
+    "notes": "Leave at reception if not home.",
+    "is_gift": false,
+    "gift_message": null,
+    "placed_at": "2026-04-05T10:00:00Z",
+    "paid_at": "2026-04-05T10:01:00Z",
+    "fulfilled_at": null,
+    "cancelled_at": null,
+    "created_at": "2026-04-05T10:00:00Z",
+    "updated_at": "2026-04-05T10:05:00Z"
+  },
+  {
+    "order_id": "ord_1002",
+    "order_number": "ORD-2026-0002",
+    "customer_id": "cus_002",
+    "user_id": "usr_002",
+    "status": "shipped",
+    "payment_status": "paid",
+    "fulfillment_status": "fulfilled",
+    "currency": "ZAR",
+    "subtotal": 799.99,
+    "discount_total": 0,
+    "tax_total": 0,
+    "shipping_total": 60.00,
+    "total": 859.99,
+    "coupon_code": null,
+    "billing_address": {
+      "line1": "88 Bree Street",
+      "city": "Johannesburg",
+      "postal_code": "2001",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "line1": "88 Bree Street",
+      "city": "Johannesburg",
+      "postal_code": "2001",
+      "country": "South Africa"
+    },
+    "items": [
+      {
+        "product_id": "prod_002",
+        "variant_id": "var_002",
+        "name": "White Sneakers",
+        "quantity": 1,
+        "price": 799.99
+      }
+    ],
+    "payment_method": "eft",
+    "payment_reference": "pay_xyz789",
+    "tracking_number": "TRK987654321ZA",
+    "shipping_carrier": "Aramex",
+    "notes": null,
+    "is_gift": true,
+    "gift_message": "Happy Birthday!",
+    "placed_at": "2026-03-28T12:00:00Z",
+    "paid_at": "2026-03-28T12:05:00Z",
+    "fulfilled_at": "2026-03-29T09:00:00Z",
+    "cancelled_at": null,
+    "created_at": "2026-03-28T12:00:00Z",
+    "updated_at": "2026-03-29T09:10:00Z"
+  },
+  {
+    "order_id": "ord_1003",
+    "order_number": "ORD-2026-0003",
+    "customer_id": "cus_003",
+    "user_id": "usr_003",
+    "status": "cancelled",
+    "payment_status": "refunded",
+    "fulfillment_status": "unfulfilled",
+    "currency": "ZAR",
+    "subtotal": 199.99,
+    "discount_total": 0,
+    "tax_total": 0,
+    "shipping_total": 0,
+    "total": 199.99,
+    "coupon_code": null,
+    "billing_address": {
+      "line1": "5 Ocean Drive",
+      "city": "Durban",
+      "postal_code": "4001",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "line1": "5 Ocean Drive",
+      "city": "Durban",
+      "postal_code": "4001",
+      "country": "South Africa"
+    },
+    "items": [
+      {
+        "product_id": "prod_003",
+        "variant_id": null,
+        "name": "Coffee Beans 1kg",
+        "quantity": 1,
+        "price": 199.99
+      }
+    ],
+    "payment_method": "card",
+    "payment_reference": "pay_cancel_001",
+    "tracking_number": null,
+    "shipping_carrier": null,
+    "notes": "Customer cancelled before shipping",
+    "is_gift": false,
+    "gift_message": null,
+    "placed_at": "2026-03-20T08:00:00Z",
+    "paid_at": "2026-03-20T08:01:00Z",
+    "fulfilled_at": null,
+    "cancelled_at": "2026-03-20T08:10:00Z",
+    "created_at": "2026-03-20T08:00:00Z",
+    "updated_at": "2026-03-20T08:10:00Z"
+  }
+]

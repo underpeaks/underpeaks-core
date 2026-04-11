@@ -1,0 +1,98 @@
+[
+  {
+    "saas_user_id": "susr_1001",
+    "user_id": "usr_9001",
+    "organisation_id": "org_1001",
+    "vendor_id": null,
+    "role_id": "role_1001",
+    "status": "active",
+    "permissions_override": [],
+    "last_active_at": "2026-04-07T08:30:00Z",
+    "invited_by": null,
+    "invited_at": null,
+    "accepted_at": "2026-01-10T09:10:00Z",
+    "created_at": "2026-01-10T09:10:00Z",
+    "updated_at": "2026-04-07T08:30:00Z"
+  },
+  {
+    "saas_user_id": "susr_1002",
+    "user_id": "usr_9002",
+    "organisation_id": "org_1001",
+    "vendor_id": null,
+    "role_id": "role_1002",
+    "status": "active",
+    "permissions_override": [
+      "billing.write"
+    ],
+    "last_active_at": "2026-04-06T18:20:00Z",
+    "invited_by": "usr_9001",
+    "invited_at": "2026-02-01T08:00:00Z",
+    "accepted_at": "2026-02-01T08:15:00Z",
+    "created_at": "2026-02-01T08:00:00Z",
+    "updated_at": "2026-04-06T18:20:00Z"
+  },
+  {
+    "saas_user_id": "susr_1003",
+    "user_id": "usr_9003",
+    "organisation_id": "org_1002",
+    "vendor_id": null,
+    "role_id": "role_1003",
+    "status": "active",
+    "permissions_override": [],
+    "last_active_at": "2026-04-07T09:10:00Z",
+    "invited_by": "usr_9002",
+    "invited_at": "2026-03-15T10:00:00Z",
+    "accepted_at": "2026-03-15T10:30:00Z",
+    "created_at": "2026-03-15T10:00:00Z",
+    "updated_at": "2026-04-07T09:10:00Z"
+  },
+  {
+    "saas_user_id": "susr_1004",
+    "user_id": "usr_9004",
+    "organisation_id": "org_1003",
+    "vendor_id": "ven_2003",
+    "role_id": "role_1004",
+    "status": "invited",
+    "permissions_override": [
+      "tickets.escalate"
+    ],
+    "last_active_at": null,
+    "invited_by": "usr_9001",
+    "invited_at": "2026-04-05T12:00:00Z",
+    "accepted_at": null,
+    "created_at": "2026-04-05T12:00:00Z",
+    "updated_at": "2026-04-05T12:00:00Z"
+  },
+  {
+    "saas_user_id": "susr_1005",
+    "user_id": "usr_9005",
+    "organisation_id": "org_1004",
+    "vendor_id": null,
+    "role_id": "role_1005",
+    "status": "suspended",
+    "permissions_override": [],
+    "last_active_at": "2026-03-20T15:00:00Z",
+    "invited_by": "usr_9002",
+    "invited_at": "2026-02-10T09:00:00Z",
+    "accepted_at": "2026-02-10T09:20:00Z",
+    "created_at": "2026-02-10T09:00:00Z",
+    "updated_at": "2026-03-25T10:00:00Z"
+  },
+  {
+    "saas_user_id": "susr_1006",
+    "user_id": "usr_9006",
+    "organisation_id": null,
+    "vendor_id": null,
+    "role_id": "role_1006",
+    "status": "active",
+    "permissions_override": [
+      "*"
+    ],
+    "last_active_at": "2026-04-07T10:00:00Z",
+    "invited_by": null,
+    "invited_at": null,
+    "accepted_at": "2026-01-01T00:00:00Z",
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-04-07T10:00:00Z"
+  }
+]

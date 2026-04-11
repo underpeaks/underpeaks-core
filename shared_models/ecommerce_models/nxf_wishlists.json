@@ -1,0 +1,145 @@
+{
+  "table_name": "nxf_wishlist",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "wishlist_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "session_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "product_id",
+      "type": "string",
+      "nullable": false
+    },
+
+    {
+      "name": "variant_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "priority",
+      "type": "string",
+      "nullable": true,
+      "default": "medium"
+    },
+
+    {
+      "name": "notes",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "price_when_saved",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": true,
+      "default": "ZAR"
+    },
+
+    {
+      "name": "is_purchased",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "added_from",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "utm_source",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "utm_medium",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "utm_campaign",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "reminder_sent_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "last_reminder_sent_at",
+      "type": "datetime",
+      "nullable": true
+    },
+
+    {
+      "name": "engagement_score",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "device_type",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "country",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

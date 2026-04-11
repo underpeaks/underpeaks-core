@@ -1,0 +1,114 @@
+{
+  "table_name": "nxf_tags",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "tag_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false
+    },
+
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+
+    {
+      "name": "description",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "type",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "color",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "icon",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "usage_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "is_featured",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "is_system_tag",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "related_tags",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "seo_description",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "seo_keywords",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    {
+      "name": "canonical_url",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

@@ -1,0 +1,33 @@
+{
+  "table_name": "nxf_post_tag_map",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "post_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "tag_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["post_id", "tag_id"]
+    }
+  ]
+}

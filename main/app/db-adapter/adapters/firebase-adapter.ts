@@ -1,7 +1,7 @@
 import admin from 'firebase-admin'
 import { DBAdapter, DBConfig } from '../types'
 import bcrypt from 'bcryptjs'
-import { CreateDataModels } from '../utils/create-data-models'
+import { CreateUserDataModels } from '../utils/create-data-models'
 import { getFirestore } from 'firebase-admin/firestore';
 import { sendEmailVerification } from 'firebase/auth';
 
@@ -336,12 +336,12 @@ export class FirebaseAdapter implements DBAdapter {
     return { id: doc.id, ...doc.data() }
   }
 
-  async CreateDataModels(projectId: string) {
+  async CreateDataModels(projectId: string,selectedProjectType: string) {
     if (!this.config || !projectId) throw new Error('Missing DB config or projectId')
-    return CreateDataModels(this, projectId)
+    return CreateUserDataModels(this, projectId,selectedProjectType,[])
   }
 
-  async createDataModelsFromUserEmail(email: string) {
+  async createDataModelsFromUserEmail(email: string,selectedProjectType: string) {
     if (!email) throw new Error('Missing User Email');
 
     const user = await this.findUserByEmail(this.config, email);
@@ -353,16 +353,16 @@ export class FirebaseAdapter implements DBAdapter {
     const db = this.getFirestoreInstance();
 
     const modelsCollection = db.collection(`projects/${project.id}/models`);
-    const snapshot = await modelsCollection.limit(1).get();
+   // const snapshot = await modelsCollection.limit(1).get();
 
-    if (!snapshot.empty) {
-      return {
-        skipped: true,
-        message: 'Data models already exist for this project, skipping.',
-      };
-    }
+    // if (!snapshot.empty) {
+    //   return {
+    //     skipped: true,
+    //     message: 'Data models already exist for this project, skipping.',
+    //   };
+    // }
 
-    const result = await this.CreateDataModels(project.id);
+    const result = await this.CreateDataModels(project.id,selectedProjectType);
     return {
       skipped: false,
       message: 'Data models inserted successfully',

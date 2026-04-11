@@ -1,0 +1,150 @@
+{
+  "table_name": "nxf_inventory",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "inventory_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+
+    {
+      "name": "product_id",
+      "type": "string",
+      "nullable": false
+    },
+
+    {
+      "name": "variant_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "warehouse_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "sku",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "stock_on_hand",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "stock_reserved",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "stock_available",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "low_stock_threshold",
+      "type": "double",
+      "nullable": true,
+      "default": 5
+    },
+
+    {
+      "name": "reorder_level",
+      "type": "double",
+      "nullable": true,
+      "default": 10
+    },
+
+    {
+      "name": "reorder_quantity",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "track_inventory",
+      "type": "boolean",
+      "nullable": true,
+      "default": true
+    },
+
+    {
+      "name": "allow_backorder",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "warehouse_location",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "last_stock_updated_at",
+      "type": "datetime",
+      "nullable": true
+    },
+
+    {
+      "name": "cost_price",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "selling_price",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": true,
+      "default": "ZAR"
+    },
+
+    {
+      "name": "batch_number",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "expiry_date",
+      "type": "datetime",
+      "nullable": true
+    },
+
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

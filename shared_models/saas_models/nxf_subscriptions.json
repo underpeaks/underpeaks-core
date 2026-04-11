@@ -1,0 +1,133 @@
+{
+  "table_name": "nxf_subscriptions",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "subscription_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": false,
+      "description": "SaaS tenant / organisation owning the subscription"
+    },
+    {
+      "name": "plan_id",
+      "type": "string",
+      "nullable": false,
+      "description": "linked to pricing plan"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, trialing, past_due, canceled, expired"
+    },
+    {
+      "name": "billing_cycle",
+      "type": "string",
+      "nullable": false,
+      "description": "monthly, yearly, custom"
+    },
+    {
+      "name": "current_period_start",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "current_period_end",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "trial_start",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "trial_end",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "auto_renew",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": false,
+      "default": "ZAR"
+    },
+    {
+      "name": "amount",
+      "type": "decimal",
+      "nullable": false,
+      "description": "recurring subscription amount"
+    },
+    {
+      "name": "discount_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "payment_provider",
+      "type": "string",
+      "nullable": true,
+      "description": "stripe, paypal, payfast, manual"
+    },
+    {
+      "name": "provider_subscription_id",
+      "type": "string",
+      "nullable": true,
+      "description": "external billing system reference"
+    },
+    {
+      "name": "cancel_at_period_end",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "canceled_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_sub_org",
+      "fields": ["organisation_id"]
+    },
+    {
+      "name": "idx_sub_plan",
+      "fields": ["plan_id"]
+    },
+    {
+      "name": "idx_sub_status",
+      "fields": ["status"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["organisation_id", "plan_id", "status"]
+    }
+  ]
+}

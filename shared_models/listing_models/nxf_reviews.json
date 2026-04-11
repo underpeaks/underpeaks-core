@@ -1,0 +1,104 @@
+{
+  "table_name": "nxf_reviews",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "review_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "listing_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "order_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "rating",
+      "type": "double",
+      "nullable": false
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "comment",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "images",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active"
+    },
+    {
+      "name": "is_verified_purchase",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "helpful_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "report_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "reply_from_owner",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "reply_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "listing_id"]
+    }
+  ]
+}

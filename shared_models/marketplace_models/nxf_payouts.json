@@ -1,0 +1,113 @@
+{
+  "table_name": "nxf_payouts",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "payout_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "vendor_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "amount",
+      "type": "double",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": false,
+      "default": "USD"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "pending"
+    },
+    {
+      "name": "method",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "reference",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "bank_details",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "scheduled_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "processed_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "paid_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "failure_reason",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "fee_amount",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "net_amount",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "currency_rate",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "external_provider",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "external_payout_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "notes",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ]
+}

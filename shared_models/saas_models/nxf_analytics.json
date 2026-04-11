@@ -1,0 +1,123 @@
+{
+  "table_name": "nxf_analytics",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "event_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": false,
+      "description": "Vendor ID or platform scope depending on event_type"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "session_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "event_type",
+      "type": "string",
+      "nullable": false,
+      "description": "page_view, product_view, add_to_cart, purchase, login, search, etc."
+    },
+    {
+      "name": "event_category",
+      "type": "string",
+      "nullable": true,
+      "description": "commerce, auth, engagement, system"
+    },
+    {
+      "name": "entity_type",
+      "type": "string",
+      "nullable": true,
+      "description": "product, order, vendor, user"
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}",
+      "description": "Flexible event payload (price, device, referrer, etc.)"
+    },
+    {
+      "name": "source",
+      "type": "string",
+      "nullable": true,
+      "description": "web, app, api, admin"
+    },
+    {
+      "name": "device_type",
+      "type": "string",
+      "nullable": true,
+      "description": "mobile, desktop, tablet"
+    },
+    {
+      "name": "country",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "city",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "user_agent",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "referrer",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_analytics_tenant",
+      "fields": ["tenant_id", "created_at"]
+    },
+    {
+      "name": "idx_analytics_event_type",
+      "fields": ["event_type"]
+    },
+    {
+      "name": "idx_analytics_entity",
+      "fields": ["entity_type", "entity_id"]
+    },
+    {
+      "name": "idx_analytics_user",
+      "fields": ["user_id"]
+    }
+  ]
+}

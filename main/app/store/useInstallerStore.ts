@@ -3,20 +3,25 @@ import { DBType, DBConfig } from "../db-adapter/types";
 
 export type InstallerState = {
   projectName: string;
-  domain: string; // <-- add this
+  domain: string;
   subdomain: string;
   ecommerceEnabled: boolean;
   demoContentEnabled: boolean;
+  selectedProjectType: string;
   selectedPages: string[];
   selectedStack: "next" | "flutter" | "both";
   selectedDb: DBType | null;
-  dbConfig: DBConfig & { storageBucket?: string }; // added storageBucket optional
+  dbConfig: DBConfig & { storageBucket?: string };
   adminUser: {
     fullName: string;
     email: string;
     password: string;
   };
   models: any[];
+
+
+ 
+
   setInstallerValue: <T extends keyof InstallerState>(
     key: T,
     value: InstallerState[T]
@@ -30,16 +35,22 @@ export const useInstallerStore = create<InstallerState>((set) => ({
   subdomain: "",
   ecommerceEnabled: false,
   demoContentEnabled: false,
+  selectedProjectType: "blank",
   selectedPages: [],
   selectedStack: "next",
   selectedDb: null,
-  dbConfig: { type: "supabase", storageBucket: "" }, // default with storageBucket field
+  databaseName: "",
+  dbConfig: { type: "supabase", storageBucket: "" },
   adminUser: {
     fullName: "",
     email: "",
     password: "",
   },
   models: [],
+
+  // NEW: initialize with blank project type
+ 
+
   setInstallerValue: (key, value) =>
     set((state) => ({
       ...state,
@@ -48,18 +59,21 @@ export const useInstallerStore = create<InstallerState>((set) => ({
   resetInstaller: () =>
     set(() => ({
       projectName: "",
+      domain: "",
       subdomain: "",
       ecommerceEnabled: false,
       demoContentEnabled: false,
+      selectedProjectType: "blank",
       selectedPages: [],
       selectedStack: "next",
       selectedDb: null,
-      dbConfig: { type: "supabase", storageBucket: "" }, // reset with storageBucket
+      dbConfig: { type: "supabase", storageBucket: "" },
       adminUser: {
         fullName: "",
         email: "",
         password: "",
       },
       models: [],
+      
     })),
 }));

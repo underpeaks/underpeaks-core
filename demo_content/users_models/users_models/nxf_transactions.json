@@ -1,0 +1,95 @@
+[
+  {
+    "id": "tran_1",
+    "order_id": "ord_1001",
+    "user_id": "user_1",
+    "transaction_status": "success",
+    "payment_method": "card",
+    "payment_gateway_response": {
+      "gateway": "stripe",
+      "payment_intent": "pi_abc123",
+      "status": "succeeded",
+      "card_brand": "visa",
+      "last4": "4242"
+    },
+    "amount": 1299.99,
+    "currency": "ZAR",
+    "transaction_date": "2026-01-10T10:15:00Z",
+    "transaction_reference": "pay_ref_001",
+    "created_at": "2026-01-10T10:15:05Z",
+    "updated_at": "2026-01-10T10:15:10Z"
+  },
+  {
+    "id": "tran_2",
+    "order_id": "ord_1002",
+    "user_id": "user_2",
+    "transaction_status": "pending",
+    "payment_method": "eft",
+    "payment_gateway_response": {
+      "gateway": "payfast",
+      "status": "initiated",
+      "reference": "PF_778812"
+    },
+    "amount": 499.50,
+    "currency": "ZAR",
+    "transaction_date": "2026-01-11T12:00:00Z",
+    "transaction_reference": "pay_ref_002",
+    "created_at": "2026-01-11T12:00:01Z",
+    "updated_at": null
+  },
+  {
+    "id": "tran_3",
+    "order_id": "ord_1003",
+    "user_id": "user_3",
+    "transaction_status": "failed",
+    "payment_method": "card",
+    "payment_gateway_response": {
+      "gateway": "stripe",
+      "error": "card_declined",
+      "decline_code": "insufficient_funds"
+    },
+    "amount": 899.00,
+    "currency": "ZAR",
+    "transaction_date": "2026-01-12T08:30:00Z",
+    "transaction_reference": "pay_ref_003",
+    "created_at": "2026-01-12T08:30:02Z",
+    "updated_at": "2026-01-12T08:30:05Z"
+  },
+  {
+    "id": "tran_4",
+    "order_id": "ord_1004",
+    "user_id": "user_1",
+    "transaction_status": "refunded",
+    "payment_method": "card",
+    "payment_gateway_response": {
+      "gateway": "stripe",
+      "payment_intent": "pi_refund_456",
+      "refund_id": "re_998877",
+      "status": "refunded"
+    },
+    "amount": 2599.00,
+    "currency": "ZAR",
+    "transaction_date": "2026-01-09T14:00:00Z",
+    "transaction_reference": "pay_ref_004",
+    "created_at": "2026-01-09T14:00:05Z",
+    "updated_at": "2026-01-10T09:00:00Z"
+  },
+  {
+    "id": "tran_5",
+    "order_id": "ord_1005",
+    "user_id": "user_4",
+    "transaction_status": "success",
+    "payment_method": "wallet",
+    "payment_gateway_response": {
+      "gateway": "internal_wallet",
+      "wallet_id": "wal_12345",
+      "balance_after": 340.00
+    },
+    "amount": 150.00,
+    "currency": "ZAR",
+    "transaction_date": "2026-01-13T09:45:00Z",
+    "transaction_reference": "pay_ref_005",
+    "created_at": "2026-01-13T09:45:01Z",
+    "updated_at": "2026-01-13T09:45:02Z"
+  }
+]

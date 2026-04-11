@@ -1,0 +1,99 @@
+{
+  "table_name": "nxf_logs",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "log_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "level",
+      "type": "string",
+      "nullable": false,
+      "description": "info, warning, error, debug, critical"
+    },
+    {
+      "name": "service",
+      "type": "string",
+      "nullable": true,
+      "description": "auth, marketplace, billing, analytics, api, admin"
+    },
+    {
+      "name": "event",
+      "type": "string",
+      "nullable": false,
+      "description": "short event identifier like user_login_failed, order_created"
+    },
+    {
+      "name": "message",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "request_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "trace_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "ip_address",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "user_agent",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "stack_trace",
+      "type": "text",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_logs_level",
+      "fields": ["level"]
+    },
+    {
+      "name": "idx_logs_service",
+      "fields": ["service"]
+    },
+    {
+      "name": "idx_logs_tenant",
+      "fields": ["tenant_id", "created_at"]
+    },
+    {
+      "name": "idx_logs_event",
+      "fields": ["event"]
+    }
+  ]
+}

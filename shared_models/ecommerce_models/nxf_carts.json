@@ -1,0 +1,162 @@
+{
+  "table_name": "nxf_cart",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "cart_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "session_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": true,
+      "default": "ZAR"
+    },
+
+    {
+      "name": "items",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "[]"
+    },
+
+    {
+      "name": "item_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "subtotal",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "discount_total",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "tax_total",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "shipping_estimate",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "grand_total",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "coupon_code",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "applied_discount_type",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "applied_discount_value",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": true,
+      "default": true
+    },
+
+    {
+      "name": "last_activity_at",
+      "type": "datetime",
+      "nullable": true
+    },
+
+    {
+      "name": "converted_to_order",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+
+    {
+      "name": "order_id",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "device_type",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "browser",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "country",
+      "type": "string",
+      "nullable": true
+    },
+
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

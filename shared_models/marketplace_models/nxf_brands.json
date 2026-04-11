@@ -1,0 +1,146 @@
+{
+  "table_name": "nxf_brands",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "brand_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "logo_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "banner_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "website_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "phone",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "social_links",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "address",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "latitude",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "longitude",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "is_verified",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_featured",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active"
+    },
+    {
+      "name": "rating_average",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "rating_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_keywords",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["slug"]
+    }
+  ]
+}

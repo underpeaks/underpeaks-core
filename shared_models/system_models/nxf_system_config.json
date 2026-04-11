@@ -51,6 +51,13 @@
       "nullable": false,
       "comment": "next | flutter | both"
     },
+     {
+  "name": "selected_project_type",
+  "type": "string",
+  "nullable": false,
+  "default": "blank",
+  "comment": "blank | ecommerce | saas | social | etc"
+},
     {
       "name": "selected_db",
       "type": "string",
@@ -109,5 +116,6 @@
       "nullable": false,
       "default": "now()"
     }
+   
   ]
 }

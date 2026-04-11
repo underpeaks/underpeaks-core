@@ -68,6 +68,9 @@ export default function FinalizePage() {
           selectedStack: installerState.selectedStack,
           selectedDb: installerState.selectedDb,
           dbConfig: installerState.dbConfig,
+          selectedProjectType : installerState.selectedProjectType,
+          databaseName: installerState.dbConfig.database,
+
 
         
         adminUser: installerState.adminUser

@@ -1,0 +1,126 @@
+{
+  "table_name": "nxf_inventory",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "inventory_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "product_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "variant_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "sku",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "warehouse_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "quantity_available",
+      "type": "double",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "quantity_reserved",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "quantity_sold",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "reorder_level",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "reorder_quantity",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "cost_price",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "selling_price",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": true,
+      "default": "USD"
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "batch_number",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "expiry_date",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "last_stock_update_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active"
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["product_id", "variant_id", "warehouse_id"]
+    }
+  ]
+}

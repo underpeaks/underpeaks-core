@@ -1,0 +1,138 @@
+{
+  "table_name": "nxf_menu",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "menu_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional tenant scope (null = global/shared menu)"
+    },
+    {
+      "name": "parent_menu_id",
+      "type": "string",
+      "nullable": true,
+      "description": "supports nested menus"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "nullable": false,
+      "description": "display name"
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false,
+      "description": "unique identifier for routing"
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "nullable": true,
+      "description": "icon name or svg reference"
+    },
+    {
+      "name": "route",
+      "type": "string",
+      "nullable": true,
+      "description": "frontend route (if navigational item)"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "nullable": false,
+      "description": "link, group, divider, external"
+    },
+    {
+      "name": "platform",
+      "type": "string",
+      "nullable": false,
+      "default": "all",
+      "description": "web, mobile, admin, all"
+    },
+    {
+      "name": "permission_key",
+      "type": "string",
+      "nullable": true,
+      "description": "RBAC control (ties into roles/permissions system)"
+    },
+    {
+      "name": "sort_order",
+      "type": "integer",
+      "nullable": false,
+      "default": 0
+    },
+    {
+      "name": "is_visible",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}",
+      "description": "flexible config (badges, counters, feature flags, etc.)"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_menu_org",
+      "fields": ["organisation_id"]
+    },
+    {
+      "name": "idx_menu_parent",
+      "fields": ["parent_menu_id"]
+    },
+    {
+      "name": "idx_menu_slug",
+      "fields": ["slug"]
+    },
+    {
+      "name": "idx_menu_platform",
+      "fields": ["platform"]
+    },
+    {
+      "name": "idx_menu_sort",
+      "fields": ["sort_order"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["organisation_id", "slug"]
+    },
+    {
+      "type": "foreign_key",
+      "fields": ["parent_menu_id"],
+      "references": {
+        "table": "nxf_menu",
+        "field": "menu_id"
+      }
+    }
+  ]
+}

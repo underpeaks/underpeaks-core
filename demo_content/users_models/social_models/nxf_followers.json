@@ -1,0 +1,74 @@
+[
+  {
+    "follow_id": "flw_0001",
+    "organisation_id": "org_001",
+    "follower_user_id": "usr_001",
+    "following_user_id": "usr_002",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_type": "user",
+    "status": "active",
+    "created_at": "2026-04-07T08:00:00Z",
+    "updated_at": "2026-04-07T08:00:00Z"
+  },
+  {
+    "follow_id": "flw_0002",
+    "organisation_id": "org_001",
+    "follower_user_id": "usr_002",
+    "following_user_id": "usr_001",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_type": "user",
+    "status": "active",
+    "created_at": "2026-04-07T08:01:00Z",
+    "updated_at": "2026-04-07T08:01:00Z"
+  },
+  {
+    "follow_id": "flw_0003",
+    "organisation_id": "org_001",
+    "follower_user_id": "usr_003",
+    "following_user_id": null,
+    "following_entity_type": "product",
+    "following_entity_id": "prd_2001",
+    "follow_type": "product",
+    "status": "active",
+    "created_at": "2026-04-07T08:05:00Z",
+    "updated_at": "2026-04-07T08:05:00Z"
+  },
+  {
+    "follow_id": "flw_0004",
+    "organisation_id": "org_001",
+    "follower_user_id": "usr_004",
+    "following_user_id": null,
+    "following_entity_type": "organization",
+    "following_entity_id": "org_001",
+    "follow_type": "organization",
+    "status": "active",
+    "created_at": "2026-04-07T08:10:00Z",
+    "updated_at": "2026-04-07T08:10:00Z"
+  },
+  {
+    "follow_id": "flw_0005",
+    "organisation_id": "org_001",
+    "follower_user_id": "usr_005",
+    "following_user_id": null,
+    "following_entity_type": "post",
+    "following_entity_id": "post_1001",
+    "follow_type": "post",
+    "status": "active",
+    "created_at": "2026-04-07T08:15:00Z",
+    "updated_at": "2026-04-07T08:15:00Z"
+  },
+  {
+    "follow_id": "flw_0006",
+    "organisation_id": "org_001",
+    "follower_user_id": "usr_001",
+    "following_user_id": "usr_003",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_type": "user",
+    "status": "blocked",
+    "created_at": "2026-04-07T08:20:00Z",
+    "updated_at": "2026-04-07T08:25:00Z"
+  }
+]

@@ -1,0 +1,152 @@
+{
+  "table_name": "nxf_post_categories",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "category_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+
+   
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "parent_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "depth_level",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "path",
+      "type": "string",
+      "nullable": true
+    },
+
+   
+    {
+      "name": "image_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": true,
+      "default": true
+    },
+    {
+      "name": "is_featured",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "sort_order",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+
+    {
+      "name": "posts_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+
+   
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_keywords",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "canonical_url",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "og_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "og_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "og_image",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "schema_markup",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+
+    
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["slug"]
+    }
+  ]
+}

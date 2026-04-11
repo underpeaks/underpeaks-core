@@ -1,0 +1,150 @@
+[
+  {
+    "id": "ord_001",
+    "user_id": "user_001",
+    "products": ["prod_001", "prod_002"],
+    "product_variants": [],
+    "quantities": [1, 2],
+    "unit_prices": [1299.99, 299.99],
+    "total_price": 1899.97,
+    "status": "processing",
+    "order_notes": "Leave at reception if not home",
+
+    "shipping_address_line1": "12 Ocean View Street",
+    "shipping_address_line2": "Apartment 4B",
+    "shipping_city": "Cape Town",
+    "shipping_state": "Western Cape",
+    "shipping_postal_code": "8001",
+    "shipping_country": "South Africa",
+
+    "billing_address_line1": "12 Ocean View Street",
+    "billing_address_line2": "Apartment 4B",
+    "billing_city": "Cape Town",
+    "billing_state": "Western Cape",
+    "billing_postal_code": "8001",
+    "billing_country": "South Africa",
+
+    "shipping_method": "standard",
+    "discount_percentage": 10,
+    "discount_value": 100,
+
+    "estimated_delivery": "2026-04-05T12:00:00Z",
+    "delivered_at": null,
+
+    "created_at": "2026-04-01T10:20:00Z",
+    "updated_at": "2026-04-01T10:25:00Z",
+
+    "transaction_id": "tran_001"
+  },
+  {
+    "id": "ord_002",
+    "user_id": "user_102",
+    "products": ["prod_003"],
+    "product_variants": ["var_003_black"],
+    "quantities": [1],
+    "unit_prices": [1599.99],
+    "total_price": 1599.99,
+    "status": "shipped",
+    "order_notes": "",
+
+    "shipping_address_line1": "45 Rose Avenue",
+    "shipping_address_line2": "",
+    "shipping_city": "Johannesburg",
+    "shipping_state": "Gauteng",
+    "shipping_postal_code": "2001",
+    "shipping_country": "South Africa",
+
+    "billing_address_line1": "45 Rose Avenue",
+    "billing_address_line2": "",
+    "billing_city": "Johannesburg",
+    "billing_state": "Gauteng",
+    "billing_postal_code": "2001",
+    "billing_country": "South Africa",
+
+    "shipping_method": "express",
+    "discount_percentage": 0,
+    "discount_value": 0,
+
+    "estimated_delivery": "2026-04-03T18:00:00Z",
+    "delivered_at": null,
+
+    "created_at": "2026-03-30T09:00:00Z",
+    "updated_at": "2026-04-01T08:00:00Z",
+
+    "transaction_id": "tran_002"
+  },
+  {
+    "id": "ord_003",
+    "user_id": "user_103",
+    "products": ["prod_004", "prod_005"],
+    "product_variants": [],
+    "quantities": [1, 3],
+    "unit_prices": [2499.99, 199.99],
+    "total_price": 3099.96,
+    "status": "delivered",
+    "order_notes": "Call before delivery",
+
+    "shipping_address_line1": "78 Palm Road",
+    "shipping_address_line2": "Unit 12",
+    "shipping_city": "Durban",
+    "shipping_state": "KwaZulu-Natal",
+    "shipping_postal_code": "4001",
+    "shipping_country": "South Africa",
+
+    "billing_address_line1": "78 Palm Road",
+    "billing_address_line2": "Unit 12",
+    "billing_city": "Durban",
+    "billing_state": "KwaZulu-Natal",
+    "billing_postal_code": "4001",
+    "billing_country": "South Africa",
+
+    "shipping_method": "standard",
+    "discount_percentage": 10,
+    "discount_value": 300,
+
+    "estimated_delivery": "2026-03-28T12:00:00Z",
+    "delivered_at": "2026-03-28T11:45:00Z",
+
+    "created_at": "2026-03-20T08:00:00Z",
+    "updated_at": "2026-03-28T11:45:00Z",
+
+    "transaction_id": "tran_003"
+  },
+  {
+    "id": "ord_004",
+    "user_id": "user_001",
+    "products": ["prod_001"],
+    "product_variants": [],
+    "quantities": [1],
+    "unit_prices": [1299.99],
+    "total_price": 1299.99,
+    "status": "pending",
+    "order_notes": "",
+
+    "shipping_address_line1": "12 Ocean View Street",
+    "shipping_address_line2": "Apartment 4B",
+    "shipping_city": "Cape Town",
+    "shipping_state": "Western Cape",
+    "shipping_postal_code": "8001",
+    "shipping_country": "South Africa",
+
+    "billing_address_line1": "12 Ocean View Street",
+    "billing_address_line2": "Apartment 4B",
+    "billing_city": "Cape Town",
+    "billing_state": "Western Cape",
+    "billing_postal_code": "8001",
+    "billing_country": "South Africa",
+
+    "shipping_method": "express",
+    "discount_percentage": 0,
+    "discount_value": 0,
+
+    "estimated_delivery": "2026-04-06T12:00:00Z",
+    "delivered_at": null,
+
+    "created_at": "2026-04-02T09:00:00Z",
+    "updated_at": "2026-04-02T09:05:00Z",
+
+    "transaction_id": null
+  }
+]

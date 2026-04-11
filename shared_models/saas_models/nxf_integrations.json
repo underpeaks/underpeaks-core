@@ -1,0 +1,123 @@
+{
+  "table_name": "nxf_integrations",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "integration_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false,
+      "description": "e.g. Stripe, PayFast, WhatsApp, Firebase, Shopify, DHL"
+    },
+    {
+      "name": "key",
+      "type": "string",
+      "nullable": false,
+      "description": "unique identifier like 'stripe', 'payfast', 'whatsapp_api'"
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "nullable": false,
+      "description": "payment, shipping, messaging, auth, analytics, storage, ai"
+    },
+    {
+      "name": "provider",
+      "type": "string",
+      "nullable": true,
+      "description": "external provider name if different from integration name"
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "is_required",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "core integrations required for system operation"
+    },
+    {
+      "name": "config_schema",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}",
+      "description": "Defines required config fields (api keys, secrets, endpoints)"
+    },
+    {
+      "name": "default_config",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "is_multi_tenant",
+      "type": "boolean",
+      "nullable": false,
+      "default": true,
+      "description": "whether each vendor has their own config instance"
+    },
+    {
+      "name": "supports_webhooks",
+      "type": "boolean",
+      "nullable": false,
+      "default": false
+    },
+    {
+      "name": "webhook_url_template",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "rate_limit_per_minute",
+      "type": "int",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, deprecated, beta, disabled"
+    },
+    {
+      "name": "documentation_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_integrations_key",
+      "fields": ["key"]
+    },
+    {
+      "name": "idx_integrations_type",
+      "fields": ["type"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["key"]
+    }
+  ]
+}

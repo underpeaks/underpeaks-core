@@ -1,0 +1,100 @@
+{
+  "table_name": "nxf_ratings",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "rating_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "listing_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "review_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "rating",
+      "type": "double",
+      "nullable": false
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "comment",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "categories",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "is_verified_purchase",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active"
+    },
+    {
+      "name": "helpful_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "report_count",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "images",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "metadata",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["user_id", "listing_id"]
+    }
+  ]
+}

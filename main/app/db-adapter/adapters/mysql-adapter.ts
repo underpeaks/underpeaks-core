@@ -3,7 +3,7 @@ import mysql from "mysql2/promise";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { DBConfig, DBAdapter, ColumnDef } from "../types";
-import { CreateDataModels } from "../utils/create-data-models";
+import { CreateUserDataModels } from "../utils/create-data-models";
 
 export class MySQLAdapter implements DBAdapter {
   private pool: mysql.Pool;
@@ -200,12 +200,16 @@ async read(config: DBConfig, table: string, query?: any): Promise<any> {
           case "array": typeSql = "JSON"; break;
           case "datetime":
           case "timestamp":
+            case "date":
           case "timestamp with time zone": typeSql = "DATETIME"; break;
           case "integer":
+            
           case "int": typeSql = "INT"; break;
           case "bigint": typeSql = "BIGINT"; break;
           case "boolean": typeSql = "TINYINT(1)"; break;
           case "float":
+            case "number":
+              case "decimal":
           case "double": typeSql = "FLOAT"; break;
           default: throw new Error(`Unsupported MySQL column type: ${col.type}`);
         }
@@ -227,8 +231,8 @@ async read(config: DBConfig, table: string, query?: any): Promise<any> {
  // =========================
 // CREATE DATA MODELS (FIXED)
 // =========================
-async CreateDataModels(projectId: string) {
-  const raw = await CreateDataModels(this, projectId);
+async CreateDataModels(projectId: string, selectedProjectType:string) {
+  const raw = await CreateUserDataModels(this, projectId, selectedProjectType,[]);
 
   // ✅ Proper type narrowing
   if (!raw) {
@@ -291,14 +295,14 @@ async CreateDataModels(projectId: string) {
   return result;
 }
 
-  async createDataModelsFromUserEmail(email: string) {
+  async createDataModelsFromUserEmail(email: string, selectedProjectType:string) {
     const user = await this.findUserByEmail(this.config, email);
     if (!user?.user_id) throw new Error("User not found");
 
     const project = await this.findProjectByOwnerId(this.config, user.user_id);
     if (!project?.project_id) throw new Error("Project not found");
 
-    return this.CreateDataModels(project.project_id);
+    return this.CreateDataModels(project.project_id, selectedProjectType);
   }
 
   // ---------------- USER HELPERS ----------------

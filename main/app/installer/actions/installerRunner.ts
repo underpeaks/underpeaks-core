@@ -11,13 +11,13 @@ function delay(ms: number) {
 // Installer Step Functions
 // -----------------------------
 async function createDatabaseSchemaAndTables() {
-  const { dbConfig } = useInstallerStore.getState();
+  const { dbConfig,selectedProjectType  } = useInstallerStore.getState();
   if (!dbConfig) throw new Error('Database configuration not found.');
 
   const response = await fetch('/api/create-system-tables', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ config: dbConfig }),
+    body: JSON.stringify({ config: dbConfig ,selectedProjectType,}),
   });
 
   if (!response.ok) {
@@ -52,7 +52,7 @@ async function createAdminUser(dbConfig: any, adminUser: any, projectName: strin
 }
 
 async function createModels() {
-  const { adminUser, dbConfig } = useInstallerStore.getState();
+  const { adminUser, dbConfig,selectedProjectType  } = useInstallerStore.getState();
 
   if (!dbConfig) throw new Error('DB config missing in store');
   if (!adminUser?.email) throw new Error('Admin user email missing in store');
@@ -66,7 +66,8 @@ async function createModels() {
         email: adminUser.email,
         fullName: adminUser.fullName,
         password: adminUser.password || ''
-      }
+      },
+      selectedProjectType 
     }),
   });
 
@@ -94,6 +95,7 @@ export async function writeConfigFile() {
       dbConfig: store.dbConfig,
       ecommerceEnabled: store.ecommerceEnabled,
       demoContentEnabled: store.demoContentEnabled,
+      selectedProjectType: store.selectedProjectType,
       selectedPages: store.selectedPages,
       models: store.models,
       adminUser: {

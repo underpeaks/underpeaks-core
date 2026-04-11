@@ -1,0 +1,99 @@
+[
+  {
+    "review_id": "rev_001",
+    "product_id": "prod_001",
+    "order_id": "ord_1001",
+    "customer_id": "cust_001",
+    "rating": 5,
+    "title": "Amazing quality!",
+    "comment": "The cotton is super soft and fits perfectly. Easily one of the best t-shirts I own.",
+    "images": [
+      "https://demo.com/reviews/rev_001_img1.jpg"
+    ],
+    "status": "published",
+    "is_verified_purchase": true,
+    "helpful_count": 12,
+    "report_count": 0,
+    "response_from_vendor": "Thanks for the great feedback!",
+    "response_at": "2025-03-02T10:00:00Z",
+    "created_at": "2025-03-01T09:00:00Z",
+    "updated_at": "2025-03-02T10:00:00Z"
+  },
+  {
+    "review_id": "rev_002",
+    "product_id": "prod_002",
+    "order_id": "ord_1002",
+    "customer_id": "cust_002",
+    "rating": 4,
+    "title": "Great sound but slight delay",
+    "comment": "Audio quality is excellent, but there's a small Bluetooth delay when gaming.",
+    "images": [],
+    "status": "published",
+    "is_verified_purchase": true,
+    "helpful_count": 34,
+    "report_count": 1,
+    "response_from_vendor": "We are working on a firmware update to improve latency.",
+    "response_at": "2025-03-03T12:00:00Z",
+    "created_at": "2025-03-02T11:00:00Z",
+    "updated_at": "2025-03-03T12:00:00Z"
+  },
+  {
+    "review_id": "rev_003",
+    "product_id": "prod_003",
+    "order_id": "ord_1003",
+    "customer_id": "cust_003",
+    "rating": 5,
+    "title": "Perfect for hiking",
+    "comment": "Keeps water cold the whole day during hikes. Very durable build.",
+    "images": [
+      "https://demo.com/reviews/rev_003_img1.jpg",
+      "https://demo.com/reviews/rev_003_img2.jpg"
+    ],
+    "status": "published",
+    "is_verified_purchase": true,
+    "helpful_count": 9,
+    "report_count": 0,
+    "response_from_vendor": null,
+    "response_at": null,
+    "created_at": "2025-03-04T08:00:00Z",
+    "updated_at": "2025-03-04T08:00:00Z"
+  },
+  {
+    "review_id": "rev_004",
+    "product_id": "prod_002",
+    "order_id": null,
+    "customer_id": "cust_004",
+    "rating": 2,
+    "title": "Not worth the price",
+    "comment": "Sound is okay but expected much better noise cancellation.",
+    "images": [],
+    "status": "published",
+    "is_verified_purchase": false,
+    "helpful_count": 3,
+    "report_count": 5,
+    "response_from_vendor": null,
+    "response_at": null,
+    "created_at": "2025-03-05T10:00:00Z",
+    "updated_at": "2025-03-05T10:00:00Z"
+  },
+  {
+    "review_id": "rev_005",
+    "product_id": "prod_001",
+    "order_id": "ord_1005",
+    "customer_id": "cust_001",
+    "rating": 1,
+    "title": "Wrong size and poor stitching",
+    "comment": "Very disappointed. Stitching started coming loose after one wash.",
+    "images": [
+      "https://demo.com/reviews/rev_005_img1.jpg"
+    ],
+    "status": "published",
+    "is_verified_purchase": true,
+    "helpful_count": 1,
+    "report_count": 2,
+    "response_from_vendor": "We are sorry for the experience. Please contact support for a replacement.",
+    "response_at": "2025-03-06T09:00:00Z",
+    "created_at": "2025-03-05T08:30:00Z",
+    "updated_at": "2025-03-06T09:00:00Z"
+  }
+]

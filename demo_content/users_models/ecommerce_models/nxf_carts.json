@@ -1,0 +1,146 @@
+[
+  {
+    "cart_id": "cart_001",
+    "user_id": "user_001",
+    "session_id": null,
+    "email": "john@example.com",
+    "currency": "ZAR",
+    "items": [
+      {
+        "product_id": "prod_001",
+        "name": "Wireless Headphones",
+        "price": 1299.99,
+        "quantity": 1
+      },
+      {
+        "product_id": "prod_002",
+        "name": "USB-C Charger",
+        "price": 299.99,
+        "quantity": 2
+      }
+    ],
+    "item_count": 3,
+    "subtotal": 1899.97,
+    "discount_total": 100,
+    "tax_total": 284.99,
+    "shipping_estimate": 89.99,
+    "grand_total": 2174.95,
+    "coupon_code": "SAVE100",
+    "applied_discount_type": "fixed",
+    "applied_discount_value": 100,
+    "is_active": true,
+    "last_activity_at": "2026-04-01T10:15:00Z",
+    "converted_to_order": false,
+    "order_id": null,
+    "device_type": "mobile",
+    "browser": "Chrome",
+    "country": "South Africa",
+    "created_at": "2026-04-01T09:00:00Z",
+    "updated_at": "2026-04-01T10:15:00Z"
+  },
+  {
+    "cart_id": "cart_002",
+    "user_id": null,
+    "session_id": "sess_abc123",
+    "email": null,
+    "currency": "ZAR",
+    "items": [
+      {
+        "product_id": "prod_003",
+        "name": "Running Shoes",
+        "price": 1599.99,
+        "quantity": 1
+      }
+    ],
+    "item_count": 1,
+    "subtotal": 1599.99,
+    "discount_total": 0,
+    "tax_total": 239.99,
+    "shipping_estimate": 79.99,
+    "grand_total": 1919.97,
+    "coupon_code": null,
+    "applied_discount_type": null,
+    "applied_discount_value": 0,
+    "is_active": true,
+    "last_activity_at": "2026-04-01T11:30:00Z",
+    "converted_to_order": false,
+    "order_id": null,
+    "device_type": "desktop",
+    "browser": "Firefox",
+    "country": "South Africa",
+    "created_at": "2026-04-01T11:00:00Z",
+    "updated_at": "2026-04-01T11:30:00Z"
+  },
+  {
+    "cart_id": "cart_003",
+    "user_id": "user_002",
+    "session_id": null,
+    "email": "sarah@example.com",
+    "currency": "ZAR",
+    "items": [
+      {
+        "product_id": "prod_004",
+        "name": "Smart Watch",
+        "price": 2499.99,
+        "quantity": 1
+      },
+      {
+        "product_id": "prod_005",
+        "name": "Phone Case",
+        "price": 199.99,
+        "quantity": 3
+      }
+    ],
+    "item_count": 4,
+    "subtotal": 3099.96,
+    "discount_total": 300,
+    "tax_total": 419.99,
+    "shipping_estimate": 99.99,
+    "grand_total": 3319.94,
+    "coupon_code": "WELCOME300",
+    "applied_discount_type": "fixed",
+    "applied_discount_value": 300,
+    "is_active": false,
+    "last_activity_at": "2026-03-28T16:00:00Z",
+    "converted_to_order": true,
+    "order_id": "order_1001",
+    "device_type": "mobile",
+    "browser": "Safari",
+    "country": "South Africa",
+    "created_at": "2026-03-28T15:00:00Z",
+    "updated_at": "2026-03-28T16:00:00Z"
+  },
+  {
+    "cart_id": "cart_004",
+    "user_id": "user_003",
+    "session_id": null,
+    "email": "mike@example.com",
+    "currency": "ZAR",
+    "items": [
+      {
+        "product_id": "prod_006",
+        "name": "Gaming Keyboard",
+        "price": 999.99,
+        "quantity": 1
+      }
+    ],
+    "item_count": 1,
+    "subtotal": 999.99,
+    "discount_total": 0,
+    "tax_total": 149.99,
+    "shipping_estimate": 59.99,
+    "grand_total": 1209.97,
+    "coupon_code": null,
+    "applied_discount_type": null,
+    "applied_discount_value": 0,
+    "is_active": true,
+    "last_activity_at": "2026-04-02T08:45:00Z",
+    "converted_to_order": false,
+    "order_id": null,
+    "device_type": "tablet",
+    "browser": "Edge",
+    "country": "South Africa",
+    "created_at": "2026-04-02T08:30:00Z",
+    "updated_at": "2026-04-02T08:45:00Z"
+  }
+]

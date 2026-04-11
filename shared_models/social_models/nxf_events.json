@@ -1,0 +1,110 @@
+{
+  "table_name": "nxf_events",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "event_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "event_type",
+      "type": "string",
+      "nullable": false,
+      "description": "e.g. user.signup, post.created, payment.success"
+    },
+    {
+      "name": "event_source",
+      "type": "string",
+      "nullable": false,
+      "description": "app, api, system, webhook, cron"
+    },
+    {
+      "name": "actor_type",
+      "type": "string",
+      "nullable": false,
+      "description": "user, system, admin, service"
+    },
+    {
+      "name": "actor_id",
+      "type": "string",
+      "nullable": true,
+      "description": "who triggered the event"
+    },
+    {
+      "name": "entity_type",
+      "type": "string",
+      "nullable": true,
+      "description": "affected entity type (post, order, user, etc.)"
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": true,
+      "description": "affected entity id"
+    },
+    {
+      "name": "payload",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}",
+      "description": "full event data snapshot"
+    },
+    {
+      "name": "context",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}",
+      "description": "ip, user_agent, device, geo, request_id"
+    },
+    {
+      "name": "severity",
+      "type": "string",
+      "nullable": false,
+      "default": "info",
+      "description": "info, warning, critical"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "processed",
+      "description": "queued, processed, failed"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_events_org",
+      "fields": ["organisation_id"]
+    },
+    {
+      "name": "idx_events_type",
+      "fields": ["event_type"]
+    },
+    {
+      "name": "idx_events_actor",
+      "fields": ["actor_type", "actor_id"]
+    },
+    {
+      "name": "idx_events_entity",
+      "fields": ["entity_type", "entity_id"]
+    },
+    {
+      "name": "idx_events_created",
+      "fields": ["created_at"]
+    }
+  ],
+  "constraints": []
+}

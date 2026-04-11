@@ -1,0 +1,123 @@
+{
+  "table_name": "nxf_listing_users",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "auth_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "username",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "full_name",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "email",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "phone",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "avatar_url",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "bio",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "role",
+      "type": "string",
+      "nullable": false,
+      "default": "user"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active"
+    },
+    {
+      "name": "is_verified",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_premium",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "location",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "latitude",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "longitude",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "social_links",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "preferences",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "last_login_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["email"]
+    },
+    {
+      "type": "unique",
+      "fields": ["username"]
+    }
+  ]
+}

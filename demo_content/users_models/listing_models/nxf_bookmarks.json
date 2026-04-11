@@ -1,0 +1,72 @@
+[
+  {
+    "bookmark_id": "bmk_001",
+    "user_id": "usr_1001",
+    "entity_type": "blog",
+    "entity_id": "blog_202",
+    "title_snapshot": "Building a Scalable Flutter Architecture",
+    "image_snapshot": "https://cdn.nxf.com/images/blogs/flutter-architecture.jpg",
+    "note": "Need to revisit this when refactoring state management",
+    "tags": ["flutter", "architecture", "riverpod"],
+    "folder": "development",
+    "is_favorite": true,
+    "created_at": "2026-03-20T10:15:00Z",
+    "updated_at": "2026-03-20T10:15:00Z"
+  },
+  {
+    "bookmark_id": "bmk_002",
+    "user_id": "usr_1001",
+    "entity_type": "listing",
+    "entity_id": "lst_889",
+    "title_snapshot": "2018 Yamaha Jet Ski - Low Hours",
+    "image_snapshot": "https://cdn.nxf.com/images/listings/jetski.jpg",
+    "note": "Potential resale opportunity",
+    "tags": ["jetski", "watercraft", "resale"],
+    "folder": "marketplace",
+    "is_favorite": false,
+    "created_at": "2026-03-18T14:30:00Z",
+    "updated_at": "2026-03-18T14:30:00Z"
+  },
+  {
+    "bookmark_id": "bmk_003",
+    "user_id": "usr_1002",
+    "entity_type": "profile",
+    "entity_id": "usr_1005",
+    "title_snapshot": "Anton Wentzel",
+    "image_snapshot": "https://cdn.nxf.com/images/users/anton.jpg",
+    "note": "Potential business partner",
+    "tags": ["networking", "lead"],
+    "folder": "contacts",
+    "is_favorite": true,
+    "created_at": "2026-03-21T08:00:00Z",
+    "updated_at": "2026-03-21T08:00:00Z"
+  },
+  {
+    "bookmark_id": "bmk_004",
+    "user_id": "usr_1003",
+    "entity_type": "blog",
+    "entity_id": "blog_310",
+    "title_snapshot": "SEO Strategies for 2026",
+    "image_snapshot": "https://cdn.nxf.com/images/blogs/seo-2026.jpg",
+    "note": null,
+    "tags": ["seo", "marketing"],
+    "folder": "learning",
+    "is_favorite": false,
+    "created_at": "2026-03-22T09:45:00Z",
+    "updated_at": "2026-03-22T09:45:00Z"
+  },
+  {
+    "bookmark_id": "bmk_005",
+    "user_id": "usr_1001",
+    "entity_type": "listing",
+    "entity_id": "lst_1021",
+    "title_snapshot": "Cape Town Yacht Charter Opportunity",
+    "image_snapshot": "https://cdn.nxf.com/images/listings/yacht-charter.jpg",
+    "note": "High potential seasonal business",
+    "tags": ["yacht", "charter", "business"],
+    "folder": "investments",
+    "is_favorite": true,
+    "created_at": "2026-03-23T11:20:00Z",
+    "updated_at": "2026-03-23T11:20:00Z"
+  }
+]

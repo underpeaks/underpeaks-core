@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ptm_001",
+    "post_id": "post_001",
+    "tag_id": "tag_saas",
+    "created_at": "2026-01-10T08:00:00Z"
+  },
+  {
+    "id": "ptm_002",
+    "post_id": "post_001",
+    "tag_id": "tag_architecture",
+    "created_at": "2026-01-10T08:00:00Z"
+  },
+  {
+    "id": "ptm_003",
+    "post_id": "post_001",
+    "tag_id": "tag_backend",
+    "created_at": "2026-01-10T08:00:00Z"
+  },
+  {
+    "id": "ptm_004",
+    "post_id": "post_002",
+    "tag_id": "tag_startups",
+    "created_at": "2026-01-11T09:00:00Z"
+  },
+  {
+    "id": "ptm_005",
+    "post_id": "post_002",
+    "tag_id": "tag_business",
+    "created_at": "2026-01-11T09:00:00Z"
+  },
+  {
+    "id": "ptm_006",
+    "post_id": "post_003",
+    "tag_id": "tag_frontend",
+    "created_at": "2026-01-12T10:00:00Z"
+  },
+  {
+    "id": "ptm_007",
+    "post_id": "post_003",
+    "tag_id": "tag_react",
+    "created_at": "2026-01-12T10:00:00Z"
+  },
+  {
+    "id": "ptm_008",
+    "post_id": "post_003",
+    "tag_id": "tag_uiux",
+    "created_at": "2026-01-12T10:00:00Z"
+  }
+]

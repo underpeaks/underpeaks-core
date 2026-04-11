@@ -1,0 +1,187 @@
+[
+  {
+    "cart_id": "cart_001",
+    "user_id": "user_9821",
+    "session_id": null,
+    "email": "buyer1@example.com",
+    "phone": "+27821234567",
+    "items": [
+      {
+        "product_id": "prod_101",
+        "name": "Premium Business Listing Package",
+        "type": "service",
+        "price": 120,
+        "quantity": 1,
+        "vendor_id": "vendor_501"
+      },
+      {
+        "product_id": "prod_305",
+        "name": "Logo Design (3 Concepts)",
+        "type": "service",
+        "price": 75,
+        "quantity": 1,
+        "vendor_id": "vendor_722"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 195,
+    "discount_total": 20,
+    "tax_total": 0,
+    "total": 175,
+    "coupon_code": "LAUNCH20",
+    "abandon_reason": "high_shipping_cost",
+    "last_activity_at": "2026-04-06T18:45:12Z",
+    "recovered": false,
+    "recovered_at": null,
+    "recovery_email_sent": true,
+    "recovery_email_sent_at": "2026-04-06T19:00:00Z",
+    "metadata": {
+      "device": "mobile",
+      "location": "South Africa",
+      "utm_source": "facebook_ads"
+    },
+    "created_at": "2026-04-06T18:10:00Z",
+    "updated_at": "2026-04-06T18:45:12Z"
+  },
+  {
+    "cart_id": "cart_002",
+    "user_id": null,
+    "session_id": "sess_abc123",
+    "email": "guestbuyer@example.com",
+    "phone": null,
+    "items": [
+      {
+        "product_id": "prod_888",
+        "name": "Industrial Generator 15kVA",
+        "type": "product",
+        "price": 2200,
+        "quantity": 1,
+        "vendor_id": "vendor_901"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 2200,
+    "discount_total": 0,
+    "tax_total": 330,
+    "total": 2530,
+    "coupon_code": null,
+    "abandon_reason": "payment_failed",
+    "last_activity_at": "2026-04-05T14:22:09Z",
+    "recovered": true,
+    "recovered_at": "2026-04-05T16:10:00Z",
+    "recovery_email_sent": true,
+    "recovery_email_sent_at": "2026-04-05T15:00:00Z",
+    "metadata": {
+      "device": "desktop",
+      "browser": "Chrome",
+      "intent": "bulk_purchase"
+    },
+    "created_at": "2026-04-05T13:50:00Z",
+    "updated_at": "2026-04-05T16:10:00Z"
+  },
+  {
+    "cart_id": "cart_003",
+    "user_id": "user_5542",
+    "session_id": null,
+    "email": "startupfounder@example.com",
+    "phone": "+27719876543",
+    "items": [
+      {
+        "product_id": "prod_450",
+        "name": "Website Development (Next.js + CMS)",
+        "type": "service",
+        "price": 950,
+        "quantity": 1,
+        "vendor_id": "vendor_333"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 950,
+    "discount_total": 0,
+    "tax_total": 0,
+    "total": 950,
+    "coupon_code": null,
+    "abandon_reason": "just_browsing",
+    "last_activity_at": "2026-04-04T20:05:44Z",
+    "recovered": false,
+    "recovered_at": null,
+    "recovery_email_sent": false,
+    "recovery_email_sent_at": null,
+    "metadata": {
+      "device": "tablet",
+      "stage": "consideration"
+    },
+    "created_at": "2026-04-04T19:40:00Z",
+    "updated_at": "2026-04-04T20:05:44Z"
+  },
+  {
+    "cart_id": "cart_004",
+    "user_id": null,
+    "session_id": "sess_xyz789",
+    "email": null,
+    "phone": null,
+    "items": [
+      {
+        "product_id": "prod_210",
+        "name": "Bulk Office Chairs (Pack of 10)",
+        "type": "product",
+        "price": 480,
+        "quantity": 2,
+        "vendor_id": "vendor_610"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 960,
+    "discount_total": 50,
+    "tax_total": 144,
+    "total": 1054,
+    "coupon_code": "BULK5",
+    "abandon_reason": "account_required",
+    "last_activity_at": "2026-04-03T11:12:33Z",
+    "recovered": false,
+    "recovered_at": null,
+    "recovery_email_sent": false,
+    "recovery_email_sent_at": null,
+    "metadata": {
+      "device": "desktop",
+      "entry_page": "vendor_storefront"
+    },
+    "created_at": "2026-04-03T10:50:00Z",
+    "updated_at": "2026-04-03T11:12:33Z"
+  },
+  {
+    "cart_id": "cart_005",
+    "user_id": "user_7777",
+    "session_id": null,
+    "email": "retailer@example.com",
+    "phone": "+27651239876",
+    "items": [
+      {
+        "product_id": "prod_999",
+        "name": "Wholesale Electronics Bundle",
+        "type": "product",
+        "price": 5000,
+        "quantity": 1,
+        "vendor_id": "vendor_888"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 5000,
+    "discount_total": 500,
+    "tax_total": 0,
+    "total": 4500,
+    "coupon_code": "WHOLESALE10",
+    "abandon_reason": "waiting_for_approval",
+    "last_activity_at": "2026-04-02T09:30:00Z",
+    "recovered": false,
+    "recovered_at": null,
+    "recovery_email_sent": true,
+    "recovery_email_sent_at": "2026-04-02T10:00:00Z",
+    "metadata": {
+      "business_type": "retailer",
+      "priority_lead": true
+    },
+    "created_at": "2026-04-02T09:00:00Z",
+    "updated_at": "2026-04-02T09:30:00Z"
+  }
+]

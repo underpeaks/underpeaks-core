@@ -1,0 +1,185 @@
+{
+  "table_name": "nxf_blog_posts",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "post_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "author_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "excerpt",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "content",
+      "type": "jsonb",
+      "nullable": false
+    },
+    {
+      "name": "content_html",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "featured_image",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "image_gallery",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "categories",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "tags",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "draft"
+    },
+    {
+      "name": "is_featured",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "is_pinned",
+      "type": "boolean",
+      "nullable": true,
+      "default": false
+    },
+    {
+      "name": "allow_comments",
+      "type": "boolean",
+      "nullable": true,
+      "default": true
+    },
+
+    
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "seo_keywords",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "canonical_url",
+      "type": "string",
+      "nullable": true
+    },
+
+   
+    {
+      "name": "og_title",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "og_description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "og_image",
+      "type": "string",
+      "nullable": true
+    },
+
+    
+    {
+      "name": "schema_markup",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+
+   
+    {
+      "name": "views_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "likes_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "comments_count",
+      "type": "int",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "read_time_minutes",
+      "type": "int",
+      "nullable": true
+    },
+
+  
+    {
+      "name": "published_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "scheduled_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

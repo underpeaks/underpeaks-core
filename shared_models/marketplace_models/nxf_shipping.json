@@ -1,0 +1,108 @@
+{
+  "table_name": "nxf_shipping",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "shipping_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "order_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "vendor_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "customer_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "carrier",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "service_level",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "tracking_number",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "pending"
+    },
+    {
+      "name": "origin_address",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "destination_address",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "{}"
+    },
+    {
+      "name": "weight",
+      "type": "double",
+      "nullable": true
+    },
+    {
+      "name": "dimensions",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "shipping_cost",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "currency",
+      "type": "string",
+      "nullable": false,
+      "default": "USD"
+    },
+    {
+      "name": "estimated_delivery_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "shipped_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "delivered_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ]
+}

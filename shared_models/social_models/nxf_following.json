@@ -1,0 +1,99 @@
+{
+  "table_name": "nxf_following",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "follow_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional multi-tenant scope (SaaS)"
+    },
+    {
+      "name": "follower_user_id",
+      "type": "string",
+      "nullable": false,
+      "description": "user who is following"
+    },
+    {
+      "name": "following_user_id",
+      "type": "string",
+      "nullable": true,
+      "description": "user being followed (user-to-user)"
+    },
+    {
+      "name": "following_entity_type",
+      "type": "string",
+      "nullable": true,
+      "description": "type of entity being followed (user, product, post, organization, event, vendor)"
+    },
+    {
+      "name": "following_entity_id",
+      "type": "string",
+      "nullable": true,
+      "description": "id of entity being followed"
+    },
+    {
+      "name": "follow_scope",
+      "type": "string",
+      "nullable": false,
+      "description": "user, entity",
+      "default": "user"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, unfollowed, blocked"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_following_follower",
+      "fields": ["follower_user_id"]
+    },
+    {
+      "name": "idx_following_user",
+      "fields": ["following_user_id"]
+    },
+    {
+      "name": "idx_following_entity",
+      "fields": ["following_entity_type", "following_entity_id"]
+    },
+    {
+      "name": "idx_following_scope",
+      "fields": ["follow_scope"]
+    },
+    {
+      "name": "idx_following_status",
+      "fields": ["status"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": [
+        "follower_user_id",
+        "following_user_id",
+        "following_entity_type",
+        "following_entity_id"
+      ]
+    }
+  ]
+}

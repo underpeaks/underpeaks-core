@@ -1,0 +1,88 @@
+{
+  "table_name": "nxf_saas_roles",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "role_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false,
+      "description": "e.g. owner, admin, manager, support, viewer"
+    },
+    {
+      "name": "key",
+      "type": "string",
+      "nullable": false,
+      "description": "unique system identifier like 'org_owner', 'vendor_admin'"
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "scope",
+      "type": "string",
+      "nullable": false,
+      "default": "tenant",
+      "description": "system, tenant, organisation, vendor"
+    },
+    {
+      "name": "is_system_role",
+      "type": "boolean",
+      "nullable": false,
+      "default": true,
+      "description": "cannot be deleted or modified if true"
+    },
+    {
+      "name": "is_active",
+      "type": "boolean",
+      "nullable": false,
+      "default": true
+    },
+    {
+      "name": "permissions",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "[]",
+      "description": "array of permission keys or structured permission objects"
+    },
+    {
+      "name": "hierarchy_level",
+      "type": "int",
+      "nullable": true,
+      "description": "lower number = higher privilege (0 = owner/root)"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "indexes": [
+    {
+      "name": "idx_roles_key",
+      "fields": ["key"]
+    },
+    {
+      "name": "idx_roles_scope",
+      "fields": ["scope"]
+    }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["key"]
+    }
+  ]
+}

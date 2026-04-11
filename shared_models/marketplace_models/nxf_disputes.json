@@ -1,0 +1,97 @@
+{
+  "table_name": "nxf_disputes",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "dispute_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true
+    },
+    {
+      "name": "order_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "customer_id",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "vendor_id",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "reason",
+      "type": "string",
+      "nullable": false
+    },
+    {
+      "name": "description",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "category",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "open"
+    },
+    {
+      "name": "priority",
+      "type": "string",
+      "nullable": true,
+      "default": "medium"
+    },
+    {
+      "name": "resolution",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "resolution_notes",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "refund_amount",
+      "type": "double",
+      "nullable": true,
+      "default": 0
+    },
+    {
+      "name": "evidence",
+      "type": "array",
+      "nullable": true,
+      "default": "{}"
+    },
+    {
+      "name": "assigned_to",
+      "type": "string",
+      "nullable": true
+    },
+    {
+      "name": "resolved_at",
+      "type": "datetime",
+      "nullable": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true
+    }
+  ],
+  "constraints": []
+}

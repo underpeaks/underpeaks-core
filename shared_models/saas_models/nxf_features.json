@@ -1,0 +1,105 @@
+{
+  "table_name": "nxf_features",
+  "primary_key": "id",
+  "columns": {
+    "id": {
+      "type": "string",
+      "required": true
+    },
+
+    "key": {
+      "type": "string",
+      "required": true,
+      "description": "Unique feature key (e.g. analytics_dashboard)"
+    },
+
+    "name": {
+      "type": "string",
+      "required": true
+    },
+
+    "description": {
+      "type": "string"
+    },
+
+    "category": {
+      "type": "string",
+      "description": "core, analytics, marketplace, billing, ai, etc."
+    },
+
+    "scope": {
+      "type": "string",
+      "required": true,
+      "description": "global, plan, tenant"
+    },
+
+    "plan_id": {
+      "type": "string",
+      "nullable": true,
+      "description": "If scoped to a specific plan"
+    },
+
+    "tenant_id": {
+      "type": "string",
+      "nullable": true,
+      "description": "If overridden for a specific tenant"
+    },
+
+    "type": {
+      "type": "string",
+      "required": true,
+      "description": "boolean, limit"
+    },
+
+    "value": {
+      "type": "string",
+      "nullable": true,
+      "description": "true/false or numeric limit as string"
+    },
+
+    "enabled": {
+      "type": "boolean",
+      "required": true
+    },
+
+    "priority": {
+      "type": "number",
+      "required": true,
+      "description": "Higher overrides lower (tenant > plan > global)"
+    },
+
+    "metadata": {
+      "type": "jsonb",
+      "nullable": true,
+      "description": "Extra config (optional UI rules, limits, etc.)"
+    },
+
+    "created_at": {
+      "type": "datetime",
+      "required": true
+    },
+
+    "updated_at": {
+      "type": "datetime"
+    }
+  },
+
+  "indexes": [
+    {
+      "name": "idx_feature_key",
+      "fields": ["key"]
+    },
+    {
+      "name": "idx_feature_scope",
+      "fields": ["scope"]
+    },
+    {
+      "name": "idx_feature_plan",
+      "fields": ["plan_id"]
+    },
+    {
+      "name": "idx_feature_tenant",
+      "fields": ["tenant_id"]
+    }
+  ]
+}
