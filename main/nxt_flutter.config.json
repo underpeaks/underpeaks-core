@@ -2,22 +2,22 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "postgres",
+  "selectedDb": "firebase",
   "deploymentType": "self-hosted",
   "dbConfig": {
-    "type": "postgres"
+    "type": "firebase"
   },
   "ecommerceEnabled": false,
-  "demoContentEnabled": false,
+  "demoContentEnabled": true,
   "selectedPages": [],
   "models": [],
   "adminUser": {
-    "fullName": "ANTON WENTZEL",
+    "fullName": "Anton Wentzel",
     "email": "anton@her.co.za"
   },
   "featureFlags": {
     "ecommerce": false,
-    "demoContent": false
+    "demoContent": true
   },
-  "selectedProjectType": "blank"
+  "selectedProjectType": "ecommerce"
 }

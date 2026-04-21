@@ -1,98 +1,70 @@
 [
   {
-    "sp_id": "ps1000000-aaaa-bbbb-cccc-000000000001",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
+    "sp_id": "ps1c9f0e2-9001-4c8d-9a2a-00000001",
+    "project_id": "proj_001",
     "app_type": "ecommerce",
+    "menu_config": {
+      "type": "bottom_navigation",
+      "items": [
+        { "label": "Home", "icon": "home", "route": "/home" },
+        { "label": "Shop", "icon": "store", "route": "/products" },
+        { "label": "Cart", "icon": "cart", "route": "/cart" },
+        { "label": "Orders", "icon": "receipt", "route": "/orders" },
+        { "label": "Profile", "icon": "person", "route": "/profile" }
+      ]
+    },
+    "created_at": "2026-04-01T08:00:00Z",
+    "updated_at": "2026-04-15T07:00:00Z"
+  },
+  {
+    "sp_id": "ps1c9f0e2-9001-4c8d-9a2a-00002",
+    "project_id": "proj_002",
+    "app_type": "saas",
     "menu_config": {
       "type": "sidebar",
       "items": [
-        {
-          "label": "Dashboard",
-          "route": "/dashboard",
-          "icon": "home"
-        },
-        {
-          "label": "Products",
-          "route": "/products",
-          "icon": "box"
-        },
-        {
-          "label": "Orders",
-          "route": "/orders",
-          "icon": "shopping-cart"
-        },
-        {
-          "label": "Settings",
-          "route": "/settings",
-          "icon": "settings"
-        }
+        { "label": "Dashboard", "icon": "dashboard" },
+        { "label": "Analytics", "icon": "bar_chart" },
+        { "label": "Users", "icon": "group" },
+        { "label": "Billing", "icon": "credit_card" },
+        { "label": "Settings", "icon": "settings" }
       ]
     },
-    "created_at": "2026-03-01T08:00:00Z",
-    "updated_at": "2026-03-01T08:00:00Z"
+    "created_at": "2026-03-20T10:00:00Z",
+    "updated_at": "2026-04-14T12:00:00Z"
   },
   {
-    "sp_id": "ps1000000-aaaa-bbbb-cccc-000000000002",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000002",
-    "app_type": "logistics",
+    "sp_id": "ps1c9f0e2-9001-4c8d-9a2a-00003",
+    "project_id": "proj_003",
+    "app_type": "social",
     "menu_config": {
-      "type": "bottom_nav",
+      "type": "bottom_navigation",
       "items": [
-        {
-          "label": "Loads",
-          "route": "/loads",
-          "icon": "truck"
-        },
-        {
-          "label": "Map",
-          "route": "/map",
-          "icon": "map"
-        },
-        {
-          "label": "Bids",
-          "route": "/bids",
-          "icon": "handshake"
-        },
-        {
-          "label": "Profile",
-          "route": "/profile",
-          "icon": "user"
-        }
+        { "label": "Feed", "icon": "feed" },
+        { "label": "Search", "icon": "search" },
+        { "label": "Create", "icon": "add" },
+        { "label": "Notifications", "icon": "notifications" },
+        { "label": "Profile", "icon": "person" }
       ]
     },
-    "created_at": "2026-03-01T08:10:00Z",
-    "updated_at": "2026-03-01T08:10:00Z"
+    "created_at": "2026-04-10T09:00:00Z",
+    "updated_at": "2026-04-15T08:30:00Z"
   },
   {
-    "sp_id": "ps1000000-aaaa-bbbb-cccc-000000000003",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000003",
+    "sp_id": "ps1c9f0e2-9001-4c8d-9a2a-00004",
+    "project_id": "proj_004",
     "app_type": "marketplace",
     "menu_config": {
-      "type": "tab_bar",
+      "type": "hybrid",
       "items": [
-        {
-          "label": "Home",
-          "route": "/",
-          "icon": "grid"
-        },
-        {
-          "label": "Search",
-          "route": "/search",
-          "icon": "search"
-        },
-        {
-          "label": "Favorites",
-          "route": "/favorites",
-          "icon": "heart"
-        },
-        {
-          "label": "Account",
-          "route": "/account",
-          "icon": "user"
-        }
+        { "label": "Explore", "icon": "explore" },
+        { "label": "Categories", "icon": "category" },
+        { "label": "Sell", "icon": "upload" },
+        { "label": "Messages", "icon": "chat" },
+        { "label": "Account", "icon": "account_circle" }
       ]
     },
-    "created_at": "2026-03-01T08:20:00Z",
-    "updated_at": "2026-03-01T08:20:00Z"
+    "created_at": "2026-04-12T11:00:00Z",
+    "updated_at": "2026-04-15T09:00:00Z"
   }
 ]

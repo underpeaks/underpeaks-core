@@ -2,9 +2,9 @@
   "table_name": "nxf_system_activity_logs",
   "schema": "public",
   "columns": [
-    { "name": "sal_id", "type": "uuid", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    { "name": "user_id", "type": "uuid", "nullable": false, "foreign_key": { "references": "nxf_users(user_id)", "on_delete": "CASCADE" } },
-    { "name": "project_id", "type": "uuid", "nullable": true, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
+    { "name": "sal_id", "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
+    { "name": "user_id", "type": "string", "nullable": false, "foreign_key": { "references": "nxf_users(user_id)", "on_delete": "CASCADE" } },
+    { "name": "project_id", "type": "string", "nullable": true, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
     { "name": "action", "type": "string", "nullable": false },
     { "name": "context", "type": "jsonb", "nullable": true },
     { "name": "created_at", "type": "timestamp with time zone", "nullable": false, "default": "now()" }

@@ -1,106 +1,51 @@
 {
   "pages": {
+    "/api/signin/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/signin/route.js"
+    ],
     "/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/installer/layout": [
+    "/console/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/installer/layout.css",
-      "static/chunks/app/installer/layout.js"
+      "static/chunks/app/console/layout.js"
     ],
-    "/installer/page": [
+    "/console/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/installer/page.js"
+      "static/css/app/console/page.css",
+      "static/chunks/app/console/page.js"
     ],
-    "/installer/project/page": [
+    "/api/session/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/installer/project/page.js"
+      "static/chunks/app/api/session/route.js"
     ],
-    "/installer/admin/page": [
+    "/console/dashboard/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/installer/admin/page.js"
+      "static/chunks/app/console/dashboard/page.js"
     ],
-    "/installer/config/page": [
+    "/console/settings/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/installer/config/page.js"
+      "static/chunks/app/console/settings/page.js"
     ],
-    "/installer/database/page": [
+    "/api/logout/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/installer/database/page.js"
+      "static/chunks/app/api/logout/route.js"
     ],
-    "/api/test-db-connection/route": [
+    "/(auth)/signin/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/test-db-connection/route.js"
-    ],
-    "/api/save-db-config/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/save-db-config/route.js"
-    ],
-    "/installer/demo/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/demo/page.js"
-    ],
-    "/installer/finalise/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/finalise/page.js"
-    ],
-    "/api/flutter/create/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/flutter/create/route.js"
-    ],
-    "/api/nextjs/create/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/nextjs/create/route.js"
-    ],
-    "/api/create-system-tables/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/create-system-tables/route.js"
-    ],
-    "/api/create-admin-user/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/create-admin-user/route.js"
-    ],
-    "/api/create-models/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/create-models/route.js"
-    ],
-    "/api/write-config/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/write-config/route.js"
-    ],
-    "/api/create-storage-buckets/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/create-storage-buckets/route.js"
-    ],
-    "/api/save-config/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/save-config/route.js"
-    ],
-    "/installer/done/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/installer/done/page.js"
+      "static/chunks/app/(auth)/signin/page.js"
     ]
   }
 }

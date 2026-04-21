@@ -1,0 +1,138 @@
+[
+  {
+    "id": "feat_0001",
+    "feat_key": "analytics_dashboard",
+    "name": "Analytics Dashboard",
+    "description": "Access to advanced analytics and reporting dashboard",
+    "category": "analytics",
+    "scope": "global",
+    "plan_id": null,
+    "tenant_id": null,
+    "type": "boolean",
+    "value": "true",
+    "enabled": true,
+    "priority": 1,
+    "metadata": {
+      "ui_route": "/admin/analytics",
+      "widgets": ["traffic", "sales", "conversion"]
+    },
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-10T00:00:00Z"
+  },
+  {
+    "id": "feat_0002",
+    "feat_key": "product_listings_limit",
+    "name": "Product Listings Limit",
+    "description": "Maximum number of listings a tenant can create",
+    "category": "marketplace",
+    "scope": "plan",
+    "plan_id": "plan_pro",
+    "tenant_id": null,
+    "type": "limit",
+    "value": "500",
+    "enabled": true,
+    "priority": 2,
+    "metadata": {
+      "reset_cycle": "monthly"
+    },
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "feat_0003",
+    "feat_key": "ai_listing_generator",
+    "name": "AI Listing Generator",
+    "description": "Generate listings using AI assistant",
+    "category": "ai",
+    "scope": "plan",
+    "plan_id": "plan_enterprise",
+    "tenant_id": null,
+    "type": "boolean",
+    "value": "true",
+    "enabled": true,
+    "priority": 3,
+    "metadata": {
+      "model": "gpt-4.1-mini",
+      "credits_per_use": 2
+    },
+    "created_at": "2026-02-01T00:00:00Z",
+    "updated_at": "2026-02-05T00:00:00Z"
+  },
+  {
+    "id": "feat_0004",
+    "feat_key": "custom_domain",
+    "name": "Custom Domain Support",
+    "description": "Allow tenants to use their own domain",
+    "category": "core",
+    "scope": "plan",
+    "plan_id": "plan_pro",
+    "tenant_id": null,
+    "type": "boolean",
+    "value": "true",
+    "enabled": true,
+    "priority": 2,
+    "metadata": {
+      "ssl_included": true
+    },
+    "created_at": "2026-01-05T00:00:00Z",
+    "updated_at": "2026-01-05T00:00:00Z"
+  },
+  {
+    "id": "feat_0005",
+    "feat_key": "api_rate_limit",
+    "name": "API Rate Limit",
+    "description": "Requests per minute allowed via API",
+    "category": "core",
+    "scope": "plan",
+    "plan_id": "plan_basic",
+    "tenant_id": null,
+    "type": "limit",
+    "value": "60",
+    "enabled": true,
+    "priority": 1,
+    "metadata": {
+      "burst_limit": 10
+    },
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "id": "feat_0006",
+    "feat_key": "analytics_dashboard",
+    "name": "Analytics Dashboard (Tenant Override)",
+    "description": "Tenant-specific override enabling premium analytics",
+    "category": "analytics",
+    "scope": "tenant",
+    "plan_id": null,
+    "tenant_id": "tenant_marketplace_01",
+    "type": "boolean",
+    "value": "true",
+    "enabled": true,
+    "priority": 10,
+    "metadata": {
+      "custom_reports": true,
+      "heatmaps": true
+    },
+    "created_at": "2026-04-01T00:00:00Z",
+    "updated_at": "2026-04-10T00:00:00Z"
+  },
+  {
+    "id": "feat_0007",
+    "feat_key": "white_label",
+    "name": "White Label Branding",
+    "description": "Remove platform branding for enterprise tenants",
+    "category": "core",
+    "scope": "plan",
+    "plan_id": "plan_enterprise",
+    "tenant_id": null,
+    "type": "boolean",
+    "value": "true",
+    "enabled": true,
+    "priority": 3,
+    "metadata": {
+      "hide_powered_by": true
+    },
+    "created_at": "2026-01-15T00:00:00Z",
+    "updated_at": "2026-01-15T00:00:00Z"
+  }
+]

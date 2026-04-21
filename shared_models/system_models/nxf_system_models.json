@@ -3,13 +3,13 @@
   "schema": "public",
   "columns": {
     "sm_id": {
-      "type": "uuid",
+      "type": "string",
       "default": "gen_random_uuid()",
       "primary_key": true,
       "nullable": false
     },
     "project_id": {
-      "type": "uuid",
+      "type": "string",
       "nullable": false,
       "foreign_key": {
         "references": "nxf_system_projects(project_id)",

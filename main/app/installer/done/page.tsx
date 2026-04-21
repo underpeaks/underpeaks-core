@@ -17,6 +17,7 @@ export default function DonePage() {
     ecommerceEnabled,
     demoContentEnabled,
     models,
+    selectedProjectType, // ✅ ONLY ADDITION
   } = useInstallerStore()
 
   const maskedPassword = adminUser.password
@@ -125,6 +126,19 @@ export default function DonePage() {
             <p><strong>Name:</strong> {adminUser.fullName}</p>
             <p><strong>Email:</strong> {adminUser.email}</p>
             <p><strong>Password:</strong> {maskedPassword}</p>
+          </section>
+
+          <hr className="border-gray-300" />
+
+          {/* Demo Content */}
+          <section>
+            <h3 className="font-semibold text-lg">Selected Project Type</h3>
+            <p className="text-sm text-gray-500 mb-2">
+              Project template chosen during setup.
+            </p>
+            <p className="font-medium text-black">
+              {selectedProjectType || '—'}
+            </p>
           </section>
 
           <hr className="border-gray-300" />

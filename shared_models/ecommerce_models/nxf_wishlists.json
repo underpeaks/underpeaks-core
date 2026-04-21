@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_wishlist",
+  "table_name": "nxf_wishlists",
   "schema": "public",
   "columns": [
     {

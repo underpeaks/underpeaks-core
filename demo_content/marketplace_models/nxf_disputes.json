@@ -1,0 +1,106 @@
+[
+  {
+    "dispute_id": "disp_001",
+    "order_id": "order_001",
+    "customer_id": "cust_001",
+    "vendor_id": "brand_001",
+    "reason": "Item not received",
+    "description": "Customer reports that the smartphone was marked as delivered but never arrived.",
+    "category": "delivery_issue",
+    "status": "open",
+    "priority": "high",
+    "resolution": null,
+    "resolution_notes": null,
+    "refund_amount": 0,
+    "evidence": [
+      "https://picsum.photos/seed/evidence1/800/600"
+    ],
+    "assigned_to": "admin_001",
+    "resolved_at": null,
+    "created_at": "2026-04-10T09:00:00Z",
+    "updated_at": "2026-04-10T09:00:00Z"
+  },
+  {
+    "dispute_id": "disp_002",
+    "order_id": "order_002",
+    "customer_id": "cust_002",
+    "vendor_id": "brand_003",
+    "reason": "Damaged product",
+    "description": "Clothing item arrived torn and not as described.",
+    "category": "product_quality",
+    "status": "under_review",
+    "priority": "medium",
+    "resolution": null,
+    "resolution_notes": null,
+    "refund_amount": 0,
+    "evidence": [
+      "https://picsum.photos/seed/evidence2/800/600",
+      "https://picsum.photos/seed/evidence3/800/600"
+    ],
+    "assigned_to": "support_agent_02",
+    "resolved_at": null,
+    "created_at": "2026-04-08T14:30:00Z",
+    "updated_at": "2026-04-09T10:15:00Z"
+  },
+  {
+    "dispute_id": "disp_003",
+    "order_id": "order_003",
+    "customer_id": "cust_003",
+    "vendor_id": "brand_002",
+    "reason": "Wrong item delivered",
+    "description": "Customer ordered marine GPS system but received a different model.",
+    "category": "fulfillment_error",
+    "status": "resolved",
+    "priority": "high",
+    "resolution": "refund_issued",
+    "resolution_notes": "Full refund processed after vendor confirmed mistake in dispatch.",
+    "refund_amount": 499.99,
+    "evidence": [
+      "https://picsum.photos/seed/evidence4/800/600"
+    ],
+    "assigned_to": "admin_001",
+    "resolved_at": "2026-04-05T12:00:00Z",
+    "created_at": "2026-04-02T08:00:00Z",
+    "updated_at": "2026-04-05T12:00:00Z"
+  },
+  {
+    "dispute_id": "disp_004",
+    "order_id": "order_004",
+    "customer_id": "cust_005",
+    "vendor_id": "brand_004",
+    "reason": "Late delivery",
+    "description": "Organic food order arrived 5 days after expected delivery date.",
+    "category": "delivery_delay",
+    "status": "resolved",
+    "priority": "low",
+    "resolution": "partial_refund",
+    "resolution_notes": "20% refund issued due to delayed delivery.",
+    "refund_amount": 24.50,
+    "evidence": [],
+    "assigned_to": "support_agent_01",
+    "resolved_at": "2026-03-28T16:00:00Z",
+    "created_at": "2026-03-20T09:00:00Z",
+    "updated_at": "2026-03-28T16:00:00Z"
+  },
+  {
+    "dispute_id": "disp_005",
+    "order_id": "order_005",
+    "customer_id": "cust_001",
+    "vendor_id": "brand_001",
+    "reason": "Refund not processed",
+    "description": "Customer claims refund request was ignored after return shipment.",
+    "category": "refund_issue",
+    "status": "open",
+    "priority": "high",
+    "resolution": null,
+    "resolution_notes": null,
+    "refund_amount": 0,
+    "evidence": [
+      "https://picsum.photos/seed/evidence5/800/600"
+    ],
+    "assigned_to": "admin_002",
+    "resolved_at": null,
+    "created_at": "2026-04-12T11:30:00Z",
+    "updated_at": "2026-04-12T11:30:00Z"
+  }
+]

@@ -9,6 +9,12 @@
       "is_primary": true
     },
     {
+      "name": "project_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": false
+    },
+    {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,

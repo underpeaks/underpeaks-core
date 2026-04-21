@@ -43,6 +43,7 @@ export interface DBAdapter {
   testConnection?(): Promise<{ success: boolean; message: string }>;
 
   /** ------------------- BASIC AUTH ------------------- */
+  getUserById?(uid: string):Promise<{user?:any; error?:string}>
   login?(
     config: DBConfig,
     email: string,
@@ -195,6 +196,16 @@ export interface DBAdapter {
     idColumn?: string
   ): Promise<any>;
   delete?(config: DBConfig, collection: string, id: string): Promise<any>;
+  installDemoContent?: (
+    config: DBConfig,
+    selectedProjectType: string
+  ) => Promise<{
+    success: boolean;
+    message?: string;
+    inserted?: number;
+    skipped?: boolean; // ✅ FIXED
+  }>;
+
 
   /** ------------------- TENANT & PROJECT ------------------- */
   createTenant?(config: DBConfig, data: any): Promise<any>;

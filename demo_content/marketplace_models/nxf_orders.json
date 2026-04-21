@@ -1,0 +1,239 @@
+[
+  {
+    "order_id": "order_001",
+    "order_number": "ORD-10001",
+    "customer_id": "cust_001",
+    "user_id": "user_001",
+    "status": "completed",
+    "payment_status": "paid",
+    "fulfillment_status": "fulfilled",
+    "currency": "USD",
+    "subtotal": 349.98,
+    "discount_total": 20.0,
+    "tax_total": 52.5,
+    "shipping_total": 15.0,
+    "total": 397.48,
+    "coupon_code": "WELCOME10",
+    "billing_address": {
+      "city": "Cape Town",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "city": "Cape Town",
+      "country": "South Africa"
+    },
+    "items": [
+      {
+        "product_id": "prod_001",
+        "name": "Wireless Noise Cancelling Headphones",
+        "quantity": 1,
+        "unit_price": 199.99
+      },
+      {
+        "product_id": "prod_002",
+        "name": "Smart Fitness Watch",
+        "quantity": 1,
+        "unit_price": 149.99
+      }
+    ],
+    "payment_method": "card",
+    "payment_reference": "pay_abc_10001",
+    "tracking_number": "TRK123456789",
+    "shipping_carrier": "DHL",
+    "notes": null,
+    "is_gift": false,
+    "gift_message": null,
+    "placed_at": "2026-04-10T10:00:00Z",
+    "paid_at": "2026-04-10T10:02:00Z",
+    "fulfilled_at": "2026-04-12T14:00:00Z",
+    "cancelled_at": null,
+    "created_at": "2026-04-10T10:00:00Z",
+    "updated_at": "2026-04-12T14:00:00Z"
+  },
+  {
+    "order_id": "order_002",
+    "order_number": "ORD-10002",
+    "customer_id": "cust_002",
+    "user_id": "user_002",
+    "status": "pending",
+    "payment_status": "unpaid",
+    "fulfillment_status": "unfulfilled",
+    "currency": "USD",
+    "subtotal": 25.0,
+    "discount_total": 0,
+    "tax_total": 3.75,
+    "shipping_total": 5.0,
+    "total": 33.75,
+    "coupon_code": null,
+    "billing_address": {
+      "city": "Johannesburg",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "city": "Johannesburg",
+      "country": "South Africa"
+    },
+    "items": [
+      {
+        "product_id": "prod_003",
+        "name": "Organic Green Tea Pack",
+        "quantity": 2,
+        "unit_price": 12.5
+      }
+    ],
+    "payment_method": null,
+    "payment_reference": null,
+    "tracking_number": null,
+    "shipping_carrier": null,
+    "notes": "Customer abandoned checkout after payment step",
+    "is_gift": false,
+    "gift_message": null,
+    "placed_at": "2026-04-15T07:10:00Z",
+    "paid_at": null,
+    "fulfilled_at": null,
+    "cancelled_at": null,
+    "created_at": "2026-04-15T07:10:00Z",
+    "updated_at": "2026-04-15T07:10:00Z"
+  },
+  {
+    "order_id": "order_003",
+    "order_number": "ORD-10003",
+    "customer_id": "cust_003",
+    "user_id": "user_003",
+    "status": "completed",
+    "payment_status": "paid",
+    "fulfillment_status": "fulfilled",
+    "currency": "USD",
+    "subtotal": 499.99,
+    "discount_total": 50.0,
+    "tax_total": 67.5,
+    "shipping_total": 20.0,
+    "total": 537.49,
+    "coupon_code": "SEA50",
+    "billing_address": {
+      "city": "Durban",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "city": "Durban",
+      "country": "South Africa"
+    },
+    "items": [
+      {
+        "product_id": "prod_006",
+        "name": "Marine GPS Navigation System",
+        "quantity": 1,
+        "unit_price": 499.99
+      }
+    ],
+    "payment_method": "card",
+    "payment_reference": "pay_xyz_10003",
+    "tracking_number": "TRK998877665",
+    "shipping_carrier": "FedEx",
+    "notes": null,
+    "is_gift": false,
+    "gift_message": null,
+    "placed_at": "2026-04-02T08:00:00Z",
+    "paid_at": "2026-04-02T08:01:00Z",
+    "fulfilled_at": "2026-04-04T16:00:00Z",
+    "cancelled_at": null,
+    "created_at": "2026-04-02T08:00:00Z",
+    "updated_at": "2026-04-04T16:00:00Z"
+  },
+  {
+    "order_id": "order_004",
+    "order_number": "ORD-10004",
+    "customer_id": "cust_005",
+    "user_id": "user_005",
+    "status": "cancelled",
+    "payment_status": "refunded",
+    "fulfillment_status": "unfulfilled",
+    "currency": "USD",
+    "subtotal": 69.98,
+    "discount_total": 5.0,
+    "tax_total": 9.75,
+    "shipping_total": 5.0,
+    "total": 79.73,
+    "coupon_code": "TECH5",
+    "billing_address": {
+      "city": "Cape Town",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "city": "Cape Town",
+      "country": "South Africa"
+    },
+    "items": [
+      {
+        "product_id": "prod_007",
+        "name": "Smart LED Desk Lamp",
+        "quantity": 1,
+        "unit_price": 39.99
+      },
+      {
+        "product_id": "prod_008",
+        "name": "Wireless Charging Pad",
+        "quantity": 1,
+        "unit_price": 29.99
+      }
+    ],
+    "payment_method": "card",
+    "payment_reference": "pay_refund_10004",
+    "tracking_number": null,
+    "shipping_carrier": null,
+    "notes": "Customer cancelled due to duplicate order",
+    "is_gift": false,
+    "gift_message": null,
+    "placed_at": "2026-04-14T16:00:00Z",
+    "paid_at": "2026-04-14T16:01:00Z",
+    "fulfilled_at": null,
+    "cancelled_at": "2026-04-14T17:00:00Z",
+    "created_at": "2026-04-14T16:00:00Z",
+    "updated_at": "2026-04-14T17:00:00Z"
+  },
+  {
+    "order_id": "order_005",
+    "order_number": "ORD-10005",
+    "customer_id": "cust_004",
+    "user_id": "user_004",
+    "status": "processing",
+    "payment_status": "paid",
+    "fulfillment_status": "unfulfilled",
+    "currency": "USD",
+    "subtotal": 89.99,
+    "discount_total": 10.0,
+    "tax_total": 12.0,
+    "shipping_total": 8.0,
+    "total": 99.99,
+    "coupon_code": "URBAN10",
+    "billing_address": {
+      "city": "Stellenbosch",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "city": "Stellenbosch",
+      "country": "South Africa"
+    },
+    "items": [
+      {
+        "product_id": "prod_004",
+        "name": "Urban Street Hoodie",
+        "quantity": 1,
+        "unit_price": 89.99
+      }
+    ],
+    "payment_method": "card",
+    "payment_reference": "pay_urban_10005",
+    "tracking_number": null,
+    "shipping_carrier": "Aramex",
+    "notes": "Packed and awaiting pickup",
+    "is_gift": false,
+    "gift_message": null,
+    "placed_at": "2026-04-13T09:00:00Z",
+    "paid_at": "2026-04-13T09:01:00Z",
+    "fulfilled_at": null,
+    "cancelled_at": null,
+    "created_at": "2026-04-13T09:00:00Z",
+    "updated_at": "2026-04-15T06:00:00Z"
+  }
+]

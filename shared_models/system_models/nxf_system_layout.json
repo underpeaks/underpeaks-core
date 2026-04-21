@@ -1,15 +1,15 @@
 {
-  "table_name": "nxf_system_layoutd",
+  "table_name": "nxf_system_layout",
   "schema": "public",
   "columns": {
     "sl_id": {
-      "type": "uuid",
+      "type": "string",
       "default": "gen_random_uuid()",
       "primary_key": true,
       "nullable": false
     },
     "project_id": {
-      "type": "uuid",
+      "type": "string",
       "nullable": false,
       "foreign_key": {
         "references": "nxf_system_projects(project_id)",

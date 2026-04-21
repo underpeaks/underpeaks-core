@@ -4,18 +4,18 @@
   "columns": [
     {
       "name": "tm_id",
-      "type": "uuid",
+      "type": "string",
       "primary_key": true,
       "default": "gen_random_uuid()"
     },
     {
       "name": "team_id",
-      "type": "uuid",
+      "type": "string",
       "nullable": false
     },
     {
       "name": "user_id",
-      "type": "uuid",
+      "type": "string",
       "nullable": false
     },
     {

@@ -2,8 +2,8 @@
   "table_name": "nxf_system_apis",
   "schema": "public",
   "columns": {
-    "api_id": { "type": "uuid", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    "project_id": { "type": "uuid", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
+    "api_id": { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
+    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
     "name": { "type": "string", "nullable": false },
     "base_path": { "type": "string", "nullable": false },
     "version": { "type": "string", "nullable": true },

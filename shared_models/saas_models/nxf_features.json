@@ -7,7 +7,7 @@
       "required": true
     },
 
-    "key": {
+    "feat_key": {
       "type": "string",
       "required": true,
       "description": "Unique feature key (e.g. analytics_dashboard)"
@@ -87,7 +87,7 @@
   "indexes": [
     {
       "name": "idx_feature_key",
-      "fields": ["key"]
+      "fields": ["feat_key"]
     },
     {
       "name": "idx_feature_scope",

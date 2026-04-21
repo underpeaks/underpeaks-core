@@ -1,0 +1,104 @@
+[
+  {
+    "id": "tran_001",
+    "order_id": "ord_1001",
+    "user_id": "user_001",
+    "transaction_status": "completed",
+    "payment_method": "card",
+    "payment_gateway_response": {
+      "gateway": "stripe",
+      "payment_intent": "pi_3Nxxxx",
+      "status": "succeeded",
+      "last4": "4242",
+      "brand": "visa"
+    },
+    "amount": 1250.00,
+    "currency": "USD",
+    "transaction_date": "2026-04-10T09:15:00Z",
+    "transaction_reference": "STRIPE_TXN_10001",
+    "created_at": "2026-04-10T09:15:05Z",
+    "updated_at": "2026-04-10T09:15:10Z"
+  },
+
+  {
+    "id": "tran_002",
+    "order_id": "ord_1002",
+    "user_id": "user_002",
+    "transaction_status": "pending",
+    "payment_method": "bank_transfer",
+    "payment_gateway_response": {
+      "gateway": "manual_bank",
+      "status": "pending",
+      "bank": "Standard Bank",
+      "reference_used": "REF_77821"
+    },
+    "amount": 340.50,
+    "currency": "USD",
+    "transaction_date": "2026-04-12T14:30:00Z",
+    "transaction_reference": "BANK_TXN_20002",
+    "created_at": "2026-04-12T14:30:10Z",
+    "updated_at": "2026-04-12T14:35:00Z"
+  },
+
+  {
+    "id": "tran_003",
+    "order_id": "ord_1003",
+    "user_id": "user_003",
+    "transaction_status": "failed",
+    "payment_method": "card",
+    "payment_gateway_response": {
+      "gateway": "stripe",
+      "payment_intent": "pi_3Nyyyy",
+      "status": "failed",
+      "error": "insufficient_funds",
+      "decline_code": "card_declined"
+    },
+    "amount": 89.99,
+    "currency": "USD",
+    "transaction_date": "2026-04-13T11:05:00Z",
+    "transaction_reference": "STRIPE_TXN_10003",
+    "created_at": "2026-04-13T11:05:05Z",
+    "updated_at": "2026-04-13T11:05:20Z"
+  },
+
+  {
+    "id": "tran_004",
+    "order_id": "ord_1004",
+    "user_id": "user_001",
+    "transaction_status": "refunded",
+    "payment_method": "card",
+    "payment_gateway_response": {
+      "gateway": "stripe",
+      "payment_intent": "pi_3Nzzzz",
+      "status": "refunded",
+      "refund_id": "re_123456",
+      "refund_reason": "customer_request"
+    },
+    "amount": 560.00,
+    "currency": "USD",
+    "transaction_date": "2026-04-08T08:20:00Z",
+    "transaction_reference": "STRIPE_TXN_10004",
+    "created_at": "2026-04-08T08:20:05Z",
+    "updated_at": "2026-04-09T10:00:00Z"
+  },
+
+  {
+    "id": "tran_005",
+    "order_id": "ord_1005",
+    "user_id": "user_004",
+    "transaction_status": "processing",
+    "payment_method": "paypal",
+    "payment_gateway_response": {
+      "gateway": "paypal",
+      "order_id": "PP_88991",
+      "status": "processing",
+      "payer_email": "buyer@example.com"
+    },
+    "amount": 2100.00,
+    "currency": "USD",
+    "transaction_date": "2026-04-14T16:45:00Z",
+    "transaction_reference": "PAYPAL_TXN_30005",
+    "created_at": "2026-04-14T16:45:10Z",
+    "updated_at": "2026-04-14T16:46:00Z"
+  }
+]

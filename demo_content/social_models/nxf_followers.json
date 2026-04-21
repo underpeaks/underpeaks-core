@@ -1,0 +1,110 @@
+[
+  {
+    "follow_id": "flw_001",
+    "organisation_id": "org_001",
+    "follower_user_id": "user_001",
+    "following_user_id": "user_002",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_type": "user",
+    "status": "active",
+    "created_at": "2026-04-14T08:00:00Z",
+    "updated_at": "2026-04-14T08:00:00Z"
+  },
+  {
+    "follow_id": "flw_002",
+    "organisation_id": "org_001",
+    "follower_user_id": "user_002",
+    "following_user_id": "user_003",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_type": "user",
+    "status": "active",
+    "created_at": "2026-04-14T08:01:00Z",
+    "updated_at": "2026-04-14T08:01:00Z"
+  },
+  {
+    "follow_id": "flw_003",
+    "organisation_id": "org_001",
+    "follower_user_id": "user_001",
+    "following_user_id": null,
+    "following_entity_type": "vendor",
+    "following_entity_id": "vendor_1001",
+    "follow_type": "vendor",
+    "status": "active",
+    "created_at": "2026-04-14T08:02:00Z",
+    "updated_at": "2026-04-14T08:02:00Z"
+  },
+  {
+    "follow_id": "flw_004",
+    "organisation_id": "org_002",
+    "follower_user_id": "user_003",
+    "following_user_id": null,
+    "following_entity_type": "product",
+    "following_entity_id": "prod_2001",
+    "follow_type": "product",
+    "status": "active",
+    "created_at": "2026-04-14T08:03:00Z",
+    "updated_at": "2026-04-14T08:03:00Z"
+  },
+  {
+    "follow_id": "flw_005",
+    "organisation_id": "org_002",
+    "follower_user_id": "user_004",
+    "following_user_id": "user_001",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_type": "user",
+    "status": "active",
+    "created_at": "2026-04-14T08:04:00Z",
+    "updated_at": "2026-04-14T08:04:00Z"
+  },
+  {
+    "follow_id": "flw_006",
+    "organisation_id": null,
+    "follower_user_id": "user_005",
+    "following_user_id": null,
+    "following_entity_type": "organization",
+    "following_entity_id": "org_002",
+    "follow_type": "organization",
+    "status": "active",
+    "created_at": "2026-04-14T08:05:00Z",
+    "updated_at": "2026-04-14T08:05:00Z"
+  },
+  {
+    "follow_id": "flw_007",
+    "organisation_id": "org_003",
+    "follower_user_id": "user_006",
+    "following_user_id": null,
+    "following_entity_type": "event",
+    "following_entity_id": "evt_1001",
+    "follow_type": "event",
+    "status": "active",
+    "created_at": "2026-04-14T08:06:00Z",
+    "updated_at": "2026-04-14T08:06:00Z"
+  },
+  {
+    "follow_id": "flw_008",
+    "organisation_id": "org_001",
+    "follower_user_id": "user_002",
+    "following_user_id": "user_004",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_type": "user",
+    "status": "active",
+    "created_at": "2026-04-14T08:07:00Z",
+    "updated_at": "2026-04-14T08:07:00Z"
+  },
+  {
+    "follow_id": "flw_009",
+    "organisation_id": "org_002",
+    "follower_user_id": "user_003",
+    "following_user_id": "user_001",
+    "following_entity_type": null,
+    "following_entity_id": null,
+    "follow_type": "user",
+    "status": "blocked",
+    "created_at": "2026-04-14T08:08:00Z",
+    "updated_at": "2026-04-14T08:09:00Z"
+  }
+]

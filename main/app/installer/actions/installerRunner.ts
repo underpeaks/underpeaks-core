@@ -135,11 +135,42 @@ async function setupStorage() {
   return data;
 }
 
+async function installDemoContent() {
+  const { dbConfig, selectedProjectType, demoContentEnabled } = useInstallerStore.getState();
+   console.log("DEMO CONTENT")
+  if (!demoContentEnabled) {
+    console.log('⏭ Demo content skipped');
+    return { skipped: true };
+  }
+
+  if (!selectedProjectType) {
+    throw new Error('selectedProjectType is missing');
+  }
+
+  const response = await fetch('/api/install-demo-content', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      config: dbConfig,
+      selectedProjectType,
+    }),
+  });
+
+  if (!response.ok) {
+    const err = await response.json();
+    throw new Error(`Failed to install demo content: ${err.message}`);
+  }
+
+  const data = await response.json();
+  console.log('✅ Demo content installed:', data);
+  return data;
+}
+
 // Dummy implementations for other installer steps
 async function createApiEndpoints() { console.log('Creating API endpoints...'); await delay(1000); }
 async function setupAuthSystem() { console.log('Setting up authentication...'); await delay(1000); }
 async function configureSession() { console.log('Configuring session management...'); await delay(1000); }
-async function installDemoContent() { console.log('Installing demo content...'); await delay(1000); }
+
 async function runTests() { console.log('Running tests...'); await delay(1000); }
 async function finalizeInstaller() { console.log('Finalizing installer...'); await delay(1000); }
 

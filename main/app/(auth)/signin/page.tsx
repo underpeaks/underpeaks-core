@@ -9,9 +9,9 @@ import { Label } from '@/components/ui/label'
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
 import { FiMail, FiLock } from 'react-icons/fi'
 
-// Firebase SDK
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
 import { initializeApp, getApps } from 'firebase/app'
+import { parseFirebaseWebConfig } from '@/app/lib/firebaseConfig'
 
 export default function SignInPageWrapper() {
   return (
@@ -23,6 +23,7 @@ export default function SignInPageWrapper() {
 
 function SignInPage() {
   const router = useRouter()
+
   const redirectedFrom =
     typeof window !== 'undefined'
       ? new URLSearchParams(window.location.search).get('redirectedFrom') || '/console'
@@ -39,86 +40,93 @@ function SignInPage() {
 
     try {
       const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE
-      if (!DB_TYPE) throw new Error('NEXT_PUBLIC_DB_TYPE is not set')
+      console.log('🔥 DB_TYPE:', DB_TYPE)
 
-      let bodyPayload: any = { email, password, userAgent: navigator.userAgent }
-
-      // 🔥 FIREBASE LOGIN
       if (DB_TYPE === 'firebase') {
+        console.log('🔥 Firebase login (frontend only)')
+
+        // ---------------- INIT FIREBASE ----------------
         if (!getApps().length) {
-          const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG!)
+          const raw = process.env.NEXT_PUBLIC_FIREBASE_CONFIG
+
+          console.log('🔥 RAW FIREBASE CONFIG:', raw)
+
+          const firebaseConfig = parseFirebaseWebConfig(raw)
+
+          console.log('🔥 PARSED FIREBASE CONFIG:', firebaseConfig)
+
           initializeApp(firebaseConfig)
         }
 
         const auth = getAuth()
-        const userCredential = await signInWithEmailAndPassword(auth, email, password)
+
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        )
+
         const idToken = await userCredential.user.getIdToken()
 
+        console.log('🔥 ID TOKEN GENERATED')
+
+        // ---------------- SEND TOKEN ONLY ----------------
         const res = await fetch('/api/signin', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${idToken}`,
           },
-          body: JSON.stringify({ email, idToken, userAgent: navigator.userAgent }),
+          body: JSON.stringify({
+            email,
+            idToken,
+            userAgent: navigator.userAgent,
+          }),
         })
 
         const data = await res.json()
-        console.log('[FIREBASE SIGNIN RESPONSE]', data)
 
-        if (!res.ok || !data.success) throw new Error(data.error || 'Signin failed')
+        console.log('🔥 BACKEND RESPONSE:', data)
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Signin failed')
+        }
+
         localStorage.setItem('authToken', data.accessToken)
-        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
+        if (data.refreshToken)
+          localStorage.setItem('refreshToken', data.refreshToken)
       }
 
-      // 🔥 SUPABASE FIXED
-      else if (DB_TYPE === 'supabase') {
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!.trim()
-        const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!.trim()
-        const { createClient } = await import('@supabase/supabase-js')
-        const supabase = createClient(supabaseUrl, anonKey)
-
-        // Call Supabase sign-in via API route
-        const res = await fetch('/api/signin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        })
-
-        const data = await res.json()
-        console.log('[SUPABASE SIGNIN RESPONSE]', data)
-
-        if (!res.ok || !data.success) throw new Error(data.error || 'Signin failed')
-
-        // Save tokens
-        localStorage.setItem('authToken', data.accessToken)
-        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
-      }
-
-      // 🔹 MONGO / SQL CUSTOM LOGIN
       else {
         const res = await fetch('/api/signin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(bodyPayload),
+          body: JSON.stringify({
+            email,
+            password,
+            userAgent: navigator.userAgent,
+          }),
         })
 
         const data = await res.json()
-        console.log('[CUSTOM SIGNIN RESPONSE]', data)
 
-        if (!res.ok || !data.success || !data.accessToken) {
+        console.log('🔥 NON-FIREBASE RESPONSE:', data)
+
+        if (!res.ok || !data.success) {
           throw new Error(data.error || 'Signin failed')
         }
+
         localStorage.setItem('authToken', data.accessToken)
-        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
+        if (data.refreshToken)
+          localStorage.setItem('refreshToken', data.refreshToken)
       }
 
       await router.replace(redirectedFrom)
     } catch (err: any) {
-      console.error('Signin error:', err)
-      setError(err.message || 'Authentication failed')
+      console.error('❌ SIGNIN ERROR:', err)
+      setError(err.message)
     } finally {
-      setTimeout(() => setLoading(false), 300)
+      setLoading(false)
     }
   }
 

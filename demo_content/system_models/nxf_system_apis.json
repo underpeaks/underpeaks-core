@@ -1,154 +1,77 @@
-{
-  "table_name": "nxf_system_apis",
-  "records": [
-    {
-      "api_id": "22222222-2222-2222-2222-222222222001",
-      "project_id": "proj_001",
-      "name": "Auth API",
-      "base_path": "/api/auth",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/login", "method": "POST", "auth": false },
-          { "path": "/register", "method": "POST", "auth": false },
-          { "path": "/logout", "method": "POST", "auth": true }
-        ]
-      },
-      "created_at": "2026-02-01T08:00:00Z",
-      "updated_at": "2026-02-01T08:00:00Z"
+[
+  {
+    "api_id": "7f1c2d9a-1000-4b7a-a111-000000000001",
+    "project_id": "proj_001",
+    "name": "Marketplace Core API",
+    "base_path": "/api/v1/marketplace",
+    "version": "v1",
+    "schema": {
+      "products": "/products",
+      "orders": "/orders",
+      "vendors": "/vendors",
+      "customers": "/customers"
     },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222002",
-      "project_id": "proj_001",
-      "name": "Users API",
-      "base_path": "/api/users",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/profile", "method": "GET", "auth": true },
-          { "path": "/update", "method": "PUT", "auth": true }
-        ]
-      },
-      "created_at": "2026-02-01T08:05:00Z",
-      "updated_at": "2026-02-01T08:05:00Z"
+    "created_at": "2026-01-01T08:00:00Z",
+    "updated_at": "2026-04-15T08:00:00Z"
+  },
+  {
+    "api_id": "7f1c2d9a-1000-4b7a-a111-000000000002",
+    "project_id": "proj_001",
+    "name": "Authentication API",
+    "base_path": "/api/v1/auth",
+    "version": "v1",
+    "schema": {
+      "login": "/login",
+      "register": "/register",
+      "refresh": "/refresh-token",
+      "logout": "/logout"
     },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222003",
-      "project_id": "proj_002",
-      "name": "Projects API",
-      "base_path": "/api/projects",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/create", "method": "POST", "auth": true },
-          { "path": "/list", "method": "GET", "auth": true }
-        ]
-      },
-      "created_at": "2026-02-01T08:10:00Z",
-      "updated_at": "2026-02-01T08:10:00Z"
+    "created_at": "2026-01-02T08:00:00Z",
+    "updated_at": "2026-04-15T09:00:00Z"
+  },
+  {
+    "api_id": "7f1c2d9a-1000-4b7a-a111-000000000003",
+    "project_id": "proj_001",
+    "name": "Vendor Management API",
+    "base_path": "/api/v1/vendors",
+    "version": "v1",
+    "schema": {
+      "profile": "/profile",
+      "products": "/products",
+      "payouts": "/payouts",
+      "analytics": "/analytics"
     },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222004",
-      "project_id": "proj_002",
-      "name": "Payments API",
-      "base_path": "/api/payments",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/charge", "method": "POST", "auth": true },
-          { "path": "/refund", "method": "POST", "auth": true }
-        ]
-      },
-      "created_at": "2026-02-01T08:15:00Z",
-      "updated_at": "2026-02-01T08:15:00Z"
+    "created_at": "2026-01-05T08:00:00Z",
+    "updated_at": "2026-04-14T10:00:00Z"
+  },
+  {
+    "api_id": "7f1c2d9a-1000-4b7a-a111-000000000004",
+    "project_id": "proj_001",
+    "name": "Order Processing API",
+    "base_path": "/api/v1/orders",
+    "version": "v1",
+    "schema": {
+      "create": "/create",
+      "update_status": "/status",
+      "cancel": "/cancel",
+      "track": "/track"
     },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222005",
-      "project_id": "proj_003",
-      "name": "Notifications API",
-      "base_path": "/api/notifications",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/send", "method": "POST", "auth": true },
-          { "path": "/list", "method": "GET", "auth": true }
-        ]
-      },
-      "created_at": "2026-02-01T08:20:00Z",
-      "updated_at": "2026-02-01T08:20:00Z"
+    "created_at": "2026-01-08T08:00:00Z",
+    "updated_at": "2026-04-15T07:30:00Z"
+  },
+  {
+    "api_id": "7f1c2d9a-1000-4b7a-a111-000000000005",
+    "project_id": "proj_001",
+    "name": "System Analytics API",
+    "base_path": "/api/v1/system",
+    "version": "v1",
+    "schema": {
+      "activity_logs": "/logs",
+      "events": "/events",
+      "metrics": "/metrics",
+      "health": "/health"
     },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222006",
-      "project_id": "proj_003",
-      "name": "Analytics API",
-      "base_path": "/api/analytics",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/events", "method": "GET", "auth": true },
-          { "path": "/metrics", "method": "GET", "auth": true }
-        ]
-      },
-      "created_at": "2026-02-01T08:25:00Z",
-      "updated_at": "2026-02-01T08:25:00Z"
-    },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222007",
-      "project_id": "proj_004",
-      "name": "Files API",
-      "base_path": "/api/files",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/upload", "method": "POST", "auth": true },
-          { "path": "/delete", "method": "DELETE", "auth": true }
-        ]
-      },
-      "created_at": "2026-02-01T08:30:00Z",
-      "updated_at": "2026-02-01T08:30:00Z"
-    },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222008",
-      "project_id": "proj_004",
-      "name": "Webhooks API",
-      "base_path": "/api/webhooks",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/receive", "method": "POST", "auth": false }
-        ]
-      },
-      "created_at": "2026-02-01T08:35:00Z",
-      "updated_at": "2026-02-01T08:35:00Z"
-    },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222009",
-      "project_id": "proj_005",
-      "name": "Search API",
-      "base_path": "/api/search",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/query", "method": "GET", "auth": false }
-        ]
-      },
-      "created_at": "2026-02-01T08:40:00Z",
-      "updated_at": "2026-02-01T08:40:00Z"
-    },
-    {
-      "api_id": "22222222-2222-2222-2222-222222222010",
-      "project_id": "proj_005",
-      "name": "Admin API",
-      "base_path": "/api/admin",
-      "version": "v1",
-      "schema": {
-        "endpoints": [
-          { "path": "/users", "method": "GET", "auth": true },
-          { "path": "/logs", "method": "GET", "auth": true }
-        ]
-      },
-      "created_at": "2026-02-01T08:45:00Z",
-      "updated_at": "2026-02-01T08:45:00Z"
-    }
-  ]
-}
+    "created_at": "2026-01-10T08:00:00Z",
+    "updated_at": "2026-04-15T06:45:00Z"
+  }
+]

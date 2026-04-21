@@ -1,0 +1,132 @@
+[
+  {
+    "user_id": "usr_001",
+    "auth_id": "auth_001",
+    "username": "anton_dev",
+    "full_name": "Anton Wentzel",
+    "email": "anton@example.com",
+    "phone": "+27 82 555 1001",
+    "avatar_url": "https://cdn.demo.com/avatars/anton.jpg",
+    "bio": "Full-stack developer building marketplace systems.",
+    "role": "admin",
+    "status": "active",
+    "is_verified": true,
+    "is_premium": true,
+    "location": "Cape Town, South Africa",
+    "latitude": -33.9249,
+    "longitude": 18.4241,
+    "social_links": {
+      "github": "https://github.com/anton",
+      "linkedin": "https://linkedin.com/in/anton"
+    },
+    "preferences": {
+      "theme": "dark",
+      "notifications": true
+    },
+    "last_login_at": "2026-04-13T18:22:00Z",
+    "created_at": "2026-01-01T09:00:00Z",
+    "updated_at": "2026-04-13T18:22:00Z"
+  },
+  {
+    "user_id": "usr_002",
+    "auth_id": "auth_002",
+    "username": "sarah_smith",
+    "full_name": "Sarah Smith",
+    "email": "sarah@example.com",
+    "phone": "+27 83 444 2002",
+    "avatar_url": "https://cdn.demo.com/avatars/sarah.jpg",
+    "bio": "Interior designer and property enthusiast.",
+    "role": "user",
+    "status": "active",
+    "is_verified": true,
+    "is_premium": false,
+    "location": "Johannesburg, South Africa",
+    "latitude": -26.2041,
+    "longitude": 28.0473,
+    "social_links": {
+      "instagram": "https://instagram.com/sarah_designs"
+    },
+    "preferences": {
+      "theme": "light",
+      "notifications": true
+    },
+    "last_login_at": "2026-04-12T14:10:00Z",
+    "created_at": "2026-02-15T10:30:00Z",
+    "updated_at": "2026-04-12T14:10:00Z"
+  },
+  {
+    "user_id": "usr_003",
+    "auth_id": "auth_003",
+    "username": "john_trader",
+    "full_name": "John Peterson",
+    "email": "john@example.com",
+    "phone": "+27 81 777 3003",
+    "avatar_url": "https://cdn.demo.com/avatars/john.jpg",
+    "bio": "Car dealer and reseller.",
+    "role": "seller",
+    "status": "active",
+    "is_verified": false,
+    "is_premium": false,
+    "location": "Durban, South Africa",
+    "latitude": -29.8587,
+    "longitude": 31.0218,
+    "social_links": {},
+    "preferences": {
+      "theme": "dark"
+    },
+    "last_login_at": "2026-04-11T09:45:00Z",
+    "created_at": "2026-03-01T08:00:00Z",
+    "updated_at": "2026-04-11T09:45:00Z"
+  },
+  {
+    "user_id": "usr_004",
+    "auth_id": "auth_004",
+    "username": "tech_anna",
+    "full_name": "Anna Müller",
+    "email": "anna@example.com",
+    "phone": "+27 84 222 4004",
+    "avatar_url": "https://cdn.demo.com/avatars/anna.jpg",
+    "bio": "Tech reviewer and gadget enthusiast.",
+    "role": "seller",
+    "status": "active",
+    "is_verified": true,
+    "is_premium": true,
+    "location": "Pretoria, South Africa",
+    "latitude": -25.7479,
+    "longitude": 28.2293,
+    "social_links": {
+      "youtube": "https://youtube.com/@anna-tech"
+    },
+    "preferences": {
+      "theme": "dark",
+      "email_updates": true
+    },
+    "last_login_at": "2026-04-13T20:05:00Z",
+    "created_at": "2026-01-20T11:00:00Z",
+    "updated_at": "2026-04-13T20:05:00Z"
+  },
+  {
+    "user_id": "usr_005",
+    "auth_id": "auth_005",
+    "username": "lazy_buyer",
+    "full_name": "Michael Brown",
+    "email": "michael@example.com",
+    "phone": "+27 82 999 5005",
+    "avatar_url": "https://cdn.demo.com/avatars/michael.jpg",
+    "bio": "Casual buyer looking for good deals.",
+    "role": "user",
+    "status": "active",
+    "is_verified": false,
+    "is_premium": false,
+    "location": "Cape Town, South Africa",
+    "latitude": -33.9189,
+    "longitude": 18.4233,
+    "social_links": {},
+    "preferences": {
+      "theme": "light"
+    },
+    "last_login_at": "2026-04-10T16:30:00Z",
+    "created_at": "2026-03-10T12:00:00Z",
+    "updated_at": "2026-04-10T16:30:00Z"
+  }
+]

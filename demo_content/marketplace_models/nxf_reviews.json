@@ -1,0 +1,101 @@
+[
+  {
+    "review_id": "rev_001",
+    "product_id": "prod_001",
+    "order_id": "order_001",
+    "customer_id": "cust_001",
+    "rating": 5,
+    "title": "Absolutely outstanding sound quality",
+    "comment": "The noise cancellation is incredible and battery life easily lasts me a full work week.",
+    "images": [
+      "https://picsum.photos/seed/review1/800/800"
+    ],
+    "status": "published",
+    "is_verified_purchase": true,
+    "helpful_count": 42,
+    "report_count": 0,
+    "response_from_vendor": "Thank you for your feedback! We're glad you love the product.",
+    "response_at": "2026-04-10T10:00:00Z",
+    "created_at": "2026-04-09T08:00:00Z",
+    "updated_at": "2026-04-10T10:00:00Z"
+  },
+  {
+    "review_id": "rev_002",
+    "product_id": "prod_002",
+    "order_id": "order_003",
+    "customer_id": "cust_003",
+    "rating": 4,
+    "title": "Great watch but slightly overpriced",
+    "comment": "Features are excellent but I expected a bit more battery optimization.",
+    "images": [],
+    "status": "published",
+    "is_verified_purchase": true,
+    "helpful_count": 18,
+    "report_count": 0,
+    "response_from_vendor": "We appreciate your feedback and are working on battery improvements.",
+    "response_at": "2026-04-12T09:00:00Z",
+    "created_at": "2026-04-11T07:30:00Z",
+    "updated_at": "2026-04-12T09:00:00Z"
+  },
+  {
+    "review_id": "rev_003",
+    "product_id": "prod_003",
+    "order_id": "order_002",
+    "customer_id": "cust_002",
+    "rating": 5,
+    "title": "Best green tea I've ever had",
+    "comment": "Fresh, clean taste and noticeable energy boost without jitters.",
+    "images": [
+      "https://picsum.photos/seed/review3/800/800",
+      "https://picsum.photos/seed/review3b/800/800"
+    ],
+    "status": "published",
+    "is_verified_purchase": true,
+    "helpful_count": 63,
+    "report_count": 0,
+    "response_from_vendor": null,
+    "response_at": null,
+    "created_at": "2026-04-10T11:00:00Z",
+    "updated_at": "2026-04-10T11:00:00Z"
+  },
+  {
+    "review_id": "rev_004",
+    "product_id": "prod_004",
+    "order_id": null,
+    "customer_id": "cust_005",
+    "rating": 2,
+    "title": "Not as expected",
+    "comment": "Material felt thinner than described and sizing was off.",
+    "images": [
+      "https://picsum.photos/seed/review4/800/800"
+    ],
+    "status": "published",
+    "is_verified_purchase": false,
+    "helpful_count": 5,
+    "report_count": 2,
+    "response_from_vendor": "Sorry for the experience. Please contact support for a replacement.",
+    "response_at": "2026-04-15T08:00:00Z",
+    "created_at": "2026-04-14T06:00:00Z",
+    "updated_at": "2026-04-15T08:00:00Z"
+  },
+  {
+    "review_id": "rev_005",
+    "product_id": "prod_006",
+    "order_id": "order_005",
+    "customer_id": "cust_010",
+    "rating": 5,
+    "title": "Perfect for marine navigation",
+    "comment": "Used this on a 3-day voyage and it performed flawlessly even in rough conditions.",
+    "images": [
+      "https://picsum.photos/seed/review5/800/800"
+    ],
+    "status": "published",
+    "is_verified_purchase": true,
+    "helpful_count": 91,
+    "report_count": 0,
+    "response_from_vendor": "Thank you — safe sailing!",
+    "response_at": "2026-04-13T12:00:00Z",
+    "created_at": "2026-04-12T09:00:00Z",
+    "updated_at": "2026-04-13T12:00:00Z"
+  }
+]

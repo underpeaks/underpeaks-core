@@ -1,0 +1,142 @@
+[
+  {
+    "group_id": "grp_001",
+    "organisation_id": "org_001",
+    "created_by": "user_001",
+    "name": "Startup Founders SA",
+    "description": "A community for South African startup founders sharing ideas, funding tips, and growth strategies.",
+    "group_type": "interest",
+    "visibility": "public",
+    "status": "active",
+    "avatar_url": "https://cdn.example.com/groups/startup_founders.jpg",
+    "cover_image_url": "https://cdn.example.com/groups/startup_cover.jpg",
+    "owner_user_id": "user_001",
+    "member_count": 1280,
+    "post_count": 342,
+    "rules": [
+      "No spam or self-promotion without context",
+      "Be respectful and constructive",
+      "No investment scams or fake funding offers"
+    ],
+    "tags": ["startup", "entrepreneurship", "saas", "funding"],
+    "settings": {
+      "join_approval": false,
+      "posting_rights": "all_members",
+      "moderation_level": "standard"
+    },
+    "created_at": "2026-01-10T09:00:00Z",
+    "updated_at": "2026-04-14T07:10:00Z"
+  },
+  {
+    "group_id": "grp_002",
+    "organisation_id": "org_001",
+    "created_by": "user_002",
+    "name": "AI Builders Hub",
+    "description": "Discuss AI tools, agents, automation workflows, and real-world implementations.",
+    "group_type": "interest",
+    "visibility": "public",
+    "status": "active",
+    "avatar_url": "https://cdn.example.com/groups/ai_hub.jpg",
+    "cover_image_url": "https://cdn.example.com/groups/ai_cover.jpg",
+    "owner_user_id": "user_002",
+    "member_count": 842,
+    "post_count": 210,
+    "rules": [
+      "No low-effort AI spam",
+      "Share working examples where possible",
+      "No misleading AI claims"
+    ],
+    "tags": ["ai", "machine learning", "automation", "agents"],
+    "settings": {
+      "join_approval": false,
+      "posting_rights": "members_only",
+      "moderation_level": "strict"
+    },
+    "created_at": "2026-02-05T10:30:00Z",
+    "updated_at": "2026-04-14T07:11:00Z"
+  },
+  {
+    "group_id": "grp_003",
+    "organisation_id": "org_002",
+    "created_by": "user_003",
+    "name": "Cape Town Developers",
+    "description": "Local dev community for networking, job posts, and collaboration in Cape Town.",
+    "group_type": "org_group",
+    "visibility": "public",
+    "status": "active",
+    "avatar_url": "https://cdn.example.com/groups/ct_dev.jpg",
+    "cover_image_url": "https://cdn.example.com/groups/ct_cover.jpg",
+    "owner_user_id": "user_003",
+    "member_count": 540,
+    "post_count": 98,
+    "rules": [
+      "Job posts allowed once per week",
+      "No recruitment spam",
+      "Keep discussions technical or career-related"
+    ],
+    "tags": ["developers", "cape town", "jobs", "software"],
+    "settings": {
+      "join_approval": true,
+      "posting_rights": "approved_members",
+      "moderation_level": "moderate"
+    },
+    "created_at": "2026-03-01T08:00:00Z",
+    "updated_at": "2026-04-14T07:12:00Z"
+  },
+  {
+    "group_id": "grp_004",
+    "organisation_id": "org_001",
+    "created_by": "user_004",
+    "name": "Private Investors Circle",
+    "description": "Exclusive group for vetted investors discussing private deals and opportunities.",
+    "group_type": "private",
+    "visibility": "private",
+    "status": "active",
+    "avatar_url": "https://cdn.example.com/groups/investors.jpg",
+    "cover_image_url": "https://cdn.example.com/groups/investors_cover.jpg",
+    "owner_user_id": "user_004",
+    "member_count": 42,
+    "post_count": 76,
+    "rules": [
+      "Strict NDA applies",
+      "No sharing outside group",
+      "Verified members only"
+    ],
+    "tags": ["investing", "private equity", "angel investing"],
+    "settings": {
+      "join_approval": true,
+      "posting_rights": "admins_only",
+      "moderation_level": "strict"
+    },
+    "created_at": "2026-01-20T12:00:00Z",
+    "updated_at": "2026-04-14T07:13:00Z"
+  },
+  {
+    "group_id": "grp_005",
+    "organisation_id": null,
+    "created_by": "user_005",
+    "name": "Freelance Designers Network",
+    "description": "A global community for UI/UX and graphic designers sharing work and clients.",
+    "group_type": "public",
+    "visibility": "public",
+    "status": "active",
+    "avatar_url": "https://cdn.example.com/groups/designers.jpg",
+    "cover_image_url": "https://cdn.example.com/groups/design_cover.jpg",
+    "owner_user_id": "user_005",
+    "member_count": 2300,
+    "post_count": 890,
+    "rules": [
+      "Portfolio sharing encouraged",
+      "No plagiarism",
+      "Be constructive with feedback"
+    ],
+    "tags": ["design", "ui", "ux", "freelance"],
+    "settings": {
+      "join_approval": false,
+      "posting_rights": "all_members",
+      "moderation_level": "light"
+    },
+    "created_at": "2025-12-15T09:00:00Z",
+    "updated_at": "2026-04-14T07:14:00Z"
+  }
+]

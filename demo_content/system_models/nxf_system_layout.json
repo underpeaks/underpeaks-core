@@ -1,92 +1,76 @@
 [
   {
-    "sl_id": "l1000000-aaaa-bbbb-cccc-000000000001",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
-    "name": "dashboard_layout",
+    "sl_id": "l1c9f0e2-6001-4c8d-9a2a-000000000001",
+    "project_id": "proj_001",
+    "name": "Ecommerce App Main Layout",
     "schema": {
-      "type": "page",
-      "route": "/dashboard",
-      "layout": "grid",
-      "theme": "default",
-      "components": [
-        {
-          "id": "header_1",
-          "type": "header",
-          "props": {
-            "title": "Dashboard",
-            "showUserMenu": true
+      "app_shell": {
+        "type": "scaffold",
+        "navigation": "bottom_nav",
+        "screens": [
+          {
+            "name": "Home",
+            "route": "/home",
+            "widgets": ["banner", "categories", "featured_products"]
+          },
+          {
+            "name": "Search",
+            "route": "/search",
+            "widgets": ["search_bar", "filters", "results_grid"]
+          },
+          {
+            "name": "Cart",
+            "route": "/cart",
+            "widgets": ["cart_items", "price_summary", "checkout_button"]
+          },
+          {
+            "name": "Profile",
+            "route": "/profile",
+            "widgets": ["user_card", "orders", "settings"]
           }
-        },
-        {
-          "id": "stats_row",
-          "type": "stats_grid",
-          "props": {
-            "columns": 4
-          }
-        },
-        {
-          "id": "recent_activity",
-          "type": "table",
-          "props": {
-            "source": "audit_trails",
-            "limit": 10
-          }
-        }
-      ]
+        ]
+      },
+      "theme": {
+        "primary_color": "#1E88E5",
+        "dark_mode": true
+      }
     },
-    "created_at": "2026-03-01T08:30:00Z",
-    "updated_at": "2026-03-01T08:30:00Z"
+    "created_at": "2026-04-01T08:00:00Z",
+    "updated_at": "2026-04-15T07:00:00Z"
   },
   {
-    "sl_id": "l1000000-aaaa-bbbb-cccc-000000000002",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
-    "name": "login_layout",
+    "sl_id": "l1c9f0e2-6001-4c8d-9a2a-000000000002",
+    "project_id": "proj_002",
+    "name": "SaaS Dashboard Layout",
     "schema": {
-      "type": "page",
-      "route": "/login",
-      "layout": "centered",
-      "theme": "minimal",
-      "components": [
-        {
-          "id": "login_card",
-          "type": "auth_card",
-          "props": {
-            "title": "Welcome back",
-            "providers": ["email", "google"]
-          }
-        }
+      "layout_type": "sidebar",
+      "sidebar": {
+        "items": ["dashboard", "analytics", "billing", "users", "settings"]
+      },
+      "dashboard_widgets": [
+        "revenue_chart",
+        "user_growth",
+        "active_sessions",
+        "system_health"
       ]
     },
-    "created_at": "2026-03-01T08:35:00Z",
-    "updated_at": "2026-03-01T08:35:00Z"
+    "created_at": "2026-03-25T10:00:00Z",
+    "updated_at": "2026-04-14T12:00:00Z"
   },
   {
-    "sl_id": "l1000000-aaaa-bbbb-cccc-000000000003",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
-    "name": "settings_layout",
+    "sl_id": "l1c9f0e2-6001-4c8d-9a2a-000000000003",
+    "project_id": "proj_003",
+    "name": "Social Feed Layout",
     "schema": {
-      "type": "page",
-      "route": "/settings",
-      "layout": "sidebar",
-      "theme": "default",
+      "layout_type": "feed",
       "components": [
-        {
-          "id": "sidebar_nav",
-          "type": "navigation",
-          "props": {
-            "items": ["profile", "security", "billing"]
-          }
-        },
-        {
-          "id": "settings_panel",
-          "type": "form",
-          "props": {
-            "sections": ["profile", "notifications", "api_keys"]
-          }
-        }
+        "stories_bar",
+        "post_creator",
+        "feed_list",
+        "trending_sidebar"
       ]
     },
-    "created_at": "2026-03-01T08:40:00Z",
-    "updated_at": "2026-03-01T08:40:00Z"
+    "created_at": "2026-04-10T09:00:00Z",
+    "updated_at": "2026-04-15T08:30:00Z"
   }
 ]

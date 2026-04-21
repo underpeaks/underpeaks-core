@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_post_tag_map",
+  "table_name": "nxf_post_tags_map",
   "schema": "public",
   "columns": [
     {

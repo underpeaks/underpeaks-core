@@ -2,9 +2,9 @@
   "table_name": "nxf_system_deployments",
   "schema": "public",
   "columns": {
-    "sd_id": { "type": "uuid", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    "project_id": { "type": "uuid", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
-    "environment_id": { "type": "uuid", "nullable": false, "foreign_key": { "references": "nxf_system_environments(se_id)", "on_delete": "CASCADE" } },
+    "sd_id": { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
+    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
+    "environment_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_environments(se_id)", "on_delete": "CASCADE" } },
     "status": { "type": "string", "nullable": false },
     "logs": { "type": "string", "nullable": true },
     "meta": { "type": "jsonb", "nullable": true },

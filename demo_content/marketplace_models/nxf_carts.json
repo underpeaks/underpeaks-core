@@ -1,0 +1,178 @@
+[
+  {
+    "cart_id": "cart_001",
+    "user_id": "user_001",
+    "session_id": null,
+    "items": [
+      {
+        "product_id": "prod_001",
+        "name": "Wireless Noise Cancelling Headphones",
+        "quantity": 1,
+        "unit_price": 199.99,
+        "brand_id": "brand_001"
+      },
+      {
+        "product_id": "prod_002",
+        "name": "Smart Fitness Watch",
+        "quantity": 1,
+        "unit_price": 149.99,
+        "brand_id": "brand_001"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 349.98,
+    "discount_total": 20.0,
+    "tax_total": 52.5,
+    "total": 382.48,
+    "coupon_code": "WELCOME10",
+    "status": "active",
+    "expires_at": "2026-04-25T00:00:00Z",
+    "last_activity_at": "2026-04-14T18:30:00Z",
+    "converted_to_order": false,
+    "order_id": null,
+    "metadata": {
+      "source": "web",
+      "device": "desktop"
+    },
+    "created_at": "2026-04-12T10:00:00Z",
+    "updated_at": "2026-04-14T18:30:00Z"
+  },
+  {
+    "cart_id": "cart_002",
+    "user_id": null,
+    "session_id": "sess_abc_123",
+    "items": [
+      {
+        "product_id": "prod_003",
+        "name": "Organic Green Tea Pack",
+        "quantity": 2,
+        "unit_price": 12.5,
+        "brand_id": "brand_004"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 25.0,
+    "discount_total": 0,
+    "tax_total": 3.75,
+    "total": 28.75,
+    "coupon_code": null,
+    "status": "active",
+    "expires_at": "2026-04-18T00:00:00Z",
+    "last_activity_at": "2026-04-15T07:10:00Z",
+    "converted_to_order": false,
+    "order_id": null,
+    "metadata": {
+      "source": "mobile_app",
+      "device": "android"
+    },
+    "created_at": "2026-04-15T06:45:00Z",
+    "updated_at": "2026-04-15T07:10:00Z"
+  },
+  {
+    "cart_id": "cart_003",
+    "user_id": "user_003",
+    "session_id": null,
+    "items": [
+      {
+        "product_id": "prod_004",
+        "name": "Urban Street Hoodie",
+        "quantity": 1,
+        "unit_price": 89.99,
+        "brand_id": "brand_003"
+      },
+      {
+        "product_id": "prod_005",
+        "name": "Cargo Pants Premium Fit",
+        "quantity": 2,
+        "unit_price": 59.99,
+        "brand_id": "brand_003"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 209.97,
+    "discount_total": 10.0,
+    "tax_total": 31.5,
+    "total": 231.47,
+    "coupon_code": "URBAN10",
+    "status": "abandoned",
+    "expires_at": "2026-04-10T00:00:00Z",
+    "last_activity_at": "2026-04-09T21:45:00Z",
+    "converted_to_order": false,
+    "order_id": null,
+    "metadata": {
+      "abandon_reason": "shipping_cost_high",
+      "device": "mobile"
+    },
+    "created_at": "2026-04-08T14:00:00Z",
+    "updated_at": "2026-04-09T21:45:00Z"
+  },
+  {
+    "cart_id": "cart_004",
+    "user_id": "user_004",
+    "session_id": null,
+    "items": [
+      {
+        "product_id": "prod_006",
+        "name": "Marine GPS Navigation System",
+        "quantity": 1,
+        "unit_price": 499.99,
+        "brand_id": "brand_002"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 499.99,
+    "discount_total": 50.0,
+    "tax_total": 67.5,
+    "total": 517.49,
+    "coupon_code": "SEA50",
+    "status": "converted",
+    "expires_at": "2026-04-20T00:00:00Z",
+    "last_activity_at": "2026-04-13T12:20:00Z",
+    "converted_to_order": true,
+    "order_id": "order_789",
+    "metadata": {
+      "conversion_source": "checkout",
+      "payment_method": "card"
+    },
+    "created_at": "2026-04-11T09:00:00Z",
+    "updated_at": "2026-04-13T12:20:00Z"
+  },
+  {
+    "cart_id": "cart_005",
+    "user_id": null,
+    "session_id": "sess_xyz_789",
+    "items": [
+      {
+        "product_id": "prod_007",
+        "name": "Smart LED Desk Lamp",
+        "quantity": 1,
+        "unit_price": 39.99,
+        "brand_id": "brand_001"
+      },
+      {
+        "product_id": "prod_008",
+        "name": "Wireless Charging Pad",
+        "quantity": 1,
+        "unit_price": 29.99,
+        "brand_id": "brand_001"
+      }
+    ],
+    "currency": "USD",
+    "subtotal": 69.98,
+    "discount_total": 5.0,
+    "tax_total": 9.75,
+    "total": 74.73,
+    "coupon_code": "TECH5",
+    "status": "active",
+    "expires_at": "2026-04-22T00:00:00Z",
+    "last_activity_at": "2026-04-15T08:55:00Z",
+    "converted_to_order": false,
+    "order_id": null,
+    "metadata": {
+      "source": "web",
+      "device": "tablet"
+    },
+    "created_at": "2026-04-14T16:00:00Z",
+    "updated_at": "2026-04-15T08:55:00Z"
+  }
+]

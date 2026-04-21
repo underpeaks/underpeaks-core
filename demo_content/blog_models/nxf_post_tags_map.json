@@ -1,0 +1,62 @@
+[
+  {
+    "id": "ptm_001",
+    "post_id": "post_001",
+    "tag_id": "tag_tech",
+    "created_at": "2025-01-01T10:00:00Z"
+  },
+  {
+    "id": "ptm_002",
+    "post_id": "post_001",
+    "tag_id": "tag_ai",
+    "created_at": "2025-01-01T10:00:00Z"
+  },
+  {
+    "id": "ptm_003",
+    "post_id": "post_002",
+    "tag_id": "tag_business",
+    "created_at": "2025-01-02T10:00:00Z"
+  },
+  {
+    "id": "ptm_004",
+    "post_id": "post_002",
+    "tag_id": "tag_startup",
+    "created_at": "2025-01-02T10:00:00Z"
+  },
+  {
+    "id": "ptm_005",
+    "post_id": "post_003",
+    "tag_id": "tag_design",
+    "created_at": "2025-01-03T10:00:00Z"
+  },
+  {
+    "id": "ptm_006",
+    "post_id": "post_003",
+    "tag_id": "tag_uiux",
+    "created_at": "2025-01-03T10:00:00Z"
+  },
+  {
+    "id": "ptm_007",
+    "post_id": "post_004",
+    "tag_id": "tag_marketing",
+    "created_at": "2025-01-04T10:00:00Z"
+  },
+  {
+    "id": "ptm_008",
+    "post_id": "post_005",
+    "tag_id": "tag_programming",
+    "created_at": "2025-01-05T10:00:00Z"
+  },
+  {
+    "id": "ptm_009",
+    "post_id": "post_005",
+    "tag_id": "tag_flutter",
+    "created_at": "2025-01-05T10:00:00Z"
+  },
+  {
+    "id": "ptm_010",
+    "post_id": "post_006",
+    "tag_id": "tag_ai",
+    "created_at": "2025-01-06T10:00:00Z"
+  }
+]

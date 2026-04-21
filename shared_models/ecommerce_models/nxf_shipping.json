@@ -2,7 +2,7 @@
   "table_name": "nxf_shipping",
   "primary_key": "ship_id",
   "columns": {
-    "id": {
+    "ship_id": {
       "type": "string"
     },
     "order_id": {

@@ -4,6 +4,7 @@ import { getAdapter } from '@/app/db-adapter'
 import type { DBType, DBConfig } from '@/app/db-adapter/types'
 import mysql from 'mysql2/promise'
 import { Client as PgClient } from 'pg'
+import { parseFirebaseServiceAccount, parseFirebaseWebConfig } from '@/app/lib/firebaseConfig'
 
 export async function POST(req: NextRequest) {
   console.log('🔐 [LOGOUT API] Request received')
@@ -36,13 +37,15 @@ export async function POST(req: NextRequest) {
     if (dbType === 'firebase') {
       console.log('🚪 Preparing Firebase config')
       const serviceAccount = process.env.NEXT_DB_FIREBASE_SERVICE_ACCOUNT
+      const configAccount = process.env.NEXT_PUBLIC_FIREBASE_CONFIG
       if (!serviceAccount) throw new Error('Firebase service account missing')
-      const parsedAccount = JSON.parse(serviceAccount)
+      const parsedAccount =  parseFirebaseServiceAccount(serviceAccount) //JSON.parse(serviceAccount)
+    const parsedconfig = parseFirebaseWebConfig(configAccount);
 
       dbConfig = {
         type: 'firebase',
         firebaseConfigJson: JSON.stringify(parsedAccount),
-        storageBucket: 'gs://' + parsedAccount.storageBucket,
+        storageBucket: 'gs://' + parsedconfig.storageBucket,
       }
 
     // ======================= SUPABASE =======================
@@ -116,7 +119,7 @@ export async function POST(req: NextRequest) {
       if (dbType === 'firebase') {
         const { getApps, initializeApp } = await import('firebase/app')
         const { getAuth, signOut } = await import('firebase/auth')
-        const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG!)
+        const firebaseConfig =  parseFirebaseWebConfig(process.env.NEXT_PUBLIC_FIREBASE_CONFIG!)  //JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG!)
         const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
         const auth = getAuth(app)
         await signOut(auth)

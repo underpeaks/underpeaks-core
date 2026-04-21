@@ -25,6 +25,7 @@ export default function FinalizePage() {
     if (
       step === 'Installing Flutter project' &&
       selectedStack !== 'flutter' &&
+      
       selectedStack !== 'both'
     ) {
       return { label: step, skipped: true };
@@ -32,10 +33,18 @@ export default function FinalizePage() {
     if (
       step === 'Installing Next.js project' &&
       selectedStack !== 'next' &&
+      
       selectedStack !== 'both'
     ) {
       return { label: step, skipped: true };
     }
+    if (
+  step === 'Installing CMS project' &&
+  selectedStack !== 'cms' &&
+  selectedStack !== 'both'
+) {
+  return { label: step, skipped: true };
+}
     return { label: step, skipped: false };
   });
 }, [selectedStack]);

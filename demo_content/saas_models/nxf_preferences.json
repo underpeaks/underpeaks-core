@@ -1,0 +1,80 @@
+[
+  {
+    "preference_id": "pref_001",
+    "user_id": "user_001",
+    "tenant_id": null,
+    "pref_key": "theme",
+    "value": { "mode": "dark", "accent": "blue" },
+    "category": "ui",
+    "scope": "user",
+    "is_sensitive": false,
+    "updated_at": "2026-04-14T08:00:00Z",
+    "created_at": "2026-01-10T10:00:00Z"
+  },
+  {
+    "preference_id": "pref_002",
+    "user_id": "user_001",
+    "tenant_id": null,
+    "pref_key": "language",
+    "value": "en",
+    "category": "ui",
+    "scope": "user",
+    "is_sensitive": false,
+    "updated_at": "2026-04-14T08:01:00Z",
+    "created_at": "2026-01-10T10:05:00Z"
+  },
+  {
+    "preference_id": "pref_003",
+    "user_id": "user_002",
+    "tenant_id": null,
+    "pref_key": "notifications.email",
+    "value": {
+      "marketing": true,
+      "orders": true,
+      "security": true
+    },
+    "category": "notification",
+    "scope": "user",
+    "is_sensitive": false,
+    "updated_at": "2026-04-14T08:02:00Z",
+    "created_at": "2026-01-11T10:00:00Z"
+  },
+  {
+    "preference_id": "pref_004",
+    "user_id": "user_003",
+    "tenant_id": "tenant_001",
+    "pref_key": "dashboard.layout",
+    "value": {
+      "widgets": ["sales", "analytics", "recent_orders"]
+    },
+    "category": "ui",
+    "scope": "tenant",
+    "is_sensitive": false,
+    "updated_at": "2026-04-14T08:03:00Z",
+    "created_at": "2026-02-01T09:00:00Z"
+  },
+  {
+    "preference_id": "pref_005",
+    "user_id": "user_002",
+    "tenant_id": "tenant_001",
+    "pref_key": "privacy.data_sharing",
+    "value": false,
+    "category": "privacy",
+    "scope": "tenant",
+    "is_sensitive": true,
+    "updated_at": "2026-04-14T08:04:00Z",
+    "created_at": "2026-02-10T09:30:00Z"
+  },
+  {
+    "preference_id": "pref_006",
+    "user_id": "user_001",
+    "tenant_id": null,
+    "pref_key": "system.auto_save",
+    "value": true,
+    "category": "system",
+    "scope": "user",
+    "is_sensitive": false,
+    "updated_at": "2026-04-14T08:05:00Z",
+    "created_at": "2026-03-01T12:00:00Z"
+  }
+]

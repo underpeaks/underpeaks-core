@@ -1,0 +1,79 @@
+[
+  {
+    "saas_user_id": "su_001",
+    "user_id": "user_001",
+    "organisation_id": "org_001",
+    "vendor_id": null,
+    "role_id": "role_001",
+    "status": "active",
+    "permissions_override": [],
+    "last_active_at": "2026-04-14T08:10:00Z",
+    "invited_by": null,
+    "invited_at": null,
+    "accepted_at": "2026-01-05T10:00:00Z",
+    "created_at": "2026-01-05T10:00:00Z",
+    "updated_at": "2026-04-14T08:10:00Z"
+  },
+  {
+    "saas_user_id": "su_002",
+    "user_id": "user_002",
+    "organisation_id": "org_001",
+    "vendor_id": null,
+    "role_id": "role_002",
+    "status": "active",
+    "permissions_override": [
+      "analytics:export"
+    ],
+    "last_active_at": "2026-04-14T08:12:00Z",
+    "invited_by": "user_001",
+    "invited_at": "2026-01-10T09:00:00Z",
+    "accepted_at": "2026-01-10T09:30:00Z",
+    "created_at": "2026-01-10T09:00:00Z",
+    "updated_at": "2026-04-14T08:12:00Z"
+  },
+  {
+    "saas_user_id": "su_003",
+    "user_id": "user_003",
+    "organisation_id": "org_002",
+    "vendor_id": "vendor_001",
+    "role_id": "role_006",
+    "status": "active",
+    "permissions_override": [],
+    "last_active_at": "2026-04-14T08:15:00Z",
+    "invited_by": "user_001",
+    "invited_at": "2026-02-01T12:00:00Z",
+    "accepted_at": "2026-02-02T08:00:00Z",
+    "created_at": "2026-02-01T12:00:00Z",
+    "updated_at": "2026-04-14T08:15:00Z"
+  },
+  {
+    "saas_user_id": "su_004",
+    "user_id": "user_004",
+    "organisation_id": "org_001",
+    "vendor_id": null,
+    "role_id": "role_003",
+    "status": "invited",
+    "permissions_override": [],
+    "last_active_at": null,
+    "invited_by": "user_001",
+    "invited_at": "2026-04-10T10:00:00Z",
+    "accepted_at": null,
+    "created_at": "2026-04-10T10:00:00Z",
+    "updated_at": "2026-04-10T10:00:00Z"
+  },
+  {
+    "saas_user_id": "su_005",
+    "user_id": "user_005",
+    "organisation_id": "org_003",
+    "vendor_id": null,
+    "role_id": "role_005",
+    "status": "suspended",
+    "permissions_override": [],
+    "last_active_at": "2026-03-20T11:00:00Z",
+    "invited_by": "user_002",
+    "invited_at": "2026-02-15T09:00:00Z",
+    "accepted_at": "2026-02-15T09:30:00Z",
+    "created_at": "2026-02-15T09:00:00Z",
+    "updated_at": "2026-03-25T10:00:00Z"
+  }
+]

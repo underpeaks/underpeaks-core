@@ -1,0 +1,202 @@
+[
+  {
+    "customer_id": "cust_001",
+    "user_id": "user_001",
+    "auth_id": "auth_001",
+    "first_name": "Daniel",
+    "last_name": "Meyer",
+    "email": "daniel.meyer@example.com",
+    "phone": "+27 82 555 1122",
+    "avatar_url": "https://picsum.photos/seed/cust1/300/300",
+    "date_of_birth": "1992-06-14T00:00:00Z",
+    "gender": "male",
+    "billing_address": {
+      "line1": "12 Beach Road",
+      "city": "Cape Town",
+      "postal_code": "8001",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "line1": "12 Beach Road",
+      "city": "Cape Town",
+      "postal_code": "8001",
+      "country": "South Africa"
+    },
+    "city": "Cape Town",
+    "country": "South Africa",
+    "postal_code": "8001",
+    "loyalty_points": 820,
+    "total_spent": 2450.75,
+    "currency": "USD",
+    "status": "active",
+    "is_verified": true,
+    "marketing_opt_in": true,
+    "preferences": {
+      "categories": ["electronics", "marine"],
+      "newsletter": true
+    },
+    "last_login_at": "2026-04-14T18:00:00Z",
+    "created_at": "2026-01-05T09:00:00Z",
+    "updated_at": "2026-04-14T18:00:00Z"
+  },
+  {
+    "customer_id": "cust_002",
+    "user_id": "user_002",
+    "auth_id": "auth_002",
+    "first_name": "Aisha",
+    "last_name": "Patel",
+    "email": "aisha.patel@example.com",
+    "phone": "+27 71 444 8899",
+    "avatar_url": "https://picsum.photos/seed/cust2/300/300",
+    "date_of_birth": "1996-11-02T00:00:00Z",
+    "gender": "female",
+    "billing_address": {
+      "line1": "88 Long Street",
+      "city": "Johannesburg",
+      "postal_code": "2000",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "line1": "88 Long Street",
+      "city": "Johannesburg",
+      "postal_code": "2000",
+      "country": "South Africa"
+    },
+    "city": "Johannesburg",
+    "country": "South Africa",
+    "postal_code": "2000",
+    "loyalty_points": 120,
+    "total_spent": 540.30,
+    "currency": "USD",
+    "status": "active",
+    "is_verified": true,
+    "marketing_opt_in": false,
+    "preferences": {
+      "categories": ["fashion", "home-living"],
+      "newsletter": false
+    },
+    "last_login_at": "2026-04-10T14:20:00Z",
+    "created_at": "2026-02-10T11:00:00Z",
+    "updated_at": "2026-04-10T14:20:00Z"
+  },
+  {
+    "customer_id": "cust_003",
+    "user_id": "user_003",
+    "auth_id": "auth_003",
+    "first_name": "Liam",
+    "last_name": "van der Merwe",
+    "email": "liam.vdm@example.com",
+    "phone": "+27 83 222 3344",
+    "avatar_url": "https://picsum.photos/seed/cust3/300/300",
+    "date_of_birth": "1988-03-22T00:00:00Z",
+    "gender": "male",
+    "billing_address": {
+      "line1": "5 Ocean Drive",
+      "city": "Durban",
+      "postal_code": "4001",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "line1": "5 Ocean Drive",
+      "city": "Durban",
+      "postal_code": "4001",
+      "country": "South Africa"
+    },
+    "city": "Durban",
+    "country": "South Africa",
+    "postal_code": "4001",
+    "loyalty_points": 2300,
+    "total_spent": 8900.99,
+    "currency": "USD",
+    "status": "active",
+    "is_verified": true,
+    "marketing_opt_in": true,
+    "preferences": {
+      "categories": ["sports-outdoors", "electronics"],
+      "newsletter": true
+    },
+    "last_login_at": "2026-04-15T06:30:00Z",
+    "created_at": "2026-01-12T08:00:00Z",
+    "updated_at": "2026-04-15T06:30:00Z"
+  },
+  {
+    "customer_id": "cust_004",
+    "user_id": "user_004",
+    "auth_id": "auth_004",
+    "first_name": "Emily",
+    "last_name": "Johnson",
+    "email": "emily.johnson@example.com",
+    "phone": "+27 72 888 1234",
+    "avatar_url": "https://picsum.photos/seed/cust4/300/300",
+    "date_of_birth": "1999-09-18T00:00:00Z",
+    "gender": "female",
+    "billing_address": {
+      "line1": "22 Green Street",
+      "city": "Stellenbosch",
+      "postal_code": "7600",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "line1": "22 Green Street",
+      "city": "Stellenbosch",
+      "postal_code": "7600",
+      "country": "South Africa"
+    },
+    "city": "Stellenbosch",
+    "country": "South Africa",
+    "postal_code": "7600",
+    "loyalty_points": 410,
+    "total_spent": 1200.00,
+    "currency": "USD",
+    "status": "inactive",
+    "is_verified": false,
+    "marketing_opt_in": true,
+    "preferences": {
+      "categories": ["fashion"],
+      "newsletter": true
+    },
+    "last_login_at": "2026-02-20T10:00:00Z",
+    "created_at": "2026-01-20T09:00:00Z",
+    "updated_at": "2026-02-20T10:00:00Z"
+  },
+  {
+    "customer_id": "cust_005",
+    "user_id": "user_005",
+    "auth_id": "auth_005",
+    "first_name": "Noah",
+    "last_name": "Smith",
+    "email": "noah.smith@example.com",
+    "phone": "+27 81 999 7788",
+    "avatar_url": "https://picsum.photos/seed/cust5/300/300",
+    "date_of_birth": "1993-12-01T00:00:00Z",
+    "gender": "male",
+    "billing_address": {
+      "line1": "77 Marina Bay",
+      "city": "Cape Town",
+      "postal_code": "8001",
+      "country": "South Africa"
+    },
+    "shipping_address": {
+      "line1": "77 Marina Bay",
+      "city": "Cape Town",
+      "postal_code": "8001",
+      "country": "South Africa"
+    },
+    "city": "Cape Town",
+    "country": "South Africa",
+    "postal_code": "8001",
+    "loyalty_points": 150,
+    "total_spent": 320.40,
+    "currency": "USD",
+    "status": "active",
+    "is_verified": true,
+    "marketing_opt_in": false,
+    "preferences": {
+      "categories": ["home-living", "fashion"],
+      "newsletter": false
+    },
+    "last_login_at": "2026-04-12T19:10:00Z",
+    "created_at": "2026-03-01T12:00:00Z",
+    "updated_at": "2026-04-12T19:10:00Z"
+  }
+]

@@ -15,7 +15,7 @@
       "description": "e.g. owner, admin, manager, support, viewer"
     },
     {
-      "name": "key",
+      "name": "saas_key",
       "type": "string",
       "nullable": false,
       "description": "unique system identifier like 'org_owner', 'vendor_admin'"
@@ -72,7 +72,7 @@
   "indexes": [
     {
       "name": "idx_roles_key",
-      "fields": ["key"]
+      "fields": ["saas_key"]
     },
     {
       "name": "idx_roles_scope",
@@ -82,7 +82,7 @@
   "constraints": [
     {
       "type": "unique",
-      "fields": ["key"]
+      "fields": ["saas_key"]
     }
   ]
 }

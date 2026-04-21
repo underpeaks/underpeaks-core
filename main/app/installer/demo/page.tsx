@@ -27,7 +27,6 @@ export default function DemoPage() {
     { value: "blank", label: "⚙️ Blank Project" }
   ]
 
-  // Descriptions for each project type
   const projectDescriptions: Record<string, string> = {
     ecommerce: "Includes products, categories, orders, customers, and storefront pages.",
     marketplace: "Supports multiple vendors, listings, commissions, and vendor dashboards.",
@@ -51,6 +50,8 @@ export default function DemoPage() {
       router.push('/installer/finalise')
     }, 1000)
   }
+
+  const showDemoCard = selectedProject !== 'blank'
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
@@ -80,7 +81,9 @@ export default function DemoPage() {
                 />
                 <div className="flex flex-col">
                   <span className="text-sm font-medium">{option.label}</span>
-                  <span className="text-gray-500 text-xs">{projectDescriptions[option.value]}</span>
+                  <span className="text-gray-500 text-xs">
+                    {projectDescriptions[option.value]}
+                  </span>
                 </div>
               </label>
             ))}
@@ -88,45 +91,50 @@ export default function DemoPage() {
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Setup Demo Content</CardTitle>
-          <CardDescription>
-            Preview your store with sample data already loaded.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="demoData"
-                checked={installDemo}
-                onCheckedChange={handleCheckedChange}
-              />
-              <Label htmlFor="demoData" className="font-medium">
-                Include demo content for the selected project:
-              </Label>
+      {/* ✅ ONLY THIS CARD IS CONDITIONAL */}
+      {showDemoCard && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Setup Demo Content</CardTitle>
+            <CardDescription>
+              Preview your store with sample data already loaded.
+            </CardDescription>
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="demoData"
+                  checked={installDemo}
+                  onCheckedChange={handleCheckedChange}
+                />
+                <Label htmlFor="demoData" className="font-medium">
+                  Include demo content for the selected project:
+                </Label>
+              </div>
+
+              {installDemo && selectedProject === 'ecommerce' && (
+                <ul className="text-muted-foreground text-sm list-disc list-inside pl-6 space-y-1">
+                  <li>Demo products with categories and tags</li>
+                  <li>Example customers and orders</li>
+                  <li>Storefront pages (home, products, cart, checkout)</li>
+                  <li>Basic CMS content (about us, contact, policies)</li>
+                  <li>Pre-configured menus and modules</li>
+                </ul>
+              )}
             </div>
+          </CardContent>
+        </Card>
+      )}
 
-            {installDemo && selectedProject === 'ecommerce' && (
-              <ul className="text-muted-foreground text-sm list-disc list-inside pl-6 space-y-1">
-                <li>Demo products with categories and tags</li>
-                <li>Example customers and orders</li>
-                <li>Storefront pages (home, products, cart, checkout)</li>
-                <li>Basic CMS content (about us, contact, policies)</li>
-                <li>Pre-configured menus and modules</li>
-              </ul>
-            )}
-          </div>
-
-          <div className="flex justify-end pt-2">
-            <Button onClick={handleNext} disabled={loading} className="w-full">
-              {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-              {loading ? 'Continuing...' : 'Next'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+      {/* ✅ ALWAYS VISIBLE CONTINUE BUTTON */}
+      <div className="flex justify-end pt-2">
+        <Button onClick={handleNext} disabled={loading} className="w-full">
+          {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+          {loading ? 'Continuing...' : 'Continue'}
+        </Button>
+      </div>
     </div>
   )
 }

@@ -20,7 +20,7 @@
       "description": "optional: organisation/vendor scope for SaaS preferences"
     },
     {
-      "name": "key",
+      "name": "pref_key",
       "type": "string",
       "nullable": false,
       "description": "e.g. theme, language, notifications.email, dashboard.layout"
@@ -73,13 +73,13 @@
     },
     {
       "name": "idx_preferences_key",
-      "fields": ["key"]
+      "fields": ["pref_key"]
     }
   ],
   "constraints": [
     {
       "type": "unique",
-      "fields": ["user_id", "tenant_id", "key"]
+      "fields": ["user_id", "tenant_id", "pref_key"]
     }
   ]
 }

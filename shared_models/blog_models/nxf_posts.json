@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_blog_posts",
+  "table_name": "nxf_posts",
   "schema": "public",
   "columns": [
     {

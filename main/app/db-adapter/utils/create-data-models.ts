@@ -75,7 +75,7 @@ export async function CreateUserDataModels(
         updated_at: new Date().toISOString(),
       };
 
-     // await adapter.create(dbConfig, 'nxf_system_models', modelData);
+      await adapter.create(dbConfig, 'nxf_system_models', modelData);
 
       createdModels.push(modelData);
     }

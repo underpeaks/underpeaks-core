@@ -9,7 +9,7 @@ export type InstallerState = {
   demoContentEnabled: boolean;
   selectedProjectType: string;
   selectedPages: string[];
-  selectedStack: "next" | "flutter" | "both";
+  selectedStack: "next" | "flutter" | "cms" |"both";
   selectedDb: DBType | null;
   dbConfig: DBConfig & { storageBucket?: string };
   adminUser: {
@@ -37,7 +37,7 @@ export const useInstallerStore = create<InstallerState>((set) => ({
   demoContentEnabled: false,
   selectedProjectType: "blank",
   selectedPages: [],
-  selectedStack: "next",
+  selectedStack: "both",
   selectedDb: null,
   databaseName: "",
   dbConfig: { type: "supabase", storageBucket: "" },
@@ -65,7 +65,7 @@ export const useInstallerStore = create<InstallerState>((set) => ({
       demoContentEnabled: false,
       selectedProjectType: "blank",
       selectedPages: [],
-      selectedStack: "next",
+      selectedStack: "both",
       selectedDb: null,
       dbConfig: { type: "supabase", storageBucket: "" },
       adminUser: {
