@@ -1,0 +1,121 @@
+[
+  {
+    "user_permission_id": "up_001",
+    "organisation_id": null,
+    "user_id": "user_admin_001",
+    "permission_key": "system.admin.access",
+    "scope_type": "global",
+    "scope_id": null,
+    "effect": "allow",
+    "source": "role",
+    "expires_at": null,
+    "created_by": "system",
+    "created_at": "2026-04-01T08:00:00Z",
+    "updated_at": "2026-04-01T08:00:00Z"
+  },
+
+  {
+    "user_permission_id": "up_002",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_vendor_001",
+    "permission_key": "product.create",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "effect": "allow",
+    "source": "role",
+    "expires_at": null,
+    "created_by": "user_admin_001",
+    "created_at": "2026-04-02T10:00:00Z",
+    "updated_at": "2026-04-02T10:00:00Z"
+  },
+
+  {
+    "user_permission_id": "up_003",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_vendor_001",
+    "permission_key": "order.refund",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "effect": "deny",
+    "source": "override",
+    "expires_at": null,
+    "created_by": "user_admin_001",
+    "created_at": "2026-04-02T10:05:00Z",
+    "updated_at": "2026-04-02T10:05:00Z"
+  },
+
+  {
+    "user_permission_id": "up_004",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_customer_001",
+    "permission_key": "order.create",
+    "scope_type": "own_resource",
+    "scope_id": null,
+    "effect": "allow",
+    "source": "role",
+    "expires_at": null,
+    "created_by": "system",
+    "created_at": "2026-04-03T09:00:00Z",
+    "updated_at": "2026-04-03T09:00:00Z"
+  },
+
+  {
+    "user_permission_id": "up_005",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_support_001",
+    "permission_key": "order.view",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "effect": "allow",
+    "source": "role",
+    "expires_at": null,
+    "created_by": "user_admin_001",
+    "created_at": "2026-04-03T11:00:00Z",
+    "updated_at": "2026-04-03T11:00:00Z"
+  },
+
+  {
+    "user_permission_id": "up_006",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_temp_001",
+    "permission_key": "product.delete",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "effect": "allow",
+    "source": "direct",
+    "expires_at": "2026-05-01T00:00:00Z",
+    "created_by": "user_admin_001",
+    "created_at": "2026-04-10T14:00:00Z",
+    "updated_at": "2026-04-10T14:00:00Z"
+  },
+
+  {
+    "user_permission_id": "up_007",
+    "organisation_id": null,
+    "user_id": "user_auditor_001",
+    "permission_key": "audit.logs.read",
+    "scope_type": "global",
+    "scope_id": null,
+    "effect": "allow",
+    "source": "system",
+    "expires_at": null,
+    "created_by": "system",
+    "created_at": "2026-04-01T08:00:00Z",
+    "updated_at": "2026-04-01T08:00:00Z"
+  },
+
+  {
+    "user_permission_id": "up_008",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_vendor_002",
+    "permission_key": "product.update",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "effect": "allow",
+    "source": "role",
+    "expires_at": null,
+    "created_by": "user_admin_001",
+    "created_at": "2026-04-04T09:30:00Z",
+    "updated_at": "2026-04-04T09:30:00Z"
+  }
+]

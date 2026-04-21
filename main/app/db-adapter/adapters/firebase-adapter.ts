@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs'
 import { CreateUserDataModels } from '../utils/create-data-models'
 import { getFirestore } from 'firebase-admin/firestore';
 import { sendEmailVerification } from 'firebase/auth';
+import { parseFirebaseServiceAccount, parseFirebaseWebConfig } from '@/app/lib/firebaseConfig';
 
 const DEFAULT_BUCKETS = ['uploads', 'products', 'avatars', 'reports']
 
@@ -44,7 +45,8 @@ export class FirebaseAdapter implements DBAdapter {
       let rawConfig: any
       if (typeof _config.firebaseConfigJson === 'string') {
         try {
-          rawConfig = JSON.parse(_config.firebaseConfigJson)
+          console.log(`FIREBASE CONFIG RAW: ${_config.firebaseConfigJson} `)
+          rawConfig =  parseFirebaseServiceAccount(_config.firebaseConfigJson) //JSON.parse(_config.firebaseConfigJson)
         } catch {
           throw new Error('[FirebaseAdapter] firebaseConfigJson is not valid JSON')
         }
@@ -94,6 +96,24 @@ export class FirebaseAdapter implements DBAdapter {
       return { success: false, message: `Failed to connect to Firebase: ${err.message}` }
     }
   }
+
+  async getUserById(uid: string): Promise<{ user?: any; error?: string }> {
+  try {
+    if (!uid) {
+      return { error: 'UID is required' }
+    }
+
+    const doc = await this.firestore.collection('nxf_users').doc(uid).get()
+
+    if (!doc.exists) {
+      return { error: 'User not found' }
+    }
+
+    return { user: doc.data() }
+  } catch (err: any) {
+    return { error: err.message || 'Failed to fetch user' }
+  }
+}
 
   async create(config: DBConfig, collection: string, data: any): Promise<string> {
     const docRef = await this.firestore.collection(collection).add(data)
@@ -149,7 +169,7 @@ export class FirebaseAdapter implements DBAdapter {
       role: 'admin',
       status: 'active',
       notes: data.notes || '',
-      email_verified: false,
+      email_verified: true,
       token: null,
       token_ttl: null,
       created_at: new Date().toISOString(),
@@ -260,7 +280,7 @@ export class FirebaseAdapter implements DBAdapter {
       role: data.role || 'admin',
       status: 'active',
       notes: data.notes || '',
-      email_verified: false,
+      email_verified: true,
       token: null,
       token_ttl: null,
       created_at: new Date().toISOString(),
@@ -432,8 +452,120 @@ export class FirebaseAdapter implements DBAdapter {
     })
     return docRef.id
   }
-}
 
+ async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string
+): Promise<{
+  success: boolean;
+  error?: string;
+  inserted?: number;
+  skipped?: boolean;
+}> {
+  const fs = require("fs");
+  const path = require("path");
+
+  try {
+    const modelFolders = [
+      `${selectedProjectType}_models`,
+      "system_models",
+      "users_models",
+    ];
+
+    const basePaths = modelFolders.map((folder) =>
+      path.resolve(process.cwd(), "..", "demo_content", folder)
+    );
+
+    let totalInserted = 0;
+
+    for (const basePath of basePaths) {
+      console.log("CHECKING PATH =", basePath);
+
+      if (!fs.existsSync(basePath)) {
+        console.log("SKIP (missing folder):", basePath);
+        continue;
+      }
+
+      const files = fs
+        .readdirSync(basePath)
+        .filter((f: string) => f.endsWith(".json"));
+
+      for (const file of files) {
+        const fullPath = path.join(basePath, file);
+
+        console.log("Reading file:", fullPath);
+
+        const raw = fs.readFileSync(fullPath, "utf-8");
+
+        let json: any;
+
+        try {
+          json = JSON.parse(raw);
+        } catch (e: any) {
+          console.log(`INVALID JSON: ${file}`, e.message);
+          continue;
+        }
+
+        const collectionName = file.replace(".json", "");
+
+        const rows = Array.isArray(json) ? json : json?.demo_data;
+
+        if (!rows || !Array.isArray(rows)) {
+          console.log(`SKIPPING ${file} (no valid data array)`);
+          continue;
+        }
+
+        console.log(`INSTALLING ${collectionName} -> ${rows.length} docs`);
+
+        const collectionRef = this.firestore.collection(collectionName);
+        const batch = this.firestore.batch();
+
+        let count = 0;
+
+        for (const row of rows) {
+          try {
+            const id =
+              row.id ||
+              row._id ||
+              row[`${collectionName.slice(0, -1)}_id`] ||
+              this.firestore.collection("_tmp").doc().id;
+
+            const docRef = collectionRef.doc(id);
+
+            batch.set(docRef, {
+              ...row,
+              created_at: row.created_at || new Date().toISOString(),
+              updated_at: row.updated_at || new Date().toISOString(),
+            });
+
+            count++;
+            totalInserted++;
+          } catch (err: any) {
+            console.log(`FAILED PREP ${collectionName}:`, err.message);
+          }
+        }
+
+        if (count > 0) {
+          await batch.commit();
+        }
+      }
+    }
+
+    return {
+      success: true,
+      inserted: totalInserted,
+    };
+  } catch (err: any) {
+    console.error("FIREBASE DEMO INSTALL ERROR:", err);
+
+    return {
+      success: false,
+      inserted: 0,
+      error: err?.message || "Failed to install demo content",
+    };
+  }
+}
+}
 export function getFirebaseAdapter(config: DBConfig) {
   if (!config) throw new Error('Firebase config is required')
   return new FirebaseAdapter(config)

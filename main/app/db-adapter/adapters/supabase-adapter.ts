@@ -5,6 +5,7 @@ import { ColumnDef, DBAdapter, DBConfig } from '../types';
 import { randomBytes } from 'crypto';
 import nodemailer from 'nodemailer';
 import { loadAllModels } from '../utils/load-model';
+import { CreateUserDataModels } from '../utils/create-data-models';
 
 
 const DEFAULT_BUCKETS = ['system', 'themes', 'extensions', 'projects', 'avatars', 'logos', 'uploads'];
@@ -756,43 +757,44 @@ async CreateDataModels(projectId: string, selectedProjectType: string) {
   if (!projectId) throw new Error('Project ID is required');
 
   console.log('🧩 Creating models (adapter-controlled)');
+   return await CreateUserDataModels(this, projectId,selectedProjectType,[]);
 
-  const models = await loadAllModels(selectedProjectType);
+  // const models = await loadAllModels(selectedProjectType);
 
-  const results = [];
+  // const results = [];
 
-  for (const model of models) {
-    console.log(`📦 Creating model: ${model.name}`);
+  // for (const model of models) {
+  //   console.log(`📦 Creating model: ${model.name}`);
 
-    // ✅ 1. CREATE TABLE
-    await this.createTable(model.name, {
-      columns: model.columns,
-    });
+  //   // ✅ 1. CREATE TABLE
+  //   await this.createTable(model.name, {
+  //     columns: model.columns,
+  //   });
 
-    // ✅ 2. INSERT METADATA (ONLY PLACE IT HAPPENS)
-    const { error } = await this.client
-      .from('nxf_system_models')
-      .insert({
-        sm_id: crypto.randomUUID(),
-        project_id: projectId,
-        name: model.name,
-        schema: model.columns, // ✅ CORRECT
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
+  //   // ✅ 2. INSERT METADATA (ONLY PLACE IT HAPPENS)
+  //   const { error } = await this.client
+  //     .from('nxf_system_models')
+  //     .insert({
+  //       sm_id: crypto.randomUUID(),
+  //       project_id: projectId,
+  //       name: model.name,
+  //       schema: model.columns, // ✅ CORRECT
+  //       created_at: new Date().toISOString(),
+  //       updated_at: new Date().toISOString(),
+  //     });
 
-    if (error) {
-      console.error('❌ Insert failed:', error.message);
-      throw error;
-    }
+  //   if (error) {
+  //     console.error('❌ Insert failed:', error.message);
+  //     throw error;
+  //   }
 
-    results.push(model);
-  }
+  //   results.push(model);
+  // }
 
-  return {
-    success: true,
-    data: results,
-  };
+  // return {
+  //   success: true,
+  //   data: results,
+  // };
 }
 
 
@@ -926,8 +928,139 @@ async createDataModelsFromUserEmail(email: string,selectedProjectType:string) {
 
   console.log('✅ Table created successfully on Supabase:', tableName);
 }
-}
 
+async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string
+): Promise<{
+  success: boolean;
+  message?: string;
+  inserted?: number;
+  skipped?: boolean;
+}> {
+  try {
+    if (!selectedProjectType) {
+      throw new Error("selectedProjectType is required");
+    }
+
+    const fs = await import("fs");
+    const path = await import("path");
+
+    // --------------------------------------------------
+    // FIX: correct demo_content root path (Windows-safe)
+    // --------------------------------------------------
+    const DEMO_ROOT = path.resolve(
+      process.cwd(),
+      "..",
+      "demo_content"
+    );
+
+    const modelFolders = [
+      `${selectedProjectType}_models`,
+      "system_models",
+      "users_models",
+    ];
+
+    const basePaths = modelFolders.map((folder) =>
+      path.join(DEMO_ROOT, folder)
+    );
+
+    let totalInserted = 0;
+
+    for (const basePath of basePaths) {
+      console.log("CHECKING PATH =", basePath);
+
+      if (!fs.existsSync(basePath)) {
+        console.log("SKIP (missing folder):", basePath);
+        continue;
+      }
+
+      const files = fs
+        .readdirSync(basePath)
+        .filter((f: string) => f.endsWith(".json"));
+
+      if (!files.length) {
+        console.log("NO FILES IN:", basePath);
+        continue;
+      }
+
+      for (const file of files) {
+        const filePath = path.join(basePath, file);
+
+        console.log("Reading file:", filePath);
+
+        const raw = fs.readFileSync(filePath, "utf-8");
+
+        let jsonData: any;
+
+        try {
+          jsonData = JSON.parse(raw);
+        } catch (e: any) {
+          console.log(`INVALID JSON: ${file}`, e.message);
+          continue;
+        }
+
+        const tableName = file.replace(".json", "");
+
+        const rows = Array.isArray(jsonData)
+          ? jsonData
+          : jsonData?.demo_data;
+
+        if (!rows || !Array.isArray(rows)) {
+          console.log(`SKIPPING ${file} (no valid data array)`);
+          continue;
+        }
+
+        console.log(`📦 Inserting into ${tableName} -> ${rows.length} rows`);
+
+        const chunkSize = 200;
+
+        for (let i = 0; i < rows.length; i += chunkSize) {
+          const chunk = rows.slice(i, i + chunkSize);
+
+          // clean undefined values (Supabase requirement)
+          const cleanedChunk = chunk.map((row: any) => {
+            const cleaned: any = {};
+            for (const key in row) {
+              if (row[key] !== undefined) {
+                cleaned[key] = row[key];
+              }
+            }
+            return cleaned;
+          });
+
+          const { error } = await this.client
+            .from(tableName)
+            .insert(cleanedChunk);
+
+          if (error) {
+            console.error(`❌ FAILED INSERT ${tableName}:`, error.message);
+            throw new Error(
+              `Insert failed for ${tableName}: ${error.message}`
+            );
+          }
+
+          totalInserted += cleanedChunk.length;
+        }
+      }
+    }
+
+    return {
+      success: true,
+      message: "Demo content installed successfully",
+      inserted: totalInserted,
+    };
+  } catch (err: any) {
+    console.error("❌ installDemoContent (Supabase) failed:", err);
+
+    return {
+      success: false,
+      message: err.message || "Failed to install demo content",
+      inserted: 0,
+    };
+  }
+}
+}
 /* -----------------------------
    FACTORY
 ----------------------------- */

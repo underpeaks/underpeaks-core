@@ -1,30 +1,37 @@
 [
   {
-    "st_id": "11111111-aaaa-1111-aaaa-111111111111",
-    "project_id": "proj_1",
+    "st_id": "team_001",
+    "project_id": "proj_001",
     "name": "Core Platform Team",
-    "created_at": "2026-01-01T08:00:00Z",
-    "updated_at": "2026-01-01T08:00:00Z"
+    "created_at": "2026-03-01T08:00:00Z",
+    "updated_at": "2026-04-15T09:00:00Z"
   },
   {
-    "st_id": "22222222-bbbb-2222-bbbb-222222222222",
-    "project_id": "proj_1",
-    "name": "Frontend Team",
-    "created_at": "2026-01-02T09:00:00Z",
-    "updated_at": "2026-01-02T09:00:00Z"
+    "st_id": "team_002",
+    "project_id": "proj_001",
+    "name": "Frontend Flutter Team",
+    "created_at": "2026-03-05T10:00:00Z",
+    "updated_at": "2026-04-15T09:10:00Z"
   },
   {
-    "st_id": "33333333-cccc-3333-cccc-333333333333",
-    "project_id": "proj_2",
-    "name": "Mobile App Team",
-    "created_at": "2026-01-03T10:00:00Z",
-    "updated_at": "2026-01-03T10:00:00Z"
+    "st_id": "team_003",
+    "project_id": "proj_001",
+    "name": "Backend API Team",
+    "created_at": "2026-03-10T12:00:00Z",
+    "updated_at": "2026-04-15T09:20:00Z"
   },
   {
-    "st_id": "44444444-dddd-4444-dddd-444444444444",
-    "project_id": "proj_3",
+    "st_id": "team_004",
+    "project_id": "proj_002",
+    "name": "Marketplace Operations",
+    "created_at": "2026-03-15T09:30:00Z",
+    "updated_at": "2026-04-15T09:30:00Z"
+  },
+  {
+    "st_id": "team_005",
+    "project_id": "proj_003",
     "name": "DevOps & Infrastructure",
-    "created_at": "2026-01-04T11:00:00Z",
-    "updated_at": "2026-01-04T11:00:00Z"
+    "created_at": "2026-03-20T14:00:00Z",
+    "updated_at": "2026-04-15T09:40:00Z"
   }
 ]

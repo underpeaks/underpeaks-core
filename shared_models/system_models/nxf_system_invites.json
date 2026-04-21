@@ -2,8 +2,8 @@
   "table_name": "nxf_system_invites",
   "schema": "public",
   "columns": {
-    "si_id": { "type": "uuid", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    "project_id": { "type": "uuid", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
+    "si_id": { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
+    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
     "email": { "type": "string", "nullable": false },
     "role": { "type": "string", "nullable": false },
     "token": { "type": "string", "nullable": false },

@@ -1,167 +1,148 @@
 {
-  "table_name": "nxf_abandoned_cart",
+  "table_name": "nxf_abandoned_carts",
+  "primary_key": "acart_id",
   "schema": "public",
   "columns": [
     {
-      "name": "cart_id",
+      "name": "acart_id",
       "type": "string",
       "nullable": false,
       "is_primary": true
     },
-
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false
+    },
     {
       "name": "user_id",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "session_id",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "email",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "phone",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "items",
       "type": "jsonb",
       "nullable": false,
       "default": "[]"
     },
-
     {
       "name": "currency",
       "type": "string",
       "nullable": true,
       "default": "ZAR"
     },
-
     {
       "name": "subtotal",
       "type": "double",
       "nullable": true,
       "default": 0
     },
-
     {
       "name": "discount_total",
       "type": "double",
       "nullable": true,
       "default": 0
     },
-
     {
       "name": "tax_total",
       "type": "double",
       "nullable": true,
       "default": 0
     },
-
     {
       "name": "shipping_estimate",
       "type": "double",
       "nullable": true,
       "default": 0
     },
-
     {
       "name": "grand_total",
       "type": "double",
       "nullable": true,
       "default": 0
     },
-
     {
       "name": "abandon_stage",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "abandoned_at",
       "type": "datetime",
       "nullable": false
     },
-
     {
       "name": "recovered_at",
       "type": "datetime",
       "nullable": true
     },
-
     {
       "name": "is_recovered",
       "type": "boolean",
       "nullable": true,
       "default": false
     },
-
     {
       "name": "recovery_attempts",
       "type": "double",
       "nullable": true,
       "default": 0
     },
-
     {
       "name": "last_recovery_sent_at",
       "type": "datetime",
       "nullable": true
     },
-
     {
       "name": "utm_source",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "utm_medium",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "utm_campaign",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "device_type",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "browser",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "country",
       "type": "string",
       "nullable": true
     },
-
     {
       "name": "created_at",
       "type": "datetime",
       "nullable": false
     },
-
     {
       "name": "updated_at",
       "type": "datetime",

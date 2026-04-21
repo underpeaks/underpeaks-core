@@ -1,0 +1,65 @@
+[
+  {
+    "storage_id": "f3a1c2d4-1111-4a11-9a11-000000000001",
+    "folder": "uploads/products",
+    "file_name": "iphone_15_pro.jpg",
+    "file_path": "/uploads/products/iphone_15_pro.jpg",
+    "mime_type": "image/jpeg",
+    "size": 245678,
+    "created_at": "2026-04-10T09:00:00Z"
+  },
+  {
+    "storage_id": "f3a1c2d4-1111-4a11-9a11-000000000002",
+    "folder": "uploads/products",
+    "file_name": "macbook_air_m3.png",
+    "file_path": "/uploads/products/macbook_air_m3.png",
+    "mime_type": "image/png",
+    "size": 389102,
+    "created_at": "2026-04-10T09:05:00Z"
+  },
+  {
+    "storage_id": "f3a1c2d4-1111-4a11-9a11-000000000003",
+    "folder": "uploads/avatars",
+    "file_name": "user_admin_001.png",
+    "file_path": "/uploads/avatars/user_admin_001.png",
+    "mime_type": "image/png",
+    "size": 88421,
+    "created_at": "2026-04-09T14:30:00Z"
+  },
+  {
+    "storage_id": "f3a1c2d4-1111-4a11-9a11-000000000004",
+    "folder": "uploads/documents",
+    "file_name": "invoice_template.pdf",
+    "file_path": "/uploads/documents/invoice_template.pdf",
+    "mime_type": "application/pdf",
+    "size": 1200345,
+    "created_at": "2026-04-08T11:20:00Z"
+  },
+  {
+    "storage_id": "f3a1c2d4-1111-4a11-9a11-000000000005",
+    "folder": "uploads/banners",
+    "file_name": "home_banner_main.jpg",
+    "file_path": "/uploads/banners/home_banner_main.jpg",
+    "mime_type": "image/jpeg",
+    "size": 512340,
+    "created_at": "2026-04-07T08:45:00Z"
+  },
+  {
+    "storage_id": "f3a1c2d4-1111-4a11-9a11-000000000006",
+    "folder": "uploads/products",
+    "file_name": "nike_air_max.png",
+    "file_path": "/uploads/products/nike_air_max.png",
+    "mime_type": "image/png",
+    "size": 332100,
+    "created_at": "2026-04-06T12:00:00Z"
+  },
+  {
+    "storage_id": "f3a1c2d4-1111-4a11-9a11-000000000007",
+    "folder": "uploads/temp",
+    "file_name": "upload_cache.tmp",
+    "file_path": "/uploads/temp/upload_cache.tmp",
+    "mime_type": "application/octet-stream",
+    "size": 10240,
+    "created_at": "2026-04-05T10:10:00Z"
+  }
+]

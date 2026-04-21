@@ -1,0 +1,154 @@
+[
+  {
+    "integration_id": "int_0001",
+    "name": "Stripe",
+    "int_key": "stripe",
+    "type": "payment",
+    "provider": "Stripe",
+    "is_active": true,
+    "is_required": true,
+    "config_schema": {
+      "api_key": "string",
+      "secret_key": "string",
+      "webhook_secret": "string"
+    },
+    "default_config": {
+      "currency": "USD",
+      "capture_method": "automatic"
+    },
+    "is_multi_tenant": true,
+    "supports_webhooks": true,
+    "webhook_url_template": "https://api.yourapp.com/webhooks/stripe/{tenant_id}",
+    "rate_limit_per_minute": 100,
+    "status": "active",
+    "documentation_url": "https://stripe.com/docs",
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-02-01T00:00:00Z"
+  },
+  {
+    "integration_id": "int_0002",
+    "name": "PayFast",
+    "int_key": "payfast",
+    "type": "payment",
+    "provider": "PayFast",
+    "is_active": true,
+    "is_required": true,
+    "config_schema": {
+      "merchant_id": "string",
+      "merchant_key": "string",
+      "passphrase": "string"
+    },
+    "default_config": {
+      "currency": "ZAR"
+    },
+    "is_multi_tenant": true,
+    "supports_webhooks": true,
+    "webhook_url_template": "https://api.yourapp.com/webhooks/payfast/{tenant_id}",
+    "rate_limit_per_minute": 60,
+    "status": "active",
+    "documentation_url": "https://developers.payfast.co.za",
+    "created_at": "2026-01-05T00:00:00Z",
+    "updated_at": "2026-01-20T00:00:00Z"
+  },
+  {
+    "integration_id": "int_0003",
+    "name": "WhatsApp Business API",
+    "int_key": "whatsapp_api",
+    "type": "messaging",
+    "provider": "Meta",
+    "is_active": true,
+    "is_required": false,
+    "config_schema": {
+      "access_token": "string",
+      "phone_number_id": "string",
+      "business_account_id": "string"
+    },
+    "default_config": {
+      "message_type": "template"
+    },
+    "is_multi_tenant": true,
+    "supports_webhooks": true,
+    "webhook_url_template": "https://api.yourapp.com/webhooks/whatsapp/{tenant_id}",
+    "rate_limit_per_minute": 200,
+    "status": "beta",
+    "documentation_url": "https://developers.facebook.com/docs/whatsapp",
+    "created_at": "2026-02-01T00:00:00Z",
+    "updated_at": "2026-03-01T00:00:00Z"
+  },
+  {
+    "integration_id": "int_0004",
+    "name": "Firebase",
+    "int_key": "firebase",
+    "type": "auth",
+    "provider": "Google",
+    "is_active": true,
+    "is_required": true,
+    "config_schema": {
+      "api_key": "string",
+      "auth_domain": "string",
+      "project_id": "string"
+    },
+    "default_config": {
+      "auth_enabled": true,
+      "analytics_enabled": true
+    },
+    "is_multi_tenant": false,
+    "supports_webhooks": false,
+    "webhook_url_template": null,
+    "rate_limit_per_minute": null,
+    "status": "active",
+    "documentation_url": "https://firebase.google.com/docs",
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "integration_id": "int_0005",
+    "name": "DHL Shipping",
+    "int_key": "dhl",
+    "type": "shipping",
+    "provider": "DHL",
+    "is_active": true,
+    "is_required": false,
+    "config_schema": {
+      "api_key": "string",
+      "account_number": "string",
+      "site_id": "string"
+    },
+    "default_config": {
+      "label_format": "PDF"
+    },
+    "is_multi_tenant": true,
+    "supports_webhooks": true,
+    "webhook_url_template": "https://api.yourapp.com/webhooks/dhl/{tenant_id}",
+    "rate_limit_per_minute": 80,
+    "status": "active",
+    "documentation_url": "https://developer.dhl.com",
+    "created_at": "2026-01-10T00:00:00Z",
+    "updated_at": "2026-02-10T00:00:00Z"
+  },
+  {
+    "integration_id": "int_0006",
+    "name": "OpenAI",
+    "int_key": "openai",
+    "type": "ai",
+    "provider": "OpenAI",
+    "is_active": true,
+    "is_required": false,
+    "config_schema": {
+      "api_key": "string",
+      "organization_id": "string"
+    },
+    "default_config": {
+      "model": "gpt-4.1-mini",
+      "temperature": 0.7
+    },
+    "is_multi_tenant": true,
+    "supports_webhooks": false,
+    "webhook_url_template": null,
+    "rate_limit_per_minute": 120,
+    "status": "active",
+    "documentation_url": "https://platform.openai.com/docs",
+    "created_at": "2026-02-15T00:00:00Z",
+    "updated_at": "2026-03-10T00:00:00Z"
+  }
+]

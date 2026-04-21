@@ -233,43 +233,45 @@ async connect() {
  async CreateDataModels(projectId: string,selectedProjectType:string) {
   if (!projectId) throw new Error('Project ID is required');
 
-  const raw = await CreateUserDataModels(this, projectId,selectedProjectType,[]);
+  //const raw = 
+  
+  return await CreateUserDataModels(this, projectId,selectedProjectType,[]);
 
-  console.log('[DEBUG RAW MODELS]:', raw);
+  // console.log('[DEBUG RAW MODELS]:', raw);
 
-  // ✅ Handle skipped
-  if (raw?.skipped) {
-    console.log('⚡ Skipped:', raw.message);
-    return [];
-  }
+  // // ✅ Handle skipped
+  // if (raw?.skipped) {
+  //   console.log('⚡ Skipped:', raw.message);
+  //   return [];
+  // }
 
-  // ✅ Extract actual models
-  const result = raw?.data;
+  // // ✅ Extract actual models
+  // const result = raw?.data;
 
-  if (!Array.isArray(result)) {
-    throw new Error(
-      `Invalid models format: ${JSON.stringify(raw)}`
-    );
-  }
+  // if (!Array.isArray(result)) {
+  //   throw new Error(
+  //     `Invalid models format: ${JSON.stringify(raw)}`
+  //   );
+  // }
 
-  const createdModels: any[] = [];
+  // const createdModels: any[] = [];
 
-  for (const table of result) {
-    if (!table?.name) continue;
+  // for (const table of result) {
+  //   if (!table?.name) continue;
 
-    await this.create(this.config, "nxf_system_models", {
-      sm_id: crypto.randomUUID(),
-      project_id: projectId,
-      name: table.name,
-      schema: JSON.stringify(table.schema || table.columns || []),
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
+  //   await this.create(this.config, "nxf_system_models", {
+  //     sm_id: crypto.randomUUID(),
+  //     project_id: projectId,
+  //     name: table.name,
+  //     schema: JSON.stringify(table.schema || table.columns || []),
+  //     created_at: new Date(),
+  //     updated_at: new Date(),
+  //   });
 
-    createdModels.push(table);
-  }
+  //   createdModels.push(table);
+  // }
 
-  return createdModels;
+  // return createdModels;
 }
 
 
@@ -663,7 +665,126 @@ async findUserByEmailWithRetry(
       created_at: new Date(),
     });
   }
+
+ async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string
+): Promise<{
+  success: boolean;
+  message?: string;
+  inserted?: number;
+  skipped?: boolean;
+}> {
+  try {
+    const fs = require("fs");
+    const path = require("path");
+
+    await this.connect();
+
+    const modelFolders = [
+      `${selectedProjectType}_models`,
+      "system_models",
+      "users_models",
+    ];
+
+    const basePaths = modelFolders.map((folder) =>
+      path.resolve(process.cwd(), "..", "demo_content", folder)
+    );
+
+    let inserted = 0;
+
+    for (const basePath of basePaths) {
+      console.log("CHECKING PATH =", basePath);
+
+      if (!fs.existsSync(basePath)) {
+        console.log("SKIP (missing folder):", basePath);
+        continue;
+      }
+
+      const files = fs
+        .readdirSync(basePath)
+        .filter((f: string) => f.endsWith(".json"));
+
+      for (const file of files) {
+        const fullPath = path.join(basePath, file);
+
+        console.log("Reading file:", fullPath);
+
+        const raw = fs.readFileSync(fullPath, "utf-8");
+
+        let json: any;
+
+        try {
+          json = JSON.parse(raw);
+        } catch (e: any) {
+          console.log(`INVALID JSON: ${file}`, e.message);
+          continue;
+        }
+
+        const tableName = file.replace(".json", "");
+
+        const rows = Array.isArray(json) ? json : json?.demo_data;
+
+        if (!rows || !Array.isArray(rows)) {
+          console.log(`SKIPPING ${file} (no valid data array)`);
+          continue;
+        }
+
+        console.log(`📦 Inserting into ${tableName} -> ${rows.length} rows`);
+
+        for (const row of rows) {
+          const keys = Object.keys(row);
+
+          // ✅ FIX: convert values properly for Postgres
+          const values = keys.map((key) => {
+            const val = row[key];
+
+            // 🔥 THIS IS THE IMPORTANT FIX
+            if (val === null || val === undefined) return null;
+
+            if (typeof val === "object") {
+              return JSON.stringify(val); // convert JSONB
+            }
+
+            return val;
+          });
+
+          const columns = keys.map((k) => `"${k}"`).join(",");
+          const placeholders = keys.map((_, i) => `$${i + 1}`).join(",");
+
+          const sql = `
+            INSERT INTO "${tableName}"
+            (${columns})
+            VALUES (${placeholders})
+          `;
+
+          try {
+            await this.client.query(sql, values);
+            inserted++;
+          } catch (err: any) {
+            console.log(`❌ FAILED INSERT ${tableName}:`, err.message);
+          }
+        }
+      }
+    }
+
+    return {
+      success: true,
+      inserted,
+      skipped: false,
+      message: "Demo content installed successfully",
+    };
+  } catch (err: any) {
+    return {
+      success: false,
+      inserted: 0,
+      skipped: true,
+      message: err.message || "Failed to install demo content",
+    };
+  }
 }
+}
+
 
 // factory
 export function getPostgresAdapter(config: DBConfig) {

@@ -232,67 +232,68 @@ async read(config: DBConfig, table: string, query?: any): Promise<any> {
 // CREATE DATA MODELS (FIXED)
 // =========================
 async CreateDataModels(projectId: string, selectedProjectType:string) {
-  const raw = await CreateUserDataModels(this, projectId, selectedProjectType,[]);
+  //const raw = 
+ return await CreateUserDataModels(this, projectId, selectedProjectType,[]);
 
   // ✅ Proper type narrowing
-  if (!raw) {
-    throw new Error("Failed to create models: empty response");
-  }
+  // if (!raw) {
+  //   throw new Error("Failed to create models: empty response");
+  // }
 
-  let result: any[] = [];
+  // let result: any[] = [];
 
-  if (Array.isArray(raw)) {
-    result = raw;
-  } else if ("data" in raw && Array.isArray(raw.data)) {
-    result = raw.data;
-  } else if ("skipped" in raw && raw.skipped) {
-    console.log("⚡ Skipped model creation:", raw.message);
-    return [];
-  } else {
-    console.error("❌ Invalid CreateDataModels output:", raw);
-    throw new Error("Failed to create models: invalid schema returned");
-  }
+  // if (Array.isArray(raw)) {
+  //   result = raw;
+  // } else if ("data" in raw && Array.isArray(raw.data)) {
+  //   result = raw.data;
+  // } else if ("skipped" in raw && raw.skipped) {
+  //   console.log("⚡ Skipped model creation:", raw.message);
+  //   return [];
+  // } else {
+  //   console.error("❌ Invalid CreateDataModels output:", raw);
+  //   throw new Error("Failed to create models: invalid schema returned");
+  // }
 
-  const pool = await this.getPool(this.config);
+  // const pool = await this.getPool(this.config);
 
-  for (const table of result) {
-    if (!table || !table.name) {
-      throw new Error("Invalid table definition: missing name");
-    }
+  // for (const table of result) {
+  //   if (!table || !table.name) {
+  //     throw new Error("Invalid table definition: missing name");
+  //   }
 
-    // Normalize columns
-    if (!table.columns) {
-      table.columns = [];
-    } else if (typeof table.columns === "object" && !Array.isArray(table.columns)) {
-      table.columns = Object.entries(table.columns).map(([name, col]: any) => ({
-        ...col,
-        name,
-      }));
-    }
+  //   // Normalize columns
+  //   if (!table.columns) {
+  //     table.columns = [];
+  //   } else if (typeof table.columns === "object" && !Array.isArray(table.columns)) {
+  //     table.columns = Object.entries(table.columns).map(([name, col]: any) => ({
+  //       ...col,
+  //       name,
+  //     }));
+  //   }
 
-    // Duplicate check
-    const [rows]: any = await pool.query(
-      "SELECT 1 FROM nxf_system_models WHERE project_id = ? AND name = ? LIMIT 1",
-      [projectId, table.name]
-    );
+  //   // Duplicate check
+  //   const [rows]: any = await pool.query(
+  //     "SELECT 1 FROM nxf_system_models WHERE project_id = ? AND name = ? LIMIT 1",
+  //     [projectId, table.name]
+  //   );
 
-    if (rows.length > 0) {
-      console.log(`⚠️ Skipping duplicate model: ${table.name}`);
-      continue;
-    }
+  //   if (rows.length > 0) {
+  //     console.log(`⚠️ Skipping duplicate model: ${table.name}`);
+  //     continue;
+  //   }
 
-    // Insert model
-    await this.create(this.config, "nxf_system_models", {
-      sm_id: crypto.randomUUID(),
-      project_id: projectId,
-      name: table.name,
-      schema: JSON.stringify(table.columns),
-      created_at: new Date(),
-      updated_at: new Date(),
-    });
-  }
+  //   // Insert model
+  //   // await this.create(this.config, "nxf_system_models", {
+  //   //   sm_id: crypto.randomUUID(),
+  //   //   project_id: projectId,
+  //   //   name: table.name,
+  //   //   schema: JSON.stringify(table.columns),
+  //   //   created_at: new Date(),
+  //   //   updated_at: new Date(),
+  //   // });
+  // }
 
-  return result;
+  // return result;
 }
 
   async createDataModelsFromUserEmail(email: string, selectedProjectType:string) {
@@ -748,8 +749,120 @@ async updatePasswordByToken(token: string, newPassword: string) {
   async createBucket(folder: string) {
     return this.create(this.config, "nxf_storage", { storage_id: crypto.randomUUID(), folder, file_name: "", file_path: folder, created_at: new Date() });
   }
-}
 
+async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string
+): Promise<{
+  success: boolean;
+  error?: string;
+  inserted?: number;
+  skipped?: boolean;
+}> {
+  try {
+    console.log("REACHED 1");
+
+    const fs = require("fs");
+    const path = require("path");
+
+    console.log("REACHED 2");
+
+    // ✅ FIX: support ALL model folders, not just one
+    const modelFolders = [
+      `${selectedProjectType}_models`,
+      "system_models",
+      "users_models",
+    ];
+
+    console.log("REACHED 3", { modelFolders });
+
+    const basePaths = modelFolders.map((folder) =>
+      path.resolve(process.cwd(), "..", "demo_content", folder)
+    );
+
+    console.log("BASE PATHS =", basePaths);
+
+    let inserted = 0;
+
+    // ✅ loop all folders
+    for (const basePath of basePaths) {
+      console.log("CHECKING PATH =", basePath);
+
+      if (!fs.existsSync(basePath)) {
+        console.log("SKIP (missing folder):", basePath);
+        continue;
+      }
+
+      const files = fs
+        .readdirSync(basePath)
+        .filter((f: string) => f.endsWith(".json"));
+
+      if (!files.length) {
+        console.log("NO FILES IN:", basePath);
+        continue;
+      }
+
+      for (const file of files) {
+        const fullPath = path.join(basePath, file);
+
+        console.log("Reading file:", fullPath);
+
+        const raw = fs.readFileSync(fullPath, "utf-8");
+
+        let json: any;
+
+        try {
+          json = JSON.parse(raw);
+        } catch (e: any) {
+          return {
+            success: false,
+            error: `Invalid JSON in file ${file}: ${e.message}`,
+            skipped: true,
+          };
+        }
+
+        const tableName = file.replace(".json", "");
+
+        // ✅ FIX: support BOTH formats
+        const rows = Array.isArray(json) ? json : json?.demo_data;
+
+        if (!rows || !Array.isArray(rows)) {
+          console.log(`SKIPPING ${file} (no insertable array found)`);
+          continue;
+        }
+
+        console.log(`INSTALLING ${tableName} -> ${rows.length} rows`);
+
+        for (const row of rows) {
+          try {
+            await this.create(config, tableName, row);
+            inserted++;
+          } catch (err: any) {
+            console.log(`FAILED INSERT ${tableName}:`, err.message);
+          }
+        }
+      }
+    }
+
+    console.log("REACHED END");
+
+    return {
+      success: true,
+      inserted,
+      skipped: false,
+    };
+  } catch (err: any) {
+    console.error("INSTALL DEMO CONTENT ERROR:", err);
+
+    return {
+      success: false,
+      inserted: 0,
+      skipped: true,
+      error: err?.message || "Failed to install demo content",
+    };
+  }
+}
+}
 // ---------------- FACTORY ----------------
 export function getMySQLAdapter(config: DBConfig) {
   return new MySQLAdapter(config);

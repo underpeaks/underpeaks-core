@@ -2,7 +2,7 @@
   "table_name": "nxf_returns",
   "primary_key": "ret_id",
   "columns": {
-    "id": {
+    "ret_id": {
       "type": "string"
     },
     "order_id": {

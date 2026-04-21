@@ -4,6 +4,7 @@ import { getAdapter } from '@/app/db-adapter'
 import type { DBType, DBConfig } from '@/app/db-adapter/types'
 import mysql from 'mysql2/promise'
 import { Client as PgClient } from 'pg'
+import { parseFirebaseServiceAccount, parseFirebaseWebConfig } from '@/app/lib/firebaseConfig'
 
 export async function POST(req: NextRequest) {
   console.log('🔐 [SESSIONS API] Request received')
@@ -36,12 +37,14 @@ export async function POST(req: NextRequest) {
     // ======================= FIREBASE =======================
     if (dbType === 'firebase') {
       const serviceAccount = process.env.NEXT_DB_FIREBASE_SERVICE_ACCOUNT
+      const configAccount = process.env.NEXT_PUBLIC_FIREBASE_CONFIG
       if (!serviceAccount) throw new Error('Firebase service account missing')
-      const parsedAccount = JSON.parse(serviceAccount)
+      const parsedAccount =  parseFirebaseServiceAccount(serviceAccount); //JSON.parse(serviceAccount)
+      const parsedConfig = parseFirebaseWebConfig(configAccount);
       dbConfig = {
         type: dbType,
         firebaseConfigJson: JSON.stringify(parsedAccount),
-        storageBucket: 'gs://' + parsedAccount.storageBucket,
+        storageBucket: 'gs://' + parsedConfig.storageBucket,
       }
       console.log('Firebase config prepared')
     }
@@ -139,28 +142,56 @@ export async function POST(req: NextRequest) {
       // Only attempt Supabase JWT validation if token looks like a JWT (3 segments)
       const isJwt = token.split('.').length === 3
 
-      if (dbType === 'supabase' && isJwt) {
-        user = await adapter.validateBuiltInSession?.(dbConfig, token)
-        console.log('Built-in session validation result:', user)
+    // ================= BUILT-IN AUTH (Firebase/Supabase) =================
+if (adapter.supportsBuiltInAuth) {
+  console.log('Using built-in auth')
 
-        // Supabase auto refresh if JWT is invalid or expired
-        if (!user && refreshToken) {
-          try {
-            console.log('Attempting Supabase refresh via adapter...')
-            const { data, error } = await adapter.client.auth.refreshSession({
-              refresh_token: refreshToken,
-            })
-            if (!error && data?.session) {
-              user = data.session.user
-              console.log('Supabase refresh success, user:', user)
-            }
-          } catch (e) {
-            console.error('Supabase refresh exception:', e)
-          }
-        }
+  const isJwt = token.split('.').length === 3
+
+  // ✅ FIREBASE FIX
+  if (dbType === 'firebase') {
+    try {
+      console.log('🔥 Validating Firebase ID token...')
+      
+      const decoded = await adapter.validateBuiltInSession?.(dbConfig, token)
+
+      if (!decoded) {
+        console.warn('❌ Firebase token invalid')
       } else {
-        console.log('Skipping built-in session validation for non-JWT token')
+        console.log('✅ Firebase token valid:', decoded.uid)
+
+        // OPTIONAL: attach full user from DB if needed
+        const userDoc = await adapter.getUserById?.(decoded.uid)
+
+        user = userDoc || { uid: decoded.uid }
       }
+    } catch (err) {
+      console.error('❌ Firebase validation error:', err)
+    }
+  }
+
+  // ================= SUPABASE (UNCHANGED) =================
+  else if (dbType === 'supabase' && isJwt) {
+    user = await adapter.validateBuiltInSession?.(dbConfig, token)
+    console.log('Built-in session validation result:', user)
+
+    if (!user && refreshToken) {
+      try {
+        console.log('Attempting Supabase refresh via adapter...')
+        const { data, error } = await adapter.client.auth.refreshSession({
+          refresh_token: refreshToken,
+        })
+        if (!error && data?.session) {
+          user = data.session.user
+          console.log('Supabase refresh success, user:', user)
+        }
+      } catch (e) {
+        console.error('Supabase refresh exception:', e)
+      }
+    }
+  }
+
+}
     }
 
     // ================= CUSTOM TOKEN AUTH (Mongo/MySQL/Postgres) =================

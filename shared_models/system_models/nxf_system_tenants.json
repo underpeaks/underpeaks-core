@@ -4,7 +4,7 @@
   "columns": [
     {
       "name": "ten_id",
-      "type": "uuid",
+      "type": "string",
       "nullable": false,
       "default": "extensions.uuid_generate_v4()",
       "is_primary": true

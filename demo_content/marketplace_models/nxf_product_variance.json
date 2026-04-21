@@ -1,0 +1,140 @@
+[
+  {
+    "variant_id": "var_001",
+    "product_id": "prod_001",
+    "sku": "HEADPHONES-BLK-001",
+    "title": "Black - Standard Edition",
+    "attributes": {
+      "color": "black",
+      "edition": "standard"
+    },
+    "price": 199.99,
+    "compare_at_price": 249.99,
+    "cost_price": 85.0,
+    "currency": "USD",
+    "stock_quantity": 120,
+    "reserved_quantity": 15,
+    "is_active": true,
+    "image_url": "https://picsum.photos/seed/variant1/800/800",
+    "barcode": "890123456001",
+    "weight": 0.35,
+    "weight_unit": "kg",
+    "created_at": "2026-01-05T08:00:00Z",
+    "updated_at": "2026-04-14T10:00:00Z"
+  },
+  {
+    "variant_id": "var_002",
+    "product_id": "prod_001",
+    "sku": "HEADPHONES-WHT-001",
+    "title": "White - Standard Edition",
+    "attributes": {
+      "color": "white",
+      "edition": "standard"
+    },
+    "price": 199.99,
+    "compare_at_price": 249.99,
+    "cost_price": 85.0,
+    "currency": "USD",
+    "stock_quantity": 80,
+    "reserved_quantity": 10,
+    "is_active": true,
+    "image_url": "https://picsum.photos/seed/variant2/800/800",
+    "barcode": "890123456002",
+    "weight": 0.35,
+    "weight_unit": "kg",
+    "created_at": "2026-01-05T08:00:00Z",
+    "updated_at": "2026-04-14T10:00:00Z"
+  },
+  {
+    "variant_id": "var_003",
+    "product_id": "prod_002",
+    "sku": "WATCH-SILVER-042",
+    "title": "Silver - 42mm",
+    "attributes": {
+      "color": "silver",
+      "size": "42mm"
+    },
+    "price": 149.99,
+    "compare_at_price": 179.99,
+    "cost_price": 70.0,
+    "currency": "USD",
+    "stock_quantity": 45,
+    "reserved_quantity": 5,
+    "is_active": true,
+    "image_url": "https://picsum.photos/seed/variant3/800/800",
+    "barcode": "890123456003",
+    "weight": 0.18,
+    "weight_unit": "kg",
+    "created_at": "2026-01-10T09:00:00Z",
+    "updated_at": "2026-04-13T12:00:00Z"
+  },
+  {
+    "variant_id": "var_004",
+    "product_id": "prod_002",
+    "sku": "WATCH-BLACK-042",
+    "title": "Black - 42mm",
+    "attributes": {
+      "color": "black",
+      "size": "42mm"
+    },
+    "price": 159.99,
+    "compare_at_price": 189.99,
+    "cost_price": 72.0,
+    "currency": "USD",
+    "stock_quantity": 30,
+    "reserved_quantity": 3,
+    "is_active": true,
+    "image_url": "https://picsum.photos/seed/variant4/800/800",
+    "barcode": "890123456004",
+    "weight": 0.18,
+    "weight_unit": "kg",
+    "created_at": "2026-01-10T09:00:00Z",
+    "updated_at": "2026-04-13T12:00:00Z"
+  },
+  {
+    "variant_id": "var_005",
+    "product_id": "prod_004",
+    "sku": "HOODIE-BLK-L",
+    "title": "Black - Large",
+    "attributes": {
+      "color": "black",
+      "size": "L"
+    },
+    "price": 89.99,
+    "compare_at_price": 119.99,
+    "cost_price": 35.0,
+    "currency": "USD",
+    "stock_quantity": 0,
+    "reserved_quantity": 0,
+    "is_active": false,
+    "image_url": "https://picsum.photos/seed/variant5/800/800",
+    "barcode": "890123456005",
+    "weight": 0.6,
+    "weight_unit": "kg",
+    "created_at": "2026-02-01T10:00:00Z",
+    "updated_at": "2026-04-10T09:00:00Z"
+  },
+  {
+    "variant_id": "var_006",
+    "product_id": "prod_004",
+    "sku": "HOODIE-GRY-M",
+    "title": "Grey - Medium",
+    "attributes": {
+      "color": "grey",
+      "size": "M"
+    },
+    "price": 84.99,
+    "compare_at_price": 109.99,
+    "cost_price": 32.0,
+    "currency": "USD",
+    "stock_quantity": 60,
+    "reserved_quantity": 4,
+    "is_active": true,
+    "image_url": "https://picsum.photos/seed/variant6/800/800",
+    "barcode": "890123456006",
+    "weight": 0.58,
+    "weight_unit": "kg",
+    "created_at": "2026-02-01T10:00:00Z",
+    "updated_at": "2026-04-15T06:00:00Z"
+  }
+]

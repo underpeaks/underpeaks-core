@@ -1,41 +1,65 @@
 [
   {
-    "sn_id": "n1000000-aaaa-bbbb-cccc-000000000001",
-    "user_id": "u1111111-aaaa-bbbb-cccc-999999999999",
-    "title": "Deployment Successful",
-    "body": "Your project 'LogiLoads' has been deployed to production.",
-    "read": false,
+    "sn_id": "n1c9f0e2-7001-4c8d-9a2a-0000001",
+    "user_id": "user_001",
+    "title": "Project Deployment Successful",
+    "body": "Your Flutter ecommerce app has been deployed successfully.",
+    "is_read": false,
     "data": {
-      "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
-      "deployment_id": "d9000000-aaaa-bbbb-cccc-000000000001",
-      "type": "deployment_success"
+      "project_id": "proj_001",
+      "deployment_id": "dep_123",
+      "status": "success"
     },
-    "created_at": "2026-03-01T10:22:00Z"
+    "created_at": "2026-04-15T07:20:00Z"
   },
   {
-    "sn_id": "n1000000-aaaa-bbbb-cccc-000000000002",
-    "user_id": "u1111111-aaaa-bbbb-cccc-999999999999",
-    "title": "New Project Invite",
-    "body": "You have been invited to join 'Fleet Manager' as an editor.",
-    "read": true,
+    "sn_id": "n1c9f0e2-7001-4c8d-9a2a-0000002",
+    "user_id": "user_002",
+    "title": "New Team Invitation",
+    "body": "You have been invited to join Project SaaS Dashboard as an editor.",
+    "is_read": false,
     "data": {
-      "project_id": "p2000000-aaaa-bbbb-cccc-000000000002",
-      "invite_id": "i1000000-aaaa-bbbb-cccc-000000000002",
-      "role": "editor"
+      "project_id": "proj_002",
+      "role": "editor",
+      "invite_id": "inv_002"
     },
-    "created_at": "2026-03-01T09:15:00Z"
+    "created_at": "2026-04-15T07:45:00Z"
   },
   {
-    "sn_id": "n1000000-aaaa-bbbb-cccc-000000000003",
-    "user_id": "u2222222-aaaa-bbbb-cccc-888888888888",
-    "title": "Generator Completed",
-    "body": "Flutter app generation finished successfully.",
-    "read": false,
+    "sn_id": "n1c9f0e2-7001-4c8d-9a2a-0000003",
+    "user_id": "user_003",
+    "title": "Generator Run Completed",
+    "body": "Next.js SaaS generator finished successfully.",
+    "is_read": true,
     "data": {
-      "generator_id": "g1000000-aaaa-bbbb-cccc-000000000002",
-      "status": "success",
-      "type": "generator_run"
+      "generator_id": "sg_003",
+      "project_id": "proj_002",
+      "duration_ms": 4200
     },
-    "created_at": "2026-03-01T10:50:00Z"
+    "created_at": "2026-04-14T18:05:00Z"
+  },
+  {
+    "sn_id": "n1c9f0e2-7001-4c8d-9a2a-0000004",
+    "user_id": "user_001",
+    "title": "Low Inventory Warning",
+    "body": "Some products are below reorder level.",
+    "is_read": false,
+    "data": {
+      "product_ids": ["prod_001", "prod_005"],
+      "threshold": 5
+    },
+    "created_at": "2026-04-15T06:50:00Z"
+  },
+  {
+    "sn_id": "n1c9f0e2-7001-4c8d-9a2a-000005",
+    "user_id": "user_004",
+    "title": "Order Shipped",
+    "body": "Your order ORD-10452 has been shipped.",
+    "is_read": true,
+    "data": {
+      "order_id": "ord_10452",
+      "tracking_number": "TRK123456789"
+    },
+    "created_at": "2026-04-13T11:30:00Z"
   }
 ]

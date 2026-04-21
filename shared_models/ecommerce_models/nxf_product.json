@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_products",
+  "table_name": "nxf_product",
   "schema": "public",
   "columns": [
     {

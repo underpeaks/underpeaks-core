@@ -1,0 +1,47 @@
+[
+  {
+    "organisation_id": "org_001",
+    "name": "Cape Listings Group",
+    "slug": "cape-listings-group",
+    "owner_user_id": "user_001",
+    "email": "admin@capelistings.co.za",
+    "phone": "+27 82 555 1234",
+    "logo_url": "https://cdn.app.com/logos/cape.png",
+    "type": "vendor_group",
+    "status": "active",
+    "billing_email": "billing@capelistings.co.za",
+    "address": {
+      "city": "Cape Town",
+      "country": "South Africa"
+    },
+    "settings": {
+      "theme": "dark",
+      "currency": "ZAR"
+    },
+    "subscription_plan": "pro",
+    "is_verified": true,
+    "member_count": 12,
+    "created_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "organisation_id": "org_002",
+    "name": "Ocean Rentals SA",
+    "slug": "ocean-rentals-sa",
+    "owner_user_id": "user_002",
+    "email": "hello@oceanrentals.co.za",
+    "type": "company",
+    "status": "active",
+    "billing_email": "billing@oceanrentals.co.za",
+    "address": {
+      "city": "George",
+      "country": "South Africa"
+    },
+    "settings": {
+      "theme": "light"
+    },
+    "subscription_plan": "starter",
+    "is_verified": false,
+    "member_count": 4,
+    "created_at": "2026-02-01T00:00:00Z"
+  }
+]

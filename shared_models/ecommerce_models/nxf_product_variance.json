@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_product_variants",
+  "table_name": "nxf_product_variance",
   "schema": "public",
   "columns": [
     {

@@ -1,0 +1,146 @@
+[
+  {
+    "return_id": "ret_001",
+    "order_id": "order_001",
+    "customer_id": "cust_001",
+    "vendor_id": "brand_001",
+    "status": "approved",
+    "reason": "defective_item",
+    "description": "Headphones have intermittent sound loss in left ear cup.",
+    "items": [
+      {
+        "product_id": "prod_001",
+        "variant_id": "var_001",
+        "quantity": 1
+      }
+    ],
+    "refund_amount": 199.99,
+    "refund_status": "processed",
+    "return_method": "courier_pickup",
+    "tracking_number": "RET123456789",
+    "images": [
+      "https://picsum.photos/seed/return1/800/800",
+      "https://picsum.photos/seed/return2/800/800"
+    ],
+    "approved_at": "2026-04-13T09:00:00Z",
+    "rejected_at": null,
+    "received_at": "2026-04-15T10:00:00Z",
+    "refunded_at": "2026-04-15T12:00:00Z",
+    "created_at": "2026-04-12T08:00:00Z",
+    "updated_at": "2026-04-15T12:00:00Z"
+  },
+  {
+    "return_id": "ret_002",
+    "order_id": "order_003",
+    "customer_id": "cust_003",
+    "vendor_id": "brand_002",
+    "status": "requested",
+    "reason": "wrong_item_delivered",
+    "description": "Received silver watch instead of black variant.",
+    "items": [
+      {
+        "product_id": "prod_002",
+        "variant_id": "var_004",
+        "quantity": 1
+      }
+    ],
+    "refund_amount": 0,
+    "refund_status": "pending",
+    "return_method": "drop_off",
+    "tracking_number": null,
+    "images": [
+      "https://picsum.photos/seed/return3/800/800"
+    ],
+    "approved_at": null,
+    "rejected_at": null,
+    "received_at": null,
+    "refunded_at": null,
+    "created_at": "2026-04-14T11:00:00Z",
+    "updated_at": "2026-04-14T11:00:00Z"
+  },
+  {
+    "return_id": "ret_003",
+    "order_id": "order_004",
+    "customer_id": "cust_005",
+    "vendor_id": "brand_004",
+    "status": "rejected",
+    "reason": "changed_mind",
+    "description": "Customer no longer wants hoodie after delivery.",
+    "items": [
+      {
+        "product_id": "prod_004",
+        "variant_id": "var_006",
+        "quantity": 1
+      }
+    ],
+    "refund_amount": 0,
+    "refund_status": "rejected",
+    "return_method": "courier_pickup",
+    "tracking_number": "RET998877",
+    "images": [],
+    "approved_at": null,
+    "rejected_at": "2026-04-15T09:00:00Z",
+    "received_at": null,
+    "refunded_at": null,
+    "created_at": "2026-04-14T08:30:00Z",
+    "updated_at": "2026-04-15T09:00:00Z"
+  },
+  {
+    "return_id": "ret_004",
+    "order_id": "order_002",
+    "customer_id": "cust_002",
+    "vendor_id": "brand_003",
+    "status": "received",
+    "reason": "expired_product",
+    "description": "Tea packets were close to expiry upon delivery.",
+    "items": [
+      {
+        "product_id": "prod_003",
+        "variant_id": null,
+        "quantity": 2
+      }
+    ],
+    "refund_amount": 25.0,
+    "refund_status": "pending",
+    "return_method": "drop_off",
+    "tracking_number": "RET445566",
+    "images": [
+      "https://picsum.photos/seed/return4/800/800"
+    ],
+    "approved_at": "2026-04-10T10:00:00Z",
+    "rejected_at": null,
+    "received_at": "2026-04-13T14:00:00Z",
+    "refunded_at": null,
+    "created_at": "2026-04-09T09:00:00Z",
+    "updated_at": "2026-04-13T14:00:00Z"
+  },
+  {
+    "return_id": "ret_005",
+    "order_id": "order_001",
+    "customer_id": "cust_001",
+    "vendor_id": "brand_001",
+    "status": "approved",
+    "reason": "not_as_described",
+    "description": "Product noise cancellation not as advertised.",
+    "items": [
+      {
+        "product_id": "prod_001",
+        "variant_id": "var_002",
+        "quantity": 1
+      }
+    ],
+    "refund_amount": 199.99,
+    "refund_status": "pending",
+    "return_method": "courier_pickup",
+    "tracking_number": "RET112233",
+    "images": [
+      "https://picsum.photos/seed/return5/800/800"
+    ],
+    "approved_at": "2026-04-14T10:00:00Z",
+    "rejected_at": null,
+    "received_at": null,
+    "refunded_at": null,
+    "created_at": "2026-04-13T07:00:00Z",
+    "updated_at": "2026-04-14T10:00:00Z"
+  }
+]

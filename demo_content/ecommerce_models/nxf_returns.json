@@ -1,0 +1,77 @@
+[
+  {
+    "ret_id": "ret_1001",
+  
+    "order_id": "ord_5001",
+    "product_id": "prod_2001",
+    "product_variant_id": "pv_3001",
+    "user_id": "user_001",
+    "reason": "Product size too small",
+    "status": "pending",
+    "requested_at": "2026-04-10T09:15:00Z",
+    "processed_at": null,
+    "refund_amount": 499.99,
+    "created_at": "2026-04-10T09:15:00Z",
+    "updated_at": "2026-04-10T09:15:00Z"
+  },
+  {
+    "ret_id": "ret_1002",
+    
+    "order_id": "ord_5002",
+    "product_id": "prod_2003",
+    "product_variant_id": null,
+    "user_id": "user_002",
+    "reason": "Item arrived damaged",
+    "status": "approved",
+    "requested_at": "2026-04-09T14:22:00Z",
+    "processed_at": "2026-04-10T08:00:00Z",
+    "refund_amount": 1299.00,
+    "created_at": "2026-04-09T14:22:00Z",
+    "updated_at": "2026-04-10T08:00:00Z"
+  },
+  {
+    "ret_id": "ret_1003",
+    
+    "order_id": "ord_5003",
+    "product_id": "prod_2005",
+    "product_variant_id": "pv_3007",
+    "user_id": "user_003",
+    "reason": "Changed mind after purchase",
+    "status": "rejected",
+    "requested_at": "2026-04-08T11:45:00Z",
+    "processed_at": "2026-04-08T15:30:00Z",
+    "refund_amount": 0,
+    "created_at": "2026-04-08T11:45:00Z",
+    "updated_at": "2026-04-08T15:30:00Z"
+  },
+  {
+    "ret_id": "ret_1004",
+    
+    "order_id": "ord_5004",
+    "product_id": "prod_2002",
+    "product_variant_id": "pv_3003",
+    "user_id": "user_004",
+    "reason": "Wrong item delivered",
+    "status": "processed",
+    "requested_at": "2026-04-07T10:10:00Z",
+    "processed_at": "2026-04-08T12:00:00Z",
+    "refund_amount": 799.50,
+    "created_at": "2026-04-07T10:10:00Z",
+    "updated_at": "2026-04-08T12:00:00Z"
+  },
+  {
+    "ret_id": "ret_1005",
+   
+    "order_id": "ord_5005",
+    "product_id": "prod_2008",
+    "product_variant_id": null,
+    "user_id": "user_005",
+    "reason": "Product not as described",
+    "status": "pending",
+    "requested_at": "2026-04-12T16:40:00Z",
+    "processed_at": null,
+    "refund_amount": 349.00,
+    "created_at": "2026-04-12T16:40:00Z",
+    "updated_at": "2026-04-12T16:40:00Z"
+  }
+]

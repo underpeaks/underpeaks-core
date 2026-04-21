@@ -1,0 +1,121 @@
+[
+  {
+    "user_role_id": "ur_001",
+    "organisation_id": null,
+    "user_id": "user_admin_001",
+    "role_key": "admin",
+    "scope_type": "global",
+    "scope_id": null,
+    "status": "active",
+    "assigned_by": "system",
+    "assigned_at": "2026-04-01T08:00:00Z",
+    "expires_at": null,
+    "created_at": "2026-04-01T08:00:00Z",
+    "updated_at": "2026-04-01T08:00:00Z"
+  },
+
+  {
+    "user_role_id": "ur_002",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_vendor_001",
+    "role_key": "vendor",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "status": "active",
+    "assigned_by": "user_admin_001",
+    "assigned_at": "2026-04-02T09:00:00Z",
+    "expires_at": null,
+    "created_at": "2026-04-02T09:00:00Z",
+    "updated_at": "2026-04-02T09:00:00Z"
+  },
+
+  {
+    "user_role_id": "ur_003",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_customer_001",
+    "role_key": "customer",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "status": "active",
+    "assigned_by": "system",
+    "assigned_at": "2026-04-03T08:00:00Z",
+    "expires_at": null,
+    "created_at": "2026-04-03T08:00:00Z",
+    "updated_at": "2026-04-03T08:00:00Z"
+  },
+
+  {
+    "user_role_id": "ur_004",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_support_001",
+    "role_key": "support",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "status": "active",
+    "assigned_by": "user_admin_001",
+    "assigned_at": "2026-04-03T10:00:00Z",
+    "expires_at": null,
+    "created_at": "2026-04-03T10:00:00Z",
+    "updated_at": "2026-04-03T10:00:00Z"
+  },
+
+  {
+    "user_role_id": "ur_005",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_moderator_001",
+    "role_key": "moderator",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "status": "active",
+    "assigned_by": "user_admin_001",
+    "assigned_at": "2026-04-05T11:00:00Z",
+    "expires_at": null,
+    "created_at": "2026-04-05T11:00:00Z",
+    "updated_at": "2026-04-05T11:00:00Z"
+  },
+
+  {
+    "user_role_id": "ur_006",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_temp_001",
+    "role_key": "editor",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "status": "active",
+    "assigned_by": "user_admin_001",
+    "assigned_at": "2026-04-10T12:00:00Z",
+    "expires_at": "2026-05-01T00:00:00Z",
+    "created_at": "2026-04-10T12:00:00Z",
+    "updated_at": "2026-04-10T12:00:00Z"
+  },
+
+  {
+    "user_role_id": "ur_007",
+    "organisation_id": null,
+    "user_id": "user_auditor_001",
+    "role_key": "auditor",
+    "scope_type": "global",
+    "scope_id": null,
+    "status": "active",
+    "assigned_by": "system",
+    "assigned_at": "2026-04-01T08:00:00Z",
+    "expires_at": null,
+    "created_at": "2026-04-01T08:00:00Z",
+    "updated_at": "2026-04-01T08:00:00Z"
+  },
+
+  {
+    "user_role_id": "ur_008",
+    "organisation_id": "org_demo_001",
+    "user_id": "user_vendor_002",
+    "role_key": "vendor",
+    "scope_type": "organisation",
+    "scope_id": "org_demo_001",
+    "status": "suspended",
+    "assigned_by": "user_admin_001",
+    "assigned_at": "2026-04-04T09:30:00Z",
+    "expires_at": null,
+    "created_at": "2026-04-04T09:30:00Z",
+    "updated_at": "2026-04-12T15:00:00Z"
+  }
+]

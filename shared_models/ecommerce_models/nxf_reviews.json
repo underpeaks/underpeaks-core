@@ -2,7 +2,7 @@
   "table_name": "nxf_reviews",
   "primary_key": "rev_id",
   "columns": {
-    "id": { "type": "string" },
+    "rev_id": { "type": "string" },
     "product_id": {
       "type": "string",
       "references": {

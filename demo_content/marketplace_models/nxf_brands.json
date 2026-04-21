@@ -1,0 +1,173 @@
+[
+  {
+    "brand_id": "brand_001",
+    "name": "CapeTech Solutions",
+    "slug": "capetech-solutions",
+    "description": "A South African technology brand specializing in SaaS platforms, mobile apps, and enterprise systems for SMEs.",
+    "logo_url": "https://picsum.photos/seed/brand1logo/300/300",
+    "banner_url": "https://picsum.photos/seed/brand1banner/1200/400",
+    "website_url": "https://capetech.demo.com",
+    "email": "info@capetech.demo.com",
+    "phone": "+27 21 555 0101",
+    "social_links": {
+      "facebook": "https://facebook.com/capetech",
+      "instagram": "https://instagram.com/capetech",
+      "linkedin": "https://linkedin.com/company/capetech"
+    },
+    "address": "Cape Town Tech Hub, South Africa",
+    "location": "Cape Town",
+    "latitude": -33.9249,
+    "longitude": 18.4241,
+    "is_verified": true,
+    "is_featured": true,
+    "status": "active",
+    "rating_average": 4.7,
+    "rating_count": 128,
+    "seo_title": "CapeTech Solutions - SaaS & App Development",
+    "seo_description": "Leading South African SaaS and mobile app development company for SMEs.",
+    "seo_keywords": ["software development", "SaaS South Africa", "mobile apps"],
+    "metadata": {
+      "industry": "technology",
+      "company_size": "50-100",
+      "founded": 2019
+    },
+    "created_at": "2026-01-01T08:00:00Z",
+    "updated_at": "2026-03-10T10:00:00Z"
+  },
+  {
+    "brand_id": "brand_002",
+    "name": "OceanEdge Marine",
+    "slug": "oceanedge-marine",
+    "description": "Premium marine equipment and yacht accessories supplier focused on global sailing communities.",
+    "logo_url": "https://picsum.photos/seed/brand2logo/300/300",
+    "banner_url": "https://picsum.photos/seed/brand2banner/1200/400",
+    "website_url": "https://oceanedge.demo.com",
+    "email": "sales@oceanedge.demo.com",
+    "phone": "+27 82 555 2211",
+    "social_links": {
+      "instagram": "https://instagram.com/oceanedge",
+      "youtube": "https://youtube.com/oceanedge"
+    },
+    "address": "Simon's Town Marina, South Africa",
+    "location": "Cape Town",
+    "latitude": -34.1930,
+    "longitude": 18.4500,
+    "is_verified": true,
+    "is_featured": false,
+    "status": "active",
+    "rating_average": 4.9,
+    "rating_count": 64,
+    "seo_title": "OceanEdge Marine - Yacht & Sailing Equipment",
+    "seo_description": "High-end marine gear and yacht accessories for global sailors.",
+    "seo_keywords": ["marine equipment", "yacht accessories", "sailing gear"],
+    "metadata": {
+      "industry": "marine",
+      "company_size": "20-50",
+      "founded": 2015
+    },
+    "created_at": "2026-01-15T09:00:00Z",
+    "updated_at": "2026-03-01T11:00:00Z"
+  },
+  {
+    "brand_id": "brand_003",
+    "name": "UrbanThread Apparel",
+    "slug": "urbanthread-apparel",
+    "description": "Modern streetwear fashion brand combining urban culture with premium fabrics.",
+    "logo_url": "https://picsum.photos/seed/brand3logo/300/300",
+    "banner_url": "https://picsum.photos/seed/brand3banner/1200/400",
+    "website_url": "https://urbanthread.demo.com",
+    "email": "hello@urbanthread.demo.com",
+    "phone": "+27 83 444 7788",
+    "social_links": {
+      "instagram": "https://instagram.com/urbanthread",
+      "tiktok": "https://tiktok.com/@urbanthread"
+    },
+    "address": "Johannesburg Design District, South Africa",
+    "location": "Johannesburg",
+    "latitude": -26.2041,
+    "longitude": 28.0473,
+    "is_verified": false,
+    "is_featured": true,
+    "status": "active",
+    "rating_average": 4.3,
+    "rating_count": 312,
+    "seo_title": "UrbanThread Apparel - Streetwear Fashion Brand",
+    "seo_description": "Premium urban streetwear clothing brand based in South Africa.",
+    "seo_keywords": ["streetwear", "fashion brand", "urban clothing"],
+    "metadata": {
+      "industry": "fashion",
+      "company_size": "10-20",
+      "founded": 2021
+    },
+    "created_at": "2026-02-01T10:00:00Z",
+    "updated_at": "2026-03-20T14:00:00Z"
+  },
+  {
+    "brand_id": "brand_004",
+    "name": "GreenField Organics",
+    "slug": "greenfield-organics",
+    "description": "Organic food and natural products supplier focused on sustainable farming and healthy living.",
+    "logo_url": "https://picsum.photos/seed/brand4logo/300/300",
+    "banner_url": "https://picsum.photos/seed/brand4banner/1200/400",
+    "website_url": "https://greenfield.demo.com",
+    "email": "support@greenfield.demo.com",
+    "phone": "+27 21 333 9988",
+    "social_links": {
+      "facebook": "https://facebook.com/greenfieldorganics",
+      "instagram": "https://instagram.com/greenfieldorganics"
+    },
+    "address": "Stellenbosch Farms, Western Cape",
+    "location": "Stellenbosch",
+    "latitude": -33.9321,
+    "longitude": 18.8602,
+    "is_verified": true,
+    "is_featured": true,
+    "status": "active",
+    "rating_average": 4.8,
+    "rating_count": 221,
+    "seo_title": "GreenField Organics - Healthy Organic Products",
+    "seo_description": "Fresh organic food and sustainable products from South Africa.",
+    "seo_keywords": ["organic food", "healthy living", "farm produce"],
+    "metadata": {
+      "industry": "food",
+      "company_size": "30-60",
+      "founded": 2017
+    },
+    "created_at": "2026-01-20T07:00:00Z",
+    "updated_at": "2026-03-05T09:30:00Z"
+  },
+  {
+    "brand_id": "brand_005",
+    "name": "SwiftLogix",
+    "slug": "swiftlogix",
+    "description": "Logistics and delivery optimization platform powering fast marketplace fulfillment across Africa.",
+    "logo_url": "https://picsum.photos/seed/brand5logo/300/300",
+    "banner_url": "https://picsum.photos/seed/brand5banner/1200/400",
+    "website_url": "https://swiftlogix.demo.com",
+    "email": "ops@swiftlogix.demo.com",
+    "phone": "+27 87 222 5566",
+    "social_links": {
+      "linkedin": "https://linkedin.com/company/swiftlogix",
+      "twitter": "https://twitter.com/swiftlogix"
+    },
+    "address": "Cape Town Logistics Park",
+    "location": "Cape Town",
+    "latitude": -33.9068,
+    "longitude": 18.5400,
+    "is_verified": true,
+    "is_featured": false,
+    "status": "active",
+    "rating_average": 4.6,
+    "rating_count": 98,
+    "seo_title": "SwiftLogix - Logistics for Marketplaces",
+    "seo_description": "Fast and reliable logistics solutions for ecommerce and marketplaces.",
+    "seo_keywords": ["logistics", "delivery platform", "fulfillment"],
+    "metadata": {
+      "industry": "logistics",
+      "company_size": "100-200",
+      "founded": 2018
+    },
+    "created_at": "2026-01-05T06:00:00Z",
+    "updated_at": "2026-03-18T12:00:00Z"
+  }
+]

@@ -9,7 +9,7 @@ import { Loader2 } from 'lucide-react' // Spinner icon (you can replace it)
 
 export default function StackConfigPage() {
   const router = useRouter()
-  const [stack, setStack] = useState<'next' | 'flutter' | 'both'>('both')
+  const [stack, setStack] = useState<'next' | 'flutter' | 'both' | 'cms'>('both')
   const [loading, setLoading] = useState(false)
 
   const { setInstallerValue } = useInstallerStore()
@@ -70,6 +70,17 @@ export default function StackConfigPage() {
                 Build cross-platform mobile and desktop apps with Flutter using a shared codebase, and <strong>use it as a headless CMS backend if desired.</strong>
               </p>
             </div>
+          </div>
+          <div className="flex items-start space-x-3">
+            <RadioGroupItem value="cms" id="cms" />
+            <div>
+  <label htmlFor="cms" className="font-semibold text-gray-900 cursor-pointer">
+    Headless CMS
+  </label>
+  <p className="text-sm text-gray-600 max-w-md">
+    Deploy as a headless CMS backend only. Expose your data through APIs and connect it to any custom frontend, mobile application, or third-party service with full flexibility.
+  </p>
+</div>
           </div>
         </RadioGroup>
 

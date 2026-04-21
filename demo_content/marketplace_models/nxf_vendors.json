@@ -1,0 +1,167 @@
+[
+  {
+    "vendor_id": "brand_001",
+    "user_id": "user_001",
+    "business_name": "AudioLux Technologies",
+    "slug": "audiolux-technologies",
+    "email": "support@audiolux.com",
+    "phone": "+27 82 555 1001",
+    "description": "Premium audio equipment manufacturer specializing in high-end wireless sound systems.",
+    "logo_url": "https://picsum.photos/seed/vendor1/400/400",
+    "banner_url": "https://picsum.photos/seed/vendor1b/1200/400",
+    "status": "active",
+    "verification_status": "verified",
+    "commission_rate": 12,
+    "payout_schedule": "weekly",
+    "bank_details": {
+      "bank_name": "Standard Bank",
+      "account_holder": "AudioLux Technologies",
+      "account_number": "****1122",
+      "branch_code": "051001"
+    },
+    "address": {
+      "line1": "12 Tech Park",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "8001"
+    },
+    "rating": 4.8,
+    "total_sales": 125000.50,
+    "total_orders": 3200,
+    "is_featured": true,
+    "created_at": "2026-01-01T08:00:00Z",
+    "updated_at": "2026-04-15T09:00:00Z"
+  },
+  {
+    "vendor_id": "brand_002",
+    "user_id": "user_002",
+    "business_name": "WearTech Innovations",
+    "slug": "weartech-innovations",
+    "email": "info@weartech.io",
+    "phone": "+27 82 555 1002",
+    "description": "Smart wearable technology company focused on health and fitness tracking devices.",
+    "logo_url": "https://picsum.photos/seed/vendor2/400/400",
+    "banner_url": "https://picsum.photos/seed/vendor2b/1200/400",
+    "status": "active",
+    "verification_status": "verified",
+    "commission_rate": 10,
+    "payout_schedule": "biweekly",
+    "bank_details": {
+      "bank_name": "FNB",
+      "account_holder": "WearTech Innovations",
+      "account_number": "****3344",
+      "branch_code": "250655"
+    },
+    "address": {
+      "line1": "88 Innovation Drive",
+      "city": "Johannesburg",
+      "country": "South Africa",
+      "postal_code": "2000"
+    },
+    "rating": 4.6,
+    "total_sales": 98000.75,
+    "total_orders": 2100,
+    "is_featured": true,
+    "created_at": "2026-01-03T08:00:00Z",
+    "updated_at": "2026-04-14T11:00:00Z"
+  },
+  {
+    "vendor_id": "brand_003",
+    "user_id": "user_003",
+    "business_name": "GreenField Organics",
+    "slug": "greenfield-organics",
+    "email": "hello@greenfieldorganic.com",
+    "phone": "+27 82 555 1003",
+    "description": "Organic food producer focused on sustainable farming and natural health products.",
+    "logo_url": "https://picsum.photos/seed/vendor3/400/400",
+    "banner_url": "https://picsum.photos/seed/vendor3b/1200/400",
+    "status": "active",
+    "verification_status": "verified",
+    "commission_rate": 8,
+    "payout_schedule": "weekly",
+    "bank_details": {
+      "bank_name": "Nedbank",
+      "account_holder": "GreenField Organics",
+      "account_number": "****5566",
+      "branch_code": "198765"
+    },
+    "address": {
+      "line1": "Farm Road 22",
+      "city": "Stellenbosch",
+      "country": "South Africa",
+      "postal_code": "7600"
+    },
+    "rating": 4.9,
+    "total_sales": 54000.25,
+    "total_orders": 1500,
+    "is_featured": false,
+    "created_at": "2026-01-05T08:00:00Z",
+    "updated_at": "2026-04-15T07:00:00Z"
+  },
+  {
+    "vendor_id": "brand_004",
+    "user_id": "user_004",
+    "business_name": "UrbanThread Apparel",
+    "slug": "urbanthread-apparel",
+    "email": "sales@urbanthread.com",
+    "phone": "+27 82 555 1004",
+    "description": "Streetwear fashion brand combining modern design with premium fabrics.",
+    "logo_url": "https://picsum.photos/seed/vendor4/400/400",
+    "banner_url": "https://picsum.photos/seed/vendor4b/1200/400",
+    "status": "active",
+    "verification_status": "pending_review",
+    "commission_rate": 15,
+    "payout_schedule": "monthly",
+    "bank_details": {
+      "bank_name": "Capitec",
+      "account_holder": "UrbanThread Apparel",
+      "account_number": "****7788",
+      "branch_code": "470010"
+    },
+    "address": {
+      "line1": "33 Fashion District",
+      "city": "Cape Town",
+      "country": "South Africa",
+      "postal_code": "8000"
+    },
+    "rating": 4.3,
+    "total_sales": 23000.00,
+    "total_orders": 800,
+    "is_featured": false,
+    "created_at": "2026-01-10T08:00:00Z",
+    "updated_at": "2026-04-13T08:00:00Z"
+  },
+  {
+    "vendor_id": "brand_005",
+    "user_id": "user_005",
+    "business_name": "OceanEdge Marine Systems",
+    "slug": "oceanedge-marine-systems",
+    "email": "info@oceanedge.co",
+    "phone": "+27 82 555 1005",
+    "description": "Marine navigation and ocean technology systems for professional and recreational use.",
+    "logo_url": "https://picsum.photos/seed/vendor5/400/400",
+    "banner_url": "https://picsum.photos/seed/vendor5b/1200/400",
+    "status": "active",
+    "verification_status": "verified",
+    "commission_rate": 10,
+    "payout_schedule": "weekly",
+    "bank_details": {
+      "bank_name": "DHL Finance Bank",
+      "account_holder": "OceanEdge Marine Systems",
+      "account_number": "****9900",
+      "branch_code": "123456"
+    },
+    "address": {
+      "line1": "77 Harbour Dock",
+      "city": "Durban",
+      "country": "South Africa",
+      "postal_code": "4001"
+    },
+    "rating": 4.9,
+    "total_sales": 180000.90,
+    "total_orders": 4100,
+    "is_featured": true,
+    "created_at": "2026-01-12T08:00:00Z",
+    "updated_at": "2026-04-15T06:00:00Z"
+  }
+]

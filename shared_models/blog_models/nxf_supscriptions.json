@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_subscriptions",
+  "table_name": "nxf_supscriptions",
   "schema": "public",
   "columns": [
     { "name": "subscription_id", "type": "string", "nullable": false, "is_primary": true },

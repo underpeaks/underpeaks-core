@@ -1,44 +1,72 @@
 [
   {
-    "se_id": "e1000000-aaaa-bbbb-cccc-000000000001",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
+    "se_id": "e1c9f0e2-3001-4c8d-9a2a-000000000001",
+    "project_id": "proj_001",
     "name": "production",
     "is_default": true,
     "variables": {
-      "API_URL": "https://api.myapp.com",
+      "API_URL": "https://api.marketplace.com",
       "DB_POOL_SIZE": 20,
-      "ENABLE_LOGGING": false,
-      "PAYMENTS_MODE": "live"
+      "CACHE_ENABLED": true,
+      "LOG_LEVEL": "error"
     },
-    "created_at": "2026-03-01T08:00:00Z",
-    "updated_at": "2026-03-01T08:00:00Z"
+    "created_at": "2026-04-01T08:00:00Z",
+    "updated_at": "2026-04-15T07:00:00Z"
   },
   {
-    "se_id": "e1000000-aaaa-bbbb-cccc-000000000002",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
+    "se_id": "e1c9f0e2-3001-4c8d-9a2a-000000000002",
+    "project_id": "proj_001",
     "name": "staging",
     "is_default": false,
     "variables": {
-      "API_URL": "https://staging-api.myapp.com",
-      "DB_POOL_SIZE": 5,
-      "ENABLE_LOGGING": true,
-      "PAYMENTS_MODE": "test"
+      "API_URL": "https://staging-api.marketplace.com",
+      "DB_POOL_SIZE": 10,
+      "CACHE_ENABLED": false,
+      "LOG_LEVEL": "debug"
     },
-    "created_at": "2026-03-01T08:05:00Z",
-    "updated_at": "2026-03-01T08:05:00Z"
+    "created_at": "2026-04-01T08:10:00Z",
+    "updated_at": "2026-04-14T12:00:00Z"
   },
   {
-    "se_id": "e1000000-aaaa-bbbb-cccc-000000000003",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
+    "se_id": "e1c9f0e2-3001-4c8d-9a2a-000000000003",
+    "project_id": "proj_001",
     "name": "development",
     "is_default": false,
     "variables": {
       "API_URL": "http://localhost:3000",
-      "DB_POOL_SIZE": 1,
-      "ENABLE_LOGGING": true,
-      "PAYMENTS_MODE": "mock"
+      "DB_POOL_SIZE": 5,
+      "CACHE_ENABLED": false,
+      "LOG_LEVEL": "debug"
     },
-    "created_at": "2026-03-01T08:10:00Z",
-    "updated_at": "2026-03-01T08:10:00Z"
+    "created_at": "2026-04-01T08:15:00Z",
+    "updated_at": "2026-04-15T08:00:00Z"
+  },
+  {
+    "se_id": "e1c9f0e2-3001-4c8d-9a2a-000000000004",
+    "project_id": "proj_002",
+    "name": "production",
+    "is_default": true,
+    "variables": {
+      "API_URL": "https://saasapp.com",
+      "DB_POOL_SIZE": 30,
+      "CACHE_ENABLED": true,
+      "LOG_LEVEL": "warn"
+    },
+    "created_at": "2026-03-20T10:00:00Z",
+    "updated_at": "2026-04-15T06:00:00Z"
+  },
+  {
+    "se_id": "e1c9f0e2-3001-4c8d-9a2a-000000000005",
+    "project_id": "proj_003",
+    "name": "sandbox",
+    "is_default": true,
+    "variables": {
+      "API_URL": "https://sandbox.api.socialapp.dev",
+      "DB_POOL_SIZE": 3,
+      "CACHE_ENABLED": false,
+      "LOG_LEVEL": "trace"
+    },
+    "created_at": "2026-04-10T09:00:00Z",
+    "updated_at": "2026-04-15T08:30:00Z"
   }
 ]

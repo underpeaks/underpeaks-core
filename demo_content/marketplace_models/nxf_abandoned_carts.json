@@ -1,0 +1,166 @@
+[
+  {
+    "cart_id": "cart_001",
+    "user_id": "user_101",
+    "session_id": "sess_a1",
+    "email": "john@example.com",
+    "phone": "+27821234567",
+    "items": [
+      {
+        "product_id": "prod_001",
+        "name": "Wireless Headphones",
+        "price": 1299.99,
+        "quantity": 1
+      },
+      {
+        "product_id": "prod_002",
+        "name": "USB-C Charger",
+        "price": 299.99,
+        "quantity": 2
+      }
+    ],
+    "currency": "ZAR",
+    "subtotal": 1899.97,
+    "discount_total": 100,
+    "tax_total": 270,
+    "total": 2069.97,
+    "coupon_code": "SAVE100",
+    "abandon_reason": "high_shipping_cost",
+    "last_activity_at": "2026-04-10T14:32:00Z",
+    "recovered": false,
+    "recovery_email_sent": true,
+    "recovery_email_sent_at": "2026-04-10T15:00:00Z",
+    "metadata": {
+      "device": "mobile",
+      "browser": "Chrome"
+    },
+    "created_at": "2026-04-10T14:00:00Z",
+    "updated_at": "2026-04-10T15:00:00Z"
+  },
+  {
+    "cart_id": "cart_002",
+    "user_id": null,
+    "session_id": "sess_b2",
+    "email": "guest1@example.com",
+    "phone": null,
+    "items": [
+      {
+        "product_id": "prod_010",
+        "name": "Gaming Mouse",
+        "price": 599.99,
+        "quantity": 1
+      }
+    ],
+    "currency": "ZAR",
+    "subtotal": 599.99,
+    "discount_total": 0,
+    "tax_total": 90,
+    "total": 689.99,
+    "coupon_code": null,
+    "abandon_reason": "checkout_friction",
+    "last_activity_at": "2026-04-11T09:15:00Z",
+    "recovered": false,
+    "recovery_email_sent": false,
+    "metadata": {
+      "device": "desktop",
+      "referrer": "google_ads"
+    },
+    "created_at": "2026-04-11T09:00:00Z",
+    "updated_at": "2026-04-11T09:15:00Z"
+  },
+  {
+    "cart_id": "cart_003",
+    "user_id": "user_202",
+    "session_id": "sess_c3",
+    "email": "sarah@example.com",
+    "phone": "+27829876543",
+    "items": [
+      {
+        "product_id": "prod_021",
+        "name": "Smart Watch",
+        "price": 2499.99,
+        "quantity": 1
+      }
+    ],
+    "currency": "ZAR",
+    "subtotal": 2499.99,
+    "discount_total": 0,
+    "tax_total": 375,
+    "total": 2874.99,
+    "coupon_code": null,
+    "abandon_reason": "payment_failed",
+    "last_activity_at": "2026-04-12T18:45:00Z",
+    "recovered": true,
+    "recovered_at": "2026-04-12T19:10:00Z",
+    "recovery_email_sent": true,
+    "recovery_email_sent_at": "2026-04-12T19:00:00Z",
+    "metadata": {
+      "device": "tablet",
+      "payment_provider": "payfast"
+    },
+    "created_at": "2026-04-12T18:00:00Z",
+    "updated_at": "2026-04-12T19:10:00Z"
+  },
+  {
+    "cart_id": "cart_004",
+    "user_id": "user_303",
+    "session_id": "sess_d4",
+    "email": "mike@example.com",
+    "phone": "+27820001111",
+    "items": [
+      {
+        "product_id": "prod_033",
+        "name": "Office Chair",
+        "price": 1899.99,
+        "quantity": 1
+      }
+    ],
+    "currency": "ZAR",
+    "subtotal": 1899.99,
+    "discount_total": 200,
+    "tax_total": 255,
+    "total": 1954.99,
+    "coupon_code": "OFFICE200",
+    "abandon_reason": "just_browsing",
+    "last_activity_at": "2026-04-13T11:20:00Z",
+    "recovered": false,
+    "recovery_email_sent": false,
+    "metadata": {
+      "device": "desktop",
+      "session_duration_seconds": 320
+    },
+    "created_at": "2026-04-13T11:00:00Z",
+    "updated_at": "2026-04-13T11:20:00Z"
+  },
+  {
+    "cart_id": "cart_005",
+    "user_id": null,
+    "session_id": "sess_e5",
+    "email": null,
+    "phone": null,
+    "items": [
+      {
+        "product_id": "prod_045",
+        "name": "Bluetooth Speaker",
+        "price": 899.99,
+        "quantity": 1
+      }
+    ],
+    "currency": "ZAR",
+    "subtotal": 899.99,
+    "discount_total": 0,
+    "tax_total": 135,
+    "total": 1034.99,
+    "coupon_code": null,
+    "abandon_reason": "no_contact_info",
+    "last_activity_at": "2026-04-14T16:05:00Z",
+    "recovered": false,
+    "recovery_email_sent": false,
+    "metadata": {
+      "device": "mobile",
+      "geo": "South Africa"
+    },
+    "created_at": "2026-04-14T16:00:00Z",
+    "updated_at": "2026-04-14T16:05:00Z"
+  }
+]

@@ -1,67 +1,108 @@
 [
   {
-    "sg_id": "g1000000-aaaa-bbbb-cccc-000000000001",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
-    "name": "Next.js App Generator",
-    "type": "next",
+    "sg_id": "f1c9f0e2-4001-4c8d-9a2a-000000000001",
+    "project_id": "proj_001",
+    "name": "Flutter App Generator",
+    "type": "flutter_code_generator",
     "config": {
-      "framework": "next",
-      "app_router": true,
-      "typescript": true,
-      "styling": "tailwind",
-      "auth": "supabase",
-      "output_dir": "/apps/web",
-      "features": {
-        "dashboard": true,
-        "admin_panel": true,
-        "seo": true
-      }
-    },
-    "last_run_at": "2026-03-01T10:30:00Z",
-    "created_at": "2026-03-01T09:00:00Z",
-    "updated_at": "2026-03-01T10:30:00Z"
-  },
-  {
-    "sg_id": "g1000000-aaaa-bbbb-cccc-000000000002",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
-    "name": "Flutter Mobile Generator",
-    "type": "flutter",
-    "config": {
+      "template": "ecommerce_v2",
       "state_management": "riverpod",
-      "backend": "firebase",
-      "platforms": ["ios", "android", "web"],
-      "navigation": "go_router",
-      "offline_mode": true,
-      "features": {
-        "auth": true,
-        "chat": true,
-        "notifications": true
-      }
+      "routing": "go_router",
+      "backend": "supabase",
+      "features": [
+        "auth",
+        "products",
+        "cart",
+        "checkout",
+        "orders"
+      ],
+      "ui_theme": "material_3"
     },
-    "last_run_at": "2026-03-01T10:45:00Z",
-    "created_at": "2026-03-01T09:05:00Z",
-    "updated_at": "2026-03-01T10:45:00Z"
+    "last_run_at": "2026-04-15T07:10:00Z",
+    "created_at": "2026-04-01T09:00:00Z",
+    "updated_at": "2026-04-15T07:10:00Z"
   },
   {
-    "sg_id": "g1000000-aaaa-bbbb-cccc-000000000003",
-    "project_id": "p1000000-aaaa-bbbb-cccc-000000000001",
-    "name": "API Backend Generator",
-    "type": "backend",
+    "sg_id": "f1c9f0e2-4001-4c8d-9a2a-000000000002",
+    "project_id": "proj_001",
+    "name": "API Scaffold Generator",
+    "type": "backend_api_generator",
     "config": {
-      "runtime": "node",
-      "framework": "nestjs",
-      "database": "postgres",
-      "orm": "prisma",
+      "framework": "nodejs",
+      "pattern": "mvc",
       "auth": "jwt",
-      "structure": "modular",
-      "features": {
-        "audit_logs": true,
-        "rate_limiting": true,
-        "multi_tenant": true
-      }
+      "database": "postgres",
+      "auto_migrations": true,
+      "modules": [
+        "users",
+        "orders",
+        "vendors",
+        "products"
+      ]
+    },
+    "last_run_at": "2026-04-14T18:00:00Z",
+    "created_at": "2026-04-01T09:10:00Z",
+    "updated_at": "2026-04-14T18:00:00Z"
+  },
+  {
+    "sg_id": "f1c9f0e2-4001-4c8d-9a2a-000000000003",
+    "project_id": "proj_002",
+    "name": "Next.js SaaS Generator",
+    "type": "nextjs_generator",
+    "config": {
+      "framework": "nextjs",
+      "render_mode": "ssr",
+      "auth": "supabase",
+      "billing": true,
+      "multi_tenant": true,
+      "features": [
+        "dashboard",
+        "billing",
+        "analytics",
+        "api_keys"
+      ]
+    },
+    "last_run_at": "2026-04-15T06:45:00Z",
+    "created_at": "2026-03-20T10:00:00Z",
+    "updated_at": "2026-04-15T06:45:00Z"
+  },
+  {
+    "sg_id": "f1c9f0e2-4001-4c8d-9a2a-000000000004",
+    "project_id": "proj_003",
+    "name": "Social App Generator",
+    "type": "fullstack_generator",
+    "config": {
+      "frontend": "flutter + web",
+      "backend": "firebase",
+      "realtime": true,
+      "features": [
+        "posts",
+        "chat",
+        "followers",
+        "notifications"
+      ],
+      "storage": "firebase_storage"
     },
     "last_run_at": null,
-    "created_at": "2026-03-01T09:10:00Z",
-    "updated_at": "2026-03-01T09:10:00Z"
+    "created_at": "2026-04-10T09:30:00Z",
+    "updated_at": "2026-04-15T08:00:00Z"
+  },
+  {
+    "sg_id": "f1c9f0e2-4001-4c8d-9a2a-000000000005",
+    "project_id": "proj_001",
+    "name": "System Config Generator",
+    "type": "meta_generator",
+    "config": {
+      "targets": [
+        "nxf_system_config",
+        "nxf_system_deployments",
+        "nxf_system_apis"
+      ],
+      "auto_sync": true,
+      "validation": "strict"
+    },
+    "last_run_at": "2026-04-15T07:05:00Z",
+    "created_at": "2026-04-01T09:20:00Z",
+    "updated_at": "2026-04-15T07:05:00Z"
   }
 ]

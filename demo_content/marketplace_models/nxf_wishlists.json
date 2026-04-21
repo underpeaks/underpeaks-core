@@ -1,0 +1,72 @@
+[
+  {
+    "wishlist_id": "wish_001",
+    "user_id": "user_101",
+    "product_id": "prod_001",
+    "variant_id": "var_001",
+    "notes": "Waiting for payday discount",
+    "priority": "high",
+    "price_when_added": 129.99,
+    "currency": "USD",
+    "is_available": true,
+    "reminder_enabled": true,
+    "added_at": "2026-04-01T10:15:00Z",
+    "updated_at": "2026-04-10T12:00:00Z"
+  },
+  {
+    "wishlist_id": "wish_002",
+    "user_id": "user_101",
+    "product_id": "prod_014",
+    "variant_id": null,
+    "notes": "Gift idea for birthday",
+    "priority": "normal",
+    "price_when_added": 59.99,
+    "currency": "USD",
+    "is_available": true,
+    "reminder_enabled": false,
+    "added_at": "2026-03-20T09:00:00Z",
+    "updated_at": "2026-03-20T09:00:00Z"
+  },
+  {
+    "wishlist_id": "wish_003",
+    "user_id": "user_102",
+    "product_id": "prod_020",
+    "variant_id": "var_003",
+    "notes": "Compare with competitor brand",
+    "priority": "low",
+    "price_when_added": 249.00,
+    "currency": "USD",
+    "is_available": false,
+    "reminder_enabled": true,
+    "added_at": "2026-02-15T14:30:00Z",
+    "updated_at": "2026-04-12T08:45:00Z"
+  },
+  {
+    "wishlist_id": "wish_004",
+    "user_id": "user_103",
+    "product_id": "prod_007",
+    "variant_id": "var_002",
+    "notes": "Check when new stock arrives",
+    "priority": "high",
+    "price_when_added": 89.50,
+    "currency": "USD",
+    "is_available": false,
+    "reminder_enabled": true,
+    "added_at": "2026-01-28T11:00:00Z",
+    "updated_at": "2026-04-14T07:10:00Z"
+  },
+  {
+    "wishlist_id": "wish_005",
+    "user_id": "user_104",
+    "product_id": "prod_011",
+    "variant_id": null,
+    "notes": "Impulse buy, waiting for review score to improve",
+    "priority": "normal",
+    "price_when_added": 199.99,
+    "currency": "USD",
+    "is_available": true,
+    "reminder_enabled": false,
+    "added_at": "2026-04-05T16:20:00Z",
+    "updated_at": "2026-04-05T16:20:00Z"
+  }
+]

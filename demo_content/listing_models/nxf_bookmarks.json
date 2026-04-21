@@ -1,0 +1,72 @@
+[
+  {
+    "bookmark_id": "bmk_001",
+    "user_id": "usr_001",
+    "entity_type": "product",
+    "entity_id": "prod_001",
+    "title_snapshot": "Nike Air Max 270",
+    "image_snapshot": "https://cdn.example.com/images/nike-airmax-270.jpg",
+    "note": "Waiting for payday before buying",
+    "tags": ["shoes", "running", "wishlist"],
+    "folder": "Wishlist",
+    "is_favorite": true,
+    "created_at": "2026-04-10T10:15:00Z",
+    "updated_at": "2026-04-12T09:00:00Z"
+  },
+  {
+    "bookmark_id": "bmk_002",
+    "user_id": "usr_001",
+    "entity_type": "blog",
+    "entity_id": "blog_014",
+    "title_snapshot": "How to scale a marketplace in 2026",
+    "image_snapshot": "https://cdn.example.com/images/blog-marketplace.jpg",
+    "note": "Great reference for my SaaS roadmap",
+    "tags": ["business", "saas", "growth"],
+    "folder": "Research",
+    "is_favorite": false,
+    "created_at": "2026-04-09T14:30:00Z",
+    "updated_at": "2026-04-09T14:30:00Z"
+  },
+  {
+    "bookmark_id": "bmk_003",
+    "user_id": "usr_002",
+    "entity_type": "product",
+    "entity_id": "prod_022",
+    "title_snapshot": "Apple MacBook Pro M3",
+    "image_snapshot": "https://cdn.example.com/images/macbook-pro-m3.jpg",
+    "note": "For dev work upgrade",
+    "tags": ["laptop", "apple", "dev"],
+    "folder": "Tech",
+    "is_favorite": true,
+    "created_at": "2026-04-08T18:45:00Z",
+    "updated_at": "2026-04-11T12:20:00Z"
+  },
+  {
+    "bookmark_id": "bmk_004",
+    "user_id": "usr_003",
+    "entity_type": "listing",
+    "entity_id": "lst_010",
+    "title_snapshot": "2019 Toyota Hilux 2.8 GD-6",
+    "image_snapshot": "https://cdn.example.com/images/hilux.jpg",
+    "note": "Check service history before contacting",
+    "tags": ["vehicle", "car", "pickup"],
+    "folder": "Vehicles",
+    "is_favorite": false,
+    "created_at": "2026-04-07T08:00:00Z",
+    "updated_at": "2026-04-07T08:00:00Z"
+  },
+  {
+    "bookmark_id": "bmk_005",
+    "user_id": "usr_001",
+    "entity_type": "blog",
+    "entity_id": "blog_021",
+    "title_snapshot": "Flutter vs React Native in 2026",
+    "image_snapshot": "https://cdn.example.com/images/flutter-vs-rn.jpg",
+    "note": "Use this for my dev blog comparison post",
+    "tags": ["flutter", "mobile", "comparison"],
+    "folder": "Dev Notes",
+    "is_favorite": true,
+    "created_at": "2026-04-06T11:25:00Z",
+    "updated_at": "2026-04-06T11:25:00Z"
+  }
+]

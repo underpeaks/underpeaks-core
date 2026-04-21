@@ -4,13 +4,13 @@
   "columns": [
     {
       "name": "sp_id",
-      "type": "uuid",
+      "type": "string",
       "nullable": false,
       "is_primary": true
     },
     {
       "name": "project_id",
-      "type": "uuid",
+      "type": "string",
       "nullable": true
     },
     {

@@ -1,0 +1,115 @@
+[
+  {
+    "review_id": "rev_001",
+    "user_id": "usr_1001",
+    "listing_id": "lst_2001",
+    "order_id": "ord_9001",
+    "rating": 5,
+    "title": "Absolutely amazing experience",
+    "comment": "The listing was exactly as described. The seller was very responsive and the service exceeded expectations.",
+    "images": ["https://cdn.example.com/reviews/rev_001_1.jpg"],
+    "status": "active",
+    "is_verified_purchase": true,
+    "helpful_count": 12,
+    "report_count": 0,
+    "reply_from_owner": "Thank you so much! Glad you enjoyed it.",
+    "reply_at": "2026-03-20T10:15:00Z",
+    "metadata": {
+      "device": "mobile",
+      "location": "Cape Town"
+    },
+    "created_at": "2026-03-18T09:12:00Z",
+    "updated_at": "2026-03-20T10:15:00Z"
+  },
+  {
+    "review_id": "rev_002",
+    "user_id": "usr_1002",
+    "listing_id": "lst_2002",
+    "order_id": "ord_9002",
+    "rating": 4,
+    "title": "Very good, minor issues",
+    "comment": "Overall great listing, but response time could be improved. Product quality was solid.",
+    "images": [],
+    "status": "active",
+    "is_verified_purchase": true,
+    "helpful_count": 5,
+    "report_count": 0,
+    "reply_from_owner": "Thanks for the feedback, we’re improving response times.",
+    "reply_at": "2026-03-22T14:40:00Z",
+    "metadata": {
+      "device": "desktop",
+      "location": "Johannesburg"
+    },
+    "created_at": "2026-03-21T08:00:00Z",
+    "updated_at": "2026-03-22T14:40:00Z"
+  },
+  {
+    "review_id": "rev_003",
+    "user_id": "usr_1003",
+    "listing_id": "lst_2003",
+    "order_id": null,
+    "rating": 3,
+    "title": "Average experience",
+    "comment": "It was okay, nothing special. Expected a bit more detail in the listing.",
+    "images": [],
+    "status": "active",
+    "is_verified_purchase": false,
+    "helpful_count": 2,
+    "report_count": 1,
+    "reply_from_owner": null,
+    "reply_at": null,
+    "metadata": {
+      "device": "mobile",
+      "location": "Durban"
+    },
+    "created_at": "2026-03-25T11:30:00Z",
+    "updated_at": "2026-03-25T11:30:00Z"
+  },
+  {
+    "review_id": "rev_004",
+    "user_id": "usr_1004",
+    "listing_id": "lst_2004",
+    "order_id": "ord_9004",
+    "rating": 1,
+    "title": "Not as described",
+    "comment": "The listing did not match what was delivered. Very disappointed with the experience.",
+    "images": [
+      "https://cdn.example.com/reviews/rev_004_1.jpg",
+      "https://cdn.example.com/reviews/rev_004_2.jpg"
+    ],
+    "status": "active",
+    "is_verified_purchase": true,
+    "helpful_count": 18,
+    "report_count": 3,
+    "reply_from_owner": "We’re sorry for this experience. Please contact support for resolution.",
+    "reply_at": "2026-03-28T16:20:00Z",
+    "metadata": {
+      "device": "tablet",
+      "location": "Pretoria"
+    },
+    "created_at": "2026-03-27T10:05:00Z",
+    "updated_at": "2026-03-28T16:20:00Z"
+  },
+  {
+    "review_id": "rev_005",
+    "user_id": "usr_1005",
+    "listing_id": "lst_2005",
+    "order_id": "ord_9005",
+    "rating": 5,
+    "title": "Perfect listing",
+    "comment": "Fast delivery, great communication, and excellent quality. Would highly recommend.",
+    "images": ["https://cdn.example.com/reviews/rev_005_1.jpg"],
+    "status": "active",
+    "is_verified_purchase": true,
+    "helpful_count": 9,
+    "report_count": 0,
+    "reply_from_owner": "Appreciate the support!",
+    "reply_at": "2026-03-30T09:45:00Z",
+    "metadata": {
+      "device": "mobile",
+      "location": "Cape Town"
+    },
+    "created_at": "2026-03-29T08:10:00Z",
+    "updated_at": "2026-03-30T09:45:00Z"
+  }
+]

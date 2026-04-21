@@ -1,6 +1,6 @@
-[
+
   {
-    "table_name": "nxf_users_permissions",
+    "table_name": "nxf_user_permisissions",
     "schema": "public",
     "columns": [
       {
@@ -100,4 +100,3 @@
       }
     ]
   }
-]

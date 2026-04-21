@@ -15,13 +15,13 @@
       "description": "null = global system setting, otherwise tenant-specific override"
     },
     {
-      "name": "key",
+      "name": "setting_key",
       "type": "string",
       "nullable": false,
       "description": "unique setting key (e.g. theme.mode, app.name)"
     },
     {
-      "name": "value",
+      "name": "setting_value",
       "type": "jsonb",
       "nullable": true,
       "description": "flexible value storage (string, number, object, array)"
@@ -82,7 +82,7 @@
     },
     {
       "name": "idx_settings_key",
-      "fields": ["key"]
+      "fields": ["setting_key"]
     },
     {
       "name": "idx_settings_category",
@@ -92,7 +92,7 @@
   "constraints": [
     {
       "type": "unique",
-      "fields": ["organisation_id", "key"]
+      "fields": ["organisation_id", "setting_value"]
     }
   ]
 }

@@ -1,0 +1,106 @@
+[
+  {
+    "role_id": "role_001",
+    "name": "Owner",
+    "saas_key": "org_owner",
+    "description": "Full control over organisation and billing",
+    "scope": "organisation",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "all:*"
+    ],
+    "hierarchy_level": 0,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "role_id": "role_002",
+    "name": "Admin",
+    "saas_key": "org_admin",
+    "description": "Manages users, listings, and settings",
+    "scope": "organisation",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "users:read",
+      "users:write",
+      "listings:read",
+      "listings:write",
+      "analytics:read"
+    ],
+    "hierarchy_level": 1,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "role_id": "role_003",
+    "name": "Manager",
+    "saas_key": "org_manager",
+    "description": "Manages listings and operations",
+    "scope": "organisation",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "listings:read",
+      "listings:write",
+      "orders:read",
+      "orders:write"
+    ],
+    "hierarchy_level": 2,
+    "created_at": "2026-01-01T00:00:00Z",
+    "updated_at": "2026-01-01T00:00:00Z"
+  },
+  {
+    "role_id": "role_004",
+    "name": "Support Agent",
+    "saas_key": "support_agent",
+    "description": "Handles user support tickets and moderation",
+    "scope": "system",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "users:read",
+      "tickets:read",
+      "tickets:write",
+      "reviews:moderate"
+    ],
+    "hierarchy_level": 3,
+    "created_at": "2026-01-02T00:00:00Z",
+    "updated_at": "2026-01-02T00:00:00Z"
+  },
+  {
+    "role_id": "role_005",
+    "name": "Viewer",
+    "saas_key": "org_viewer",
+    "description": "Read-only access to organisation data",
+    "scope": "tenant",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "listings:read",
+      "analytics:read"
+    ],
+    "hierarchy_level": 4,
+    "created_at": "2026-01-03T00:00:00Z",
+    "updated_at": "2026-01-03T00:00:00Z"
+  },
+  {
+    "role_id": "role_006",
+    "name": "Vendor Admin",
+    "saas_key": "vendor_admin",
+    "description": "Admin for vendor stores",
+    "scope": "vendor",
+    "is_system_role": true,
+    "is_active": true,
+    "permissions": [
+      "products:write",
+      "orders:read",
+      "invoices:read",
+      "analytics:read"
+    ],
+    "hierarchy_level": 1,
+    "created_at": "2026-02-01T00:00:00Z",
+    "updated_at": "2026-02-01T00:00:00Z"
+  }
+]

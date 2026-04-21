@@ -1,0 +1,90 @@
+[
+  {
+    "like_id": "like_001",
+    "organisation_id": "org_001",
+    "user_id": "user_001",
+    "entity_type": "post",
+    "entity_id": "post_001",
+    "reaction_type": "like",
+    "status": "active",
+    "created_at": "2026-04-14T07:10:00Z",
+    "updated_at": "2026-04-14T07:10:00Z"
+  },
+  {
+    "like_id": "like_002",
+    "organisation_id": "org_001",
+    "user_id": "user_002",
+    "entity_type": "post",
+    "entity_id": "post_001",
+    "reaction_type": "love",
+    "status": "active",
+    "created_at": "2026-04-14T07:11:00Z",
+    "updated_at": "2026-04-14T07:11:00Z"
+  },
+  {
+    "like_id": "like_003",
+    "organisation_id": "org_001",
+    "user_id": "user_003",
+    "entity_type": "comment",
+    "entity_id": "cmt_001",
+    "reaction_type": "like",
+    "status": "active",
+    "created_at": "2026-04-14T07:12:00Z",
+    "updated_at": "2026-04-14T07:12:00Z"
+  },
+  {
+    "like_id": "like_004",
+    "organisation_id": "org_001",
+    "user_id": "user_004",
+    "entity_type": "post",
+    "entity_id": "post_002",
+    "reaction_type": "wow",
+    "status": "active",
+    "created_at": "2026-04-14T07:13:00Z",
+    "updated_at": "2026-04-14T07:13:00Z"
+  },
+  {
+    "like_id": "like_005",
+    "organisation_id": "org_002",
+    "user_id": "user_005",
+    "entity_type": "group",
+    "entity_id": "grp_002",
+    "reaction_type": "like",
+    "status": "active",
+    "created_at": "2026-04-14T07:14:00Z",
+    "updated_at": "2026-04-14T07:14:00Z"
+  },
+  {
+    "like_id": "like_006",
+    "organisation_id": "org_001",
+    "user_id": "user_002",
+    "entity_type": "comment",
+    "entity_id": "cmt_002",
+    "reaction_type": "laugh",
+    "status": "active",
+    "created_at": "2026-04-14T07:15:00Z",
+    "updated_at": "2026-04-14T07:15:00Z"
+  },
+  {
+    "like_id": "like_007",
+    "organisation_id": "org_003",
+    "user_id": "user_006",
+    "entity_type": "post",
+    "entity_id": "post_010",
+    "reaction_type": "like",
+    "status": "active",
+    "created_at": "2026-04-14T07:16:00Z",
+    "updated_at": "2026-04-14T07:16:00Z"
+  },
+  {
+    "like_id": "like_008",
+    "organisation_id": "org_001",
+    "user_id": "user_003",
+    "entity_type": "post",
+    "entity_id": "post_001",
+    "reaction_type": "angry",
+    "status": "removed",
+    "created_at": "2026-04-14T07:17:00Z",
+    "updated_at": "2026-04-14T07:20:00Z"
+  }
+]

@@ -1,0 +1,97 @@
+[
+  {
+    "tag_id": "tag_001",
+    "name": "Verified Seller",
+    "slug": "verified-seller",
+    "description": "Trusted and verified marketplace sellers",
+    "color": "#22C55E",
+    "icon": "check-circle",
+    "type": "trust",
+    "usage_count": 120,
+    "is_active": true,
+    "seo_title": "Verified Sellers",
+    "seo_description": "Buy from trusted verified sellers only",
+    "seo_keywords": ["verified", "trusted", "seller"],
+    "metadata": {
+      "badge_level": "gold"
+    },
+    "created_at": "2026-01-10T08:00:00Z",
+    "updated_at": "2026-04-10T10:00:00Z"
+  },
+  {
+    "tag_id": "tag_002",
+    "name": "Featured Listing",
+    "slug": "featured-listing",
+    "description": "High visibility promoted listings",
+    "color": "#F59E0B",
+    "icon": "star",
+    "type": "promotion",
+    "usage_count": 340,
+    "is_active": true,
+    "seo_title": "Featured Listings",
+    "seo_description": "Top promoted marketplace listings",
+    "seo_keywords": ["featured", "premium", "boost"],
+    "metadata": {
+      "boost_multiplier": 2
+    },
+    "created_at": "2026-01-15T09:30:00Z",
+    "updated_at": "2026-04-11T11:00:00Z"
+  },
+  {
+    "tag_id": "tag_003",
+    "name": "Urgent Sale",
+    "slug": "urgent-sale",
+    "description": "Listings that need to sell quickly",
+    "color": "#EF4444",
+    "icon": "alert-triangle",
+    "type": "sales",
+    "usage_count": 87,
+    "is_active": true,
+    "seo_title": "Urgent Listings",
+    "seo_description": "Buy fast-moving urgent sale listings",
+    "seo_keywords": ["urgent", "quick sale", "discount"],
+    "metadata": {
+      "priority": "high"
+    },
+    "created_at": "2026-02-01T10:00:00Z",
+    "updated_at": "2026-04-12T09:00:00Z"
+  },
+  {
+    "tag_id": "tag_004",
+    "name": "Luxury",
+    "slug": "luxury",
+    "description": "Premium high-end listings",
+    "color": "#8B5CF6",
+    "icon": "diamond",
+    "type": "category",
+    "usage_count": 210,
+    "is_active": true,
+    "seo_title": "Luxury Marketplace Items",
+    "seo_description": "High-end premium listings and products",
+    "seo_keywords": ["luxury", "premium", "high-end"],
+    "metadata": {
+      "segment": "premium"
+    },
+    "created_at": "2026-01-20T12:00:00Z",
+    "updated_at": "2026-04-13T14:00:00Z"
+  },
+  {
+    "tag_id": "tag_005",
+    "name": "Budget Friendly",
+    "slug": "budget-friendly",
+    "description": "Affordable and low-cost options",
+    "color": "#3B82F6",
+    "icon": "wallet",
+    "type": "pricing",
+    "usage_count": 512,
+    "is_active": true,
+    "seo_title": "Affordable Listings",
+    "seo_description": "Best budget-friendly marketplace deals",
+    "seo_keywords": ["cheap", "affordable", "discount"],
+    "metadata": {
+      "price_segment": "low"
+    },
+    "created_at": "2026-02-10T08:45:00Z",
+    "updated_at": "2026-04-14T08:00:00Z"
+  }
+]

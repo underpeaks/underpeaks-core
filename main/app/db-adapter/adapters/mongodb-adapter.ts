@@ -491,7 +491,6 @@ async createDataModelsFromUserEmail(email: string,selectedProjectType:string) {
   return this.CreateDataModels(project.project_id,selectedProjectType);
 }
 
-
   // ---------------- STORAGE ----------------
   async setupStorageBuckets() {
     const db = await this.getDb()
@@ -499,4 +498,122 @@ async createDataModelsFromUserEmail(email: string,selectedProjectType:string) {
     if (!exists) await db.createCollection('nxf_storage')
     return { success: true, buckets: DEFAULT_BUCKETS }
   }
+
+async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string
+): Promise<{
+  success: boolean;
+  message?: string;
+  inserted?: number;
+  skipped?: boolean;
+}> {
+  try {
+    const db = await this.getDb();
+
+    const fs = require("fs");
+    const path = require("path");
+
+    // ✅ match other adapters
+    const modelFolders = [
+      `${selectedProjectType}_models`,
+      "system_models",
+      "users_models",
+    ];
+
+    const basePaths = modelFolders.map((folder) =>
+      path.resolve(process.cwd(),"..", "demo_content", folder)
+    );
+
+    let inserted = 0;
+
+    for (const basePath of basePaths) {
+      console.log("CHECKING PATH =", basePath);
+
+      if (!fs.existsSync(basePath)) {
+        console.log("SKIP (missing folder):", basePath);
+        continue;
+      }
+
+      const files = fs
+        .readdirSync(basePath)
+        .filter((f: string) => f.endsWith(".json"));
+
+      if (!files.length) {
+        console.log("NO FILES IN:", basePath);
+        continue;
+      }
+
+      for (const file of files) {
+        const fullPath = path.join(basePath, file);
+
+        console.log("Reading file:", fullPath);
+
+        const raw = fs.readFileSync(fullPath, "utf-8");
+
+        let json: any;
+
+        try {
+          json = JSON.parse(raw);
+        } catch (e: any) {
+          console.log(`INVALID JSON: ${file}`, e.message);
+          continue;
+        }
+
+        const collectionName = file.replace(".json", "");
+
+        // ✅ support both formats
+        const rows = Array.isArray(json) ? json : json?.demo_data;
+
+        if (!rows || !Array.isArray(rows)) {
+          console.log(`SKIPPING ${file} (no valid data array)`);
+          continue;
+        }
+
+        console.log(
+          `📦 Inserting into ${collectionName} -> ${rows.length} docs`
+        );
+
+        const collection = db.collection(collectionName);
+
+        if (rows.length > 0) {
+          try {
+            const result = await collection.insertMany(rows, {
+              ordered: false, // ✅ prevents full failure on one bad doc
+            });
+
+            inserted += result.insertedCount || 0;
+          } catch (err: any) {
+            console.log(
+              `FAILED INSERT ${collectionName}:`,
+              err.message
+            );
+
+            // still count partial success
+            if (err.result?.nInserted) {
+              inserted += err.result.nInserted;
+            }
+          }
+        }
+      }
+    }
+
+    return {
+      success: true,
+      inserted,
+      skipped: false,
+      message: "Demo content installed successfully",
+    };
+  } catch (err: any) {
+    console.error("MONGO DEMO INSTALL ERROR:", err);
+
+    return {
+      success: false,
+      message: err.message || "Failed to install demo content",
+      inserted: 0,
+      skipped: true,
+    };
+  }
+}
+  
 }

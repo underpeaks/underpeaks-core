@@ -15,7 +15,7 @@
       "description": "e.g. Stripe, PayFast, WhatsApp, Firebase, Shopify, DHL"
     },
     {
-      "name": "key",
+      "name": "int_key",
       "type": "string",
       "nullable": false,
       "description": "unique identifier like 'stripe', 'payfast', 'whatsapp_api'"
@@ -107,7 +107,7 @@
   "indexes": [
     {
       "name": "idx_integrations_key",
-      "fields": ["key"]
+      "fields": ["int_key"]
     },
     {
       "name": "idx_integrations_type",
@@ -117,7 +117,7 @@
   "constraints": [
     {
       "type": "unique",
-      "fields": ["key"]
+      "fields": ["int_key"]
     }
   ]
 }

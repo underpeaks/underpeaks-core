@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_menu",
+  "table_name": "nxf_menus",
   "schema": "public",
   "columns": [
     {
@@ -7,6 +7,12 @@
       "type": "string",
       "nullable": false,
       "is_primary": true
+    },
+    {
+      "name":"project_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": false
     },
     {
       "name": "organisation_id",

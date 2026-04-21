@@ -1,105 +1,88 @@
-{
-  "table_name": "nxf_system_audit_trails",
-  "records": [
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333001",
-      "entity": "user",
-      "entity_id": "user_001",
-      "action": "create",
-      "user_id": "user_001",
-      "before": null,
-      "after": { "email": "user1@nxf.io", "status": "active" },
-      "timestamp": "2026-02-01T08:00:00Z"
+[
+  {
+    "sat_id": "b1c9f0e2-1111-4c8d-9a2a-000000000001",
+    "entity": "nxf_orders",
+    "entity_id": "order_10021",
+    "action": "order_status_updated",
+    "user_id": "user_001",
+    "before_data": {
+      "status": "pending",
+      "payment_status": "unpaid"
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333002",
-      "entity": "user",
-      "entity_id": "user_002",
-      "action": "update",
-      "user_id": "admin_001",
-      "before": { "status": "pending" },
-      "after": { "status": "active" },
-      "timestamp": "2026-02-01T08:10:00Z"
+    "after_data": {
+      "status": "confirmed",
+      "payment_status": "paid"
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333003",
-      "entity": "project",
-      "entity_id": "proj_001",
-      "action": "create",
-      "user_id": "user_002",
-      "before": null,
-      "after": { "name": "Marketplace MVP", "status": "draft" },
-      "timestamp": "2026-02-01T08:20:00Z"
+    "created_at": "2026-04-15T07:18:33Z"
+  },
+  {
+    "sat_id": "b1c9f0e2-1111-4c8d-9a2a-000000000002",
+    "entity": "nxf_product",
+    "entity_id": "prod_014",
+    "action": "price_updated",
+    "user_id": "user_002",
+    "before_data": {
+      "base_price": 129.99
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333004",
-      "entity": "project",
-      "entity_id": "proj_001",
-      "action": "update",
-      "user_id": "user_002",
-      "before": { "status": "draft" },
-      "after": { "status": "active" },
-      "timestamp": "2026-02-01T08:30:00Z"
+    "after_data": {
+      "base_price": 119.99
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333005",
-      "entity": "api",
-      "entity_id": "api_001",
-      "action": "update",
-      "user_id": "admin_001",
-      "before": { "version": "v1" },
-      "after": { "version": "v2" },
-      "timestamp": "2026-02-01T08:40:00Z"
+    "created_at": "2026-04-15T07:22:10Z"
+  },
+  {
+    "sat_id": "b1c9f0e2-1111-4c8d-9a2a-000000000003",
+    "entity": "nxf_vendors",
+    "entity_id": "vendor_004",
+    "action": "verification_status_changed",
+    "user_id": "user_999",
+    "before_data": {
+      "verification_status": "pending"
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333006",
-      "entity": "user",
-      "entity_id": "user_003",
-      "action": "delete",
-      "user_id": "admin_001",
-      "before": { "email": "user3@nxf.io", "status": "active" },
-      "after": null,
-      "timestamp": "2026-02-01T08:50:00Z"
+    "after_data": {
+      "verification_status": "verified"
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333007",
-      "entity": "settings",
-      "entity_id": "setting_001",
-      "action": "update",
-      "user_id": "admin_002",
-      "before": { "value": "light" },
-      "after": { "value": "dark" },
-      "timestamp": "2026-02-01T09:00:00Z"
+    "created_at": "2026-04-15T07:25:44Z"
+  },
+  {
+    "sat_id": "b1c9f0e2-1111-4c8d-9a2a-000000000004",
+    "entity": "nxf_customers",
+    "entity_id": "customer_321",
+    "action": "profile_updated",
+    "user_id": "user_321",
+    "before_data": {
+      "phone": "+27000000000"
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333008",
-      "entity": "role",
-      "entity_id": "role_001",
-      "action": "assign",
-      "user_id": "admin_001",
-      "before": null,
-      "after": { "user_id": "user_004", "role": "admin" },
-      "timestamp": "2026-02-01T09:10:00Z"
+    "after_data": {
+      "phone": "+27825551234"
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333009",
-      "entity": "project",
-      "entity_id": "proj_002",
-      "action": "delete",
-      "user_id": "user_005",
-      "before": { "name": "Test Project", "status": "inactive" },
-      "after": null,
-      "timestamp": "2026-02-01T09:20:00Z"
+    "created_at": "2026-04-15T07:30:00Z"
+  },
+  {
+    "sat_id": "b1c9f0e2-1111-4c8d-9a2a-000000000005",
+    "entity": "nxf_inventory",
+    "entity_id": "inv_555",
+    "action": "stock_adjustment",
+    "user_id": "user_002",
+    "before_data": {
+      "quantity_available": 100
     },
-    {
-      "sat_id": "33333333-3333-3333-3333-333333333010",
-      "entity": "api_key",
-      "entity_id": "key_001",
-      "action": "create",
-      "user_id": "user_006",
-      "before": null,
-      "after": { "name": "Production Key", "scope": "full_access" },
-      "timestamp": "2026-02-01T09:30:00Z"
-    }
-  ]
-}
+    "after_data": {
+      "quantity_available": 82
+    },
+    "created_at": "2026-04-15T07:33:12Z"
+  },
+  {
+    "sat_id": "b1c9f0e2-1111-4c8d-9a2a-000000000006",
+    "entity": "nxf_returns",
+    "entity_id": "return_9001",
+    "action": "refund_processed",
+    "user_id": "user_support_01",
+    "before_data": {
+      "refund_status": "pending"
+    },
+    "after_data": {
+      "refund_status": "processed"
+    },
+    "created_at": "2026-04-15T07:40:55Z"
+  }
+]
