@@ -1,10 +1,9 @@
-import admin from 'firebase-admin'
+
 import { DBAdapter, DBConfig } from '../types'
 import bcrypt from 'bcryptjs'
 import { CreateUserDataModels } from '../utils/create-data-models'
-import { getFirestore } from 'firebase-admin/firestore';
-import { sendEmailVerification } from 'firebase/auth';
-import { parseFirebaseServiceAccount, parseFirebaseWebConfig } from '@/app/lib/firebaseConfig';
+import admin from 'firebase-admin'
+import { parseFirebaseServiceAccount } from '@/app/lib/firebaseConfig';
 
 const DEFAULT_BUCKETS = ['uploads', 'products', 'avatars', 'reports']
 
@@ -16,73 +15,148 @@ export class FirebaseAdapter implements DBAdapter {
   private storage: admin.storage.Storage
 
   constructor(private _config: DBConfig) {
-    if (!_config) throw new Error('[FirebaseAdapter] DBConfig is required')
-    if (!_config.firebaseConfigJson) throw new Error('[FirebaseAdapter] firebaseConfigJson is required')
+  console.log('[FirebaseAdapter] 🚀 Constructor started')
 
-    // -----------------------------
-    // EXTRACT storageBucket FROM ENV IF MISSING
-    // -----------------------------
-    if (!_config.storageBucket) {
-      const publicConfigStr = process.env.NEXT_PUBLIC_FIREBASE_CONFIG
-      if (!publicConfigStr) {
-        throw new Error('[FirebaseAdapter] storageBucket is required and NEXT_PUBLIC_FIREBASE_CONFIG not set')
-      }
-      try {
-        const publicConfig = JSON.parse(publicConfigStr)
-        if (!publicConfig.storageBucket) {
-          throw new Error('[FirebaseAdapter] storageBucket not found in NEXT_PUBLIC_FIREBASE_CONFIG')
-        }
-        _config.storageBucket = publicConfig.storageBucket
-      } catch (err: any) {
-        throw new Error(`[FirebaseAdapter] Failed to parse NEXT_PUBLIC_FIREBASE_CONFIG: ${err.message}`)
-      }
+  try {
+    if (!_config) {
+      console.error('[FirebaseAdapter] ❌ Missing DBConfig')
+      throw new Error('DBConfig is required')
+    }
+
+    console.log('[FirebaseAdapter] ✅ Config received')
+
+    if (!_config.firebaseConfigJson) {
+      console.error('[FirebaseAdapter] ❌ Missing firebaseConfigJson')
+      throw new Error('firebaseConfigJson is required')
     }
 
     // -----------------------------
-    // INIT FIREBASE ADMIN (ONCE)
+    // STORAGE BUCKET RESOLUTION
     // -----------------------------
+    console.log('[FirebaseAdapter] 🔍 Checking storageBucket')
+
+    if (!_config.storageBucket) {
+      console.warn('[FirebaseAdapter] ⚠️ storageBucket missing, trying fallback env')
+
+      const publicConfigStr = process.env.NEXT_PUBLIC_FIREBASE_CONFIG
+
+      if (!publicConfigStr) {
+        console.error('[FirebaseAdapter] ❌ NEXT_PUBLIC_FIREBASE_CONFIG missing')
+        throw new Error('storageBucket is required and env fallback not set')
+      }
+
+      try {
+        const publicConfig = JSON.parse(publicConfigStr)
+        console.log('[FirebaseAdapter] 🌐 Parsed NEXT_PUBLIC_FIREBASE_CONFIG:', publicConfig)
+
+        if (!publicConfig.storageBucket) {
+          console.error('[FirebaseAdapter] ❌ storageBucket not found in env config')
+          throw new Error('storageBucket missing in env config')
+        }
+
+        _config.storageBucket = publicConfig.storageBucket
+
+        console.log('[FirebaseAdapter] ✅ storageBucket resolved:', _config.storageBucket)
+      } catch (err: any) {
+        console.error('[FirebaseAdapter] ❌ Failed parsing env config:', err.message)
+        throw err
+      }
+    } else {
+      console.log('[FirebaseAdapter] ✅ storageBucket provided:', _config.storageBucket)
+    }
+
+    // -----------------------------
+    // FIREBASE ADMIN INIT
+    // -----------------------------
+    console.log('[FirebaseAdapter] 🔧 Initializing Firebase Admin')
+
+    let app: admin.app.App
+
     if (!admin.apps.length) {
+      console.log('[FirebaseAdapter] 🆕 No existing Firebase app found, creating new one')
+
       let rawConfig: any
+
+      console.log('[FirebaseAdapter] 📦 Raw firebaseConfigJson type:', typeof _config.firebaseConfigJson)
+
       if (typeof _config.firebaseConfigJson === 'string') {
         try {
-          console.log(`FIREBASE CONFIG RAW: ${_config.firebaseConfigJson} `)
-          rawConfig =  parseFirebaseServiceAccount(_config.firebaseConfigJson) //JSON.parse(_config.firebaseConfigJson)
-        } catch {
-          throw new Error('[FirebaseAdapter] firebaseConfigJson is not valid JSON')
+          console.log('[FirebaseAdapter] 🧪 Parsing service account JSON')
+
+          rawConfig = parseFirebaseServiceAccount(_config.firebaseConfigJson)
+
+          console.log('[FirebaseAdapter] ✅ Parsed service account:', {
+            project_id: rawConfig?.project_id,
+            client_email: rawConfig?.client_email,
+          })
+        } catch (err: any) {
+          console.error('[FirebaseAdapter] ❌ Service account parse failed:', err.message)
+          throw new Error('firebaseConfigJson is not valid JSON')
         }
       } else {
         rawConfig = _config.firebaseConfigJson
+        console.log('[FirebaseAdapter] 📦 Using object config directly')
       }
 
-      if (!rawConfig.private_key) throw new Error('[FirebaseAdapter] private_key missing in firebaseConfigJson')
+      if (!rawConfig.private_key) {
+        console.error('[FirebaseAdapter] ❌ Missing private_key')
+        throw new Error('private_key missing in firebaseConfigJson')
+      }
 
-      const fixedConfig: admin.ServiceAccount = {
+      const serviceAccount: admin.ServiceAccount = {
         ...rawConfig,
         private_key: rawConfig.private_key.replace(/\\n/g, '\n'),
       }
 
-      this.firebaseAdmin = admin.initializeApp({
-        credential: admin.credential.cert(fixedConfig),
+      console.log('[FirebaseAdapter] 🔐 Initializing Firebase app...')
+
+      app = admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
         storageBucket: _config.storageBucket,
       })
+
+      console.log('[FirebaseAdapter] ✅ Firebase Admin initialized')
     } else {
-      this.firebaseAdmin = admin.app()
+      console.log('[FirebaseAdapter] ♻️ Reusing existing Firebase app')
+      app = admin.app()
     }
 
-    this.firestore = admin.firestore()
+    this.firebaseAdmin = app
+
+    // -----------------------------
+    // FIRESTORE INIT
+    // -----------------------------
+    console.log('[FirebaseAdapter] 🧱 Initializing Firestore')
+
+    this.firestore = this.firebaseAdmin.firestore()
 
     try {
-      this.firestore.settings({ ignoreUndefinedProperties: true })
+      this.firestore.settings({
+        ignoreUndefinedProperties: true,
+      })
+
+      console.log('[FirebaseAdapter] ✅ Firestore settings applied')
     } catch (err: any) {
-      if (!err.message.includes('already been initialized')) throw err
+      console.warn('[FirebaseAdapter] ⚠️ Firestore settings warning:', err.message)
     }
 
-    this.storage = admin.storage()
-  }
+    // -----------------------------
+    // STORAGE INIT
+    // -----------------------------
+    console.log('[FirebaseAdapter] 🪣 Initializing Storage')
 
-  getFirestoreInstance() {
-    return getFirestore();
+    this.storage = this.firebaseAdmin.storage()
+
+    console.log('[FirebaseAdapter] 🎉 Constructor completed successfully')
+  } catch (err: any) {
+    console.error('[FirebaseAdapter] 💥 Constructor FAILED:', err.message)
+    throw err
   }
+}
+
+ getFirestoreInstance() {
+  return admin.firestore()
+}
 
   get config(): DBConfig {
     return this._config
@@ -564,6 +638,22 @@ export class FirebaseAdapter implements DBAdapter {
       error: err?.message || "Failed to install demo content",
     };
   }
+}
+// Add this method to FirebaseAdapter class
+
+async findSystemConfigByUserId(config: DBConfig, userId: string) {
+  console.log("FIREBASE ADAPTER - [LOOKING UP USER]")
+  if (!userId) return null
+console.log("FIREBASE ADAPTER - [LOOKING UP CONFIG]")
+  const snapshot = await this.firestore
+    .collection('nxf_system_config')
+    .where('user_id', '==', userId)
+    .limit(1)
+    .get()
+  if (snapshot.empty) return null
+  const doc = snapshot.docs[0]
+  console.log("FIREBASE ADAPTER - [RETURNING CONFIG]")
+  return { id: doc.id, ...doc.data() }
 }
 }
 export function getFirebaseAdapter(config: DBConfig) {

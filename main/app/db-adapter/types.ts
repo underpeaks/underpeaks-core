@@ -185,6 +185,7 @@ export interface DBAdapter {
   createDataModels?(projectId: string): Promise<any>;
 
   /** ------------------- CRUD ------------------- */
+  findSystemConfigByUserId?(config: DBConfig, userId: string): Promise<any | null>
   createTable?(tableName: string, schema: any): Promise<any>;
   create?(config: DBConfig, collection: string, data: any): Promise<any>;
   read?(config: DBConfig, collection: string, query?: any): Promise<any>;

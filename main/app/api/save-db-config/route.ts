@@ -67,7 +67,7 @@ function normalizeServiceAccount(input: any) {
 // ======================= MAIN WRITER =======================
 
 async function writeEnvFileFromObject(env: Record<string, any>) {
-  console.log('📦 Received ENV payload:', env);
+ 
 
   if (!env.type) throw new Error('Missing "type" in env payload');
 
@@ -132,11 +132,11 @@ async function writeEnvFileFromObject(env: Record<string, any>) {
     );
 
     if (env.anonKey) {
-      lines.push(`NEXT_PUBLIC_SUPABASE_ANON_KEY=${envSafe(env.anonKey)}`);
+      lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.anonKey)}`);
     }
 
     if (env.serviceKey) {
-      lines.push(`SUPABASE_SERVICE_ROLE_KEY=${envSafe(env.serviceKey)}`);
+      lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.serviceKey)}`);
     }
 
     if (env.storageUrl) {
@@ -169,14 +169,14 @@ async function writeEnvFileFromObject(env: Record<string, any>) {
       );
     }
 
-    if (env.storageUrl) {
+    //if (env.storageUrl) {
       lines.push(
-        `NEXT_DB_STORAGE_URL=${envSafe(ensureHttp(env.storageUrl))}`
+        `NEXT_PUBLIC_FIREBASE_STORAGE_URL=${envSafe('gs://'+webConfig.storageBucket)}`
       );
-    }
+    //}
   }
 
-  console.log('🧾 FINAL ENV OUTPUT:\n', lines.join('\n'));
+
 
   await writeFile(ENV_FILE_PATH, lines.join('\n') + '\n', 'utf-8');
 

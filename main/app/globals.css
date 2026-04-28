@@ -1,8 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
 
 @custom-variant dark (&:is(.dark *));
 
@@ -127,7 +124,6 @@
 
 /* Custom checkbox styling */
 .custom-checkbox {
-  /* Hide the native checkbox */
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;

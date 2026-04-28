@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Button } from '../../components/ui/button'
-import { Checkbox } from '../../components/ui/checkbox'
+
+import { Checkbox } from '@/components/ui/checkbox'
 import { Loader2 } from 'lucide-react' // optional spinner icon
+import { Button } from '@/components/ui/button'
 
 export default function WelcomePage() {
   const [accepted, setAccepted] = useState(false)
@@ -29,10 +30,14 @@ export default function WelcomePage() {
   return (
     <div className="min-h-screen bg-white flex flex-col px-6 py-12">
       {/* Header */}
-      <header className="mb-8 text-center">
-        <h1 className="text-4xl font-extrabold text-black tracking-tight">🚀 NXT_Flutter</h1>
-        <p className="text-xl text-gray-700 mt-2">Your All-in-One SaaS Installer & Code Generator</p>
-      </header>
+     <header className="mb-8 text-center flex flex-col items-center">
+  <img 
+    src="/images/logo/NXT_Flutter_logo.png" 
+    alt="NXT_Flutter Logo" 
+    className="h-16 w-auto mb-4"
+  />
+  <p className="text-xl text-gray-700">Your All-in-One SaaS Installer & Code Generator</p>
+</header>
 
       {/* Benefits */}
       <section className="max-w-3xl mx-auto text-gray-800 mb-10">
@@ -71,18 +76,22 @@ export default function WelcomePage() {
       </section>
 
       {/* Continue Button */}
-      <div className="flex justify-end mt-auto max-w-4xl mx-auto">
-        <Button disabled={!accepted || loading} onClick={handleContinue}>
-          {loading ? (
-            <span className="flex items-center gap-2">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              Loading...
-            </span>
-          ) : (
-            'Continue →'
-          )}
-        </Button>
-      </div>
+      <div className="flex justify-end mt-auto max-w-6xl mx-auto">
+  <Button 
+    disabled={!accepted || loading} 
+    onClick={handleContinue}
+    className="px-8 py-6 text-lg"
+  >
+    {loading ? (
+      <span className="flex items-center gap-2">
+        <Loader2 className="w-5 h-5 animate-spin" />
+        Loading...
+      </span>
+    ) : (
+      'Continue →'
+    )}
+  </Button>
+</div>
     </div>
   )
 }

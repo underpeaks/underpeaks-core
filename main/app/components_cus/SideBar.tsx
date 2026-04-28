@@ -30,7 +30,6 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
       }, {} as Record<string, boolean>)
   );
 
-  const [showLogoutToast, setShowLogoutToast] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const toggleSection = (title: string) => {
@@ -63,11 +62,9 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         console.log('✅ Logout successful:', data.message);
       }
 
-      // Clear local tokens
       localStorage.removeItem('authToken');
       localStorage.removeItem('refreshToken');
 
-      // Optional Firebase logout only if using Firebase
       if (process.env.NEXT_PUBLIC_DB_TYPE === 'firebase') {
         try {
           const { getApps, initializeApp } = await import('firebase/app');
@@ -82,7 +79,6 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         }
       }
 
-      // small UX delay (optional smoothness)
       await new Promise((r) => setTimeout(r, 400));
 
       router.push('/signin');
@@ -95,17 +91,16 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
   return (
     <aside
       className={`fixed top-16 left-0 z-30 flex flex-col bg-white border-r border-gray-200 transition-width duration-300 ${
-        collapsed ? 'w-20' : 'w-64'
+        collapsed ? 'w-25' : 'w-64'
       }`}
       style={{ height: 'calc(100vh - 64px)' }}
     >
       {/* Header */}
-      <div className="shrink-0 bg-white border-b border-gray-200 flex items-center justify-between p-4 min-h-[60px]">
-        {!collapsed && <div className="text-lg font-bold text-gray-900">NextFlutter</div>}
+      <div className="shrink-0 bg-white border-b border-gray-200 flex items-center justify-between p-6 min-h-[60px]">
         <button
           onClick={() => setCollapsed(!collapsed)}
           aria-label="Toggle sidebar"
-          className="hover:bg-gray-100 p-2 rounded"
+          className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors"
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? <FiChevronRight size={18} /> : <FiChevronLeft size={18} />}
@@ -164,35 +159,31 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
       </nav>
 
       {/* Footer */}
-      <div className="shrink-0 bg-white border-t border-gray-200 p-4 flex justify-around">
-        <Link href="/console/settings" className="hover:bg-gray-100 p-2 rounded">
-          <FiSettings size={18} />
+      <div className="shrink-0 bg-white border-t border-gray-200 p-4 flex justify-between px-3 items-center">
+        <Link
+          href="/console/settings"
+          title="Settings"
+          className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors text-gray-600"
+        >
+          <FiSettings size={16} />
         </Link>
 
         <button
           onClick={handleLogout}
-          className="hover:bg-gray-100 p-2 rounded"
           disabled={isLoggingOut}
+          title="Logout"
+          className="flex items-center justify-center w-9 h-9 rounded-full bg-gray-100 hover:bg-red-100 hover:text-red-500 transition-colors text-gray-600 disabled:opacity-50"
         >
-          <FiLogOut size={18} />
+          <FiLogOut size={16} />
         </button>
       </div>
-
-      {/* Logout Toast */}
-      {showLogoutToast && (
-        <div className="fixed top-8 left-1/2 transform -translate-x-1/2 px-6 py-3 bg-green-500 text-white rounded shadow-lg text-sm z-50">
-          Logged out successfully. Redirecting to login...
-        </div>
-      )}
 
       {/* BLOCKING LOGOUT OVERLAY */}
       {isLoggingOut && (
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-xl px-8 py-6 flex flex-col items-center gap-3">
             <div className="h-6 w-6 border-2 border-gray-300 border-t-gray-800 rounded-full animate-spin" />
-            <div className="text-sm font-medium text-gray-800">
-              Logging out…
-            </div>
+            <div className="text-sm font-medium text-gray-800">Logging out…</div>
           </div>
         </div>
       )}

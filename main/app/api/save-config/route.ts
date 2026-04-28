@@ -5,7 +5,6 @@ import crypto from 'crypto';
 
 const IV_LENGTH = 16;
 
-// Helper: derive encryption key from project_id, config_id, user_id, and created_at
 function deriveEncryptionKey({
   projectId,
   configId,
@@ -21,7 +20,6 @@ function deriveEncryptionKey({
   return crypto.createHash('sha256').update(rawKey).digest();
 }
 
-// Encrypt function with dynamic key
 function encrypt(data: any, key: Buffer) {
   const iv = crypto.randomBytes(IV_LENGTH);
   const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
@@ -38,9 +36,6 @@ function encrypt(data: any, key: Buffer) {
   };
 }
 
-// ----------------------
-// Helper: detect missing fields
-// ----------------------
 function getMissingFields(fields: Record<string, any>) {
   return Object.entries(fields)
     .filter(([_, value]) => value === undefined || value === null || value === '')
@@ -50,34 +45,29 @@ function getMissingFields(fields: Record<string, any>) {
 export async function POST(req: Request) {
   try {
     const {
+      projectName,        // ✅ ADDED
       selectedStack,
       selectedDb,
       dbConfig,
       adminUser,
       featureFlags = {},
-      selectedProjectType, // <-- NEW
+      selectedProjectType,
+      branding = {},
     } = await req.json();
 
-    // ----------------------
-    // Determine if password is required
-    // ----------------------
-    const requirePassword = !['supabase','firebase','mongodb','mysql','postgres'].includes(selectedDb);
+    const requirePassword = !['supabase', 'firebase', 'mongodb', 'mysql', 'postgres'].includes(selectedDb);
 
-    // ----------------------
-    // Check missing fields with logging
-    // ----------------------
     const missingFields = getMissingFields({
       selectedStack,
       selectedDb,
       dbConfig,
       adminUserEmail: adminUser?.email,
       ...(requirePassword && { adminUserPassword: adminUser?.password }),
-      selectedProjectType, // <-- NEW: validate project type
+      selectedProjectType,
     });
 
     if (missingFields.length > 0) {
       console.error('[SAVE CONFIG] Missing fields:', missingFields);
-
       return NextResponse.json(
         {
           error: 'Missing required fields',
@@ -97,7 +87,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // 1️⃣ Get adapter dynamically (Firebase, Supabase, etc.)
     const adapter = getAdapter(selectedDb, dbConfig as DBConfig);
 
     if (!adapter.findUserByEmailWithRetry || !adapter.createAdminUser) {
@@ -107,10 +96,8 @@ export async function POST(req: Request) {
       );
     }
 
-    // 2️⃣ Fetch the admin user with retry
     let user = await adapter.findUserByEmailWithRetry(adapter.config, adminUser.email);
 
-    // 3️⃣ If user doesn't exist, create it
     if (!user?.user_id && !user?.id) {
       const userId = crypto.randomUUID();
       await adapter.createAdminUser(adapter.config, {
@@ -121,7 +108,6 @@ export async function POST(req: Request) {
         role: 'admin',
       });
 
-      // Fetch again to confirm
       user = await adapter.findUserByEmailWithRetry(adapter.config, adminUser.email);
     }
 
@@ -133,12 +119,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // 4️⃣ Find or create the project for this user
     let project = await adapter.findProjectByOwnerId!(adapter.config, userId);
 
     if (!project?.project_id && !project?.id) {
       const projectId = await adapter.createProject!(adapter.config, {
-        name: `${adminUser.full_name}'s Project`,
+        name: projectName || `${adminUser.full_name}'s Project`, // ✅ UPDATED
         user_id: userId,
       });
 
@@ -147,7 +132,6 @@ export async function POST(req: Request) {
 
     const projectId = project.project_id || project.id;
 
-    // 5️⃣ Prepare created_at and config_id for key derivation
     const createdAt = new Date().toISOString();
     const configIdForKey = crypto.randomUUID();
 
@@ -158,19 +142,24 @@ export async function POST(req: Request) {
       createdAt,
     });
 
-    // 6️⃣ Encrypt DB config
     const encryptedDbConfig = encrypt(dbConfig, encryptionKey);
 
-    // 7️⃣ Save installer config
+    const safeBranding = {
+      logo_url: branding?.logoUrl || '',
+      favicon_url: branding?.faviconUrl || '/images/favicon/NXT_Flutter_favicon.png',
+      primary_color: branding?.primaryColor || '#000000',
+    };
+
     const configId = await adapter.saveInstallerConfig!(adapter.config, {
       config_id: configIdForKey,
       project_id: projectId,
+      project_name: projectName || `${adminUser.full_name}'s Project`, // ✅ ADDED
       user_id: userId,
       deployment_type: 'self_hosted',
       status: 'configured',
       selected_stack: selectedStack,
       selected_db: selectedDb,
-      selected_project_type: selectedProjectType, // <-- NEW
+      selected_project_type: selectedProjectType,
       db_config: encryptedDbConfig,
       admin_user: {
         email: adminUser.email,
@@ -179,6 +168,7 @@ export async function POST(req: Request) {
         ...(requirePassword && { password: adminUser.password }),
       },
       feature_flags: featureFlags,
+      branding: safeBranding,
       generator_version: '1.0.0',
       is_active: true,
       created_at: createdAt,
@@ -192,7 +182,6 @@ export async function POST(req: Request) {
     });
   } catch (err: any) {
     console.error('[SAVE CONFIG ERROR]', err);
-
     return NextResponse.json(
       { error: err.message ?? 'Internal Server Error' },
       { status: 500 }

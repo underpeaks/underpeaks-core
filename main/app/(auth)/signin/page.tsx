@@ -40,21 +40,13 @@ function SignInPage() {
 
     try {
       const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE
-      console.log('🔥 DB_TYPE:', DB_TYPE)
 
       if (DB_TYPE === 'firebase') {
-        console.log('🔥 Firebase login (frontend only)')
-
-        // ---------------- INIT FIREBASE ----------------
+        // ✅ INIT FIREBASE (ONCE)
         if (!getApps().length) {
-          const raw = process.env.NEXT_PUBLIC_FIREBASE_CONFIG
-
-          console.log('🔥 RAW FIREBASE CONFIG:', raw)
-
-          const firebaseConfig = parseFirebaseWebConfig(raw)
-
-          console.log('🔥 PARSED FIREBASE CONFIG:', firebaseConfig)
-
+          const firebaseConfig = parseFirebaseWebConfig(
+            process.env.NEXT_PUBLIC_FIREBASE_CONFIG
+          )
           initializeApp(firebaseConfig)
         }
 
@@ -66,62 +58,47 @@ function SignInPage() {
           password
         )
 
+        // ✅ ONLY TOKEN SOURCE
         const idToken = await userCredential.user.getIdToken()
 
-        console.log('🔥 ID TOKEN GENERATED')
-
-        // ---------------- SEND TOKEN ONLY ----------------
-        const res = await fetch('/api/signin', {
+        // ✅ SEND TOKEN IN HEADER ONLY
+        const res = await fetch('/api/session', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${idToken}`,
           },
-          body: JSON.stringify({
-            email,
-            idToken,
-            userAgent: navigator.userAgent,
-          }),
         })
 
         const data = await res.json()
 
-        console.log('🔥 BACKEND RESPONSE:', data)
-
-        if (!res.ok || !data.success) {
+        if (!res.ok || !data.user) {
           throw new Error(data.error || 'Signin failed')
         }
 
-        localStorage.setItem('authToken', data.accessToken)
-        if (data.refreshToken)
-          localStorage.setItem('refreshToken', data.refreshToken)
-      }
-
-      else {
+        // ✅ OPTIONAL: store Firebase token only
+        localStorage.setItem('authToken', idToken)
+      } else {
+        // NON-FIREBASE FLOW
         const res = await fetch('/api/signin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             email,
             password,
-            userAgent: navigator.userAgent,
           }),
         })
 
         const data = await res.json()
-
-        console.log('🔥 NON-FIREBASE RESPONSE:', data)
 
         if (!res.ok || !data.success) {
           throw new Error(data.error || 'Signin failed')
         }
 
         localStorage.setItem('authToken', data.accessToken)
-        if (data.refreshToken)
-          localStorage.setItem('refreshToken', data.refreshToken)
       }
 
-      await router.replace(redirectedFrom)
+      router.replace(redirectedFrom)
     } catch (err: any) {
       console.error('❌ SIGNIN ERROR:', err)
       setError(err.message)
