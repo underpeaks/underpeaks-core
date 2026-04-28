@@ -1,14 +1,25 @@
 'use client'
 
-import { useState, useEffect, createContext, useContext, ReactNode, useRef } from 'react'
+import {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  ReactNode,
+  useRef,
+} from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { TopNavbar, Sidebar } from '../components_cus'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'
 
-// ---------------------------
-// Auth Context
-// ---------------------------
 interface AuthContextType {
   user: any | null
   checkingAuth: boolean
@@ -25,9 +36,6 @@ export function useAuth() {
   return useContext(AuthContext)
 }
 
-// ---------------------------
-// Console Layout Props
-// ---------------------------
 interface ConsoleLayoutProps {
   children: ReactNode
 }
@@ -36,12 +44,12 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [user, setUser] = useState<any | undefined>(undefined)
   const [checkingAuth, setCheckingAuth] = useState(true)
+  const [logoUrl, setLogoUrl] = useState<string>('/images/logo/NXT_Flutter_logo.png')
+  const [projectName, setProjectName] = useState<string>('Default')
+
   const router = useRouter()
   const pathname = usePathname()
 
-  // ---------------------------
-  // Session check / refresh
-  // ---------------------------
   const refreshSession = async () => {
     try {
       const token = localStorage.getItem('authToken')
@@ -64,14 +72,35 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
       }
 
       const data = await res.json()
+
       if (!data.user) {
         localStorage.removeItem('authToken')
         localStorage.removeItem('refreshToken')
         setUser(null)
       } else {
         setUser(data.user)
-        if (data.accessToken) localStorage.setItem('authToken', data.accessToken)
-        if (data.refreshToken) localStorage.setItem('refreshToken', data.refreshToken)
+
+        if (data.accessToken)
+          localStorage.setItem('authToken', data.accessToken)
+
+        if (data.refreshToken)
+          localStorage.setItem('refreshToken', data.refreshToken)
+
+        const userId = data.user?.user?.user_id
+
+        if (userId) {
+          console.log('[PAGE REQUEST]- REQUESTING CONFIG')
+          const configRes = await fetch(`/api/get-db-config?user_id=${userId}`)
+          console.log('[PAGE REQUEST]- FETCH COMPLETE -  CONFIG')
+          const configData = await configRes.json()
+          const config = configData?.config
+
+          console.log('BRANDING:', config?.branding)
+          console.log('PROJECT NAME :', config?.project_name)
+
+          if (config?.branding?.logo_url) setLogoUrl(config.branding.logo_url)
+          if (config?.project_name) setProjectName(config.project_name)
+        }
       }
     } catch {
       setUser(null)
@@ -95,9 +124,6 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     }
   }, [checkingAuth, user, router, pathname])
 
-  // ---------------------------
-  // Idle Logout Modal
-  // ---------------------------
   const [showIdleModal, setShowIdleModal] = useState(false)
   const [countdown, setCountdown] = useState(30)
   const idleTimerRef = useRef<NodeJS.Timeout | null>(null)
@@ -127,25 +153,21 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     }
   }
 
-  // Countdown effect
   useEffect(() => {
     if (!showIdleModal) return
-
     if (countdown <= 0) {
       handleLogout()
       return
     }
-
     const interval = setInterval(() => {
       setCountdown((prev) => prev - 1)
     }, 1000)
-
     return () => clearInterval(interval)
   }, [showIdleModal, countdown])
 
   const resetIdleTimer = () => {
     if (idleTimerRef.current) clearTimeout(idleTimerRef.current)
-    idleTimerRef.current = setTimeout(startIdleCountdown, 10 * 60 * 1000) // 10 minutes
+    idleTimerRef.current = setTimeout(startIdleCountdown, 10 * 60 * 1000)
   }
 
   useEffect(() => {
@@ -169,66 +191,80 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     )
   }
 
-  const sidebarWidth = collapsed ? 80 : 256
+  const sidebarWidth = collapsed ? 96 : 256
 
   return (
     <AuthContext.Provider value={{ user, checkingAuth, refreshSession }}>
-      <div className="flex flex-col min-h-screen relative">
-        <header className="w-full h-16 border-b shadow">
-          <TopNavbar user={user} />
+      {/* Full viewport, no scroll on the shell itself */}
+      <div className="flex flex-col h-screen overflow-hidden">
+
+        {/* ── Top navbar — fixed height ── */}
+        <header className="h-16 shrink-0 w-full border-b shadow z-50">
+          <TopNavbar
+            user={user}
+            logoUrl={logoUrl}
+            projectName={projectName}
+          />
         </header>
-        <div className="flex flex-1">
+
+        {/* ── Body row — fills remaining height ── */}
+        <div className="flex flex-1 overflow-hidden">
+
+          {/* ── Sidebar — fixed pixel width, never shrinks ── */}
           <aside
-            style={{ width: sidebarWidth, transition: 'width 0.3s' }}
-            className="border-r h-[calc(100vh-4rem)] overflow-auto"
+            className="shrink-0 border-r overflow-hidden transition-all duration-300"
+            style={{ width: sidebarWidth }}
           >
             <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
           </aside>
-          <main style={{ flexGrow: 1 }} className="p-6 overflow-auto">
-            {children}
-          </main>
+
+          {/* ── Main content — fills remaining width, owns its own scroll ── */}
+       <main style={{ flexGrow: 1, minWidth: 0 }} className="relative overflow-hidden bg-gray-100">
+  {children}
+</main>
+
         </div>
-
-        {/* Idle Logout Modal using ShadCN Dialog */}
-        <Dialog open={showIdleModal} onOpenChange={() => {}}>
-          <DialogContent className="sm:max-w-[400px] text-center flex flex-col items-center">
-            <DialogHeader>
-              <DialogTitle className="text-center" style={{ fontSize: 20 }}>
-                Inactive Session
-              </DialogTitle>
-              <DialogDescription className="mt-2 text-center" style={{ fontSize: 15 }}>
-                You have been inactive. Logging out in:
-              </DialogDescription>
-            </DialogHeader>
-
-            {/* Countdown number */}
-            <div className="mt-4 font-bold text-center" style={{ fontSize: 54 }}>
-              {countdown}
-            </div>
-
-            <DialogFooter className="flex flex-col gap-4 mt-6 w-full items-center">
-              <Button
-                variant="destructive"
-                onClick={handleLogout}
-                className="w-1/2 px-6 py-2 text-sm text-center"
-              >
-                Logout
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => {
-                  setShowIdleModal(false)
-                  setCountdown(30)
-                  resetIdleTimer()
-                }}
-                className="w-1/2 px-6 py-2 text-sm text-center"
-              >
-                Keep Alive
-              </Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
       </div>
+
+      {/* ── Idle modal ── */}
+      <Dialog open={showIdleModal} onOpenChange={() => {}}>
+        <DialogContent className="sm:max-w-[400px] text-center flex flex-col items-center">
+          <DialogHeader>
+            <DialogTitle className="text-center" style={{ fontSize: 20 }}>
+              Inactive Session
+            </DialogTitle>
+            <DialogDescription className="mt-2 text-center" style={{ fontSize: 15 }}>
+              You have been inactive. Logging out in:
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-4 font-bold text-center" style={{ fontSize: 54 }}>
+            {countdown}
+          </div>
+
+          <DialogFooter className="flex flex-col gap-4 mt-6 w-full items-center">
+            <Button
+              variant="destructive"
+              onClick={handleLogout}
+              className="w-1/2 px-6 py-2 text-sm text-center"
+            >
+              Logout
+            </Button>
+
+            <Button
+              variant="outline"
+              onClick={() => {
+                setShowIdleModal(false)
+                setCountdown(30)
+                resetIdleTimer()
+              }}
+              className="w-1/2 px-6 py-2 text-sm text-center"
+            >
+              Keep Alive
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AuthContext.Provider>
   )
 }

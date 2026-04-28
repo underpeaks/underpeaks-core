@@ -17,7 +17,8 @@ import {
   FiUserPlus,
   FiLink,
   FiGrid,
-  FiGift
+  FiGift,
+  FiDroplet
  
 } from 'react-icons/fi'
 
@@ -52,15 +53,16 @@ export const menuSections: MenuSection[] = [
     title: 'Content',
     items: [
       { label: 'Shared Models', path: '/console/models', icon: <FiDatabase size={14} /> },
-      { label: 'Layouts', path: '/console/layouts', icon: <FiLayout size={14} /> },
+      { label: 'Menu', path: '/console/layouts', icon: <FiLayout size={14} /> },
       { label: 'Pages', path: '/console/pages', icon: <FiFileText size={14} /> },
+      { label: 'Theme', path: '/console/themePage', icon: <FiDroplet  size={14} /> },
     ],
   },
   {
     title: 'Assets',
     items: [
-      { label: 'Media Library', path: '/console/media-library', icon: <FiImage size={14} /> },
-      { label: 'CDN Uploads', path: '/console/cdn', icon: <FiUpload size={14} /> },
+      { label: 'Storage', path: '/console/media-library', icon: <FiImage size={14} /> },
+      // { label: 'CDN Uploads', path: '/console/cdn', icon: <FiUpload size={14} /> },
     ],
   },
   {

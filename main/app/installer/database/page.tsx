@@ -24,6 +24,7 @@ import { useInstallerStore } from '../../store/useInstallerStore';
 import { DBType } from '@/app/db-adapter/types';
 import { Result } from 'pg';
 
+
 /* =========================
    ONLY ADDITION: INFO BLOCK
 ========================= */
@@ -42,7 +43,7 @@ function InfoBlock({ title, description, where }: any) {
 /* =========================
    FIREBASE FIX HELPER (ONLY CHANGE)
 ========================= */
-function parseFirebaseWebConfig(input: string) {
+function parseFirebaseConfig(input: string) {
   if (!input) return {};
 
   try {
@@ -86,6 +87,16 @@ const DATABASES = [
         info: {
           title: 'Anon Public Key',
           description: 'Client-side key with restricted access rules.',
+          where: 'Supabase Dashboard → Settings → API',
+        },
+      },
+      {
+        key: 'serviceKey',
+        label: 'Supabase Service Key',
+        placeholder: 'eyJhbGciOiJIUzI1NiIsInR...',
+        info: {
+          title: 'Service Key',
+          description: 'Server-side key.',
           where: 'Supabase Dashboard → Settings → API',
         },
       },
@@ -214,6 +225,7 @@ export default function DatabaseConfigPage() {
   function handleInputChange(key: string, value: string) {
     setFormData((prev) => {
       const updated = { ...prev, [key]: value };
+      console.log('🧠 UPDATED formData:', updated); 
       setInstallerValue('dbConfig', {
         type: selectedDb,
         ...updated,
@@ -244,7 +256,8 @@ export default function DatabaseConfigPage() {
       let dbConfigToSend: any;
 
       if (selectedDb === 'firebase') {
-        const webConfig = parseFirebaseWebConfig(formData['firebaseWebConfig'] || '');
+         console.log(formData['firebaseWebConfig']);
+        const webConfig = parseFirebaseConfig(formData['firebaseWebConfig'] || '');
 
         dbConfigToSend = {
           type: 'firebase',
@@ -289,7 +302,13 @@ export default function DatabaseConfigPage() {
       let envPayload: any;
 
       if (selectedDb === 'firebase') {
-        const webConfig = parseFirebaseWebConfig(formData['firebaseWebConfig'] || '');
+
+        console.log(formData['firebaseWebConfig']);
+
+        const webConfig = parseFirebaseConfig(formData['firebaseWebConfig'] || '');
+
+
+
 
         envPayload = {
           type: 'firebase',
@@ -331,12 +350,15 @@ export default function DatabaseConfigPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white px-6 py-12">
-      <header className="mb-8 text-center">
-        <h1 className="text-3xl font-extrabold text-black tracking-tight">
-          🚀 NXT_Flutter
-        </h1>
-        <p className="text-sm text-gray-500">Build once. Run anywhere.</p>
-      </header>
+       <header className="mb-8 text-center flex flex-col items-center">
+  <img 
+    src="/images/logo/NXT_Flutter_logo.png" 
+    alt="NXT_Flutter Logo" 
+    className="h-16 w-auto mb-4"
+  />
+  <p className="text-xl text-gray-700">Your All-in-One SaaS Installer & Code Generator</p>
+</header>
+
 
       <div className="w-full max-w-xl p-8 bg-gray-50 rounded-2xl shadow-xl border space-y-6">
         <h2 className="text-2xl font-bold text-gray-900">

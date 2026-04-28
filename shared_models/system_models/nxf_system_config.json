@@ -20,12 +20,11 @@
       "comment": "Every config must belong to a project"
     },
     {
-  "name": "user_id",
-  "type": "string",
-  "nullable": false,
-  "comment": "Owner user ID for auditing, tracing"
-},
-
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "comment": "Owner user ID for auditing, tracing"
+    },
     {
       "name": "deployment_type",
       "type": "string",
@@ -51,13 +50,13 @@
       "nullable": false,
       "comment": "next | flutter | both"
     },
-     {
-  "name": "selected_project_type",
-  "type": "string",
-  "nullable": false,
-  "default": "blank",
-  "comment": "blank | ecommerce | saas | social | etc"
-},
+    {
+      "name": "selected_project_type",
+      "type": "string",
+      "nullable": false,
+      "default": "blank",
+      "comment": "blank | ecommerce | saas | social | etc"
+    },
     {
       "name": "selected_db",
       "type": "string",
@@ -76,6 +75,16 @@
       "nullable": true,
       "comment": "Admin user details (email, full_name, firebase_uid; password excluded)"
     },
+
+    
+    {
+      "name": "branding",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "{}",
+      "comment": "UI branding config (logo_url, primary_color, etc)"
+    },
+
     {
       "name": "feature_flags",
       "type": "jsonb",
@@ -116,6 +125,5 @@
       "nullable": false,
       "default": "now()"
     }
-   
   ]
 }

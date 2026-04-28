@@ -62,10 +62,15 @@ export default function ModelsSelectionPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white px-6 py-12">
-      <header className="mb-8 text-center">
-        <h1 className="text-3xl font-extrabold text-black tracking-tight">🚀 NXT_Flutter</h1>
-        <p className="text-sm text-gray-500">Build once. Run anywhere.</p>
-      </header>
+     <header className="mb-8 text-center flex flex-col items-center">
+  <img 
+    src="/images/logo/NXT_Flutter_logo.png" 
+    alt="NXT_Flutter Logo" 
+    className="h-16 w-auto mb-4"
+  />
+  <p className="text-xl text-gray-700">Your All-in-One SaaS Installer & Code Generator</p>
+</header>
+
 
       <div className="w-full max-w-md p-8 bg-gray-50 rounded-2xl shadow-xl border space-y-6">
         <div className="flex items-center justify-between">

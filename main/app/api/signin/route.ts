@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
     // --------------------------- SUPABASE ---------------------------
     else if (dbType === 'supabase') {
       const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-      const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+      const anonKey = process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY
       if (!url || !anonKey) throw new Error('Supabase env vars missing')
 
       dbConfig = {

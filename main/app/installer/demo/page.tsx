@@ -37,10 +37,6 @@ export default function DemoPage() {
     blank: "No demo content; start with an empty project skeleton."
   }
 
-  const handleCheckedChange = (checked: boolean) => {
-    setInstallDemo(checked)
-  }
-
   const handleNext = () => {
     setLoading(true)
     setInstallerValue('demoContentEnabled', installDemo)
@@ -55,11 +51,19 @@ export default function DemoPage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
-      <header className="mb-8 text-center">
-        <h1 className="text-3xl font-extrabold text-black tracking-tight">🚀 NXT_Flutter</h1>
-        <p className="text-sm text-gray-500">Build once. Run anywhere.</p>
+
+      <header className="mb-8 text-center flex flex-col items-center">
+        <img
+          src="/images/logo/NXT_Flutter_logo.png"
+          alt="NXT_Flutter Logo"
+          className="h-16 w-auto mb-4"
+        />
+        <p className="text-xl text-gray-700">
+          Your All-in-One SaaS Installer & Code Generator
+        </p>
       </header>
 
+      {/* ================= PROJECT TYPE ================= */}
       <Card>
         <CardHeader>
           <CardTitle>Select Project Type</CardTitle>
@@ -67,31 +71,48 @@ export default function DemoPage() {
             Choose a template to automatically install default models for your project.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex flex-col space-y-3">
-            {projectOptions.map((option) => (
-              <label key={option.value} className="flex items-start gap-3">
+
+        <CardContent className="space-y-1">
+
+          {projectOptions.map((option) => {
+            const isActive = selectedProject === option.value
+
+            return (
+              <div
+                key={option.value}
+                onClick={() => setSelectedProject(option.value)}
+                className={`
+                  flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition
+                  ${isActive
+                    ? 'border-black bg-gray-50'
+                    : 'border-gray-200 hover:border-gray-400'
+                  }
+                `}
+              >
                 <input
                   type="radio"
                   name="projectType"
-                  value={option.value}
-                  checked={selectedProject === option.value}
-                  onChange={() => setSelectedProject(option.value)}
-                  className="h-4 w-4 mt-1"
+                  checked={isActive}
+                  readOnly
+                  className="mt-1 h-4 w-4 accent-black bg-white border-gray-400"
                 />
+
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium">{option.label}</span>
-                  <span className="text-gray-500 text-xs">
+                  <span className="text-base font-medium">
+                    {option.label}
+                  </span>
+                  <span className="text-sm text-gray-500 mt-1">
                     {projectDescriptions[option.value]}
                   </span>
                 </div>
-              </label>
-            ))}
-          </div>
+              </div>
+            )
+          })}
+
         </CardContent>
       </Card>
 
-      {/* ✅ ONLY THIS CARD IS CONDITIONAL */}
+      {/* ================= DEMO CARD ================= */}
       {showDemoCard && (
         <Card>
           <CardHeader>
@@ -102,39 +123,38 @@ export default function DemoPage() {
           </CardHeader>
 
           <CardContent className="space-y-6">
-            <div className="space-y-2">
-              <div className="flex items-start gap-3">
-                <Checkbox
-                  id="demoData"
-                  checked={installDemo}
-                  onCheckedChange={handleCheckedChange}
-                />
-                <Label htmlFor="demoData" className="font-medium">
-                  Include demo content for the selected project:
-                </Label>
-              </div>
-
-              {installDemo && selectedProject === 'ecommerce' && (
-                <ul className="text-muted-foreground text-sm list-disc list-inside pl-6 space-y-1">
-                  <li>Demo products with categories and tags</li>
-                  <li>Example customers and orders</li>
-                  <li>Storefront pages (home, products, cart, checkout)</li>
-                  <li>Basic CMS content (about us, contact, policies)</li>
-                  <li>Pre-configured menus and modules</li>
-                </ul>
-              )}
+            <div className="flex items-start gap-3">
+              <Checkbox
+                id="demoData"
+                checked={installDemo}
+                onCheckedChange={(checked) => setInstallDemo(!!checked)}
+              />
+              <Label htmlFor="demoData" className="font-medium">
+                Include demo content for the selected project
+              </Label>
             </div>
+
+            {installDemo && selectedProject === 'ecommerce' && (
+              <ul className="text-sm text-gray-600 list-disc pl-6 space-y-1">
+                <li>Demo products with categories and tags</li>
+                <li>Example customers and orders</li>
+                <li>Storefront pages (home, products, cart, checkout)</li>
+                <li>Basic CMS content</li>
+                <li>Pre-configured menus and modules</li>
+              </ul>
+            )}
           </CardContent>
         </Card>
       )}
 
-      {/* ✅ ALWAYS VISIBLE CONTINUE BUTTON */}
+      {/* ================= CONTINUE ================= */}
       <div className="flex justify-end pt-2">
         <Button onClick={handleNext} disabled={loading} className="w-full">
           {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
           {loading ? 'Continuing...' : 'Continue'}
         </Button>
       </div>
+
     </div>
   )
 }

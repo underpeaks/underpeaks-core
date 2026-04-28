@@ -1,45 +1,54 @@
 {
   "compilerOptions": {
     "ignoreDeprecations": "6.0",
+
     "target": "esnext",
-    "module": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
+
     "jsx": "preserve",
-    "declaration": false,
-    "sourceMap": true,
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+
     "strict": true,
-    "outDir": "dist",
-    "types": ["node"],
-    "allowJs": true,
     "noEmit": true,
-    "incremental": true,
+
+    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "baseUrl": "./",
+    "incremental": true,
+
+    "baseUrl": ".",
+
     "paths": {
       "@/*": ["./*"],
-      "@components/*": ["app/components_cus/*"],
-      "@shadcn/*": ["components/ui/*"],
-      "@lib/*": ["app/lib/*"],
-      "@hooks/*": ["app/hooks/*"],
+
+      "@components/*": ["./components/*"],
+      "@shadcn/*": ["./components/ui/*"],
+      "@lib/*": ["./lib/*"],
+      "@hooks/*": ["hooks/*"],
       "@nxf/*": ["nxf-ui/*"]
     },
+
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+
+    "allowJs": true,
+    "skipLibCheck": true,
+    "isolatedModules": true
   },
+
   "include": [
     "app/**/*",
-    "components/ui/**/*",
+    "components/**/*",
+    "lib/**/*",
+    "hooks/**/*",
+    "nxf-ui/**/*",
     ".next/types/**/*.ts"
-, "postcss.config.js"  ],
-  "exclude": [
+, "server/getSystemConfig.ts"  ],
+
+ "exclude": [
     "node_modules",
      ".next"
   ]

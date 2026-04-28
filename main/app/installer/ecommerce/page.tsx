@@ -39,10 +39,15 @@ export default function EcommercePage() {
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
-      <header className="mb-8 text-center">
-        <h1 className="text-3xl font-extrabold text-black tracking-tight">🚀 NXT_Flutter</h1>
-        <p className="text-sm text-gray-500">Build once. Run anywhere.</p>
-      </header>
+       <header className="mb-8 text-center flex flex-col items-center">
+  <img 
+    src="/images/logo/NXT_Flutter_logo.png" 
+    alt="NXT_Flutter Logo" 
+    className="h-16 w-auto mb-4"
+  />
+  <p className="text-xl text-gray-700">Your All-in-One SaaS Installer & Code Generator</p>
+</header>
+
 
       <Card>
         <CardHeader>

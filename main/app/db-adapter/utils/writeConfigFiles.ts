@@ -2,7 +2,6 @@ import { InstallerState } from "@/app/store/useInstallerStore";
 import fs from "fs";
 import path from "path";
 
-// Pull sensitive DB values from environment variables
 const { DB_TYPE, DB_URL, DB_ANON_KEY } = process.env;
 
 export async function writeConfigFromStore(store: InstallerState) {
@@ -14,11 +13,11 @@ export async function writeConfigFromStore(store: InstallerState) {
     subdomain: store.subdomain,
     selectedStack: store.selectedStack,
     selectedDb: store.selectedDb,
-    deploymentType: "self-hosted", // <-- added flag
+    deploymentType: "self-hosted",
     dbConfig: {
       type: DB_TYPE || store.selectedDb || "supabase",
-      // Do not expose secrets in config
     },
+    faviconUrl: '/images/favicon/NXT_Flutter_favicon.png',
     ecommerceEnabled: store.ecommerceEnabled,
     demoContentEnabled: store.demoContentEnabled,
     selectedPages: store.selectedPages,
@@ -31,7 +30,7 @@ export async function writeConfigFromStore(store: InstallerState) {
       ecommerce: store.ecommerceEnabled,
       demoContent: store.demoContentEnabled,
     },
-    selectedProjectType: store.selectedProjectType
+    selectedProjectType: store.selectedProjectType,
   };
 
   fs.writeFileSync(filePath, JSON.stringify(config, null, 2), "utf-8");
