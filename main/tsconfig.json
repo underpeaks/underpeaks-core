@@ -39,14 +39,16 @@
     "isolatedModules": true
   },
 
-  "include": [
-    "app/**/*",
-    "components/**/*",
-    "lib/**/*",
-    "hooks/**/*",
-    "nxf-ui/**/*",
-    ".next/types/**/*.ts"
-, "server/getSystemConfig.ts"  ],
+ "include": [
+  "app/**/*",
+  "components/**/*",
+  "lib/**/*",
+  "hooks/**/*",
+  "nxf-ui/**/*",
+  "core/**/*",
+  "server/**/*",
+  ".next/types/**/*.ts"
+],
 
  "exclude": [
     "node_modules",

@@ -2,16 +2,61 @@
   "table_name": "nxf_system_apis",
   "schema": "public",
   "columns": {
-    "api_id": { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
-    "name": { "type": "string", "nullable": false },
-    "base_path": { "type": "string", "nullable": false },
-    "version": { "type": "string", "nullable": true },
-    "schema": { "type": "jsonb", "nullable": false },
-    "created_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" },
-    "updated_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+    "api_id": {
+      "type": "string",
+      "default": "gen_random_uuid()",
+      "primary_key": true,
+      "nullable": false
+    },
+    "project_id": {
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_projects(project_id)",
+        "on_delete": "CASCADE"
+      }
+    },
+    "name": {
+      "type": "string",
+      "nullable": false,
+      "description": "Human readable label e.g. Production Key"
+    },
+    "key_encrypted": {
+      "type": "string",
+      "nullable": false,
+      "description": "AES-256-GCM encrypted full API key"
+    },
+    "key_prefix": {
+      "type": "string",
+      "nullable": false,
+      "description": "First 16 chars shown in UI — safe to store plain"
+    },
+    "status": {
+      "type": "string",
+      "nullable": false,
+      "default": "active",
+      "description": "active, revoked"
+    },
+    "last_used_at": {
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    "revoked_at": {
+      "type": "timestamp with time zone",
+      "nullable": true
+    },
+    "created_at": {
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()"
+    },
+    "updated_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()"
+    }
   },
   "constraints": {
-    "primary_key": ["id"]
+    "primary_key": ["api_id"]
   }
 }

@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { hasValidConfig } from './config';
-import '@/app/layout';
+import '@/app/[locale]/layout';
 
 
 export default function Home() {

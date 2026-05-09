@@ -65,7 +65,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
-/***/ "./work-async-storage.external":
+/***/ "../app-render/work-async-storage.external":
 /*!*****************************************************************************!*\
   !*** external "next/dist/server/app-render/work-async-storage.external.js" ***!
   \*****************************************************************************/

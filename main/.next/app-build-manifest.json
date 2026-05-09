@@ -1,96 +1,25 @@
 {
   "pages": {
-    "/layout": [
+    "/[locale]/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/layout.css",
-      "static/chunks/app/layout.js"
+      "static/css/app/[locale]/layout.css",
+      "static/chunks/app/[locale]/layout.js"
     ],
-    "/console/layout": [
+    "/[locale]/installer/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/console/layout.css",
-      "static/chunks/app/console/layout.js"
+      "static/chunks/app/[locale]/installer/layout.js"
     ],
-    "/console/settings/[id]/page": [
+    "/[locale]/installer/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/console/settings/[id]/page.js"
-    ],
-    "/api/session/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/session/route.js"
+      "static/chunks/app/[locale]/installer/page.js"
     ],
     "/api/get-system-config/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/get-system-config/route.js"
-    ],
-    "/api/get-db-config/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/get-db-config/route.js"
-    ],
-    "/console/themePage/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/themePage/page.js"
-    ],
-    "/console/themePage/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/themePage/[id]/page.js"
-    ],
-    "/console/settings/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/settings/page.js"
-    ],
-    "/console/dashboard/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/dashboard/page.js"
-    ],
-    "/console/layouts/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/layouts/page.js"
-    ],
-    "/console/pages/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/pages/page.js"
-    ],
-    "/console/media-library/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/media-library/page.js"
-    ],
-    "/console/integrations/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/integrations/page.js"
-    ],
-    "/console/api-hooks/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/api-hooks/page.js"
-    ],
-    "/api/logout/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/logout/route.js"
-    ],
-    "/(auth)/signin/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(auth)/signin/page.js"
-    ],
-    "/console/models/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/console/models/page.js"
     ]
   }
 }

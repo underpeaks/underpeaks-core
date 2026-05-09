@@ -131,8 +131,17 @@
       "type": "foreign_key",
       "fields": ["recipient_user_id"],
       "references": {
-        "table": "nxf_saas_users",
+        "table": "nxf_users",
         "field": "user_id"
+      }
+    },
+
+    {
+      "type": "foreign_key",
+      "fields": ["project_id"],
+      "references": {
+        "table": "nxf_system_projects",
+        "field": "project_id"
       }
     }
   ]

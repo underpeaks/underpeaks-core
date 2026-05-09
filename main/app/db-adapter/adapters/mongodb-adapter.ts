@@ -83,6 +83,33 @@ export class MongoDBAdapter implements DBAdapter {
     return true
   }
 
+  async findSystemConfigByUserId(config: DBConfig, userId: string) {
+  try {
+    console.log("MONGODB ADAPTER - [findSystemConfigByUserId] START")
+
+    if (!userId) {
+      console.warn("MONGODB ADAPTER - [findSystemConfigByUserId] No userId provided")
+      return null
+    }
+
+    const collection = this.db!.collection('nxf_system_config')
+    const doc = await collection.findOne({ user_id: userId })
+
+    if (!doc) {
+      console.log("MONGODB ADAPTER - [findSystemConfigByUserId] No config found")
+      return null
+    }
+
+    console.log("MONGODB ADAPTER - [findSystemConfigByUserId] SUCCESS")
+    const { _id, ...rest } = doc
+    return { id: _id.toString(), ...rest }
+
+  } catch (error) {
+    console.error("MONGODB ADAPTER - [findSystemConfigByUserId] FAILED", error)
+    throw new Error(`MongoDBAdapter.findSystemConfigByUserId failed: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
+
   // ---------------- USER HELPERS ----------------
   async createAdminUser(config: DBConfig, data: any) {
     const { user_id, user_email, password, role = 'admin', ...rest } = data

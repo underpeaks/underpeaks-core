@@ -1,11 +1,1 @@
-{
-  "version": 4,
-  "routes": {},
-  "dynamicRoutes": {},
-  "notFoundRoutes": [],
-  "preview": {
-    "previewModeId": "c0d1163ccd1bb118ea5027bf002c1600",
-    "previewModeSigningKey": "6818caf171e8e48352e96e3d6e160151bd73f7950100c24c01ce1def2a0c5ba0",
-    "previewModeEncryptionKey": "f23a4a2e2daec3f8449ded2236e967147cbc3b9d71403369c3bd35e3aed56da3"
-  }
-}
+{"version":4,"routes":{"/en/installer":{},"/fr/installer":{},"/af/installer":{},"/de/installer":{},"/es/installer":{},"/pt/installer":{},"/it/installer":{},"/nl/installer":{},"/pl/installer":{},"/ja/installer":{},"/zh/installer":{},"/ko/installer":{},"/ar/installer":{},"/ru/installer":{},"/tr/installer":{},"/sv/installer":{},"/da/installer":{}},"dynamicRoutes":{"/[locale]/installer":{"dataRoute":null,"dataRouteRegex":null,"fallback":null,"fallbackRevalidate":false,"fallbackSourceRoute":"/[locale]/installer","routeRegex":"^\\/([^/]+?)\\/installer(?:\\/)?$","allowHeader":[]}},"notFoundRoutes":[],"preview":{"previewModeId":"2830ba6e85786c2bd90bc74eb962353f","previewModeSigningKey":"1d73f82a28af33c9e8a0208078d57e1e18374c45bbe2b8bcfc5d1d844c6e29e8","previewModeEncryptionKey":"2b83d41da757cacc407a59ce31184ab2398ff6f0904a0e437856fb1c84f01281"}}

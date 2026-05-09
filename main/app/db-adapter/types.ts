@@ -36,7 +36,18 @@ export interface DBConfig {
   full_name?: string;
   [key: string]: any;
 }
-
+export interface StorageFile {
+  id:          string
+  name:        string
+  url:         string
+  size:        string
+  mimeType:    string
+  folder:      string
+  folderPath:  string
+  uploaded:    string
+  project_id?: string   // ← added, optional so existing adapter methods don't break
+  dimensions?: string
+}
 export interface DBAdapter {
   /** ------------------- GENERAL ------------------- */
   supportsBuiltInAuth?: boolean;
@@ -232,6 +243,19 @@ export interface DBAdapter {
   listBuckets?(): Promise<string[]>;
   deleteBucket?(bucketName: string): Promise<void>;
   setupStorageBuckets?(): Promise<string[] | { success: boolean; buckets: string[] }>;
+
+
+/** ------------------- STORAGE FILES ------------------- */
+listFolders?(): Promise<string[]>
+listFiles?(folder: string): Promise<StorageFile[]>
+uploadFile?(folder: string, fileName: string, buffer: Buffer, mimeType: string): Promise<string>
+deleteFile?(folder: string, fileName: string): Promise<void>
+deleteFolder?(folder: string): Promise<void>
+createFolder?(folder: string): Promise<void>
+importFromUrl?(folder: string, url: string): Promise<StorageFile>
+deleteStorageRecordByFilePath?(filePath: string): Promise<void>
+renameFile?(folder: string, oldName: string, newName: string): Promise<void>
+moveFile?(fromFolder: string, toFolder: string, fileName: string): Promise<void>
 
   /** ------------------- EXTENSIBILITY ------------------- */
   [key: string]: any;

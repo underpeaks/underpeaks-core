@@ -149,26 +149,52 @@ if (adapter.supportsBuiltInAuth) {
   const isJwt = token.split('.').length === 3
 
   // ✅ FIREBASE FIX
-  if (dbType === 'firebase') {
-    try {
-      console.log('🔥 Validating Firebase ID token...')
-      
-      const decoded = await adapter.validateBuiltInSession?.(dbConfig, token)
+  // ======================= FIREBASE BLOCK — replace existing =======================
+if (dbType === 'firebase') {
+  try {
+    console.log('🔥 Validating Firebase ID token...')
 
-      if (!decoded) {
-        console.warn('❌ Firebase token invalid')
-      } else {
-        console.log('✅ Firebase token valid:', decoded.uid)
+    const decoded = await adapter.validateBuiltInSession?.(dbConfig, token)
 
-        // OPTIONAL: attach full user from DB if needed
-        const userDoc = await adapter.getUserById?.(decoded.uid)
-
-        user = userDoc || { uid: decoded.uid }
-      }
-    } catch (err) {
-      console.error('❌ Firebase validation error:', err)
+    if (!decoded) {
+      console.warn('❌ Firebase token invalid')
+      return NextResponse.json({ user: null, error: 'Invalid token' }, { status: 401 })
     }
+
+    console.log('✅ Firebase token valid, uid:', decoded.uid)
+
+    // Fetch full profile from nxf_users
+    const result = await adapter.getUserById?.(decoded.uid)
+
+    if (!result?.user) {
+      console.warn('⚠️ Firebase auth valid but no nxf_users record found for uid:', decoded.uid)
+      return NextResponse.json({ user: null, error: 'User profile not found' }, { status: 404 })
+    }
+
+    // Return a clean, flat, predictable shape
+    return NextResponse.json({
+      user: {
+        // Auth identity
+        uid:   decoded.uid,
+        email: decoded.email ?? result.user.user_email,
+
+        // Full nxf_users profile
+        user_id:        result.user.user_id,
+        user_email:     result.user.user_email,
+        full_name:      result.user.full_name,
+        role:           result.user.role,
+        status:         result.user.status,
+        avatar_url:     result.user.avatar_url     ?? null,
+        email_verified: result.user.email_verified ?? false,
+        created_at:     result.user.created_at     ?? null,
+      }
+    })
+
+  } catch (err) {
+    console.error('❌ Firebase session error:', err)
+    return NextResponse.json({ user: null, error: 'Firebase session failed' }, { status: 500 })
   }
+}
 
   // ================= SUPABASE (UNCHANGED) =================
   else if (dbType === 'supabase' && isJwt) {

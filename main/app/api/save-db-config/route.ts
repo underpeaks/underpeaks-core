@@ -1,5 +1,6 @@
 import { writeFile } from 'fs/promises';
 import path from 'path';
+import crypto from 'crypto'
 
 const ENV_FILE_PATH = path.resolve(process.cwd(), '.env.local');
 console.log('📝 ENV write path:', ENV_FILE_PATH);
@@ -64,6 +65,21 @@ function normalizeServiceAccount(input: any) {
   return obj;
 }
 
+function generateApiKeySecret() {
+  // 32 characters (NOT hex — actual 32 chars)
+  const chars =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+
+  let result = ''
+  const bytes = crypto.randomBytes(32)
+
+  for (let i = 0; i < 32; i++) {
+    result += chars[bytes[i] % chars.length]
+  }
+
+  return result
+}
+
 // ======================= MAIN WRITER =======================
 
 async function writeEnvFileFromObject(env: Record<string, any>) {
@@ -81,6 +97,8 @@ async function writeEnvFileFromObject(env: Record<string, any>) {
       ensureHttp(env.domain || 'localhost:3000')
     )}`
   );
+  const apiKeySecret = generateApiKeySecret()
+  lines.push(`NXF_API_KEY_SECRET=${envSafe(apiKeySecret)}`)
 
   // ======================= MONGODB =======================
   if (env.type === 'mongodb') {

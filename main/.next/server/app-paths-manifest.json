@@ -1,9 +1,4 @@
 {
-  "/api/logout/route": "app/api/logout/route.js",
-  "/(auth)/signin/page": "app/(auth)/signin/page.js",
-  "/console/media-library/page": "app/console/media-library/page.js",
-  "/console/integrations/page": "app/console/integrations/page.js",
-  "/console/themePage/page": "app/console/themePage/page.js",
-  "/console/api-hooks/page": "app/console/api-hooks/page.js",
-  "/console/settings/[id]/page": "app/console/settings/[id]/page.js"
+  "/api/get-system-config/route": "app/api/get-system-config/route.js",
+  "/[locale]/installer/page": "app/[locale]/installer/page.js"
 }
