@@ -152,15 +152,12 @@
 ///--------------------------------------------------------------------------------------///
 ///LOGOUT*********///
 ///--------------------------------------------------------------------------------------///
-///TODO 1. Logout Functionality. DONE
-///TODO 2. Confirm Before Logout Modal. DONE
+
 
 ///--------------------------------------------------------------------------------------///
 ///NAVBAR*********///
 ///--------------------------------------------------------------------------------------///
-///TODO 1. Profile Link/Page.
-///TODO 2. Notification Icon with Dropdown.
-///TODO 3. Help / Docs Link.
+
 
 ///--------------------------------------------------------------------------------------///
 ///SIDEBAR*********///
@@ -201,45 +198,69 @@
 
 
 
-//CORE///////////////////////////////////////////////////////////////
+```
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// UPDATED 55-DAY SCHEDULE: 52 DAYS REMAINING
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PHASE 1 — Studio CORE
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///DONE - Days 1–2:   Profile dropdown + Account page + Messages + Notifications
+///DONE - Days 3–4:   Connect remaining Settings pages — API Keys, Branding wired
+///DONE - Days 5–6:   i18n framework setup + language selector + en.json extraction
+///DONE - Day  6.5:   Add LocaleSwitcher to all installer pages
+          Days 7–8:   Audit and replace hardcoded text across all pages
+                      (translations + console.log cleanup + documentation per page)
+          Days 9–12:  Connect Pages + Menu screens + models
+          Days 13–14: Wire up Themes page
+          Days 14–15: Dashboard
+          Days 15–16: Replicate all storage functions for Supabase, MongoDB, MySQL, PostgreSQL
+          Days 17–18: Connect API layer — endpoints, test panel, API keys manager
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// PHASE 2 — Studio MVP + Paid Features
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+          Days 18–19: Studio admin panel — accounts, billing, plans, usage, license keys
+          Days 20–21: Wire self-hosted to Studio — license validation, phone home, usage tracking
+          Days 22–24: Integrations — category tabs, connect/disconnect, OAuth flows, webhook support
+          Days 25–27: API Builder — custom endpoint creation, business logic editor, test panel
+          Days 28–32: Page Builder — drag and drop components, layout system, preview, publish
+          Days 33–36: Flutter code generation — models, pages, navigation from CMS config
+          Days 37–40: Next.js code generation — models, pages, API routes from CMS config
+          Days 41–42: Code generation testing — generate sample apps, fix issues
+          Days 43–44: Help center — structure, categories, core articles
+          Days 45–47: Developer docs — API reference, adapter docs, deployment guide
+          Days 48–50: End to end QA — self-hosted flow, hosted flow, license checks, all DB types
+          Days 51–55: Buffer — spillover, bug fixes, polish, anything that ran long
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// OUTSTANDING TODOs
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//8.  Running tests to verify installation                    — 0.5 days
+//9.  Finalizing installer and cleanup                        — 0.5 days
+//10. Switch between self-hosted and hosted with API keys     — 1 day
+//12. Dashboard widgets — wire up real data                   — 1 day
+//13. Track when a user is logged in and on which date        — 0.5 days
 
-//1.  'Setting up authentication system', - DONE
-//2.  'Configuring session management', - DONE
-//3.  'Creating API endpoints', 2 days
-//4.  'cms front end ', 4 days
-//5.  'code gen for flutter', 2 days
-//6.  'code gen for nextjs', 2 days
-//7.  'Installing demo content', 2 days
-//8.  'Running tests to verify installation', 0.5 dyas
-//9.  'Finalizing installer and cleanup', 0.5 days
-//10. 'switch between self hosted and hosted with api keys', 1 days
-//11. 'model generation', 2 days
-//12. FIX SUPABASE EMAIL VERIFIED - DONE
-//13. UPDATE SO THAT WE TRACK WHEN A USER IS LOGGED IN AND ON WHICH DATE 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// DEPENDENT TODOs — blocked on other tasks being completed first
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//1. API-Key in Settings/Overview        — depends on Studio version
+//2. Test Signup/forgot/reset SMTP       — depends on all DB functions being complete
+//3. Test fetch config on other DBs      — depends on all DB functions being complete
+//4. Sort session issue                  — not dependent, easier done alongside #2
+//5. Notifications server check          — depends on Studio version
+//6. Link billing on Settings page       — depends on Studio version
+//7. Complete help center                — depends on app being completed
+//8. Test messages and notifications     — depends on Studio version or client-facing messages API
 
-// TOTAL DAYS - 17 Days 
-
-
-///FEATURES I WANT TO ADD
-///1. ADMIN MUST ENABLE EMAIL VERIFICATION AND THEN PROVIDE SMTP DETAILS
-///2. ENABLE SOCIAL LOGIN AND CODE GEN FOR THAT IN THE FLUTTER APP AND NEXTJS APP
-///3. integrate 2fa 
-///4. email and sms integration
-///widget, themes and extensions marketplace
-///api builder
-///integration with 3rd party api's
-
-
-
-///TODO LIST 17/02/2026
-
-
-
-///3 Day
-
-//7.  'Installing demo content', 2 days
-
-
-
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// FEATURES TO ADD — HOSTED PAID VERSION
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//1. Enable social login + code gen for Flutter and Next.js apps
+//2. Integrate 2FA
+//3. Email and SMS integration
+//4. Widget, themes and extensions marketplace
+//5. API builder
+//6. Integration with 3rd party APIs
+//7. Add timezone settings
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

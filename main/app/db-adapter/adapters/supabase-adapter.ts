@@ -134,6 +134,40 @@ export class SupabaseAdapter implements DBAdapter {
     return deleted;
   }
 
+  async findSystemConfigByUserId(config: DBConfig, userId: string) {
+  try {
+    console.log("SUPABASE ADAPTER - [findSystemConfigByUserId] START")
+
+    if (!userId) {
+      console.warn("SUPABASE ADAPTER - [findSystemConfigByUserId] No userId provided")
+      return null
+    }
+
+    const { data, error } = await this.client
+      .from('nxf_system_config')
+      .select('*')
+      .eq('user_id', userId)
+      .limit(1)
+      .single()
+
+    if (error) {
+      // PGRST116 = no rows found — not a real error
+      if (error.code === 'PGRST116') {
+        console.log("SUPABASE ADAPTER - [findSystemConfigByUserId] No config found")
+        return null
+      }
+      throw error
+    }
+
+    console.log("SUPABASE ADAPTER - [findSystemConfigByUserId] SUCCESS")
+    return data
+
+  } catch (error) {
+    console.error("SUPABASE ADAPTER - [findSystemConfigByUserId] FAILED", error)
+    throw new Error(`SupabaseAdapter.findSystemConfigByUserId failed: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
+
   async createProject(_config: DBConfig, data: { name: string; user_id: string }): Promise<string> {
     const project_id = crypto.randomUUID();
     const { data: inserted, error } = await this.client

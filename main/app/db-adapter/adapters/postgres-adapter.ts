@@ -162,6 +162,34 @@ async connect() {
     return res.rows[0];
   }
 
+  async findSystemConfigByUserId(config: DBConfig, userId: string) {
+  try {
+    console.log("POSTGRES ADAPTER - [findSystemConfigByUserId] START")
+
+    if (!userId) {
+      console.warn("POSTGRES ADAPTER - [findSystemConfigByUserId] No userId provided")
+      return null
+    }
+
+    const result = await this.client.query(
+      `SELECT * FROM nxf_system_config WHERE user_id = $1 LIMIT 1`,
+      [userId]
+    )
+
+    if (result.rows.length === 0) {
+      console.log("POSTGRES ADAPTER - [findSystemConfigByUserId] No config found")
+      return null
+    }
+
+    console.log("POSTGRES ADAPTER - [findSystemConfigByUserId] SUCCESS")
+    return result.rows[0]
+
+  } catch (error) {
+    console.error("POSTGRES ADAPTER - [findSystemConfigByUserId] FAILED", error)
+    throw new Error(`PostgresAdapter.findSystemConfigByUserId failed: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
+
   // ---------------- TABLE CREATION ----------------
   async createTable(
     tableName: string,

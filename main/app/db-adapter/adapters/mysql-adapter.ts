@@ -1,5 +1,5 @@
 // db-adapter/adapters/mysql-adapter.ts
-import mysql from "mysql2/promise";
+import mysql, { RowDataPacket } from "mysql2/promise";
 import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { DBConfig, DBAdapter, ColumnDef } from "../types";
@@ -176,6 +176,34 @@ async read(config: DBConfig, table: string, query?: any): Promise<any> {
     const [result] = await pool.query(sql, [id]);
     return result;
   }
+
+  async findSystemConfigByUserId(config: DBConfig, userId: string) {
+  try {
+    console.log("MYSQL ADAPTER - [findSystemConfigByUserId] START")
+
+    if (!userId) {
+      console.warn("MYSQL ADAPTER - [findSystemConfigByUserId] No userId provided")
+      return null
+    }
+
+    const [rows] = await this.pool.execute<RowDataPacket[]>(
+      `SELECT * FROM nxf_system_config WHERE user_id = ? LIMIT 1`,
+      [userId]
+    )
+
+    if (rows.length === 0) {
+      console.log("MYSQL ADAPTER - [findSystemConfigByUserId] No config found")
+      return null
+    }
+
+    console.log("MYSQL ADAPTER - [findSystemConfigByUserId] SUCCESS")
+    return rows[0]
+
+  } catch (error) {
+    console.error("MYSQL ADAPTER - [findSystemConfigByUserId] FAILED", error)
+    throw new Error(`MySQLAdapter.findSystemConfigByUserId failed: ${error instanceof Error ? error.message : String(error)}`)
+  }
+}
 
   // ---------------- TABLE CREATION ----------------
   async createTable(tableName: string, schema: { columns: ColumnDef[] | Record<string, ColumnDef> }) {
