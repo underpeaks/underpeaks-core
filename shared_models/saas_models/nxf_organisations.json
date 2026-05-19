@@ -6,94 +6,142 @@
       "name": "organisation_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "name",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "slug",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     {
       "name": "owner_user_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "email",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "email-input"
     },
     {
       "name": "phone",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "phone-input"
     },
     {
       "name": "logo_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "type",
       "type": "string",
       "nullable": true,
-      "description": "company, individual, vendor_group, enterprise"
+      "description": "company, individual, vendor_group, enterprise",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
-      "default": "active"
+      "default": "active",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "billing_email",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "email-input"
     },
     {
       "name": "address",
       "type": "jsonb",
       "nullable": true,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "settings",
       "type": "jsonb",
       "nullable": true,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "subscription_plan",
       "type": "string",
       "nullable": true,
-      "description": "plan_id or tier name"
+      "description": "plan_id or tier name",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "is_verified",
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "member_count",
       "type": "int",
       "nullable": true,
-      "default": 1
+      "default": 1,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "constraints": [

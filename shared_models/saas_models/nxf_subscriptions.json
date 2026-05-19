@@ -6,108 +6,158 @@
       "name": "subscription_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": false,
-      "description": "SaaS tenant / organisation owning the subscription"
+      "description": "SaaS tenant / organisation owning the subscription",
+      "hidden": true
     },
     {
       "name": "plan_id",
       "type": "string",
       "nullable": false,
-      "description": "linked to pricing plan"
+      "description": "linked to pricing plan",
+      "hidden": true
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, trialing, past_due, canceled, expired"
+      "description": "active, trialing, past_due, canceled, expired",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "billing_cycle",
       "type": "string",
       "nullable": false,
-      "description": "monthly, yearly, custom"
+      "description": "monthly, yearly, custom",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "current_period_start",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "current_period_end",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "trial_start",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "trial_end",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "auto_renew",
       "type": "boolean",
       "nullable": false,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "currency",
       "type": "string",
       "nullable": false,
-      "default": "ZAR"
+      "default": "ZAR",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "amount",
       "type": "decimal",
       "nullable": false,
-      "description": "recurring subscription amount"
+      "description": "recurring subscription amount",
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "discount_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "payment_provider",
       "type": "string",
       "nullable": true,
-      "description": "stripe, paypal, payfast, manual"
+      "description": "stripe, paypal, payfast, manual",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "provider_subscription_id",
       "type": "string",
       "nullable": true,
-      "description": "external billing system reference"
+      "description": "external billing system reference",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "cancel_at_period_end",
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "canceled_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

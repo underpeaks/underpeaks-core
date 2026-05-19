@@ -3,29 +3,28 @@
   "primary_key": "mes_id",
   "columns": {
     "mes_id": {
-      "type": "string"
-    },
-
-    "project_id": {
       "type": "string",
-      "nullable": false,
-      "references": {
-        "table": "nxf_system_projects",
-        "column": "project_id",
-        "on_delete": "CASCADE"
-      }
+      "hidden": true
     },
-
-    "conversation_id": {
+    "tenant_id": {
   "type": "string",
   "nullable": false,
   "foreign_key": {
-    "references": "nxf_conversations(con_id)",
+    "references": "nxf_system_tenants(ten_id)",
     "on_delete": "CASCADE"
-  }
-
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
+    "conversation_id": {
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_conversations(con_id)",
+        "on_delete": "CASCADE"
+      },
+      "hidden": true
     },
-
     "sender_id": {
       "type": "string",
       "nullable": false,
@@ -33,9 +32,9 @@
         "table": "users",
         "column": "user_id",
         "on_delete": "SET NULL"
-      }
+      },
+      "hidden": true
     },
-
     "recipient_id": {
       "type": "string",
       "nullable": true,
@@ -43,33 +42,37 @@
         "table": "users",
         "column": "user_id",
         "on_delete": "SET NULL"
-      }
+      },
+      "hidden": true
     },
-
     "content": {
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textarea"
     },
-
     "is_read": {
       "type": "boolean",
       "default": false,
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
     "sent_at": {
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
-
     "created_at": {
       "type": "datetime",
-      "required": true
+      "required": true,
+      "hidden": true
     },
-
     "updated_at": {
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   }
 }

@@ -6,67 +6,104 @@
       "name": "role_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "name",
       "type": "string",
       "nullable": false,
-      "description": "e.g. owner, admin, manager, support, viewer"
+      "description": "e.g. owner, admin, manager, support, viewer",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "saas_key",
       "type": "string",
       "nullable": false,
-      "description": "unique system identifier like 'org_owner', 'vendor_admin'"
+      "description": "unique system identifier like 'org_owner', 'vendor_admin'",
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     {
       "name": "description",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "scope",
       "type": "string",
       "nullable": false,
       "default": "tenant",
-      "description": "system, tenant, organisation, vendor"
+      "description": "system, tenant, organisation, vendor",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "is_system_role",
       "type": "boolean",
       "nullable": false,
       "default": true,
-      "description": "cannot be deleted or modified if true"
+      "description": "cannot be deleted or modified if true",
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "is_active",
       "type": "boolean",
       "nullable": false,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "permissions",
       "type": "jsonb",
       "nullable": false,
       "default": "[]",
-      "description": "array of permission keys or structured permission objects"
+      "description": "array of permission keys or structured permission objects",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "hierarchy_level",
       "type": "int",
       "nullable": true,
-      "description": "lower number = higher privilege (0 = owner/root)"
+      "description": "lower number = higher privilege (0 = owner/root)",
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

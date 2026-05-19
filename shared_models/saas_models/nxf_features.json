@@ -1,89 +1,136 @@
 {
   "table_name": "nxf_features",
-  "primary_key": "id",
-  "columns": {
-    "id": {
+  "schema": "public",
+  "columns": [
+    {
+      "name": "id",
       "type": "string",
-      "required": true
+      "nullable": false,
+      "is_primary": true,
+      "hidden": true
     },
-
-    "feat_key": {
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
+    {
+      "name": "feat_key",
       "type": "string",
-      "required": true,
-      "description": "Unique feature key (e.g. analytics_dashboard)"
+      "nullable": false,
+      "description": "Unique feature key (e.g. analytics_dashboard)",
+      "hidden": false,
+      "ui_type": "slug-input"
     },
-
-    "name": {
+    {
+      "name": "name",
       "type": "string",
-      "required": true
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
-    "description": {
-      "type": "string"
-    },
-
-    "category": {
-      "type": "string",
-      "description": "core, analytics, marketplace, billing, ai, etc."
-    },
-
-    "scope": {
-      "type": "string",
-      "required": true,
-      "description": "global, plan, tenant"
-    },
-
-    "plan_id": {
-      "type": "string",
-      "nullable": true,
-      "description": "If scoped to a specific plan"
-    },
-
-    "tenant_id": {
-      "type": "string",
-      "nullable": true,
-      "description": "If overridden for a specific tenant"
-    },
-
-    "type": {
-      "type": "string",
-      "required": true,
-      "description": "boolean, limit"
-    },
-
-    "value": {
+    {
+      "name": "description",
       "type": "string",
       "nullable": true,
-      "description": "true/false or numeric limit as string"
+      "hidden": false,
+      "ui_type": "textarea"
     },
-
-    "enabled": {
+    {
+      "name": "category",
+      "type": "string",
+      "nullable": true,
+      "description": "core, analytics, marketplace, billing, ai, etc.",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "scope",
+      "type": "string",
+      "nullable": false,
+      "description": "global, plan, tenant",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "plan_id",
+      "type": "string",
+      "nullable": true,
+      "description": "If scoped to a specific plan",
+      "hidden": true
+    },
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": true,
+      "description": "If overridden for a specific tenant",
+      "hidden": true
+    },
+    {
+      "name": "type",
+      "type": "string",
+      "nullable": false,
+      "description": "boolean, limit",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "value",
+      "type": "string",
+      "nullable": true,
+      "description": "true/false or numeric limit as string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "enabled",
       "type": "boolean",
-      "required": true
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
-    "priority": {
-      "type": "number",
-      "required": true,
-      "description": "Higher overrides lower (tenant > plan > global)"
+    {
+      "name": "priority",
+      "type": "int",
+      "nullable": false,
+      "description": "Higher overrides lower (tenant > plan > global)",
+      "hidden": false,
+      "ui_type": "number-input"
     },
-
-    "metadata": {
+    {
+      "name": "metadata",
       "type": "jsonb",
       "nullable": true,
-      "description": "Extra config (optional UI rules, limits, etc.)"
+      "description": "Extra config (optional UI rules, limits, etc.)",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
-
-    "created_at": {
+    {
+      "name": "created_at",
       "type": "datetime",
-      "required": true
+      "nullable": false,
+      "hidden": true
     },
-
-    "updated_at": {
-      "type": "datetime"
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true,
+      "hidden": true
     }
-  },
-
+  ],
   "indexes": [
     {
       "name": "idx_feature_key",

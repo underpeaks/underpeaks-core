@@ -6,60 +6,91 @@
       "name": "follow_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "optional multi-tenant scope (SaaS)"
+      "description": "optional multi-tenant scope (SaaS)",
+      "hidden": true
     },
     {
       "name": "follower_user_id",
       "type": "string",
       "nullable": false,
-      "description": "user who follows"
+      "description": "user who follows",
+      "hidden": true
     },
     {
       "name": "following_user_id",
       "type": "string",
       "nullable": true,
-      "description": "user being followed (if user-to-user)"
+      "description": "user being followed (if user-to-user)",
+      "hidden": true
     },
     {
       "name": "following_entity_type",
       "type": "string",
       "nullable": true,
-      "description": "optional: vendor, product, event, organization, post"
+      "description": "optional: vendor, product, event, organization, post",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "following_entity_id",
       "type": "string",
       "nullable": true,
-      "description": "id of entity being followed"
+      "description": "id of entity being followed",
+      "hidden": true
     },
     {
       "name": "follow_type",
       "type": "string",
       "nullable": false,
-      "description": "user, vendor, product, event, organization"
+      "description": "user, vendor, product, event, organization",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, unfollowed, blocked"
+      "description": "active, unfollowed, blocked",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

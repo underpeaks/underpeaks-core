@@ -6,106 +6,154 @@
       "name": "group_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "multi-tenant scope (SaaS)"
+      "description": "multi-tenant scope (SaaS)",
+      "hidden": true
     },
     {
       "name": "created_by",
       "type": "string",
       "nullable": false,
-      "description": "user_id of group creator"
+      "description": "user_id of group creator",
+      "hidden": true
     },
     {
       "name": "name",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "description",
       "type": "text",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "group_type",
       "type": "string",
       "nullable": false,
-      "description": "public, private, hidden, org_group, interest"
+      "description": "public, private, hidden, org_group, interest",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "visibility",
       "type": "string",
       "nullable": false,
       "default": "public",
-      "description": "public, private, restricted"
+      "description": "public, private, restricted",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, archived, banned, deleted"
+      "description": "active, archived, banned, deleted",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "avatar_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "cover_image_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "owner_user_id",
       "type": "string",
       "nullable": false,
-      "description": "group owner"
+      "description": "group owner",
+      "hidden": true
     },
     {
       "name": "member_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "post_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "rules",
       "type": "jsonb",
       "nullable": true,
       "default": "[]",
-      "description": "group rules or moderation guidelines"
+      "description": "group rules or moderation guidelines",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "tags",
       "type": "jsonb",
       "nullable": true,
-      "default": "[]"
+      "default": "[]",
+      "hidden": false,
+      "ui_type": "tags-input"
     },
     {
       "name": "settings",
       "type": "jsonb",
       "nullable": true,
-      "description": "join approval, posting rights, moderation settings"
+      "description": "join approval, posting rights, moderation settings",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

@@ -7,146 +7,213 @@
       "name": "acart_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "name",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "user_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "session_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "email",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "email-input"
     },
     {
       "name": "phone",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "phone-input"
     },
     {
       "name": "items",
       "type": "jsonb",
       "nullable": false,
-      "default": "[]"
+      "default": "[]",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "currency",
       "type": "string",
       "nullable": true,
-      "default": "ZAR"
+      "default": "ZAR",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "subtotal",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "discount_total",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "tax_total",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "shipping_estimate",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "grand_total",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "abandon_stage",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "abandoned_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "recovered_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "is_recovered",
       "type": "boolean",
       "nullable": true,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "recovery_attempts",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "last_recovery_sent_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "utm_source",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "utm_medium",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "utm_campaign",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "device_type",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "browser",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "country",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "constraints": []

@@ -6,136 +6,200 @@
       "name": "blog_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+    {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "author_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "title",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "slug",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     {
       "name": "excerpt",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "content",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "rich-text"
     },
     {
       "name": "tags",
       "type": "array",
       "nullable": true,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "tags-input"
     },
     {
       "name": "categories",
       "type": "array",
       "nullable": true,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "multi-select"
     },
     {
       "name": "featured_image",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
-      "default": "draft"
+      "default": "draft",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "is_featured",
       "type": "boolean",
       "nullable": true,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "views",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "likes_count",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "comments_count",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "seo_title",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "seo_description",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "seo_keywords",
       "type": "array",
       "nullable": true,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "tags-input"
     },
     {
       "name": "canonical_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "url-input"
     },
     {
       "name": "og_title",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "og_description",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "og_image",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "structured_data",
       "type": "jsonb",
       "nullable": true,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "published_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "constraints": [

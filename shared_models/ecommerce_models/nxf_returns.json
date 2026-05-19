@@ -3,7 +3,8 @@
   "primary_key": "ret_id",
   "columns": {
     "ret_id": {
-      "type": "string"
+      "type": "string",
+      "hidden": true
     },
     "order_id": {
       "type": "string",
@@ -12,8 +13,19 @@
         "table": "orders",
         "column": "ord_id",
         "on_delete": "CASCADE"
-      }
+      },
+      "hidden": true
     },
+    "tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "product_id": {
       "type": "string",
       "nullable": false,
@@ -21,7 +33,8 @@
         "table": "products",
         "column": "prod_id",
         "on_delete": "CASCADE"
-      }
+      },
+      "hidden": true
     },
     "product_variant_id": {
       "type": "string",
@@ -30,7 +43,8 @@
         "table": "product_variants",
         "column": "pv_id",
         "on_delete": "SET NULL"
-      }
+      },
+      "hidden": true
     },
     "user_id": {
       "type": "string",
@@ -39,36 +53,49 @@
         "table": "users",
         "column": "user_id",
         "on_delete": "SET NULL"
-      }
+      },
+      "hidden": true
     },
     "reason": {
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     "status": {
       "type": "string",
       "default": "pending",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "select"
     },
     "requested_at": {
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "processed_at": {
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "refund_amount": {
       "type": "double",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     "created_at": {
       "type": "datetime",
-      "required": true
+      "required": true,
+      "hidden": true
     },
     "updated_at": {
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   }
 }

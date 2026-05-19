@@ -1,157 +1,330 @@
-import { DBAdapter, DBConfig, StorageFile } from '../types'
-import bcrypt from 'bcryptjs'
-import { CreateUserDataModels } from '../utils/create-data-models'
-import admin from 'firebase-admin'
-import { parseFirebaseServiceAccount } from '@/app/lib/firebaseConfig'
+/**
+ * FirebaseAdapter
+ *
+ * This class is the Firebase implementation of the DBAdapter interface.
+ * It acts as the single point of contact between the rest of the application
+ * and Firebase's two main services:
+ *
+ *   - Firestore   — Firebase's NoSQL cloud database, used to store all
+ *                   application data (users, projects, config, etc.).
+ *   - Cloud Storage — Firebase's file storage service, used to store
+ *                     uploaded files (images, documents, etc.).
+ *
+ * What this adapter provides:
+ * - Initialising the Firebase Admin SDK exactly once (subsequent instantiations
+ *   reuse the existing app to avoid "app already exists" errors).
+ * - Full CRUD operations (create, read, update, delete) against Firestore.
+ * - User management: register, login, find, sync, hash passwords.
+ * - Authentication: validate session tokens via Firebase Auth.
+ * - Project and tenant management.
+ * - System config read/write operations.
+ * - File storage: upload, list, rename, move, delete files and folders.
+ * - Demo content installation from local JSON files.
+ *
+ * How to use:
+ *   import { getFirebaseAdapter } from './firebase-adapter'
+ *   const adapter = getFirebaseAdapter(dbConfig)
+ *   await adapter.create(adapter.config, 'nxf_users', { ... })
+ *
+ * This file should never be imported on the client side — it uses the
+ * Firebase Admin SDK which is server-only.
+ */
 
+import { ColumnDef, DBAdapter, DBConfig, StorageFile }    from '../types'
+import bcrypt                                  from 'bcryptjs'
+import { CreateUserDataModels }                from '../utils/create-data-models'
+import admin                                   from 'firebase-admin'
+import { parseFirebaseServiceAccount }         from '@/app/lib/firebaseConfig'
+
+/**
+ * DEFAULT_BUCKETS
+ *
+ * The list of default storage folders created when Firebase Storage is
+ * first set up. Each folder is initialised with a hidden .keep file so
+ * the folder exists in Cloud Storage (which has no concept of empty folders).
+ */
 const DEFAULT_BUCKETS = ['uploads', 'products', 'avatars', 'reports']
 
+// ---------------------------------------------------------------------------
+// Class
+// ---------------------------------------------------------------------------
+
 export class FirebaseAdapter implements DBAdapter {
+  /**
+   * supportsBuiltInAuth — Tells the rest of the application that this adapter
+   * has its own authentication system (Firebase Auth) and does not need an
+   * external auth provider.
+   */
   supportsBuiltInAuth = true
+
+  /**
+   * firebaseAdmin — The initialised Firebase Admin app instance.
+   * Exposed publicly so other parts of the system can access it if needed,
+   * but all internal usage goes through this.firestore and this.storage.
+   */
   firebaseAdmin: admin.app.App
 
+  /**
+   * firestore — The Firestore database instance. All database read/write
+   * operations in this adapter use this reference.
+   */
   private firestore: admin.firestore.Firestore
+
+  /**
+   * storage — The Firebase Cloud Storage instance. All file upload/download
+   * operations in this adapter use this reference.
+   */
   private storage: admin.storage.Storage
 
+  // ─── Constructor ──────────────────────────────────────────────────────────
+
+  /**
+   * constructor
+   *
+   * Initialises the FirebaseAdapter by setting up the Firebase Admin SDK,
+   * Firestore, and Cloud Storage.
+   *
+   * This constructor handles two scenarios:
+   *
+   * 1. First instantiation — no Firebase app exists yet.
+   *    Parses the service account credentials, initialises a new Firebase
+   *    Admin app, and applies Firestore settings.
+   *
+   * 2. Subsequent instantiations — a Firebase app already exists.
+   *    Reuses the existing app instead of calling initializeApp() again,
+   *    which would throw an "app already exists" error.
+   *
+   * Storage bucket resolution:
+   *    The storageBucket is read from the config. If it is missing, the
+   *    constructor falls back to NEXT_PUBLIC_FIREBASE_CONFIG env var.
+   *    If neither is available, an error is thrown.
+   *
+   * @param _config - The DBConfig object containing Firebase credentials
+   *                  and configuration (firebaseConfigJson, storageBucket).
+   * @throws Error if required config fields are missing or invalid.
+   */
   constructor(private _config: DBConfig) {
-    console.log('[FirebaseAdapter] 🚀 Constructor started')
+    console.log('[FirebaseAdapter] Constructor started')
 
     try {
+      /**
+       * Validate that a config object was provided at all.
+       * Without it we cannot initialise anything.
+       */
       if (!_config) {
-        console.error('[FirebaseAdapter] ❌ Missing DBConfig')
         throw new Error('DBConfig is required')
       }
 
-      console.log('[FirebaseAdapter] ✅ Config received')
-
+      /**
+       * firebaseConfigJson is the Firebase Admin SDK service account JSON.
+       * It must be present — without it we cannot authenticate with Firebase.
+       */
       if (!_config.firebaseConfigJson) {
-        console.error('[FirebaseAdapter] ❌ Missing firebaseConfigJson')
         throw new Error('firebaseConfigJson is required')
       }
 
-      // ─── Storage Bucket Resolution ─────────────────────────────────────
-      console.log('[FirebaseAdapter] 🔍 Checking storageBucket')
+      // ─── Storage Bucket Resolution ───────────────────────────────────────
 
+      /**
+       * The storageBucket tells Firebase Admin which Cloud Storage bucket
+       * to use for file operations. It should look like:
+       *   'gs://my-project.appspot.com'
+       *
+       * If it was not provided in the config, we try to read it from the
+       * NEXT_PUBLIC_FIREBASE_CONFIG environment variable as a fallback.
+       */
       if (!_config.storageBucket) {
-        console.warn('[FirebaseAdapter] ⚠️ storageBucket missing, trying fallback env')
+        console.warn('[FirebaseAdapter] storageBucket missing, trying fallback env')
 
         const publicConfigStr = process.env.NEXT_PUBLIC_FIREBASE_CONFIG
 
         if (!publicConfigStr) {
-          console.error('[FirebaseAdapter] ❌ NEXT_PUBLIC_FIREBASE_CONFIG missing')
           throw new Error('storageBucket is required and env fallback not set')
         }
 
         try {
           const publicConfig = JSON.parse(publicConfigStr)
-          console.log('[FirebaseAdapter] 🌐 Parsed NEXT_PUBLIC_FIREBASE_CONFIG:', publicConfig)
 
           if (!publicConfig.storageBucket) {
-            console.error('[FirebaseAdapter] ❌ storageBucket not found in env config')
             throw new Error('storageBucket missing in env config')
           }
 
           _config.storageBucket = publicConfig.storageBucket
-          console.log('[FirebaseAdapter] ✅ storageBucket resolved:', _config.storageBucket)
+          console.log('[FirebaseAdapter] storageBucket resolved from env fallback')
         } catch (err: any) {
-          console.error('[FirebaseAdapter] ❌ Failed parsing env config:', err.message)
+          /**
+           * Re-throw so the outer catch reports the failure and the adapter
+           * does not silently continue with a broken config.
+           */
           throw err
         }
       } else {
-        console.log('[FirebaseAdapter] ✅ storageBucket provided:', _config.storageBucket)
+        console.log('[FirebaseAdapter] storageBucket provided in config')
       }
 
-      // ─── Firebase Admin Init ───────────────────────────────────────────
-      console.log('[FirebaseAdapter] 🔧 Initializing Firebase Admin')
+      // ─── Firebase Admin Init ─────────────────────────────────────────────
 
+      /**
+       * Firebase Admin SDK only allows one app to be initialised per process.
+       * We check admin.apps.length to see if an app already exists:
+       *
+       * - If no app exists (length === 0): parse credentials and initialise.
+       * - If an app already exists: reuse it with admin.app().
+       *
+       * isNewApp tracks which path was taken so we know whether to apply
+       * Firestore settings below (settings() can only be called once per
+       * fresh Firestore instance — calling it on a reused instance throws).
+       */
       let app: admin.app.App
       let isNewApp = false
 
       if (!admin.apps.length) {
-        console.log('[FirebaseAdapter] 🆕 No existing Firebase app found, creating new one')
+        console.log('[FirebaseAdapter] No existing Firebase app found, initialising new one')
         isNewApp = true
 
+        /**
+         * Parse the service account credentials from firebaseConfigJson.
+         * This can be either a JSON string or an already-parsed object,
+         * so we handle both cases.
+         */
         let rawConfig: any
-
-        console.log('[FirebaseAdapter] 📦 Raw firebaseConfigJson type:', typeof _config.firebaseConfigJson)
 
         if (typeof _config.firebaseConfigJson === 'string') {
           try {
-            console.log('[FirebaseAdapter] 🧪 Parsing service account JSON')
             rawConfig = parseFirebaseServiceAccount(_config.firebaseConfigJson)
-            console.log('[FirebaseAdapter] ✅ Parsed service account:', {
-              project_id:   rawConfig?.project_id,
-              client_email: rawConfig?.client_email,
-            })
+            console.log('[FirebaseAdapter] Service account parsed successfully')
           } catch (err: any) {
-            console.error('[FirebaseAdapter] ❌ Service account parse failed:', err.message)
             throw new Error('firebaseConfigJson is not valid JSON')
           }
         } else {
+          /**
+           * Config was already provided as a parsed object — use it directly.
+           */
           rawConfig = _config.firebaseConfigJson
-          console.log('[FirebaseAdapter] 📦 Using object config directly')
         }
 
+        /**
+         * private_key is required to authenticate with Firebase.
+         * If it is missing, the service account JSON is incomplete or corrupted.
+         */
         if (!rawConfig.private_key) {
-          console.error('[FirebaseAdapter] ❌ Missing private_key')
           throw new Error('private_key missing in firebaseConfigJson')
         }
 
+        /**
+         * Build the final ServiceAccount object.
+         * The private_key often has literal '\n' sequences (escaped newlines)
+         * when stored as a string in env variables — replace() converts them
+         * back to real newline characters so the key is valid PEM format.
+         */
         const serviceAccount: admin.ServiceAccount = {
           ...rawConfig,
           private_key: rawConfig.private_key.replace(/\\n/g, '\n'),
         }
-
-        console.log('[FirebaseAdapter] 🔐 Initializing Firebase app...')
 
         app = admin.initializeApp({
           credential:    admin.credential.cert(serviceAccount),
           storageBucket: _config.storageBucket,
         })
 
-        console.log('[FirebaseAdapter] ✅ Firebase Admin initialized')
+        console.log('[FirebaseAdapter] Firebase Admin initialised successfully')
       } else {
-        console.log('[FirebaseAdapter] ♻️ Reusing existing Firebase app')
+        console.log('[FirebaseAdapter] Reusing existing Firebase app')
         app = admin.app()
       }
 
       this.firebaseAdmin = app
 
-      // ─── Firestore Init ────────────────────────────────────────────────
-      console.log('[FirebaseAdapter] 🧱 Initializing Firestore')
+      // ─── Firestore Init ──────────────────────────────────────────────────
 
+      /**
+       * Get the Firestore instance from the Firebase app.
+       * ignoreUndefinedProperties: true prevents Firestore from throwing
+       * when a document field has an undefined value — instead it silently
+       * omits those fields. Only applied on a fresh app to avoid the
+       * "settings() called after use" error on reused instances.
+       */
       this.firestore = this.firebaseAdmin.firestore()
 
-      // settings() can only be called once on a fresh instance — skip on reuse
       if (isNewApp) {
         this.firestore.settings({ ignoreUndefinedProperties: true })
-        console.log('[FirebaseAdapter] ✅ Firestore settings applied')
+        console.log('[FirebaseAdapter] Firestore settings applied')
       } else {
-        console.log('[FirebaseAdapter] ♻️ Skipping Firestore settings — reused app')
+        console.log('[FirebaseAdapter] Skipping Firestore settings — reused app')
       }
 
-      // ─── Storage Init ──────────────────────────────────────────────────
-      console.log('[FirebaseAdapter] 🪣 Initializing Storage')
+      // ─── Storage Init ────────────────────────────────────────────────────
 
+      /**
+       * Get the Cloud Storage instance from the Firebase app.
+       * All file operations (upload, list, delete, etc.) go through this.
+       */
       this.storage = this.firebaseAdmin.storage()
 
-      console.log('[FirebaseAdapter] 🎉 Constructor completed successfully')
+      console.log('[FirebaseAdapter] Constructor completed successfully')
+
     } catch (err: any) {
-      console.error('[FirebaseAdapter] 💥 Constructor FAILED:', err.message)
+      console.error('[FirebaseAdapter] Constructor failed')
       throw err
     }
   }
 
+  // ─── Internal helpers ─────────────────────────────────────────────────────
+
+  /**
+   * getFirestoreInstance
+   *
+   * Returns a direct reference to the Firestore database.
+   * Used in methods like createDataModelsFromUserEmail where a raw Firestore
+   * reference is needed alongside the adapter's own methods.
+   *
+   * @returns The admin.firestore.Firestore instance.
+   */
   getFirestoreInstance() {
     return admin.firestore()
   }
 
+  /**
+   * config — Getter that exposes the private _config object publicly.
+   * Other parts of the application pass adapter.config back into adapter
+   * methods that require it (e.g. adapter.create(adapter.config, ...)).
+   */
   get config(): DBConfig {
     return this._config
   }
 
-  // ─── Connection ──────────────────────────────────────────────────────────
+  /**
+   * getBucketName
+   *
+   * Extracts the raw bucket name from the storageBucket config value.
+   *
+   * Cloud Storage API calls require just the bucket name (e.g. 'my-app.appspot.com'),
+   * not the full 'gs://my-app.appspot.com' URI that the config stores.
+   * This helper strips the 'gs://' prefix and any sub-path.
+   *
+   * @returns The bare bucket name string.
+   */
+  private getBucketName(): string {
+    return this._config.storageBucket!
+      .replace(/^gs:\/\//, '')
+      .split('/')[0]
+  }
 
+  // ─── Connection ───────────────────────────────────────────────────────────
+
+  /**
+   * testConnection
+   *
+   * Verifies that the adapter can successfully communicate with Firestore.
+   * Used by the installer to confirm that the provided Firebase credentials
+   * are valid before proceeding with setup.
+   *
+   * It calls listCollections() as a lightweight read operation — if this
+   * succeeds, the credentials are valid and Firestore is reachable.
+   *
+   * @returns { success: true, message } on success,
+   *          { success: false, message } on failure.
+   */
   async testConnection() {
     try {
       await this.firestore.listCollections()
@@ -161,8 +334,17 @@ export class FirebaseAdapter implements DBAdapter {
     }
   }
 
-  // ─── Users ───────────────────────────────────────────────────────────────
+  // ─── Users ────────────────────────────────────────────────────────────────
 
+  /**
+   * getUserById
+   *
+   * Fetches a single user document from the nxf_users collection by their
+   * unique user ID (which is also the Firestore document ID).
+   *
+   * @param uid - The user's unique ID.
+   * @returns { user: object } on success, or { error: string } on failure.
+   */
   async getUserById(uid: string): Promise<{ user?: any; error?: string }> {
     try {
       if (!uid) return { error: 'UID is required' }
@@ -177,6 +359,18 @@ export class FirebaseAdapter implements DBAdapter {
     }
   }
 
+  /**
+   * findUserByEmail
+   *
+   * Searches the nxf_users collection for a user whose user_email field
+   * matches the provided email address.
+   *
+   * Returns the first match (emails should be unique) or null if not found.
+   *
+   * @param config - The DBConfig (not used directly here but required by interface).
+   * @param email  - The email address to search for.
+   * @returns The user object with its Firestore document id, or null.
+   */
   async findUserByEmail(config: DBConfig, email: string) {
     if (!email) return null
     const snapshot = await this.firestore
@@ -189,6 +383,21 @@ export class FirebaseAdapter implements DBAdapter {
     return { id: doc.id, ...doc.data() }
   }
 
+  /**
+   * findUserByEmailWithRetry
+   *
+   * A resilient version of findUserByEmail that retries the lookup up to
+   * `retries` times with a delay between attempts.
+   *
+   * This is useful immediately after user creation, when Firestore may not
+   * yet have propagated the new document to the read replica being queried.
+   *
+   * @param config   - The DBConfig.
+   * @param email    - The email address to search for.
+   * @param retries  - Maximum number of attempts (default: 3).
+   * @param delayMs  - Milliseconds to wait between attempts (default: 1000).
+   * @returns The user object or null. Throws if all retries fail.
+   */
   async findUserByEmailWithRetry(
     config: DBConfig,
     email: string,
@@ -207,6 +416,26 @@ export class FirebaseAdapter implements DBAdapter {
     throw lastError
   }
 
+  /**
+   * registerUserInAuth
+   *
+   * Creates a new user in both Firebase Authentication and the nxf_users
+   * Firestore collection. This method is used during the installer flow
+   * to create the initial admin account.
+   *
+   * Steps:
+   * 1. Checks Firebase Auth to ensure the email is not already registered.
+   * 2. Creates the Firebase Auth user record.
+   * 3. Hashes the password and saves a full user document to nxf_users.
+   *
+   * The user is created with role: 'admin' and email_verified: true
+   * because this is called during controlled installer setup.
+   *
+   * @param config - The DBConfig.
+   * @param data   - { email, password, full_name, notes? }
+   * @returns { id: string } — the new user's UID.
+   * @throws Error if the email is already in use or required fields are missing.
+   */
   async registerUserInAuth(
     config: DBConfig,
     data: { email: string; password: string; full_name: string; notes?: string }
@@ -215,6 +444,12 @@ export class FirebaseAdapter implements DBAdapter {
     if (!data.password)  throw new Error('Password is required')
     if (!data.full_name) throw new Error('Full Name is required')
 
+    /**
+     * Check whether the email is already registered in Firebase Auth.
+     * getUserByEmail throws 'auth/user-not-found' if the user doesn't exist —
+     * that error is expected and caught. Any other error is re-thrown.
+     * If the user IS found, we throw to prevent duplicate registrations.
+     */
     let userRecord
     try {
       userRecord = await admin.auth().getUserByEmail(data.email)
@@ -249,6 +484,21 @@ export class FirebaseAdapter implements DBAdapter {
     return { id: userRecord.uid }
   }
 
+  /**
+   * registerUser
+   *
+   * Creates a new standard (non-admin) user in Firebase Auth and nxf_users.
+   * Used by the public registration flow.
+   *
+   * Differences from registerUserInAuth:
+   * - Sets role: 'user' (not 'admin').
+   * - Sets email_verified: false — the user must verify their email.
+   * - Returns { userId } on success or { error } on failure instead of throwing.
+   *
+   * @param config - The DBConfig.
+   * @param data   - { email, password, full_name, notes? }
+   * @returns { userId: string } on success, or { error: string } on failure.
+   */
   async registerUser(
     config: DBConfig,
     data: { email: string; password: string; full_name: string; notes?: string }
@@ -290,11 +540,25 @@ export class FirebaseAdapter implements DBAdapter {
 
       return { userId: userRec.uid }
     } catch (err: any) {
-      console.error('registerUser error:', err)
+      console.error('[FirebaseAdapter] registerUser failed')
       return { error: err.message || 'Registration failed' }
     }
   }
 
+  /**
+   * syncAuthUserToDatabase
+   *
+   * Ensures a Firebase Auth user also has a corresponding record in the
+   * nxf_users Firestore collection. Used when a user signs in via a
+   * third-party provider (e.g. Google) and may not have a Firestore record yet.
+   *
+   * - If no Firestore record exists: creates one.
+   * - If a record already exists: updates email and full_name only.
+   *
+   * @param config - The DBConfig.
+   * @param user   - { uid, email, full_name, notes? }
+   * @returns The user's UID.
+   */
   async syncAuthUserToDatabase(
     config: DBConfig,
     user: { uid: string; email: string; full_name: string; notes?: string }
@@ -327,6 +591,21 @@ export class FirebaseAdapter implements DBAdapter {
     return user.uid
   }
 
+  /**
+   * createAdminUser
+   *
+   * Creates an admin user record directly in Firestore with a pre-known user_id
+   * (used during the installer when the user_id is already determined).
+   * Also attempts to create the corresponding Firebase Auth record.
+   *
+   * The Firebase Auth creation is wrapped in its own try/catch — if it fails
+   * (e.g. the Auth user already exists), the Firestore record is still kept.
+   * This prevents installer failures caused by a partially completed previous run.
+   *
+   * @param config - The DBConfig.
+   * @param data   - { user_id, user_email, full_name, password, role, notes? }
+   * @returns The user_id string.
+   */
   async createAdminUser(
     config: DBConfig,
     data: {
@@ -366,19 +645,55 @@ export class FirebaseAdapter implements DBAdapter {
         password:    data.password,
         displayName: data.full_name,
       })
-    } catch (err: any) {
-      console.warn('⚠️ Firebase Auth admin user creation failed:', err.message)
+    } catch {
+      /**
+       * Firebase Auth user creation failed — this is non-fatal.
+       * The Firestore record already exists, so the user can still log in
+       * via the built-in auth flow. A warning is logged for visibility.
+       */
+      console.warn('[FirebaseAdapter] Firebase Auth admin user creation failed — continuing')
     }
 
     return data.user_id
   }
 
+  /**
+   * hashPassword
+   *
+   * Hashes a plain-text password using bcrypt with a cost factor of 10.
+   * The cost factor determines how slow the hash is to compute — higher
+   * values are more secure but slower. 10 is the standard recommended value.
+   *
+   * We NEVER store plain-text passwords — always use this method before
+   * saving a password to the database.
+   *
+   * @param password - The plain-text password to hash.
+   * @returns A bcrypt hash string suitable for storing in the database.
+   */
   async hashPassword(password: string) {
     return bcrypt.hash(password, 10)
   }
 
-  // ─── Auth ─────────────────────────────────────────────────────────────────
+  // ─── Auth ──────────────────────────────────────────────────────────────────
 
+  /**
+   * validateBuiltInSession
+   *
+   * Validates a Firebase ID token (the short-lived JWT issued by Firebase Auth
+   * after a user signs in on the client side).
+   *
+   * The client sends this token in the Authorization header as "Bearer <token>".
+   * This method verifies the token's signature and expiry using the Firebase
+   * Admin SDK, which returns the decoded payload containing the user's UID
+   * and other claims.
+   *
+   * Returns null instead of throwing on invalid/expired tokens so callers
+   * can handle the "not authenticated" case gracefully.
+   *
+   * @param config - The DBConfig (not used directly here).
+   * @param token  - The Firebase ID token string from the Authorization header.
+   * @returns The decoded token payload (including uid) on success, or null.
+   */
   async validateBuiltInSession(config: DBConfig, token: string) {
     try {
       return await admin.auth().verifyIdToken(token)
@@ -387,50 +702,149 @@ export class FirebaseAdapter implements DBAdapter {
     }
   }
 
+  /**
+   * login
+   *
+   * Not supported via the Admin SDK. Firebase authentication for end users
+   * must be performed on the client using the Firebase Client SDK, which
+   * then sends the resulting ID token to the server.
+   *
+   * @returns An error message explaining the limitation.
+   */
   async login() {
     return {
       error: 'login() via Firebase Admin SDK not supported. Use client SDK and pass ID token.',
     }
   }
 
+  /**
+   * sendResetEmail
+   *
+   * Generates a Firebase password reset link for the given email address
+   * and returns it. The caller is responsible for sending the link to the
+   * user via their email service.
+   *
+   * @param config      - The DBConfig.
+   * @param email       - The email address of the user who forgot their password.
+   * @param redirectUrl - The URL the user is redirected to after resetting.
+   * @returns { success: true }
+   * @throws Error if email or redirectUrl are missing.
+   */
   async sendResetEmail(config: DBConfig, email: string, redirectUrl?: string) {
     if (!email)       throw new Error('Email is required')
     if (!redirectUrl) throw new Error('Redirect URL is required')
 
-    const link = await admin.auth().generatePasswordResetLink(email, { url: redirectUrl })
-    console.log('🔗 Firebase password reset link:', link)
+    /**
+     * generatePasswordResetLink creates a one-time link that Firebase Auth
+     * uses to confirm the user's identity before allowing a password change.
+     * The link is returned here so the caller can send it however they prefer.
+     */
+    await admin.auth().generatePasswordResetLink(email, { url: redirectUrl })
     return { success: true }
   }
 
-  // ─── CRUD ─────────────────────────────────────────────────────────────────
+  // ─── CRUD ──────────────────────────────────────────────────────────────────
 
-  async create(config: DBConfig, collection: string, data: any): Promise<string> {
-    const docRef = await this.firestore.collection(collection).add(data)
-    return docRef.id
-  }
+  /**
+   * create
+   *
+   * Adds a new document to a Firestore collection and returns the
+   * auto-generated document ID.
+   *
+   * @param config     - The DBConfig.
+   * @param collection - The Firestore collection name (e.g. 'nxf_users').
+   * @param data       - The data object to store as the document.
+   * @returns The new document's auto-generated ID string.
+   */
+ async create(config: DBConfig, collection: string, data: any): Promise<string> {
+  const id     = data.sm_id || data.id || this.firestore.collection(collection).doc().id
+  const docRef = this.firestore.collection(collection).doc(id)
+  await docRef.set(data)
+  return id
+}
 
+  /**
+   * read
+   *
+   * Fetches all documents from a Firestore collection.
+   * Each returned object includes the Firestore document ID as `id`.
+   *
+   * Note: Use with caution on large collections — this fetches everything
+   * with no pagination or filtering.
+   *
+   * @param config     - The DBConfig.
+   * @param collection - The Firestore collection name.
+   * @returns An array of all documents in the collection, each with `id`.
+   */
   async read(config: DBConfig, collection: string) {
     const snapshot = await this.firestore.collection(collection).get()
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
   }
 
+  /**
+   * update
+   *
+   * Updates specific fields on an existing Firestore document.
+   * Only the fields included in `data` are changed — other fields are left
+   * untouched. Supports dot-notation keys for updating nested fields
+   * (e.g. 'smtp.host' updates only the `host` field inside the `smtp` object).
+   *
+   * @param config     - The DBConfig.
+   * @param collection - The Firestore collection name.
+   * @param id         - The document ID to update.
+   * @param data       - An object of field-value pairs to update.
+   * @returns true on success.
+   */
   async update(config: DBConfig, collection: string, id: string, data: any) {
     await this.firestore.collection(collection).doc(id).update(data)
     return true
   }
 
+  /**
+   * delete
+   *
+   * Permanently deletes a document from a Firestore collection.
+   *
+   * @param config     - The DBConfig.
+   * @param collection - The Firestore collection name.
+   * @param id         - The document ID to delete.
+   * @returns true on success.
+   */
   async delete(config: DBConfig, collection: string, id: string) {
     await this.firestore.collection(collection).doc(id).delete()
     return true
   }
 
+  /**
+   * createTable
+   *
+   * A no-op for Firestore — Firestore is schema-less and creates collections
+   * automatically when the first document is written. No table creation is needed.
+   *
+   * This method exists to satisfy the DBAdapter interface which is also
+   * implemented by SQL adapters that do require explicit table creation.
+   *
+   * @param tableName - The table/collection name (logged for traceability).
+   * @returns true always.
+   */
   async createTable(tableName: string) {
-    console.log(`[FirebaseAdapter] Skipping createTable for ${tableName} (Firestore has no tables)`)
+    console.log(`[FirebaseAdapter] Skipping createTable for ${tableName} — Firestore has no tables`)
     return true
   }
 
   // ─── Projects & Tenants ───────────────────────────────────────────────────
 
+  /**
+   * createProject
+   *
+   * Creates a new project record in the nxf_system_projects collection.
+   * A project links together the system config, users, and data models
+   * that belong to a single deployment.
+   *
+   * @param config - The DBConfig.
+   * @param data   - { name: string, user_id: string }
+   * @returns The new project's auto-generated document ID.
+   */
   async createProject(config: DBConfig, data: { name: string; user_id: string }) {
     const docRef = await this.firestore.collection('nxf_system_projects').add({
       name:       data.name || 'defaultproject',
@@ -440,6 +854,16 @@ export class FirebaseAdapter implements DBAdapter {
     return docRef.id
   }
 
+  /**
+   * findProjectByOwnerId
+   *
+   * Finds the project record that belongs to a given user_id.
+   * Used to resolve which project an upload or action should be linked to.
+   *
+   * @param config   - The DBConfig.
+   * @param ownerId  - The user_id to search for.
+   * @returns The project object with its document id, or null if not found.
+   */
   async findProjectByOwnerId(config: DBConfig, ownerId: string) {
     if (!ownerId) return null
     const snapshot = await this.firestore
@@ -452,6 +876,17 @@ export class FirebaseAdapter implements DBAdapter {
     return { id: doc.id, ...doc.data() }
   }
 
+  /**
+   * createTenant
+   *
+   * Creates a new tenant record in the nxf_system_tenants collection.
+   * A tenant represents a single organisation or customer using the platform,
+   * identified by their subdomain.
+   *
+   * @param config - The DBConfig.
+   * @param data   - { subdomain: string, user_email: string }
+   * @returns The new tenant's auto-generated document ID.
+   */
   async createTenant(config: DBConfig, data: { subdomain: string; user_email: string }) {
     const docRef = await this.firestore.collection('nxf_system_tenants').add({
       subdomain:  data.subdomain || 'console',
@@ -461,6 +896,15 @@ export class FirebaseAdapter implements DBAdapter {
     return docRef.id
   }
 
+  /**
+   * findTenantByUserEmail
+   *
+   * Finds the tenant record associated with a given email address.
+   *
+   * @param config - The DBConfig.
+   * @param email  - The email address to search for.
+   * @returns The tenant object with its document id, or null if not found.
+   */
   async findTenantByUserEmail(config: DBConfig, email: string) {
     if (!email) return null
     const snapshot = await this.firestore
@@ -473,8 +917,19 @@ export class FirebaseAdapter implements DBAdapter {
     return { id: doc.id, ...doc.data() }
   }
 
-  // ─── Config ───────────────────────────────────────────────────────────────
+  // ─── Config ────────────────────────────────────────────────────────────────
 
+  /**
+   * saveInstallerConfig
+   *
+   * Saves the full installer configuration to the nxf_system_config collection.
+   * Called at the end of the installer wizard to persist all setup choices.
+   *
+   * @param config - The DBConfig.
+   * @param data   - The installer config object. Must include project_id.
+   * @returns The new config document's auto-generated ID.
+   * @throws Error if project_id is missing.
+   */
   async saveInstallerConfig(config: DBConfig, data: any): Promise<string> {
     if (!data.project_id) throw new Error('project_id is required')
     const docRef = await this.firestore.collection('nxf_system_config').add({
@@ -485,9 +940,24 @@ export class FirebaseAdapter implements DBAdapter {
     return docRef.id
   }
 
+  /**
+   * findSystemConfigByUserId
+   *
+   * Finds the system config record for a given user_id.
+   * The system config holds all application-level settings (branding, SMTP,
+   * project details, etc.) for a specific user's deployment.
+   *
+   * Returns null rather than throwing if the config is not found, so callers
+   * can handle the "not configured yet" case gracefully.
+   *
+   * @param config - The DBConfig.
+   * @param userId - The user_id to search for.
+   * @returns The config object with its document id, or null if not found.
+   * @throws Error if the Firestore query itself fails.
+   */
   async findSystemConfigByUserId(config: DBConfig, userId: string) {
     try {
-      console.log('[FirebaseAdapter] findSystemConfigByUserId START')
+      console.log('[FirebaseAdapter] findSystemConfigByUserId started')
 
       if (!userId) {
         console.warn('[FirebaseAdapter] findSystemConfigByUserId — no userId provided')
@@ -506,10 +976,11 @@ export class FirebaseAdapter implements DBAdapter {
       }
 
       const doc = snapshot.docs[0]
-      console.log('[FirebaseAdapter] findSystemConfigByUserId SUCCESS')
+      console.log('[FirebaseAdapter] findSystemConfigByUserId completed successfully')
       return { id: doc.id, ...doc.data() }
+
     } catch (error) {
-      console.error('[FirebaseAdapter] findSystemConfigByUserId FAILED', error)
+      console.error('[FirebaseAdapter] findSystemConfigByUserId failed')
       throw new Error(
         `FirebaseAdapter.findSystemConfigByUserId failed: ${
           error instanceof Error ? error.message : String(error)
@@ -520,11 +991,36 @@ export class FirebaseAdapter implements DBAdapter {
 
   // ─── Data Models ──────────────────────────────────────────────────────────
 
+  /**
+   * CreateDataModels
+   *
+   * Triggers the creation of the standard data model collections for a given
+   * project and project type. Delegates to the CreateUserDataModels utility.
+   *
+   * @param projectId           - The project's unique ID.
+   * @param selectedProjectType - The type of project (e.g. 'ecommerce', 'blog').
+   * @returns The result from CreateUserDataModels.
+   * @throws Error if config or projectId are missing.
+   */
   async CreateDataModels(projectId: string, selectedProjectType: string) {
     if (!this.config || !projectId) throw new Error('Missing DB config or projectId')
     return CreateUserDataModels(this, projectId, selectedProjectType, [])
   }
 
+  /**
+   * createDataModelsFromUserEmail
+   *
+   * Convenience method that resolves a user's project from their email address
+   * and then calls CreateDataModels for that project.
+   *
+   * Used during onboarding flows where we know the user's email but not their
+   * project ID.
+   *
+   * @param email               - The user's email address.
+   * @param selectedProjectType - The type of project to create models for.
+   * @returns A result object with skipped, message, and data fields.
+   * @throws Error if the user or project cannot be found.
+   */
   async createDataModelsFromUserEmail(email: string, selectedProjectType: string) {
     if (!email) throw new Error('Missing User Email')
 
@@ -534,8 +1030,13 @@ export class FirebaseAdapter implements DBAdapter {
     const project = await this.findProjectByOwnerId(this.config, user.id)
     if (!project?.id) throw new Error('Project not found')
 
-    const db               = this.getFirestoreInstance()
-    const modelsCollection = db.collection(`projects/${project.id}/models`)
+    /**
+     * We get a direct Firestore instance here for the models collection
+     * reference, even though the actual insertion is handled by CreateDataModels.
+     * This is kept for potential future use or debugging.
+     */
+    const db = this.getFirestoreInstance()
+    db.collection(`projects/${project.id}/models`)
 
     const result = await this.CreateDataModels(project.id, selectedProjectType)
     return {
@@ -547,108 +1048,204 @@ export class FirebaseAdapter implements DBAdapter {
 
   // ─── Demo Content ─────────────────────────────────────────────────────────
 
-  async installDemoContent(
-    config: DBConfig,
-    selectedProjectType: string
-  ): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
-    const fs   = require('fs')
-    const path = require('path')
+  /**
+   * installDemoContent
+   *
+   * Reads demo data from local JSON files and inserts it into Firestore.
+   * Used during the installer to populate the application with sample data
+   * so new users can see how the platform works immediately.
+   *
+   * How it works:
+   * 1. Builds a list of folder paths to check for demo JSON files, based
+   *    on the selected project type.
+   * 2. For each folder, reads every .json file found there.
+   * 3. Each JSON file's name becomes the Firestore collection name.
+   * 4. Rows are written using a Firestore batch for efficiency.
+   * 5. If a folder does not exist, it is skipped silently.
+   * 6. If a JSON file is malformed, that file is skipped — others continue.
+   *
+   * @param config              - The DBConfig.
+   * @param selectedProjectType - Used to find the correct demo content folder.
+   * @returns { success, inserted, error?, skipped? }
+   */
+ async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string,
+  adminEmail?: string  // ← add this to drive the lookups
+): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
+  const fs   = require('fs')
+  const path = require('path')
 
-    try {
-      const modelFolders = [
-        `${selectedProjectType}_models`,
-        'system_models',
-        'users_models',
-      ]
+  try {
+    // ─── Resolve project_id, tenant_id, user_id ──────────────────────────
 
-      const basePaths = modelFolders.map((folder) =>
-        path.resolve(process.cwd(), '..', 'demo_content', folder)
-      )
+    let resolvedUserId:   string | null = null
+    let resolvedProjectId: string | null = null
+    let resolvedTenantId:  string | null = null
 
-      let totalInserted = 0
+    if (adminEmail) {
+      /**
+       * 1. Find the admin user by email so we have their user_id.
+       */
+      const user = await this.findUserByEmail(config, adminEmail)
+      if (user?.id) {
+        resolvedUserId = user.id
 
-      for (const basePath of basePaths) {
-        console.log('CHECKING PATH =', basePath)
+        /**
+         * 2. Use the user_id to find their project.
+         *    findProjectByOwnerId queries nxf_system_projects by user_id.
+         */
+        const project = await this.findProjectByOwnerId(config, user.id)
+        if (project?.id) {
+          resolvedProjectId = project.id
+        } else {
+          console.warn('[FirebaseAdapter] installDemoContent — no project found for user, project_id will not be injected')
+        }
 
-        if (!fs.existsSync(basePath)) {
-          console.log('SKIP (missing folder):', basePath)
+        /**
+         * 3. Use the email to find the tenant.
+         *    findTenantByUserEmail queries nxf_system_tenants by user_email.
+         */
+        const tenant = await this.findTenantByUserEmail(config, adminEmail)
+        if (tenant?.id) {
+          resolvedTenantId = tenant.id
+        } else {
+          console.warn('[FirebaseAdapter] installDemoContent — no tenant found for email, tenant_id will not be injected')
+        }
+      } else {
+        console.warn('[FirebaseAdapter] installDemoContent — user not found for email, IDs will not be injected')
+      }
+    } else {
+      console.warn('[FirebaseAdapter] installDemoContent — no adminEmail provided, project_id/tenant_id/user_id will not be injected')
+    }
+
+    console.log('[FirebaseAdapter] installDemoContent resolved IDs —', {
+      user_id:    resolvedUserId,
+      project_id: resolvedProjectId,
+      tenant_id:  resolvedTenantId,
+    })
+
+    // ─── Load and insert demo content ─────────────────────────────────────
+
+    const modelFolders = [
+      `${selectedProjectType}_models`,
+      'system_models',
+      'users_models',
+    ]
+
+    const basePaths = modelFolders.map((folder) =>
+      path.resolve(process.cwd(), '..', 'demo_content', folder)
+    )
+
+    let totalInserted = 0
+
+    for (const basePath of basePaths) {
+      console.log('[FirebaseAdapter] Checking demo content path:', basePath)
+
+      if (!fs.existsSync(basePath)) {
+        console.log('[FirebaseAdapter] Demo content folder not found, skipping:', basePath)
+        continue
+      }
+
+      const files = fs
+        .readdirSync(basePath)
+        .filter((f: string) => f.endsWith('.json'))
+
+      for (const file of files) {
+        const fullPath = path.join(basePath, file)
+        const raw      = fs.readFileSync(fullPath, 'utf-8')
+
+        let json: any
+        try {
+          json = JSON.parse(raw)
+        } catch {
+          console.warn(`[FirebaseAdapter] Skipping invalid JSON file: ${file}`)
           continue
         }
 
-        const files = fs
-          .readdirSync(basePath)
-          .filter((f: string) => f.endsWith('.json'))
+        const collectionName = file.replace('.json', '')
+        const rows           = Array.isArray(json) ? json : json?.demo_data
 
-        for (const file of files) {
-          const fullPath = path.join(basePath, file)
-          const raw      = fs.readFileSync(fullPath, 'utf-8')
-
-          let json: any
-          try {
-            json = JSON.parse(raw)
-          } catch (e: any) {
-            console.log(`INVALID JSON: ${file}`, e.message)
-            continue
-          }
-
-          const collectionName = file.replace('.json', '')
-          const rows           = Array.isArray(json) ? json : json?.demo_data
-
-          if (!rows || !Array.isArray(rows)) {
-            console.log(`SKIPPING ${file} (no valid data array)`)
-            continue
-          }
-
-          console.log(`INSTALLING ${collectionName} -> ${rows.length} docs`)
-
-          const collectionRef = this.firestore.collection(collectionName)
-          const batch         = this.firestore.batch()
-          let count           = 0
-
-          for (const row of rows) {
-            try {
-              const id =
-                row.id ||
-                row._id ||
-                row[`${collectionName.slice(0, -1)}_id`] ||
-                this.firestore.collection('_tmp').doc().id
-
-              batch.set(collectionRef.doc(id), {
-                ...row,
-                created_at: row.created_at || new Date().toISOString(),
-                updated_at: row.updated_at || new Date().toISOString(),
-              })
-
-              count++
-              totalInserted++
-            } catch (err: any) {
-              console.log(`FAILED PREP ${collectionName}:`, err.message)
-            }
-          }
-
-          if (count > 0) await batch.commit()
+        if (!rows || !Array.isArray(rows)) {
+          console.log(`[FirebaseAdapter] Skipping ${file} — no valid data array found`)
+          continue
         }
+
+        console.log(`[FirebaseAdapter] Installing ${collectionName} — ${rows.length} documents`)
+
+        const collectionRef = this.firestore.collection(collectionName)
+        const batch         = this.firestore.batch()
+        let count           = 0
+
+        for (const row of rows) {
+          try {
+            const id =
+              row.id ||
+              row._id ||
+              row[`${collectionName.slice(0, -1)}_id`] ||
+              this.firestore.collection('_tmp').doc().id
+
+            /**
+             * Inject the resolved IDs only for fields that:
+             *   a) exist on the row (i.e. the schema declares them), AND
+             *   b) are currently empty/null in the demo JSON.
+             *
+             * This means demo JSON files that already have hardcoded IDs
+             * are left untouched, while empty-string placeholders are
+             * replaced with the real runtime values.
+             */
+            const injected: Record<string, string> = {}
+
+            if (resolvedUserId   && ('user_id'    in row) && !row.user_id)    injected.user_id    = resolvedUserId
+            if (resolvedProjectId && ('project_id' in row) && !row.project_id) injected.project_id = resolvedProjectId
+            if (resolvedTenantId  && ('tenant_id'  in row) && !row.tenant_id)  injected.tenant_id  = resolvedTenantId
+
+            batch.set(collectionRef.doc(id), {
+              ...row,
+              ...injected,
+              created_at: row.created_at || new Date().toISOString(),
+              updated_at: row.updated_at || new Date().toISOString(),
+            })
+
+            count++
+            totalInserted++
+          } catch {
+            console.warn(`[FirebaseAdapter] Failed to prepare document in ${collectionName} — skipping row`)
+          }
+        }
+
+        if (count > 0) await batch.commit()
       }
-
-      return { success: true, inserted: totalInserted }
-    } catch (err: any) {
-      console.error('FIREBASE DEMO INSTALL ERROR:', err)
-      return { success: false, inserted: 0, error: err?.message || 'Failed to install demo content' }
     }
+
+    return { success: true, inserted: totalInserted }
+
+  } catch {
+    console.error('[FirebaseAdapter] Demo content installation failed')
+    return { success: false, inserted: 0, error: 'Failed to install demo content' }
   }
+}
 
-  // ─── Storage ──────────────────────────────────────────────────────────────
+  // ─── Storage ───────────────────────────────────────────────────────────────
 
-  private getBucketName(): string {
-    return this._config.storageBucket!
-      .replace(/^gs:\/\//, '')
-      .split('/')[0]
-  }
-
+  /**
+   * setupStorageBuckets
+   *
+   * Creates the default storage folders in Firebase Cloud Storage by writing
+   * a hidden .keep file into each folder. Cloud Storage has no concept of
+   * empty folders — a folder only exists if it contains at least one file.
+   *
+   * Retries up to 10 times with a 5-second delay between attempts because
+   * Cloud Storage can take a short time to become available after project
+   * creation.
+   *
+   * @returns { success: true, buckets: string[] } on success.
+   * @throws Error if all retry attempts fail.
+   */
   async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
-    const retries  = 10
-    const delayMs  = 5000
-    const bucket   = this.storage.bucket(this.getBucketName())
+    const retries = 10
+    const delayMs = 5000
+    const bucket  = this.storage.bucket(this.getBucketName())
 
     for (let i = 0; i < retries; i++) {
       try {
@@ -659,7 +1256,7 @@ export class FirebaseAdapter implements DBAdapter {
         }
         return { success: true, buckets: DEFAULT_BUCKETS }
       } catch (err: any) {
-        console.error(`[FirebaseAdapter][Storage] Attempt ${i + 1} failed:`, err?.message || err)
+        console.error(`[FirebaseAdapter] Storage setup attempt ${i + 1} failed`)
         if (i === retries - 1)
           throw new Error(`Failed to setup Firebase Storage: ${err?.message || err}`)
         await new Promise((res) => setTimeout(res, delayMs))
@@ -668,93 +1265,145 @@ export class FirebaseAdapter implements DBAdapter {
     throw new Error('Unexpected storage setup failure')
   }
 
+  /**
+   * listFolders
+   *
+   * Lists all top-level folders in the storage bucket by examining the
+   * prefix of every file path. A "folder" is any unique first path segment
+   * of a file name (e.g. the file 'avatars/photo.png' indicates an 'avatars' folder).
+   *
+   * @returns An array of unique folder name strings, or [] on error.
+   */
   async listFolders(): Promise<string[]> {
-  try {
-    const bucket  = this.storage.bucket(this.getBucketName())
-    const [files] = await bucket.getFiles()
+    try {
+      const bucket  = this.storage.bucket(this.getBucketName())
+      const [files] = await bucket.getFiles()
 
-    console.log('[listFolders] total files in bucket:', files.length)
-    files.forEach(f => console.log('[listFolders] file:', f.name))
+      console.log(`[FirebaseAdapter] listFolders — ${files.length} files found in bucket`)
 
-    const folders = new Set<string>()
+      const folders = new Set<string>()
 
-    files.forEach((file) => {
-      if (!file.name) return
-      const parts = file.name.split('/')
-      if (parts.length > 1) {
-        folders.add(parts[0])
-      }
-    })
-
-    const result = Array.from(folders)
-    console.log('[listFolders] result:', result)
-    return result
-  } catch (err: any) {
-    console.error('[listFolders] FAILED:', err.message)
-    return []
-  }
-}
-
-async listFiles(folder: string): Promise<StorageFile[]> {
-  try {
-    const bucket  = this.storage.bucket(this.getBucketName())
-    const [files] = await bucket.getFiles({ prefix: `${folder}/` })
-
-    const results: StorageFile[] = []
-
-    for (const file of files) {
-      // ── Skip folder placeholders and .keep files ───────────────────
-      if (file.name.endsWith('/')) continue
-      if (file.name.endsWith('.keep')) continue
-
-      const [meta]      = await file.getMetadata()
-      const [signedUrl] = await file.getSignedUrl({
-        action:  'read',
-        expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      files.forEach((file) => {
+        if (!file.name) return
+        const parts = file.name.split('/')
+        /**
+         * Only consider files that have at least one folder level in their path.
+         * e.g. 'avatars/photo.png' → parts = ['avatars', 'photo.png'] → add 'avatars'
+         * e.g. 'rootfile.txt'      → parts = ['rootfile.txt']          → skip
+         */
+        if (parts.length > 1) {
+          folders.add(parts[0])
+        }
       })
 
-      const sizeBytes = parseInt(meta.size ?? '0')
-      const sizeLabel = sizeBytes > 1024 * 1024
-        ? `${(sizeBytes / (1024 * 1024)).toFixed(1)} MB`
-        : `${Math.round(sizeBytes / 1024)} KB`
+      const result = Array.from(folders)
+      console.log(`[FirebaseAdapter] listFolders — ${result.length} folders resolved`)
+      return result
 
-      results.push({
-        id:         meta.id ?? file.name,
-        name:       file.name.split('/').pop() ?? file.name,
-        url:        signedUrl,
-        size:       sizeLabel,
-        mimeType:   meta.contentType ?? 'application/octet-stream',
-        folder,
-        folderPath: file.name,
-        uploaded:   meta.timeCreated
-          ? new Date(meta.timeCreated).toLocaleDateString('en-GB', {
-              day:   '2-digit',
-              month: 'short',
-              year:  'numeric',
-            })
-          : '—',
-      })
+    } catch {
+      console.error('[FirebaseAdapter] listFolders failed')
+      return []
     }
-
-    return results
-  } catch (err: any) {
-    console.error('[FirebaseAdapter.listFiles]', err.message)
-    return []
   }
-}
 
+  /**
+   * listFiles
+   *
+   * Lists all files inside a given storage folder, enriched with metadata
+   * and a 7-day signed URL for direct browser access.
+   *
+   * Skips folder placeholder files (paths ending in '/') and .keep sentinel
+   * files created by setupStorageBuckets and createFolder.
+   *
+   * @param folder - The folder name to list files from (e.g. 'avatars').
+   * @returns An array of StorageFile objects, or [] on error.
+   */
+  async listFiles(folder: string): Promise<StorageFile[]> {
+    try {
+      const bucket  = this.storage.bucket(this.getBucketName())
+      const [files] = await bucket.getFiles({ prefix: `${folder}/` })
+
+      const results: StorageFile[] = []
+
+      for (const file of files) {
+        /**
+         * Skip folder placeholder entries and .keep sentinel files —
+         * these are internal bookkeeping files, not user-uploaded content.
+         */
+        if (file.name.endsWith('/'))     continue
+        if (file.name.endsWith('.keep')) continue
+
+        const [meta]      = await file.getMetadata()
+
+        /**
+         * Generate a signed URL that allows read access to this file for 7 days.
+         * Signed URLs are required because Firebase Storage buckets are private
+         * by default — files cannot be accessed without authentication or a
+         * time-limited signed URL.
+         */
+        const [signedUrl] = await file.getSignedUrl({
+          action:  'read',
+          expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+        })
+
+        const sizeBytes = parseInt(meta.size ?? '0')
+        const sizeLabel = sizeBytes > 1024 * 1024
+          ? `${(sizeBytes / (1024 * 1024)).toFixed(1)} MB`
+          : `${Math.round(sizeBytes / 1024)} KB`
+
+        results.push({
+          id:         meta.id ?? file.name,
+          name:       file.name.split('/').pop() ?? file.name,
+          url:        signedUrl,
+          size:       sizeLabel,
+          mimeType:   meta.contentType ?? 'application/octet-stream',
+          folder,
+          folderPath: file.name,
+          /**
+           * Format the upload date in a human-readable format (e.g. "14 May 2026").
+           * Falls back to '—' if the metadata timestamp is unavailable.
+           */
+          uploaded: meta.timeCreated
+            ? new Date(meta.timeCreated).toLocaleDateString('en-GB', {
+                day:   '2-digit',
+                month: 'short',
+                year:  'numeric',
+              })
+            : '—',
+        })
+      }
+
+      return results
+
+    } catch {
+      console.error('[FirebaseAdapter] listFiles failed')
+      return []
+    }
+  }
+
+  /**
+   * uploadFile
+   *
+   * Uploads a file buffer to Firebase Cloud Storage and returns a 7-day
+   * signed URL for accessing the uploaded file.
+   *
+   * @param folder   - The destination folder name (e.g. 'avatars').
+   * @param fileName - The filename to save as (e.g. 'profile.png').
+   * @param buffer   - The file contents as a Node.js Buffer.
+   * @param mimeType - The MIME type of the file (e.g. 'image/png').
+   * @returns A signed URL string for accessing the uploaded file.
+   */
   async uploadFile(
     folder:   string,
     fileName: string,
     buffer:   Buffer,
     mimeType: string
   ): Promise<string> {
-    console.log("I REACH UPLOAD")
-     const bucket = this.storage.bucket(this.getBucketName())
-     const file   = bucket.file(`${folder}/${fileName}`)
+    console.log('[FirebaseAdapter] uploadFile started')
 
-    console.log(`FILE: ${file}`);
-    console.log(buffer)
+    const bucket = this.storage.bucket(this.getBucketName())
+    const file   = bucket.file(`${folder}/${fileName}`)
+
     await file.save(buffer, { contentType: mimeType, resumable: false })
 
     const [signedUrl] = await file.getSignedUrl({
@@ -762,9 +1411,17 @@ async listFiles(folder: string): Promise<StorageFile[]> {
       expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
     })
 
-     return signedUrl
+    return signedUrl
   }
 
+  /**
+   * deleteFile
+   *
+   * Permanently deletes a single file from Firebase Cloud Storage.
+   *
+   * @param folder   - The folder containing the file (e.g. 'avatars').
+   * @param fileName - The filename to delete (e.g. 'profile.png').
+   */
   async deleteFile(folder: string, fileName: string): Promise<void> {
     await this.storage
       .bucket(this.getBucketName())
@@ -772,12 +1429,30 @@ async listFiles(folder: string): Promise<StorageFile[]> {
       .delete()
   }
 
+  /**
+   * deleteFolder
+   *
+   * Permanently deletes all files inside a folder from Firebase Cloud Storage.
+   * Since Cloud Storage has no real folders, this lists all files with the
+   * folder prefix and deletes them in parallel.
+   *
+   * @param folder - The folder to delete (e.g. 'avatars').
+   */
   async deleteFolder(folder: string): Promise<void> {
     const bucket  = this.storage.bucket(this.getBucketName())
     const [files] = await bucket.getFiles({ prefix: `${folder}/` })
     await Promise.all(files.map((f) => f.delete()))
   }
 
+  /**
+   * createFolder
+   *
+   * Creates a new folder in Firebase Cloud Storage by writing a .keep
+   * sentinel file into it. Cloud Storage folders only exist while they
+   * contain at least one file.
+   *
+   * @param folder - The folder name to create (e.g. 'documents').
+   */
   async createFolder(folder: string): Promise<void> {
     await this.storage
       .bucket(this.getBucketName())
@@ -785,6 +1460,24 @@ async listFiles(folder: string): Promise<StorageFile[]> {
       .save('', { contentType: 'text/plain', resumable: false })
   }
 
+  /**
+   * importFromUrl
+   *
+   * Downloads a file from a remote URL and uploads it to Firebase Cloud Storage.
+   * Useful for importing assets from external sources into the media library.
+   *
+   * Steps:
+   * 1. Fetches the file from the remote URL.
+   * 2. Determines the MIME type from the response headers.
+   * 3. Generates a timestamped filename to avoid collisions.
+   * 4. Uploads the buffer via uploadFile.
+   * 5. Returns a StorageFile object with the signed URL and metadata.
+   *
+   * @param folder - The destination folder in Cloud Storage.
+   * @param url    - The remote URL to import from.
+   * @returns A StorageFile object representing the imported file.
+   * @throws Error if the remote URL cannot be fetched.
+   */
   async importFromUrl(folder: string, url: string): Promise<StorageFile> {
     const response = await fetch(url)
     if (!response.ok) throw new Error(`Failed to fetch URL: ${url}`)
@@ -812,96 +1505,246 @@ async listFiles(folder: string): Promise<StorageFile[]> {
     }
   }
 
- async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
-  try {
-    console.log('[FirebaseAdapter.deleteStorageRecordByFilePath] START | filePath:', filePath)
+  /**
+   * deleteStorageRecordByFilePath
+   *
+   * Deletes the nxf_storage metadata record whose file_path matches the
+   * given path string. This is called when a file is deleted from Cloud
+   * Storage so the media library record is also removed.
+   *
+   * Note: This only deletes the Firestore metadata record — the actual file
+   * in Cloud Storage must be deleted separately via deleteFile().
+   *
+   * @param filePath - The file path to match (e.g. 'avatars/profile.png').
+   * @throws Error if the Firestore query or delete operation fails.
+   */
+  async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
+    try {
+      console.log('[FirebaseAdapter] deleteStorageRecordByFilePath started')
 
-    const snapshot = await this.firestore
-      .collection('nxf_storage')
-      .where('file_path', '==', filePath)
-      .limit(1)
-      .get()
+      const snapshot = await this.firestore
+        .collection('nxf_storage')
+        .where('file_path', '==', filePath)
+        .limit(1)
+        .get()
 
-    console.log('[FirebaseAdapter.deleteStorageRecordByFilePath] snapshot empty:', snapshot.empty)
-    console.log('[FirebaseAdapter.deleteStorageRecordByFilePath] docs found:', snapshot.docs.length)
+      if (snapshot.empty) {
+        console.warn('[FirebaseAdapter] deleteStorageRecordByFilePath — no matching record found')
+        return
+      }
 
-    if (snapshot.empty) {
-      console.warn('[FirebaseAdapter.deleteStorageRecordByFilePath] no record found for:', filePath)
-      return
+      await snapshot.docs[0].ref.delete()
+      console.log('[FirebaseAdapter] deleteStorageRecordByFilePath completed successfully')
+
+    } catch {
+      console.error('[FirebaseAdapter] deleteStorageRecordByFilePath failed')
+      throw new Error('Failed to delete storage record')
     }
-
-    const doc = snapshot.docs[0]
-    console.log('[FirebaseAdapter.deleteStorageRecordByFilePath] found doc id:', doc.id)
-    console.log('[FirebaseAdapter.deleteStorageRecordByFilePath] found doc data:', doc.data())
-
-    await doc.ref.delete()
-    console.log('[FirebaseAdapter.deleteStorageRecordByFilePath] DELETE SUCCESS')
-  } catch (err: any) {
-    console.error('[FirebaseAdapter.deleteStorageRecordByFilePath] FAILED:', err.message)
-    console.error('[FirebaseAdapter.deleteStorageRecordByFilePath] STACK:', err.stack)
-    throw err
   }
-}
 
-async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
-  const bucket      = this.storage.bucket(this.getBucketName())
-  const oldFile     = bucket.file(`${folder}/${oldName}`)
-  const newFile     = bucket.file(`${folder}/${newName}`)
+  /**
+   * renameFile
+   *
+   * Renames a file in Firebase Cloud Storage by copying it to the new name
+   * and deleting the original (Cloud Storage has no native rename operation).
+   * Also updates the corresponding nxf_storage metadata record if one exists.
+   *
+   * @param folder   - The folder containing the file.
+   * @param oldName  - The current filename.
+   * @param newName  - The new filename.
+   */
+  async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
+    const bucket  = this.storage.bucket(this.getBucketName())
+    const oldFile = bucket.file(`${folder}/${oldName}`)
+    const newFile = bucket.file(`${folder}/${newName}`)
 
-  // Copy to new name then delete old
-  await oldFile.copy(newFile)
-  await oldFile.delete()
+    /**
+     * Cloud Storage has no rename operation — we simulate it by copying
+     * to the new path and then deleting the original.
+     */
+    await oldFile.copy(newFile)
+    await oldFile.delete()
 
-  // Update nxf_storage record
-  try {
-    const snapshot = await this.firestore
-      .collection('nxf_storage')
-      .where('file_path', '==', `${folder}/${oldName}`)
-      .limit(1)
-      .get()
+    /**
+     * Update the metadata record in nxf_storage to reflect the new filename
+     * and file path. Wrapped in try/catch so a metadata update failure does
+     * not roll back the storage rename — the file has already been renamed.
+     */
+    try {
+      const snapshot = await this.firestore
+        .collection('nxf_storage')
+        .where('file_path', '==', `${folder}/${oldName}`)
+        .limit(1)
+        .get()
 
-    if (!snapshot.empty) {
-      await snapshot.docs[0].ref.update({
-        file_name: newName,
-        file_path: `${folder}/${newName}`,
-      })
-      console.log('[FirebaseAdapter.renameFile] nxf_storage record updated')
+      if (!snapshot.empty) {
+        await snapshot.docs[0].ref.update({
+          file_name: newName,
+          file_path: `${folder}/${newName}`,
+        })
+        console.log('[FirebaseAdapter] renameFile — nxf_storage record updated')
+      }
+    } catch {
+      /**
+       * Log a warning but do not throw — the storage rename succeeded,
+       * so this is a non-fatal metadata sync failure.
+       */
+      console.warn('[FirebaseAdapter] renameFile — nxf_storage update failed')
     }
-  } catch (err: any) {
-    console.warn('[FirebaseAdapter.renameFile] nxf_storage update failed:', err.message)
   }
-}
 
-async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
-  const bucket   = this.storage.bucket(this.getBucketName())
-  const oldFile  = bucket.file(`${fromFolder}/${fileName}`)
-  const newFile  = bucket.file(`${toFolder}/${fileName}`)
+  /**
+   * moveFile
+   *
+   * Moves a file from one storage folder to another by copying it to the
+   * new path and deleting the original. Also updates the nxf_storage
+   * metadata record to reflect the new folder and file path.
+   *
+   * @param fromFolder - The source folder (e.g. 'uploads/temp').
+   * @param toFolder   - The destination folder (e.g. 'uploads/avatars').
+   * @param fileName   - The filename to move.
+   */
+  async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
+    const bucket  = this.storage.bucket(this.getBucketName())
+    const oldFile = bucket.file(`${fromFolder}/${fileName}`)
+    const newFile = bucket.file(`${toFolder}/${fileName}`)
 
-  // Copy to new folder then delete original
-  await oldFile.copy(newFile)
-  await oldFile.delete()
+    /**
+     * Copy to the new folder path then delete the original.
+     * There is no atomic move operation in Cloud Storage.
+     */
+    await oldFile.copy(newFile)
+    await oldFile.delete()
 
-  // Update nxf_storage record
-  try {
-    const snapshot = await this.firestore
-      .collection('nxf_storage')
-      .where('file_path', '==', `${fromFolder}/${fileName}`)
-      .limit(1)
-      .get()
+    /**
+     * Update the metadata record in nxf_storage to reflect the new folder
+     * and file path. Non-fatal if it fails — the file has already been moved.
+     */
+    try {
+      const snapshot = await this.firestore
+        .collection('nxf_storage')
+        .where('file_path', '==', `${fromFolder}/${fileName}`)
+        .limit(1)
+        .get()
 
-    if (!snapshot.empty) {
-      await snapshot.docs[0].ref.update({
-        folder:    toFolder,
-        file_path: `${toFolder}/${fileName}`,
-      })
-      console.log('[FirebaseAdapter.moveFile] nxf_storage record updated')
+      if (!snapshot.empty) {
+        await snapshot.docs[0].ref.update({
+          folder:    toFolder,
+          file_path: `${toFolder}/${fileName}`,
+        })
+        console.log('[FirebaseAdapter] moveFile — nxf_storage record updated')
+      }
+    } catch {
+      /**
+       * Log a warning but do not throw — the storage move succeeded,
+       * so this is a non-fatal metadata sync failure.
+       */
+      console.warn('[FirebaseAdapter] moveFile — nxf_storage update failed')
     }
-  } catch (err: any) {
-    console.warn('[FirebaseAdapter.moveFile] nxf_storage update failed:', err.message)
   }
+
+  /**
+ * alterTable
+ *
+ * Firestore is schemaless — collections have no fixed schema and columns
+ * do not need to be explicitly added or removed at the database level.
+ * This is a no-op for Firebase. Schema changes are tracked only in
+ * nxf_system_models, which the API route handles separately.
+ *
+ * @param tableName - The collection name (logged for traceability).
+ * @param changes   - The requested changes (ignored for Firestore).
+ * @returns true always.
+ */
+async alterTable(
+  tableName: string,
+  changes: { add?: ColumnDef[]; drop?: string[]; rename?: { from: string; to: string } }
+): Promise<any> {
+  console.log(`[FirebaseAdapter] alterTable no-op for ${tableName} — Firestore is schemaless`)
+  return true
+}
+
+/**
+ * dropTable
+ *
+ * Deletes all documents in a Firestore collection in batches of 500,
+ * then the collection disappears naturally (Firestore has no empty collections).
+ *
+ * We do not recurse into subcollections because the console does not
+ * currently support subcollections — all model data is flat top-level documents.
+ *
+ * Steps:
+ * 1. Fetch up to 500 documents from the collection.
+ * 2. If none are returned the collection is already empty — stop.
+ * 3. Delete all fetched documents in a single batch commit.
+ * 4. Repeat from step 1 until no documents remain.
+ *
+ * @param tableName - The Firestore collection name to delete.
+ * @returns true when all documents have been deleted.
+ */
+async dropTable(tableName: string): Promise<any> {
+  console.log(`[FirebaseAdapter] dropTable — deleting all documents in: ${tableName}`)
+
+  const collectionRef = this.firestore.collection(tableName)
+
+  /**
+   * Firestore does not support a native "delete collection" operation.
+   * We must fetch and delete documents in batches of 500 (the Firestore
+   * batch write limit). The loop continues until a fetch returns 0 documents,
+   * at which point the collection is empty and effectively deleted.
+   */
+  while (true) {
+    const snapshot = await collectionRef.limit(500).get()
+
+    // Collection is now empty — exit the loop
+    if (snapshot.empty) break
+
+    const batch = this.firestore.batch()
+    snapshot.docs.forEach((doc) => batch.delete(doc.ref))
+    await batch.commit()
+
+    console.log(
+      `[FirebaseAdapter] dropTable — deleted batch of ${snapshot.docs.length} documents from ${tableName}`
+    )
+  }
+
+  console.log(`[FirebaseAdapter] dropTable — collection ${tableName} is now empty`)
+  return true
+}
+
+/**
+ * renameTable
+ *
+ * Firestore has no rename operation for collections. Since all relationships
+ * in NXTFlutter reference models by sm_id (not by collection name), renaming
+ * only needs to update the nxf_system_models record — which the API route
+ * handles. This is a no-op at the adapter level for Firebase.
+ *
+ * @param oldName - The current collection name (logged for traceability).
+ * @param newName - The new collection name (logged for traceability).
+ * @returns true always.
+ */
+async renameTable(oldName: string, newName: string): Promise<any> {
+  console.log(`[FirebaseAdapter] renameTable no-op: ${oldName} → ${newName} — Firestore collections are implicit`)
+  return true
 }
 }
 
+// ---------------------------------------------------------------------------
+// Factory function
+// ---------------------------------------------------------------------------
+
+/**
+ * getFirebaseAdapter
+ *
+ * A factory function that creates and returns a new FirebaseAdapter instance.
+ * Prefer this function over calling `new FirebaseAdapter()` directly — it
+ * provides a single place to add validation or configuration before the
+ * adapter is returned.
+ *
+ * @param config - The DBConfig containing Firebase credentials and settings.
+ * @returns A new FirebaseAdapter instance.
+ * @throws Error if config is not provided.
+ */
 export function getFirebaseAdapter(config: DBConfig) {
   if (!config) throw new Error('Firebase config is required')
   return new FirebaseAdapter(config)

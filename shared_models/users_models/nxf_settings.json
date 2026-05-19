@@ -6,88 +6,116 @@
       "name": "setting_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "null = global system setting, otherwise tenant-specific override"
+      "description": "null = global system setting, otherwise tenant-specific override",
+      "hidden": true
     },
     {
       "name": "setting_key",
       "type": "string",
       "nullable": false,
-      "description": "unique setting key (e.g. theme.mode, app.name)"
+      "description": "unique setting key (e.g. theme.mode, app.name)",
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     {
       "name": "setting_value",
       "type": "jsonb",
       "nullable": true,
-      "description": "flexible value storage (string, number, object, array)"
+      "description": "flexible value storage (string, number, object, array)",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "value_type",
       "type": "string",
       "nullable": false,
       "default": "string",
-      "description": "string, number, boolean, json"
+      "description": "string, number, boolean, json",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "category",
       "type": "string",
       "nullable": false,
-      "description": "ui, auth, billing, notifications, system, integrations"
+      "description": "ui, auth, billing, notifications, system, integrations",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "is_public",
       "type": "boolean",
       "nullable": false,
       "default": false,
-      "description": "whether frontend clients can access this setting"
+      "description": "whether frontend clients can access this setting",
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "is_sensitive",
       "type": "boolean",
       "nullable": false,
       "default": false,
-      "description": "marks secrets (API keys, tokens)"
+      "description": "marks secrets (API keys, tokens)",
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "description",
       "type": "text",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "updated_by",
       "type": "string",
       "nullable": true,
-      "description": "user_id who last changed the setting"
+      "description": "user_id who last changed the setting",
+      "hidden": true
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [
-    {
-      "name": "idx_settings_org",
-      "fields": ["organisation_id"]
-    },
-    {
-      "name": "idx_settings_key",
-      "fields": ["setting_key"]
-    },
-    {
-      "name": "idx_settings_category",
-      "fields": ["category"]
-    }
+    { "name": "idx_settings_org", "fields": ["organisation_id"] },
+    { "name": "idx_settings_key", "fields": ["setting_key"] },
+    { "name": "idx_settings_category", "fields": ["category"] }
   ],
   "constraints": [
     {

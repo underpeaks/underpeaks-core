@@ -6,119 +6,171 @@
       "name": "post_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "multi-tenant scope (SaaS)"
+      "description": "multi-tenant scope (SaaS)",
+      "hidden": true
     },
     {
       "name": "user_id",
       "type": "string",
       "nullable": false,
-      "description": "author of the post"
+      "description": "author of the post",
+      "hidden": true
     },
     {
       "name": "group_id",
       "type": "string",
       "nullable": true,
-      "description": "optional group post"
+      "description": "optional group post",
+      "hidden": true
     },
     {
       "name": "post_type",
       "type": "string",
       "nullable": false,
-      "description": "text, image, video, link, poll, event"
+      "description": "text, image, video, link, poll, event",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "title",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "content",
       "type": "text",
       "nullable": true,
-      "description": "main post body"
+      "description": "main post body",
+      "hidden": false,
+      "ui_type": "rich-text"
     },
     {
       "name": "media",
       "type": "jsonb",
       "nullable": true,
       "default": "[]",
-      "description": "images/videos/files"
+      "description": "images/videos/files",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "link_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "url-input"
     },
     {
       "name": "tags",
       "type": "jsonb",
       "nullable": true,
-      "default": "[]"
+      "default": "[]",
+      "hidden": false,
+      "ui_type": "tags-input"
     },
     {
       "name": "visibility",
       "type": "string",
       "nullable": false,
       "default": "public",
-      "description": "public, private, followers, group_only"
+      "description": "public, private, followers, group_only",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, hidden, deleted, flagged"
+      "description": "active, hidden, deleted, flagged",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "like_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "comment_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "share_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "is_pinned",
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "is_edited",
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "edited_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

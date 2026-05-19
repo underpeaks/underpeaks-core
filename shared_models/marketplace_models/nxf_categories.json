@@ -3,18 +3,35 @@
   "primary_key": "cat_id",
   "columns": {
     "id": {
-      "type": "string"
+      "type": "string",
+      "hidden": true
     },
+    "tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "name": {
       "type": "string",
-      "required": true
+      "required": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "slug": {
       "type": "string",
-      "required": true
+      "required": true,
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     "description": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textarea"
     },
     "parent_id": {
       "type": "string",
@@ -23,14 +40,17 @@
         "table": "categories",
         "column": "cat_id",
         "on_delete": "SET NULL"
-      }
+      },
+      "hidden": true
     },
     "created_at": {
       "type": "datetime",
-      "required": true
+      "required": true,
+      "hidden": true
     },
     "updated_at": {
-      "type": "datetime"
+      "type": "datetime",
+      "hidden": true
     }
   }
 }

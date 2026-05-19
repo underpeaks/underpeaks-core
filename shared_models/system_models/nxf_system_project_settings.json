@@ -6,36 +6,56 @@
       "name": "sp_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
-    {
-      "name": "project_id",
-      "type": "string",
-      "nullable": true
+  {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
     },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "app_type",
       "type": "string",
       "nullable": true,
-      "default": "ecommerce"
+      "default": "ecommerce",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "menu_config",
       "type": "jsonb",
       "nullable": true,
       "default": "{}",
-      "description": "JSONB field that can hold an array or object for menu configuration"
+      "description": "JSONB field that can hold an array or object for menu configuration",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "created_at",
       "type": "datetime",
       "nullable": true,
-      "default": "now()"
+      "default": "now()",
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "constraints": []

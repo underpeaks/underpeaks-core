@@ -6,89 +6,130 @@
       "name": "comment_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "multi-tenant scope (SaaS)"
+      "description": "multi-tenant scope (SaaS)",
+      "hidden": true
     },
     {
       "name": "user_id",
       "type": "string",
       "nullable": false,
-      "description": "author of the comment"
+      "description": "author of the comment",
+      "hidden": true
     },
     {
       "name": "entity_type",
       "type": "string",
       "nullable": false,
-      "description": "post, product, order, blog, etc."
+      "description": "post, product, order, blog, etc.",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "entity_id",
       "type": "string",
       "nullable": false,
-      "description": "id of the entity being commented on"
+      "description": "id of the entity being commented on",
+      "hidden": true
     },
     {
       "name": "parent_comment_id",
       "type": "string",
       "nullable": true,
-      "description": "for threaded replies"
+      "description": "for threaded replies",
+      "hidden": true
     },
     {
       "name": "content",
       "type": "text",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "attachments",
       "type": "jsonb",
       "nullable": true,
       "default": "[]",
-      "description": "images, files, links"
+      "description": "images, files, links",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "like_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "reply_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, hidden, deleted, flagged"
+      "description": "active, hidden, deleted, flagged",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "is_edited",
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "edited_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

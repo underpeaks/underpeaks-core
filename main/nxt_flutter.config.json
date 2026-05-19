@@ -1,5 +1,5 @@
 {
-  "projectName": "myapp2",
+  "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
   "selectedDb": "firebase",
@@ -7,7 +7,7 @@
   "dbConfig": {
     "type": "firebase"
   },
-  "faviconUrl": "",
+  "faviconUrl": "/images/favicon/NXT_Flutter_favicon.png",
   "ecommerceEnabled": false,
   "demoContentEnabled": true,
   "selectedPages": [],
@@ -20,7 +20,5 @@
     "ecommerce": false,
     "demoContent": true
   },
-  "selectedProjectType": "ecommerce",
-  "projectUrl": "http://localhost:3000",
-  "logoUrl": ""
+  "selectedProjectType": "ecommerce"
 }

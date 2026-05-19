@@ -7,123 +7,157 @@
       "type": "string",
       "default": "gen_random_uuid()",
       "primary_key": true,
-      "nullable": false
-    },
-    {
-      "name": "project_id",
-      "type": "string",
       "nullable": false,
-      "foreign_key": {
-        "references": "nxf_system_projects(project_id)",
-        "on_delete": "CASCADE"
-      },
-      "comment": "Every config must belong to a project"
+      "hidden": true
     },
+{
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "user_id",
       "type": "string",
       "nullable": false,
-      "comment": "Owner user ID for auditing, tracing"
+      "comment": "Owner user ID for auditing, tracing",
+      "hidden": true
     },
     {
       "name": "deployment_type",
       "type": "string",
       "nullable": false,
-      "comment": "self_hosted | hosted"
+      "comment": "self_hosted | hosted",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "hosted_api_key",
       "type": "string",
       "nullable": true,
-      "comment": "Platform-issued key used when hosted"
+      "comment": "Platform-issued key used when hosted",
+      "hidden": true
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "draft",
-      "comment": "draft | configured | generated | deployed | disabled"
+      "comment": "draft | configured | generated | deployed | disabled",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "selected_stack",
       "type": "string",
       "nullable": false,
-      "comment": "next | flutter | both"
+      "comment": "next | flutter | both",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "selected_project_type",
       "type": "string",
       "nullable": false,
       "default": "blank",
-      "comment": "blank | ecommerce | saas | social | etc"
+      "comment": "blank | ecommerce | saas | social | etc",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "selected_db",
       "type": "string",
       "nullable": false,
-      "comment": "firebase | supabase | postgres | mysql | mongodb"
+      "comment": "firebase | supabase | postgres | mysql | mongodb",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "db_config",
       "type": "jsonb",
       "nullable": false,
-      "comment": "Encrypted database configuration (passwords excluded!)"
+      "comment": "Encrypted database configuration (passwords excluded!)",
+      "hidden": true
     },
     {
       "name": "admin_user",
       "type": "jsonb",
       "nullable": true,
-      "comment": "Admin user details (email, full_name, firebase_uid; password excluded)"
+      "comment": "Admin user details (email, full_name, firebase_uid; password excluded)",
+      "hidden": true
     },
-
-    
     {
       "name": "branding",
       "type": "jsonb",
       "nullable": false,
       "default": "{}",
-      "comment": "UI branding config (logo_url, primary_color, etc)"
+      "comment": "UI branding config (logo_url, primary_color, etc)",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
-
     {
       "name": "feature_flags",
       "type": "jsonb",
       "nullable": false,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "models_version",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "generator_version",
       "type": "string",
       "nullable": false,
-      "comment": "Version of generator used"
+      "comment": "Version of generator used",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "last_generated_at",
       "type": "timestamp with time zone",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "is_active",
       "type": "boolean",
       "nullable": false,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "created_at",
       "type": "timestamp with time zone",
       "nullable": false,
-      "default": "now()"
+      "default": "now()",
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "timestamp with time zone",
       "nullable": false,
-      "default": "now()"
+      "default": "now()",
+      "hidden": true
     }
   ]
 }

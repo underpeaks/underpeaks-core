@@ -6,127 +6,185 @@
       "name": "profile_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "user_id",
       "type": "string",
       "nullable": false,
-      "description": "linked to nxf_saas_users.user_id"
+      "description": "linked to nxf_saas_users.user_id",
+      "hidden": true
     },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "optional SaaS tenant scope"
+      "description": "optional SaaS tenant scope",
+      "hidden": true
     },
     {
       "name": "username",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     {
       "name": "display_name",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "bio",
       "type": "text",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "avatar_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "cover_image_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "website_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "url-input"
     },
     {
       "name": "location",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "phone_number",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "phone-input"
     },
     {
       "name": "email",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "email-input"
     },
     {
       "name": "date_of_birth",
       "type": "date",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "date-picker"
     },
     {
       "name": "gender",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "is_verified",
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "follower_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "following_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "post_count",
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "account_type",
       "type": "string",
       "nullable": false,
       "default": "personal",
-      "description": "personal, business, creator"
+      "description": "personal, business, creator",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, suspended, deleted"
+      "description": "active, suspended, deleted",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "last_active_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

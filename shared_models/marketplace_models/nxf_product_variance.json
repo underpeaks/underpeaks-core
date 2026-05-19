@@ -6,98 +6,148 @@
       "name": "variant_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "product_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "sku",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "title",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "attributes",
       "type": "jsonb",
       "nullable": false,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "price",
       "type": "double",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "compare_at_price",
       "type": "double",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "cost_price",
       "type": "double",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "currency",
       "type": "string",
       "nullable": false,
-      "default": "USD"
+      "default": "USD",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "stock_quantity",
       "type": "int",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "reserved_quantity",
       "type": "int",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "is_active",
       "type": "boolean",
       "nullable": false,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "image_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "barcode",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "weight",
       "type": "double",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "weight_unit",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "constraints": [
