@@ -2,13 +2,53 @@
   "table_name": "nxf_system_enviroments",
   "schema": "public",
   "columns": {
-    "se_id": { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
-    "name": { "type": "string", "nullable": false },
-    "is_default": { "type": "boolean", "nullable": false, "default": "false" },
-    "variables": { "type": "jsonb", "nullable": true },
-    "created_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" },
-    "updated_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+    "se_id": {
+      "type": "string",
+      "default": "gen_random_uuid()",
+      "primary_key": true,
+      "nullable": false,
+      "hidden": true
+    },
+  "tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
+    "name": {
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "is_default": {
+      "type": "boolean",
+      "nullable": false,
+      "default": "false",
+      "hidden": false,
+      "ui_type": "toggle"
+    },
+    "variables": {
+      "type": "jsonb",
+      "nullable": true,
+      "hidden": true
+    },
+    "created_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    },
+    "updated_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    }
   },
   "constraints": {
     "primary_key": ["se_id"]

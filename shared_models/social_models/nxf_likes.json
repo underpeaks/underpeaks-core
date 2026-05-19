@@ -6,54 +6,84 @@
       "name": "like_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "multi-tenant scope (SaaS)"
+      "description": "multi-tenant scope (SaaS)",
+      "hidden": true
     },
     {
       "name": "user_id",
       "type": "string",
       "nullable": false,
-      "description": "user who liked the entity"
+      "description": "user who liked the entity",
+      "hidden": true
     },
     {
       "name": "entity_type",
       "type": "string",
       "nullable": false,
-      "description": "post, comment, product, event, group, etc."
+      "description": "post, comment, product, event, group, etc.",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "entity_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "reaction_type",
       "type": "string",
       "nullable": false,
       "default": "like",
-      "description": "like, love, laugh, wow, angry, sad"
+      "description": "like, love, laugh, wow, angry, sad",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, removed"
+      "description": "active, removed",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

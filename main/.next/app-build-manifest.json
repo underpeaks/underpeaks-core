@@ -6,20 +6,66 @@
       "static/css/app/[locale]/layout.css",
       "static/chunks/app/[locale]/layout.js"
     ],
-    "/[locale]/installer/layout": [
+    "/[locale]/console/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/installer/layout.js"
+      "static/chunks/app/[locale]/console/layout.js"
     ],
-    "/[locale]/installer/page": [
+    "/[locale]/console/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/installer/page.js"
+      "static/css/app/[locale]/console/page.css",
+      "static/chunks/app/[locale]/console/page.js"
     ],
     "/api/get-system-config/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/get-system-config/route.js"
+    ],
+    "/api/session/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/session/route.js"
+    ],
+    "/api/get-db-config/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/get-db-config/route.js"
+    ],
+    "/api/messages/list/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/messages/list/route.js"
+    ],
+    "/api/notifications/list/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/notifications/list/route.js"
+    ],
+    "/[locale]/console/dashboard/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/console/dashboard/page.js"
+    ],
+    "/[locale]/console/models/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/console/models/page.js"
+    ],
+    "/api/models/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/models/route.js"
+    ],
+    "/[locale]/console/models/create/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/console/models/create/page.js"
+    ],
+    "/api/models/names/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/models/names/route.js"
     ]
   }
 }

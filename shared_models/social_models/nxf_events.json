@@ -6,82 +6,121 @@
       "name": "event_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "multi-tenant scope (SaaS)"
+      "description": "multi-tenant scope (SaaS)",
+      "hidden": true
     },
     {
       "name": "event_type",
       "type": "string",
       "nullable": false,
-      "description": "e.g. user.signup, post.created, payment.success"
+      "description": "e.g. user.signup, post.created, payment.success",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "event_source",
       "type": "string",
       "nullable": false,
-      "description": "app, api, system, webhook, cron"
+      "description": "app, api, system, webhook, cron",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "actor_type",
       "type": "string",
       "nullable": false,
-      "description": "user, system, admin, service"
+      "description": "user, system, admin, service",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "actor_id",
       "type": "string",
       "nullable": true,
-      "description": "who triggered the event"
+      "description": "who triggered the event",
+      "hidden": true
     },
     {
       "name": "entity_type",
       "type": "string",
       "nullable": true,
-      "description": "affected entity type (post, order, user, etc.)"
+      "description": "affected entity type (post, order, user, etc.)",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "entity_id",
       "type": "string",
       "nullable": true,
-      "description": "affected entity id"
+      "description": "affected entity id",
+      "hidden": true
     },
     {
       "name": "payload",
       "type": "jsonb",
       "nullable": true,
       "default": "{}",
-      "description": "full event data snapshot"
+      "description": "full event data snapshot",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "context",
       "type": "jsonb",
       "nullable": true,
       "default": "{}",
-      "description": "ip, user_agent, device, geo, request_id"
+      "description": "ip, user_agent, device, geo, request_id",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "severity",
       "type": "string",
       "nullable": false,
       "default": "info",
-      "description": "info, warning, critical"
+      "description": "info, warning, critical",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "processed",
-      "description": "queued, processed, failed"
+      "description": "queued, processed, failed",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     }
   ],
   "indexes": [

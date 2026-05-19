@@ -6,144 +6,179 @@
       "name": "inventory_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
-
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "product_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
-
     {
       "name": "variant_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
-
     {
       "name": "warehouse_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
-
     {
       "name": "sku",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "stock_on_hand",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
-
     {
       "name": "stock_reserved",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
-
     {
       "name": "stock_available",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
-
     {
       "name": "low_stock_threshold",
       "type": "double",
       "nullable": true,
-      "default": 5
+      "default": 5,
+      "hidden": false,
+      "ui_type": "number-input"
     },
-
     {
       "name": "reorder_level",
       "type": "double",
       "nullable": true,
-      "default": 10
+      "default": 10,
+      "hidden": false,
+      "ui_type": "number-input"
     },
-
     {
       "name": "reorder_quantity",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
-
     {
       "name": "track_inventory",
       "type": "boolean",
       "nullable": true,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
     {
       "name": "allow_backorder",
       "type": "boolean",
       "nullable": true,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
     {
       "name": "warehouse_location",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "last_stock_updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
-
     {
       "name": "cost_price",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
-
     {
       "name": "selling_price",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
-
     {
       "name": "currency",
       "type": "string",
       "nullable": true,
-      "default": "ZAR"
+      "default": "ZAR",
+      "hidden": false,
+      "ui_type": "select"
     },
-
     {
       "name": "batch_number",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "expiry_date",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "date-picker"
     },
-
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
-
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "constraints": []

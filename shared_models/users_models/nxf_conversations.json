@@ -6,21 +6,35 @@
       "name": "con_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
     {
-      "name": "project_id",
-      "type": "string",
-      "nullable": false,
-      "foreign_key": {
-        "references": "nxf_system_projects(project_id)",
-        "on_delete": "CASCADE"
-      }
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
     },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
+
+
     {
       "name": "subject",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "created_by",
@@ -29,50 +43,62 @@
       "foreign_key": {
         "references": "nxf_users(user_id)",
         "on_delete": "SET NULL"
-      }
+      },
+      "hidden": true
     },
     {
       "name": "participant_ids",
       "type": "jsonb",
       "nullable": false,
       "default": "[]",
-      "description": "array of user_ids in this conversation"
+      "description": "array of user_ids in this conversation",
+      "hidden": true
     },
     {
       "name": "last_message_preview",
       "type": "string",
       "nullable": true,
-      "description": "cached preview of the latest message for dropdown display"
+      "description": "cached preview of the latest message for dropdown display",
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "last_message_at",
       "type": "datetime",
       "nullable": true,
-      "description": "timestamp of latest message for sorting"
+      "description": "timestamp of latest message for sorting",
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "is_system",
       "type": "boolean",
       "nullable": false,
       "default": false,
-      "description": "true if created by NXTFlutter Studio or system"
+      "description": "true if created by NXTFlutter Studio or system",
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "open",
-      "description": "open, closed, archived"
+      "description": "open, closed, archived",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

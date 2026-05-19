@@ -6,76 +6,114 @@
       "name": "log_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "level",
       "type": "string",
       "nullable": false,
-      "description": "info, warning, error, debug, critical"
+      "description": "info, warning, error, debug, critical",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "service",
       "type": "string",
       "nullable": true,
-      "description": "auth, marketplace, billing, analytics, api, admin"
+      "description": "auth, marketplace, billing, analytics, api, admin",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "event",
       "type": "string",
       "nullable": false,
-      "description": "short event identifier like user_login_failed, order_created"
+      "description": "short event identifier like user_login_failed, order_created",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "message",
       "type": "text",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "user_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "tenant_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "request_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "trace_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "metadata",
       "type": "jsonb",
       "nullable": true,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "ip_address",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "user_agent",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "stack_trace",
       "type": "text",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     }
   ],
   "indexes": [

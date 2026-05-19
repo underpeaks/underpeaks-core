@@ -2,13 +2,82 @@
   "table_name": "nxf_system_audit_trials",
   "schema": "public",
   "columns": [
-    { "name": "sat_id", "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    { "name": "entity", "type": "string", "nullable": false },
-    { "name": "entity_id", "type": "string", "nullable": false },
-    { "name": "action", "type": "string", "nullable": false },
-    { "name": "user_id", "type": "string", "nullable": true, "foreign_key": { "references": "nxf_users(user_id)", "on_delete": "SET NULL" } },
-    { "name": "before_data", "type": "jsonb", "nullable": true },
-    { "name": "after_data", "type": "jsonb", "nullable": true },
-    { "name": "created_at", "type": "timestamp with time zone", "nullable": false, "default": "now()" }
+    {
+      "name": "sat_id",
+      "type": "string",
+      "default": "gen_random_uuid()",
+      "primary_key": true,
+      "nullable": false,
+      "hidden": true
+    },
+    {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
+    {
+      "name": "entity",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "entity_id",
+      "type": "string",
+      "nullable": false,
+      "hidden": true
+    },
+    {
+      "name": "action",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": true,
+      "foreign_key": {
+        "references": "nxf_users(user_id)",
+        "on_delete": "SET NULL"
+      },
+      "hidden": true
+    },
+    {
+      "name": "before_data",
+      "type": "jsonb",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "code-editor"
+    },
+    {
+      "name": "after_data",
+      "type": "jsonb",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "code-editor"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()",
+      "hidden": true
+    }
   ]
 }

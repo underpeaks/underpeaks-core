@@ -2,11 +2,54 @@
   "table_name": "nxf_system_projects",
   "schema": "public",
   "columns": [
-    { "name": "project_id", "type": "string", "primary_key": true,"unique":true ,"nullable": false },
-    { "name": "name", "type": "string", "nullable": false },
-    { "name": "user_id", "type": "string", "nullable": false,"unique":true ,"foreign_key": { "references": "nxf_users(user_id)" } },
-    { "name": "created_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" },
-    { "name": "updated_at", "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+    {
+      "name": "project_id",
+      "type": "string",
+      "primary_key": true,
+      "unique": true,
+      "nullable": false,
+      "hidden": true
+    },
+      {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "unique": true,
+      "foreign_key": {
+        "references": "nxf_users(user_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    }
   ],
   "tablespace": "pg_default"
 }

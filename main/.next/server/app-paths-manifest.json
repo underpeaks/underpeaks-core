@@ -1,4 +1,11 @@
 {
-  "/api/get-system-config/route": "app/api/get-system-config/route.js",
-  "/[locale]/installer/page": "app/[locale]/installer/page.js"
+  "/api/messages/list/route": "app/api/messages/list/route.js",
+  "/api/notifications/list/route": "app/api/notifications/list/route.js",
+  "/api/session/route": "app/api/session/route.js",
+  "/api/get-db-config/route": "app/api/get-db-config/route.js",
+  "/api/models/route": "app/api/models/route.js",
+  "/[locale]/console/page": "app/[locale]/console/page.js",
+  "/[locale]/console/dashboard/page": "app/[locale]/console/dashboard/page.js",
+  "/[locale]/console/models/page": "app/[locale]/console/models/page.js",
+  "/[locale]/console/models/create/page": "app/[locale]/console/models/create/page.js"
 }

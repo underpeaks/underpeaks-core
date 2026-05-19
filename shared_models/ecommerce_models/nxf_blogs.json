@@ -3,29 +3,38 @@
   "primary_key": "blog_id",
   "columns": {
     "id": {
-      "type": "string"
-    },
-    "project_id": {
       "type": "string",
-      "nullable": false,
-      "references": {
-        "table": "projects",
-        "column": "project_id",
-        "on_delete": "CASCADE"
-      }
+      "hidden": true
     },
+    
+"tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "title": {
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "slug": {
       "type": "string",
       "nullable": false,
-      "unique": true
+      "unique": true,
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     "content": {
       "type": "jsonb",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "rich-text"
     },
     "author_id": {
       "type": "string",
@@ -34,33 +43,44 @@
         "table": "users",
         "column": "user_id",
         "on_delete": "SET NULL"
-      }
+      },
+      "hidden": true
     },
     "categories": {
       "type": "array",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "multi-select"
     },
     "tags": {
       "type": "array",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "tags-input"
     },
     "published_at": {
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "status": {
       "type": "string",
       "nullable": false,
       "default": "draft",
-      "enum": ["draft", "published", "archived"]
+      "enum": ["draft", "published", "archived"],
+      "hidden": false,
+      "ui_type": "select"
     },
     "created_at": {
       "type": "datetime",
-      "required": true
+      "required": true,
+      "hidden": true
     },
     "updated_at": {
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   }
 }

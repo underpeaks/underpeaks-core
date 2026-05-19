@@ -6,78 +6,114 @@
       "name": "activity_log_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "optional multi-tenant scope (SaaS)"
+      "description": "optional multi-tenant scope (SaaS)",
+      "hidden": true
     },
     {
       "name": "user_id",
       "type": "string",
       "nullable": true,
-      "description": "user who triggered the activity"
+      "description": "user who triggered the activity",
+      "hidden": true
     },
     {
       "name": "actor_type",
       "type": "string",
       "nullable": false,
-      "description": "user, system, admin, webhook"
+      "description": "user, system, admin, webhook",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "actor_id",
       "type": "string",
       "nullable": true,
-      "description": "id of actor (user/system/service)"
+      "description": "id of actor (user/system/service)",
+      "hidden": true
     },
     {
       "name": "action",
       "type": "string",
       "nullable": false,
-      "description": "e.g. login, create_post, update_product, delete_order"
+      "description": "e.g. login, create_post, update_product, delete_order",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "entity_type",
       "type": "string",
       "nullable": true,
-      "description": "table/entity affected (post, order, product, user, etc.)"
+      "description": "table/entity affected (post, order, product, user, etc.)",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "entity_id",
       "type": "string",
       "nullable": true,
-      "description": "id of affected entity"
+      "description": "id of affected entity",
+      "hidden": true
     },
     {
       "name": "metadata",
       "type": "jsonb",
       "nullable": true,
       "default": "{}",
-      "description": "extra context (IP, device, payload diff, etc.)"
+      "description": "extra context (IP, device, payload diff, etc.)",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "ip_address",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "user_agent",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "severity",
       "type": "string",
       "nullable": false,
       "default": "info",
-      "description": "info, warning, critical, security"
+      "description": "info, warning, critical, security",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     }
   ],
   "indexes": [

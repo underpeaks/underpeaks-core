@@ -6,100 +6,139 @@
       "name": "event_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
-    {
-      "name": "tenant_id",
-      "type": "string",
-      "nullable": false,
-      "description": "Vendor ID or platform scope depending on event_type"
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
     },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "user_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "session_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "event_type",
       "type": "string",
       "nullable": false,
-      "description": "page_view, product_view, add_to_cart, purchase, login, search, etc."
+      "description": "page_view, product_view, add_to_cart, purchase, login, search, etc.",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "event_category",
       "type": "string",
       "nullable": true,
-      "description": "commerce, auth, engagement, system"
+      "description": "commerce, auth, engagement, system",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "entity_type",
       "type": "string",
       "nullable": true,
-      "description": "product, order, vendor, user"
+      "description": "product, order, vendor, user",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "entity_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "metadata",
       "type": "jsonb",
       "nullable": true,
       "default": "{}",
-      "description": "Flexible event payload (price, device, referrer, etc.)"
+      "description": "Flexible event payload (price, device, referrer, etc.)",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "source",
       "type": "string",
       "nullable": true,
-      "description": "web, app, api, admin"
+      "description": "web, app, api, admin",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "device_type",
       "type": "string",
       "nullable": true,
-      "description": "mobile, desktop, tablet"
+      "description": "mobile, desktop, tablet",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "country",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "region",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "city",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "ip_address",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "user_agent",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "referrer",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "url-input"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     }
   ],
   "indexes": [

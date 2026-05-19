@@ -6,74 +6,109 @@
       "name": "saas_user_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "user_id",
       "type": "string",
       "nullable": false,
-      "description": "reference to auth/user table"
+      "description": "reference to auth/user table",
+      "hidden": true
     },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "optional org membership (multi-org support)"
+      "description": "optional org membership (multi-org support)",
+      "hidden": true
     },
     {
       "name": "vendor_id",
       "type": "string",
       "nullable": true,
-      "description": "optional vendor scope if user belongs to a vendor account"
+      "description": "optional vendor scope if user belongs to a vendor account",
+      "hidden": true
     },
     {
       "name": "role_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, invited, suspended, deleted"
+      "description": "active, invited, suspended, deleted",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "permissions_override",
       "type": "jsonb",
       "nullable": true,
       "default": "[]",
-      "description": "extra permissions beyond role"
+      "description": "extra permissions beyond role",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "last_active_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "invited_by",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "invited_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "accepted_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [

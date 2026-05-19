@@ -3,60 +3,93 @@
   "primary_key": "coup_id",
   "columns": {
     "id": {
-      "type": "string"
+      "type": "string",
+      "hidden": true
     },
+    "tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "code": {
       "type": "string",
       "nullable": false,
-      "unique": true
+      "unique": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "description": {
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     "discount_type": {
       "type": "string",
       "nullable": false,
       "default": "percentage",
-      "enum": ["percentage", "fixed_amount"]
+      "enum": ["percentage", "fixed_amount"],
+      "hidden": false,
+      "ui_type": "select"
     },
     "discount_value": {
       "type": "double",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     "min_purchase_amount": {
       "type": "double",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     "max_uses": {
       "type": "integer",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     "used_count": {
       "type": "integer",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     "start_date": {
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "expiry_date": {
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "active": {
       "type": "boolean",
       "nullable": false,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     "created_at": {
       "type": "datetime",
-      "required": true
+      "required": true,
+      "hidden": true
     },
     "updated_at": {
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   }
 }

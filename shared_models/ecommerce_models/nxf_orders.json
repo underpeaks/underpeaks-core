@@ -2,9 +2,24 @@
   "table_name": "nxf_orders",
   "primary_key": "ord_id",
   "columns": {
-    "id": { "type": "string" },
-    "user_id": { "type": "string" },
-
+    "id": {
+      "type": "string",
+      "hidden": true
+    },
+    "user_id": {
+      "type": "string",
+      "hidden": true
+    },
+    "tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "products": {
       "type": "array",
       "items": {
@@ -14,7 +29,8 @@
           "column": "prod_id",
           "on_delete": "CASCADE"
         }
-      }
+      },
+      "hidden": true
     },
     "product_variants": {
       "type": "array",
@@ -25,53 +41,139 @@
           "column": "pv_id",
           "on_delete": "CASCADE"
         }
-      }
+      },
+      "hidden": true
     },
-
     "quantities": {
       "type": "array",
-      "items": { "type": "integer" }
+      "items": { "type": "integer" },
+      "hidden": false,
+      "ui_type": "list"
     },
     "unit_prices": {
       "type": "array",
-      "items": { "type": "double" }
+      "items": { "type": "double" },
+      "hidden": false,
+      "ui_type": "list"
     },
-    "total_price": { "type": "double" },
-
-    "status": { "type": "string", "default": "pending" },
-    "order_notes": { "type": "string" },
-
-    "shipping_address_line1": { "type": "string" },
-    "shipping_address_line2": { "type": "string" },
-    "shipping_city": { "type": "string" },
-    "shipping_state": { "type": "string" },
-    "shipping_postal_code": { "type": "string" },
-    "shipping_country": { "type": "string" },
-
-    "billing_address_line1": { "type": "string" },
-    "billing_address_line2": { "type": "string" },
-    "billing_city": { "type": "string" },
-    "billing_state": { "type": "string" },
-    "billing_postal_code": { "type": "string" },
-    "billing_country": { "type": "string" },
-
-    "shipping_method": { "type": "string" },
-    "discount_percentage": { "type": "double" },
-    "discount_value": { "type": "double" },
-
-    "estimated_delivery": { "type": "datetime" },
-    "delivered_at": { "type": "datetime" },
-
-    "created_at": { "type": "datetime", "required": true },
-    "updated_at": { "type": "datetime" },
-
+    "total_price": {
+      "type": "double",
+      "hidden": false,
+      "ui_type": "currency-input"
+    },
+    "status": {
+      "type": "string",
+      "default": "pending",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    "order_notes": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textarea"
+    },
+    "shipping_address_line1": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "shipping_address_line2": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "shipping_city": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "shipping_state": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "shipping_postal_code": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "shipping_country": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    "billing_address_line1": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "billing_address_line2": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "billing_city": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "billing_state": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "billing_postal_code": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "billing_country": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    "shipping_method": {
+      "type": "string",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    "discount_percentage": {
+      "type": "double",
+      "hidden": false,
+      "ui_type": "number-input"
+    },
+    "discount_value": {
+      "type": "double",
+      "hidden": false,
+      "ui_type": "currency-input"
+    },
+    "estimated_delivery": {
+      "type": "datetime",
+      "hidden": false,
+      "ui_type": "date-picker"
+    },
+    "delivered_at": {
+      "type": "datetime",
+      "hidden": false,
+      "ui_type": "datetime-picker"
+    },
+    "created_at": {
+      "type": "datetime",
+      "required": true,
+      "hidden": true
+    },
+    "updated_at": {
+      "type": "datetime",
+      "hidden": true
+    },
     "transaction_id": {
       "type": "string",
       "references": {
         "table": "transactions",
         "column": "tran_id",
         "on_delete": "CASCADE"
-      }
+      },
+      "hidden": true
     }
   }
 }

@@ -6,138 +6,201 @@
       "name": "product_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "vendor_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "title",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "slug",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     {
       "name": "description",
       "type": "text",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "rich-text"
     },
     {
       "name": "short_description",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "category_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "brand",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
-      "default": "draft"
+      "default": "draft",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "visibility",
       "type": "string",
       "nullable": false,
-      "default": "public"
+      "default": "public",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "base_price",
       "type": "double",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "compare_at_price",
       "type": "double",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
     {
       "name": "currency",
       "type": "string",
       "nullable": false,
-      "default": "USD"
+      "default": "USD",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "stock_quantity",
       "type": "int",
       "nullable": false,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "track_inventory",
       "type": "boolean",
       "nullable": false,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "allow_backorder",
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "images",
       "type": "jsonb",
       "nullable": true,
-      "default": "[]"
+      "default": "[]",
+      "hidden": false,
+      "ui_type": "image-upload"
     },
     {
       "name": "tags",
       "type": "jsonb",
       "nullable": true,
-      "default": "[]"
+      "default": "[]",
+      "hidden": false,
+      "ui_type": "tags-input"
     },
     {
       "name": "seo_title",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     {
       "name": "seo_description",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     {
       "name": "rating",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "review_count",
       "type": "int",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
     {
       "name": "published_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "constraints": [

@@ -6,60 +6,86 @@
       "name": "preference_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
     {
       "name": "user_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
-      "name": "tenant_id",
-      "type": "string",
-      "nullable": true,
-      "description": "optional: organisation/vendor scope for SaaS preferences"
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
     },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "pref_key",
       "type": "string",
       "nullable": false,
-      "description": "e.g. theme, language, notifications.email, dashboard.layout"
+      "description": "e.g. theme, language, notifications.email, dashboard.layout",
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     {
       "name": "value",
       "type": "jsonb",
       "nullable": false,
       "default": "{}",
-      "description": "flexible value (string, bool, object, array)"
+      "description": "flexible value (string, bool, object, array)",
+      "hidden": false,
+      "ui_type": "code-editor"
     },
     {
       "name": "category",
       "type": "string",
       "nullable": true,
-      "description": "ui, notification, privacy, system"
+      "description": "ui, notification, privacy, system",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "scope",
       "type": "string",
       "nullable": false,
       "default": "user",
-      "description": "user, tenant, system"
+      "description": "user, tenant, system",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "is_sensitive",
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     }
   ],
   "indexes": [

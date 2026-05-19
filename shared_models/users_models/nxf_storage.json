@@ -2,14 +2,80 @@
   "table_name": "nxf_storage",
   "schema": "public",
   "columns": [
-    { "name": "storage_id", "type": "uuid",      "primary_key": true, "unique": true, "nullable": false },
-    { "name": "project_id", "type": "string",    "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)" } },
-    { "name": "folder",     "type": "string",    "nullable": false },
-    { "name": "file_name",  "type": "string",    "nullable": false },
-    { "name": "file_path",  "type": "string",    "nullable": false },
-    { "name": "url",        "type": "string",    "nullable": true  },
-    { "name": "mime_type",  "type": "string",    "nullable": true  },
-    { "name": "size",       "type": "bigint",    "nullable": true  },
-    { "name": "created_at", "type": "timestamp", "nullable": false, "default": "now()" }
+    {
+      "name": "storage_id",
+      "type": "uuid",
+      "primary_key": true,
+      "unique": true,
+      "nullable": false,
+      "hidden": true
+    },
+    {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
+    {
+      "name": "folder",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "file_name",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "file_path",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "url",
+      "type": "string",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "url-input"
+    },
+    {
+      "name": "mime_type",
+      "type": "string",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "size",
+      "type": "bigint",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "number-input"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp",
+      "nullable": false,
+      "default": "now()",
+      "hidden": true
+    }
   ]
 }

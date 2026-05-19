@@ -6,88 +6,111 @@
       "name": "user_role_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
     {
       "name": "organisation_id",
       "type": "string",
       "nullable": true,
-      "description": "optional SaaS tenant scope (null = global role assignment)"
+      "description": "optional SaaS tenant scope (null = global role assignment)",
+      "hidden": true
     },
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "user_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "role_key",
       "type": "string",
       "nullable": false,
-      "description": "e.g. admin, moderator, editor, user"
+      "description": "e.g. admin, moderator, editor, user",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "scope_type",
       "type": "string",
       "nullable": true,
-      "description": "global, organisation, group, resource"
+      "description": "global, organisation, group, resource",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "scope_id",
       "type": "string",
       "nullable": true,
-      "description": "id of scoped entity (org_id, group_id, etc.)"
+      "description": "id of scoped entity (org_id, group_id, etc.)",
+      "hidden": true
     },
     {
       "name": "status",
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, suspended, revoked"
+      "description": "active, suspended, revoked",
+      "hidden": false,
+      "ui_type": "select"
     },
     {
       "name": "assigned_by",
       "type": "string",
       "nullable": true,
-      "description": "admin/system user who assigned role"
+      "description": "admin/system user who assigned role",
+      "hidden": true
     },
     {
       "name": "assigned_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "expires_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "indexes": [
-    {
-      "name": "idx_user_roles_user",
-      "fields": ["user_id"]
-    },
-    {
-      "name": "idx_user_roles_role",
-      "fields": ["role_key"]
-    },
-    {
-      "name": "idx_user_roles_scope",
-      "fields": ["scope_type", "scope_id"]
-    },
-    {
-      "name": "idx_user_roles_org",
-      "fields": ["organisation_id"]
-    }
+    { "name": "idx_user_roles_user", "fields": ["user_id"] },
+    { "name": "idx_user_roles_role", "fields": ["role_key"] },
+    { "name": "idx_user_roles_scope", "fields": ["scope_type", "scope_id"] },
+    { "name": "idx_user_roles_org", "fields": ["organisation_id"] }
   ],
   "constraints": [
     {

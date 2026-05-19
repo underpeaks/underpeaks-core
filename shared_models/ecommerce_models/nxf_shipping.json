@@ -3,7 +3,8 @@
   "primary_key": "ship_id",
   "columns": {
     "ship_id": {
-      "type": "string"
+      "type": "string",
+      "hidden": true
     },
     "order_id": {
       "type": "string",
@@ -11,44 +12,77 @@
         "table": "orders",
         "column": "ord_id",
         "on_delete": "CASCADE"
-      }
+      },
+      "hidden": true
     },
+    "tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "shipping_method": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "select"
     },
     "shipping_address_line1": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "shipping_address_line2": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "shipping_city": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "shipping_state": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "shipping_postal_code": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "shipping_country": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "select"
     },
     "tracking_number": {
-      "type": "string"
+      "type": "string",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "shipped_at": {
-      "type": "datetime"
+      "type": "datetime",
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "delivered_at": {
-      "type": "datetime"
+      "type": "datetime",
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "created_at": {
       "type": "datetime",
-      "required": true
+      "required": true,
+      "hidden": true
     },
     "updated_at": {
-      "type": "datetime"
+      "type": "datetime",
+      "hidden": true
     }
   }
 }

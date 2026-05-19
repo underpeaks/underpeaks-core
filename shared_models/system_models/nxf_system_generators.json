@@ -2,14 +2,59 @@
   "table_name": "nxf_system_generators",
   "schema": "public",
   "columns": {
-    "sg_id": { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
-    "name": { "type": "string", "nullable": false },
-    "type": { "type": "string", "nullable": false },
-    "config": { "type": "jsonb", "nullable": false },
-    "last_run_at": { "type": "timestamp with time zone", "nullable": true },
-    "created_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" },
-    "updated_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+    "sg_id": {
+      "type": "string",
+      "default": "gen_random_uuid()",
+      "primary_key": true,
+      "nullable": false,
+      "hidden": true
+    },
+    "tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
+    "name": {
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    "type": {
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "select"
+    },
+    "config": {
+      "type": "jsonb",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "code-editor"
+    },
+    "last_run_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
+    },
+    "created_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    },
+    "updated_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    }
   },
   "constraints": {
     "primary_key": ["sg_id"]

@@ -6,54 +6,70 @@
       "type": "string",
       "default": "gen_random_uuid()",
       "primary_key": true,
-      "nullable": false
-    },
-    "project_id": {
-      "type": "string",
       "nullable": false,
-      "foreign_key": {
-        "references": "nxf_system_projects(project_id)",
-        "on_delete": "CASCADE"
-      }
+      "hidden": true
     },
+   "tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "name": {
       "type": "string",
       "nullable": false,
-      "description": "Human readable label e.g. Production Key"
+      "description": "Human readable label e.g. Production Key",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "key_encrypted": {
       "type": "string",
       "nullable": false,
-      "description": "AES-256-GCM encrypted full API key"
+      "description": "AES-256-GCM encrypted full API key",
+      "hidden": true
     },
     "key_prefix": {
       "type": "string",
       "nullable": false,
-      "description": "First 16 chars shown in UI — safe to store plain"
+      "description": "First 16 chars shown in UI — safe to store plain",
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "status": {
       "type": "string",
       "nullable": false,
       "default": "active",
-      "description": "active, revoked"
+      "description": "active, revoked",
+      "hidden": false,
+      "ui_type": "select"
     },
     "last_used_at": {
       "type": "timestamp with time zone",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "revoked_at": {
       "type": "timestamp with time zone",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "created_at": {
       "type": "timestamp with time zone",
       "nullable": false,
-      "default": "now()"
+      "default": "now()",
+      "hidden": true
     },
     "updated_at": {
       "type": "timestamp with time zone",
       "nullable": true,
-      "default": "now()"
+      "default": "now()",
+      "hidden": true
     }
   },
   "constraints": {

@@ -2,14 +2,63 @@
   "table_name": "nxf_system_deployments",
   "schema": "public",
   "columns": {
-    "sd_id": { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false },
-    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" } },
-    "environment_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_environments(se_id)", "on_delete": "CASCADE" } },
-    "status": { "type": "string", "nullable": false },
-    "logs": { "type": "string", "nullable": true },
-    "meta": { "type": "jsonb", "nullable": true },
-    "deployed_at": { "type": "timestamp with time zone", "nullable": true },
-    "created_at": { "type": "timestamp with time zone", "nullable": true, "default": "now()" }
+    "sd_id": {
+      "type": "string",
+      "default": "gen_random_uuid()",
+      "primary_key": true,
+      "nullable": false,
+      "hidden": true
+    },
+   
+"tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
+    "environment_id": {
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_environments(se_id)",
+        "on_delete": "CASCADE"
+      },
+      "hidden": true
+    },
+    "status": {
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "select"
+    },
+    "logs": {
+      "type": "string",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
+    },
+    "meta": {
+      "type": "jsonb",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "code-editor"
+    },
+    "deployed_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
+    },
+    "created_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    }
   },
   "constraints": {
     "primary_key": ["sd_id"]

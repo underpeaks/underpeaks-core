@@ -6,228 +6,279 @@
       "name": "customer_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
     },
-
+     {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
+  },
+  {
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
+  },
     {
       "name": "user_id",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     },
-
     {
       "name": "email",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "email-input"
     },
-
     {
       "name": "phone",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "phone-input"
     },
-
     {
       "name": "first_name",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "last_name",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "full_name",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "avatar_url",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
     },
-
     {
       "name": "date_of_birth",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "date-picker"
     },
-
     {
       "name": "gender",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
-
     {
       "name": "country",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
-
     {
       "name": "city",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "address_line_1",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "address_line_2",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "postal_code",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "customer_segment",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
-
     {
       "name": "lifetime_value",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
-
     {
       "name": "total_orders",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
     },
-
     {
       "name": "average_order_value",
       "type": "double",
       "nullable": true,
-      "default": 0
+      "default": 0,
+      "hidden": false,
+      "ui_type": "currency-input"
     },
-
     {
       "name": "last_order_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
-
     {
       "name": "first_order_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
-
     {
       "name": "is_active",
       "type": "boolean",
       "nullable": true,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
     {
       "name": "is_blocked",
       "type": "boolean",
       "nullable": true,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
     {
       "name": "email_verified",
       "type": "boolean",
       "nullable": true,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
     {
       "name": "phone_verified",
       "type": "boolean",
       "nullable": true,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
     {
       "name": "marketing_opt_in",
       "type": "boolean",
       "nullable": true,
-      "default": true
+      "default": true,
+      "hidden": false,
+      "ui_type": "toggle"
     },
-
     {
       "name": "preferred_language",
       "type": "string",
       "nullable": true,
-      "default": "en"
+      "default": "en",
+      "hidden": false,
+      "ui_type": "select"
     },
-
     {
       "name": "preferred_currency",
       "type": "string",
       "nullable": true,
-      "default": "ZAR"
+      "default": "ZAR",
+      "hidden": false,
+      "ui_type": "select"
     },
-
     {
       "name": "tags",
       "type": "array",
       "nullable": true,
-      "default": "{}"
+      "default": "{}",
+      "hidden": false,
+      "ui_type": "tags-input"
     },
-
     {
       "name": "notes",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
-
     {
       "name": "source",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "select"
     },
-
     {
       "name": "utm_source",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "utm_medium",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "utm_campaign",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
-
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
-
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "hidden": true
     }
   ],
   "constraints": []

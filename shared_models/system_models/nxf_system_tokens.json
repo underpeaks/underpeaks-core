@@ -6,7 +6,8 @@
       "type": "string",
       "default": "gen_random_uuid()",
       "primary_key": true,
-      "nullable": false
+      "nullable": false,
+      "hidden": true
     },
     "user_id": {
       "type": "string",
@@ -14,60 +15,80 @@
       "foreign_key": {
         "references": "nxf_users(user_id)",
         "on_delete": "CASCADE"
-      }
+      },
+      "hidden": true
     },
-    "project_id": {
-      "type": "string",
-      "nullable": false,
-      "foreign_key": {
-        "references": "nxf_system_projects(project_id)",
-        "on_delete": "CASCADE"
-      }
-    },
+   
+"tenant_id": {
+  "type": "string",
+  "nullable": false,
+  "foreign_key": {
+    "references": "nxf_system_tenants(ten_id)",
+    "on_delete": "CASCADE"
+  },
+  "hidden": true
+},
+"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "access_token": {
       "type": "string",
       "nullable": false,
-      "unique": true
+      "unique": true,
+      "hidden": true
     },
     "refresh_token": {
       "type": "string",
       "nullable": false,
-      "unique": true
+      "unique": true,
+      "hidden": true
     },
     "token_type": {
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "select"
     },
     "expires_at": {
       "type": "timestamp with time zone",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "refresh_expires_at": {
       "type": "timestamp with time zone",
-      "nullable": false
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "datetime-picker"
     },
     "ip_address": {
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
     },
     "user_agent": {
       "type": "text",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
     },
     "revoked": {
       "type": "boolean",
       "nullable": false,
-      "default": false
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
     },
     "created_at": {
       "type": "timestamp with time zone",
       "nullable": false,
-      "default": "now()"
+      "default": "now()",
+      "hidden": true
     },
     "updated_at": {
       "type": "timestamp with time zone",
       "nullable": false,
-      "default": "now()"
+      "default": "now()",
+      "hidden": true
     }
   }
 }

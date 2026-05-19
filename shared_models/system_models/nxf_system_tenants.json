@@ -7,24 +7,40 @@
       "type": "string",
       "nullable": false,
       "default": "extensions.uuid_generate_v4()",
-      "is_primary": true
+      "is_primary": true,
+      "hidden": true
+    },
+      {
+      "name": "user_id",
+      "type": "string",
+      "nullable": false,
+      "unique": true,
+      "foreign_key": {
+        "references": "nxf_users(user_id)"
+      },
+      "hidden": true
     },
     {
       "name": "subdomain",
       "type": "string",
       "nullable": true,
-      "unique": true
+      "unique": true,
+      "hidden": false,
+      "ui_type": "slug-input"
     },
     {
       "name": "user_email",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "email-input"
     },
     {
       "name": "created_at",
       "type": "datetime",
       "nullable": true,
-      "default": "now()"
+      "default": "now()",
+      "hidden": true
     }
   ],
   "constraints": []
