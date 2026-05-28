@@ -19,7 +19,7 @@
 
 'use client'
 
-import { useTranslations } from 'next-intl'
+//import { useTranslations } from 'next-intl'
 import { FiKey, FiX, FiCheck } from 'react-icons/fi'
 import { NewKeyResult } from './types'
 
@@ -64,7 +64,7 @@ export default function NewKeyModal({ result, onClose }: Props) {
    * t — Translation function scoped to the 'newKeyModal' namespace.
    * Use t('key') to retrieve the translated string for that key.
    */
-  const t = useTranslations('newKeyModal')
+ // const t = useTranslations('newKeyModal')
 
   return (
     /*
@@ -92,7 +92,7 @@ export default function NewKeyModal({ result, onClose }: Props) {
 
             {/* Modal title */}
             <h3 className="text-sm font-semibold text-gray-900">
-              {t('title')}
+              {('title')}
             </h3>
           </div>
 
@@ -123,11 +123,9 @@ export default function NewKeyModal({ result, onClose }: Props) {
            * `eyeIcon` is a separately translated string so it can be styled inline.
            */}
           <p className="text-xs text-gray-500 text-center">
-            {t.rich('instructions', {
-              eyeIcon: (chunks) => (
-                <span className="font-medium text-gray-700">{chunks}</span>
-              ),
-            })}
+            <span className="font-medium text-gray-700">
+  Click the eye icon to reveal your API key.
+</span>
           </p>
 
           {/* Masked key preview — shows the prefix followed by bullet placeholders */}
@@ -144,7 +142,7 @@ export default function NewKeyModal({ result, onClose }: Props) {
           onClick={onClose}
           className="w-full py-2 bg-gray-900 text-white text-xs font-medium rounded-lg hover:bg-gray-700 transition mt-2"
         >
-          {t('doneButton')}
+          {('doneButton')}
         </button>
 
       </div>

@@ -41,12 +41,11 @@ import 'server-only'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getTranslations }           from 'next-intl/server'
 import fs                            from 'fs'
 import path                          from 'path'
 import sharp                         from 'sharp'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
 import { v4 as uuidv4 }              from 'uuid'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -64,13 +63,6 @@ import { v4 as uuidv4 }              from 'uuid'
  *          or { error: string } on failure.
  */
 export async function POST(req: NextRequest) {
-  /**
-   * t — Server-side translation function scoped to the 'uploadFile' namespace.
-   * Because this is a server-only route we use getTranslations() (async)
-   * rather than the client-side useTranslations() hook.
-   */
-  //const t = await getTranslations('uploadFile')
-
   try {
     // ── Parse form data ──────────────────────────────────────────────────────
 
@@ -91,7 +83,7 @@ export async function POST(req: NextRequest) {
     const resizeRaw = formData.get('resize') as string | null
     const mode      = formData.get('mode')   as 'local' | 'storage' | null
 
-    console.log(('logs.uploadMode'), mode)
+    console.log('[upload-file] Upload mode:', mode)
 
     /**
      * Both file and folder are mandatory — without them we cannot determine
@@ -100,7 +92,7 @@ export async function POST(req: NextRequest) {
      */
     if (!file || !folder)
       return NextResponse.json(
-        { error: ('errors.fileAndFolderRequired') },
+        { error: 'file and folder are required' },
         { status: 400 }
       )
 
@@ -125,7 +117,7 @@ export async function POST(req: NextRequest) {
       const token      = authHeader?.replace('Bearer ', '') ?? null
 
       if (token) {
-        const adapter = getStorageAdapter()
+        const adapter = getConfiguredAdapter()
 
         /**
          * Validate the token and decode its payload.
@@ -156,7 +148,7 @@ export async function POST(req: NextRequest) {
        * The upload will continue and the metadata record will have a null
        * project_id instead.
        */
-      console.warn(('logs.projectIdLookupFailed'))
+      console.warn('[upload-file] project_id lookup failed — continuing without project_id')
     }
 
     // ── Read and process file ────────────────────────────────────────────────
@@ -267,7 +259,7 @@ export async function POST(req: NextRequest) {
      */
     const saveMetadata = async (url: string, filePath: string) => {
       try {
-        const adapter = getStorageAdapter()
+        const adapter = getConfiguredAdapter()
         if (!adapter.create) return
 
         await adapter.create(adapter.config, 'nxf_storage', {
@@ -282,14 +274,14 @@ export async function POST(req: NextRequest) {
           created_at: new Date().toISOString(),
         })
 
-        console.log(('logs.metadataSaved'))
+        console.log('[upload-file] Metadata saved successfully')
       } catch {
         /**
          * Log a warning without including the raw error — error messages from
          * database adapters can expose table names, query details, or connection
          * strings that should not appear in logs.
          */
-        console.warn(('logs.metadataSaveFailed'))
+        console.warn('[upload-file] Metadata save failed — file was uploaded but not recorded')
       }
     }
 
@@ -308,7 +300,7 @@ export async function POST(req: NextRequest) {
       // ── Cloud storage (Firebase / Supabase) ──────────────────────────────
 
       if (dbType === 'firebase' || dbType === 'supabase') {
-        const adapter = getStorageAdapter()
+        const adapter = getConfiguredAdapter()
 
         /**
          * Ensure the adapter supports cloud uploads before attempting one.
@@ -317,7 +309,7 @@ export async function POST(req: NextRequest) {
          */
         if (!adapter.uploadFile)
           return NextResponse.json(
-            { error: ('errors.uploadFileNotSupported') },
+            { error: 'File upload is not supported by the current storage adapter' },
             { status: 400 }
           )
 
@@ -387,7 +379,7 @@ export async function POST(req: NextRequest) {
     fs.writeFileSync(filePath, processed)
 
     const url = `/${folder}/${filename}`
-    console.log(('logs.localUploadSuccess'), url)
+    console.log('[upload-file] Local upload saved:', url)
 
     return NextResponse.json({
       success:  true,
@@ -408,7 +400,7 @@ export async function POST(req: NextRequest) {
      * is a security risk.
      */
     return NextResponse.json(
-      { error: ('errors.internalError') },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

@@ -1,0 +1,15 @@
+{
+  "table_name": "nxf_themes",
+  "schema": "public",
+  "columns": [
+    { "name": "theme_id",   "type": "string",   "nullable": false, "is_primary": true, "hidden": true },
+    { "name": "project_id", "type": "string",   "nullable": false, "hidden": true },
+    { "name": "tenant_id",  "type": "string",   "nullable": false, "hidden": true },
+    { "name": "colours",    "type": "jsonb",    "nullable": false },
+    { "name": "typography", "type": "jsonb",    "nullable": false },
+    { "name": "spacing",    "type": "jsonb",    "nullable": false },
+    { "name": "flags",      "type": "jsonb",    "nullable": false },
+    { "name": "created_at", "type": "datetime", "nullable": false, "hidden": true },
+    { "name": "updated_at", "type": "datetime", "nullable": true,  "hidden": true }
+  ]
+}

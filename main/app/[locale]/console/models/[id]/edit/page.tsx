@@ -16,6 +16,7 @@ import { ConfirmDialog }         from '../../../../components_cus/confirmDialog'
 import { FIELD_TYPES, getDefaultUiType, UI_TYPE_OPTIONS } from '@/app/api/models/uitypes'
 import ForeignKeySelector        from '@/app/[locale]/console/models/components/ForeignKeySelector'
 import Loader                    from '../../../Loading'
+import { logActivity } from '@/app/lib/logActivity'
 
 const EDITABLE_SYSTEM_TABLES = ['nxf_users', 'nxf_messages', 'nxf_notifications']
 
@@ -193,6 +194,15 @@ export default function EditModelPage() {
       const text = await res.text()
       const data = text ? JSON.parse(text) : {}
       if (!res.ok) throw new Error(data.error || t('errors.updateModelFailed'))
+        if (!res.ok) throw new Error(data.error || t('errors.updateModelFailed'))
+
+      // Log after confirmed success
+      const userId = user?.user_id || user?.id
+      if (userId) {
+        await logActivity(userId, 'model_updated', { model_name: modelName.trim() })
+      }
+
+      router.push('/console/models')
       router.push('/console/models')
     } catch (err: any) {
       setError(err.message || t('errors.updateModelFailed'))

@@ -50,8 +50,7 @@
  *   500 { error }                        — One or more variables are missing.
  */
 
-import { NextResponse }    from 'next/server';
-import { getTranslations } from 'next-intl/server';
+import { NextResponse } from 'next/server';
 
 /**
  * FirebaseClientConfig
@@ -62,14 +61,14 @@ import { getTranslations } from 'next-intl/server';
  * All fields are required strings — the Firebase SDK will fail to initialise
  * if any of them are undefined or empty.
  */
-interface FirebaseClientConfig {
-  apiKey:            string;
-  authDomain:        string;
-  projectId:         string;
-  storageBucket:     string;
-  messagingSenderId: string;
-  appId:             string;
-}
+// interface FirebaseClientConfig {
+//   apiKey:            string;
+//   authDomain:        string;
+//   projectId:         string;
+//   storageBucket:     string;
+//   messagingSenderId: string;
+//   appId:             string;
+// }
 
 /**
  * GET
@@ -82,63 +81,22 @@ interface FirebaseClientConfig {
  *          or an error message identifying the missing variable (500).
  */
 export async function GET(): Promise<NextResponse> {
-  /**
-   * t — Server-side translation function scoped to the 'firebaseConfigRoute'
-   * namespace. getTranslations() is the server-side equivalent of the
-   * client-side useTranslations() hook.
-   */
- // const t = await getTranslations('firebaseConfigRoute');
+  const raw = process.env.NEXT_PUBLIC_FIREBASE_CONFIG
 
-  /**
-   * config
-   *
-   * Assemble the Firebase client configuration from environment variables.
-   * Values are typed as string | undefined because process.env always returns
-   * string | undefined — the validation loop below narrows them to string
-   * before this object is returned to the client.
-   *
-   * These variable names must match exactly what is set in your .env file.
-   */
-  const config: Record<string, string | undefined> = {
-    apiKey:            process.env.FIREBASE_API_KEY,
-    authDomain:        process.env.FIREBASE_AUTH_DOMAIN,
-    projectId:         process.env.FIREBASE_PROJECT_ID,
-    storageBucket:     process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-    appId:             process.env.FIREBASE_APP_ID,
-  };
-
-  // -------------------------------------------------------------------------
-  // Validation — ensure every required variable is set
-  // -------------------------------------------------------------------------
-
-  /**
-   * Iterate over every key/value pair in the config object.
-   * If any value is undefined or an empty string, return a 500 immediately
-   * with the name of the missing variable so the developer can identify and
-   * fix the gap in their environment configuration without guessing.
-   *
-   * We return on the first missing variable rather than collecting all missing
-   * ones, because fixing them one at a time is the natural workflow when
-   * setting up a new environment.
-   */
-  for (const [key, value] of Object.entries(config)) {
-    if (!value) {
-      return NextResponse.json(
-        { error: 'errors.missingEnvVariable',  key  },
-        { status: 500 },
-      );
-    }
+  if (!raw) {
+    return NextResponse.json(
+      { error: 'Missing required environment variable: NEXT_PUBLIC_FIREBASE_CONFIG' },
+      { status: 500 }
+    )
   }
 
-  // -------------------------------------------------------------------------
-  // Return the validated config
-  // -------------------------------------------------------------------------
-
-  /**
-   * At this point every value has been confirmed to be a non-empty string,
-   * so the cast to FirebaseClientConfig is safe.
-   * The frontend Firebase SDK will use this object to call initializeApp().
-   */
-  return NextResponse.json(config);
+  try {
+    const config = JSON.parse(raw)
+    return NextResponse.json(config)
+  } catch {
+    return NextResponse.json(
+      { error: 'NEXT_PUBLIC_FIREBASE_CONFIG is not valid JSON' },
+      { status: 500 }
+    )
+  }
 }

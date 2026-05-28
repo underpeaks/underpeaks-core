@@ -28,10 +28,9 @@
  * Errors:         { success: false, message: string } with status 500
  */
 
-import { NextRequest, NextResponse }   from 'next/server'
-import { getTranslations }             from 'next-intl/server'
-import { InstallerState }              from '@/app/store/useInstallerStore'
-import { writeConfigFromStore }        from '@/app/db-adapter/utils/writeConfigFiles'
+import { NextRequest, NextResponse } from 'next/server'
+import { InstallerState }            from '@/app/store/useInstallerStore'
+import { writeConfigFromStore }      from '@/app/db-adapter/utils/writeConfigFiles'
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -50,12 +49,6 @@ import { writeConfigFromStore }        from '@/app/db-adapter/utils/writeConfigF
  *          or { success: false, message: string } on failure.
  */
 export async function POST(req: NextRequest) {
-  /**
-   * t — Server-side translation function scoped to the 'writeConfig' namespace.
-   * Used for the error message returned in the catch block.
-   */
- // const t = await getTranslations('writeConfig')
-
   try {
     // ── Parse request body ─────────────────────────────────────────────────
 
@@ -103,7 +96,7 @@ export async function POST(req: NextRequest) {
      * back to the client.
      */
     return NextResponse.json(
-      { success: false, message: ('errors.writeFailed') },
+      { success: false, message: 'Failed to write configuration files' },
       { status: 500 }
     )
   }

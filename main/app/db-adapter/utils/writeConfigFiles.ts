@@ -164,6 +164,7 @@ export async function writeConfigFromStore(store: InstallerState) {
     },
 
     selectedProjectType: store.selectedProjectType,
+    installed:store.installed
   };
 
   // -------------------------------------------------------------------------

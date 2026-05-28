@@ -59,6 +59,7 @@ interface PublicSystemConfig {
   faviconUrl:  string
   projectName: string
   logoUrl:     string
+  installed:   boolean
 }
 
 /**
@@ -85,5 +86,6 @@ export async function GET(): Promise<Response> {
     faviconUrl:  config.faviconUrl,
     projectName: config.projectName,
     logoUrl:     config.logoUrl,
+     installed:   config.installed ?? false,
   } satisfies PublicSystemConfig)
 }

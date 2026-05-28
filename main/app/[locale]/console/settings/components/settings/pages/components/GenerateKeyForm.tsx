@@ -18,7 +18,7 @@
 
 'use client'
 
-import { useTranslations } from 'next-intl'
+//import { useTranslations } from 'next-intl'
 import { SectionCard, Input, FormField } from '../../../ui'
 
 // ---------------------------------------------------------------------------
@@ -67,10 +67,10 @@ export default function GenerateKeyForm({ keyName, generating, onChange, onGener
    * t — Translation function scoped to the 'generateKeyForm' namespace.
    * Use t('key') to get the translated string for that key.
    */
-  const t = useTranslations('generateKeyForm')
+ // const t = useTranslations('generateKeyForm')
 
   return (
-    <SectionCard title={t('sectionTitle')}>
+    <SectionCard title={('sectionTitle')}>
 
       {/*
        * Key Name Field
@@ -79,11 +79,11 @@ export default function GenerateKeyForm({ keyName, generating, onChange, onGener
        * identify what the key is used for later.
        */}
       <FormField
-        label={t('keyNameLabel')}
-        hint={t('keyNameHint')}
+        label={('keyNameLabel')}
+        hint={('keyNameHint')}
       >
         <Input
-          placeholder={t('keyNamePlaceholder')}
+          placeholder={('keyNamePlaceholder')}
           value={keyName}
           onChange={onChange}
         />
@@ -112,7 +112,7 @@ export default function GenerateKeyForm({ keyName, generating, onChange, onGener
           )}
 
           {/* Label — switches between idle and loading states */}
-          {generating ? t('buttonGenerating') : t('buttonIdle')}
+          {generating ? ('buttonGenerating') : ('buttonIdle')}
         </button>
       </div>
 

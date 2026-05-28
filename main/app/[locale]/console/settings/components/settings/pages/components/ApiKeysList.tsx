@@ -61,7 +61,7 @@ function KeyRow({
   apiKey:    ApiKey
   onRevoke:  (key: ApiKey) => void
 }) {
-  const { t } = useTranslation()
+  //const { t } = useTranslation()
 
   // Whether the full key is currently visible on screen
   const [revealed,  setRevealed]  = useState(false)
@@ -169,15 +169,15 @@ function KeyRow({
           {/* Created date and last-used date */}
           <div className="flex items-center gap-3 mt-0.5">
             <p className="text-[11px] text-gray-400">
-              {t('apiKeys.createdDate', { date: formatDate(apiKey.created_at) })}
+              Created: {formatDate(apiKey.created_at)}
             </p>
             {apiKey.last_used_at ? (
               <p className="text-[11px] text-gray-400">
-                {t('apiKeys.lastUsedDate', { date: formatDate(apiKey.last_used_at) })}
+                Last used: {formatDate(apiKey.last_used_at)}
               </p>
             ) : (
               <p className="text-[11px] text-gray-400 italic">
-                {t('apiKeys.neverUsed')}
+                {('apiKeys.neverUsed')}
               </p>
             )}
           </div>
@@ -192,7 +192,7 @@ function KeyRow({
           onClick={handleReveal}
           disabled={loading}
           className="p-1.5 rounded-md hover:bg-gray-200 text-gray-400 hover:text-gray-700 transition disabled:opacity-50"
-          title={revealed ? t('apiKeys.hideKey') : t('apiKeys.revealKey')}
+          title={revealed ? ('apiKeys.hideKey') : ('apiKeys.revealKey')}
         >
           {loading
             ? <span className="w-3.5 h-3.5 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin block" />
@@ -207,7 +207,7 @@ function KeyRow({
           <button
             onClick={handleCopy}
             className="p-1.5 rounded-md hover:bg-gray-200 text-gray-400 hover:text-gray-700 transition"
-            title={t('apiKeys.copyKey')}
+            title={('apiKeys.copyKey')}
           >
             {copied
               ? <FiCheck size={14} className="text-green-500" />
@@ -224,7 +224,7 @@ function KeyRow({
           onClick={() => onRevoke(apiKey)}
           className="text-xs text-red-500 hover:text-red-700 font-medium transition"
         >
-          {t('apiKeys.revoke')}
+          {('apiKeys.revoke')}
         </button>
       </div>
     </div>
@@ -250,10 +250,10 @@ function KeyRow({
  * @param onRevoke - Passed down to each `KeyRow` to handle revoke actions.
  */
 export default function ApiKeysList({ keys, loading, onRevoke }: Props) {
-  const { t } = useTranslation()
+  //const { t } = useTranslation()
 
   return (
-    <SectionCard title={t('apiKeys.sectionTitle')}>
+    <SectionCard title={('apiKeys.sectionTitle')}>
 
       {loading ? (
         // Loading state: centered spinner
@@ -268,10 +268,10 @@ export default function ApiKeysList({ keys, loading, onRevoke }: Props) {
             <FiKey size={18} className="text-gray-400" />
           </div>
           <p className="text-sm font-medium text-gray-600">
-            {t('apiKeys.emptyTitle')}
+            {('apiKeys.emptyTitle')}
           </p>
           <p className="text-xs text-gray-400 mt-0.5">
-            {t('apiKeys.emptySubtitle')}
+            {('apiKeys.emptySubtitle')}
           </p>
         </div>
 

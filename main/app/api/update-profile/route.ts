@@ -28,8 +28,7 @@ import 'server-only'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getTranslations }           from 'next-intl/server'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -48,13 +47,6 @@ import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
  *          or { error: string } on failure.
  */
 export async function POST(req: NextRequest) {
-  /**
-   * t — Server-side translation function scoped to the 'updateProfile' namespace.
-   * Because this is a server-only route we use getTranslations() (async)
-   * rather than the client-side useTranslations() hook.
-   */
-  //const t = await getTranslations('updateProfile')
-
   try {
     // ── Parse and validate request body ───────────────────────────────────
 
@@ -72,7 +64,7 @@ export async function POST(req: NextRequest) {
      */
     if (!full_name?.trim())
       return NextResponse.json(
-        { error: ('errors.fullNameRequired') },
+        { error: 'Full name is required' },
         { status: 400 }
       )
 
@@ -93,7 +85,7 @@ export async function POST(req: NextRequest) {
      */
     if (!token)
       return NextResponse.json(
-        { error: ('errors.unauthorized') },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
 
@@ -103,7 +95,7 @@ export async function POST(req: NextRequest) {
      * All database operations go through this adapter so the route works
      * regardless of which backend the project is using.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
 
     /**
      * Validate the token against the adapter's built-in session system.
@@ -126,7 +118,7 @@ export async function POST(req: NextRequest) {
      */
     if (!uid)
       return NextResponse.json(
-        { error: ('errors.invalidToken') },
+        { error: 'Invalid token' },
         { status: 401 }
       )
 
@@ -165,7 +157,7 @@ export async function POST(req: NextRequest) {
      * database details is a security risk.
      */
     return NextResponse.json(
-      { error: ('errors.internalError') },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

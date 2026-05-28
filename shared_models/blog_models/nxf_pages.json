@@ -9,24 +9,24 @@
       "is_primary": true,
       "hidden": true
     },
-     {
-    "name": "project_id",
-    "type": "string",
-    "nullable": false,
-    "foreign_key": {
-      "references": "nxf_system_projects(project_id)"
+    {
+      "name": "project_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_projects(project_id)"
+      },
+      "hidden": true
     },
-    "hidden": true
-  },
-  {
-    "name": "tenant_id",
-    "type": "string",
-    "nullable": false,
-    "foreign_key": {
-      "references": "nxf_system_tenants(ten_id)"
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_tenants(ten_id)"
+      },
+      "hidden": true
     },
-    "hidden": true
-  },
     {
       "name": "organisation_id",
       "type": "string",
@@ -40,6 +40,32 @@
       "nullable": false,
       "description": "user_id of page creator",
       "hidden": true
+    },
+    {
+      "name": "page_type",
+      "type": "string",
+      "nullable": false,
+      "default": "admin",
+      "description": "admin | client — admin pages appear in CMS menu and generate admin screens; client pages are used by the page builder and generate storefront screens",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "is_system",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "system pages cannot be edited or deleted by the user",
+      "hidden": true
+    },
+    {
+      "name": "hidden",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "hide this page from navigation and sitemaps",
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "title",
@@ -57,19 +83,22 @@
       "ui_type": "slug-input"
     },
     {
-      "name": "content",
-      "type": "jsonb",
+      "name": "model_id",
+      "type": "string",
       "nullable": true,
-      "description": "flexible page builder blocks / structured content",
+      "description": "links to nxf_system_models — the data model that powers this page",
+      "foreign_key": {
+        "references": "nxf_system_models(sm_id)"
+      },
       "hidden": false,
-      "ui_type": "code-editor"
+      "ui_type": "select"
     },
     {
       "name": "template_type",
       "type": "string",
       "nullable": false,
-      "default": "custom",
-      "description": "custom, landing, blog, profile, legal, marketing",
+      "default": "list",
+      "description": "admin: list | detail | form | dashboard | custom — client: landing | blog | profile | legal | marketing | custom",
       "hidden": false,
       "ui_type": "select"
     },
@@ -78,7 +107,7 @@
       "type": "string",
       "nullable": false,
       "default": "draft",
-      "description": "draft, published, archived",
+      "description": "draft | published | archived",
       "hidden": false,
       "ui_type": "select"
     },
@@ -87,7 +116,7 @@
       "type": "string",
       "nullable": false,
       "default": "public",
-      "description": "public, private, org_only, unlisted",
+      "description": "public | admin | draft",
       "hidden": false,
       "ui_type": "select"
     },
@@ -163,11 +192,13 @@
     }
   ],
   "indexes": [
-    { "name": "idx_pages_org", "fields": ["organisation_id"] },
-    { "name": "idx_pages_slug", "fields": ["slug"] },
-    { "name": "idx_pages_status", "fields": ["status"] },
-    { "name": "idx_pages_visibility", "fields": ["visibility"] },
-    { "name": "idx_pages_creator", "fields": ["created_by"] }
+    { "name": "idx_pages_org",        "fields": ["organisation_id"] },
+    { "name": "idx_pages_slug",       "fields": ["slug"]           },
+    { "name": "idx_pages_status",     "fields": ["status"]         },
+    { "name": "idx_pages_visibility", "fields": ["visibility"]     },
+    { "name": "idx_pages_creator",    "fields": ["created_by"]     },
+    { "name": "idx_pages_type",       "fields": ["page_type"]      },
+    { "name": "idx_pages_model",      "fields": ["model_id"]       }
   ],
   "constraints": [
     {

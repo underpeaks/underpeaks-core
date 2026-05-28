@@ -200,7 +200,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// UPDATED 55-DAY SCHEDULE: 43 DAYS REMAINING/55 DAYS - DAYS USED -> 12 - TODO STARTED - 7th MAY 2026 - CURRENT DAY - 19th MAY 2026 
+// UPDATED 65-DAY SCHEDULE: 43 DAYS REMAINING/65 DAYS - DAYS USED -> 22 - TODO STARTED - 7th MAY 2026 - CURRENT DAY - 28th MAY 2026 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+DAYS BEHIND SCHEDULE - +- 2 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PHASE 1 — Studio CORE //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -209,38 +211,47 @@
 ///DONE - Days 5–6:   i18n framework setup + language selector + en.json extraction
 ///DONE - Day  6.5:   Add LocaleSwitcher to all installer pages
 ///DONE - Days 7–8:   Audit and replace hardcoded text across all pages (translations + console.log cleanup + documentation per page)
-          Days 9–12:  Connect Pages + Menu screens + models
-          Days 13–14: Wire up Themes page
-          Days 14–15: Dashboard
-          Days 15–16: Replicate all storage functions for Supabase, MongoDB, MySQL, PostgreSQL
-          Days 17–18: Connect API layer — endpoints, test panel, API keys manager
-          DAYS 18:    Translate all translations json pages
-          DAYS 19:    FIX DEMO CONTENT
+///DONE - Days 9–12:  Connect Pages + Menu screens + models
+///DONE - Days 13:    Wire up Themes page
+///DONE - DAYS 14:    user page
+///DONE - DAYS 15:    Dashboard 
+///DONE - DAYS 16:    Running tests to verify installation                   
+///DONE - DAYS 16:    Finalizing installer and cleanup                       
+///DONE - DAYS 17:    Track when a user is logged in and on which date
+///DONE - DAYS 17:    and fix backend translation issue.
+          DAYS 18-19: CLEANUP AND FIX ANY REMAINNING ISSUES (MESSAGES AN NOTIFICATIONS SPECIFICALLY)
+                       -> //DONE// Signin ISSUES
+                       -> //DONE// Notifications need to work on project_id and also from nxf_system_notifications collections
+                       -> //DONE// updte the collection to nxf_system_messages and nxf_system_conversations
+                       -> //DONE// Messages need to chanage to project id and user id 
+                       -> //DONE// See why messages are not displaying 
+          DAYS 20:    FIX DEMO CONTENT - create pages and menu items based on project type
+          DAYS 21-23: Page Builder
+          Days 24:    Replicate all storage functions for Supabase, MongoDB, MySQL, PostgreSQL
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PHASE 2 — Studio MVP + Paid Features //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          Days 20: Studio admin panel — accounts, billing, plans, usage, license keys
-          Days 20–21: Wire self-hosted to Studio — license validation, phone home, usage tracking
-          Days 22–24: Integrations — category tabs, connect/disconnect, OAuth flows, webhook support
-          Days 25–27: API Builder — custom endpoint creation, business logic editor, test panel
-          Days 28–32: Page Builder — drag and drop components, layout system, preview, publish
-          Days 33–36: Flutter code generation — models, pages, navigation from CMS config
-          Days 37–40: Next.js code generation — models, pages, API routes from CMS config
-          Days 41–42: Code generation testing — generate sample apps, fix issues
-          Days 43–44: Help center — structure, categories, core articles
-          Days 45–47: Developer docs — API reference, adapter docs, deployment guide
-          Days 48–50: End to end QA — self-hosted flow, hosted flow, license checks, all DB types
-          Days 51–55: Buffer — spillover, bug fixes, polish, anything that ran long
+          DAYS 25-26: Copy self-hosted version and configure to be Hosted version base
+          DAYS 27-28  CREATE FRONTEND WITH LOGIN
+          Days 29-32: Studio admin panel — accounts, billing, plans, usage, license keys
+          Days 33–34: Wire self-hosted to Studio — license validation, phone home, usage tracking
+          Days 34–36: Integrations — category tabs, connect/disconnect, OAuth flows, webhook support
+          Days 37–39: API Builder — custom endpoint creation, business logic editor, test panel
+          Days 40–42: Page Builder — drag and drop components, layout system, preview, publish - Studio version only
+          Days 43–45: Flutter code generation — models, pages, navigation from CMS config
+          Days 46–48: Next.js code generation — models, pages, API routes from CMS config
+          Days 49–50: Code generation testing — generate sample apps, fix issues
+          DAYS 52:    Switch between self-hosted and hosted with API keys     — 1 day
+          Days 52–54: Help center — structure, categories, core articles
+          Days 55–57: Developer docs — API reference, adapter docs, deployment guide
+          Days 58–60: End to end QA — self-hosted flow, hosted flow, license checks, all DB types
+          Days 60–65: Buffer — spillover, bug fixes, polish, anything that ran long, Translate all translations json pages
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // OUTSTANDING TODOs //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//8.  Running tests to verify installation                    — 0.5 days
-//9.  Finalizing installer and cleanup                        — 0.5 days
-//10. Switch between self-hosted and hosted with API keys     — 1 day
-//12. Dashboard widgets — wire up real data                   — 1 day
-//13. Track when a user is logged in and on which date        — 0.5 days
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DEPENDENT TODOs — blocked on other tasks being completed first //
@@ -253,6 +264,7 @@
 //6. Link billing on Settings page       — depends on Studio version
 //7. Complete help center                — depends on app being completed
 //8. Test messages and notifications     — depends on Studio version or client-facing messages API
+//9 Connect API layer — endpoints, test panel, API keys manager
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FEATURES TO ADD — HOSTED PAID VERSION //
@@ -265,3 +277,96 @@
 //6. Integration with 3rd party APIs
 //7. Add timezone settings
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+DEMO CONTENT MODELS -PAGE AND MENU CREATION
+-- BLOG
+   -- Authors
+   -- Comments
+   -- Likes
+   -- Post Categories
+   -- Post Tags Map
+   -- Post Tags
+   -- Posts
+   -- Reviews
+   -- Supscriptions
+
+--E-COMMERCE MODEL
+  -- Abandoned Carts
+  -- Blogs
+  -- Brands
+  -- Carts
+  -- Categories
+  -- Coupons 
+  -- Customers
+  -- Inventory
+  -- ORDERS
+  -- Product Variance
+  -- PRODUCTS
+  -- Returns
+  -- Reviews
+  -- SHIPPING
+  -- Tags
+  -- Wishlist
+
+-- LISTING MODELS
+   -- Blogs
+   -- Bookmarks
+   -- Listing Categories 
+   -- Listing Types
+   -- Listing Users
+   -- Listings
+   -- Ratings
+   -- Reviews
+   -- Tags
+
+-- MARKETPLACE MODELS
+   -- Abandoned Carts
+   -- Blogs
+   -- Brands
+   -- Carts
+   -- Categories
+   -- Coupons 
+   -- Customers
+   -- Disputes
+   -- Inventory
+   -- ORDERS
+   -- Payouts
+   -- Product Variance
+   -- Products
+   -- Returns
+   -- Reviews 
+   -- Shipping
+   -- Tags 
+   -- Vendors
+   -- Wishlist
+
+-- SAAS MODELS
+   -- Analytics
+   -- Features
+   -- Integrations
+   -- Invoices
+   -- Logs
+   -- Organisations
+   -- Preferences
+   -- Saas Roles
+   -- Saas Users
+   -- Subscriptions
+
+-- SOCIAL MODELS
+   -- Activity Logs
+   -- Comments
+   -- Events
+   -- Followers
+   -- Following
+   -- Groups
+   -- Likes
+   -- Posts
+   -- Privacy
+   -- Profiles
+
+
+
+

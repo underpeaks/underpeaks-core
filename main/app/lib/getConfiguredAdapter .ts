@@ -91,7 +91,7 @@ import { parseFirebaseServiceAccount, parseFirebaseWebConfig } from '@/app/lib/f
  *                  — NEXT_PUBLIC_DB_TYPE is set to an unrecognised value,
  *                    or is missing entirely (in which case value is undefined).
  */
-export function getStorageAdapter() {
+export function getConfiguredAdapter() {
   /**
    * dbType — which database engine to connect to.
    * Cast to the DBType union so TypeScript can check it against the known

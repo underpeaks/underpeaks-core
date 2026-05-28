@@ -28,7 +28,7 @@
 'use client'
 
 import { useState, useEffect }                      from 'react'
-import { useTranslations }                          from 'next-intl'
+//import { useTranslations }                          from 'next-intl'
 import { SectionCard, FormField, Input, SaveButton } from '../../ui'
 import { CMSToggle }                                from '../../ui/CMSToggle'
 import { useConsoleStore }                          from '@/app/store/consoleStore'
@@ -62,7 +62,7 @@ export default function SmtpPage() {
    * t — Translation function scoped to the 'smtpPage' namespace.
    * Use t('key') to get the translated string for that key.
    */
-  const t = useTranslations('smtpPage')
+  //const t = useTranslations('smtpPage')
 
   /**
    * Pull global state from the console store:
@@ -208,7 +208,7 @@ export default function SmtpPage() {
   const handleSave = async () => {
     setSaving(true)
     setSaved(false)
-    console.log(t('logs.savingSmtp'))
+    console.log(('logs.savingSmtp'))
 
     try {
       const res = await fetch('/api/update-smtp-settings', {
@@ -250,7 +250,7 @@ export default function SmtpPage() {
         })
 
         setSaved(true)
-        console.log(t('logs.smtpSaved'))
+        console.log(('logs.smtpSaved'))
         setTimeout(() => setSaved(false), 3000)
       }
     } finally {
@@ -269,8 +269,8 @@ export default function SmtpPage() {
         * Page heading and description
         * ------------------------------------------------------------------ */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900">{t('heading')}</h2>
-        <p className="text-sm text-gray-500 mt-0.5">{t('subheading')}</p>
+        <h2 className="text-lg font-bold text-gray-900">{('heading')}</h2>
+        <p className="text-sm text-gray-500 mt-0.5">{('subheading')}</p>
       </div>
 
       {/* ------------------------------------------------------------------
@@ -279,7 +279,7 @@ export default function SmtpPage() {
         * If the DB type handles email natively, toggles are hidden and
         * an informational notice is shown instead.
         * ------------------------------------------------------------------ */}
-      <SectionCard title={t('emailFeatures.sectionTitle')}>
+      <SectionCard title={('emailFeatures.sectionTitle')}>
 
         {/* Email feature toggles — only shown for non-built-in providers */}
         {!usesBuiltInEmail && (
@@ -287,12 +287,12 @@ export default function SmtpPage() {
             <CMSToggle
               checked={verifyEmail}
               onChange={setVerifyEmail}
-              label={t('emailFeatures.verifyEmailLabel')}
+              label={('emailFeatures.verifyEmailLabel')}
             />
             <CMSToggle
               checked={forgotPassword}
               onChange={setForgotPassword}
-              label={t('emailFeatures.forgotPasswordLabel')}
+              label={('emailFeatures.forgotPasswordLabel')}
             />
           </>
         )}
@@ -303,9 +303,7 @@ export default function SmtpPage() {
          */}
         {usesBuiltInEmail && (
           <p className="text-xs text-blue-500 bg-blue-50 border border-blue-100 rounded-md px-3 py-2 mb-3">
-            {t('emailFeatures.builtInNotice', {
-              provider: dbType.charAt(0).toUpperCase() + dbType.slice(1),
-            })}
+            Built-in email features are enabled for {dbType.charAt(0).toUpperCase() + dbType.slice(1)}.
           </p>
         )}
 
@@ -313,7 +311,7 @@ export default function SmtpPage() {
         <CMSToggle
           checked={smtpEnabled}
           onChange={setSmtpEnabled}
-          label={t('emailFeatures.smtpToggleLabel')}
+          label={('emailFeatures.smtpToggleLabel')}
         />
       </SectionCard>
 
@@ -323,46 +321,46 @@ export default function SmtpPage() {
         * Contains all the fields needed to connect to a custom SMTP server.
         * ------------------------------------------------------------------ */}
       {showSmtpFields && (
-        <SectionCard title={t('smtpConfig.sectionTitle')}>
+        <SectionCard title={('smtpConfig.sectionTitle')}>
 
           {/* Host and Port — side by side in a 2-column grid */}
           <div className="grid grid-cols-2 gap-4">
-            <FormField label={t('smtpConfig.hostLabel')}>
+            <FormField label={('smtpConfig.hostLabel')}>
               <Input
                 value={host}
                 onChange={setHost}
-                placeholder={t('smtpConfig.hostPlaceholder')}
+                placeholder={('smtpConfig.hostPlaceholder')}
               />
             </FormField>
-            <FormField label={t('smtpConfig.portLabel')}>
+            <FormField label={('smtpConfig.portLabel')}>
               <Input
                 value={port}
                 onChange={setPort}
-                placeholder={t('smtpConfig.portPlaceholder')}
+                placeholder={('smtpConfig.portPlaceholder')}
               />
             </FormField>
           </div>
 
           {/* From Address */}
-          <FormField label={t('smtpConfig.fromAddressLabel')}>
+          <FormField label={('smtpConfig.fromAddressLabel')}>
             <Input
               value={fromAddress}
               onChange={setFromAddress}
-              placeholder={t('smtpConfig.fromAddressPlaceholder')}
+              placeholder={('smtpConfig.fromAddressPlaceholder')}
             />
           </FormField>
 
           {/* Username */}
-          <FormField label={t('smtpConfig.usernameLabel')}>
+          <FormField label={('smtpConfig.usernameLabel')}>
             <Input
               value={username}
               onChange={setUsername}
-              placeholder={t('smtpConfig.usernamePlaceholder')}
+              placeholder={('smtpConfig.usernamePlaceholder')}
             />
           </FormField>
 
           {/* Password with show/hide toggle button */}
-          <FormField label={t('smtpConfig.passwordLabel')}>
+          <FormField label={('smtpConfig.passwordLabel')}>
             <div className="flex items-center gap-2">
               <div className="flex-1">
                 <Input
@@ -371,7 +369,7 @@ export default function SmtpPage() {
                   placeholder={
                     config?.smtp?.username
                       ? '••••••••••••'
-                      : t('smtpConfig.passwordPlaceholder')
+                      : ('smtpConfig.passwordPlaceholder')
                   }
                   type={showPassword ? 'text' : 'password'}
                 />
@@ -386,7 +384,7 @@ export default function SmtpPage() {
                 type="button"
                 onClick={() => setShowPassword((p) => !p)}
                 className="shrink-0 flex items-center justify-center w-9 h-9 rounded-md border border-gray-200 bg-gray-50 hover:bg-gray-100 text-gray-500 transition"
-                title={showPassword ? t('smtpConfig.hidePassword') : t('smtpConfig.showPassword')}
+                title={showPassword ? ('smtpConfig.hidePassword') : ('smtpConfig.showPassword')}
               >
                 {showPassword ? <FiEyeOff size={15} /> : <FiEye size={15} />}
               </button>
@@ -394,7 +392,7 @@ export default function SmtpPage() {
           </FormField>
 
           {/* Encryption type — dropdown with TLS, SSL, None options */}
-          <FormField label={t('smtpConfig.encryptionLabel')}>
+          <FormField label={('smtpConfig.encryptionLabel')}>
             <select
               value={encryption}
               onChange={(e) => setEncryption(e.target.value as 'TLS' | 'SSL' | 'None')}
@@ -402,7 +400,7 @@ export default function SmtpPage() {
             >
               <option value="TLS">TLS</option>
               <option value="SSL">SSL</option>
-              <option value="None">{t('smtpConfig.encryptionNone')}</option>
+              <option value="None">{('smtpConfig.encryptionNone')}</option>
             </select>
           </FormField>
 

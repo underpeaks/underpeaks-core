@@ -72,44 +72,64 @@ import { fileURLToPath } from 'url'
  *     redirect('/install')
  *   }
  */
-export function hasValidConfig(): boolean {
+// export function hasValidConfig(): boolean {
 
-  // Reconstruct __dirname for ESM environments.
-  // In CommonJS this would simply be the built-in __dirname variable, but
-  // ESM modules do not have it, so we derive it from the module's own URL.
-  const __dirname  = path.dirname(fileURLToPath(import.meta.url))
+//   // Reconstruct __dirname for ESM environments.
+//   // In CommonJS this would simply be the built-in __dirname variable, but
+//   // ESM modules do not have it, so we derive it from the module's own URL.
+//   const __dirname  = path.dirname(fileURLToPath(import.meta.url))
 
-  // Build the absolute path to config.json.
-  // path.resolve() joins segments and normalises the result to an absolute
-  // path, regardless of where the process was started from.
-  // '../app/config.json' means: go one directory up from this file, then
-  // into the 'app' folder to find 'config.json'.
-  const configPath = path.resolve(__dirname, '../app/config.json')
+//   // Build the absolute path to config.json.
+//   // path.resolve() joins segments and normalises the result to an absolute
+//   // path, regardless of where the process was started from.
+//   // '../app/config.json' means: go one directory up from this file, then
+//   // into the 'app' folder to find 'config.json'.
+//   const configPath = path.resolve(__dirname, '../app/config.json')
 
-  // Short-circuit: if the file doesn't exist there is nothing to parse.
-  // Returning false here means the installer has not been run yet.
-  if (!fs.existsSync(configPath)) return false
+//   // Short-circuit: if the file doesn't exist there is nothing to parse.
+//   // Returning false here means the installer has not been run yet.
+//   if (!fs.existsSync(configPath)) return false
+
+//   try {
+//     // Read the file synchronously as a UTF-8 string.
+//     // This is acceptable here because hasValidConfig() is called during
+//     // application startup/middleware, before any request handling begins.
+//     const content = fs.readFileSync(configPath, 'utf-8')
+
+//     // Parse the JSON string into a plain JavaScript object.
+//     // If the file content is not valid JSON, JSON.parse throws a SyntaxError
+//     // which is caught below, returning false.
+//     const config = JSON.parse(content)
+
+//     // Validate that the parsed config has a truthy dbType field.
+//     // The !! operator converts the value to a strict boolean:
+//     //   !!undefined → false
+//     //   !!''        → false
+//     //   !!'firebase'→ true
+//      return !!config?.dbType
+
+//   } catch {
+//     // JSON.parse failed (syntax error or empty file) — treat as invalid.
+//     return false
+//   }
+
+//   // config.ts
+// }
+
+// config.ts
+export function hasValidConfig(): { selectedDb: string; installed: boolean } | null {
+  const configPath = path.resolve(process.cwd(), 'nxt_flutter.config.json')
+
+  if (!fs.existsSync(configPath)) return null
 
   try {
-    // Read the file synchronously as a UTF-8 string.
-    // This is acceptable here because hasValidConfig() is called during
-    // application startup/middleware, before any request handling begins.
     const content = fs.readFileSync(configPath, 'utf-8')
-
-    // Parse the JSON string into a plain JavaScript object.
-    // If the file content is not valid JSON, JSON.parse throws a SyntaxError
-    // which is caught below, returning false.
     const config = JSON.parse(content)
 
-    // Validate that the parsed config has a truthy dbType field.
-    // The !! operator converts the value to a strict boolean:
-    //   !!undefined → false
-    //   !!''        → false
-    //   !!'firebase'→ true
-    return !!config?.dbType
+    if (!config?.selectedDb) return null
 
+    return config
   } catch {
-    // JSON.parse failed (syntax error or empty file) — treat as invalid.
-    return false
+    return null
   }
 }

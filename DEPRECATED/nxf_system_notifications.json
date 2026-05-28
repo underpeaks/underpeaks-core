@@ -36,7 +36,7 @@
       "hidden": true
     },
     {
-      "name": "recipient_user_id",
+      "name": "user_id",
       "type": "string",
       "nullable": false,
       "description": "user who receives the notification",
@@ -144,7 +144,7 @@
     }
   ],
   "indexes": [
-    { "name": "idx_notifications_recipient", "fields": ["recipient_user_id"] },
+    { "name": "idx_notifications_recipient", "fields": ["user_id"] },
     { "name": "idx_notifications_type", "fields": ["type"] },
     { "name": "idx_notifications_status", "fields": ["status"] },
     { "name": "idx_notifications_entity", "fields": ["entity_type", "entity_id"] },
@@ -153,7 +153,7 @@
   "constraints": [
     {
       "type": "foreign_key",
-      "fields": ["recipient_user_id"],
+      "fields": ["user_id"],
       "references": { "table": "nxf_users", "field": "user_id" }
     },
     {

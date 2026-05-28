@@ -25,7 +25,7 @@
 'use client'
 
 import { useState, useEffect }                from 'react'
-import { useTranslations }                    from 'next-intl'
+//import { useTranslations }                    from 'next-intl'
 import { FiX, FiCheck, FiAlertCircle }        from 'react-icons/fi'
 import { useConsoleStore }                    from '@/app/store/consoleStore'
 import { UploadZone }                         from '@/app/lib/uploads/UploadZone'
@@ -87,7 +87,7 @@ export default function BrandingPage() {
    * t — Translation function scoped to the 'brandingPage' namespace.
    * Use t('key') to get the translated string for that key.
    */
-  const t = useTranslations('brandingPage')
+ // const t = useTranslations('brandingPage')
 
   /**
    * Pull global state from the console store:
@@ -165,7 +165,7 @@ export default function BrandingPage() {
     setSaving(true)
     setSaved(false)
     setError(null)
-    console.log(t('logs.savingBranding'))
+    console.log(('logs.savingBranding'))
 
     try {
       const res = await fetch('/api/update-branding', {
@@ -194,13 +194,13 @@ export default function BrandingPage() {
         })
 
         setSaved(true)
-        console.log(t('logs.brandingSaved'))
+        console.log(('logs.brandingSaved'))
 
         // Automatically hide the success message after 2.5 seconds
         setTimeout(() => setSaved(false), 2500)
       } else {
         const data = await res.json()
-        setError(data.error ?? t('errors.saveFailed'))
+        setError(data.error ?? ('errors.saveFailed'))
       }
     } finally {
       setSaving(false)
@@ -218,8 +218,8 @@ export default function BrandingPage() {
         * Page heading and description
         * ------------------------------------------------------------------ */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900">{t('heading')}</h2>
-        <p className="text-sm text-gray-500 mt-0.5">{t('subheading')}</p>
+        <h2 className="text-lg font-bold text-gray-900">{('heading')}</h2>
+        <p className="text-sm text-gray-500 mt-0.5">{('subheading')}</p>
       </div>
 
       {/* ------------------------------------------------------------------
@@ -245,7 +245,7 @@ export default function BrandingPage() {
         * Lets the user upload a logo image.
         * Shows a topnav preview beneath the upload zone.
         * ------------------------------------------------------------------ */}
-      <SectionCard title={t('logoSection.title')}>
+      <SectionCard title={('logoSection.title')}>
 
         {/* Upload zone for the logo image */}
         <UploadZone
@@ -253,9 +253,9 @@ export default function BrandingPage() {
             folder:      'images/logo',
             fileType:    'image',
             maxSizeKb:   512,
-            label:       t('logoSection.uploadLabel'),
-            hint:        t('logoSection.uploadHint'),
-            recommended: t('logoSection.uploadRecommended'),
+            label:       ('logoSection.uploadLabel'),
+            hint:        ('logoSection.uploadHint'),
+            recommended: ('logoSection.uploadRecommended'),
             resize:      { width: 400, height: 120, fit: 'inside' },
           }}
           initialPreview={config?.branding?.logo_url || null}
@@ -267,20 +267,20 @@ export default function BrandingPage() {
         {/* Topnav preview — shows how the logo will appear in the nav bar */}
         <div>
           <p className="text-xs font-semibold text-gray-700 mb-2">
-            {t('preview.label')}
+            {('preview.label')}
           </p>
           <div className="flex items-center gap-3 px-5 h-14 bg-white border border-gray-200 rounded-lg shadow-sm">
 
             {/* Logo preview image — falls back to the default logo if none uploaded */}
             <img
               src={logoUrl || '/images/logo/NXT_Flutter_logo.png'}
-              alt={t('logoSection.imageAlt')}
+              alt={('logoSection.imageAlt')}
               className="h-7 w-auto object-contain"
             />
 
             {/* Project name badge — shows alongside the logo as it would in the nav */}
             <div className="flex items-center gap-2 px-3 py-1 rounded-md border border-gray-200 bg-gray-50 ml-2">
-              <span className="text-[10px] text-gray-400">{t('preview.projectLabel')}</span>
+              <span className="text-[10px] text-gray-400">{('preview.projectLabel')}</span>
               <span className="text-xs font-semibold text-gray-600">{projectName}</span>
             </div>
           </div>
@@ -292,7 +292,7 @@ export default function BrandingPage() {
         * Lets the user upload a favicon image.
         * Shows a topnav preview beneath the upload zone.
         * ------------------------------------------------------------------ */}
-      <SectionCard title={t('faviconSection.title')}>
+      <SectionCard title={('faviconSection.title')}>
 
         {/* Upload zone for the favicon image */}
         <UploadZone
@@ -300,9 +300,9 @@ export default function BrandingPage() {
             folder:      'images/favicon',
             fileType:    'image',
             maxSizeKb:   256,
-            label:       t('faviconSection.uploadLabel'),
-            hint:        t('faviconSection.uploadHint'),
-            recommended: t('faviconSection.uploadRecommended'),
+            label:       ('faviconSection.uploadLabel'),
+            hint:        ('faviconSection.uploadHint'),
+            recommended: ('faviconSection.uploadRecommended'),
             resize:      { width: 64, height: 64, fit: 'cover' },
           }}
           initialPreview={config?.branding?.favicon_url || null}
@@ -314,20 +314,20 @@ export default function BrandingPage() {
         {/* Topnav preview — shows how the favicon will appear in the nav bar */}
         <div>
           <p className="text-xs font-semibold text-gray-700 mb-2">
-            {t('preview.label')}
+            {('preview.label')}
           </p>
           <div className="flex items-center gap-3 px-5 h-14 bg-white border border-gray-200 rounded-lg shadow-sm">
 
             {/* Favicon preview image — falls back to the default favicon if none uploaded */}
             <img
               src={faviconUrl || '/images/favicon/NXT_Flutter_favicon.png'}
-              alt={t('faviconSection.imageAlt')}
+              alt={('faviconSection.imageAlt')}
               className="h-7 w-auto object-contain"
             />
 
             {/* Project name badge */}
             <div className="flex items-center gap-2 px-3 py-1 rounded-md border border-gray-200 bg-gray-50 ml-2">
-              <span className="text-[10px] text-gray-400">{t('preview.projectLabel')}</span>
+              <span className="text-[10px] text-gray-400">{('preview.projectLabel')}</span>
               <span className="text-xs font-semibold text-gray-600">{projectName}</span>
             </div>
           </div>
@@ -345,7 +345,7 @@ export default function BrandingPage() {
         {saved && (
           <p className="text-xs text-green-600 flex items-center gap-1.5">
             <FiCheck size={13} />
-            {t('saveSuccess')}
+            {('saveSuccess')}
           </p>
         )}
 
@@ -361,7 +361,7 @@ export default function BrandingPage() {
               <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
             )}
             {/* Label — switches between idle and saving states */}
-            {saving ? t('saveButtonSaving') : t('saveButtonIdle')}
+            {saving ? ('saveButtonSaving') : ('saveButtonIdle')}
           </button>
         </div>
       </div>

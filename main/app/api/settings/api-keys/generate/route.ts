@@ -53,10 +53,10 @@
 
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
 import { encryptApiKey }             from '@/app/lib/apiKeyEncryption'
 import { v4 as uuidv4 }              from 'uuid'
 import crypto                        from 'crypto'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // Route Handler
@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
      * We handle both shapes by checking `uid` first, then falling back to
      * `user_id`. If neither exists, the token is invalid → return 401.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
     const decoded = await adapter.validateBuiltInSession?.(adapter.config, token)
     const uid     = decoded?.uid ?? decoded?.user_id ?? null
     if (!uid)

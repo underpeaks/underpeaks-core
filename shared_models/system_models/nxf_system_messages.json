@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_messages",
+  "table_name": "nxf_system_messages",
   "primary_key": "mes_id",
   "columns": {
     "mes_id": {

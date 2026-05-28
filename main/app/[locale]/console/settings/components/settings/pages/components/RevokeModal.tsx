@@ -22,7 +22,7 @@
 
 'use client'
 
-import { useTranslations } from 'next-intl'
+//import { useTranslations } from 'next-intl'
 import { FiAlertTriangle } from 'react-icons/fi'
 
 // ---------------------------------------------------------------------------
@@ -75,7 +75,7 @@ export default function RevokeModal({ keyName, onConfirm, onCancel, revoking }: 
    * t — Translation function scoped to the 'revokeModal' namespace.
    * Use t('key') to retrieve the translated string for that key.
    */
-  const t = useTranslations('revokeModal')
+  //const t = useTranslations('revokeModal')
 
   return (
     /*
@@ -102,7 +102,7 @@ export default function RevokeModal({ keyName, onConfirm, onCancel, revoking }: 
 
           {/* Modal title */}
           <h3 className="text-sm font-semibold text-gray-900">
-            {t('title')}
+            {('title')}
           </h3>
         </div>
 
@@ -113,11 +113,13 @@ export default function RevokeModal({ keyName, onConfirm, onCancel, revoking }: 
           * `keyName` is passed as a rich-text variable so it can be styled.
           * -------------------------------------------------------------- */}
         <p className="text-sm text-gray-500 mb-5">
-          {t.rich('message', {
-            keyName: () => (
-              <span className="font-medium text-gray-800">{keyName}</span>
-            ),
-          })}
+          <>
+  API key{' '}
+  <span className="font-medium text-gray-800">
+    {keyName}
+  </span>{' '}
+  was created successfully.
+</>
         </p>
 
         {/* --------------------------------------------------------------
@@ -133,7 +135,7 @@ export default function RevokeModal({ keyName, onConfirm, onCancel, revoking }: 
             disabled={revoking}
             className="flex-1 py-2 border border-gray-200 text-xs font-medium rounded-lg hover:bg-gray-50 disabled:opacity-50 transition"
           >
-            {t('cancelButton')}
+            {('cancelButton')}
           </button>
 
           {/* Confirm/Revoke button — red style, triggers the revoke action */}
@@ -148,7 +150,7 @@ export default function RevokeModal({ keyName, onConfirm, onCancel, revoking }: 
             )}
 
             {/* Label — switches between idle and in-progress states */}
-            {revoking ? t('revokeButtonRevoking') : t('revokeButtonIdle')}
+            {revoking ? ('revokeButtonRevoking') : ('revokeButtonIdle')}
           </button>
         </div>
 

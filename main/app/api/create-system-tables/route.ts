@@ -43,8 +43,7 @@
  *   500 { success: false, message } — Unexpected error during table creation.
  */
 
-import { NextResponse }    from 'next/server';
-import { getTranslations } from 'next-intl/server';
+import { NextResponse } from 'next/server';
 import {
   createSystemTables,
   createUsersTables,
@@ -71,13 +70,6 @@ import {
  * @returns A NextResponse JSON object indicating success or failure.
  */
 export async function POST(request: Request): Promise<NextResponse> {
-  /**
-   * t — Server-side translation function scoped to the
-   * 'createSystemTablesRoute' namespace. getTranslations() is the server-side
-   * equivalent of the client-side useTranslations() hook.
-   */
-  //const t = await getTranslations('createSystemTablesRoute');
-
   try {
     /**
      * Parse the incoming request body.
@@ -96,7 +88,7 @@ export async function POST(request: Request): Promise<NextResponse> {
      */
     if (!config) {
       return NextResponse.json(
-        { success: false, message: ('errors.missingConfig') },
+        { success: false, message: 'Database config is required' },
         { status: 400 },
       );
     }
@@ -142,7 +134,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      message: ('success.tablesCreated'),
+      message: 'System tables created successfully',
     });
 
   } catch (error: any) {
@@ -152,11 +144,11 @@ export async function POST(request: Request): Promise<NextResponse> {
      * for debugging and returned to the caller so the installer UI can display
      * a meaningful failure reason.
      */
-    console.error(('logs.createTablesError'), error);
+    console.error('[create-system-tables] Error:', error);
     return NextResponse.json(
       {
         success: false,
-        message: error.message || ('errors.genericFailure'),
+        message: error.message || 'An unexpected error occurred',
       },
       { status: 500 },
     );

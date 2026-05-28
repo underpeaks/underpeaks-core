@@ -32,10 +32,9 @@ import 'server-only'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getTranslations }           from 'next-intl/server'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
 import bcrypt                        from 'bcryptjs'
 import admin                         from 'firebase-admin'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -52,14 +51,6 @@ import admin                         from 'firebase-admin'
  * @returns A NextResponse with either { success: true } or { error: string }.
  */
 export async function POST(req: NextRequest) {
-  /**
-   * t — Server-side translation function scoped to the 'changePassword' namespace.
-   * Unlike client components which use useTranslations(), server-side code must
-   * use getTranslations() and await it. This gives us access to all translated
-   * strings for error messages and log entries in this route.
-   */
- // const t = await getTranslations('changePassword')
-
   try {
     /**
      * Parse the JSON body sent by the client.
@@ -77,7 +68,7 @@ export async function POST(req: NextRequest) {
      */
     if (!currentPassword || !newPassword)
       return NextResponse.json(
-        { error: ('errors.bothPasswordsRequired') },
+        { error: 'Both passwords are required' },
         { status: 400 }
       )
 
@@ -88,7 +79,7 @@ export async function POST(req: NextRequest) {
      */
     if (newPassword.length < 8)
       return NextResponse.json(
-        { error: ('errors.passwordTooShort') },
+        { error: 'Password must be at least 8 characters' },
         { status: 400 }
       )
 
@@ -109,7 +100,7 @@ export async function POST(req: NextRequest) {
      */
     if (!token)
       return NextResponse.json(
-        { error: ('errors.unauthorized') },
+        { error: 'Unauthorized' },
         { status: 401 }
       )
 
@@ -119,7 +110,7 @@ export async function POST(req: NextRequest) {
      * All database operations go through this adapter so the route works
      * regardless of which backend the project is using.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
 
     /**
      * Validate the token against the adapter's built-in session system.
@@ -142,7 +133,7 @@ export async function POST(req: NextRequest) {
      */
     if (!uid)
       return NextResponse.json(
-        { error: ('errors.invalidToken') },
+        { error: 'Invalid token' },
         { status: 401 }
       )
 
@@ -161,7 +152,7 @@ export async function POST(req: NextRequest) {
      */
     if (!result?.user)
       return NextResponse.json(
-        { error: ('errors.userNotFound') },
+        { error: 'User not found' },
         { status: 404 }
       )
 
@@ -183,7 +174,7 @@ export async function POST(req: NextRequest) {
     const passwordMatch = await bcrypt.compare(currentPassword, user.password_hash)
     if (!passwordMatch)
       return NextResponse.json(
-        { error: ('errors.incorrectCurrentPassword') },
+        { error: 'Current password is incorrect' },
         { status: 400 }
       )
 
@@ -228,15 +219,9 @@ export async function POST(req: NextRequest) {
     if (dbType === 'firebase') {
       try {
         await admin.auth().updateUser(uid, { password: newPassword })
-        console.log(('logs.firebasePasswordUpdated'))
+        console.log('Firebase password updated successfully')
       } catch {
-        /**
-         * Log a warning without including the error object itself —
-         * the error may contain internal Firebase details or stack traces
-         * that should not be written to logs in production.
-         * We do not re-throw because the nxf_users record is already saved.
-         */
-        console.warn(('logs.firebasePasswordUpdateFailed'))
+        console.warn('Firebase password update failed')
       }
     }
 
@@ -254,7 +239,7 @@ export async function POST(req: NextRequest) {
      * leaking stack traces or internal messages is a security risk.
      */
     return NextResponse.json(
-      { error: ('errors.internalError') },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

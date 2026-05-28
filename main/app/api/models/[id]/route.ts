@@ -21,10 +21,8 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getTranslations }           from 'next-intl/server'
-
 import { ColumnDef }                 from '@/app/db-adapter/types'
-import { getStorageAdapter } from '@/app/lib/getStorageAdapter'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // PUT — Update an existing model
@@ -34,10 +32,7 @@ export async function PUT(
   req:     NextRequest,
   { params }: { params: { id: string } }
 ): Promise<NextResponse> {
-  
-
   try {
-    //const t = await getTranslations('modelsRoute')
     const { id } = params
 
     // -----------------------------------------------------------------------
@@ -49,7 +44,7 @@ export async function PUT(
       body = await req.json()
     } catch {
       return NextResponse.json(
-        { error: 'errors.invalidBody' },
+        { error: 'Invalid request body' },
         { status: 400 }
       )
     }
@@ -58,7 +53,7 @@ export async function PUT(
 
     if (!user_id || !name || !schema?.length || !old_name || !old_schema) {
       return NextResponse.json(
-        { error: ('errors.missingFields') },
+        { error: 'Missing required fields: user_id, name, schema, old_name, old_schema' },
         { status: 400 }
       )
     }
@@ -77,7 +72,7 @@ export async function PUT(
       name.toLowerCase().startsWith('nxf_system_')
     ) {
       return NextResponse.json(
-        { error: ('errors.systemTableProtected') },
+        { error: 'System tables cannot be modified' },
         { status: 403 }
       )
     }
@@ -89,12 +84,12 @@ export async function PUT(
     const primaryKeyCount = (schema as any[]).filter((f) => f.is_primary).length
     if (primaryKeyCount > 1) {
       return NextResponse.json(
-        { error: ('errors.multiplePrimaryKeys') },
+        { error: 'A model can only have one primary key' },
         { status: 400 }
       )
     }
 
-    const adapter  = getStorageAdapter()
+    const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
     // -----------------------------------------------------------------------
@@ -157,7 +152,7 @@ export async function PUT(
   } catch (err: any) {
     console.error('PUT /api/models/[id] error:', err.message)
     return NextResponse.json(
-      { error: err.message || 'errors.updateFailed' },
+      { error: err.message || 'Failed to update model' },
       { status: 500 }
     )
   }
@@ -171,8 +166,6 @@ export async function DELETE(
   req:     NextRequest,
   { params }: { params: { id: string } }
 ): Promise<NextResponse> {
-  //const t = await getTranslations('modelsRoute')
-
   try {
     const { id } = params
 
@@ -185,7 +178,7 @@ export async function DELETE(
       body = await req.json()
     } catch {
       return NextResponse.json(
-        { error: ('errors.invalidBody') },
+        { error: 'Invalid request body' },
         { status: 400 }
       )
     }
@@ -194,7 +187,7 @@ export async function DELETE(
 
     if (!name) {
       return NextResponse.json(
-        { error: ('errors.missingFields') },
+        { error: 'Missing required field: name' },
         { status: 400 }
       )
     }
@@ -205,12 +198,12 @@ export async function DELETE(
 
     if (name.toLowerCase().startsWith('nxf_system_')) {
       return NextResponse.json(
-        { error: ('errors.systemTableProtected') },
+        { error: 'System tables cannot be deleted' },
         { status: 403 }
       )
     }
 
-    const adapter  = getStorageAdapter()
+    const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
     // -----------------------------------------------------------------------
@@ -243,7 +236,7 @@ export async function DELETE(
   } catch (err: any) {
     console.error('DELETE /api/models/[id] error:', err.message)
     return NextResponse.json(
-      { error: err.message || ('errors.deleteFailed') },
+      { error: err.message || 'Failed to delete model' },
       { status: 500 }
     )
   }

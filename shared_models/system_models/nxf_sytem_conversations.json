@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_conversations",
+  "table_name": "nxf_system_conversations",
   "schema": "public",
   "columns": [
     {

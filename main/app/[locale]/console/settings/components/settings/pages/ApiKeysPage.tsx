@@ -26,7 +26,7 @@
 'use client'
 
 import { useState, useEffect }  from 'react'
-import { useTranslations }      from 'next-intl'
+//import { useTranslations }      from 'next-intl'
 import { FiAlertTriangle, FiX } from 'react-icons/fi'
 import ApiKeysList               from './components/ApiKeysList'
 import GenerateKeyForm           from './components/GenerateKeyForm'
@@ -52,7 +52,7 @@ export default function ApiKeysPage() {
    * t — Translation function scoped to the 'apiKeysPage' namespace.
    * Use t('key') to retrieve the translated string for that key.
    */
-  const t = useTranslations('apiKeysPage')
+  //const t = useTranslations('apiKeysPage')
 
   // -------------------------------------------------------------------------
   // State
@@ -128,7 +128,7 @@ export default function ApiKeysPage() {
    */
   useEffect(() => {
     const load = async () => {
-      console.log(t('logs.loadingKeys'))
+      console.log(('logs.loadingKeys'))
       try {
         const res  = await fetch('/api/settings/api-keys/list', {
           headers: { 'Authorization': `Bearer ${token}` },
@@ -137,9 +137,9 @@ export default function ApiKeysPage() {
 
         // Use the returned keys array, or fall back to empty if missing
         setKeys(data.keys ?? [])
-        console.log(t('logs.keysLoaded'))
+        console.log(('logs.keysLoaded'))
       } catch {
-        setError(t('errors.loadFailed'))
+        setError(('errors.loadFailed'))
       } finally {
         setLoading(false)
       }
@@ -171,7 +171,7 @@ export default function ApiKeysPage() {
 
     setGenerating(true)
     setError(null)
-    console.log(t('logs.generatingKey'))
+    console.log(('logs.generatingKey'))
 
     try {
       const res  = await fetch('/api/settings/api-keys/generate', {
@@ -181,7 +181,7 @@ export default function ApiKeysPage() {
       })
       const data = await res.json()
 
-      if (!res.ok) throw new Error(data.error ?? t('errors.generateFailed'))
+      if (!res.ok) throw new Error(data.error ?? ('errors.generateFailed'))
 
       /**
        * Build a local ApiKey object from the server response so we can
@@ -205,7 +205,7 @@ export default function ApiKeysPage() {
 
       // Reset the name input ready for the next key
       setKeyName('')
-      console.log(t('logs.keyGenerated'))
+      console.log(('logs.keyGenerated'))
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -235,7 +235,7 @@ export default function ApiKeysPage() {
     if (!revokeTarget) return
 
     setRevoking(true)
-    console.log(t('logs.revokingKey'))
+    console.log(('logs.revokingKey'))
 
     try {
       const res = await fetch('/api/settings/api-keys/revoke', {
@@ -244,14 +244,14 @@ export default function ApiKeysPage() {
         body:   JSON.stringify({ api_id: revokeTarget.api_id }),
       })
 
-      if (!res.ok) throw new Error(t('errors.revokeFailed'))
+      if (!res.ok) throw new Error(('errors.revokeFailed'))
 
       // Remove the revoked key from the list by filtering it out
       setKeys((prev) => prev.filter((k) => k.api_id !== revokeTarget.api_id))
 
       // Close the revoke modal
       setRevokeTarget(null)
-      console.log(t('logs.keyRevoked'))
+      console.log(('logs.keyRevoked'))
     } catch (err: any) {
       setError(err.message)
     } finally {
@@ -271,10 +271,10 @@ export default function ApiKeysPage() {
         * ------------------------------------------------------------------ */}
       <div>
         <h2 className="text-lg font-bold text-gray-900">
-          {t('heading')}
+          {('heading')}
         </h2>
         <p className="text-sm text-gray-500 mt-0.5">
-          {t('subheading')}
+          {('subheading')}
         </p>
       </div>
 

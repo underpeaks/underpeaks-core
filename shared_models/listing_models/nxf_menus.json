@@ -1,0 +1,142 @@
+{
+  "table_name": "nxf_menu",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "menu_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true,
+      "hidden": true
+    },
+    {
+      "name": "project_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_projects(project_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_tenants(ten_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "page_id",
+      "type": "string",
+      "nullable": true,
+      "description": "links to nxf_pages — the page this menu item navigates to",
+      "foreign_key": {
+        "references": "nxf_pages(page_id)"
+      },
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "nullable": false,
+      "description": "display text shown in the navigation menu",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "icon",
+      "type": "string",
+      "nullable": true,
+      "default": "FiFileText",
+      "description": "icon name from react-icons/fi (e.g. FiHome, FiPackage)",
+      "hidden": false,
+      "ui_type": "icon-picker"
+    },
+    {
+      "name": "order",
+      "type": "integer",
+      "nullable": false,
+      "default": 0,
+      "description": "sort order within the menu level — lower numbers appear first",
+      "hidden": false,
+      "ui_type": "number-input"
+    },
+    {
+      "name": "parent_id",
+      "type": "string",
+      "nullable": true,
+      "default": null,
+      "description": "id of the parent menu item — null means top-level; child items appear as dropdowns",
+      "foreign_key": {
+        "references": "nxf_menu(menu_id)"
+      },
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "target",
+      "type": "string",
+      "nullable": false,
+      "default": "_self",
+      "description": "_self | _blank — whether the link opens in the same or a new tab",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "visible",
+      "type": "boolean",
+      "nullable": false,
+      "default": true,
+      "description": "whether this item is shown in the nav — hidden items are saved but not rendered",
+      "hidden": false,
+      "ui_type": "toggle"
+    },
+    {
+      "name": "is_system",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "system menu items (Dashboard, Users) cannot be edited or deleted",
+      "hidden": true
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false,
+      "hidden": true
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true,
+      "hidden": true
+    }
+  ],
+  "indexes": [
+    { "name": "idx_menu_project",  "fields": ["project_id"] },
+    { "name": "idx_menu_page",     "fields": ["page_id"]    },
+    { "name": "idx_menu_parent",   "fields": ["parent_id"]  },
+    { "name": "idx_menu_order",    "fields": ["order"]      }
+  ],
+  "constraints": [
+    {
+      "type": "foreign_key",
+      "fields": ["page_id"],
+      "references": {
+        "table": "nxf_pages",
+        "field": "page_id"
+      }
+    },
+    {
+      "type": "foreign_key",
+      "fields": ["parent_id"],
+      "references": {
+        "table": "nxf_menu",
+        "field": "menu_id"
+      }
+    }
+  ]
+}

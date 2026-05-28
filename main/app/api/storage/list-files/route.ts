@@ -29,8 +29,7 @@ import 'server-only'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getTranslations }           from 'next-intl/server'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // GET handler
@@ -48,13 +47,6 @@ import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
  *          or { error: string } on failure.
  */
 export async function GET(req: NextRequest) {
-  /**
-   * t — Server-side translation function scoped to the 'listFiles' namespace.
-   * Because this is a server-only route we use getTranslations() (async) rather
-   * than the client-side useTranslations() hook.
-   */
-  //const t = await getTranslations('listFiles')
-
   try {
     // ── Read and validate query parameter ─────────────────────────────────
 
@@ -69,7 +61,7 @@ export async function GET(req: NextRequest) {
     const folder = req.nextUrl.searchParams.get('folder')
     if (!folder)
       return NextResponse.json(
-        { error: ('errors.folderRequired') },
+        { error: 'folder query parameter is required' },
         { status: 400 }
       )
 
@@ -81,7 +73,7 @@ export async function GET(req: NextRequest) {
      * All file operations go through this adapter so the route works
      * regardless of which storage backend the project uses.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
 
     // ── Guard: adapter may not support listing ─────────────────────────────
 
@@ -120,7 +112,7 @@ export async function GET(req: NextRequest) {
      * traces is a security risk.
      */
     return NextResponse.json(
-      { error: ('errors.internalError') },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

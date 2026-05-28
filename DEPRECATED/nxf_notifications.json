@@ -2,7 +2,7 @@
   {
     "notification_id": "notif_001",
     "project_id": "proj_001",
-    "recipient_user_id": "user_001",
+    "user_id": "user_001",
     "actor_user_id": "user_002",
     "type": "comment",
     "title": "New comment on your product",
@@ -23,7 +23,7 @@
   {
     "notification_id": "notif_002",
     "project_id": "proj_001",
-    "recipient_user_id": "user_003",
+    "user_id": "user_003",
     "actor_user_id": null,
     "type": "payment",
     "title": "Payout processed",
@@ -43,7 +43,7 @@
   {
     "notification_id": "notif_003",
     "project_id": "proj_001",
-    "recipient_user_id": "user_004",
+    "user_id": "user_004",
     "actor_user_id": "system",
     "type": "system",
     "title": "Security alert",
@@ -64,7 +64,7 @@
   {
     "notification_id": "notif_004",
     "project_id": "proj_002",
-    "recipient_user_id": "user_010",
+    "user_id": "user_010",
     "actor_user_id": "vendor_001",
     "type": "message",
     "title": "New message from vendor",

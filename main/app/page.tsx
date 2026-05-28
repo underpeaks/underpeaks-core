@@ -40,7 +40,6 @@
 
 import { redirect }        from 'next/navigation'
 import { hasValidConfig }  from './config'
-import '@/app/[locale]/layout'
 
 /**
  * Home
@@ -60,8 +59,13 @@ import '@/app/[locale]/layout'
  *                  wizard has not been completed. Send the user there first
  *                  so they can configure the application before using it.
  */
-export default function Home() {
-  if (hasValidConfig()) {
+export default async function Home() {
+   
+  const config = await hasValidConfig();
+
+  console.log('HAS VALID CONFIG: '+ config?.installed);
+
+  if (config?.installed) {
     // config.json exists and contains a valid dbType — installation is done.
     // Redirect to the sign-in page as the normal application entry point.
     redirect('/signin')

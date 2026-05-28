@@ -178,7 +178,7 @@ export const localeNames: Record<Locale, string> = {
  * Used by: LocaleSwitcher component — className={`fi fi-${localeFlagCodes[l]}`}
  */
 export const localeFlagCodes: Record<Locale, string> = {
-  en: 'gb',
+  en: 'us',
   fr: 'fr',
   af: 'za',
   de: 'de',

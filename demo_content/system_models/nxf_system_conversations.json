@@ -1,0 +1,46 @@
+{
+  "demo_data": [
+    {
+      "con_id": "conv_001",
+      "project_id": "",
+      "tenant_id": "",
+      "subject": "Product availability",
+      "created_by": "",
+      "participant_ids": [],
+      "last_message_preview": "Yes, it is still in stock.",
+      "last_message_at": "2026-04-15T08:02:00Z",
+      "is_system": false,
+      "status": "open",
+      "created_at": "2026-04-15T08:00:00Z",
+      "updated_at": "2026-04-15T08:02:00Z"
+    },
+    {
+      "con_id": "conv_002",
+      "project_id": "",
+      "tenant_id": "",
+      "subject": "Order shipped",
+      "created_by": "",
+      "participant_ids": [],
+      "last_message_preview": "Your order has been shipped.",
+      "last_message_at": "2026-04-15T09:00:00Z",
+      "is_system": true,
+      "status": "open",
+      "created_at": "2026-04-15T09:00:00Z",
+      "updated_at": "2026-04-15T09:00:00Z"
+    },
+    {
+      "con_id": "conv_003",
+      "project_id": "",
+      "tenant_id": "",
+      "subject": "Payout processed",
+      "created_by": "",
+      "participant_ids": [],
+      "last_message_preview": "Your payout has been processed.",
+      "last_message_at": "2026-04-15T10:00:00Z",
+      "is_system": true,
+      "status": "open",
+      "created_at": "2026-04-15T10:00:00Z",
+      "updated_at": "2026-04-15T10:00:00Z"
+    }
+  ]
+}

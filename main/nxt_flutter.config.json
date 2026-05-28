@@ -20,5 +20,6 @@
     "ecommerce": false,
     "demoContent": true
   },
-  "selectedProjectType": "ecommerce"
+  "selectedProjectType": "ecommerce",
+  "installed": true
 }
