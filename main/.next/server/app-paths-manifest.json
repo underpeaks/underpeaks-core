@@ -1,12 +1,10 @@
 {
   "/api/notifications/list/route": "app/api/notifications/list/route.js",
   "/api/messages/list/route": "app/api/messages/list/route.js",
-  "/api/messages/thread/route": "app/api/messages/thread/route.js",
-  "/api/get-system-config/route": "app/api/get-system-config/route.js",
   "/api/session/route": "app/api/session/route.js",
   "/api/get-db-config/route": "app/api/get-db-config/route.js",
   "/api/menu/route": "app/api/menu/route.js",
   "/api/menu/pages/route": "app/api/menu/pages/route.js",
-  "/api/messages/send/route": "app/api/messages/send/route.js",
-  "/[locale]/console/messages/page": "app/[locale]/console/messages/page.js"
+  "/[locale]/console/messages/page": "app/[locale]/console/messages/page.js",
+  "/[locale]/console/dashboard/page": "app/[locale]/console/dashboard/page.js"
 }
