@@ -1,0 +1,217 @@
+{
+  "table_name": "nxf_pages",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "page_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true,
+      "hidden": true
+    },
+    {
+      "name": "project_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_projects(project_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_tenants(ten_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "organisation_id",
+      "type": "string",
+      "nullable": true,
+      "description": "optional tenant scope (null = global page)",
+      "hidden": true
+    },
+    {
+      "name": "created_by",
+      "type": "string",
+      "nullable": false,
+      "description": "user_id of page creator",
+      "hidden": true
+    },
+    {
+      "name": "page_type",
+      "type": "string",
+      "nullable": false,
+      "default": "admin",
+      "description": "admin | client — admin pages appear in CMS menu and generate admin screens; client pages are used by the page builder and generate storefront screens",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "is_system",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "system pages cannot be edited or deleted by the user",
+      "hidden": true
+    },
+    {
+      "name": "hidden",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "hide this page from navigation and sitemaps",
+      "hidden": false,
+      "ui_type": "toggle"
+    },
+    {
+      "name": "title",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "slug",
+      "type": "string",
+      "nullable": false,
+      "description": "unique URL identifier",
+      "hidden": false,
+      "ui_type": "slug-input"
+    },
+    {
+      "name": "model_id",
+      "type": "string",
+      "nullable": true,
+      "description": "links to nxf_system_models — the data model that powers this page",
+      "foreign_key": {
+        "references": "nxf_system_models(sm_id)"
+      },
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "template_type",
+      "type": "string",
+      "nullable": false,
+      "default": "list",
+      "description": "admin: list | detail | form | dashboard | custom — client: landing | blog | profile | legal | marketing | custom",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "status",
+      "type": "string",
+      "nullable": false,
+      "default": "draft",
+      "description": "draft | published | archived",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "visibility",
+      "type": "string",
+      "nullable": false,
+      "default": "public",
+      "description": "public | admin | draft",
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "seo_title",
+      "type": "string",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "seo_description",
+      "type": "text",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "textarea"
+    },
+    {
+      "name": "seo_keywords",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "[]",
+      "hidden": false,
+      "ui_type": "tags-input"
+    },
+    {
+      "name": "featured_image",
+      "type": "string",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "image-upload"
+    },
+    {
+      "name": "custom_css",
+      "type": "text",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "code-editor"
+    },
+    {
+      "name": "custom_js",
+      "type": "text",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "code-editor"
+    },
+    {
+      "name": "view_count",
+      "type": "integer",
+      "nullable": false,
+      "default": 0,
+      "hidden": false,
+      "ui_type": "number-input"
+    },
+    {
+      "name": "published_at",
+      "type": "datetime",
+      "nullable": true,
+      "hidden": false,
+      "ui_type": "datetime-picker"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false,
+      "hidden": true
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true,
+      "hidden": true
+    }
+  ],
+  "indexes": [
+    { "name": "idx_pages_org",        "fields": ["organisation_id"] },
+    { "name": "idx_pages_slug",       "fields": ["slug"]           },
+    { "name": "idx_pages_status",     "fields": ["status"]         },
+    { "name": "idx_pages_visibility", "fields": ["visibility"]     },
+    { "name": "idx_pages_creator",    "fields": ["created_by"]     },
+    { "name": "idx_pages_type",       "fields": ["page_type"]      },
+    { "name": "idx_pages_model",      "fields": ["model_id"]       }
+  ],
+  "constraints": [
+    {
+      "type": "unique",
+      "fields": ["organisation_id", "slug"]
+    },
+    {
+      "type": "foreign_key",
+      "fields": ["created_by"],
+      "references": {
+        "table": "nxf_saas_users",
+        "field": "user_id"
+      }
+    }
+  ]
+}

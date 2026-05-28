@@ -1,0 +1,84 @@
+[
+  {
+    "notification_id": "notif_001",
+    "project_id": "proj_001",
+    "user_id": "user_001",
+    "actor_user_id": "user_002",
+    "type": "comment",
+    "title": "New comment on your product",
+    "message": "John commented on your listing 'MacBook Pro 16\"'",
+    "entity_type": "product",
+    "entity_id": "prod_001",
+    "action_url": "/products/prod_001",
+    "priority": "normal",
+    "status": "unread",
+    "channel": "in_app",
+    "metadata": {
+      "comment_preview": "Is this still available?",
+      "avatar": "https://cdn.app/user2.png"
+    },
+    "read_at": null,
+    "created_at": "2026-04-15T08:00:00Z"
+  },
+  {
+    "notification_id": "notif_002",
+    "project_id": "proj_001",
+    "user_id": "user_003",
+    "actor_user_id": null,
+    "type": "payment",
+    "title": "Payout processed",
+    "message": "Your weekly payout of $1,250 has been processed.",
+    "entity_type": "payout",
+    "entity_id": "pay_001",
+    "action_url": "/payouts/pay_001",
+    "priority": "high",
+    "status": "unread",
+    "channel": "push",
+    "metadata": {
+      "currency": "USD"
+    },
+    "read_at": null,
+    "created_at": "2026-04-15T09:00:00Z"
+  },
+  {
+    "notification_id": "notif_003",
+    "project_id": "proj_001",
+    "user_id": "user_004",
+    "actor_user_id": "system",
+    "type": "system",
+    "title": "Security alert",
+    "message": "New login detected from a different device.",
+    "entity_type": "security",
+    "entity_id": null,
+    "action_url": "/security/activity",
+    "priority": "urgent",
+    "status": "read",
+    "channel": "email",
+    "metadata": {
+      "ip": "196.12.xx.xx",
+      "location": "South Africa"
+    },
+    "read_at": "2026-04-15T09:05:00Z",
+    "created_at": "2026-04-15T09:00:00Z"
+  },
+  {
+    "notification_id": "notif_004",
+    "project_id": "proj_002",
+    "user_id": "user_010",
+    "actor_user_id": "vendor_001",
+    "type": "message",
+    "title": "New message from vendor",
+    "message": "Your order has been shipped and is on its way.",
+    "entity_type": "order",
+    "entity_id": "order_123",
+    "action_url": "/orders/order_123",
+    "priority": "normal",
+    "status": "unread",
+    "channel": "in_app",
+    "metadata": {
+      "tracking": "TRK123456"
+    },
+    "read_at": null,
+    "created_at": "2026-04-15T10:00:00Z"
+  }
+]

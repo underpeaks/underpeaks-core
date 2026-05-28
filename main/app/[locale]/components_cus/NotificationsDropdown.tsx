@@ -63,7 +63,7 @@ interface Notification {
   type:        string
   status:      string
   priority:    string
-  action_url?: string
+ //action_url?: string
   created_at:  string
 }
 
@@ -163,9 +163,10 @@ export default function NotificationsDropdown({ notifications, onMarkRead, onMar
    * @param {Notification} n - The notification that was clicked.
    */
   const handleClick = (n: Notification) => {
-    if (n.status === 'unread') onMarkRead(n.id)
-    if (n.action_url) router.push(n.action_url)
-    else router.push('/console/notifications')
+    //if (n.status === 'unread') onMarkRead(n.id)
+    //if (n.action_url) router.push(n.action_url)
+    //else
+       router.push('/console/notifications')
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────

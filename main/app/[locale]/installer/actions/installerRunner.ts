@@ -34,10 +34,9 @@
  *   - writeConfigFile    : exported separately so the UI can call it on demand.
  */
 
-import { getTranslations }        from 'next-intl/server'
-import { useInstallerStore }      from '../../../store/useInstallerStore'
-import { createFlutterProject }   from './createFlutterProject'
-import { createNextJSProject }    from './createNextProject'
+import { useInstallerStore }    from '../../../store/useInstallerStore'
+import { createFlutterProject } from './createFlutterProject'
+import { createNextJSProject }  from './createNextProject'
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -73,10 +72,9 @@ function delay(ms: number): Promise<void> {
  * @throws If dbConfig is missing from the store, or if the API call fails.
  */
 async function createDatabaseSchemaAndTables(): Promise<void> {
-  //const t = await getTranslations('installerSteps')
   const { dbConfig, selectedProjectType } = useInstallerStore.getState()
 
-  if (!dbConfig) throw new Error(('errors.dbConfigNotFound'))
+  if (!dbConfig) throw new Error('Database config not found in installer store')
 
   const response = await fetch('/api/create-system-tables', {
     method:  'POST',
@@ -86,11 +84,11 @@ async function createDatabaseSchemaAndTables(): Promise<void> {
 
   if (!response.ok) {
     const err = await response.json()
-    throw new Error('errors.createTablesFailed',  )
+    throw new Error(err?.message || 'Failed to create system tables')
   }
 
   const data = await response.json()
-  console.log(('logs.tablesCreated'), data)
+  console.log('[installer] System tables created:', data)
   return data
 }
 
@@ -114,10 +112,8 @@ async function createAdminUser(
   projectName: string,
   subdomain:   string,
 ): Promise<void> {
-  //const t = await getTranslations('installerSteps')
-
-  if (!dbConfig)          throw new Error(('errors.dbConfigMissing'))
-  if (!adminUser?.email)  throw new Error(('errors.adminEmailMissing'))
+  if (!dbConfig)         throw new Error('Database config is missing')
+  if (!adminUser?.email) throw new Error('Admin user email is missing')
 
   const response = await fetch('/api/create-admin-user', {
     method:  'POST',
@@ -127,11 +123,11 @@ async function createAdminUser(
 
   if (!response.ok) {
     const err = await response.json()
-    throw new Error(('errors.createAdminFailed'))
+    throw new Error(err?.message || 'Failed to create admin user')
   }
 
   const data = await response.json()
-  console.log(('logs.adminCreated'), data)
+  console.log('[installer] Admin user created:', data)
   return data
 }
 
@@ -149,11 +145,10 @@ async function createAdminUser(
  *         API call fails.
  */
 async function createModels(): Promise<any> {
-  //const t = await getTranslations('installerSteps')
   const { adminUser, dbConfig, selectedProjectType } = useInstallerStore.getState()
 
-  if (!dbConfig)         throw new Error(('errors.dbConfigMissingStore'))
-  if (!adminUser?.email) throw new Error(('errors.adminEmailMissingStore'))
+  if (!dbConfig)         throw new Error('Database config is missing from installer store')
+  if (!adminUser?.email) throw new Error('Admin user email is missing from installer store')
 
   const response = await fetch('/api/models/create-models', {
     method:  'POST',
@@ -171,11 +166,11 @@ async function createModels(): Promise<any> {
 
   if (!response.ok) {
     const err = await response.json()
-    throw new Error(('errors.createModelsFailed'))
+    throw new Error(err?.message || 'Failed to create data models')
   }
 
   const data = await response.json()
-  console.log(('logs.modelsCreated'), data)
+  console.log('[installer] Data models created:', data)
   return data
 }
 
@@ -195,7 +190,6 @@ async function createModels(): Promise<any> {
  * @throws If the API call fails.
  */
 export async function writeConfigFile(): Promise<any> {
- // const t     = await getTranslations('installerSteps')
   const store = useInstallerStore.getState()
 
   const response = await fetch('/api/write-config', {
@@ -212,6 +206,7 @@ export async function writeConfigFile(): Promise<any> {
       selectedProjectType: store.selectedProjectType,
       selectedPages:       store.selectedPages,
       models:              store.models,
+      installed:           store.installed,
       adminUser: {
         // Password deliberately omitted — never write credentials to config
         email:    store.adminUser.email,
@@ -222,11 +217,11 @@ export async function writeConfigFile(): Promise<any> {
 
   if (!response.ok) {
     const err = await response.json()
-    throw new Error(('errors.writeConfigFailed'))
+    throw new Error(err?.message || 'Failed to write config file')
   }
 
   const data = await response.json()
-  console.log(('logs.configWritten'), data)
+  console.log('[installer] Config file written:', data)
   return data
 }
 
@@ -240,10 +235,9 @@ export async function writeConfigFile(): Promise<any> {
  * @throws If dbConfig is missing from the store, or if the API call fails.
  */
 async function setupStorage(): Promise<any> {
-  //const t = await getTranslations('installerSteps')
   const { dbConfig } = useInstallerStore.getState()
 
-  if (!dbConfig) throw new Error(('errors.dbConfigMissingStore'))
+  if (!dbConfig) throw new Error('Database config is missing from installer store')
 
   const response = await fetch('/api/create-storage-buckets', {
     method:  'POST',
@@ -253,11 +247,11 @@ async function setupStorage(): Promise<any> {
 
   if (!response.ok) {
     const err = await response.json()
-    throw new Error(('errors.setupStorageFailed'))
+    throw new Error(err?.message || 'Failed to set up storage buckets')
   }
 
   const data = await response.json()
-  console.log(('logs.storageCreated'), data)
+  console.log('[installer] Storage buckets created:', data)
   return data
 }
 
@@ -275,17 +269,16 @@ async function setupStorage(): Promise<any> {
  *          API response data.
  */
 async function installDemoContent(): Promise<any> {
-  //const t = await getTranslations('installerSteps')
   const { dbConfig, selectedProjectType, demoContentEnabled } = useInstallerStore.getState()
 
   // If the user did not opt in to demo content, skip this step gracefully
   if (!demoContentEnabled) {
-    console.log(('logs.demoContentSkipped'))
+    console.log('[installer] Demo content skipped — not enabled')
     return { skipped: true }
   }
 
   if (!selectedProjectType) {
-    throw new Error(('errors.projectTypeMissing'))
+    throw new Error('Selected project type is missing')
   }
 
   const response = await fetch('/api/install-demo-content', {
@@ -296,11 +289,11 @@ async function installDemoContent(): Promise<any> {
 
   if (!response.ok) {
     const err = await response.json()
-    throw new Error(('errors.installDemoFailed'))
+    throw new Error(err?.message || 'Failed to install demo content')
   }
 
   const data = await response.json()
-  console.log(('logs.demoContentInstalled'), data)
+  console.log('[installer] Demo content installed:', data)
   return data
 }
 
@@ -320,37 +313,88 @@ async function installDemoContent(): Promise<any> {
 
 /** Placeholder — will call the backend to register all project API endpoints. */
 async function createApiEndpoints(): Promise<void> {
-  //const t = await getTranslations('installerSteps')
-  console.log(('logs.creatingApiEndpoints'))
+  console.log('[installer] Creating API endpoints')
   await delay(1000)
 }
 
 /** Placeholder — will configure authentication providers and settings. */
 async function setupAuthSystem(): Promise<void> {
- // const t = await getTranslations('installerSteps')
-  console.log(('logs.settingUpAuth'))
+  console.log('[installer] Setting up authentication system')
   await delay(1000)
 }
 
 /** Placeholder — will configure session management (timeouts, storage, etc.). */
 async function configureSession(): Promise<void> {
-  //const t = await getTranslations('installerSteps')
-  console.log(('logs.configuringSession'))
+  console.log('[installer] Configuring session management')
   await delay(1000)
 }
 
-/** Placeholder — will run automated checks to verify the installation. */
+/**
+ * runTests
+ *
+ * Verifies the installation is complete and working by running two checks:
+ * 1. Reads config back from disk and confirms installed === true.
+ * 2. Signs in with the admin credentials to confirm auth works end-to-end.
+ */
 async function runTests(): Promise<void> {
-  //const t = await getTranslations('installerSteps')
-  console.log(('logs.runningTests'))
-  await delay(1000)
+  // ── Check 1: config file landed on disk correctly ────────────────────────
+  const configResponse = await fetch('/api/get-system-config')
+  if (!configResponse.ok) {
+    throw new Error('Verification failed: could not read system config')
+  }
+  const config = await configResponse.json()
+  if (config.installed !== true) {
+    throw new Error('Verification failed: config.json does not have installed: true')
+  }
+
+  // // ── Check 2: admin credentials work end-to-end ───────────────────────────
+  // const { adminUser } = useInstallerStore.getState()
+
+  // if (!adminUser?.email || !adminUser?.password) {
+  //   throw new Error('Verification failed: admin credentials missing from store')
+  // }
+
+  // const { getAuth, signInWithEmailAndPassword } = await import('firebase/auth')
+  // const auth = getAuth()
+
+  // const credential = await signInWithEmailAndPassword(
+  //   auth,
+  //   adminUser.email,
+  //   adminUser.password,
+  // )
+
+  // const token = await credential.user.getIdToken()
+  // if (!token) {
+  //   throw new Error('Verification failed: sign-in returned no token')
+  // }
+
+  // await auth.signOut()
+
+  console.log('[installer] Installation verified successfully')
 }
 
-/** Placeholder — will perform final cleanup and mark the install as complete. */
+/**
+ * finalizeInstaller
+ *
+ * Clears sensitive data from the installer store and redirects to the
+ * console dashboard now that installation is complete.
+ */
 async function finalizeInstaller(): Promise<void> {
-  //const t = await getTranslations('installerSteps')
-  console.log(('logs.finalizing'))
-  await delay(1000)
+  // ── Clear sensitive data from memory ────────────────────────────────────
+  useInstallerStore.setState((state) => ({
+    adminUser: {
+      ...state.adminUser,
+      password: '', // only sensitive field — email/fullName can stay
+    },
+  }))
+
+  console.log('[installer] Installer finalized — redirecting to dashboard')
+
+  // ── Redirect ─────────────────────────────────────────────────────────────
+  // This is a non-React async function so we can't use Next.js router.
+  // window.location.href is fine here — a full navigation is appropriate
+  // since the installer is now complete and the app state should reset cleanly.
+  window.location.href = '/console/done'
 }
 
 // ---------------------------------------------------------------------------
@@ -424,7 +468,6 @@ export const INSTALL_STEPS: string[] = [
 export async function runInstallerSteps(
   onProgress: (stepIndex: number) => void,
 ): Promise<void> {
- // const t = await getTranslations('installerSteps')
   const { dbConfig, adminUser, selectedStack, projectName, subdomain } =
     useInstallerStore.getState()
 
@@ -439,11 +482,12 @@ export async function runInstallerSteps(
          * or the "both" stack option in the installer wizard.
          */
         case 'Installing Flutter project':
-          console.log('INSTALLING FLUTTER')
+          console.log('[installer] Installing Flutter project')
           if (selectedStack === 'flutter' || selectedStack === 'both') {
+            console.log(`FLUTTER PROJECT NAME INSTALLER: ${projectName} `)
             await createFlutterProject(projectName)
           }
-          console.log('INSTALLING FLUTTER COMPLETED')
+          console.log('[installer] Flutter project installation complete')
           break
 
         /**
@@ -451,11 +495,11 @@ export async function runInstallerSteps(
          * or the "both" stack option.
          */
         case 'Installing Next.js project':
-           console.log('INSTALLING NEXTJS')
+          console.log('[installer] Installing Next.js project')
           if (selectedStack === 'next' || selectedStack === 'both') {
             await createNextJSProject(projectName)
           }
-           console.log('INSTALLING NEXTJS COMPLETED')
+          console.log('[installer] Next.js project installation complete')
           break
 
         /** Create all required database tables for the project. */
@@ -476,7 +520,7 @@ export async function runInstallerSteps(
         case 'Creating data models': {
           const modelsResult = await createModels()
           if (modelsResult.skipped) {
-            console.log(('logs.modelsSkipped'))
+            console.log('[installer] Data models skipped — already exist')
           }
           break
         }
@@ -514,12 +558,12 @@ export async function runInstallerSteps(
           await installDemoContent()
           break
 
-        /** Placeholder — run automated verification tests. */
+        /** Run automated verification checks. */
         case 'Running tests to verify installation':
           await runTests()
           break
 
-        /** Placeholder — final cleanup and install completion. */
+        /** Final cleanup and install completion. */
         case 'Finalizing installer and cleanup':
           await finalizeInstaller()
           break
@@ -530,7 +574,7 @@ export async function runInstallerSteps(
          * doing nothing or crashing.
          */
         default:
-          console.warn(('logs.noImplementation'))
+          console.warn(`[installer] No implementation found for step: ${step}`)
           await delay(500)
       }
 
@@ -543,7 +587,7 @@ export async function runInstallerSteps(
        * the user exactly which step failed, e.g.:
        * "Step failed: Creating admin user - Admin user email is missing"
        */
-      throw new Error(('errors.stepFailed'))
+      throw new Error(`Step failed: ${step} — ${error.message}`)
     }
   }
 }

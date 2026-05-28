@@ -44,6 +44,7 @@ import ColoursPage      from './pages/ColoursPage';
 import TypographyPage   from './pages/TypographyPage';
 import SpacingPage      from './pages/SpacingPage';
 import FeatureFlagsPage from './pages/FeatureFlagsPage';
+import { ThemeProvider } from '../../ThemeContext';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -160,6 +161,8 @@ export default function ThemingPage({ activeId }: Props) {
   // -------------------------------------------------------------------------
 
   return (
+    <ThemeProvider>
+    <div className="absolute inset-0 flex bg-gray-100 overflow-hidden">
     <div className="absolute inset-0 flex bg-gray-100 overflow-hidden">
 
       {/* ----------------------------------------------------------------
@@ -222,5 +225,7 @@ export default function ThemingPage({ activeId }: Props) {
       </main>
 
     </div>
+     </div>
+  </ThemeProvider>
   );
 }

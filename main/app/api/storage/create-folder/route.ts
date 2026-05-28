@@ -49,7 +49,7 @@
 
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // Route Handler
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
      * The adapter is configured automatically from environment variables, so
      * the handler does not need to know which provider is in use.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
 
     // -----------------------------------------------------------------------
     // 3. Confirm the adapter supports folder creation

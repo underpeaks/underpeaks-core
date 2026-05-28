@@ -27,7 +27,7 @@
 'use client'
 
 import { useState, useEffect }                    from 'react'
-import { useTranslations }                        from 'next-intl'
+//import { useTranslations }                        from 'next-intl'
 import { SectionCard, Input, SaveButton, FormField } from '../../ui'
 import { useConsoleStore }                        from '@/app/store/consoleStore'
 
@@ -54,7 +54,7 @@ export default function OverviewPage() {
    * t — Translation function scoped to the 'overviewPage' namespace.
    * Use t('key') to get the translated string for that key.
    */
-  const t = useTranslations('overviewPage')
+  //const t = useTranslations('overviewPage')
 
   /**
    * Pull global state from the console store:
@@ -153,10 +153,10 @@ export default function OverviewPage() {
    * Each has a translated label and a formatted value.
    */
   const stats = [
-    { label: t('stats.dbType'),     value: capitalize(dbType)                  },
-    { label: t('stats.environment'), value: capitalize(env)                    },
-    { label: t('stats.deployment'),  value: capitalize(config?.deployment_type) },
-    { label: t('stats.status'),      value: t('stats.statusActive')            },
+    { label: ('stats.dbType'),     value: capitalize(dbType)                  },
+    { label: ('stats.environment'), value: capitalize(env)                    },
+    { label: ('stats.deployment'),  value: capitalize(config?.deployment_type) },
+    { label: ('stats.status'),      value: ('stats.statusActive')            },
   ]
 
   /**
@@ -165,16 +165,16 @@ export default function OverviewPage() {
    * Falls back to "—" for any missing field.
    */
   const userInfo = [
-    { label: t('userInfo.fullName'),    value: user?.full_name  ?? '—' },
-    { label: t('userInfo.email'),       value: user?.user_email ?? '—' },
-    { label: t('userInfo.role'),        value: user?.role       ?? '—' },
-    { label: t('userInfo.status'),      value: user?.status     ?? '—' },
+    { label: ('userInfo.fullName'),    value: user?.full_name  ?? '—' },
+    { label: ('userInfo.email'),       value: user?.user_email ?? '—' },
+    { label: ('userInfo.role'),        value: user?.role       ?? '—' },
+    { label: ('userInfo.status'),      value: user?.status     ?? '—' },
     {
-      label: t('userInfo.verified'),
-      value: user?.email_verified ? t('userInfo.verifiedYes') : t('userInfo.verifiedNo'),
+      label: ('userInfo.verified'),
+      value: user?.email_verified ? ('userInfo.verifiedYes') : ('userInfo.verifiedNo'),
     },
     {
-      label: t('userInfo.memberSince'),
+      label: ('userInfo.memberSince'),
       value: user?.created_at
         ? new Date(user.created_at).toLocaleDateString()
         : '—',
@@ -202,7 +202,7 @@ export default function OverviewPage() {
 
     setApiKeySaving(true)
     setApiKeySaved(false)
-    console.log(t('logs.savingLicenseKey'))
+    console.log(('logs.savingLicenseKey'))
 
     try {
       const res = await fetch('/api/update-project-settings', {
@@ -220,7 +220,7 @@ export default function OverviewPage() {
         // Update only the license key in the global config
         loadConfig({ ...(config ?? {}), nxf_api_key: nxfApiKey })
         setApiKeySaved(true)
-        console.log(t('logs.licenseKeySaved'))
+        console.log(('logs.licenseKeySaved'))
         setTimeout(() => setApiKeySaved(false), 3000)
       }
     } finally {
@@ -245,7 +245,7 @@ export default function OverviewPage() {
   const handleSave = async () => {
     setSaving(true)
     setSaved(false)
-    console.log(t('logs.savingProjectInfo'))
+    console.log(('logs.savingProjectInfo'))
 
     try {
       const res = await fetch('/api/update-project-settings', {
@@ -266,7 +266,7 @@ export default function OverviewPage() {
           project_url:  projectUrl,
         })
         setSaved(true)
-        console.log(t('logs.projectInfoSaved'))
+        console.log(('logs.projectInfoSaved'))
         setTimeout(() => setSaved(false), 3000)
       }
     } finally {
@@ -285,8 +285,8 @@ export default function OverviewPage() {
         * Page heading and description
         * ------------------------------------------------------------------ */}
       <div>
-        <h2 className="text-lg font-bold text-gray-900">{t('heading')}</h2>
-        <p className="text-sm text-gray-500 mt-0.5">{t('subheading')}</p>
+        <h2 className="text-lg font-bold text-gray-900">{('heading')}</h2>
+        <p className="text-sm text-gray-500 mt-0.5">{('subheading')}</p>
       </div>
 
       {/* ------------------------------------------------------------------
@@ -313,18 +313,18 @@ export default function OverviewPage() {
         *   - Just saved        → "✓ Saved"
         * A masked preview of the key on file is shown below the input.
         * ------------------------------------------------------------------ */}
-      <SectionCard title={t('licenseKey.sectionTitle')}>
+      <SectionCard title={('licenseKey.sectionTitle')}>
         <p className="text-xs text-gray-400 mb-3">
-          {t('licenseKey.description')}
+          {('licenseKey.description')}
         </p>
 
-        <FormField label={t('licenseKey.inputLabel')}>
+        <FormField label={('licenseKey.inputLabel')}>
           <div className="flex gap-2 items-center">
             <div className="flex-1">
               <Input
                 value={nxfApiKey}
                 onChange={setNxfApiKey}
-                placeholder={t('licenseKey.inputPlaceholder')}
+                placeholder={('licenseKey.inputPlaceholder')}
               />
             </div>
 
@@ -339,12 +339,12 @@ export default function OverviewPage() {
               className="shrink-0 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               {apiKeySaving
-                ? t('licenseKey.buttonSaving')
+                ? ('licenseKey.buttonSaving')
                 : apiKeySaved
-                  ? t('licenseKey.buttonSaved')
+                  ? ('licenseKey.buttonSaved')
                   : nxfApiKey && config?.nxf_api_key
-                    ? t('licenseKey.buttonUpdate')
-                    : t('licenseKey.buttonSave')
+                    ? ('licenseKey.buttonUpdate')
+                    : ('licenseKey.buttonSave')
               }
             </button>
           </div>
@@ -353,9 +353,7 @@ export default function OverviewPage() {
         {/* Masked key preview — only shown if a key is already saved in config */}
         {config?.nxf_api_key && (
           <p className="text-[11px] text-gray-400 mt-1">
-            {t('licenseKey.keyOnFile', {
-              prefix: config.nxf_api_key.slice(0, 12),
-            })}
+           License key on file: {config.nxf_api_key.slice(0, 12)}...
           </p>
         )}
       </SectionCard>
@@ -364,23 +362,23 @@ export default function OverviewPage() {
         * Project Info Section
         * Lets the user update the project name and public URL.
         * ------------------------------------------------------------------ */}
-      <SectionCard title={t('projectInfo.sectionTitle')}>
-        <FormField label={t('projectInfo.nameLabel')}>
+      <SectionCard title={('projectInfo.sectionTitle')}>
+        <FormField label={('projectInfo.nameLabel')}>
           <Input
             value={projectName}
             onChange={setProjectName}
-            placeholder={t('projectInfo.namePlaceholder')}
+            placeholder={('projectInfo.namePlaceholder')}
           />
         </FormField>
 
         <FormField
-          label={t('projectInfo.urlLabel')}
-          hint={t('projectInfo.urlHint')}
+          label={('projectInfo.urlLabel')}
+          hint={('projectInfo.urlHint')}
         >
           <Input
             value={projectUrl}
             onChange={setProjectUrl}
-            placeholder={t('projectInfo.urlPlaceholder')}
+            placeholder={('projectInfo.urlPlaceholder')}
           />
         </FormField>
       </SectionCard>

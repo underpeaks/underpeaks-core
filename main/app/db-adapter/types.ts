@@ -763,6 +763,7 @@ export interface DBAdapter {
    * @returns          The matching records.
    */
   read?(config: DBConfig, collection: string, query?: any): Promise<any>;
+  readAll?(config: DBConfig, collection: string, query?: any): Promise<any>;
 
   /**
    * update
@@ -913,6 +914,22 @@ export interface DBAdapter {
     retries?: number,
     delay?: number
   ): Promise<any | null>;
+
+  /**
+ * generateEmailVerificationLink
+ * Generates a one-time email verification link for the given address.
+ * Firebase: uses Admin SDK generateEmailVerificationLink.
+ * Other DB types: generate a token, store it, return a /verify-email URL.
+ *
+ * @param config      - DB connection config.
+ * @param email       - The email address to generate a link for.
+ * @param redirectUrl - URL to redirect to after verification.
+ */
+generateEmailVerificationLink?(
+  config:       DBConfig,
+  email:        string,
+  redirectUrl?: string
+): Promise<string>
 
   // ─── Storage Buckets ──────────────────────────────────────────────────────
 
@@ -1065,6 +1082,183 @@ alterTable?(tableName: string, changes: {
 dropTable?(tableName: string): Promise<any>
 
 renameTable?(oldName: string, newName: string): Promise<any>
+
+
+//MESSAGES
+deleteConversation?(
+  config:         DBConfig,
+  conversationId: string
+): Promise<{ success: boolean }>
+
+/**
+ * listConversations
+ * Fetches the most recent conversations for a project, with unread count
+ * per conversation for the given user.
+ *
+ * @param config     - DB connection config.
+ * @param project_id - The project to scope conversations to.
+ * @param uid        - The user ID to calculate unread counts for.
+ * @param limit      - Max number of conversations to return (default 10).
+ */
+listConversations?(
+  config:     DBConfig,
+  project_id: string,
+  uid:        string,
+  limit?:     number
+): Promise<Array<Record<string, any>>>
+
+/**
+ * markAllMessagesRead
+ * Marks all unread messages for a given user as read in a single atomic operation.
+ *
+ * @param config - DB connection config.
+ * @param uid    - The recipient user ID whose unread messages to mark as read.
+ */
+markAllMessagesRead?(
+  config: DBConfig,
+  uid:    string
+): Promise<{ success: boolean }>
+
+/**
+ * markConversationRead
+ * Marks all unread messages in a specific conversation as read for a given user.
+ *
+ * @param config          - DB connection config.
+ * @param uid             - The recipient user ID.
+ * @param conversationId  - The conversation to mark as read.
+ */
+markConversationRead?(
+  config:         DBConfig,
+  uid:            string,
+  conversationId: string
+): Promise<{ success: boolean }>
+
+/**
+ * sendMessage
+ * Creates a new message in a conversation and updates the conversation
+ * with the latest message preview and timestamp.
+ *
+ * @param config          - DB connection config.
+ * @param conversationId  - The conversation to post the message to.
+ * @param senderId        - The authenticated user sending the message.
+ * @param content         - The text body of the message.
+ * @returns The full saved message object.
+ */
+sendMessage?(
+  config:         DBConfig,
+  conversationId: string,
+  senderId:       string,
+  content:        string
+): Promise<Record<string, any>>
+
+/**
+ * getConversationThread
+ * Fetches all messages in a conversation ordered chronologically (oldest first).
+ *
+ * @param config          - DB connection config.
+ * @param conversationId  - The conversation to fetch messages for.
+ * @returns Array of message objects sorted by sent_at ascending.
+ */
+getConversationThread?(
+  config:         DBConfig,
+  conversationId: string
+): Promise<Array<Record<string, any>>>
+
+///NOTIFICATIONS
+
+/**
+ * listNotifications
+ * Fetches active (non-deleted) notifications for a user, ordered by status
+ * then by creation date descending.
+ *
+ * @param config  - DB connection config.
+ * @param uid     - The recipient user ID to fetch notifications for.
+ * @param limit   - Max number of notifications to return (default 20).
+ */
+listNotifications?(
+  config:     DBConfig,
+  uid:        string,
+  project_id: string,
+  limit?:     number
+): Promise<Array<Record<string, any>>>
+
+/**
+ * markNotificationRead
+ * Marks a single notification as read, verifying the requesting user owns it.
+ *
+ * @param config          - DB connection config.
+ * @param notificationId  - The notification document ID to mark as read.
+ * @param uid             - The authenticated user — must match the notification's user_id.
+ */
+markNotificationRead?(
+  config:         DBConfig,
+  notificationId: string,
+  uid:            string
+): Promise<{ success: boolean }>
+
+/**
+ * markAllNotificationsRead
+ * Marks all unread notifications for a user within a project as read
+ * in a single atomic operation.
+ *
+ * @param config     - DB connection config.
+ * @param uid        - The authenticated user ID.
+ * @param project_id - The project to scope the update to.
+ */
+markAllNotificationsRead?(
+  config:     DBConfig,
+  uid:        string,
+  project_id: string
+): Promise<{ success: boolean; updated: number }>
+
+/**
+ * listApiKeys
+ * Fetches all active API keys for a project, ordered newest first.
+ * Returns safe fields only — key_encrypted is never included.
+ *
+ * @param config     - DB connection config.
+ * @param project_id - The project to fetch keys for.
+ */
+listApiKeys?(
+  config:     DBConfig,
+  project_id: string
+): Promise<Array<{
+  api_id:       string
+  name:         string
+  key_prefix:   string
+  status:       string
+  last_used_at: string | null
+  created_at:   string
+}>>
+
+/**
+ * getApiKey
+ * Fetches a single API key record by its document ID.
+ * Returns the full record including key_encrypted for server-side decryption.
+ * Never expose key_encrypted in API responses — server use only.
+ *
+ * @param config - DB connection config.
+ * @param api_id - The document ID of the key record.
+ */
+getApiKey?(
+  config: DBConfig,
+  api_id: string
+): Promise<Record<string, any> | null>
+
+/**
+ * revokeApiKey
+ * Marks an API key as revoked after verifying it belongs to the given project.
+ * Soft-delete only — record is kept for audit trail.
+ *
+ * @param config     - DB connection config.
+ * @param api_id     - The document ID of the key to revoke.
+ * @param project_id - The project that must own the key (IDOR protection).
+ */
+revokeApiKey?(
+  config:     DBConfig,
+  api_id:     string,
+  project_id: string
+): Promise<{ success: boolean }>
 
   // ─── Extensibility ────────────────────────────────────────────────────────
 

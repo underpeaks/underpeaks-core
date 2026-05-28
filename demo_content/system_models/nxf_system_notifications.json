@@ -5,6 +5,7 @@
     "title": "Project Deployment Successful",
     "body": "Your Flutter ecommerce app has been deployed successfully.",
     "is_read": false,
+    "status":"unread",
     "data": {
       "project_id": "proj_001",
       "deployment_id": "dep_123",
@@ -18,6 +19,7 @@
     "title": "New Team Invitation",
     "body": "You have been invited to join Project SaaS Dashboard as an editor.",
     "is_read": false,
+    "status":"unread",
     "data": {
       "project_id": "proj_002",
       "role": "editor",
@@ -31,6 +33,7 @@
     "title": "Generator Run Completed",
     "body": "Next.js SaaS generator finished successfully.",
     "is_read": true,
+    "status":"unread",
     "data": {
       "generator_id": "sg_003",
       "project_id": "proj_002",
@@ -44,6 +47,7 @@
     "title": "Low Inventory Warning",
     "body": "Some products are below reorder level.",
     "is_read": false,
+    "status":"unread",
     "data": {
       "product_ids": ["prod_001", "prod_005"],
       "threshold": 5
@@ -56,6 +60,7 @@
     "title": "Order Shipped",
     "body": "Your order ORD-10452 has been shipped.",
     "is_read": true,
+    "status":"unread",
     "data": {
       "order_id": "ord_10452",
       "tracking_number": "TRK123456789"

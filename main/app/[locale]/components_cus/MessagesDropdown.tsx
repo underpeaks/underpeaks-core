@@ -190,7 +190,7 @@ export default function MessagesDropdown({ conversations, onMarkRead }: Props) {
   const handleClick = (conv: Conversation) => {
     const id = conv.con_id ?? conv.id
     if (conv.unread_count > 0) onMarkRead(id)
-    router.push(`/console/messages/${id}`)
+    router.push(`/console/messages?open=${id}`)
   }
 
   // ─── Render ───────────────────────────────────────────────────────────────

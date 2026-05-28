@@ -62,7 +62,7 @@ interface Notification {
   type:        string
   status:      string
   priority:    string
-  action_url?: string
+ //action_url?: string
   created_at:  string
 }
 
@@ -232,7 +232,7 @@ export default function NotificationCard({ notification, onMarkRead, onDelete }:
               </button>
             )}
 
-            {/* View link — only visible when the notification has an action URL */}
+            {/* View link — only visible when the notification has an action URL
             {notification.action_url && (
               <a
                 href={notification.action_url}
@@ -240,7 +240,7 @@ export default function NotificationCard({ notification, onMarkRead, onDelete }:
               >
                 {t('actions.view')}
               </a>
-            )}
+            )} */}
 
             {/* Delete button — always visible */}
             <button

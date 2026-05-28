@@ -19,25 +19,29 @@
  *   - The page they originally tried to visit (via the redirectedFrom query param), or
  *   - The default /console page.
  *
+ * On successful sign-in (both flows):
+ *   - nxf_users is updated: is_logged_in → true, last_login → now
+ *   - An activity log entry is written via POST /api/activity-log
+ *
  * ⚠️  Security rules for this page:
  *   - Never log the user's email or password
  *   - Never log the Firebase ID token or access token
  *   - Never expose raw internal errors to the console in production
  */
 
-import { useState, Suspense } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
-import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert'
-import { FiMail, FiLock } from 'react-icons/fi'
-import { useTranslations } from 'next-intl'
-
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth'
-import { initializeApp, getApps } from 'firebase/app'
-import { parseFirebaseWebConfig } from '@/app/lib/firebaseConfig'
+import { useState, Suspense }                        from 'react'
+import { useRouter }                                 from 'next/navigation'
+import Link                                          from 'next/link'
+import { Input }                                     from '@/components/ui/input'
+import { Button }                                    from '@/components/ui/button'
+import { Label }                                     from '@/components/ui/label'
+import { Alert, AlertTitle, AlertDescription }       from '@/components/ui/alert'
+import { FiMail, FiLock }                            from 'react-icons/fi'
+import { useTranslations }                           from 'next-intl'
+import { getAuth, signInWithEmailAndPassword }       from 'firebase/auth'
+import { initializeApp, getApps }                    from 'firebase/app'
+import { parseFirebaseWebConfig }                    from '@/app/lib/firebaseConfig'
+import { logActivity }                               from '@/app/lib/logActivity'
 
 /**
  * @component SignInPageWrapper
@@ -66,32 +70,21 @@ export default function SignInPageWrapper() {
  * The main sign-in form. Handles:
  *   - Capturing email and password input from the user
  *   - Submitting credentials to the correct authentication backend
+ *   - Updating nxf_users (is_logged_in, last_login) on success
+ *   - Writing a user_login activity log entry on success
  *   - Displaying loading and error states
  *   - Redirecting the user after a successful sign-in
  *
  * @returns {JSX.Element}
  */
 function SignInPage() {
-  /**
-   * t() is the translation function from next-intl.
-   * Call t('some.key') to get the translated string for that key.
-   * All keys live under the "signIn" namespace in en.json.
-   */
-  const t = useTranslations('signIn')
+  const t            = useTranslations('signIn')
+  const router       = useRouter()
 
   /**
-   * router lets us programmatically navigate the user to another page.
-   * We use router.replace() after a successful sign-in.
-   */
-  const router = useRouter()
-
-  /**
-   * After sign-in, we redirect the user back to the page they were trying to visit.
-   * Next.js middleware adds a ?redirectedFrom=/some/path param to the URL when it
-   * redirects an unauthenticated user to this sign-in page.
-   * If no such param exists, we fall back to /console.
-   *
-   * The typeof window check prevents a crash during SSR where window doesn't exist.
+   * After sign-in, redirect the user back to the page they were trying to visit.
+   * Next.js middleware adds ?redirectedFrom=/some/path when redirecting an
+   * unauthenticated user here. Falls back to /console if absent.
    */
   const redirectedFrom =
     typeof window !== 'undefined'
@@ -100,56 +93,74 @@ function SignInPage() {
 
   // ─── State ───────────────────────────────────────────────────────────────────
 
-  /** The email address typed into the email field. */
-  const [email, setEmail] = useState('')
-
-  /**
-   * The password typed into the password field.
-   * ⚠️ Never log this value under any circumstances.
-   */
+  const [email,    setEmail]    = useState('')
   const [password, setPassword] = useState('')
+  const [loading,  setLoading]  = useState(false)
+  const [error,    setError]    = useState<string | null>(null)
+
+  // ─── Helpers ─────────────────────────────────────────────────────────────────
 
   /**
-   * True while the sign-in request is in flight.
-   * Disables the submit button and shows a spinner to prevent double submissions.
+   * recordLogin
+   *
+   * Called after a successful sign-in regardless of DB type.
+   * Performs two fire-and-forget operations in parallel:
+   *
+   * 1. PATCH /api/users — sets is_logged_in: true and last_login: now on the
+   *    user's nxf_users document. Uses the same PATCH route used by the CMS
+   *    users page, extended to accept is_logged_in and last_login fields.
+   *
+   * 2. POST /api/activity-log — writes a user_login event to
+   *    nxf_system_activity_logs. project_id and tenant_id are resolved
+   *    server-side — we only pass user_id, action, and context.
+   *
+   * Both calls are best-effort. A failure here must never block the redirect —
+   * the user successfully authenticated and should reach the app regardless.
+   *
+   * @param userId — The resolved user ID (Firebase UID or nxf_users.user_id).
    */
-  const [loading, setLoading] = useState(false)
+  async function recordLogin(userId: string): Promise<void> {
+    const now = new Date().toISOString()
 
-  /**
-   * Holds an error message when sign-in fails, or null when there is no error.
-   * When non-null, an error alert is rendered above the form.
-   */
-  const [error, setError] = useState<string | null>(null)
+    await Promise.allSettled([
+      // Update nxf_users — mark online and record login time
+      fetch('/api/cmsusers', {
+        method:  'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          user_id:        userId,
+          target_user_id: userId,
+          is_logged_in:   true,
+          last_login:     now,
+        }),
+      }),
+
+      // Write activity log entry
+      logActivity(userId, 'user_login', { email }),
+    ])
+  }
 
   // ─── Sign-In Handler ─────────────────────────────────────────────────────────
 
   /**
-   * @function handleSignin
-   * @description
-   * Triggered when the user clicks the "Sign In" button.
+   * handleSignin
    *
-   * Steps:
-   *  1. Sets loading to true and clears any previous error.
-   *  2. Reads NEXT_PUBLIC_DB_TYPE to decide which auth flow to use.
+   * Triggered when the user clicks "Sign In".
    *
-   *  Firebase flow:
-   *   - Initialises Firebase once (guards against re-initialisation).
-   *   - Calls signInWithEmailAndPassword() with the user's credentials.
-   *   - Gets a short-lived JWT ID token from the authenticated user.
-   *   - POSTs that token (in the Authorization header) to /api/session,
-   *     which creates a secure server-side session cookie.
-   *   - Stores the token in localStorage for client-side authenticated requests.
+   * Firebase flow:
+   *   1. Initialise Firebase app once (guards against re-init).
+   *   2. signInWithEmailAndPassword → UserCredential.
+   *   3. getIdToken → POST /api/session (sets HTTP-only session cookie).
+   *   4. Store token in localStorage.
+   *   5. recordLogin(uid).
    *
-   *  Custom (non-Firebase) flow:
-   *   - POSTs email and password to /api/signin.
-   *   - Stores the returned access token in localStorage.
+   * Custom flow:
+   *   1. POST /api/signin with email + password.
+   *   2. Store returned accessToken in localStorage.
+   *   3. recordLogin(data.user.user_id).
    *
-   *  3. On success: redirects to redirectedFrom.
-   *  4. On failure: stores the error message in state to display in the UI.
-   *  5. Always resets loading to false when done.
-   *
-   * @async
-   * @returns {Promise<void>}
+   * On success: redirect to redirectedFrom.
+   * On failure: display error in UI.
    */
   async function handleSignin() {
     setLoading(true)
@@ -159,13 +170,11 @@ function SignInPage() {
       const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE
 
       if (DB_TYPE === 'firebase') {
-        // ── Firebase Authentication Flow ────────────────────────────────────
+        // ── Firebase Authentication Flow ──────────────────────────────────
 
         /**
-         * Only initialise the Firebase app if it hasn't been initialised yet.
-         * getApps() returns all currently active Firebase app instances.
-         * This check prevents a "Firebase App named '[DEFAULT]' already exists" error
-         * if this function is called more than once or the component re-renders.
+         * Initialise Firebase once. getApps() guards against the
+         * "app already exists" error on re-renders or double calls.
          */
         if (!getApps().length) {
           const firebaseConfig = parseFirebaseWebConfig(
@@ -174,107 +183,77 @@ function SignInPage() {
           initializeApp(firebaseConfig)
         }
 
-        /** Get the Firebase Auth instance for the default app. */
-        const auth = getAuth()
-
-        /**
-         * Attempt to sign in the user with their email and password.
-         * Firebase verifies the credentials and returns a UserCredential object.
-         * If the credentials are wrong, Firebase throws an error here which is
-         * caught by the outer try/catch and shown to the user.
-         */
+        const auth           = getAuth()
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
 
         /**
-         * Get a short-lived JWT ID token from the authenticated Firebase user.
-         * This token proves the user's identity to our backend without us ever
-         * storing or transmitting their password.
-         * ⚠️ Never log this token — it is a security credential.
+         * Exchange the Firebase ID token for a server-side session cookie.
+         * ⚠️ Never log idToken — it is a short-lived security credential.
          */
         const idToken = await userCredential.user.getIdToken()
 
-        /**
-         * Send the ID token to /api/session via the Authorization header.
-         * Our server verifies the token using the Firebase Admin SDK,
-         * then sets a secure HTTP-only session cookie for future requests.
-         * We never send credentials in the request body — only in the header.
-         */
-        const res = await fetch('/api/session', {
-          method: 'POST',
+        const res  = await fetch('/api/session', {
+          method:  'POST',
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${idToken}`,
+            Authorization:  `Bearer ${idToken}`,
           },
         })
-
         const data = await res.json()
 
-        /**
-         * If the server returned a non-OK status or didn't return a user object,
-         * throw an error so it gets caught below and shown in the UI.
-         */
         if (!res.ok || !data.user) {
           throw new Error(data.error || t('errors.signinFailed'))
         }
 
-        /**
-         * Store the Firebase ID token in localStorage for use in client-side
-         * authenticated API calls (e.g. calling Firebase services directly).
-         * ⚠️ Never log this value.
-         */
+        // ⚠️ Never log this value
         localStorage.setItem('authToken', idToken)
 
-      } else {
-        // ── Custom (Non-Firebase) Authentication Flow ───────────────────────
-
         /**
-         * Send the user's credentials to our own /api/signin endpoint.
-         * The server validates them against its database and returns a JWT
-         * access token on success.
+         * Record the login in nxf_users and nxf_system_activity_logs.
+         * Uses the Firebase UID as the user identifier — this matches the
+         * user_id stored in nxf_users for Firebase installations.
+         * Best-effort: await but never let a failure here block the redirect.
          */
-        const res = await fetch('/api/signin', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        })
+        await recordLogin(userCredential.user.uid)
 
+      } else {
+        // ── Custom (Non-Firebase) Authentication Flow ─────────────────────
+
+        const res  = await fetch('/api/signin', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ email, password }),
+        })
         const data = await res.json()
 
-        /**
-         * If the server returned a failure response, throw with the server's
-         * error message so it surfaces in the UI.
-         */
         if (!res.ok || !data.success) {
           throw new Error(data.error || t('errors.signinFailed'))
         }
 
-        /**
-         * Store the access token for use in future authenticated API requests.
-         * ⚠️ Never log this value.
-         */
+        // ⚠️ Never log this value
         localStorage.setItem('authToken', data.accessToken)
+
+        /**
+         * Record the login. Uses data.user.user_id — the ID field returned
+         * by the custom /api/signin endpoint from nxf_users.
+         */
+        await recordLogin(data.user.user_id)
       }
 
       /**
-       * Sign-in succeeded — navigate the user to their destination.
-       * router.replace() is used instead of router.push() so the sign-in page
-       * is removed from the browser history. This prevents the user from pressing
-       * Back and landing on the sign-in page again after logging in.
+       * Sign-in succeeded — navigate to destination.
+       * router.replace() removes the sign-in page from history so the user
+       * cannot press Back and land here again after logging in.
        */
       router.replace(redirectedFrom)
 
     } catch (err: any) {
       /**
-       * Sign-in failed — display the error message in the UI.
-       * We do NOT log the raw error to the console to avoid accidentally
-       * exposing sensitive auth details (tokens, credentials) in production.
+       * Sign-in failed — show the error in the UI.
+       * Raw errors are never logged to avoid exposing auth details in production.
        */
       setError(err.message)
     } finally {
-      /**
-       * Always turn off loading when done, whether sign-in succeeded or failed.
-       * The finally block runs after both try and catch, guaranteed.
-       */
       setLoading(false)
     }
   }
@@ -285,16 +264,10 @@ function SignInPage() {
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-sm p-8">
 
-        {/* Page heading */}
         <h1 className="text-2xl font-bold text-black mb-6">
           {t('heading')}
         </h1>
 
-        {/*
-         * Error alert banner.
-         * Only rendered when error state is non-null.
-         * Shows the error message returned from the failed sign-in attempt.
-         */}
         {error && (
           <Alert variant="destructive" className="mb-4">
             <AlertTitle>{t('errors.title')}</AlertTitle>
@@ -302,7 +275,6 @@ function SignInPage() {
           </Alert>
         )}
 
-        {/* Email field */}
         <Label htmlFor="email" className="mb-1 text-black">
           {t('fields.email')}
         </Label>
@@ -316,7 +288,6 @@ function SignInPage() {
           />
         </div>
 
-        {/* Password field */}
         <Label htmlFor="password" className="mb-1 text-black">
           {t('fields.password')}
         </Label>
@@ -330,22 +301,16 @@ function SignInPage() {
           />
         </div>
 
-        {/* Forgot password link — right aligned */}
         <p className="mb-4 text-right text-sm">
           <Link href="/forgot-password" className="text-blue-600 hover:underline">
             {t('links.forgotPassword')}
           </Link>
         </p>
 
-        {/*
-         * Sign In button.
-         * Disabled while loading to prevent duplicate submissions.
-         * Shows a spinner with loading text while the request is in flight.
-         */}
         <Button className="w-full mb-4" onClick={handleSignin} disabled={loading}>
           {loading ? (
             <div className="flex items-center justify-center gap-2">
-              <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
+              <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
               {t('button.signingIn')}
             </div>
           ) : (
@@ -353,7 +318,6 @@ function SignInPage() {
           )}
         </Button>
 
-        {/* Sign up prompt for users without an account */}
         <p className="text-center text-sm text-gray-600">
           {t('links.noAccount')}{' '}
           <Link href="/signup" className="text-blue-600 hover:underline">

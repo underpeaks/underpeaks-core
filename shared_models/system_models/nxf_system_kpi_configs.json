@@ -1,0 +1,57 @@
+{
+  "table_name": "nxf_system_kpi_configs",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "config_id",
+      "type": "string",
+      "primary_key": true,
+      "nullable": false,
+      "default": "gen_random_uuid()",
+      "hidden": true
+    },
+    {
+      "name": "page",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield",
+      "description": "Identifier for the foundational page this config belongs to e.g. 'users' or 'dashboard'"
+    },
+    {
+      "name": "project_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_projects(project_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": true,
+      "foreign_key": {
+        "references": "nxf_system_tenants(ten_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "blocks",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "[]",
+      "hidden": false,
+      "ui_type": "code-editor",
+      "description": "Ordered array of KpiBlock objects — each block holds 1-4 KPI configs"
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": false,
+      "default": "now()",
+      "hidden": true
+    }
+  ],
+  "tablespace": "pg_default"
+}

@@ -365,7 +365,7 @@
       "logout": "Logout",
       "collapse": "Collapse sidebar",
       "expand": "Expand sidebar",
-      "content": "Content",
+      "business": "Business",
       "developer": "Developer",
       "design": "Design",
       "system": "System"
@@ -524,42 +524,41 @@
       "responseLabel": "Response:"
     }
   },
- "dashboard": {
-  "title": "Dashboard",
-  "welcome": "Welcome back, {name}",
-  "addWidget": "Add widget",
-  "editLayout": "Edit layout",
-  "saveLayout": "Save layout",
-  "resetLayout": "Reset layout",
-  "toolbar": {
+  "dashboard": {
     "title": "Dashboard",
-    "subtitle": "Drag widgets to reorder · hover to edit",
-    "refresh": "Refresh",
-    "last30Days": "Last 30 days",
-    "addWidget": "Add Widget"
+    "welcome": "Welcome back, {name}",
+    "addWidget": "Add widget",
+    "editLayout": "Edit layout",
+    "saveLayout": "Save layout",
+    "resetLayout": "Reset layout",
+    "toolbar": {
+      "title": "Dashboard",
+      "subtitle": "Drag widgets to reorder · hover to edit",
+      "refresh": "Refresh",
+      "last30Days": "Last 30 days",
+      "addWidget": "Add Widget"
+    },
+    "grid": {
+      "addWidget": "Add widget"
+    },
+    "addPanel": {
+      "title": "Add Widget",
+      "subtitle": "Click to add to dashboard"
+    },
+    "widget": {
+      "dragToReorder": "Drag to reorder",
+      "vsLastPeriod": "vs last period"
+    },
+    "chart": {
+      "day": "Day",
+      "daysAgo": "30 days ago",
+      "today": "Today"
+    },
+    "formula": {
+      "placeholder": "e.g. SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "Presets"
+    }
   },
-  "grid": {
-    "addWidget": "Add widget"
-  },
-  "addPanel": {
-    "title": "Add Widget",
-    "subtitle": "Click to add to dashboard"
-  },
-  "widget": {
-    "dragToReorder": "Drag to reorder",
-    "vsLastPeriod": "vs last period"
-  },
-  "chart": {
-    "day": "Day",
-    "daysAgo": "30 days ago",
-    "today": "Today"
-  },
-  "formula": {
-    "placeholder": "e.g. SUM(orders.total, DATERANGE(-7d, today))",
-    "presets": "Presets"
-  }
-},
-  
   "media": {
     "title": "Media",
     "uploadFiles": "Upload Files",
@@ -707,7 +706,6 @@
     "sessionError": "Session error — please log in again",
     "unknown": "An unexpected error occurred"
   },
- 
   "grid": {
     "addWidget": "Add widget"
   },
@@ -851,6 +849,12 @@
         "cancelDelete": "Cancel"
       }
     },
+    "errors": {
+      "loadFailed": "Failed to load menu items",
+      "createFailed": "Failed to create menu item",
+      "updateFailed": "Failed to update menu item",
+      "deleteFailed": "Failed to delete menu item"
+    },
     "drawer": {
       "titleAdd": "Add Menu Item",
       "titleEdit": "Edit Menu Item",
@@ -862,25 +866,27 @@
         "nesting": "Nesting",
         "preview": "Preview"
       },
-      "fields": {
-        "menuLabel": "Menu Label",
-        "menuLabelPlaceholder": "e.g. Products",
-        "menuLabelHint": "This is the text shown in the navigation menu.",
-        "visibility": "Visibility",
-        "visible": "Visible",
-        "hidden": "Hidden",
-        "linkTypePage": "Page",
-        "linkTypeExternal": "External URL",
-        "selectPage": "Select Page",
-        "selectPagePlaceholder": "— Select a page —",
-        "externalUrl": "External URL",
-        "openIn": "Open in",
-        "sameTab": "Same Tab",
-        "newTab": "New Tab",
-        "parentItem": "Parent Item",
-        "parentItemPlaceholder": "— Top level —",
-        "parentItemHint": "Nested items appear as dropdown children in the nav."
-      },
+     "fields": {
+      "pageRequired": "A page must be selected before saving a menu item.",
+  "menuLabel": "Menu Label",
+  "menuLabelPlaceholder": "e.g. Products",
+  "menuLabelHint": "This is the text shown in the navigation menu.",
+  "visibility": "Visibility",
+  "visible": "Visible",
+  "hidden": "Hidden",
+  "linkTypePage": "Page",
+  "linkTypeExternal": "External URL",
+  "selectPage": "Select Page",
+  "selectPagePlaceholder": "— Select a page —",
+  "noPagesHint": "No admin pages found. Create a page with page type set to Admin first.",
+  "externalUrl": "External URL",
+  "openIn": "Open in",
+  "sameTab": "Same Tab",
+  "newTab": "New Tab",
+  "parentItem": "Parent Item",
+  "parentItemPlaceholder": "— Top level —",
+  "parentItemHint": "Nested items appear as dropdown children in the nav."
+},
       "icons": {
         "home": "Home",
         "grid": "Grid",
@@ -899,31 +905,32 @@
       "buttons": {
         "cancel": "Cancel",
         "saveChanges": "Save Changes",
-        "addItem": "Add Item"
+        "addItem": "Add Item",
+        "saving": "Saving…"
       }
     }
   },
   "detailPanel": {
     "sections": {
-      "fileUrl":      "File URL",
-      "metadata":     "Metadata",
-      "rename":       "Rename",
+      "fileUrl": "File URL",
+      "metadata": "Metadata",
+      "rename": "Rename",
       "moveToFolder": "Move to Folder"
     },
     "metadata": {
-      "folder":     "Folder",
-      "path":       "Path",
-      "size":       "Size",
-      "type":       "Type",
-      "uploaded":   "Uploaded",
+      "folder": "Folder",
+      "path": "Path",
+      "size": "Size",
+      "type": "Type",
+      "uploaded": "Uploaded",
       "dimensions": "Dimensions"
     },
     "actions": {
-      "save":       "Save",
-      "saving":     "Saving…",
-      "cancel":     "Cancel",
-      "move":       "Move",
-      "moving":     "Moving…",
+      "save": "Save",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "move": "Move",
+      "moving": "Moving…",
       "deleteFile": "Delete File"
     },
     "move": {
@@ -931,7 +938,7 @@
     },
     "errors": {
       "renameFailed": "Rename failed",
-      "moveFailed":   "Move failed"
+      "moveFailed": "Move failed"
     }
   },
   "flutterModelGenerator": {
@@ -939,11 +946,11 @@
   },
   "folderSidebar": {
     "header": {
-      "title":          "Folders",
-      "all":            "All",
+      "title": "Folders",
+      "all": "All",
       "newFolderTitle": "New folder",
-      "collapse":       "Collapse",
-      "expand":         "Expand"
+      "collapse": "Collapse",
+      "expand": "Expand"
     },
     "folder": {
       "selectTitle": "Select folder"
@@ -952,7 +959,7 @@
   "gridView": {
     "folder": {
       "deleteTitle": "Delete folder",
-      "fileCount":   "{count} files"
+      "fileCount": "{count} files"
     },
     "empty": {
       "message": "This folder is empty"
@@ -963,9 +970,9 @@
       "message": "This folder is empty"
     },
     "header": {
-      "name":     "Name",
-      "size":     "Size",
-      "type":     "Type",
+      "name": "Name",
+      "size": "Size",
+      "type": "Type",
       "uploaded": "Uploaded"
     },
     "row": {
@@ -978,7 +985,7 @@
     },
     "actions": {
       "delete": "Delete ({count})",
-      "clear":  "Clear",
+      "clear": "Clear",
       "upload": "Upload"
     },
     "viewMode": {
@@ -987,7 +994,7 @@
     }
   },
   "newFolderPopup": {
-    "title":       "New Folder",
+    "title": "New Folder",
     "placeholder": "Folder name",
     "buttons": {
       "create": "Create",
@@ -996,10 +1003,10 @@
   },
   "uploadDialog": {
     "srDescription": "Upload files or import media via URL into the selected folder.",
-    "title":         "Add Media",
+    "title": "Add Media",
     "tabs": {
       "upload": "Upload File",
-      "url":    "Add via URL"
+      "url": "Add via URL"
     },
     "uploadZone": {
       "hint": "Any file type — images, videos, documents"
@@ -1007,9 +1014,9 @@
     "urlTab": {
       "description": "Paste a public URL to import the file directly into storage.",
       "placeholder": "https://example.com/file.jpg",
-      "import":      "Import",
-      "importing":   "Importing…",
-      "previewAlt":  "URL preview"
+      "import": "Import",
+      "importing": "Importing…",
+      "previewAlt": "URL preview"
     },
     "errors": {
       "importFailed": "Import failed"
@@ -1017,37 +1024,37 @@
   },
   "mediaPage": {
     "errors": {
-      "loadFolders":  "Failed to load folders",
-      "loadFiles":    "Failed to load files",
+      "loadFolders": "Failed to load folders",
+      "loadFiles": "Failed to load files",
       "createFolder": "Failed to create folder",
       "deleteFailed": "Delete failed"
     },
     "confirmDelete": {
-      "titleFolder":    "Delete Folder",
-      "titleFile":      "Delete File",
-      "message":        "Are you sure you want to delete",
-      "folderWarning":  "This will delete all files inside the folder.",
-      "undoWarning":    "This action cannot be undone.",
+      "titleFolder": "Delete Folder",
+      "titleFile": "Delete File",
+      "message": "Are you sure you want to delete",
+      "folderWarning": "This will delete all files inside the folder.",
+      "undoWarning": "This action cannot be undone.",
       "selectionLabel": "{count} items",
-      "cancel":         "Cancel",
-      "confirm":        "Delete",
-      "deleting":       "Deleting…"
+      "cancel": "Cancel",
+      "confirm": "Delete",
+      "deleting": "Deleting…"
     }
   },
   "conversationList": {
     "empty": {
-      "message":   "No messages",
+      "message": "No messages",
       "subUnread": "All caught up!",
-      "subAll":    "Your inbox is empty."
+      "subAll": "Your inbox is empty."
     },
     "avatar": {
       "system": "SY"
     },
     "time": {
-      "justNow":    "just now",
+      "justNow": "just now",
       "minutesAgo": "{count}m ago",
-      "hoursAgo":   "{count}h ago",
-      "daysAgo":    "{count}d ago"
+      "hoursAgo": "{count}h ago",
+      "daysAgo": "{count}d ago"
     },
     "unread": {
       "badge": "{count} unread"
@@ -1055,9 +1062,9 @@
   },
   "conversationThread": {
     "systemMessage": "System message",
-    "from": "From: {{name}}",
+    "from": "From: {name}",
     "deleteButton": "Delete",
-    "deleteAriaLabel": "Delete conversation: {{subject}}",
+    "deleteAriaLabel": "Delete conversation: {subject}",
     "messagesAriaLabel": "Message thread",
     "loading": "Loading messages...",
     "emptyTitle": "No messages yet",
@@ -1065,9 +1072,9 @@
   },
   "messageBubble": {
     "justNow": "Just now",
-    "minutesAgo": "{{count}}m ago",
-    "hoursAgo": "{{count}}h ago",
-    "daysAgo": "{{count}}d ago"
+    "minutesAgo": "{count}m ago",
+    "hoursAgo": "{count}h ago",
+    "daysAgo": "{count}d ago"
   },
   "replyBar": {
     "placeholder": "Write a reply… (Enter to send)",
@@ -1075,7 +1082,7 @@
   },
   "messagesPage": {
     "title": "Messages",
-    "unreadCount": "{{count}} unread message{{count, plural, one {} other {s}}}",
+    "unreadCount": "{count} unread message{count, plural, one {} other {s}}",
     "filters": {
       "all": "All",
       "unread": "Unread"
@@ -1092,294 +1099,309 @@
       "markAll": "Failed to mark all as read"
     }
   },
- 
   "notificationCard": {
     "priority": {
       "urgent": "Urgent",
-      "high":   "High"
+      "high": "High"
     },
     "actions": {
       "markRead": "Mark as read",
-      "view":     "View",
-      "delete":   "Delete"
+      "view": "View",
+      "delete": "Delete"
     }
   },
   "notificationsHeader": {
     "title": "Notifications",
     "unreadCount": "{count} unread notification{count, plural, one {} other {s}}",
     "filters": {
-      "all":    "All",
+      "all": "All",
       "unread": "Unread"
     },
     "markAllRead": "Mark all read"
   },
   "notificationsList": {
     "empty": {
-      "message":   "No notifications",
+      "message": "No notifications",
       "subUnread": "All caught up!",
-      "subAll":    "You have no notifications yet."
+      "subAll": "You have no notifications yet."
     }
   },
   "notificationsPage": {
     "errors": {
-      "loadFailed":        "Failed to load notifications",
-      "markReadFailed":    "Failed to mark as read",
+      "loadFailed": "Failed to load notifications",
+      "markReadFailed": "Failed to mark as read",
       "markAllReadFailed": "Failed to mark all as read",
-      "deleteFailed":      "Failed to delete notification"
+      "deleteFailed": "Failed to delete notification"
     }
   },
   "pagesPage": {
     "visibility": {
       "public": "Public",
-      "admin":  "Admin",
-      "draft":  "Draft"
+      "admin": "Admin",
+      "draft": "Draft"
     },
     "toolbar": {
-      "title":            "Pages",
-      "pageCount":        "{count} page{count, plural, one {} other {s}} total",
-      "searchPlaceholder":"Search pages…",
-      "newPage":          "New Page"
+      "title": "Pages",
+      "pageCount": "{count} page{count, plural, one {} other {s}} total",
+      "searchPlaceholder": "Search pages…",
+      "newPage": "New Page"
     },
     "filter": {
       "all": "All"
     },
     "table": {
-      "page":       "Page",
-      "model":      "Model",
-      "template":   "Template",
+      "page": "Page",
+      "model": "Model",
+      "template": "Template",
       "visibility": "Visibility",
-      "actions":    "Actions",
-      "seoPrefix":  "SEO"
+      "actions": "Actions",
+      "seoPrefix": "SEO",
+      "systemBadge": "System",
+      "hiddenBadge": "Hidden"
     },
     "emptyState": {
       "message": "No pages found",
-      "cta":     "Create your first page"
+      "cta": "Create your first page"
     },
     "actions": {
-      "edit":          "Edit page",
-      "delete":        "Delete page",
-      "view":          "View page",
+      "edit": "Edit page",
+      "delete": "Delete page",
+      "view": "View page",
       "confirmDelete": "Confirm delete",
-      "cancel":        "Cancel"
+      "cancel": "Cancel",
+      "systemLocked": "System pages cannot be edited or deleted"
+    },
+    "errors": {
+      "loadFailed": "Failed to load pages",
+      "createFailed": "Failed to create page",
+      "updateFailed": "Failed to update page",
+      "deleteFailed": "Failed to delete page"
     },
     "drawer": {
-      "title":    "Create Page",
+      "title": "Create Page",
+      "editTitle": "Edit Page",
       "subtitle": "Define a new page and attach a model",
       "sections": {
-        "basicInfo":     "Basic Info",
+        "basicInfo": "Basic Info",
         "modelTemplate": "Model & Template",
-        "seo":           "SEO"
+        "seo": "SEO"
       },
       "fields": {
+        "hidden": {
+          "label": "Hide Page",
+          "hint": "Hidden pages are not shown in navigation or sitemaps"
+        },
         "name": {
-          "label":       "Page Name",
+          "label": "Page Name",
           "placeholder": "e.g. Product Listing"
         },
         "slug": {
-          "label":       "Slug / URL",
+          "label": "Slug / URL",
           "placeholder": "/your-page-slug",
-          "hint":        "Use :id for dynamic routes, e.g. /products/:id"
+          "hint": "Use :id for dynamic routes, e.g. /products/:id"
         },
         "visibility": {
           "label": "Visibility"
         },
         "model": {
-          "label":   "Attach Model",
+          "label": "Attach Model",
           "noModel": "— No model (custom page) —",
-          "hint":    "One model can power multiple pages."
+          "hint": "One model can power multiple pages."
         },
         "template": {
           "label": "Template"
         },
         "seoTitle": {
-          "label":       "SEO Title",
+          "label": "SEO Title",
           "placeholder": "Page title for search engines",
-          "charCount":   "{count}/60 characters"
+          "charCount": "{count}/60 characters"
         },
         "seoDesc": {
-          "label":       "Meta Description",
+          "label": "Meta Description",
           "placeholder": "Brief description for search results…",
-          "charCount":   "{count}/160 characters"
+          "charCount": "{count}/160 characters"
         }
       },
       "seoPreview": {
-        "label":         "Search Preview",
+        "label": "Search Preview",
         "titleFallback": "Page Title",
-        "urlPrefix":     "yoursite.com",
-        "descFallback":  "No description provided."
+        "urlPrefix": "yoursite.com",
+        "descFallback": "No description provided."
       },
       "actions": {
         "cancel": "Cancel",
-        "create": "Create Page"
+        "create": "Create Page",
+        "update": "Update Page",
+        "saving": "Saving…"
       }
     }
   },
   "apiKeys": {
-    "sectionTitle":  "Active Keys",
-    "createdDate":   "Created {{date}}",
-    "lastUsedDate":  "Last used {{date}}",
-    "neverUsed":     "Never used",
-    "hideKey":       "Hide key",
-    "revealKey":     "Reveal key",
-    "copyKey":       "Copy key",
-    "revoke":        "Revoke",
-    "emptyTitle":    "No API keys yet",
+    "sectionTitle": "Active Keys",
+    "createdDate": "Created {{date}}",
+    "lastUsedDate": "Last used {{date}}",
+    "neverUsed": "Never used",
+    "hideKey": "Hide key",
+    "revealKey": "Reveal key",
+    "copyKey": "Copy key",
+    "revoke": "Revoke",
+    "emptyTitle": "No API keys yet",
     "emptySubtitle": "Generate a key below to get started."
   },
   "generateKeyForm": {
-    "sectionTitle":      "Generate New Key",
-    "keyNameLabel":      "Key Name",
-    "keyNameHint":       "Give it a descriptive name so you remember what it's used for.",
-    "keyNamePlaceholder":"e.g. Flutter App — Production",
-    "buttonGenerating":  "Generating…",
-    "buttonIdle":        "Generate Key"
+    "sectionTitle": "Generate New Key",
+    "keyNameLabel": "Key Name",
+    "keyNameHint": "Give it a descriptive name so you remember what it's used for.",
+    "keyNamePlaceholder": "e.g. Flutter App — Production",
+    "buttonGenerating": "Generating…",
+    "buttonIdle": "Generate Key"
   },
   "newKeyModal": {
-    "title":        "API Key Generated",
+    "title": "API Key Generated",
     "instructions": "Your key has been created and is ready to use. Click the <eyeIcon>eye icon</eyeIcon> next to the key in the list to reveal and copy it.",
-    "doneButton":   "Done"
+    "doneButton": "Done"
   },
   "revokeModal": {
-    "title":               "Revoke API Key",
-    "message":             "Are you sure you want to revoke <keyName></keyName>? Any apps using this key will immediately lose access.",
-    "cancelButton":        "Cancel",
-    "revokeButtonIdle":    "Revoke Key",
-    "revokeButtonRevoking":"Revoking…"
+    "title": "Revoke API Key",
+    "message": "Are you sure you want to revoke <keyName></keyName>? Any apps using this key will immediately lose access.",
+    "cancelButton": "Cancel",
+    "revokeButtonIdle": "Revoke Key",
+    "revokeButtonRevoking": "Revoking…"
   },
   "apiKeysPage": {
-    "heading":    "API Keys",
+    "heading": "API Keys",
     "subheading": "Manage keys used to authenticate API requests from your apps.",
     "errors": {
-      "loadFailed":     "Failed to load API keys",
+      "loadFailed": "Failed to load API keys",
       "generateFailed": "Failed to generate key",
-      "revokeFailed":   "Failed to revoke key"
+      "revokeFailed": "Failed to revoke key"
     },
     "logs": {
-      "loadingKeys":    "Loading API keys...",
-      "keysLoaded":     "API keys loaded successfully",
-      "generatingKey":  "Generating new API key...",
-      "keyGenerated":   "API key generated successfully",
-      "revokingKey":    "Revoking API key...",
-      "keyRevoked":     "API key revoked successfully"
+      "loadingKeys": "Loading API keys...",
+      "keysLoaded": "API keys loaded successfully",
+      "generatingKey": "Generating new API key...",
+      "keyGenerated": "API key generated successfully",
+      "revokingKey": "Revoking API key...",
+      "keyRevoked": "API key revoked successfully"
     }
   },
   "brandingPage": {
-    "heading":    "CMS Branding",
+    "heading": "CMS Branding",
     "subheading": "Customise how the CMS looks to your team.",
     "errors": {
       "saveFailed": "Failed to save branding"
     },
     "logs": {
       "savingBranding": "Saving branding settings...",
-      "brandingSaved":  "Branding saved successfully"
+      "brandingSaved": "Branding saved successfully"
     },
     "logoSection": {
-      "title":           "CMS Logo",
-      "uploadLabel":     "Logo",
-      "uploadHint":      "PNG or SVG with transparent background",
-      "uploadRecommended":"200×60px",
-      "imageAlt":        "Logo preview"
+      "title": "CMS Logo",
+      "uploadLabel": "Logo",
+      "uploadHint": "PNG or SVG with transparent background",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "Logo preview"
     },
     "faviconSection": {
-      "title":            "Favicon",
-      "uploadLabel":      "Favicon",
-      "uploadHint":       "ICO, PNG or SVG — shown in browser tabs",
-      "uploadRecommended":"32×32px or 64×64px",
-      "imageAlt":         "Favicon preview"
+      "title": "Favicon",
+      "uploadLabel": "Favicon",
+      "uploadHint": "ICO, PNG or SVG — shown in browser tabs",
+      "uploadRecommended": "32×32px or 64×64px",
+      "imageAlt": "Favicon preview"
     },
     "preview": {
-      "label":        "Topnav Preview",
+      "label": "Topnav Preview",
       "projectLabel": "Project:"
     },
-    "saveSuccess":       "Branding saved successfully",
-    "saveButtonIdle":    "Save Branding",
-    "saveButtonSaving":  "Saving…"
+    "saveSuccess": "Branding saved successfully",
+    "saveButtonIdle": "Save Branding",
+    "saveButtonSaving": "Saving…"
   },
   "overviewPage": {
-    "heading":    "Project Overview",
+    "heading": "Project Overview",
     "subheading": "A snapshot of your self-hosted NXTFlutter project.",
     "stats": {
-      "dbType":       "DB Type",
-      "environment":  "Environment",
-      "deployment":   "Deployment",
-      "status":       "Status",
+      "dbType": "DB Type",
+      "environment": "Environment",
+      "deployment": "Deployment",
+      "status": "Status",
       "statusActive": "Active"
     },
     "userInfo": {
-      "fullName":    "Full Name",
-      "email":       "Email",
-      "role":        "Role",
-      "status":      "Status",
-      "verified":    "Verified",
+      "fullName": "Full Name",
+      "email": "Email",
+      "role": "Role",
+      "status": "Status",
+      "verified": "Verified",
       "verifiedYes": "Yes",
-      "verifiedNo":  "No",
+      "verifiedNo": "No",
       "memberSince": "Member Since"
     },
     "licenseKey": {
-      "sectionTitle":    "NXT Flutter License Key",
-      "description":     "Paste your license key from NXT Flutter Studio. This authenticates your self-hosted instance and enables hosted vs self-hosted feature distinction.",
-      "inputLabel":      "License Key",
-      "inputPlaceholder":"nxf_live_••••••••••••••••",
-      "buttonSaving":    "Saving…",
-      "buttonSaved":     "✓ Saved",
-      "buttonUpdate":    "Update",
-      "buttonSave":      "Save",
-      "keyOnFile":       "Key on file: {prefix}••••••••••••"
+      "sectionTitle": "NXT Flutter License Key",
+      "description": "Paste your license key from NXT Flutter Studio. This authenticates your self-hosted instance and enables hosted vs self-hosted feature distinction.",
+      "inputLabel": "License Key",
+      "inputPlaceholder": "nxf_live_••••••••••••••••",
+      "buttonSaving": "Saving…",
+      "buttonSaved": "✓ Saved",
+      "buttonUpdate": "Update",
+      "buttonSave": "Save",
+      "keyOnFile": "Key on file: {prefix}••••••••••••"
     },
     "projectInfo": {
-      "sectionTitle":   "Project Info",
-      "nameLabel":      "Project Name",
-      "namePlaceholder":"My NXTFlutter App",
-      "urlLabel":       "Project URL",
-      "urlHint":        "The public URL of your deployed app.",
+      "sectionTitle": "Project Info",
+      "nameLabel": "Project Name",
+      "namePlaceholder": "My NXTFlutter App",
+      "urlLabel": "Project URL",
+      "urlHint": "The public URL of your deployed app.",
       "urlPlaceholder": "https://app.example.com"
     },
     "logs": {
-      "savingLicenseKey":  "Saving NXT Flutter license key...",
-      "licenseKeySaved":   "License key saved successfully",
+      "savingLicenseKey": "Saving NXT Flutter license key...",
+      "licenseKeySaved": "License key saved successfully",
       "savingProjectInfo": "Saving project info...",
-      "projectInfoSaved":  "Project info saved successfully"
+      "projectInfoSaved": "Project info saved successfully"
     }
   },
   "smtpPage": {
-    "heading":    "SMTP Settings",
+    "heading": "SMTP Settings",
     "subheading": "Configure outbound email for your project.",
     "emailFeatures": {
-      "sectionTitle":       "Email Features",
-      "verifyEmailLabel":   "Enable email verification on sign-up",
-      "forgotPasswordLabel":"Enable forgot password emails",
-      "builtInNotice":      "{provider} handles email verification and password reset natively — no SMTP needed for those features.",
-      "smtpToggleLabel":    "Use custom SMTP server"
+      "sectionTitle": "Email Features",
+      "verifyEmailLabel": "Enable email verification on sign-up",
+      "forgotPasswordLabel": "Enable forgot password emails",
+      "builtInNotice": "{provider} handles email verification and password reset natively — no SMTP needed for those features.",
+      "smtpToggleLabel": "Use custom SMTP server"
     },
     "smtpConfig": {
-      "sectionTitle":         "SMTP Configuration",
-      "hostLabel":            "SMTP Host",
-      "hostPlaceholder":      "smtp.example.com",
-      "portLabel":            "Port",
-      "portPlaceholder":      "587",
-      "fromAddressLabel":     "From Address",
-      "fromAddressPlaceholder":"no-reply@example.com",
-      "usernameLabel":        "Username",
-      "usernamePlaceholder":  "SMTP username",
-      "passwordLabel":        "Password",
-      "passwordPlaceholder":  "SMTP password",
-      "showPassword":         "Show password",
-      "hidePassword":         "Hide password",
-      "encryptionLabel":      "Encryption",
-      "encryptionNone":       "None"
+      "sectionTitle": "SMTP Configuration",
+      "hostLabel": "SMTP Host",
+      "hostPlaceholder": "smtp.example.com",
+      "portLabel": "Port",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "From Address",
+      "fromAddressPlaceholder": "no-reply@example.com",
+      "usernameLabel": "Username",
+      "usernamePlaceholder": "SMTP username",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "SMTP password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "encryptionLabel": "Encryption",
+      "encryptionNone": "None"
     },
     "logs": {
       "savingSmtp": "Saving SMTP settings...",
-      "smtpSaved":  "SMTP settings saved successfully"
+      "smtpSaved": "SMTP settings saved successfully"
     }
   },
   "settingsPage": {
-    "sidebarTitle":      "Settings",
-    "toggleAriaLabel":   "Toggle settings nav",
+    "sidebarTitle": "Settings",
+    "toggleAriaLabel": "Toggle settings nav",
     "nav": {
       "overview": "Overview",
       "api-keys": "API Keys",
-      "smtp":     "SMTP Settings",
+      "smtp": "SMTP Settings",
       "branding": "CMS Branding"
     }
   },
@@ -1389,29 +1411,29 @@
   "saveButton": {
     "savedMessage": "Saved successfully",
     "buttonSaving": "Saving…",
-    "buttonIdle":   "Save Changes"
+    "buttonIdle": "Save Changes"
   },
   "coloursPage": {
-    "heading":    "Colours",
+    "heading": "Colours",
     "subheading": "Define the colour tokens used across your generated Flutter and Next.js apps.",
     "preview": {
-      "title":           "Live Preview",
-      "primaryButton":   "Primary Button",
+      "title": "Live Preview",
+      "primaryButton": "Primary Button",
       "secondaryButton": "Secondary",
-      "accentBadge":     "Accent Badge",
-      "success":         "✓ Success",
-      "warning":         "⚠ Warning",
-      "danger":          "✕ Danger"
+      "accentBadge": "Accent Badge",
+      "success": "✓ Success",
+      "warning": "⚠ Warning",
+      "danger": "✕ Danger"
     },
     "tokensSectionTitle": "Colour Tokens",
-    "resetTokenTitle":    "Reset to default",
-    "resetAllButton":     "Reset all to defaults",
-    "savedMessage":       "Saved",
-    "saveButtonIdle":     "Save Colours",
-    "saveButtonSaving":   "Saving…",
+    "resetTokenTitle": "Reset to default",
+    "resetAllButton": "Reset all to defaults",
+    "savedMessage": "Saved",
+    "saveButtonIdle": "Save Colours",
+    "saveButtonSaving": "Saving…",
     "logs": {
       "savingColours": "Saving colour tokens...",
-      "coloursSaved":  "Colour tokens saved successfully"
+      "coloursSaved": "Colour tokens saved successfully"
     },
     "tokens": {
       "primary":      { "label": "Primary",             "description": "Main brand colour — buttons, links, highlights" },
@@ -1430,23 +1452,23 @@
     }
   },
   "featureFlagsPage": {
-    "heading":        "Feature Flags",
-    "subheading":     "Toggle features that will be included in your generated Flutter and Next.js apps.",
-    "paidBadge":      "PAID",
-    "savedMessage":   "Saved",
+    "heading": "Feature Flags",
+    "subheading": "Toggle features that will be included in your generated Flutter and Next.js apps.",
+    "paidBadge": "PAID",
+    "savedMessage": "Saved",
     "saveButtonIdle": "Save Flags",
-    "saveButtonSaving":"Saving…",
+    "saveButtonSaving": "Saving…",
     "upgrade": {
-      "title":       "Hosted plan required",
+      "title": "Hosted plan required",
       "description": "These features require NXTFlutter's hosted infrastructure. Upgrade to unlock them.",
-      "button":      "Upgrade"
+      "button": "Upgrade"
     },
     "groups": {
-      "Appearance":              "Appearance",
-      "Localisation":            "Localisation",
-      "App Behaviour":           "App Behaviour",
-      "Authentication — Paid":   "Authentication — Paid",
-      "Advanced — Paid":         "Advanced — Paid"
+      "Appearance": "Appearance",
+      "Localisation": "Localisation",
+      "App Behaviour": "App Behaviour",
+      "Authentication — Paid": "Authentication — Paid",
+      "Advanced — Paid": "Advanced — Paid"
     },
     "flags": {
       "dark-mode":          { "label": "Dark Mode",                 "description": "Allow users to switch between light and dark themes in the app" },
@@ -1468,131 +1490,113 @@
     },
     "logs": {
       "savingFlags": "Saving feature flags...",
-      "flagsSaved":  "Feature flags saved successfully"
+      "flagsSaved": "Feature flags saved successfully"
     }
   },
   "spacingPage": {
-    "heading":    "Spacing & Radius",
+    "heading": "Spacing & Radius",
     "subheading": "Control the shape, density and elevation of components in your generated apps.",
     "preview": {
-      "title":  "Live Preview",
+      "title": "Live Preview",
       "button": "Button",
-      "card":   "Card component",
-      "input":  "Input field"
+      "card": "Card component",
+      "input": "Input field"
     },
     "sections": {
       "radius": {
-        "title":       "Border Radius",
+        "title": "Border Radius",
         "description": "Applied to buttons, cards, inputs and modals"
       },
       "density": {
-        "title":       "Spacing Density",
+        "title": "Spacing Density",
         "description": "Controls padding inside components"
       },
       "shadow": {
-        "title":       "Elevation / Shadow",
+        "title": "Elevation / Shadow",
         "description": "Card and component shadow depth"
       }
     },
     "radius": {
       "none": "None",
-      "sm":   "Small",
-      "md":   "Medium",
-      "lg":   "Large",
-      "xl":   "X-Large",
+      "sm": "Small",
+      "md": "Medium",
+      "lg": "Large",
+      "xl": "X-Large",
       "full": "Pill"
     },
     "density": {
-      "compact": {
-        "label": "Compact",
-        "desc":  "Tight padding, more content visible"
-      },
-      "default": {
-        "label": "Default",
-        "desc":  "Balanced spacing for most use cases"
-      },
-      "relaxed": {
-        "label": "Relaxed",
-        "desc":  "Generous padding, easier to tap"
-      }
+      "compact": { "label": "Compact", "desc": "Tight padding, more content visible" },
+      "default": { "label": "Default", "desc": "Balanced spacing for most use cases" },
+      "relaxed": { "label": "Relaxed", "desc": "Generous padding, easier to tap" }
     },
     "shadow": {
       "none": "None",
-      "sm":   "Subtle",
-      "md":   "Medium",
-      "lg":   "Strong"
+      "sm": "Subtle",
+      "md": "Medium",
+      "lg": "Strong"
     },
     "save": {
-      "button":            "Save Spacing",
-      "saving":            "Saving…",
+      "button": "Save Spacing",
+      "saving": "Saving…",
       "savedConfirmation": "Saved"
     }
   },
   "typographyPage": {
-    "heading":    "Typography",
+    "heading": "Typography",
     "subheading": "Choose fonts and scale for your generated apps. Fonts are loaded from Google Fonts.",
     "preview": {
-      "title":         "Live Preview",
+      "title": "Live Preview",
       "headingSuffix": "— Heading",
-      "bodySample":    "The quick brown fox jumps over the lazy dog. Body text example at default size.",
-      "monoSample":    "const value = \"monospace\";"
+      "bodySample": "The quick brown fox jumps over the lazy dog. Body text example at default size.",
+      "monoSample": "const value = \"monospace\";"
     },
     "sections": {
       "fonts": {
-        "title":       "Font Families",
+        "title": "Font Families",
         "description": "Select from Google Fonts — included automatically in code generation"
       },
       "weights": {
         "title": "Font Weights"
       },
       "scale": {
-        "title":       "Font Size Scale",
+        "title": "Font Size Scale",
         "description": "Controls the overall text size across the app"
       }
     },
     "fonts": {
       "headingFont": "Heading Font",
-      "bodyFont":    "Body Font",
-      "monoFont":    "Mono Font"
+      "bodyFont": "Body Font",
+      "monoFont": "Mono Font"
     },
     "weights": {
       "headingWeight": "Heading Weight",
-      "bodyWeight":    "Body Weight"
+      "bodyWeight": "Body Weight"
     },
     "scale": {
-      "compact": {
-        "label": "Compact",
-        "desc":  "Smaller text, tighter spacing"
-      },
-      "default": {
-        "label": "Default",
-        "desc":  "Balanced for most apps"
-      },
-      "relaxed": {
-        "label": "Relaxed",
-        "desc":  "Larger text, more breathing room"
-      }
+      "compact": { "label": "Compact", "desc": "Smaller text, tighter spacing" },
+      "default": { "label": "Default", "desc": "Balanced for most apps" },
+      "relaxed": { "label": "Relaxed", "desc": "Larger text, more breathing room" }
     },
     "save": {
-      "button":            "Save Typography",
-      "saving":            "Saving…",
+      "button": "Save Typography",
+      "saving": "Saving…",
       "savedConfirmation": "Saved"
     }
   },
   "themingPage": {
     "sidebarLabel": "Theming",
     "nav": {
-      "colours":      "Colours",
-      "typography":   "Typography",
-      "spacing":      "Spacing & Radius",
+      "colours": "Colours",
+      "typography": "Typography",
+      "spacing": "Spacing & Radius",
       "featureFlags": "Feature Flags"
     }
   },
   "consoleLayout": {
     "idleModal": {
-      "title":           "Inactive Session",
-      "description":     "You have been inactive. Logging out in:",
-      "logoutButton":    "Logout",
+      "title": "Inactive Session",
+      "description": "You have been inactive. Logging out in:",
+      "logoutButton": "Logout",
       "keepAliveButton": "Keep Alive"
     },
     "logs": {
@@ -1603,11 +1607,11 @@
     "label": "Loading…"
   },
   "userStatus": {
-    "active":                 "Active",
+    "active": "Active",
     "needsEmailVerification": "Needs Email Verification",
     "passwordResetRequested": "Password Reset Requested",
-    "blocked":                "Blocked",
-    "disabled":               "Disabled"
+    "blocked": "Blocked",
+    "disabled": "Disabled"
   },
   "createFlutterProject": {
     "errors": {
@@ -1625,114 +1629,114 @@
   },
   "installerSteps": {
     "errors": {
-      "dbConfigNotFound":       "Database configuration not found.",
-      "dbConfigMissing":        "DB config is missing",
-      "dbConfigMissingStore":   "DB config missing in store",
-      "adminEmailMissing":      "Admin user email is missing",
+      "dbConfigNotFound": "Database configuration not found.",
+      "dbConfigMissing": "DB config is missing",
+      "dbConfigMissingStore": "DB config missing in store",
+      "adminEmailMissing": "Admin user email is missing",
       "adminEmailMissingStore": "Admin user email missing in store",
-      "projectTypeMissing":     "selectedProjectType is missing",
-      "createTablesFailed":     "Failed to create tables: {message}",
-      "createAdminFailed":      "Failed to create admin user: {message}",
-      "createModelsFailed":     "Failed to create models: {message}",
-      "writeConfigFailed":      "Failed to write config file: {message}",
-      "setupStorageFailed":     "Failed to setup storage: {message}",
-      "installDemoFailed":      "Failed to install demo content: {message}",
-      "stepFailed":             "Step failed: {step} - {message}"
+      "projectTypeMissing": "selectedProjectType is missing",
+      "createTablesFailed": "Failed to create tables: {message}",
+      "createAdminFailed": "Failed to create admin user: {message}",
+      "createModelsFailed": "Failed to create models: {message}",
+      "writeConfigFailed": "Failed to write config file: {message}",
+      "setupStorageFailed": "Failed to setup storage: {message}",
+      "installDemoFailed": "Failed to install demo content: {message}",
+      "stepFailed": "Step failed: {step} - {message}"
     },
     "logs": {
-      "tablesCreated":        "Tables created:",
-      "adminCreated":         "Admin user created:",
-      "modelsCreated":        "Create models response:",
-      "modelsSkipped":        "Models creation skipped: {message}",
-      "configWritten":        "Config file written successfully:",
-      "storageCreated":       "Storage buckets created:",
-      "demoContentSkipped":   "Demo content skipped",
+      "tablesCreated": "Tables created:",
+      "adminCreated": "Admin user created:",
+      "modelsCreated": "Create models response:",
+      "modelsSkipped": "Models creation skipped: {message}",
+      "configWritten": "Config file written successfully:",
+      "storageCreated": "Storage buckets created:",
+      "demoContentSkipped": "Demo content skipped",
       "demoContentInstalled": "Demo content installed:",
       "creatingApiEndpoints": "Creating API endpoints...",
-      "settingUpAuth":        "Setting up authentication...",
-      "configuringSession":   "Configuring session management...",
-      "runningTests":         "Running tests...",
-      "finalizing":           "Finalizing installer...",
-      "noImplementation":     "No implementation for step: {step}"
+      "settingUpAuth": "Setting up authentication...",
+      "configuringSession": "Configuring session management...",
+      "runningTests": "Running tests...",
+      "finalizing": "Finalizing installer...",
+      "noImplementation": "No implementation for step: {step}"
     }
   },
   "adminSetupPage": {
     "logoAlt": "NXT_Flutter Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
-    "heading":     "Admin User Setup",
+    "heading": "Admin User Setup",
     "description": "Please provide the admin user details to secure your NXT_Flutter system. This account will have full administrative access within the platform.",
-    "disclaimer":  "Please note: This creates an admin account on the NXT_Flutter system and may be different from your database admin account.",
+    "disclaimer": "Please note: This creates an admin account on the NXT_Flutter system and may be different from your database admin account.",
     "fields": {
       "fullName": {
-        "label":       "Full Name",
+        "label": "Full Name",
         "placeholder": "e.g., John Doe"
       },
       "email": {
-        "label":       "Email Address",
+        "label": "Email Address",
         "placeholder": "admin@example.com"
       },
       "password": {
-        "label":       "Password",
+        "label": "Password",
         "placeholder": "Create a secure password"
       }
     },
     "errors": {
-      "nameRequired":    "Full name is required",
-      "emailRequired":   "Email is required",
+      "nameRequired": "Full name is required",
+      "emailRequired": "Email is required",
       "passwordInvalid": "Password is required | Password must be 8 characters long | Must contain a capital letter | Must contain a special character (e.g. !@#$%^&*)"
     },
     "continueButton": "Continue"
   },
   "stackConfigPage": {
-    "logoAlt":     "NXT_Flutter Logo",
-    "tagline":     "Your All-in-One SaaS Installer & Code Generator",
-    "heading":     "Choose Your Stack",
+    "logoAlt": "NXT_Flutter Logo",
+    "tagline": "Your All-in-One SaaS Installer & Code Generator",
+    "heading": "Choose Your Stack",
     "description": "Select the technology stack that best fits your project needs. You can change this later if you want to add more platforms or switch your approach.",
     "stacks": {
       "both": {
-        "title":       "Next.js + Flutter",
+        "title": "Next.js + Flutter",
         "description": "Fullstack combo! Next.js for web and Flutter for cross-platform mobile and desktop apps."
       },
       "next": {
-        "title":       "Next.js Only",
+        "title": "Next.js Only",
         "description": "Use Next.js as a powerful React SSR framework and <strong>as a headless CMS to manage content and APIs.</strong>"
       },
       "flutter": {
-        "title":       "Flutter Only",
+        "title": "Flutter Only",
         "description": "Build cross-platform mobile and desktop apps with Flutter using a shared codebase, and <strong>use it as a headless CMS backend if desired.</strong>"
       },
       "cms": {
-        "title":       "Headless CMS",
+        "title": "Headless CMS",
         "description": "Deploy as a headless CMS backend only. Expose your data through APIs and connect it to any custom frontend, mobile application, or third-party service with full flexibility."
       }
     },
     "nextButton": "Next"
   },
   "databaseConfigPage": {
-    "logoAlt":           "NXT_Flutter Logo",
-    "tagline":           "Your All-in-One SaaS Installer & Code Generator",
-    "heading":           "Database Configuration",
+    "logoAlt": "NXT_Flutter Logo",
+    "tagline": "Your All-in-One SaaS Installer & Code Generator",
+    "heading": "Database Configuration",
     "selectPlaceholder": "Select database",
-    "fieldExample":      "(e.g. {placeholder})",
-    "savingWarning":     "⚠️ Please be patient, this might take a while...",
+    "fieldExample": "(e.g. {placeholder})",
+    "savingWarning": "⚠️ Please be patient, this might take a while...",
     "infoBlock": {
       "whereLabel": "Where to find it:"
     },
     "testSteps": {
       "validating": "Validating configuration...",
-      "sending":    "Sending config to server...",
-      "testing":    "Testing database connection...",
+      "sending": "Sending config to server...",
+      "testing": "Testing database connection...",
       "finalizing": "Finalizing connection check..."
     },
     "errors": {
-      "serverRejected":   "Server rejected connection",
+      "serverRejected": "Server rejected connection",
       "connectionFailed": "Connection Failed: {message}"
     },
     "buttons": {
       "testConnection": "Test Connection",
-      "testing":        "Testing...",
-      "saving":         "Saving...",
-      "continue":       "Continue"
+      "testing": "Testing...",
+      "saving": "Saving...",
+      "continue": "Continue"
     },
     "logs": {
       "firebaseParseError": "Firebase config parse failed"
@@ -1742,7 +1746,7 @@
     "logoAlt": "NXT Flutter Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "projectType": {
-      "title":       "Select Project Type",
+      "title": "Select Project Type",
       "description": "Choose a template to automatically install default models for your project."
     },
     "projects": {
@@ -1755,8 +1759,8 @@
       "blank":       { "label": "⚙️ Blank Project",       "description": "No demo content; start with an empty project skeleton." }
     },
     "demoContent": {
-      "title":         "Setup Demo Content",
-      "description":   "Preview your store with sample data already loaded.",
+      "title": "Setup Demo Content",
+      "description": "Preview your store with sample data already loaded.",
       "checkboxLabel": "Include demo content for the selected project",
       "ecommerce": {
         "item1": "Demo products with categories and tags",
@@ -1766,48 +1770,48 @@
         "item5": "Pre-configured menus and modules"
       }
     },
-    "continueButtonIdle":    "Continue",
+    "continueButtonIdle": "Continue",
     "continueButtonLoading": "Continuing...",
     "logs": {
       "navigatingToFinalise": "Saving installer selections and navigating to finalise step..."
     }
   },
   "donePage": {
-    "logoAlt":        "NXT Flutter Logo",
-    "tagline":        "Your All-in-One SaaS Installer & Code Generator",
-    "installComplete":"🎉 Installation Complete!",
+    "logoAlt": "NXT Flutter Logo",
+    "tagline": "Your All-in-One SaaS Installer & Code Generator",
+    "installComplete": "🎉 Installation Complete!",
     "stack": {
-      "both":    "Next.js + Flutter",
-      "next":    "Next.js",
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
       "flutter": "Flutter"
     },
     "projectInfo": {
-      "title":    "Project Info",
+      "title": "Project Info",
       "subtitle": "Basic information about your project setup.",
-      "name":     "Name:",
-      "stack":    "Stack:"
+      "name": "Name:",
+      "stack": "Stack:"
     },
     "database": {
-      "title":        "Database",
-      "subtitle":     "Your selected database and config.",
-      "type":         "Type:",
+      "title": "Database",
+      "subtitle": "Your selected database and config.",
+      "type": "Type:",
       "noneSelected": "None selected"
     },
     "adminUser": {
-      "title":    "Admin User",
+      "title": "Admin User",
       "subtitle": "Your initial admin credentials.",
-      "name":     "Name:",
-      "email":    "Email:",
+      "name": "Name:",
+      "email": "Email:",
       "password": "Password:"
     },
     "projectType": {
-      "title":    "Selected Project Type",
+      "title": "Selected Project Type",
       "subtitle": "Project template chosen during setup."
     },
     "demoContent": {
-      "title":        "Demo Content",
-      "subtitle":     "Whether to preload sample store data.",
-      "installed":    "Installed",
+      "title": "Demo Content",
+      "subtitle": "Whether to preload sample store data.",
+      "installed": "Installed",
       "notInstalled": "Not Installed"
     },
     "continueButton": "Continue to → Sign In"
@@ -1820,20 +1824,20 @@
     },
     "options": {
       "ecommerce": {
-        "label":       "Enable E-commerce Module",
+        "label": "Enable E-commerce Module",
         "description": "Adds product catalog, cart, checkout, and order management features."
       },
       "physical": {
-        "label":       "Include Physical Products",
+        "label": "Include Physical Products",
         "description": "Supports inventory, shipping, returns, and tracking for tangible goods."
       },
       "digital": {
-        "label":       "Include Digital Products",
+        "label": "Include Digital Products",
         "description": "Sell downloadable content like PDFs, videos, or software licenses."
       }
     },
     "button": {
-      "next":       "Next",
+      "next": "Next",
       "continuing": "Continuing..."
     }
   },
@@ -1844,12 +1848,12 @@
       "title": "Finalize Setup"
     },
     "summary": {
-      "project":        "Project:",
+      "project": "Project:",
       "defaultProject": "MyApp",
-      "stack":          "Stack:",
-      "stackBoth":      "Flutter + Next.js",
-      "database":       "Database:",
-      "notSelected":    "Not selected"
+      "stack": "Stack:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "Database:",
+      "notSelected": "Not selected"
     },
     "steps": {
       "heading": "Installation Steps:",
@@ -1857,97 +1861,79 @@
     },
     "progress": {
       "finishing": "Finishing...",
-      "ready":     "Ready to install your project"
+      "ready": "Ready to install your project"
     },
     "errors": {
-      "label":      "Error:",
+      "label": "Error:",
       "noDatabase": "No database selected, cannot save config.",
       "saveFailed": "Failed to save installer config",
-      "unknown":    "Unknown error occurred"
+      "unknown": "Unknown error occurred"
     },
     "button": {
-      "start":      "Start Installation",
+      "start": "Start Installation",
       "installing": "Installing..."
     },
     "logs": {
       "sendingConfig": "Sending installer config to server...",
-      "configSaved":   "Installer config saved successfully",
-      "installError":  "Installation error:"
+      "configSaved": "Installer config saved successfully",
+      "installError": "Installation error:"
     }
   },
   "modelsSelectionPage": {
-    "logoAlt":    "NXT Flutter Logo",
-    "tagline":    "Your All-in-One SaaS Installer & Code Generator",
-    "heading":    "Select Default Models",
+    "logoAlt": "NXT Flutter Logo",
+    "tagline": "Your All-in-One SaaS Installer & Code Generator",
+    "heading": "Select Default Models",
     "subheading": "Choose the default data models you want to include in your project. You can create or edit models later.",
-    "required":   "(required)",
+    "required": "(required)",
     "toggleAll": {
       "deselect": "Deselect All",
-      "select":   "Select All"
+      "select": "Select All"
     },
     "models": {
-      "users": {
-        "label":       "Users",
-        "description": "Manage application users and authentication"
-      },
-      "products": {
-        "label":       "Products",
-        "description": "Catalog of products or services"
-      },
-      "orders": {
-        "label":       "Orders",
-        "description": "Track customer orders and purchases"
-      },
-      "coupons": {
-        "label":       "Coupons",
-        "description": "Discount coupons and promotions"
-      },
-      "categories": {
-        "label":       "Categories",
-        "description": "Organize products or content"
-      },
-      "reviews": {
-        "label":       "Reviews",
-        "description": "User feedback and ratings"
-      }
+      "users":      { "label": "Users",      "description": "Manage application users and authentication" },
+      "products":   { "label": "Products",   "description": "Catalog of products or services" },
+      "orders":     { "label": "Orders",     "description": "Track customer orders and purchases" },
+      "coupons":    { "label": "Coupons",    "description": "Discount coupons and promotions" },
+      "categories": { "label": "Categories", "description": "Organize products or content" },
+      "reviews":    { "label": "Reviews",    "description": "User feedback and ratings" }
     },
     "button": {
-      "continue":   "Continue",
+      "continue": "Continue",
       "continuing": "Continuing..."
     }
   },
   "projectInfoPage": {
-    "logoAlt":        "NXT_Flutter Logo",
-    "tagline":        "Your All-in-One SaaS Installer & Code Generator",
-    "heading":        "Project Setup",
-    "subheading":     "Enter project name, subdomain, and domain for your self-hosted studio.",
+    "logoAlt": "NXT_Flutter Logo",
+    "tagline": "Your All-in-One SaaS Installer & Code Generator",
+    "heading": "Project Setup",
+    "subheading": "Enter project name, subdomain, and domain for your self-hosted studio.",
     "continueButton": "Continue",
     "fields": {
       "name": {
-        "label":       "Project Name",
+        "label": "Project Name",
         "placeholder": "e.g., MyApp Studio"
       },
       "domain": {
-        "label":       "Domain",
+        "label": "Domain",
         "placeholder": "e.g., http://localhost:3000",
-        "hint":        "Full domain for your app. Default is"
+        "hint": "Full domain for your app. Default is"
       },
       "subdomain": {
-        "label":       "Subdomain",
+        "label": "Subdomain",
         "placeholder": "e.g., console",
-        "hint":        "This will be used for the URL:"
+        "hint": "This will be used for the URL:"
       }
     },
     "errors": {
-      "nameRequired":      "Project name is required",
+      "nameRequired": "Project name is required",
       "subdomainRequired": "Subdomain is required",
-      "domainRequired":    "Domain is required"
+      "domainRequired": "Domain is required"
     }
   },
   "welcomePage": {
-    "logoAlt":         "NXT_Flutter Logo",
-    "tagline":         "Your All-in-One SaaS Installer & Code Generator",
-    "continueButton":  "Continue →",
+    "logoAlt": "NXT_Flutter Logo",
+    "tagline": "Your All-in-One SaaS Installer & Code Generator",
+    "continueButton": "Continue →",
     "continueLoading": "Loading...",
     "benefits": {
       "heading": "Why NXT_Flutter?",
@@ -1959,25 +1945,25 @@
       "item6": "💼 Ideal for startups, agencies, and enterprise projects"
     },
     "license": {
-      "heading":     "License Agreement",
-      "loading":     "Loading license...",
-      "loadFailed":  "Failed to load license agreement.",
+      "heading": "License Agreement",
+      "loading": "Loading license...",
+      "loadFailed": "Failed to load license agreement.",
       "acceptLabel": "Accept the license terms."
     }
   },
   "changePassword": {
     "errors": {
-      "bothPasswordsRequired":    "Current and new password are required",
-      "passwordTooShort":         "Password must be at least 8 characters",
-      "unauthorized":             "Unauthorized",
-      "invalidToken":             "Invalid token",
-      "userNotFound":             "User not found",
+      "bothPasswordsRequired": "Current and new password are required",
+      "passwordTooShort": "Password must be at least 8 characters",
+      "unauthorized": "Unauthorized",
+      "invalidToken": "Invalid token",
+      "userNotFound": "User not found",
       "incorrectCurrentPassword": "Current password is incorrect",
-      "internalError":            "An unexpected error occurred"
+      "internalError": "An unexpected error occurred"
     },
     "logs": {
-      "firebasePasswordUpdated":     "[change-password] Firebase Auth password updated",
-      "firebasePasswordUpdateFailed":"[change-password] Firebase Auth password update failed"
+      "firebasePasswordUpdated": "[change-password] Firebase Auth password updated",
+      "firebasePasswordUpdateFailed": "[change-password] Firebase Auth password update failed"
     }
   },
   "createAdminUserRoute": {
@@ -1985,16 +1971,16 @@
       "adminCreated": "Admin user created successfully"
     },
     "errors": {
-      "missingConfig":    "Missing DB config",
+      "missingConfig": "Missing DB config",
       "missingAdminUser": "Missing admin user data",
-      "genericFailure":   "Failed to create admin user"
+      "genericFailure": "Failed to create admin user"
     }
   },
   "createModelsRoute": {
     "errors": {
       "missingConfigOrEmail": "Missing DB config or admin user email",
-      "adapterNotSupported":  "This database adapter does not support data model creation",
-      "genericFailure":       "Failed to insert data models"
+      "adapterNotSupported": "This database adapter does not support data model creation",
+      "genericFailure": "Failed to insert data models"
     },
     "logs": {
       "createModelsError": "Error in create-data-models API:"
@@ -2002,7 +1988,7 @@
   },
   "createStorageBucketsRoute": {
     "errors": {
-      "missingConfig":       "Missing DB config/type",
+      "missingConfig": "Missing DB config/type",
       "adapterNotSupported": "{type} adapter does not implement storage setup"
     }
   },
@@ -2011,7 +1997,7 @@
       "tablesCreated": "All system, user, and project tables created"
     },
     "errors": {
-      "missingConfig":  "Missing DB config",
+      "missingConfig": "Missing DB config",
       "genericFailure": "Failed to create tables"
     },
     "logs": {
@@ -2025,45 +2011,45 @@
   },
   "flutterCreateRoute": {
     "errors": {
-      "missingProjectName":  "Missing projectName",
+      "missingProjectName": "Missing projectName",
       "flutterNotInstalled": "Flutter is not installed or not in PATH.",
-      "stepFailed":          "Step failed: Creating Flutter project - {message}"
+      "stepFailed": "Step failed: Creating Flutter project - {message}"
     },
     "logs": {
       "projectAlreadyExists": "Flutter project \"{projectName}\" already exists. Skipping creation.",
-      "flutterStderr":        "Flutter stderr:",
-      "flutterCreateFailed":  "Flutter create failed:"
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Flutter create failed:"
     }
   },
   "forgotPasswordRoute": {
     "errors": {
-      "emailRequired":         "Email is required",
-      "dbTypeNotSet":          "NEXT_PUBLIC_DB_TYPE not set",
-      "firebaseClientSide":    "Firebase password reset is handled client-side",
+      "emailRequired": "Email is required",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE not set",
+      "firebaseClientSide": "Firebase password reset is handled client-side",
       "supabaseMissingMethod": "Supabase adapter missing sendResetEmail method",
-      "unsupportedDbType":     "Unsupported DB type: {dbType}",
+      "unsupportedDbType": "Unsupported DB type: {dbType}",
       "adapterMissingMethods": "${dbType} adapter missing required methods",
-      "userNotFound":          "User not found",
-      "genericFailure":        "Failed to send reset link"
+      "userNotFound": "User not found",
+      "genericFailure": "Failed to send reset link"
     },
     "notices": {
       "smtpDisabled": "Email sending is disabled. Ask your administrator to reset your password."
     },
     "email": {
       "subject": "Password Reset Request",
-      "body":    "<p>Hello {name},</p><p>Click the link below to reset your password:</p><a href=\"{resetLink}\">{resetLink}</a><p>If you didn't request this, ignore this email.</p>"
+      "body": "<p>Hello {name},</p><p>Click the link below to reset your password:</p><a href=\"{resetLink}\">{resetLink}</a><p>If you didn't request this, ignore this email.</p>"
     },
     "logs": {
-      "supabaseResetSent":   "Supabase reset email sent",
-      "resetEmailSent":      "Reset email sent",
-      "smtpDisabled":        "SMTP/forgot-password disabled — email skipped",
+      "supabaseResetSent": "Supabase reset email sent",
+      "resetEmailSent": "Reset email sent",
+      "smtpDisabled": "SMTP/forgot-password disabled — email skipped",
       "forgotPasswordError": "Forgot password error:"
     }
   },
   "systemConfigRoute": {
     "errors": {
       "firebaseServiceAccountMissing": "Firebase service account missing",
-      "unsupportedDbType":             "Unsupported DB type: {dbType}"
+      "unsupportedDbType": "Unsupported DB type: {dbType}"
     },
     "logs": {
       "systemConfigError": "[SYSTEM CONFIG ERROR]"
@@ -2071,8 +2057,8 @@
   },
   "installDemoContentRoute": {
     "errors": {
-      "missingConfig":       "Missing DB config",
-      "missingProjectType":  "Missing project type",
+      "missingConfig": "Missing DB config",
+      "missingProjectType": "Missing project type",
       "adapterNotSupported": "installDemoContent not implemented for this adapter"
     },
     "logs": {
@@ -2084,13 +2070,13 @@
       "loggedOut": "Logged out successfully"
     },
     "errors": {
-      "tokenRequired":                "Token is required",
-      "dbTypeNotSet":                 "NEXT_DB_TYPE is not set",
-      "firebaseServiceAccountMissing":"Firebase service account missing",
-      "mysqlEnvMissing":              "MySQL environment variables missing",
-      "postgresEnvMissing":           "Postgres environment variables missing",
-      "unsupportedDbType":            "Unsupported DB type: {dbType}",
-      "tokenNotFound":                "Token not found"
+      "tokenRequired": "Token is required",
+      "dbTypeNotSet": "NEXT_DB_TYPE is not set",
+      "firebaseServiceAccountMissing": "Firebase service account missing",
+      "mysqlEnvMissing": "MySQL environment variables missing",
+      "postgresEnvMissing": "Postgres environment variables missing",
+      "unsupportedDbType": "Unsupported DB type: {dbType}",
+      "tokenNotFound": "Token not found"
     },
     "logs": {
       "logoutError": "LOGOUT API ERROR:"
@@ -2099,8 +2085,8 @@
   "messagesDeleteRoute": {
     "errors": {
       "conversationIdRequired": "conversation_id is required",
-      "unauthorized":           "Unauthorized",
-      "invalidToken":           "Invalid token"
+      "unauthorized": "Unauthorized",
+      "invalidToken": "Invalid token"
     },
     "logs": {
       "deleteError": "[messages/delete]"
@@ -2109,7 +2095,7 @@
   "listFiles": {
     "errors": {
       "folderRequired": "folder is required",
-      "internalError":  "An unexpected error occurred"
+      "internalError": "An unexpected error occurred"
     }
   },
   "listFolders": {
@@ -2122,30 +2108,30 @@
   },
   "moveFile": {
     "errors": {
-      "fieldsMissing":        "fromFolder, toFolder and fileName are required",
+      "fieldsMissing": "fromFolder, toFolder and fileName are required",
       "moveFileNotSupported": "moveFile not supported",
-      "internalError":        "An unexpected error occurred"
+      "internalError": "An unexpected error occurred"
     }
   },
   "renameFile": {
     "errors": {
-      "fieldsMissing":          "folder, oldName and newName are required",
+      "fieldsMissing": "folder, oldName and newName are required",
       "renameFileNotSupported": "renameFile not supported",
-      "internalError":          "An unexpected error occurred"
+      "internalError": "An unexpected error occurred"
     }
   },
   "uploadFile": {
     "errors": {
-      "fileAndFolderRequired":  "File and folder are required",
+      "fileAndFolderRequired": "File and folder are required",
       "uploadFileNotSupported": "uploadFile not supported",
-      "internalError":          "Upload failed"
+      "internalError": "Upload failed"
     },
     "logs": {
-      "uploadMode":             "[upload-file] mode:",
-      "projectIdLookupFailed":  "[upload-file] project_id lookup failed",
-      "metadataSaved":          "[upload-file] metadata saved to nxf_storage",
-      "metadataSaveFailed":     "[upload-file] metadata save failed",
-      "localUploadSuccess":     "[upload-file] local upload saved:"
+      "uploadMode": "[upload-file] mode:",
+      "projectIdLookupFailed": "[upload-file] project_id lookup failed",
+      "metadataSaved": "[upload-file] metadata saved to nxf_storage",
+      "metadataSaveFailed": "[upload-file] metadata save failed",
+      "localUploadSuccess": "[upload-file] local upload saved:"
     }
   },
   "testDbConnection": {
@@ -2155,37 +2141,37 @@
   },
   "updateBranding": {
     "errors": {
-      "userIdRequired":                "user_id is required",
+      "userIdRequired": "user_id is required",
       "firebaseServiceAccountMissing": "Firebase service account missing",
-      "unsupportedDbType":             "Unsupported database type",
-      "systemConfigNotFound":          "System config not found",
-      "internalError":                 "Internal Server Error"
+      "unsupportedDbType": "Unsupported database type",
+      "systemConfigNotFound": "System config not found",
+      "internalError": "Internal Server Error"
     }
   },
   "updateProfile": {
     "errors": {
       "fullNameRequired": "Full name is required",
-      "unauthorized":     "Unauthorized",
-      "invalidToken":     "Invalid token",
-      "internalError":    "An unexpected error occurred"
+      "unauthorized": "Unauthorized",
+      "invalidToken": "Invalid token",
+      "internalError": "An unexpected error occurred"
     }
   },
   "updateProject": {
     "errors": {
-      "requiredFieldsMissing":         "user_id and project_name are required",
+      "requiredFieldsMissing": "user_id and project_name are required",
       "firebaseServiceAccountMissing": "Firebase service account missing",
-      "unsupportedDbType":             "Unsupported database type",
-      "systemConfigNotFound":          "System config not found for this user",
-      "internalError":                 "Internal Server Error"
+      "unsupportedDbType": "Unsupported database type",
+      "systemConfigNotFound": "System config not found for this user",
+      "internalError": "Internal Server Error"
     }
   },
   "updateSmtp": {
     "errors": {
-      "userIdRequired":                "user_id is required",
+      "userIdRequired": "user_id is required",
       "firebaseServiceAccountMissing": "Firebase service account missing",
-      "unsupportedDbType":             "Unsupported database type",
-      "systemConfigNotFound":          "System config not found for this user",
-      "internalError":                 "Internal Server Error"
+      "unsupportedDbType": "Unsupported database type",
+      "systemConfigNotFound": "System config not found for this user",
+      "internalError": "Internal Server Error"
     }
   },
   "writeConfig": {
@@ -2196,19 +2182,19 @@
   "adminUserFlow": {
     "logs": {
       "existingAuthUserFound": "Existing auth user found:",
-      "newAuthUserCreated":    "New auth user created:",
-      "creatingAdminInDb":     "Creating admin user in DB...",
-      "userAlreadyInDb":       "User already exists in DB:",
-      "existingProjectFound":  "Existing project found:",
-      "newProjectCreated":     "New project created:",
-      "existingTenantFound":   "Existing tenant found:",
-      "newTenantCreated":      "New tenant created:"
+      "newAuthUserCreated": "New auth user created:",
+      "creatingAdminInDb": "Creating admin user in DB...",
+      "userAlreadyInDb": "User already exists in DB:",
+      "existingProjectFound": "Existing project found:",
+      "newProjectCreated": "New project created:",
+      "existingTenantFound": "Existing tenant found:",
+      "newTenantCreated": "New tenant created:"
     }
   },
   "createUserDataModels": {
     "logs": {
       "skippingDuplicate": "Skipping duplicate CreateDataModels run — already processed this project and type combination.",
-      "creatingTable":     "Creating table:"
+      "creatingTable": "Creating table:"
     }
   },
   "createSchemaTables": {
@@ -2218,231 +2204,314 @@
   },
   "uploadZone": {
     "folderSelector": {
-      "label":           "Upload Folder",
-      "customFolder":    "Custom folder…",
+      "label": "Upload Folder",
+      "customFolder": "Custom folder…",
       "enterFolderName": "Enter folder name",
-      "placeholder":     "e.g. banners/summer",
-      "uploadingTo":     "Uploading to:"
+      "placeholder": "e.g. banners/summer",
+      "uploadingTo": "Uploading to:"
     },
     "preview": {
-      "alt":      "Preview",
+      "alt": "Preview",
       "uploaded": "Uploaded",
-      "replace":  "Replace",
-      "clear":    "Clear file"
+      "replace": "Replace",
+      "clear": "Clear file"
     },
     "dropzone": {
-      "uploading":   "Uploading…",
-      "idle":        "Drag & drop or",
-      "browse":      "browse",
+      "uploading": "Uploading…",
+      "idle": "Drag & drop or",
+      "browse": "browse",
       "recommended": "Recommended:"
     },
     "errors": {
-      "noFolder":           "Please select or enter a folder before uploading.",
-      "uploadFailed":       "Upload failed",
+      "noFolder": "Please select or enter a folder before uploading.",
+      "uploadFailed": "Upload failed",
       "uploadFailedStatus": "Upload failed:",
-      "networkError":       "Network error"
+      "networkError": "Network error"
     }
   },
- 
-
-
-
-
-"modelView": {
-  "systemBadge":   "System",
-  "subtitle":      "Read-only — this is a protected system table.",
-  "fieldsHeading": "Fields",
-  "actions": {
-    "back": "Back to models"
+  "modelView": {
+    "systemBadge": "System",
+    "subtitle": "Read-only — this is a protected system table.",
+    "fieldsHeading": "Fields",
+    "actions": {
+      "back": "Back to models"
+    },
+    "stats": {
+      "fields": "Fields",
+      "created": "Created",
+      "updated": "Last updated"
+    },
+    "table": {
+      "name": "Field Name",
+      "type": "Type",
+      "constraints": "Constraints",
+      "nullable": "Required",
+      "default": "Default",
+      "uiType": "UI Type"
+    },
+    "badges": {
+      "hidden": "Hidden",
+      "required": "Required",
+      "optional": "Optional"
+    },
+    "errors": {
+      "loadFailed": "Failed to load model.",
+      "notFound": "Model not found."
+    }
   },
-  "stats": {
-    "fields":  "Fields",
-    "created": "Created",
-    "updated": "Last updated"
+  "modelsListPage": {
+    "header": {
+      "title": "Models",
+      "subtitle": "Define and manage your project's data structure.",
+      "createButton": "Create Model"
+    },
+    "filter": {
+      "all": "All",
+      "user": "User",
+      "system": "System"
+    },
+    "states": {
+      "empty": "No models found.",
+      "emptyHint": "Create your first model to get started."
+    },
+    "badges": {
+      "system": "System",
+      "partialSystem": "Editable System"
+    },
+    "meta": {
+      "fields": "{count} fields",
+      "foreignKeys": "{count} FK"
+    },
+    "card": {
+      "editAriaLabel": "Edit {name}",
+      "deleteAriaLabel": "Delete {name}"
+    },
+    "confirmDelete": {
+      "title": "Delete Model?",
+      "description": "Are you sure you want to delete \"{name}\"? All data in this table will be permanently deleted. This cannot be undone.",
+      "confirm": "Delete",
+      "deleting": "Deleting…",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "loadFailed": "Failed to load models.",
+      "deleteFailed": "Failed to delete model."
+    }
   },
-  "table": {
-    "name":        "Field Name",
-    "type":        "Type",
-    "constraints": "Constraints",
-    "nullable":    "Required",
-    "default":     "Default",
-    "uiType":      "UI Type"
+  "createModel": {
+    "title": "Create Model",
+    "subtitle": "Define a new data model and its fields.",
+    "actions": {
+      "save": "Save Model",
+      "saving": "Saving…",
+      "back": "Back to models"
+    },
+    "form": {
+      "modelNameLabel": "Model Name",
+      "modelNamePlaceholder": "e.g. Product",
+      "fieldNamePlaceholder": "Field name",
+      "required": "Required",
+      "unique": "Unique",
+      "primaryKey": "Primary Key",
+      "primaryKeyTaken": "already set",
+      "hidden": "Hidden",
+      "uiType": "UI Type",
+      "foreignKeyTable": "Foreign Key — Table",
+      "foreignKeyColumn": "Foreign Key — Column",
+      "noForeignKey": "— No foreign key —",
+      "selectColumn": "— Select column —",
+      "onDelete": "On Delete",
+      "addField": "Add Field",
+      "removeField": "Remove field",
+      "expandField": "Show advanced options",
+      "collapseField": "Hide advanced options"
+    },
+    "validation": {
+      "modelNameRequired": "Model name is required.",
+      "fieldsInvalid": "All fields must have a name.",
+      "fieldNameUnique": "Field names must be unique.",
+      "singlePrimaryKey": "Only one primary key is allowed per model."
+    },
+    "confirmDelete": {
+      "title": "Delete Field?",
+      "description": "Are you sure you want to remove this field?",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "createFailed": "Failed to create model."
+    }
   },
-  "badges": {
-    "hidden":   "Hidden",
-    "required": "Required",
-    "optional": "Optional"
+  "editModel": {
+    "title": "Edit Model",
+    "subtitle": "Update the model name and its field definitions.",
+    "actions": {
+      "save": "Save Changes",
+      "saving": "Saving…",
+      "back": "Back to models"
+    },
+    "form": {
+      "modelNameLabel": "Model Name",
+      "modelNamePlaceholder": "Model name",
+      "fieldNamePlaceholder": "Field name",
+      "required": "Required",
+      "unique": "Unique",
+      "primaryKey": "Primary Key",
+      "primaryKeyTaken": "already set",
+      "hidden": "Hidden",
+      "uiType": "UI Type",
+      "foreignKeyTable": "Foreign Key — Table",
+      "foreignKeyColumn": "Foreign Key — Column",
+      "noForeignKey": "— No foreign key —",
+      "selectColumn": "— Select column —",
+      "onDelete": "On Delete",
+      "addField": "Add Field",
+      "removeField": "Remove field",
+      "expandField": "Show advanced options",
+      "collapseField": "Hide advanced options"
+    },
+    "validation": {
+      "modelNameRequired": "Model name is required.",
+      "fieldsInvalid": "All fields must have a name.",
+      "fieldNameUnique": "Field names must be unique.",
+      "singlePrimaryKey": "Only one primary key is allowed per model."
+    },
+    "confirmDelete": {
+      "title": "Delete Field?",
+      "description": "Are you sure you want to remove this field?",
+      "confirm": "Delete",
+      "cancel": "Cancel"
+    },
+    "warningDialog": {
+      "title": "Serious Warning",
+      "subtitle": "You are about to delete a protected field.",
+      "primaryKeyWarning": "This field is the primary key of this table. Deleting it will break all relationships that reference this table and may permanently corrupt existing data across your entire project.",
+      "foreignKeyWarning": "This field is a foreign key that links this table to another. Deleting it will break the relationship and may cause data integrity issues for any existing records.",
+      "checkboxLabel": "I understand this may permanently corrupt my data and cannot be undone.",
+      "confirm": "Delete Anyway",
+      "cancel": "Cancel"
+    },
+    "errors": {
+      "loadModelFailed": "Failed to load model.",
+      "modelNotFound": "Model not found.",
+      "updateModelFailed": "Failed to update model."
+    }
   },
-  "errors": {
-    "loadFailed": "Failed to load model.",
-    "notFound":   "Model not found."
-  }
-},
-"modelsListPage": {
-  "header": {
-    "title":        "Models",
-    "subtitle":     "Define and manage your project's data structure.",
-    "createButton": "Create Model"
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id is required",
+      "invalidBody": "Invalid or empty request body",
+      "missingFields": "Missing required fields",
+      "projectNotFound": "No project found for this user",
+      "nameAlreadyExists": "A model with this name already exists",
+      "fetchFailed": "Failed to fetch models",
+      "createFailed": "Failed to create model",
+      "updateFailed": "Failed to update model",
+      "deleteFailed": "Failed to delete model",
+      "multiplePrimaryKeys": "Only one primary key is allowed per model",
+      "systemTableProtected": "System tables cannot be created, modified, or deleted"
+    }
   },
-  "filter": {
-    "all":    "All",
-    "user":   "User",
-    "system": "System"
+  "foreignKeySelector": {
+    "placeholder": "— Select a field —",
+    "clear": "Clear foreign key",
+    "searchPlaceholder": "Search models…",
+    "noResults": "No models found.",
+    "systemBadge": "System",
+    "fieldsLabel": "fields",
+    "onDelete": "On Delete",
+    "filter": {
+      "all": "All",
+      "user": "User",
+      "system": "System"
+    }
   },
-  "states": {
-    "empty":     "No models found.",
-    "emptyHint": "Create your first model to get started."
-  },
-  "badges": {
-    "system":        "System",
-    "partialSystem": "Editable System"
-  },
-  "meta": {
-    "fields":      "{count} fields",
-    "foreignKeys": "{count} FK"
-  },
-  "card": {
-    "editAriaLabel":   "Edit {name}",
-    "deleteAriaLabel": "Delete {name}"
-  },
-  "confirmDelete": {
-    "title":       "Delete Model?",
-    "description": "Are you sure you want to delete \"{name}\"? All data in this table will be permanently deleted. This cannot be undone.",
-    "confirm":     "Delete",
-    "deleting":    "Deleting…",
-    "cancel":      "Cancel"
-  },
-  "errors": {
-    "loadFailed":   "Failed to load models.",
-    "deleteFailed": "Failed to delete model."
-  }
-},
-"createModel": {
-  "title":    "Create Model",
-  "subtitle": "Define a new data model and its fields.",
-  "actions": {
-    "save":   "Save Model",
-    "saving": "Saving…",
-    "back":   "Back to models"
-  },
-  "form": {
-    "modelNameLabel":       "Model Name",
-    "modelNamePlaceholder": "e.g. Product",
-    "fieldNamePlaceholder": "Field name",
-    "required":             "Required",
-    "unique":               "Unique",
-    "primaryKey":           "Primary Key",
-    "primaryKeyTaken":      "already set",
-    "hidden":               "Hidden",
-    "uiType":               "UI Type",
-    "foreignKeyTable":      "Foreign Key — Table",
-    "foreignKeyColumn":     "Foreign Key — Column",
-    "noForeignKey":         "— No foreign key —",
-    "selectColumn":         "— Select column —",
-    "onDelete":             "On Delete",
-    "addField":             "Add Field",
-    "removeField":          "Remove field",
-    "expandField":          "Show advanced options",
-    "collapseField":        "Hide advanced options"
-  },
-  "validation": {
-    "modelNameRequired": "Model name is required.",
-    "fieldsInvalid":     "All fields must have a name.",
-    "fieldNameUnique":   "Field names must be unique.",
-    "singlePrimaryKey":  "Only one primary key is allowed per model."
-  },
-  "confirmDelete": {
-    "title":       "Delete Field?",
-    "description": "Are you sure you want to remove this field?",
-    "confirm":     "Delete",
-    "cancel":      "Cancel"
-  },
-  "errors": {
-    "createFailed": "Failed to create model."
-  }
-},
-"editModel": {
-  "title":    "Edit Model",
-  "subtitle": "Update the model name and its field definitions.",
-  "actions": {
-    "save":   "Save Changes",
-    "saving": "Saving…",
-    "back":   "Back to models"
-  },
-  "form": {
-    "modelNameLabel":       "Model Name",
-    "modelNamePlaceholder": "Model name",
-    "fieldNamePlaceholder": "Field name",
-    "required":             "Required",
-    "unique":               "Unique",
-    "primaryKey":           "Primary Key",
-    "primaryKeyTaken":      "already set",
-    "hidden":               "Hidden",
-    "uiType":               "UI Type",
-    "foreignKeyTable":      "Foreign Key — Table",
-    "foreignKeyColumn":     "Foreign Key — Column",
-    "noForeignKey":         "— No foreign key —",
-    "selectColumn":         "— Select column —",
-    "onDelete":             "On Delete",
-    "addField":             "Add Field",
-    "removeField":          "Remove field",
-    "expandField":          "Show advanced options",
-    "collapseField":        "Hide advanced options"
-  },
-  "validation": {
-    "modelNameRequired": "Model name is required.",
-    "fieldsInvalid":     "All fields must have a name.",
-    "fieldNameUnique":   "Field names must be unique.",
-    "singlePrimaryKey":  "Only one primary key is allowed per model."
-  },
-  "confirmDelete": {
-    "title":       "Delete Field?",
-    "description": "Are you sure you want to remove this field?",
-    "confirm":     "Delete",
-    "cancel":      "Cancel"
-  },
-  "warningDialog": {
-    "title":             "Serious Warning",
-    "subtitle":          "You are about to delete a protected field.",
-    "primaryKeyWarning": "This field is the primary key of this table. Deleting it will break all relationships that reference this table and may permanently corrupt existing data across your entire project.",
-    "foreignKeyWarning": "This field is a foreign key that links this table to another. Deleting it will break the relationship and may cause data integrity issues for any existing records.",
-    "checkboxLabel":     "I understand this may permanently corrupt my data and cannot be undone.",
-    "confirm":           "Delete Anyway",
-    "cancel":            "Cancel"
-  },
-  "errors": {
-    "loadModelFailed":   "Failed to load model.",
-    "modelNotFound":     "Model not found.",
-    "updateModelFailed": "Failed to update model."
-  }
-},
-"modelsRoute": {
-  "errors": {
-    "userIdRequired":       "user_id is required",
-    "invalidBody":          "Invalid or empty request body",
-    "missingFields":        "Missing required fields",
-    "projectNotFound":      "No project found for this user",
-    "nameAlreadyExists":    "A model with this name already exists",
-    "fetchFailed":          "Failed to fetch models",
-    "createFailed":         "Failed to create model",
-    "updateFailed":         "Failed to update model",
-    "deleteFailed":         "Failed to delete model",
-    "multiplePrimaryKeys":  "Only one primary key is allowed per model",
-    "systemTableProtected": "System tables cannot be created, modified, or deleted"
-  }
-},
-"foreignKeySelector": {
-  "placeholder":      "— Select a field —",
-  "clear":            "Clear foreign key",
-  "searchPlaceholder":"Search models…",
-  "noResults":        "No models found.",
-  "systemBadge":      "System",
-  "fieldsLabel":      "fields",
-  "onDelete":         "On Delete",
-  "filter": {
-    "all":    "All",
-    "user":   "User",
-    "system": "System"
-  }
+  "users": {
+  "page_title": "Users",
+  "page_description": "Manage CMS admin and user accounts",
+  "edit_kpis": "Edit KPIs",
+  "editing_kpis": "Editing KPIs",
+  "save_layout": "Save layout",
+  "saving": "Saving…",
+  "search_placeholder": "Search by name or email…",
+  "showing_count": "Showing {filtered} of {total} users",
+  "no_users_found": "No users found",
+  "filter": "Filter",
+  "sort": "Sort",
+  "clear_all": "Clear all",
+  "filters": "Filters",
+  "role": "Role",
+  "all_roles": "All roles",
+  "all_statuses": "All statuses",
+  "status": "Status",
+  "joined_from": "Joined from",
+  "joined_to": "Joined to",
+  "sort_by": "Sort by",
+  "direction": "Direction",
+  "asc": "Ascending (A → Z)",
+  "desc": "Descending (Z → A)",
+  "col_name": "Name",
+  "col_email": "Email",
+  "col_role": "Role",
+  "col_status": "Status",
+  "col_last_login": "Last login",
+  "col_joined": "Joined",
+  "role_admin": "Admin",
+  "role_user": "User",
+  "status_active": "Active",
+  "status_suspended": "Suspended",
+  "status_disabled": "Disabled",
+  "drawer_title": "User details",
+  "actions": "Actions",
+  "change_role": "Role",
+  "change_status": "Status",
+  "send_reset": "Send password reset email",
+  "sending_reset": "Sending…",
+  "delete_user": "Delete user",
+  "delete_confirm": "Permanently delete this user? This cannot be undone.",
+  "cancel": "Cancel",
+  "confirm_delete": "Yes, delete",
+  "deleting": "Deleting…",
+  "last_admin_warning": "Cannot demote — this is the last admin",
+  "login_history": "Login history",
+  "no_history": "No login history recorded yet",
+  "event_login": "Signed in",
+  "event_logout": "Signed out",
+  "event_online": "Online",
+  "event_offline": "Went offline",
+  "joined": "Joined",
+  "last_login": "Last login",
+  "toast_role_updated": "Role updated",
+  "toast_status_updated": "Status updated",
+  "toast_user_deleted": "User deleted",
+  "toast_reset_sent": "Password reset sent to {email}",
+  "toast_kpi_saved": "KPI layout saved",
+  "toast_load_failed": "Failed to load users",
+  "toast_save_failed": "Save failed",
+  "kpi_add": "Add KPI",
+  "kpi_add_block": "Block",
+  "kpi_edit": "Edit KPI",
+  "kpi_label_required": "Label is required",
+  "kpi_select_field": "Select a field",
+  "kpi_select_both_fields": "Select both fields",
+  "kpi_select_field_and_value": "Select a field and enter a value to match",
+  "kpi_max_reached": "Maximum 5 KPIs allowed",
+  "kpi_label": "Label",
+  "kpi_formula": "Formula",
+  "kpi_format": "Display format",
+  "kpi_icon": "Icon",
+  "kpi_accent_colour": "Accent colour",
+  "kpi_field": "Field",
+  "kpi_field_a": "Field A",
+  "kpi_field_b": "Field B",
+  "kpi_numerator": "Numerator field (A)",
+  "kpi_denominator": "Denominator field (B)",
+  "kpi_operator": "Operator",
+  "kpi_value_to_match": "Value to match",
+  "kpi_make_wide": "Make wide",
+  "kpi_make_compact": "Make compact",
+  "kpi_add_to_block": "Add",
+  "kpi_save": "Save changes",
+  "kpi_cancel": "Cancel"
 }
 }

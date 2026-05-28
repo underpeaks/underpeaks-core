@@ -31,10 +31,9 @@
  * inside the /api directory.
  */
 
-import { getAdapter }    from '@/app/db-adapter'
-import { DBConfig }      from '@/app/db-adapter/types'
-import { NextResponse }  from 'next/server'
-import { getTranslations } from 'next-intl/server'
+import { getAdapter }   from '@/app/db-adapter'
+import { DBConfig }     from '@/app/db-adapter/types'
+import { NextResponse } from 'next/server'
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -53,12 +52,6 @@ import { getTranslations } from 'next-intl/server'
  *          or { success: false, message: string } on failure.
  */
 export async function POST(req: Request) {
-  /**
-   * t — Server-side translation function scoped to the 'testDbConnection' namespace.
-   * Used for all user-facing error messages returned by this route.
-   */
- // const t = await getTranslations('testDbConnection')
-
   try {
     // ── Parse request body ─────────────────────────────────────────────────
 
@@ -129,7 +122,7 @@ export async function POST(req: Request) {
      * sent back to the client.
      */
     return NextResponse.json(
-      { success: false, message: ('errors.connectionFailed') },
+      { success: false, message: 'Failed to connect to the database' },
       { status: 500 }
     )
   }

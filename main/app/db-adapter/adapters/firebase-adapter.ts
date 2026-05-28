@@ -416,6 +416,17 @@ export class FirebaseAdapter implements DBAdapter {
     throw lastError
   }
 
+  async generateEmailVerificationLink(
+  config:       DBConfig,
+  email:        string,
+  redirectUrl?: string
+): Promise<string> {
+  const actionCodeSettings = redirectUrl ? { url: redirectUrl } : undefined
+  const link = await admin.auth().generateEmailVerificationLink(email, actionCodeSettings)
+  console.log(`[FirebaseAdapter] generateEmailVerificationLink — link generated for ${email}`)
+  return link
+}
+
   /**
    * registerUserInAuth
    *
@@ -781,6 +792,10 @@ export class FirebaseAdapter implements DBAdapter {
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
   }
 
+  async readAll(config: DBConfig, collection: string) {
+    const snapshot = await this.firestore.collection(collection).get()
+    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+  }
   /**
    * update
    *
@@ -1070,62 +1085,82 @@ export class FirebaseAdapter implements DBAdapter {
    */
  async installDemoContent(
   config: DBConfig,
-  selectedProjectType: string,
-  adminEmail?: string  // ← add this to drive the lookups
+  selectedProjectType: string
 ): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
   const fs   = require('fs')
   const path = require('path')
 
   try {
-    // ─── Resolve project_id, tenant_id, user_id ──────────────────────────
+    // -----------------------------------------------------------------------
+    // Step 1: Resolve project, tenant, and admin user for this installation
+    // -----------------------------------------------------------------------
 
-    let resolvedUserId:   string | null = null
-    let resolvedProjectId: string | null = null
-    let resolvedTenantId:  string | null = null
+    /**
+     * We need three IDs to attach every demo content row to the correct
+     * context. Without these, demo data sits orphaned in the DB with no
+     * way to scope it to the right project or user.
+     *
+     * We derive them by reading the system config which was written during
+     * the installer flow. The config links user → project → tenant.
+     *
+     * If any of these cannot be resolved we abort the demo content install
+     * rather than inserting rows that will never be accessible.
+     */
 
-    if (adminEmail) {
-      /**
-       * 1. Find the admin user by email so we have their user_id.
-       */
-      const user = await this.findUserByEmail(config, adminEmail)
-      if (user?.id) {
-        resolvedUserId = user.id
+    // Resolve admin user — find the first admin in nxf_users
+    const usersSnapshot = await this.firestore
+      .collection('nxf_users')
+      .where('role', '==', 'admin')
+      .limit(1)
+      .get()
 
-        /**
-         * 2. Use the user_id to find their project.
-         *    findProjectByOwnerId queries nxf_system_projects by user_id.
-         */
-        const project = await this.findProjectByOwnerId(config, user.id)
-        if (project?.id) {
-          resolvedProjectId = project.id
-        } else {
-          console.warn('[FirebaseAdapter] installDemoContent — no project found for user, project_id will not be injected')
-        }
-
-        /**
-         * 3. Use the email to find the tenant.
-         *    findTenantByUserEmail queries nxf_system_tenants by user_email.
-         */
-        const tenant = await this.findTenantByUserEmail(config, adminEmail)
-        if (tenant?.id) {
-          resolvedTenantId = tenant.id
-        } else {
-          console.warn('[FirebaseAdapter] installDemoContent — no tenant found for email, tenant_id will not be injected')
-        }
-      } else {
-        console.warn('[FirebaseAdapter] installDemoContent — user not found for email, IDs will not be injected')
-      }
-    } else {
-      console.warn('[FirebaseAdapter] installDemoContent — no adminEmail provided, project_id/tenant_id/user_id will not be injected')
+    if (usersSnapshot.empty) {
+      console.error('[FirebaseAdapter] installDemoContent — no admin user found, aborting')
+      return { success: false, error: 'No admin user found' }
     }
 
-    console.log('[FirebaseAdapter] installDemoContent resolved IDs —', {
-      user_id:    resolvedUserId,
-      project_id: resolvedProjectId,
-      tenant_id:  resolvedTenantId,
+    const adminUser   = usersSnapshot.docs[0].data()
+    const adminUserId = usersSnapshot.docs[0].id || adminUser.user_id
+
+    // Resolve project — find the project owned by the admin user
+    const projectsSnapshot = await this.firestore
+      .collection('nxf_system_projects')
+      .where('user_id', '==', adminUserId)
+      .limit(1)
+      .get()
+
+    if (projectsSnapshot.empty) {
+      console.error('[FirebaseAdapter] installDemoContent — no project found for admin user, aborting')
+      return { success: false, error: 'No project found for admin user' }
+    }
+
+    const project   = projectsSnapshot.docs[0].data()
+    const projectId = projectsSnapshot.docs[0].id || project.project_id
+
+    // Resolve tenant — find the tenant linked to the admin user's email
+    const tenantsSnapshot = await this.firestore
+      .collection('nxf_system_tenants')
+      .where('user_email', '==', adminUser.user_email)
+      .limit(1)
+      .get()
+
+    if (tenantsSnapshot.empty) {
+      console.error('[FirebaseAdapter] installDemoContent — no tenant found for admin user, aborting')
+      return { success: false, error: 'No tenant found for admin user' }
+    }
+
+    const tenant   = tenantsSnapshot.docs[0].data()
+    const tenantId = tenantsSnapshot.docs[0].id || tenant.ten_id
+
+    console.log('[FirebaseAdapter] installDemoContent — context resolved:', {
+      adminUserId,
+      projectId,
+      tenantId,
     })
 
-    // ─── Load and insert demo content ─────────────────────────────────────
+    // -----------------------------------------------------------------------
+    // Step 2: Scan demo content folders and install rows
+    // -----------------------------------------------------------------------
 
     const modelFolders = [
       `${selectedProjectType}_models`,
@@ -1179,30 +1214,34 @@ export class FirebaseAdapter implements DBAdapter {
 
         for (const row of rows) {
           try {
+            /**
+             * Determine the document ID using the row's own primary key field.
+             * We check common naming conventions before falling back to a
+             * Firestore-generated ID.
+             */
             const id =
-              row.id ||
-              row._id ||
+              row.id                                    ||
+              row._id                                   ||
               row[`${collectionName.slice(0, -1)}_id`] ||
               this.firestore.collection('_tmp').doc().id
 
             /**
-             * Inject the resolved IDs only for fields that:
-             *   a) exist on the row (i.e. the schema declares them), AND
-             *   b) are currently empty/null in the demo JSON.
+             * Inject the resolved context IDs into every row.
              *
-             * This means demo JSON files that already have hardcoded IDs
-             * are left untouched, while empty-string placeholders are
-             * replaced with the real runtime values.
+             * - project_id  : scopes the row to this installation's project
+             * - tenant_id   : scopes the row to this installation's tenant
+             * - user_id     : links the row to the admin user who installed
+             *
+             * We use spread so that any row that already has these fields
+             * set explicitly in the JSON file will have them overwritten
+             * with the correct runtime values — preventing stale placeholder
+             * values from being written to the database.
              */
-            const injected: Record<string, string> = {}
-
-            if (resolvedUserId   && ('user_id'    in row) && !row.user_id)    injected.user_id    = resolvedUserId
-            if (resolvedProjectId && ('project_id' in row) && !row.project_id) injected.project_id = resolvedProjectId
-            if (resolvedTenantId  && ('tenant_id'  in row) && !row.tenant_id)  injected.tenant_id  = resolvedTenantId
-
             batch.set(collectionRef.doc(id), {
               ...row,
-              ...injected,
+              project_id: projectId,
+              tenant_id:  tenantId,
+              user_id:    adminUserId,
               created_at: row.created_at || new Date().toISOString(),
               updated_at: row.updated_at || new Date().toISOString(),
             })
@@ -1210,7 +1249,9 @@ export class FirebaseAdapter implements DBAdapter {
             count++
             totalInserted++
           } catch {
-            console.warn(`[FirebaseAdapter] Failed to prepare document in ${collectionName} — skipping row`)
+            console.warn(
+              `[FirebaseAdapter] Failed to prepare document in ${collectionName} — skipping row`
+            )
           }
         }
 
@@ -1220,8 +1261,8 @@ export class FirebaseAdapter implements DBAdapter {
 
     return { success: true, inserted: totalInserted }
 
-  } catch {
-    console.error('[FirebaseAdapter] Demo content installation failed')
+  } catch (err: any) {
+    console.error('[FirebaseAdapter] Demo content installation failed:', err.message)
     return { success: false, inserted: 0, error: 'Failed to install demo content' }
   }
 }
@@ -1727,7 +1768,371 @@ async renameTable(oldName: string, newName: string): Promise<any> {
   console.log(`[FirebaseAdapter] renameTable no-op: ${oldName} → ${newName} — Firestore collections are implicit`)
   return true
 }
+///MESSAGES
+async listConversations(
+  config:     DBConfig,
+  project_id: string,
+  uid:        string,
+  limit       = 10
+): Promise<Array<Record<string, any>>> {
+  const snapshot = await this.firestore
+    .collection('nxf_system_conversations')
+    .where('project_id', '==', project_id)
+    .orderBy('last_message_at', 'desc')
+    .limit(limit)
+    .get()
+
+  // Deduplicate by con_id — if multiple Firestore docs share the same con_id
+  // (bad writes during testing), only keep the first occurrence.
+  const seen = new Set<string>()
+
+  const conversations: Record<string, any>[] = []
+
+  for (const doc of snapshot.docs) {
+    const data   = doc.data()
+    const con_id = data.con_id ?? doc.id
+
+    if (seen.has(con_id)) continue
+    seen.add(con_id)
+
+    conversations.push({ ...data, con_id, id: con_id })
+  }
+
+  const withUnread = await Promise.all(
+    conversations.map(async (conv) => {
+      const unreadSnap = await this.firestore
+        .collection('nxf_system_messages')
+        .where('conversation_id', '==', conv.con_id)
+        .where('recipient_id',    '==', uid)
+        .where('is_read',         '==', false)
+        .get()
+
+      return { ...conv, unread_count: unreadSnap.size }
+    })
+  )
+
+  return withUnread
 }
+
+async getConversationThread(
+  config:         DBConfig,
+  conversationId: string
+): Promise<Array<Record<string, any>>> {
+  const snapshot = await this.firestore
+    .collection('nxf_system_messages')
+    .where('conversation_id', '==', conversationId)
+    .get()
+
+  const seen = new Set<string>()
+
+  const messages = snapshot.docs.reduce((acc, doc): Record<string, any>[] => {
+    const data   = doc.data() as Record<string, any>
+    const mes_id = data.mes_id ?? doc.id
+
+    if (seen.has(mes_id)) return acc
+    seen.add(mes_id)
+
+    acc.push({ ...data, mes_id })
+    return acc
+  }, [] as Record<string, any>[])
+
+  return messages.sort((a, b) =>
+    new Date(a.sent_at).getTime() - new Date(b.sent_at).getTime()
+  )
+}
+
+async markConversationRead(
+  config:         DBConfig,
+  uid:            string,
+  conversationId: string
+): Promise<{ success: boolean }> {
+  const snapshot = await this.firestore
+    .collection('nxf_system_messages')
+    .where('conversation_id', '==', conversationId)
+    .where('recipient_id',    '==', uid)
+    .where('is_read',         '==', false)
+    .get()
+
+  if (snapshot.empty) return { success: true }
+
+  const batch = this.firestore.batch()
+  snapshot.docs.forEach((doc) => {
+    batch.update(doc.ref, {
+      is_read:    true,
+      updated_at: new Date().toISOString(),
+    })
+  })
+
+  await batch.commit()
+  return { success: true }
+}
+
+async sendMessage(
+  config:         DBConfig,
+  conversationId: string,
+  senderId:       string,
+  content:        string
+): Promise<Record<string, any>> {
+  const { randomUUID } = await import('crypto')
+  const now    = new Date().toISOString()
+  const mes_id = randomUUID()
+
+  // Resolve project_id and tenant_id — messages schema requires both
+  const projects = await this.readAll!(config, 'nxf_system_projects') as Record<string, any>[]
+const project_id = projects[0]?.project_id ?? projects[0]?.id ?? null
+
+const tenants = await this.readAll!(config, 'nxf_system_tenants') as Record<string, any>[]
+const tenant_id = tenants[0]?.ten_id ?? tenants[0]?.id ?? null
+
+  const message = {
+    mes_id,
+    project_id,
+    tenant_id,
+    conversation_id: conversationId,   // references nxf_system_conversations(con_id)
+    sender_id:       senderId,
+    recipient_id:    null,             // set by caller if known
+    content,
+    is_read:         false,
+    sent_at:         now,
+    created_at:      now,
+    updated_at:      now,
+  }
+
+  // Use mes_id as the Firestore document ID so doc.id === mes_id
+  await this.firestore
+    .collection('nxf_system_messages')
+    .doc(mes_id)
+    .set(message)
+
+  // Update the conversation's preview cache
+  await this.firestore
+    .collection('nxf_system_conversations')
+    .where('con_id', '==', conversationId)
+    .get()
+    .then((snap) => {
+      if (!snap.empty) {
+        return snap.docs[0].ref.update({
+          last_message_preview: content.slice(0, 100),
+          last_message_at:      now,
+          updated_at:           now,
+        })
+      }
+    })
+
+  return message
+}
+
+async deleteConversation(
+  config:         DBConfig,
+  conversationId: string
+): Promise<{ success: boolean }> {
+  try {
+    // Find the conversation doc by con_id (stored field, not doc.id)
+    const convSnap = await this.firestore
+      .collection('nxf_system_conversations')
+      .where('con_id', '==', conversationId)
+      .get()
+
+    const msgSnap = await this.firestore
+      .collection('nxf_system_messages')
+      .where('conversation_id', '==', conversationId)
+      .get()
+
+    const batch = this.firestore.batch()
+    msgSnap.docs.forEach((doc) => batch.delete(doc.ref))
+    convSnap.docs.forEach((doc) => batch.delete(doc.ref))
+
+    await batch.commit()
+    return { success: true }
+
+  } catch (err: any) {
+    throw new Error(`Failed to delete conversation: ${err.message}`)
+  }
+}
+
+async markAllMessagesRead(
+  config: DBConfig,
+  uid:    string
+): Promise<{ success: boolean }> {
+  const snapshot = await this.firestore
+    .collection('nxf_system_messages')
+    .where('recipient_id', '==', uid)
+    .where('is_read',      '==', false)
+    .get()
+
+  if (snapshot.empty) return { success: true }
+
+  const batch = this.firestore.batch()
+  snapshot.docs.forEach((doc) => {
+    batch.update(doc.ref, {
+      is_read:    true,
+      updated_at: new Date().toISOString(),
+    })
+  })
+
+  await batch.commit()
+  return { success: true }
+}
+
+///NOTIFICATIONS
+
+async listNotifications(
+  config:     DBConfig,
+  uid:        string,
+  project_id: string,
+  limit       = 20
+): Promise<Array<Record<string, any>>> {
+  const snapshot = await this.firestore
+    .collection('nxf_system_notifications')
+    .where('project_id', '==', project_id)
+    .where('user_id',    '==', uid)
+    .where('status',     '!=', 'deleted')
+    .orderBy('status')
+    .orderBy('created_at', 'desc')
+    .limit(limit)
+    .get()
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data() as Record<string, any>,
+  }))
+}
+async markNotificationRead(
+  config:         DBConfig,
+  notificationId: string,
+  uid:            string
+): Promise<{ success: boolean }> {
+  const docRef  = this.firestore.collection('nxf_system_notifications').doc(notificationId)
+  const docSnap = await docRef.get()
+
+  if (!docSnap.exists) {
+    throw new Error('Notification not found')
+  }
+
+  // Ownership check — user may only mark their own notifications as read
+  const data = docSnap.data() as Record<string, any>
+  if (data.user_id !== uid) {
+    throw new Error('Forbidden — notification does not belong to this user')
+  }
+
+  const now = new Date().toISOString()
+  await docRef.update({
+    status:     'read',
+    is_read:    true,
+    read_at:    now,
+    updated_at: now,
+  })
+
+  console.log(`[FirebaseAdapter] markNotificationRead — notification ${notificationId} marked as read`)
+  return { success: true }
+}
+async markAllNotificationsRead(
+  config:     DBConfig,
+  uid:        string,
+  project_id: string
+): Promise<{ success: boolean; updated: number }> {
+  const snapshot = await this.firestore
+    .collection('nxf_system_notifications')
+    .where('project_id', '==', project_id)
+    .where('user_id',    '==', uid)
+    .where('status',     '==', 'unread')
+    .get()
+
+  if (snapshot.empty) return { success: true, updated: 0 }
+
+  const now   = new Date().toISOString()
+  const batch = this.firestore.batch()
+
+  snapshot.docs.forEach((doc) => {
+    batch.update(doc.ref, {
+      status:     'read',
+      is_read:    true,
+      read_at:    now,
+      updated_at: now,
+    })
+  })
+
+  await batch.commit()
+
+  console.log(`[FirebaseAdapter] markAllNotificationsRead — marked ${snapshot.size} notifications as read`)
+  return { success: true, updated: snapshot.size }
+}
+
+///SETTINGS/APIKEYS
+async listApiKeys(
+  config:     DBConfig,
+  project_id: string
+) {
+  const snapshot = await this.firestore
+    .collection('nxf_system_apis')
+    .where('project_id', '==', project_id)
+    .where('status',     '==', 'active')
+    .orderBy('created_at', 'desc')
+    .get()
+
+  return snapshot.docs.map((doc) => {
+    const data = doc.data()
+    return {
+      api_id:       doc.id,
+      name:         data.name,
+      key_prefix:   data.key_prefix,
+      status:       data.status,
+      last_used_at: data.last_used_at ?? null,
+      created_at:   data.created_at,
+      // key_encrypted intentionally excluded — must never leave the server
+    }
+  })
+}
+
+async getApiKey(
+  config: DBConfig,
+  api_id: string
+): Promise<Record<string, any> | null> {
+  const doc = await this.firestore
+    .collection('nxf_system_apis')
+    .doc(api_id)
+    .get()
+
+  if (!doc.exists) return null
+
+  return { id: doc.id, ...doc.data() as Record<string, any> }
+}
+
+async revokeApiKey(
+  config:     DBConfig,
+  api_id:     string,
+  project_id: string
+): Promise<{ success: boolean }> {
+  const docRef  = this.firestore.collection('nxf_system_apis').doc(api_id)
+  const docSnap = await docRef.get()
+
+  if (!docSnap.exists) {
+    throw new Error('API key not found')
+  }
+
+  const data = docSnap.data() as Record<string, any>
+
+  // Ownership check — prevent IDOR: one user revoking another's key
+  if (data.project_id !== project_id) {
+    throw new Error('Forbidden')
+  }
+
+  const now = new Date().toISOString()
+  await docRef.update({
+    status:     'revoked',
+    revoked_at: now,
+    updated_at: now,
+  })
+
+  console.log(`[FirebaseAdapter] revokeApiKey — key ${api_id} revoked`)
+  return { success: true }
+}
+
+}
+
+///MESSAGES
+
+
 
 // ---------------------------------------------------------------------------
 // Factory function

@@ -32,8 +32,7 @@ import 'server-only'
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getTranslations }           from 'next-intl/server'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -51,13 +50,6 @@ import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
  *          or { error: string } on failure.
  */
 export async function POST(req: NextRequest) {
-  /**
-   * t — Server-side translation function scoped to the 'renameFile' namespace.
-   * Because this is a server-only route we use getTranslations() (async)
-   * rather than the client-side useTranslations() hook.
-   */
-  //const t = await getTranslations('renameFile')
-
   try {
     // ── Parse and validate request body ───────────────────────────────────
 
@@ -79,7 +71,7 @@ export async function POST(req: NextRequest) {
      */
     if (!folder || !oldName || !newName)
       return NextResponse.json(
-        { error: ('errors.fieldsMissing') },
+        { error: 'folder, oldName, and newName are all required' },
         { status: 400 }
       )
 
@@ -91,7 +83,7 @@ export async function POST(req: NextRequest) {
      * All file operations go through this adapter so the route works
      * regardless of which storage backend the project uses.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
 
     // ── Guard: adapter may not support renameFile ──────────────────────────
 
@@ -105,7 +97,7 @@ export async function POST(req: NextRequest) {
      */
     if (!adapter.renameFile)
       return NextResponse.json(
-        { error: ('errors.renameFileNotSupported') },
+        { error: 'File rename is not supported by the current storage adapter' },
         { status: 400 }
       )
 
@@ -135,7 +127,7 @@ export async function POST(req: NextRequest) {
      * stack traces is a security risk.
      */
     return NextResponse.json(
-      { error: ('errors.internalError') },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

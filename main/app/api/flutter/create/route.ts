@@ -49,7 +49,6 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-
 import { execaCommand }              from 'execa';
 import path                          from 'path';
 import fs                            from 'fs-extra';
@@ -64,19 +63,12 @@ import fs                            from 'fs-extra';
  * @returns A NextResponse JSON object describing the outcome of the operation.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  /**
-   * t — Server-side translation function scoped to the 'flutterCreateRoute'
-   * namespace. getTranslations() is the server-side equivalent of the
-   * client-side useTranslations() hook.
-   */
-  //const t = await getTranslations('flutterCreateRoute');
-
   try {
     /**
      * Parse the incoming request body and extract the project name.
      */
     const { projectName } = await req.json();
-
+console.log(`FLUTTER PROJECT NAME: ${projectName} `)
     // -----------------------------------------------------------------------
     // Validation
     // -----------------------------------------------------------------------
@@ -88,7 +80,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
      */
     if (!projectName || typeof projectName !== 'string') {
       return NextResponse.json(
-        { error: ('errors.missingProjectName') },
+        { error: 'Project name is required' },
         { status: 400 },
       );
     }
@@ -133,7 +125,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
         {
           success: false,
           skipped: false,
-          error:   ('errors.flutterNotInstalled'),
+          error:   'Flutter is not installed or not available on the system PATH',
         },
         { status: 400 },
       );
@@ -150,11 +142,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
      */
     const projectExists = await fs.pathExists(installPath);
     if (projectExists) {
-      console.log('logs.projectAlreadyExists', { projectName });
+      console.log(`[flutter/create] Project already exists: ${projectName}`);
       return NextResponse.json({
         success: true,
         skipped: true,
-        output:  'logs.projectAlreadyExists',  projectName ,
+        output:  `Project '${projectName}' already exists — skipping creation`,
       });
     }
 
@@ -181,7 +173,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
      * success (e.g. SDK version warnings). We log these as warnings rather
      * than treating them as errors so the install does not fail unnecessarily.
      */
-    if (stderr) console.warn(('logs.flutterStderr'), stderr);
+    if (stderr) console.warn('[flutter/create] stderr:', stderr);
 
     return NextResponse.json({ success: true, skipped: false, output: stdout });
 
@@ -195,12 +187,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
      * installer UI or a developer inspecting the response can diagnose the
      * root cause without needing to check server logs.
      */
-    console.error(('logs.flutterCreateFailed'), error);
+    console.error('[flutter/create] Error:', error);
 
     return NextResponse.json(
       {
         success: false,
-        error:   'errors.stepFailed',  message: error.message || error,
+        error:   error.message || 'Flutter project creation failed',
         details: error.stderr || error.stdout || error,
       },
       { status: 500 },

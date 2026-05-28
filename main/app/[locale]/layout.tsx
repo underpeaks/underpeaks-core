@@ -154,7 +154,7 @@ export default async function RootLayout({
           href={config?.faviconUrl || '/images/favicon/NXT_Flutter_favicon.png'}
         />
       </head>
-      <body>
+      <body className="flex-1 overflow-y-auto">
         {/*
          * NextIntlClientProvider
          * Passes the pre-loaded translation messages into the React tree so

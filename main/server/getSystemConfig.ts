@@ -51,6 +51,7 @@ interface SystemConfig {
   faviconUrl:  string
   logoUrl:     string
   projectName: string
+   installed:   boolean
 }
 
 // ---------------------------------------------------------------------------
@@ -122,6 +123,7 @@ export function getSystemConfig(): SystemConfig {
       faviconUrl:  config?.faviconUrl  || '/images/favicon/NXT_Flutter_favicon.png',
       logoUrl:     config?.logoUrl     || '/images/logo/NXT_Flutter_logo.png',
       projectName: config?.projectName || '',
+       installed:   config.installed   ?? false,
     }
   } catch (err) {
     /*
@@ -136,6 +138,7 @@ export function getSystemConfig(): SystemConfig {
       faviconUrl:  '/images/favicon/NXT_Flutter_favicon.png',
       logoUrl:     '/images/logo/NXT_Flutter_logo.png',
       projectName: '',
+       installed:  false,
     }
   }
 }

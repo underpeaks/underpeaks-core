@@ -47,10 +47,9 @@
  * returns 200 with skipped: true so the installer UI can handle it gracefully.
  */
 
-import { NextResponse }    from 'next/server';
-import { getTranslations } from 'next-intl/server';
-import { getAdapter }      from '@/app/db-adapter';
-import { DBAdapter }       from '@/app/db-adapter/types';
+import { NextResponse } from 'next/server';
+import { getAdapter }   from '@/app/db-adapter';
+import { DBAdapter }    from '@/app/db-adapter/types';
 
 /**
  * POST
@@ -63,15 +62,7 @@ import { DBAdapter }       from '@/app/db-adapter/types';
  * @returns A NextResponse JSON object indicating success, skip, or failure.
  */
 export async function POST(request: Request): Promise<NextResponse> {
-  /**
-   * t — Server-side translation function scoped to the 'createModelsRoute'
-   * namespace. getTranslations() is the server-side equivalent of the
-   * client-side useTranslations() hook.
-   */
-  
-
   try {
-   // const t = await getTranslations('createModelsRoute');
     /**
      * Parse the incoming request body.
      * Destructure only the fields this route requires.
@@ -84,12 +75,12 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     /**
      * Both config and adminUser.email are required:
-     *   - config      : needed to resolve and connect the correct DB adapter.
-     *   - adminUser.email : used to scope the generated models to the right account.
+     *   - config           : needed to resolve and connect the correct DB adapter.
+     *   - adminUser.email  : used to scope the generated models to the right account.
      */
     if (!config || !adminUser?.email) {
       return NextResponse.json(
-        { success: false, message: ('errors.missingConfigOrEmail') },
+        { success: false, message: 'Database config and admin email are required' },
         { status: 400 },
       );
     }
@@ -114,7 +105,7 @@ export async function POST(request: Request): Promise<NextResponse> {
      */
     if (!adapter.createDataModelsFromUserEmail) {
       return NextResponse.json(
-        { success: false, message: ('errors.adapterNotSupported') },
+        { success: false, message: `Data model creation is not supported for database type: ${config.type}` },
         { status: 400 },
       );
     }
@@ -155,11 +146,11 @@ export async function POST(request: Request): Promise<NextResponse> {
      * when available, or a generic fallback so the installer UI always has
      * something meaningful to display.
      */
-    console.error('logs.createModelsError'), error;
+    console.error('[create-models] Error:', error);
     return NextResponse.json(
       {
         success: false,
-        message: error.message || 'errors.genericFailure',
+        message: error.message || 'An unexpected error occurred',
       },
       { status: 500 },
     );

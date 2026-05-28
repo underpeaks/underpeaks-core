@@ -46,7 +46,7 @@
  *   }
  */
 
-import { getTranslations } from 'next-intl/server'
+
 
 /**
  * CreateNextJSProjectResult

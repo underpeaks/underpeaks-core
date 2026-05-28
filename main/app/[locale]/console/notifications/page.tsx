@@ -73,7 +73,7 @@ interface Notification {
   type:        string
   status:      string
   priority:    string
-  action_url?: string
+  //action_url?: string
   created_at:  string
 }
 
@@ -192,7 +192,7 @@ export default function NotificationsPage() {
    */
   const handleMarkRead = async (id: string) => {
     try {
-      await fetch('/api/notifications/mark-read', {
+      await fetch('/api/notifications/read', {
         method: 'POST',
         headers,
         body: JSON.stringify({ notification_id: id }),
@@ -216,7 +216,7 @@ export default function NotificationsPage() {
    */
   const handleMarkAllRead = async () => {
     try {
-      await fetch('/api/notifications/mark-all-read', { method: 'POST', headers })
+      await fetch('/api/notifications/read-all', { method: 'POST', headers })
       setNotifications((prev) => prev.map((n) => ({ ...n, status: 'read' })))
     } catch {
       setError(t('errors.markAllReadFailed'))

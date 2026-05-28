@@ -42,7 +42,6 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { getTranslations }           from 'next-intl/server';
 import { getAdapter }                from '@/app/db-adapter';
 
 /**
@@ -56,13 +55,6 @@ import { getAdapter }                from '@/app/db-adapter';
  * @returns A NextResponse JSON object indicating success or failure.
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
-  /**
-   * t — Server-side translation function scoped to the
-   * 'createStorageBucketsRoute' namespace. getTranslations() is the
-   * server-side equivalent of the client-side useTranslations() hook.
-   */
-  //const t = await getTranslations('createStorageBucketsRoute');
-
   try {
     /**
      * Parse the incoming request body and extract the database config.
@@ -82,7 +74,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
      * Throwing here lets the catch block handle the 500 response uniformly.
      */
     if (!dbConfig || !dbConfig.type) {
-      throw new Error(('errors.missingConfig'));
+      throw new Error('Database config and type are required');
     }
 
     // -----------------------------------------------------------------------
@@ -111,7 +103,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json(
         {
           success: false,
-          message: 'errors.adapterNotSupported',  type: dbConfig.type ,
+          message: `Storage setup is not supported for database type: ${dbConfig.type}`,
         },
         { status: 400 },
       );

@@ -32,8 +32,7 @@ import 'server-only'
  */
 
 import { NextResponse }      from 'next/server'
-import { getTranslations }   from 'next-intl/server'
-import { getStorageAdapter } from '@/app/lib/getStorageAdapter'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // GET handler
@@ -50,13 +49,6 @@ import { getStorageAdapter } from '@/app/lib/getStorageAdapter'
  *          on success, or { error: string } on failure.
  */
 export async function GET() {
-  /**
-   * t — Server-side translation function scoped to the 'listFolders' namespace.
-   * Because this is a server-only route we use getTranslations() (async) rather
-   * than the client-side useTranslations() hook.
-   */
- // const t = await getTranslations('listFolders')
-
   try {
     // ── Resolve storage adapter ──────────────────────────────────────────────
 
@@ -66,7 +58,7 @@ export async function GET() {
      * All file and folder operations go through this adapter so the route
      * works regardless of which storage backend the project uses.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
 
     // ── Guard: adapter may not support folder listing ────────────────────────
 
@@ -147,7 +139,7 @@ export async function GET() {
       })
     )
 
-    console.log(('logs.foldersEnriched'))
+    console.log('[list-folders] Folders enriched with file counts')
     return NextResponse.json({ folders: enriched })
 
   } catch {
@@ -160,7 +152,7 @@ export async function GET() {
      * stack traces is a security risk.
      */
     return NextResponse.json(
-      { error: ('errors.internalError') },
+      { error: 'Internal server error' },
       { status: 500 }
     )
   }

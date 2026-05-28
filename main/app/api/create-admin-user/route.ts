@@ -42,7 +42,6 @@
  */
 
 import { NextResponse }          from 'next/server';
-import { getTranslations }       from 'next-intl/server';
 import { createAdminUserFlow }   from '@/app/db-adapter/utils/create-admin-user-flow';
 
 /**
@@ -55,14 +54,6 @@ import { createAdminUserFlow }   from '@/app/db-adapter/utils/create-admin-user-
  * @returns A NextResponse JSON object indicating success or failure.
  */
 export async function POST(request: Request): Promise<NextResponse> {
-  /**
-   * t — Server-side translation function scoped to the 'createAdminUserRoute'
-   * namespace. Used for all response messages so they are consistent with the
-   * app's i18n system. getTranslations() is the server-side equivalent of the
-   * client-side useTranslations() hook.
-   */
-  //const t = await getTranslations('createAdminUserRoute');
-
   try {
     /**
      * Parse the incoming request body.
@@ -80,7 +71,7 @@ export async function POST(request: Request): Promise<NextResponse> {
      */
     if (!config) {
       return NextResponse.json(
-        { success: false, message: ('errors.missingConfig') },
+        { success: false, message: 'Database config is required' },
         { status: 400 },
       );
     }
@@ -91,7 +82,7 @@ export async function POST(request: Request): Promise<NextResponse> {
      */
     if (!adminUser) {
       return NextResponse.json(
-        { success: false, message: ('errors.missingAdminUser') },
+        { success: false, message: 'Admin user details are required' },
         { status: 400 },
       );
     }
@@ -112,7 +103,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     return NextResponse.json({
       success: true,
-      message: ('success.adminCreated'),
+      message: 'Admin user created successfully',
     });
 
   } catch (error: any) {
@@ -124,7 +115,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     return NextResponse.json(
       {
         success: false,
-        message: error.message || ('errors.genericFailure'),
+        message: error.message || 'An unexpected error occurred',
       },
       { status: 500 },
     );

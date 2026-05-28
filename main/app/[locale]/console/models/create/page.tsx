@@ -15,6 +15,7 @@ import { useAuth }               from '../../layout'
 import { ConfirmDialog }         from '../../../components_cus/confirmDialog'
 import { FIELD_TYPES, getDefaultUiType, ON_DELETE_OPTIONS, UI_TYPE_OPTIONS } from '@/app/api/models/uitypes'
 import ForeignKeySelector        from '@/app/[locale]/console/models/components/ForeignKeySelector'
+import { logActivity } from '@/app/lib/logActivity'
 
 interface ForeignKey {
   references: string
@@ -138,18 +139,23 @@ export default function CreateModelPage() {
 
     setSaving(true)
     try {
+      const userId   = user?.user_id || user?.id
+      const fullName = 'nxf_' + modelName.trim()
+
       const res  = await fetch('/api/models', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          user_id: user?.user_id || user?.id,
-          name:    modelName.trim(),
-          schema:  fields,
-        }),
+        body:    JSON.stringify({ user_id: userId, name: fullName, schema: fields }),
       })
       const text = await res.text()
       const data = text ? JSON.parse(text) : {}
       if (!res.ok) throw new Error(data.error || t('errors.createFailed'))
+
+      // Log after confirmed success
+      if (userId) {
+        await logActivity(userId, 'model_created', { model_name: fullName })
+      }
+
       router.push('/console/models')
     } catch (err: any) {
       setError(err.message || t('errors.createFailed'))

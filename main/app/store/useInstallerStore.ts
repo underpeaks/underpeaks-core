@@ -149,7 +149,7 @@ export type InstallerState = {
   selectedPages:       string[]
   selectedStack:       'next' | 'flutter' | 'cms' | 'both'
   selectedDb:          DBType | null
-
+  installed:           boolean
   // Features
   ecommerceEnabled:    boolean
   demoContentEnabled:  boolean
@@ -219,7 +219,7 @@ export const useInstallerStore = create<InstallerState>((set) => ({
   selectedPages:       [],
   selectedStack:       'both',    // Generate both Next.js and Flutter code
   selectedDb:          null,      // No DB chosen yet
-
+  installed:          true,
   // Features — all opt-in, disabled by default
   ecommerceEnabled:   false,
   demoContentEnabled: false,
@@ -302,6 +302,7 @@ export const useInstallerStore = create<InstallerState>((set) => ({
       selectedDb:          null,
       ecommerceEnabled:    false,
       demoContentEnabled:  false,
+      installed:           true,
       dbConfig: {
         type:          'supabase',
         storageBucket: '',

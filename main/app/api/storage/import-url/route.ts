@@ -86,8 +86,8 @@
 
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
 import { v4 as uuidv4 }              from 'uuid'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // Route Handler
@@ -141,7 +141,7 @@ export async function POST(req: NextRequest) {
       const token      = authHeader?.replace('Bearer ', '') ?? null
 
       if (token) {
-        const adapter = getStorageAdapter()
+        const adapter = getConfiguredAdapter()
         const decoded = await adapter.validateBuiltInSession?.(adapter.config, token)
         const uid     = decoded?.uid ?? decoded?.user_id ?? null
 
@@ -165,7 +165,7 @@ export async function POST(req: NextRequest) {
      * entirely if no token was provided. This guarantees `adapter` is always
      * initialised before we use it below.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
     if (!adapter.importFromUrl)
       return NextResponse.json(
         { error: 'importFromUrl not supported' },

@@ -239,6 +239,8 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     resetConsole,
   } = useConsoleStore()
 
+
+
   // -------------------------------------------------------------------------
   // Session refresh
   // -------------------------------------------------------------------------
@@ -304,10 +306,12 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
 
         // Fetch and apply the system config for this user
         const userId = data.user.user_id
+        
         if (userId) {
-          const configRes  = await fetch(`/api/get-db-config?user_id=${userId}`)
-          const configData = await configRes.json()
-          if (configData?.config) loadConfig(configData.config)
+         const configRes  = await fetch(`/api/get-db-config?user_id=${userId}`)
+const configData = await configRes.json()
+
+if (configData?.config) loadConfig(configData.config)
         }
       }
     } catch {

@@ -61,7 +61,7 @@
 
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
-import { getStorageAdapter }         from '@/app/lib/getStorageAdapter'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 // ---------------------------------------------------------------------------
 // Route Handler
@@ -101,7 +101,7 @@ export async function DELETE(req: NextRequest) {
      * abstracts over Firebase Storage, S3, GCS, and other providers.
      * The correct adapter is selected automatically from environment variables.
      */
-    const adapter = getStorageAdapter()
+    const adapter = getConfiguredAdapter()
 
     // -----------------------------------------------------------------------
     // 3. Confirm the adapter supports file deletion

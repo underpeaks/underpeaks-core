@@ -1,5 +1,15 @@
 {
   "pages": {
+    "/api/notifications/list/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/notifications/list/route.js"
+    ],
+    "/api/messages/list/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/messages/list/route.js"
+    ],
     "/[locale]/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -11,61 +21,55 @@
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/console/layout.js"
     ],
-    "/[locale]/console/page": [
+    "/[locale]/console/messages/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/css/app/[locale]/console/page.css",
-      "static/chunks/app/[locale]/console/page.js"
-    ],
-    "/api/get-system-config/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/get-system-config/route.js"
+      "static/chunks/app/[locale]/console/messages/page.js"
     ],
     "/api/session/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/session/route.js"
     ],
+    "/[locale]/[slug]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/[slug]/page.js"
+    ],
+    "/[locale]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/page.js"
+    ],
+    "/api/get-system-config/route": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/api/get-system-config/route.js"
+    ],
     "/api/get-db-config/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/get-db-config/route.js"
     ],
-    "/api/messages/list/route": [
+    "/api/menu/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/messages/list/route.js"
+      "static/chunks/app/api/menu/route.js"
     ],
-    "/api/notifications/list/route": [
+    "/api/menu/pages/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/notifications/list/route.js"
+      "static/chunks/app/api/menu/pages/route.js"
     ],
-    "/[locale]/console/dashboard/page": [
+    "/api/messages/thread/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/console/dashboard/page.js"
+      "static/chunks/app/api/messages/thread/route.js"
     ],
-    "/[locale]/console/models/page": [
+    "/api/messages/send/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/console/models/page.js"
-    ],
-    "/api/models/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/models/route.js"
-    ],
-    "/[locale]/console/models/create/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/console/models/create/page.js"
-    ],
-    "/api/models/names/route": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/api/models/names/route.js"
+      "static/chunks/app/api/messages/send/route.js"
     ]
   }
 }

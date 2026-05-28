@@ -3,10 +3,9 @@
  * POST /api/models  — Create a new model in nxf_system_models and the real DB table.
  */
 
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 import { NextRequest, NextResponse } from 'next/server'
-import { getTranslations }           from 'next-intl/server'
 import { v4 as uuidv4 }             from 'uuid'
-import { getStorageAdapter } from '@/app/lib/getStorageAdapter'
 
 // ---------------------------------------------------------------------------
 // Helper — normalise schema to always be an array
@@ -72,19 +71,17 @@ function resolveDocumentId(doc: any): string {
 // ---------------------------------------------------------------------------
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
-  //const t = await getTranslations('modelsRoute')
-
   try {
     const userId = req.nextUrl.searchParams.get('user_id')
 
     if (!userId) {
       return NextResponse.json(
-        { error: ('errors.userIdRequired') },
+        { error: 'user_id is required' },
         { status: 400 }
       )
     }
 
-    const adapter  = getStorageAdapter()
+    const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
     const project = adapter.findProjectByOwnerId
@@ -122,7 +119,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
   } catch (err: any) {
     console.error('GET /api/models error:', err.message)
     return NextResponse.json(
-      { error: err.message || ('errors.fetchFailed') },
+      { error: err.message || 'Failed to fetch models' },
       { status: 500 }
     )
   }
@@ -133,15 +130,13 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 // ---------------------------------------------------------------------------
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
- // const t = await getTranslations('modelsRoute')
-
   try {
     let body: any
     try {
       body = await req.json()
     } catch {
       return NextResponse.json(
-        { error: ('errors.invalidBody') },
+        { error: 'Invalid request body' },
         { status: 400 }
       )
     }
@@ -150,14 +145,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     if (!user_id || !name || !Array.isArray(schema) || schema.length === 0) {
       return NextResponse.json(
-        { error: ('errors.missingFields') },
+        { error: 'Missing required fields: user_id, name, schema' },
         { status: 400 }
       )
     }
 
     if (name.toLowerCase().startsWith('nxf_system_')) {
       return NextResponse.json(
-        { error: ('errors.systemTableProtected') },
+        { error: 'System tables cannot be modified' },
         { status: 403 }
       )
     }
@@ -165,12 +160,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const primaryKeyCount = schema.filter((f: any) => f.is_primary).length
     if (primaryKeyCount > 1) {
       return NextResponse.json(
-        { error: ('errors.multiplePrimaryKeys') },
+        { error: 'A model can only have one primary key' },
         { status: 400 }
       )
     }
 
-    const adapter  = getStorageAdapter()
+    const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
     const project = adapter.findProjectByOwnerId
@@ -179,7 +174,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     if (!project) {
       return NextResponse.json(
-        { error: ('errors.projectNotFound') },
+        { error: 'Project not found for this user' },
         { status: 400 }
       )
     }
@@ -195,7 +190,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     if (duplicate) {
       return NextResponse.json(
-        { error: ('errors.nameAlreadyExists') },
+        { error: 'A model with this name already exists' },
         { status: 409 }
       )
     }
@@ -221,7 +216,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   } catch (err: any) {
     console.error('POST /api/models error:', err.message)
     return NextResponse.json(
-      { error: err.message || ('errors.createFailed') },
+      { error: err.message || 'Failed to create model' },
       { status: 500 }
     )
   }

@@ -52,7 +52,7 @@ import ConversationList        from './components/ConversationList'
 import ConversationThread      from './components/ConversationThread'
 import EmptyState              from './components/EmptyState'
 import Loader                  from '../Loading'
-
+  import { useSearchParams } from 'next/navigation'
 // ─────────────────────────────────────────────────────────────────
 // TYPES
 // ─────────────────────────────────────────────────────────────────
@@ -81,6 +81,11 @@ export default function MessagesPage() {
   const [loading,       setLoading]       = useState(true)
   const [error,         setError]         = useState<string | null>(null)
 
+
+// INSIDE the component, after the existing state declarations, ADD:
+const searchParams = useSearchParams()
+const openId       = searchParams.get('open')
+
   const t = useTranslations('messagesPage')
 
   /**
@@ -100,23 +105,41 @@ export default function MessagesPage() {
 
   // ── Load conversations on mount ──
   useEffect(() => {
-    const load = async () => {
-      try {
-        const res  = await fetch('/api/messages/list', {
-          headers: getAuthHeaders(),
-        })
-        const data = await res.json()
+  const load = async () => {
+    try {
+      const headers = getAuthHeaders()
+      const res     = await fetch('/api/messages/list', { headers })
+      const data    = await res.json()
+      const convs: Conversation[] = data.conversations ?? []
+      setConversations(convs)
 
-        setConversations(data.conversations ?? [])
-      } catch {
-        setError(t('errors.load'))
-      } finally {
-        setLoading(false)
+      // Auto-select if arriving from the dropdown (?open=<con_id>)
+      if (openId) {
+        const match = convs.find((c) => (c.con_id ?? c.id) === openId)
+        if (match && match.unread_count > 0) {
+          const convId = match.con_id ?? match.id
+          await fetch('/api/messages/mark-read', {
+            method:  'POST',
+            headers,
+            body:    JSON.stringify({ conversation_id: convId }),
+          })
+          setConversations((prev) =>
+            prev.map((c) => (c.con_id ?? c.id) === convId ? { ...c, unread_count: 0 } : c)
+          )
+          setActiveConv({ ...match, unread_count: 0 })
+        } else if (match) {
+          setActiveConv(match)
+        }
       }
+    } catch {
+      setError(t('errors.load'))
+    } finally {
+      setLoading(false)
     }
-
-    load()
-  }, [])
+  }
+  load()
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, [])
 
   // ── Handle selecting a conversation ──
   const handleSelect = async (conv: Conversation) => {
