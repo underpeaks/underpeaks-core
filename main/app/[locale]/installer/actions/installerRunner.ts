@@ -394,7 +394,7 @@ async function finalizeInstaller(): Promise<void> {
   // This is a non-React async function so we can't use Next.js router.
   // window.location.href is fine here — a full navigation is appropriate
   // since the installer is now complete and the app state should reset cleanly.
-  window.location.href = '/console/done'
+ // window.location.href = '/installer/done'
 }
 
 // ---------------------------------------------------------------------------

@@ -1,10 +1,7 @@
 {
   "/api/notifications/list/route": "app/api/notifications/list/route.js",
   "/api/messages/list/route": "app/api/messages/list/route.js",
-  "/api/session/route": "app/api/session/route.js",
-  "/api/get-db-config/route": "app/api/get-db-config/route.js",
-  "/api/menu/route": "app/api/menu/route.js",
-  "/api/menu/pages/route": "app/api/menu/pages/route.js",
-  "/[locale]/console/messages/page": "app/[locale]/console/messages/page.js",
+  "/api/logout/route": "app/api/logout/route.js",
+  "/[locale]/(auth)/signin/page": "app/[locale]/(auth)/signin/page.js",
   "/[locale]/console/dashboard/page": "app/[locale]/console/dashboard/page.js"
 }

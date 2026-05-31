@@ -1,16 +1,14 @@
 // app/api/signin/route.ts
 
-import { NextRequest, NextResponse }  from 'next/server'
-import crypto                         from 'crypto'
-import nodemailer                     from 'nodemailer'
+import { NextRequest, NextResponse } from 'next/server'
+import crypto                        from 'crypto'
+import nodemailer                    from 'nodemailer'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
 export async function POST(req: NextRequest) {
   console.log('[Signin API] Request received')
 
   try {
-    // ── Parse body ──────────────────────────────────────────────────────────
-
     const body = await req.json()
     const { email, password, idToken } = body
 
@@ -26,8 +24,6 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       )
     }
-
-    // ── Resolve adapter — handles all 5 DB types from env vars ─────────────
 
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
@@ -83,7 +79,6 @@ export async function POST(req: NextRequest) {
         refreshToken: null,
       }
 
-      // Block unverified emails — return flag so client shows correct message
       if (!user?.email_verified) {
         return NextResponse.json({
           success: false,
@@ -94,17 +89,22 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Supabase ────────────────────────────────────────────────────────────
-    // Supabase needs a live client for signInWithPassword — create it here
-    // since getConfiguredAdapter only sets supabaseUrl + anonKey in the config
 
     else if (dbType === 'supabase') {
       const { createClient } = await import('@supabase/supabase-js')
-      const supabase = createClient(dbConfig.supabaseUrl!, dbConfig.anonKey!)
-
+      console.log(`SUPASBASE SIGNIN ******* : CREATING CLIENT`)
+      const supabase = createClient(
+        dbConfig.supabaseUrl!,
+        dbConfig.anonKey!,
+        
+      )
+console.log(`SUPASBASE SIGNIN ******* : GOT CLIENT`)
+console.log(`SUPASBASE SIGNIN ******* : SIGN IN STARTED`)
       const { data, error } = await supabase.auth.signInWithPassword({
         email:    email!,
         password: password!,
       })
+ console.log(`SUPASBASE SIGNIN ******* : SIGNIN COMPLETED`)     
 
       if (error || !data.session) {
         return NextResponse.json(
@@ -147,8 +147,6 @@ export async function POST(req: NextRequest) {
       throw new Error(`Unsupported DB type: ${dbType}`)
     }
 
-    // ── Reject failed logins ────────────────────────────────────────────────
-
     if (!loginResult.success) {
       return NextResponse.json(
         { success: false, error: loginResult.error || 'Signin failed' },
@@ -156,20 +154,25 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // ── Return session ──────────────────────────────────────────────────────
-    // Fall back to random UUIDs if adapter doesn't return real tokens yet
-
     const accessToken  = loginResult.accessToken  ?? crypto.randomUUID()
     const refreshToken = loginResult.refreshToken ?? crypto.randomUUID()
+
+    // FIX: normalize user_id across all adapters so recordLogin() always
+    // receives a defined value regardless of which DB type is in use.
+    // Supabase returns `id`, Firebase returns `uid`, custom adapters use `user_id`.
+    const normalizedUser = {
+      ...user,
+      user_id: user.user_id ?? user.uid ?? user.id,
+    }
 
     console.log('[Signin API] Login successful')
 
     return NextResponse.json({
-      success: true,
-      user,
+      success:      true,
+      user:         normalizedUser,
       accessToken,
       refreshToken,
-      projectId: loginResult.projectId,
+      projectId:    loginResult.projectId,
     })
 
   } catch (err: any) {
@@ -181,9 +184,7 @@ export async function POST(req: NextRequest) {
   }
 }
 
-// ---------------------------------------------------------------------------
-// Email Helper — kept as-is, called when email verification is required
-// ---------------------------------------------------------------------------
+// ── Email Helper ────────────────────────────────────────────────────────────
 
 async function sendVerificationEmail(
   fullName: string,
@@ -216,7 +217,6 @@ async function sendVerificationEmail(
       `,
     })
   } catch (err) {
-    // Non-fatal — log but don't crash the parent request
     console.error('[Signin API] SMTP error sending verification email:', err)
   }
 }

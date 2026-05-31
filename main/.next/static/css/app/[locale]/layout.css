@@ -1322,6 +1322,9 @@
   .overflow-hidden {
     overflow: hidden;
   }
+  .overflow-visible {
+    overflow: visible;
+  }
   .overflow-x-auto {
     overflow-x: auto;
   }
@@ -2288,9 +2291,6 @@
     &::placeholder {
       color: var(--color-gray-400);
     }
-  }
-  .accent-black {
-    accent-color: var(--color-black);
   }
   .opacity-0 {
     opacity: 0%;

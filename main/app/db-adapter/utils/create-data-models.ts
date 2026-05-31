@@ -121,7 +121,9 @@ const RUN_CACHE = new Set<string>();
 export async function CreateUserDataModels(
   adapter: DBAdapter & { config?: DBConfig },
   projectId: string,
+  tenant_id: string,
   selectedProjectType: string,
+  
   selectedModels: string[] = []
 ) {
   // -------------------------------------------------------------------------
@@ -298,6 +300,7 @@ export async function CreateUserDataModels(
        */
       const modelData = {
         sm_id:      uuidv4(),
+        tenant_id: tenant_id,
         project_id: projectId,
         name:       tableName,
         schema:     columns,

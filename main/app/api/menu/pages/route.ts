@@ -13,19 +13,19 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
-    const project = adapter.findProjectByOwnerId
-      ? await adapter.findProjectByOwnerId(dbConfig, userId)
-      : null
+    // Resolve project from nxf_system_projects[0] — never by owner
+    const allProjects = await adapter.readAll!(dbConfig, 'nxf_system_projects')
+    const project     = (allProjects ?? [])[0]
 
     if (!project) {
       return NextResponse.json({ success: true, pages: [] })
     }
 
-    const projectId = project.id || project.project_id
+    const projectId = project.project_id ?? project.id
 
     const [allPages, allModels] = await Promise.all([
-      adapter.read!(dbConfig, 'nxf_pages'),
-      adapter.read!(dbConfig, 'nxf_system_models'),
+      adapter.readAll!(dbConfig, 'nxf_pages'),
+      adapter.readAll!(dbConfig, 'nxf_system_models'),
     ])
 
     const pages = (allPages ?? [])

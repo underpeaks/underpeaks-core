@@ -1063,26 +1063,6 @@ export class FirebaseAdapter implements DBAdapter {
 
   // ─── Demo Content ─────────────────────────────────────────────────────────
 
-  /**
-   * installDemoContent
-   *
-   * Reads demo data from local JSON files and inserts it into Firestore.
-   * Used during the installer to populate the application with sample data
-   * so new users can see how the platform works immediately.
-   *
-   * How it works:
-   * 1. Builds a list of folder paths to check for demo JSON files, based
-   *    on the selected project type.
-   * 2. For each folder, reads every .json file found there.
-   * 3. Each JSON file's name becomes the Firestore collection name.
-   * 4. Rows are written using a Firestore batch for efficiency.
-   * 5. If a folder does not exist, it is skipped silently.
-   * 6. If a JSON file is malformed, that file is skipped — others continue.
-   *
-   * @param config              - The DBConfig.
-   * @param selectedProjectType - Used to find the correct demo content folder.
-   * @returns { success, inserted, error?, skipped? }
-   */
  async installDemoContent(
   config: DBConfig,
   selectedProjectType: string
@@ -1095,19 +1075,7 @@ export class FirebaseAdapter implements DBAdapter {
     // Step 1: Resolve project, tenant, and admin user for this installation
     // -----------------------------------------------------------------------
 
-    /**
-     * We need three IDs to attach every demo content row to the correct
-     * context. Without these, demo data sits orphaned in the DB with no
-     * way to scope it to the right project or user.
-     *
-     * We derive them by reading the system config which was written during
-     * the installer flow. The config links user → project → tenant.
-     *
-     * If any of these cannot be resolved we abort the demo content install
-     * rather than inserting rows that will never be accessible.
-     */
-
-    // Resolve admin user — find the first admin in nxf_users
+    // Resolve admin user — first admin in nxf_users
     const usersSnapshot = await this.firestore
       .collection('nxf_users')
       .where('role', '==', 'admin')
@@ -1122,35 +1090,33 @@ export class FirebaseAdapter implements DBAdapter {
     const adminUser   = usersSnapshot.docs[0].data()
     const adminUserId = usersSnapshot.docs[0].id || adminUser.user_id
 
-    // Resolve project — find the project owned by the admin user
+    // Resolve project — read first doc from nxf_system_projects (never query by user_id)
     const projectsSnapshot = await this.firestore
       .collection('nxf_system_projects')
-      .where('user_id', '==', adminUserId)
       .limit(1)
       .get()
 
     if (projectsSnapshot.empty) {
-      console.error('[FirebaseAdapter] installDemoContent — no project found for admin user, aborting')
-      return { success: false, error: 'No project found for admin user' }
+      console.error('[FirebaseAdapter] installDemoContent — no project found, aborting')
+      return { success: false, error: 'No project found' }
     }
 
     const project   = projectsSnapshot.docs[0].data()
-    const projectId = projectsSnapshot.docs[0].id || project.project_id
+    const projectId = project.project_id || projectsSnapshot.docs[0].id
 
-    // Resolve tenant — find the tenant linked to the admin user's email
+    // Resolve tenant — read first doc from nxf_system_tenants (never query by user_email)
     const tenantsSnapshot = await this.firestore
       .collection('nxf_system_tenants')
-      .where('user_email', '==', adminUser.user_email)
       .limit(1)
       .get()
 
     if (tenantsSnapshot.empty) {
-      console.error('[FirebaseAdapter] installDemoContent — no tenant found for admin user, aborting')
-      return { success: false, error: 'No tenant found for admin user' }
+      console.error('[FirebaseAdapter] installDemoContent — no tenant found, aborting')
+      return { success: false, error: 'No tenant found' }
     }
 
     const tenant   = tenantsSnapshot.docs[0].data()
-    const tenantId = tenantsSnapshot.docs[0].id || tenant.ten_id
+    const tenantId = tenant.ten_id || tenantsSnapshot.docs[0].id
 
     console.log('[FirebaseAdapter] installDemoContent — context resolved:', {
       adminUserId,
@@ -1162,10 +1128,14 @@ export class FirebaseAdapter implements DBAdapter {
     // Step 2: Scan demo content folders and install rows
     // -----------------------------------------------------------------------
 
+    /**
+     * Always install universal_models first (splash, home, signin, etc.)
+     * then the project-type-specific models.
+     */
     const modelFolders = [
-      `${selectedProjectType}_models`,
       'system_models',
       'users_models',
+      `${selectedProjectType}_models`,
     ]
 
     const basePaths = modelFolders.map((folder) =>
@@ -1214,36 +1184,20 @@ export class FirebaseAdapter implements DBAdapter {
 
         for (const row of rows) {
           try {
-            /**
-             * Determine the document ID using the row's own primary key field.
-             * We check common naming conventions before falling back to a
-             * Firestore-generated ID.
-             */
             const id =
-              row.id                                    ||
-              row._id                                   ||
-              row[`${collectionName.slice(0, -1)}_id`] ||
+              row.page_id  ||
+              row.menu_id  ||
+              row.id       ||
+              row._id      ||
               this.firestore.collection('_tmp').doc().id
 
-            /**
-             * Inject the resolved context IDs into every row.
-             *
-             * - project_id  : scopes the row to this installation's project
-             * - tenant_id   : scopes the row to this installation's tenant
-             * - user_id     : links the row to the admin user who installed
-             *
-             * We use spread so that any row that already has these fields
-             * set explicitly in the JSON file will have them overwritten
-             * with the correct runtime values — preventing stale placeholder
-             * values from being written to the database.
-             */
             batch.set(collectionRef.doc(id), {
               ...row,
               project_id: projectId,
               tenant_id:  tenantId,
-              user_id:    adminUserId,
+              created_by: adminUserId,
               created_at: row.created_at || new Date().toISOString(),
-              updated_at: row.updated_at || new Date().toISOString(),
+              updated_at: row.updated_at || null,
             })
 
             count++
@@ -1977,25 +1931,42 @@ async markAllMessagesRead(
 ///NOTIFICATIONS
 
 async listNotifications(
-  config:     DBConfig,
-  uid:        string,
+  config: DBConfig,
+  uid: string,
   project_id: string,
-  limit       = 20
+  limit = 20
 ): Promise<Array<Record<string, any>>> {
-  const snapshot = await this.firestore
-    .collection('nxf_system_notifications')
-    .where('project_id', '==', project_id)
-    .where('user_id',    '==', uid)
-    .where('status',     '!=', 'deleted')
-    .orderBy('status')
-    .orderBy('created_at', 'desc')
-    .limit(limit)
-    .get()
+  try {
+    
 
-  return snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data() as Record<string, any>,
-  }))
+    const snapshot = await this.firestore
+      .collection('nxf_system_notifications')
+      .where('project_id', '==', project_id)
+      //.where('user_id', '==', uid)
+      .where('status', '!=', 'deleted')
+      //.orderBy('status')
+      .orderBy('created_at', 'desc')
+      .limit(limit)
+      .get()
+
+    const notifications = snapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...(doc.data() as Record<string, any>),
+    }))
+
+    console.log(
+      `[FirestoreAdapter] listNotifications returned ${notifications.length} notifications`
+    )
+
+    return notifications
+  } catch (error) {
+    console.error(
+      '[FirestoreAdapter] listNotifications failed',
+      error
+    )
+
+    throw error
+  }
 }
 async markNotificationRead(
   config:         DBConfig,

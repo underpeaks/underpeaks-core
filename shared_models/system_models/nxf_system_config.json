@@ -36,6 +36,14 @@
       "hidden": true
     },
     {
+  "name": "project_name",
+  "type": "string",
+  "nullable": true,
+  "comment": "Display name of the project",
+  "hidden": false,
+  "ui_type": "textfield"
+},
+    {
       "name": "deployment_type",
       "type": "string",
       "nullable": false,

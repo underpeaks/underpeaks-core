@@ -35,7 +35,7 @@ export async function handleCreateMenu(req: NextRequest): Promise<NextResponse> 
   const menu_id = `menu_${Date.now()}`
   const now     = new Date().toISOString()
 
-  await adapter.create!(dbConfig, 'nxf_menu', {
+  await adapter.create!(dbConfig, 'nxf_menus', {
     menu_id,
     project_id: projectId,
     tenant_id:  tenantId,

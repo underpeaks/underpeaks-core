@@ -1750,13 +1750,13 @@
       "description": "Choose a template to automatically install default models for your project."
     },
     "projects": {
-      "ecommerce":   { "label": "🛒 E-commerce",         "description": "Includes products, categories, orders, customers, and storefront pages." },
-      "marketplace": { "label": "🏬 Marketplace",         "description": "Supports multiple vendors, listings, commissions, and vendor dashboards." },
-      "listing":     { "label": "📋 Listing Platform",    "description": "For property, job, or service listings with categories, search, and filters." },
-      "blog":        { "label": "✍️ Blog / Content Site", "description": "Content-driven site with posts, categories, tags, authors, and comments." },
-      "social":      { "label": "🌐 Social Network",      "description": "User profiles, posts, comments, likes, followers, messages, and notifications." },
-      "saas":        { "label": "💻 SaaS / Web App",      "description": "Web app structure with users, roles, permissions, and subscription plans." },
-      "blank":       { "label": "⚙️ Blank Project",       "description": "No demo content; start with an empty project skeleton." }
+      "ecommerce":   { "label": "E-commerce",         "description": "Includes products, categories, orders, customers, and storefront pages." },
+      "marketplace": { "label": "Marketplace",         "description": "Supports multiple vendors, listings, commissions, and vendor dashboards." },
+      "listing":     { "label": "Listing Platform",    "description": "For property, job, or service listings with categories, search, and filters." },
+      "blog":        { "label": "Blog / Content Site", "description": "Content-driven site with posts, categories, tags, authors, and comments." },
+      "social":      { "label": "Social Network",      "description": "User profiles, posts, comments, likes, followers, messages, and notifications." },
+      "saas":        { "label": "SaaS / Web App",      "description": "Web app structure with users, roles, permissions, and subscription plans." },
+      "blank":       { "label": "Blank Project",       "description": "No demo content; start with an empty project skeleton." }
     },
     "demoContent": {
       "title": "Setup Demo Content",

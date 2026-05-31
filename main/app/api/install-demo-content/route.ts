@@ -35,10 +35,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const { config, selectedProjectType } = await req.json()
 
-    // -----------------------------------------------------------------------
-    // Validation
-    // -----------------------------------------------------------------------
-
     if (!config) {
       return NextResponse.json(
         { success: false, message: 'Database config is required' },
@@ -53,22 +49,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    /**
-     * Validate config.type before passing it to getAdapter.
-     * This value comes from the client — never trust it without checking.
-     */
     if (!VALID_DB_TYPES.includes(config.type)) {
       return NextResponse.json(
         { success: false, message: `Unsupported database type: ${config.type}` },
         { status: 400 }
       )
     }
-
-    // -----------------------------------------------------------------------
-    // Resolve adapter
-    // NOTE: installer routes receive config in the request body — this is
-    // intentional. Do not replace with getConfiguredAdapter() here.
-    // -----------------------------------------------------------------------
 
     const adapter = getAdapter(config.type as DBType, config)
 
@@ -79,17 +65,12 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    // -----------------------------------------------------------------------
-    // Resolve adminEmail
-    //
-    // installDemoContent needs the admin email to look up user_id, project_id,
-    // and tenant_id so demo records are inserted with the correct ownership.
-    //
+    // ── Resolve adminEmail ──────────────────────────────────────────────────
     // Resolution order:
     //   1. config.adminEmail        — set explicitly by the installer wizard
     //   2. config.user_email        — saved by saveInstallerConfig()
-    //   3. nxf_system_config lookup — fallback via user_id if neither is present
-    // -----------------------------------------------------------------------
+    //   3. nxf_system_config lookup — fallback via user_id
+    // Last-resort nxf_users lookup is handled inside installDemoContent itself
 
     let adminEmail: string | undefined =
       config.adminEmail ??
@@ -97,31 +78,24 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       undefined
 
     if (!adminEmail && config.user_id) {
-      console.log('[install-demo-content] adminEmail missing — attempting lookup via user_id')
-
+      console.log('[install-demo-content] attempting lookup via user_id')
       try {
         const systemConfig = await adapter.findSystemConfigByUserId?.(config, config.user_id)
         if (systemConfig?.user_email) {
           adminEmail = systemConfig.user_email
-          console.log('[install-demo-content] adminEmail resolved from nxf_system_config')
+          console.log('[install-demo-content] adminEmail resolved from nxf_system_config:', adminEmail)
         }
       } catch {
-        console.warn('[install-demo-content] nxf_system_config lookup failed — continuing without adminEmail')
+        console.warn('[install-demo-content] nxf_system_config lookup failed')
       }
     }
 
     if (!adminEmail) {
-      // Non-fatal — installDemoContent handles this gracefully by skipping
-      // ownership ID injection and still inserting the raw demo records
-      console.warn('[install-demo-content] adminEmail could not be resolved — demo records will have no ownership IDs')
+      console.warn('[install-demo-content] adminEmail not resolved from config — installDemoContent will attempt its own lookup')
     }
 
-    // -----------------------------------------------------------------------
-    // Install demo content
-    // -----------------------------------------------------------------------
-
     const result = await adapter.installDemoContent(
-      config,              // use the validated request config, not adapter.config
+      config,
       selectedProjectType,
       adminEmail,
     )

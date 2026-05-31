@@ -2,10 +2,10 @@
 import { notFound }          from 'next/navigation'
 import Link                  from 'next/link'
 import { FiEyeOff }          from 'react-icons/fi'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter ';
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 
-interface Props {
-  params: { slug: string; locale: string }
+type Props = {
+  params: Promise<{ slug: string }>
 }
 
 async function getPage(slug: string) {
