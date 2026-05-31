@@ -119,6 +119,8 @@ function SignInPage() {
    *
    * @param userId — The resolved user ID (Firebase UID or nxf_users.user_id).
    */
+
+  
   async function recordLogin(userId: string): Promise<void> {
     const now = new Date().toISOString()
 
@@ -237,6 +239,8 @@ function SignInPage() {
          * Record the login. Uses data.user.user_id — the ID field returned
          * by the custom /api/signin endpoint from nxf_users.
          */
+
+        console.log('[DEBUG] user_id being passed to recordLogin:', data.user.user_id)
         await recordLogin(data.user.user_id)
       }
 

@@ -124,17 +124,31 @@ export default async function RootLayout({
    * back to an empty object {} so the rest of the layout still renders
    * correctly using default values.
    */
+// Remove these two existing lines:
+// const res = await fetch(...)
+// const config = res.ok ? await res.json() : {}
+
+// Replace with:
+let systemConfig: Record<string, any> = {}
+
+try {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_APP_DOMAIN}/api/get-system-config`,
     { cache: 'no-store' }
   )
+  if (res.ok) {
+    systemConfig = await res.json()
+  }
+} catch {
+  console.log('[RootLayout] No system config found — first install, heading to installer')
+}
 
   /**
    * Parse the response JSON if the request succeeded (res.ok = HTTP 2xx).
    * If the request failed (any non-2xx status), use an empty object as the
    * fallback so downstream code can safely use optional chaining (config?.x).
    */
-  const config = res.ok ? await res.json() : {}
+  const config = systemConfig;
 
   // -------------------------------------------------------------------------
   // Render

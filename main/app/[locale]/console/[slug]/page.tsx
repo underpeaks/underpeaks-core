@@ -1,18 +1,17 @@
-import { getStorageAdapter } from '@/app/lib/getConfiguredAdapter '
 import { notFound }          from 'next/navigation'
 import Link                  from 'next/link'
 import { FiArrowLeft, FiLayout, FiClock } from 'react-icons/fi'
-import { TEMPLATE_LABELS } from '../pages/components/types'
-
+import { TEMPLATE_LABELS }   from '../pages/components/types'
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 interface Props {
-  params: { slug: string; locale: string }
+  params: Promise<{ slug: string; locale: string }>
 }
 
 async function getPage(slug: string) {
   try {
-    const adapter  = getStorageAdapter()
+    const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
-    const allPages = await adapter.read!(dbConfig, 'nxf_pages')
+    const allPages = await adapter.readAll!(dbConfig, 'nxf_pages')
     return (allPages ?? []).find(
       (p: any) => p.slug === `/${slug}` || p.slug === slug
     ) ?? null
@@ -21,10 +20,9 @@ async function getPage(slug: string) {
   }
 }
 
-
-
 export default async function ConsoleDynamicPage({ params }: Props) {
-  const page = await getPage(params.slug)
+  const { slug } = await params
+  const page = await getPage(slug)
 
   if (!page) return notFound()
 

@@ -77,20 +77,20 @@ import { NXFUser, useConsoleStore } from '../../store/consoleStore'
  * @returns     1–2 uppercase characters representing the user's initials
  */
 function getUserInitials(user: NXFUser): string {
-  const name: string = user.full_name
+  // FIX: user.full_name may be undefined/null — default to empty string
+  const name: string = user?.full_name ?? ''
 
   if (name.trim()) {
     const parts = name.trim().split(/\s+/)
     if (parts.length >= 2) {
-      // Take first letter of the first and last word
       return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
     }
-    // Single word — take first two characters
     return parts[0].slice(0, 2).toUpperCase()
   }
 
   // Fallback to email prefix if no name is set
-  return (user.email?.split('@')[0] || '').slice(0, 2).toUpperCase()
+  const email = user?.user_email ?? user?.email ?? ''
+  return email.split('@')[0].slice(0, 2).toUpperCase() || '?'
 }
 
 /**

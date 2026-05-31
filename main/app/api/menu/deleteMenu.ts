@@ -18,7 +18,7 @@ export async function handleDeleteMenu(req: NextRequest): Promise<NextResponse> 
   const adapter  = getConfiguredAdapter()
   const dbConfig = adapter.config
 
-  const allItems = await adapter.read!(dbConfig, 'nxf_menu')
+  const allItems = await adapter.read!(dbConfig, 'nxf_menus')
   const item = (allItems ?? []).find((m: any) => resolveDocumentId(m) === menu_id)
   if (item?.is_system) {
     return NextResponse.json({ success: false, error: 'errors.systemItemProtected' }, { status: 403 })

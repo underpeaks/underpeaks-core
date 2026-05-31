@@ -12,23 +12,29 @@ export async function handleGetMenu(req: NextRequest): Promise<NextResponse> {
   const adapter  = getConfiguredAdapter()
   const dbConfig = adapter.config
 
-  const project = adapter.findProjectByOwnerId
-    ? await adapter.findProjectByOwnerId(dbConfig, userId)
-    : null
+  // Resolve project from nxf_system_projects[0] — never by owner
+  const allProjects = await adapter.readAll!(dbConfig, 'nxf_system_projects')
+  const project     = (allProjects ?? [])[0]
 
   if (!project) {
+    console.log('[handleGetMenu] no project found — returning empty')
     return NextResponse.json({ success: true, items: [] })
   }
 
-  const projectId = project.id || project.project_id
+  const projectId = project.project_id ?? project.id
+  console.log('[handleGetMenu] projectId:', projectId)
 
-  const allItems = await adapter.read!(dbConfig, 'nxf_menu')
+  const allItems = await adapter.readAll!(dbConfig, 'nxf_menus').catch(() => [])
+  console.log('[handleGetMenu] total menu items in DB:', allItems?.length ?? 0)
+
   const items = (allItems ?? [])
     .filter((m: any) => m.project_id === projectId)
     .map((m: any) => ({
       ...m,
-      menu_id: resolveDocumentId(m),
+      id: resolveDocumentId(m),  // preserve menu_id — only overwrite id
     }))
+
+  console.log('[handleGetMenu] filtered items for project:', items.length)
 
   return NextResponse.json({ success: true, items })
 }

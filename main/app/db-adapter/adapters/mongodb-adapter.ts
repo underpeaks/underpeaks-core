@@ -53,7 +53,7 @@
  */
 
 import { MongoClient, Db, ObjectId } from 'mongodb'
-import { ColumnDef, DBAdapter, DBConfig } from '../types'
+import { ColumnDef, DBAdapter, DBConfig, StorageFile } from '../types'
 import bcrypt   from 'bcryptjs'
 import crypto   from 'crypto'
 import { CreateUserDataModels } from '../utils/create-data-models'
@@ -336,29 +336,26 @@ export class MongoDBAdapter implements DBAdapter {
    * @throws If the database query itself fails unexpectedly.
    */
   async findSystemConfigByUserId(config: DBConfig, userId: string) {
-    try {
-      if (!userId) return null
+  try {
+    if (!userId) return null
 
-      const collection = this.db!.collection('nxf_system_config')
-      const doc        = await collection.findOne({ user_id: userId })
+    const db         = await this.getDb()
+    const collection = db.collection('nxf_system_config')
+    const doc        = await collection.findOne({ user_id: userId })
 
-      if (!doc) return null
+    if (!doc) return null
 
-      /**
-       * Destructure _id out of the document and return it as a plain string
-       * `id` field alongside the rest of the document fields.
-       */
-      const { _id, ...rest } = doc
-      return { id: _id.toString(), ...rest }
+    const { _id, ...rest } = doc
+    return { id: _id.toString(), ...rest }
 
-    } catch (error) {
-      throw new Error(
-        `MongoDBAdapter.findSystemConfigByUserId failed: ${
-          error instanceof Error ? error.message : String(error)
-        }`
-      )
-    }
+  } catch (error) {
+    throw new Error(
+      `MongoDBAdapter.findSystemConfigByUserId failed: ${
+        error instanceof Error ? error.message : String(error)
+      }`
+    )
   }
+}
 
   // -------------------------------------------------------------------------
   // User management
@@ -943,19 +940,20 @@ export class MongoDBAdapter implements DBAdapter {
    * @param data   — { name, user_id } — project display name and owner.
    * @returns The generated project_id (UUID string).
    */
-  async createProject(
-    config: DBConfig,
-    data:   { name: string; user_id: string },
-  ): Promise<string> {
-    const project_id = crypto.randomUUID()
-    await this.create(config, 'nxf_system_projects', {
-      project_id,
-      name:       data.name,
-      user_id:    data.user_id,
-      created_at: new Date().toISOString(),
-    })
-    return project_id
-  }
+ async createProject(
+  config: DBConfig,
+  data:   { name: string; user_id: string; tenant_ID?: string },
+): Promise<string> {
+  const project_id = crypto.randomUUID()
+  await this.create(config, 'nxf_system_projects', {
+    project_id,
+    name:       data.name,
+    user_id:    data.user_id,
+    tenant_id:  data.tenant_ID ?? null,
+    created_at: new Date().toISOString(),
+  })
+  return project_id
+}
 
   /**
    * findProjectByOwnerId
@@ -1017,6 +1015,15 @@ export class MongoDBAdapter implements DBAdapter {
   ): Promise<any | null> {
     return (
       await this.read(config, 'nxf_system_tenants', { user_email: email })
+    )[0] || null
+  }
+
+ async findTenantByUserID(
+    config: DBConfig,
+    user_id:  string,
+  ): Promise<any | null> {
+    return (
+      await this.read(config, 'nxf_system_tenants', { user_id: user_id })
     )[0] || null
   }
 
@@ -1118,12 +1125,9 @@ export class MongoDBAdapter implements DBAdapter {
    * @param selectedProjectType — The project type (e.g. 'ecommerce', 'cms').
    * @returns The result from CreateUserDataModels.
    */
-  async CreateDataModels(
-    projectId:           string,
-    selectedProjectType: string,
-  ) {
-    return CreateUserDataModels(this, projectId, selectedProjectType, [])
-  }
+async createDataModels(projectId: string, selectedProjectType: string = ''): Promise<any> {
+  return CreateUserDataModels(this, projectId, '', selectedProjectType, [])
+}
 
   /**
    * createDataModelsFromUserEmail
@@ -1150,7 +1154,7 @@ export class MongoDBAdapter implements DBAdapter {
     const project = await this.findProjectByOwnerId(this.config, user.user_id)
     if (!project?.project_id) throw new Error('Project not found')
 
-    return this.CreateDataModels(project.project_id, selectedProjectType)
+    return this.createDataModels(project.project_id, selectedProjectType)
   }
 
   // -------------------------------------------------------------------------
@@ -1217,126 +1221,898 @@ export class MongoDBAdapter implements DBAdapter {
    * @param selectedProjectType — Determines which project-specific folder to read.
    * @returns { success, inserted, skipped, message } describing the outcome.
    */
-  async installDemoContent(
-    config:              DBConfig,
-    selectedProjectType: string,
-  ): Promise<{
-    success:   boolean;
-    message?:  string;
-    inserted?: number;
-    skipped?:  boolean;
-  }> {
-    try {
-      const db   = await this.getDb()
-      const fs   = require('fs')
-      const path = require('path')
+async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string,
+  adminEmail?: string
+): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
+  const fs   = require('fs')
+  const path = require('path')
 
-      /**
-       * The three folder categories to scan for demo JSON files.
-       * Processed in order — later folders may insert into the same collections
-       * as earlier ones (which is fine with ordered: false).
-       */
-      const modelFolders = [
-        `${selectedProjectType}_models`,
-        'system_models',
-        'users_models',
-      ]
+  try {
+    if (!selectedProjectType) throw new Error('selectedProjectType is required')
 
-      const basePaths = modelFolders.map((folder) =>
-        path.resolve(process.cwd(), '..', 'demo_content', folder),
-      )
+    const db        = await this.getDb()
+    const DEMO_ROOT = path.resolve(process.cwd(), '..', 'demo_content')
 
-      let inserted = 0
+    console.log('[MongoAdapter] installDemoContent — mongoDatabase:', config.mongoDatabase)
+    console.log('[MongoAdapter] installDemoContent — DEMO_ROOT:', DEMO_ROOT)
+    console.log('[MongoAdapter] installDemoContent — DEMO_ROOT exists:', fs.existsSync(DEMO_ROOT))
+    console.log('[MongoAdapter] installDemoContent — selectedProjectType:', selectedProjectType)
+    console.log('[MongoAdapter] installDemoContent — adminEmail:', adminEmail ?? 'not provided')
 
-      for (const basePath of basePaths) {
-        /**
-         * Skip folders that don't exist on disk — not all project types will
-         * have a dedicated folder, and that is not an error.
-         */
-        if (!fs.existsSync(basePath)) continue
+    // ── Resolve admin user FIRST before anything else ──────────────────────
+    // Log exactly what is in nxf_users so we can see the field names
 
-        const files: string[] = fs
-          .readdirSync(basePath)
-          .filter((f: string) => f.endsWith('.json'))
+    const testUser = await db.collection('nxf_users').findOne({})
+    console.log('[MongoAdapter] installDemoContent — first nxf_users doc:', JSON.stringify(testUser, null, 2))
 
-        /**
-         * Skip empty folders — nothing to insert.
-         */
-        if (!files.length) continue
-
-        for (const file of files) {
-          const fullPath = path.join(basePath, file)
-          const raw      = fs.readFileSync(fullPath, 'utf-8')
-
-          let json: any
-
-          try {
-            json = JSON.parse(raw)
-          } catch (e: any) {
-            /**
-             * Skip malformed JSON files rather than aborting the entire
-             * installation — one bad file should not block the rest.
-             */
-            console.warn('[MongoDBAdapter] installDemoContent — invalid JSON:', file, e.message)
-            continue
-          }
-
-          /**
-           * The collection name is derived from the filename without the .json
-           * extension (e.g. nxf_products.json → nxf_products).
-           */
-          const collectionName = file.replace('.json', '')
-
-          /**
-           * Support both array and wrapped-object JSON formats.
-           * If neither applies, skip the file.
-           */
-          const rows = Array.isArray(json) ? json : json?.demo_data
-
-          if (!rows || !Array.isArray(rows)) continue
-
-          if (rows.length > 0) {
-            try {
-              const result = await db
-                .collection(collectionName)
-                .insertMany(rows, { ordered: false })
-
-              inserted += result.insertedCount || 0
-
-            } catch (err: any) {
-              /**
-               * insertMany with ordered: false can still throw on errors like
-               * duplicate keys. Count any partial successes from err.result
-               * so the total reflects what actually made it into the database.
-               */
-              console.warn(
-                '[MongoDBAdapter] installDemoContent — partial insert failure:',
-                collectionName,
-                err.message,
-              )
-              if (err.result?.nInserted) {
-                inserted += err.result.nInserted
-              }
-            }
-          }
-        }
-      }
-
-      return {
-        success:  true,
-        inserted,
-        skipped:  false,
-        message:  'Demo content installed successfully',
-      }
-
-    } catch (err: any) {
-      console.error('[MongoDBAdapter] installDemoContent — fatal error:', err)
-      return {
-        success:  false,
-        message:  err.message || 'Failed to install demo content',
-        inserted: 0,
-        skipped:  true,
+    // Try adminEmail first, then fall back to first admin in DB
+    if (!adminEmail) {
+      console.log('[MongoAdapter] installDemoContent — adminEmail missing, attempting nxf_users lookup')
+      const fallbackAdmin = await db.collection('nxf_users').findOne({ role: 'admin' })
+      console.log('[MongoAdapter] installDemoContent — fallbackAdmin:', JSON.stringify(fallbackAdmin, null, 2))
+      if (fallbackAdmin?.user_email) {
+        adminEmail = fallbackAdmin.user_email
+        console.log('[MongoAdapter] installDemoContent — adminEmail resolved:', adminEmail)
+      } else if (fallbackAdmin?.email) {
+        adminEmail = fallbackAdmin.email
+        console.log('[MongoAdapter] installDemoContent — adminEmail resolved from email field:', adminEmail)
       }
     }
+
+    if (!adminEmail) {
+      console.warn('[MongoAdapter] installDemoContent — no adminEmail resolved, ownership IDs will be empty')
+    }
+
+    let adminUserId: string | null = null
+    let projectId:   string | null = null
+    let tenantId:    string | null = null
+
+    if (adminEmail) {
+      try {
+        const adminUser =
+          await db.collection('nxf_users').findOne({ user_email: adminEmail }) ??
+          await db.collection('nxf_users').findOne({ email: adminEmail }) ??
+          await db.collection('nxf_users').findOne({ role: 'admin' })
+
+        console.log('[MongoAdapter] installDemoContent — adminUser resolved:', JSON.stringify(adminUser, null, 2))
+
+        if (adminUser) {
+          adminUserId = adminUser.user_id ?? adminUser._id?.toString()
+          console.log('[MongoAdapter] installDemoContent — adminUserId:', adminUserId)
+        }
+
+        if (adminUserId) {
+          const project =
+            await db.collection('nxf_system_projects').findOne({ user_id: adminUserId }) ??
+            await db.collection('nxf_system_projects').findOne({})
+
+          console.log('[MongoAdapter] installDemoContent — project resolved:', JSON.stringify(project, null, 2))
+
+          if (project) {
+            projectId = project.project_id ?? project._id?.toString()
+            console.log('[MongoAdapter] installDemoContent — projectId:', projectId)
+          }
+
+          const tenant =
+            await db.collection('nxf_system_tenants').findOne({ user_id: adminUserId }) ??
+            await db.collection('nxf_system_tenants').findOne({})
+
+          console.log('[MongoAdapter] installDemoContent — tenant resolved:', JSON.stringify(tenant, null, 2))
+
+          if (tenant) {
+            tenantId = tenant.ten_id ?? tenant._id?.toString()
+            console.log('[MongoAdapter] installDemoContent — tenantId:', tenantId)
+          }
+        }
+      } catch (err: any) {
+        console.warn('[MongoAdapter] installDemoContent — could not resolve ownership IDs:', err.message)
+      }
+    }
+
+    const modelFolders = [
+      'system_models',
+      'users_models',
+      `${selectedProjectType}_models`,
+    ]
+
+    const basePaths = modelFolders.map((folder) =>
+      path.join(DEMO_ROOT, folder)
+    )
+
+    let totalInserted = 0
+
+    for (const basePath of basePaths) {
+      console.log('[MongoAdapter] Checking demo content path:', basePath)
+
+      if (!fs.existsSync(basePath)) {
+        console.log('[MongoAdapter] Demo folder not found, skipping:', basePath)
+        continue
+      }
+
+      const files = fs.readdirSync(basePath).filter((f: string) => f.endsWith('.json'))
+      console.log(`[MongoAdapter] Found ${files.length} JSON files in:`, basePath)
+
+      for (const file of files) {
+        const filePath = path.join(basePath, file)
+        const raw      = fs.readFileSync(filePath, 'utf-8')
+
+        let json: any
+        try {
+          json = JSON.parse(raw)
+        } catch (parseErr: any) {
+          console.warn(`[MongoAdapter] Skipping invalid JSON: ${file} — ${parseErr.message}`)
+          continue
+        }
+
+        const collectionName = file.replace('.json', '')
+        const rows           = Array.isArray(json) ? json : json?.demo_data
+
+        if (!rows || !Array.isArray(rows)) {
+          console.log(`[MongoAdapter] Skipping ${file} — no valid data array found`)
+          continue
+        }
+
+        console.log(`[MongoAdapter] Inserting into ${collectionName} — ${rows.length} rows`)
+
+        const collection = db.collection(collectionName)
+
+        const docs = rows.map((row: any) => {
+          const cleaned: any = {}
+
+          for (const key in row) {
+            if (row[key] !== undefined) cleaned[key] = row[key]
+          }
+
+          // Always inject project_id and tenant_id — replace {{placeholders}} or empty values
+          if (projectId) {
+            cleaned.project_id = (
+              cleaned.project_id === '{{project_id}}' || !cleaned.project_id
+            ) ? projectId : cleaned.project_id
+          }
+
+          if (tenantId) {
+            cleaned.tenant_id = (
+              cleaned.tenant_id === '{{tenant_id}}' || !cleaned.tenant_id
+            ) ? tenantId : cleaned.tenant_id
+          }
+
+          // Only inject user_id if the row already has that field
+          if (adminUserId && 'user_id' in cleaned) {
+            cleaned.user_id = (
+              cleaned.user_id === '{{user_id}}' || !cleaned.user_id
+            ) ? adminUserId : cleaned.user_id
+          }
+
+          cleaned.created_at = cleaned.created_at || new Date().toISOString()
+          cleaned.updated_at = cleaned.updated_at || null
+
+          return cleaned
+        })
+
+        try {
+          await collection.insertMany(docs, { ordered: false })
+          totalInserted += docs.length
+          console.log(`[MongoAdapter] Inserted ${docs.length} rows into ${collectionName}`)
+        } catch (insertErr: any) {
+          console.error(`[MongoAdapter] Insert failed for ${collectionName}:`, insertErr.message)
+        }
+      }
+    }
+
+    console.log(`[MongoAdapter] installDemoContent complete — total inserted: ${totalInserted}`)
+    return { success: true, inserted: totalInserted }
+
+  } catch (err: any) {
+    console.error('[MongoAdapter] installDemoContent failed:', err.message, err.stack)
+    return { success: false, inserted: 0, error: err.message ?? 'Failed to install demo content' }
   }
+}
+  // ─── Core CRUD ────────────────────────────────────────────────────────────────
+
+async readAll(config: DBConfig, collection: string): Promise<any[]> {
+  try {
+    console.log(`[MongoAdapter] readAll — collection: ${collection}`)
+    const db   = await this.getDb()  // ← use getDb() not this.db
+    const docs = await db.collection(collection).find({}).toArray()
+    return docs.map((doc) => ({
+      ...doc,
+      id: doc._id?.toString() ?? doc.id,
+    }))
+  } catch (err: any) {
+    console.error(`[MongoAdapter] readAll failed — collection: ${collection}`)
+    throw new Error(`readAll failed: ${err.message}`)
+  }
+}
+
+// ─── Users & Auth ─────────────────────────────────────────────────────────────
+
+async getUserById(uid: string): Promise<{ user?: any; error?: string }> {
+  try {
+    if (!uid) return { error: 'UID is required' }
+
+    const db  = await this.getDb()
+    const doc = await db.collection('nxf_users').findOne({ user_id: uid })
+
+    if (!doc) return { error: 'User not found' }
+
+    return { user: { ...doc, id: doc._id?.toString() } }
+  } catch (err: any) {
+    return { error: err.message || 'Failed to fetch user' }
+  }
+}
+
+
+
+async checkUserStatus(
+  config: DBConfig,
+  userId: string
+): Promise<{ allowed: boolean; user?: any; reason?: string }> {
+  try {
+    if (!userId) return { allowed: false, reason: 'No user ID provided' }
+
+    const db  = await this.getDb()
+    const doc = await db.collection('nxf_users').findOne({ user_id: userId }) as Record<string, any> | null
+
+    if (!doc) return { allowed: false, reason: 'User not found' }
+
+    const user = { ...doc, id: doc._id?.toString() } as Record<string, any> & { id: string }
+
+    if (user.status === 'suspended') return { allowed: false, user, reason: 'Account suspended' }
+    if (user.status === 'inactive')  return { allowed: false, user, reason: 'Account inactive' }
+
+    return { allowed: true, user }
+
+  } catch (err: any) {
+    console.error('[MongoAdapter] checkUserStatus failed')
+    return { allowed: false, reason: err.message || 'Status check failed' }
+  }
+}
+
+async syncAuthUserToDatabase(
+  config: DBConfig,
+  user: { uid: string; email: string; full_name: string; notes?: string }
+): Promise<string> {
+  if (!user?.uid)      throw new Error('User UID is required')
+  if (!user.full_name) throw new Error('Full name is required')
+
+  const db         = await this.getDb()
+  const collection = db.collection('nxf_users')
+  const existing   = await collection.findOne({ user_id: user.uid })
+
+  if (!existing) {
+    await collection.insertOne({
+      user_id:    user.uid,
+      user_email: user.email || '',
+      full_name:  user.full_name,
+      role:       'user',
+      status:     'active',
+      notes:      user.notes || '',
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+  } else {
+    await collection.updateOne(
+      { user_id: user.uid },
+      {
+        $set: {
+          user_email: user.email || '',
+          full_name:  user.full_name,
+          updated_at: new Date().toISOString(),
+        },
+      }
+    )
+  }
+
+  return user.uid
+}
+
+async writeActivityLog(
+  config: DBConfig,
+  entry: { user_id: string; action: string; context?: string }
+): Promise<void> {
+  try {
+    const db = await this.getDb()
+
+    const projects   = await db.collection('nxf_system_projects').find({}).limit(1).toArray()
+    const project_id = projects[0]?.project_id ?? projects[0]?._id?.toString() ?? null
+
+    const tenants   = await db.collection('nxf_system_tenants').find({}).limit(1).toArray()
+    const tenant_id = tenants[0]?.ten_id ?? tenants[0]?._id?.toString() ?? null
+
+    await db.collection('nxf_system_activity_logs').insertOne({
+      log_id:     crypto.randomUUID(),
+      project_id,
+      tenant_id,
+      user_id:    entry.user_id,
+      action:     entry.action,
+      context:    entry.context ?? null,
+      created_at: new Date().toISOString(),
+    })
+
+  } catch (err: any) {
+    console.error('[MongoAdapter] writeActivityLog failed:', err.message)
+  }
+}
+
+// ─── Table / Collection Management ───────────────────────────────────────────
+
+async alterTable(
+  tableName: string,
+  changes: { add?: ColumnDef[]; drop?: string[]; rename?: { from: string; to: string } }
+): Promise<any> {
+  console.log(`[MongoAdapter] alterTable — ${tableName}`)
+
+  const db         = await this.getDb()
+  const collection = db.collection(tableName)
+
+  if (changes.rename) {
+    await collection.updateMany(
+      {},
+      { $rename: { [changes.rename.from]: changes.rename.to } }
+    )
+    console.log(`[MongoAdapter] alterTable — renamed field ${changes.rename.from} → ${changes.rename.to} on all docs in ${tableName}`)
+  }
+
+  if (changes.drop?.length) {
+    const unsetFields: Record<string, string> = {}
+    changes.drop.forEach((field) => { unsetFields[field] = '' })
+    await collection.updateMany({}, { $unset: unsetFields })
+    console.log(`[MongoAdapter] alterTable — dropped fields from ${tableName}`)
+  }
+
+  console.log(`[MongoAdapter] alterTable completed for ${tableName}`)
+  return true
+}
+
+async dropTable(tableName: string): Promise<any> {
+  console.log(`[MongoAdapter] dropTable — ${tableName}`)
+
+  const db = await this.getDb()
+
+  const collections = await db.listCollections({ name: tableName }).toArray()
+  if (!collections.length) {
+    console.log(`[MongoAdapter] dropTable — collection does not exist, skipping: ${tableName}`)
+    return true
+  }
+
+  await db.collection(tableName).drop()
+  console.log(`[MongoAdapter] dropTable completed — ${tableName}`)
+  return true
+}
+
+async renameTable(oldName: string, newName: string): Promise<any> {
+  console.log(`[MongoAdapter] renameTable — ${oldName} → ${newName}`)
+
+  const db = await this.getDb()
+  await db.collection(oldName).rename(newName)
+
+  console.log(`[MongoAdapter] renameTable completed — ${oldName} → ${newName}`)
+  return true
+}
+
+// ─── Messages ─────────────────────────────────────────────────────────────────
+
+async listConversations(
+  config:     DBConfig,
+  project_id: string,
+  uid:        string,
+  limit       = 10
+): Promise<Array<Record<string, any>>> {
+  const db   = await this.getDb()
+  const docs = await db
+    .collection('nxf_system_conversations')
+    .find({ project_id })
+    .sort({ last_message_at: -1 })
+    .limit(limit)
+    .toArray()
+
+  const seen    = new Set<string>()
+  const deduped = docs.filter((doc) => {
+    const con_id = doc.con_id ?? doc._id?.toString()
+    if (seen.has(con_id)) return false
+    seen.add(con_id)
+    return true
+  })
+
+  const withUnread = await Promise.all(
+    deduped.map(async (conv) => {
+      const con_id      = conv.con_id ?? conv._id?.toString()
+      const unreadCount = await db
+        .collection('nxf_system_messages')
+        .countDocuments({ conversation_id: con_id, recipient_id: uid, is_read: false })
+      return { ...conv, id: con_id, con_id, unread_count: unreadCount }
+    })
+  )
+
+  return withUnread
+}
+
+async getConversationThread(
+  config:         DBConfig,
+  conversationId: string
+): Promise<Array<Record<string, any>>> {
+  const db   = await this.getDb()
+  const docs = await db
+    .collection('nxf_system_messages')
+    .find({ conversation_id: conversationId })
+    .sort({ sent_at: 1 })
+    .toArray()
+
+  const seen = new Set<string>()
+  return docs.filter((doc) => {
+    const mes_id = doc.mes_id ?? doc._id?.toString()
+    if (seen.has(mes_id)) return false
+    seen.add(mes_id)
+    return true
+  }).map((doc) => ({ ...doc, mes_id: doc.mes_id ?? doc._id?.toString() }))
+}
+
+async sendMessage(
+  config:         DBConfig,
+  conversationId: string,
+  senderId:       string,
+  content:        string
+): Promise<Record<string, any>> {
+  const db  = await this.getDb()
+  const now = new Date().toISOString()
+  const mes_id = crypto.randomUUID()
+
+  const projects   = await db.collection('nxf_system_projects').find({}).limit(1).toArray()
+  const project_id = projects[0]?.project_id ?? projects[0]?._id?.toString() ?? null
+
+  const tenants   = await db.collection('nxf_system_tenants').find({}).limit(1).toArray()
+  const tenant_id = tenants[0]?.ten_id ?? tenants[0]?._id?.toString() ?? null
+
+  const message = {
+    mes_id,
+    project_id,
+    tenant_id,
+    conversation_id: conversationId,
+    sender_id:       senderId,
+    recipient_id:    null,
+    content,
+    is_read:         false,
+    sent_at:         now,
+    created_at:      now,
+    updated_at:      now,
+  }
+
+  await db.collection('nxf_system_messages').insertOne(message)
+
+  await db.collection('nxf_system_conversations').updateOne(
+    { con_id: conversationId },
+    {
+      $set: {
+        last_message_preview: content.slice(0, 100),
+        last_message_at:      now,
+        updated_at:           now,
+      },
+    }
+  )
+
+  return message
+}
+
+async markConversationRead(
+  config:         DBConfig,
+  uid:            string,
+  conversationId: string
+): Promise<{ success: boolean }> {
+  const db  = await this.getDb()
+
+  await db.collection('nxf_system_messages').updateMany(
+    { conversation_id: conversationId, recipient_id: uid, is_read: false },
+    { $set: { is_read: true, updated_at: new Date().toISOString() } }
+  )
+
+  return { success: true }
+}
+
+async markAllMessagesRead(
+  config: DBConfig,
+  uid:    string
+): Promise<{ success: boolean }> {
+ const db  = await this.getDb()
+
+  await db.collection('nxf_system_messages').updateMany(
+    { recipient_id: uid, is_read: false },
+    { $set: { is_read: true, updated_at: new Date().toISOString() } }
+  )
+
+  return { success: true }
+}
+
+async deleteConversation(
+  config:         DBConfig,
+  conversationId: string
+): Promise<{ success: boolean }> {
+  try {
+    const db  = await this.getDb()
+
+    // Delete all messages first
+    await db.collection('nxf_system_messages').deleteMany({
+      conversation_id: conversationId,
+    })
+
+    // Delete the conversation
+    await db.collection('nxf_system_conversations').deleteMany({
+      con_id: conversationId,
+    })
+
+    return { success: true }
+  } catch (err: any) {
+    throw new Error(`Failed to delete conversation: ${err.message}`)
+  }
+}
+
+// ─── Notifications ────────────────────────────────────────────────────────────
+
+async listNotifications(
+  config:     DBConfig,
+  uid:        string,
+  project_id: string,
+  limit       = 20
+): Promise<Array<Record<string, any>>> {
+  const db  = await this.getDb()
+  const docs = await db
+    .collection('nxf_system_notifications')
+    .find({ project_id, user_id: uid, status: { $ne: 'deleted' } })
+    .sort({ created_at: -1 })
+    .limit(limit)
+    .toArray()
+
+  return docs.map((doc) => ({ ...doc, id: doc._id?.toString() }))
+}
+
+async markNotificationRead(
+  config:         DBConfig,
+  notificationId: string,
+  uid:            string
+): Promise<{ success: boolean }> {
+ const db  = await this.getDb()
+  const doc = await db
+    .collection('nxf_system_notifications')
+    .findOne({ id: notificationId })
+
+  if (!doc) throw new Error('Notification not found')
+  if (doc.user_id !== uid) throw new Error('Forbidden — notification does not belong to this user')
+
+  const now = new Date().toISOString()
+
+  await db.collection('nxf_system_notifications').updateOne(
+    { id: notificationId },
+    { $set: { status: 'read', is_read: true, read_at: now, updated_at: now } }
+  )
+
+  return { success: true }
+}
+
+async markAllNotificationsRead(
+  config:     DBConfig,
+  uid:        string,
+  project_id: string
+): Promise<{ success: boolean; updated: number }> {
+ const db  = await this.getDb()
+  const now = new Date().toISOString()
+
+  const result = await db.collection('nxf_system_notifications').updateMany(
+    { project_id, user_id: uid, status: 'unread' },
+    { $set: { status: 'read', is_read: true, read_at: now, updated_at: now } }
+  )
+
+  return { success: true, updated: result.modifiedCount }
+}
+
+// ─── API Keys ─────────────────────────────────────────────────────────────────
+
+async listApiKeys(
+  config: DBConfig,
+  project_id: string
+): Promise<Array<{
+  api_id: string
+  name: string
+  key_prefix: string
+  status: string
+  last_used_at: string | null
+  created_at: string
+  id: string
+}>> {
+  const db  = await this.getDb()
+
+  const docs = await db
+    .collection('nxf_system_apis')
+    .find({ project_id, status: 'active' })
+    .sort({ created_at: -1 })
+    .project({
+      api_id: 1,
+      name: 1,
+      key_prefix: 1,
+      status: 1,
+      last_used_at: 1,
+      created_at: 1,
+      // key_encrypted intentionally excluded
+    })
+    .toArray()
+
+  return docs.map((doc) => ({
+    api_id: doc.api_id,
+    name: doc.name,
+    key_prefix: doc.key_prefix,
+    status: doc.status,
+    last_used_at: doc.last_used_at ?? null,
+    created_at: doc.created_at,
+    id: doc._id.toString(),
+  }))
+}
+
+async getApiKey(
+  config: DBConfig,
+  api_id: string
+): Promise<Record<string, any> | null> {
+  const db  = await this.getDb()
+  const doc = await db.collection('nxf_system_apis').findOne({ api_id })
+
+  if (!doc) return null
+  return { ...doc, id: doc._id?.toString() }
+}
+
+async revokeApiKey(
+  config:     DBConfig,
+  api_id:     string,
+  project_id: string
+): Promise<{ success: boolean }> {
+ const db  = await this.getDb()
+  const doc = await db.collection('nxf_system_apis').findOne({ api_id })
+
+  if (!doc) throw new Error('API key not found')
+  if (doc.project_id !== project_id) throw new Error('Forbidden')
+
+  const now = new Date().toISOString()
+
+  await db.collection('nxf_system_apis').updateOne(
+    { api_id },
+    { $set: { status: 'revoked', revoked_at: now, updated_at: now } }
+  )
+
+  console.log(`[MongoAdapter] revokeApiKey — key ${api_id} revoked`)
+  return { success: true }
+}
+
+// ─── Storage ──────────────────────────────────────────────────────────────────
+// MongoDB has no built-in file storage.
+// Files are stored on the local filesystem or a cloud provider (S3/GCS).
+// The nxf_storage collection tracks metadata; actual files go to disk.
+// All signed URLs below are plain public paths — swap for S3 presigned
+// URLs when a cloud bucket is wired up.
+
+async listFolders(): Promise<string[]> {
+  try {
+    const db  = await this.getDb()
+    const docs = await db
+      .collection('nxf_storage')
+      .distinct('folder')
+
+    return (docs ?? []).filter(Boolean)
+  } catch {
+    console.error('[MongoAdapter] listFolders failed')
+    return []
+  }
+}
+
+async listFiles(folder: string): Promise<StorageFile[]> {
+  try {
+    const db  = await this.getDb()
+    const docs = await db
+      .collection('nxf_storage')
+      .find({ folder })
+      .toArray()
+
+    return docs.map((doc) => ({
+      id:         doc._id?.toString(),
+      name:       doc.file_name,
+      url:        doc.url,
+      size:       doc.size_label ?? '—',
+      mimeType:   doc.mime_type ?? 'application/octet-stream',
+      folder:     doc.folder,
+      folderPath: doc.file_path,
+      uploaded:   doc.created_at
+        ? new Date(doc.created_at).toLocaleDateString('en-GB', {
+            day:   '2-digit',
+            month: 'short',
+            year:  'numeric',
+          })
+        : '—',
+    }))
+  } catch {
+    console.error('[MongoAdapter] listFiles failed')
+    return []
+  }
+}
+
+async uploadFile(
+  folder:   string,
+  fileName: string,
+  buffer:   Buffer,
+  mimeType: string
+): Promise<string> {
+  console.log('[MongoAdapter] uploadFile started')
+
+  const fs   = require('fs')
+  const path = require('path')
+
+  // Write to local uploads directory — swap this block for S3/GCS in production
+  const uploadsDir = path.resolve(process.cwd(), 'uploads', folder)
+  fs.mkdirSync(uploadsDir, { recursive: true })
+
+  const filePath = path.join(uploadsDir, fileName)
+  fs.writeFileSync(filePath, buffer)
+
+  // Build a relative URL — serves via Next.js /uploads/ static route
+  const url = `/uploads/${folder}/${fileName}`
+
+  // Save metadata to nxf_storage
+  const db        = this.client.db(this._config.mongoDatabase)
+  const sizeBytes = buffer.length
+  const sizeLabel = sizeBytes > 1024 * 1024
+    ? `${(sizeBytes / (1024 * 1024)).toFixed(1)} MB`
+    : `${Math.round(sizeBytes / 1024)} KB`
+
+  await db.collection('nxf_storage').insertOne({
+    file_name:  fileName,
+    file_path:  `${folder}/${fileName}`,
+    folder,
+    url,
+    mime_type:  mimeType,
+    size_label: sizeLabel,
+    created_at: new Date().toISOString(),
+  })
+
+  return url
+}
+
+async deleteFile(folder: string, fileName: string): Promise<void> {
+  const fs   = require('fs')
+  const path = require('path')
+
+  const filePath = path.resolve(process.cwd(), 'uploads', folder, fileName)
+
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath)
+  }
+
+  // Remove metadata record
+const db  = await this.getDb()
+  await db.collection('nxf_storage').deleteOne({ file_path: `${folder}/${fileName}` })
+}
+
+async deleteFolder(folder: string): Promise<void> {
+  const fs   = require('fs')
+  const path = require('path')
+
+  const folderPath = path.resolve(process.cwd(), 'uploads', folder)
+
+  if (fs.existsSync(folderPath)) {
+    fs.rmSync(folderPath, { recursive: true, force: true })
+  }
+
+  // Remove all metadata records for this folder
+const db  = await this.getDb()
+  await db.collection('nxf_storage').deleteMany({ folder })
+}
+
+async createFolder(folder: string): Promise<void> {
+  const fs   = require('fs')
+  const path = require('path')
+
+  const folderPath = path.resolve(process.cwd(), 'uploads', folder)
+  fs.mkdirSync(folderPath, { recursive: true })
+
+  // Write a .keep sentinel so the folder persists in nxf_storage too
+  const keepPath = path.join(folderPath, '.keep')
+  if (!fs.existsSync(keepPath)) {
+    fs.writeFileSync(keepPath, '')
+  }
+}
+
+async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
+  const fs   = require('fs')
+  const path = require('path')
+
+  const oldPath = path.resolve(process.cwd(), 'uploads', folder, oldName)
+  const newPath = path.resolve(process.cwd(), 'uploads', folder, newName)
+
+  if (fs.existsSync(oldPath)) {
+    fs.renameSync(oldPath, newPath)
+  }
+
+ const db  = await this.getDb()
+  const url = `/uploads/${folder}/${newName}`
+
+  await db.collection('nxf_storage').updateOne(
+    { file_path: `${folder}/${oldName}` },
+    {
+      $set: {
+        file_name: newName,
+        file_path: `${folder}/${newName}`,
+        url,
+      },
+    }
+  )
+}
+
+async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
+  const fs   = require('fs')
+  const path = require('path')
+
+  const oldPath = path.resolve(process.cwd(), 'uploads', fromFolder, fileName)
+  const newDir  = path.resolve(process.cwd(), 'uploads', toFolder)
+  const newPath = path.join(newDir, fileName)
+
+  fs.mkdirSync(newDir, { recursive: true })
+
+  if (fs.existsSync(oldPath)) {
+    fs.renameSync(oldPath, newPath)
+  }
+
+  const db  = await this.getDb()
+  const url = `/uploads/${toFolder}/${fileName}`
+
+  await db.collection('nxf_storage').updateOne(
+    { file_path: `${fromFolder}/${fileName}` },
+    {
+      $set: {
+        folder:    toFolder,
+        file_path: `${toFolder}/${fileName}`,
+        url,
+      },
+    }
+  )
+}
+
+async importFromUrl(folder: string, url: string): Promise<StorageFile> {
+  const response = await fetch(url)
+  if (!response.ok) throw new Error(`Failed to fetch URL: ${url}`)
+
+  const buffer   = Buffer.from(await response.arrayBuffer())
+  const mimeType = response.headers.get('content-type') ?? 'application/octet-stream'
+  const ext      = mimeType.split('/')[1]?.split(';')[0] ?? 'bin'
+  const fileName = `imported_${Date.now()}.${ext}`
+
+  const signedUrl = await this.uploadFile(folder, fileName, buffer, mimeType)
+
+  return {
+    id:         `${folder}/${fileName}`,
+    name:       fileName,
+    url:        signedUrl,
+    size:       `${Math.round(buffer.length / 1024)} KB`,
+    mimeType,
+    folder,
+    folderPath: `${folder}/${fileName}`,
+    uploaded:   new Date().toLocaleDateString('en-GB', {
+      day:   '2-digit',
+      month: 'short',
+      year:  'numeric',
+    }),
+  }
+}
+
+async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
+  try {
+    console.log('[MongoAdapter] deleteStorageRecordByFilePath started')
+
+    const db  = await this.getDb()
+    await db.collection('nxf_storage').deleteOne({ file_path: filePath })
+
+    console.log('[MongoAdapter] deleteStorageRecordByFilePath completed')
+  } catch {
+    console.error('[MongoAdapter] deleteStorageRecordByFilePath failed')
+    throw new Error('Failed to delete storage record')
+  }
+}
+
+// ─── installDemoContent — folder order fix ────────────────────────────────────
+
+
 }

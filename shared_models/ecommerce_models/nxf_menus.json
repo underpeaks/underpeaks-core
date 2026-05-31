@@ -1,5 +1,5 @@
 {
-  "table_name": "nxf_menu",
+  "table_name": "nxf_menus",
   "schema": "public",
   "columns": [
     {

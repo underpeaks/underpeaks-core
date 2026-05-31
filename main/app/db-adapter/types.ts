@@ -192,7 +192,7 @@ export interface DBConfig {
   // Supabase
   serviceRoleKey?:    string;
   supabaseUrl?:       string;
-  supabaseKey?:       string;
+  anonKey?:   string;
 
   [key: string]:      any;
 }
@@ -716,7 +716,7 @@ export interface DBAdapter {
    *
    * @param projectId - The UUID of the project to create models for.
    */
-  createDataModels?(projectId: string): Promise<any>;
+ createDataModels?(projectId: string, selectedProjectType?: string): Promise<any>;
 
   // ─── CRUD ─────────────────────────────────────────────────────────────────
 
@@ -837,7 +837,7 @@ export interface DBAdapter {
    * @returns      The tenant record, or null if not found.
    */
   findTenantByUserEmail?(config: DBConfig, email: string): Promise<any | null>;
-
+ findTenantByUserID?(config: DBConfig, userID: string): Promise<any | null>;
   /**
    * createProject
    * Creates a new project record in the database and links it to a user.
@@ -848,7 +848,7 @@ export interface DBAdapter {
    */
   createProject?(
     config: DBConfig,
-    data: { name: string; user_id: string }
+    data: { name: string; user_id: string; tenant_ID: string }
   ): Promise<string>;
 
   /**

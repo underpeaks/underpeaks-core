@@ -72,6 +72,10 @@ export async function POST(req: Request) {
      * which fields it requires.
      */
     const config: DBConfig = await req.json()
+    
+console.log('[test-db-connection] Received config:', JSON.stringify(config, null, 2))  // <-- here
+
+
 
     // ── Resolve database adapter ───────────────────────────────────────────
 
@@ -108,22 +112,11 @@ export async function POST(req: Request) {
      */
     return NextResponse.json(result)
 
-  } catch {
-    /**
-     * Catch-all for unexpected errors such as:
-     * - JSON parse failure (malformed request body)
-     * - Unknown database type passed to getAdapter
-     * - testConnection throwing instead of returning a result
-     * - Network-level errors during the connection attempt
-     *
-     * We return a generic failure message rather than the raw error —
-     * error messages from database drivers often contain connection strings,
-     * hostnames, usernames, or internal driver details that should not be
-     * sent back to the client.
-     */
-    return NextResponse.json(
-      { success: false, message: 'Failed to connect to the database' },
-      { status: 500 }
-    )
-  }
+  } catch (err: any) {
+  console.error('[test-db-connection] Error:', err.message)
+  return NextResponse.json(
+    { success: false, message: err.message || 'Failed to connect to the database' },
+    { status: 500 }
+  )
+}
 }

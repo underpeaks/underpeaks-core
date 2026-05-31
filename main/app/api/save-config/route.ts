@@ -90,10 +90,6 @@ function getMissingFields(fields: Record<string, any>): string[] {
 
 export async function POST(req: Request) {
   try {
-    // -----------------------------------------------------------------------
-    // Parse request body
-    // -----------------------------------------------------------------------
-
     const {
       projectName,
       selectedStack,
@@ -105,20 +101,12 @@ export async function POST(req: Request) {
       branding = {},
     } = await req.json()
 
-    // -----------------------------------------------------------------------
-    // Validate selectedDb before anything else — client-supplied, never trust it
-    // -----------------------------------------------------------------------
-
     if (!VALID_DB_TYPES.includes(selectedDb)) {
       return NextResponse.json(
         { error: `Unsupported database type: ${selectedDb}` },
         { status: 400 }
       )
     }
-
-    // -----------------------------------------------------------------------
-    // Validate required fields
-    // -----------------------------------------------------------------------
 
     const requirePassword = !['supabase', 'firebase', 'mongodb', 'mysql', 'postgres']
       .includes(selectedDb)
@@ -153,12 +141,6 @@ export async function POST(req: Request) {
       )
     }
 
-    // -----------------------------------------------------------------------
-    // Initialise the database adapter
-    // NOTE: installer routes receive config in the request body — intentional.
-    // Do not replace with getConfiguredAdapter() here.
-    // -----------------------------------------------------------------------
-
     const adapter = getAdapter(selectedDb as DBType, dbConfig)
 
     if (!adapter.findUserByEmailWithRetry || !adapter.createAdminUser) {
@@ -170,9 +152,7 @@ export async function POST(req: Request) {
 
     console.log(`[save-config] Using adapter for db type: ${selectedDb}`)
 
-    // -----------------------------------------------------------------------
-    // Find or create the admin user
-    // -----------------------------------------------------------------------
+    // ── Find or create admin user ──────────────────────────────────────────
 
     let user = await adapter.findUserByEmailWithRetry(adapter.config, adminUser.email)
 
@@ -201,9 +181,22 @@ export async function POST(req: Request) {
 
     console.log('[save-config] Admin user resolved successfully')
 
-    // -----------------------------------------------------------------------
-    // Find or create the project
-    // -----------------------------------------------------------------------
+    // ── Find or create tenant — look up by email, not user ID ─────────────
+
+    let tenant = await adapter.findTenantByUserEmail?.(adapter.config, adminUser.email)
+    let tenantId = tenant?.ten_id || tenant?.id || null
+
+    if (!tenantId && adapter.createTenant) {
+      console.log('[save-config] Tenant not found — creating new tenant')
+      tenantId = await adapter.createTenant(adapter.config, {
+        subdomain:  adminUser.email.split('@')[0] || 'console',
+        user_email: adminUser.email,
+      })
+    }
+
+    console.log('[save-config] Tenant resolved:', tenantId)
+
+    // ── Find or create project ─────────────────────────────────────────────
 
     let project = await adapter.findProjectByOwnerId?.(adapter.config, userId)
 
@@ -211,8 +204,9 @@ export async function POST(req: Request) {
       console.log('[save-config] Project not found — creating new project')
 
       const projectId = await adapter.createProject!(adapter.config, {
-        name:    projectName || `${adminUser.full_name}'s Project`,
-        user_id: userId,
+        name:      projectName || `${adminUser.full_name}'s Project`,
+        user_id:   userId,
+        tenant_ID: tenantId ?? undefined,
       })
 
       project = { project_id: projectId }
@@ -221,9 +215,7 @@ export async function POST(req: Request) {
     const projectId = project.project_id || project.id
     console.log('[save-config] Project resolved successfully')
 
-    // -----------------------------------------------------------------------
-    // Encrypt the database config
-    // -----------------------------------------------------------------------
+    // ── Encrypt the database config ────────────────────────────────────────
 
     const createdAt      = new Date().toISOString()
     const configIdForKey = crypto.randomUUID()
@@ -233,9 +225,7 @@ export async function POST(req: Request) {
 
     console.log('[save-config] Database config encrypted')
 
-    // -----------------------------------------------------------------------
-    // Prepare branding defaults
-    // -----------------------------------------------------------------------
+    // ── Branding defaults ──────────────────────────────────────────────────
 
     const safeBranding = {
       logo_url:      branding?.logoUrl      || '',
@@ -243,14 +233,13 @@ export async function POST(req: Request) {
       primary_color: branding?.primaryColor || '#000000',
     }
 
-    // -----------------------------------------------------------------------
-    // Save the full installer config
-    // -----------------------------------------------------------------------
+    // ── Save installer config ──────────────────────────────────────────────
 
     console.log('[save-config] Saving installer config to database')
 
     const configId = await adapter.saveInstallerConfig!(adapter.config, {
       config_id:             configIdForKey,
+      tenant_id:             tenantId,
       project_id:            projectId,
       project_name:          projectName || `${adminUser.full_name}'s Project`,
       user_id:               userId,
@@ -277,11 +266,10 @@ export async function POST(req: Request) {
     console.log('[save-config] Installer config saved successfully')
 
     return NextResponse.json({
-      success:    true,
-      project_id: projectId,
-      config_id:  configId,
+      success:     true,
+      project_id:  projectId,
+      config_id:   configId,
       projectName: projectName || `${adminUser.full_name}'s Project`,
-
     })
 
   } catch (err: any) {

@@ -371,11 +371,11 @@ async function writeEnvFileFromObject(env: Record<string, any>): Promise<void> {
     lines.push(`NEXT_PUBLIC_SUPABASE_URL=${envSafe(ensureHttp(url))}`)
 
     if (env.anonKey) {
-      lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.anonKey)}`)
+      lines.push(`NEXT_PUBLIC_SUPABASE_ANON_KEY=${envSafe(env.anonKey)}`)
     }
 
-    if (env.serviceKey) {
-      lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.serviceKey)}`)
+    if (env.serviceRoleKey) {
+      lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.serviceRoleKey)}`)
     }
 
     if (env.storageUrl) {

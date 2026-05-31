@@ -1,77 +1,67 @@
 [
   {
     "api_id": "7f1c2d9a-1000-4b7a-a111-000000000001",
-    "project_id": "proj_001",
-    "name": "Marketplace Core API",
-    "base_path": "/api/v1/marketplace",
-    "version": "v1",
-    "schema": {
-      "products": "/products",
-      "orders": "/orders",
-      "vendors": "/vendors",
-      "customers": "/customers"
-    },
+    "project_id": "{{project_id}}",
+    "tenant_id": "{{tenant_id}}",
+    "name": "Production API Key",
+    "key_encrypted": "enc_placeholder_1",
+    "key_prefix": "nxf_live_prod_001",
+    "status": "active",
+    "last_used_at": "2026-05-01T08:00:00Z",
+    "revoked_at": null,
     "created_at": "2026-01-01T08:00:00Z",
     "updated_at": "2026-04-15T08:00:00Z"
   },
   {
     "api_id": "7f1c2d9a-1000-4b7a-a111-000000000002",
-    "project_id": "proj_001",
-    "name": "Authentication API",
-    "base_path": "/api/v1/auth",
-    "version": "v1",
-    "schema": {
-      "login": "/login",
-      "register": "/register",
-      "refresh": "/refresh-token",
-      "logout": "/logout"
-    },
+    "project_id": "{{project_id}}",
+    "tenant_id": "{{tenant_id}}",
+    "name": "Development API Key",
+    "key_encrypted": "enc_placeholder_2",
+    "key_prefix": "nxf_dev_test_002",
+    "status": "active",
+    "last_used_at": "2026-05-10T09:00:00Z",
+    "revoked_at": null,
     "created_at": "2026-01-02T08:00:00Z",
     "updated_at": "2026-04-15T09:00:00Z"
   },
   {
     "api_id": "7f1c2d9a-1000-4b7a-a111-000000000003",
-    "project_id": "proj_001",
-    "name": "Vendor Management API",
-    "base_path": "/api/v1/vendors",
-    "version": "v1",
-    "schema": {
-      "profile": "/profile",
-      "products": "/products",
-      "payouts": "/payouts",
-      "analytics": "/analytics"
-    },
+    "project_id": "{{project_id}}",
+    "tenant_id": "{{tenant_id}}",
+    "name": "Staging API Key",
+    "key_encrypted": "enc_placeholder_3",
+    "key_prefix": "nxf_stg_test_003",
+    "status": "active",
+    "last_used_at": null,
+    "revoked_at": null,
     "created_at": "2026-01-05T08:00:00Z",
     "updated_at": "2026-04-14T10:00:00Z"
   },
   {
     "api_id": "7f1c2d9a-1000-4b7a-a111-000000000004",
-    "project_id": "proj_001",
-    "name": "Order Processing API",
-    "base_path": "/api/v1/orders",
-    "version": "v1",
-    "schema": {
-      "create": "/create",
-      "update_status": "/status",
-      "cancel": "/cancel",
-      "track": "/track"
-    },
+    "project_id": "{{project_id}}",
+    "tenant_id": "{{tenant_id}}",
+    "name": "Mobile App Key",
+    "key_encrypted": "enc_placeholder_4",
+    "key_prefix": "nxf_mob_app_004",
+    "status": "active",
+    "last_used_at": "2026-05-15T07:30:00Z",
+    "revoked_at": null,
     "created_at": "2026-01-08T08:00:00Z",
     "updated_at": "2026-04-15T07:30:00Z"
   },
   {
     "api_id": "7f1c2d9a-1000-4b7a-a111-000000000005",
-    "project_id": "proj_001",
-    "name": "System Analytics API",
-    "base_path": "/api/v1/system",
-    "version": "v1",
-    "schema": {
-      "activity_logs": "/logs",
-      "events": "/events",
-      "metrics": "/metrics",
-      "health": "/health"
-    },
+    "project_id": "{{project_id}}",
+    "tenant_id": "{{tenant_id}}",
+    "name": "Revoked Legacy Key",
+    "key_encrypted": "enc_placeholder_5",
+    "key_prefix": "nxf_old_leg_005",
+    "status": "revoked",
+    "last_used_at": "2026-03-01T06:45:00Z",
+    "revoked_at": "2026-03-15T00:00:00Z",
     "created_at": "2026-01-10T08:00:00Z",
-    "updated_at": "2026-04-15T06:45:00Z"
+    "updated_at": "2026-03-15T00:00:00Z"
   }
 ]

@@ -247,7 +247,7 @@ const DATABASES: DatabaseDefinition[] = [
         },
       },
       {
-        key:         'serviceKey',
+        key:         'serviceRoleKey',
         label:       'Supabase Service Key',
         placeholder: 'eyJhbGciOiJIUzI1NiIsInR...',
         info: {
@@ -532,70 +532,68 @@ export default function DatabaseConfigPage() {
    * Sets connectionSucceeded = true on full success, enabling "Continue".
    */
   async function handleTestConnection(): Promise<void> {
-    setLoading(true);
-    loadingRef.current = true;
-    setConnectionSucceeded(false);
+  setLoading(true)
+  loadingRef.current = true
+  setConnectionSucceeded(false)
 
-    // Initialise all four steps as pending
-    setTestSteps([
-      { label: t('testSteps.validating'),  status: 'pending' },
-      { label: t('testSteps.sending'),     status: 'pending' },
-      { label: t('testSteps.testing'),     status: 'pending' },
-      { label: t('testSteps.finalizing'),  status: 'pending' },
-    ]);
+  setTestSteps([
+    { label: t('testSteps.validating'), status: 'pending' },
+    { label: t('testSteps.sending'),    status: 'pending' },
+    { label: t('testSteps.testing'),    status: 'pending' },
+    { label: t('testSteps.finalizing'), status: 'pending' },
+  ])
 
-    try {
-      // Step 0 — client-side validation passes immediately
-      setTestSteps((s) =>
-        s.map((x, i) => (i === 0 ? { ...x, status: 'success' } : x))
-      );
+  try {
+    setTestSteps((s) =>
+      s.map((x, i) => (i === 0 ? { ...x, status: 'success' } : x))
+    )
 
-      // Build the config payload, handling Firebase separately
-      let dbConfigToSend: any;
+    let dbConfigToSend: any
 
-      if (selectedDb === 'firebase') {
-        const webConfig = parseFirebaseConfig(formData['firebaseWebConfig'] || '');
-        dbConfigToSend = {
-          type:               'firebase',
-          firebaseConfigJson: formData['firebaseConfigJson'],
-          firebaseDbType,
-          storageBucket:      webConfig.storageBucket || undefined,
-          firebaseWebConfig:  webConfig,
-        };
-      } else {
-        dbConfigToSend = { type: selectedDb, ...formData };
+    if (selectedDb === 'firebase') {
+      const webConfig = parseFirebaseConfig(formData['firebaseWebConfig'] || '')
+      dbConfigToSend = {
+        type:               'firebase',
+        firebaseConfigJson: formData['firebaseConfigJson'],
+        firebaseDbType,
+        storageBucket:      webConfig.storageBucket || undefined,
+        firebaseWebConfig:  webConfig,
       }
-
-      const response = await fetch('/api/test-db-connection', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(dbConfigToSend),
-      });
-
-      if (!response.ok) throw new Error(t('errors.serverRejected'));
-
-      const result = await response.json();
-      if (!result.success) throw new Error(result.error);
-
-      // Steps 1–3 all succeed together once the server confirms the connection
-      setTestSteps((s) =>
-        s.map((x, i) => (i >= 1 ? { ...x, status: 'success' } : x))
-      );
-      setConnectionSucceeded(true);
-
-    } catch (err: any) {
-      // Mark step 2 (the DB connection step) as the failure point
-      setTestSteps((s) =>
-        s.map((x, i) =>
-          i === 2 ? { ...x, status: 'error', errorMessage: err.message } : x
-        )
-      );
-    } finally {
-      setLoading(false);
-      loadingRef.current = false;
+    } else {
+      dbConfigToSend = { type: selectedDb, ...formData }
     }
-  }
 
+    const response = await fetch('/api/test-db-connection', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(dbConfigToSend),
+    })
+
+    if (!response.ok) throw new Error(t('errors.serverRejected'))
+
+    const result = await response.json()
+
+    // Read error or message — adapters may return either key
+    if (!result.success) {
+      throw new Error(result.error || result.message || 'Connection failed')
+    }
+
+    setTestSteps((s) =>
+      s.map((x, i) => (i >= 1 ? { ...x, status: 'success' } : x))
+    )
+    setConnectionSucceeded(true)
+
+  } catch (err: any) {
+    setTestSteps((s) =>
+      s.map((x, i) =>
+        i === 2 ? { ...x, status: 'error', errorMessage: err.message } : x
+      )
+    )
+  } finally {
+    setLoading(false)
+    loadingRef.current = false
+  }
+}
   /**
    * handleContinue
    *

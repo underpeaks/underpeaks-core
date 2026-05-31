@@ -10,16 +10,33 @@ export async function GET(req: NextRequest) {
     const adapter  = getConfiguredAdapter();
     const dbConfig = adapter.config;
 
-    const [users, pages, models, menuItems, mediaFiles, activityLogs, projects] =
-      await Promise.all([
-        adapter.readAll!(dbConfig, 'nxf_users'),
-        adapter.readAll!(dbConfig, 'nxf_pages'),
-        adapter.readAll!(dbConfig, 'nxf_system_models'),
-        adapter.readAll!(dbConfig, 'nxf_menu'),
-        adapter.readAll!(dbConfig, 'nxf_storage'),
-        adapter.readAll!(dbConfig, 'nxf_system_activity_logs'),
-        adapter.readAll!(dbConfig, 'nxf_system_projects'),
-      ]);
+    // Supabase and Firebase support concurrent queries safely.
+    // Postgres and MySQL use a single shared client — concurrent queries
+    // deadlock. Run sequentially for those adapters.
+    const isSequential = dbConfig.type === 'postgres' || dbConfig.type === 'mysql'
+
+    let users, pages, models, menuItems, mediaFiles, activityLogs, projects
+
+    if (isSequential) {
+      users        = await adapter.readAll!(dbConfig, 'nxf_users')
+      pages        = await adapter.readAll!(dbConfig, 'nxf_pages')
+      models       = await adapter.readAll!(dbConfig, 'nxf_system_models')
+      menuItems    = await adapter.readAll!(dbConfig, 'nxf_menus')
+      mediaFiles   = await adapter.readAll!(dbConfig, 'nxf_storage')
+      activityLogs = await adapter.readAll!(dbConfig, 'nxf_system_activity_logs')
+      projects     = await adapter.readAll!(dbConfig, 'nxf_system_projects')
+    } else {
+      ;[users, pages, models, menuItems, mediaFiles, activityLogs, projects] =
+        await Promise.all([
+          adapter.readAll!(dbConfig, 'nxf_users'),
+          adapter.readAll!(dbConfig, 'nxf_pages'),
+          adapter.readAll!(dbConfig, 'nxf_system_models'),
+          adapter.readAll!(dbConfig, 'nxf_menus'),
+          adapter.readAll!(dbConfig, 'nxf_storage'),
+          adapter.readAll!(dbConfig, 'nxf_system_activity_logs'),
+          adapter.readAll!(dbConfig, 'nxf_system_projects'),
+        ])
+    }
 
     const project = projects[0] ?? null;
 

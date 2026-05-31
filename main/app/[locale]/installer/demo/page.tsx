@@ -1,26 +1,3 @@
-/**
- * DemoPage Component
- *
- * This is the Demo Content step of the NXTFlutter installer wizard.
- * It is shown after the user has completed earlier installer steps and
- * before they reach the final "Finalise" step.
- *
- * What this page does:
- * - Lets the user select a project type from a list of templates
- *   (e.g. E-commerce, Marketplace, Blog, Blank, etc.).
- * - Each project type shows a short description of what it includes.
- * - For non-blank project types, shows a "Setup Demo Content" card where
- *   the user can opt in to having sample data pre-loaded into their project.
- * - For the E-commerce project type specifically, shows a detailed bullet
- *   list of what demo content will be installed.
- * - On "Continue", saves the selected project type and demo preference to
- *   the installer store, then navigates to the /installer/finalise step.
- *
- * Installer store:
- * - `demoContentEnabled`  — Whether the user wants demo content installed.
- * - `selectedProjectType` — The ID of the chosen project template.
- */
-
 'use client'
 
 import { useState }            from 'react'
@@ -29,76 +6,48 @@ import { useTranslations }     from 'next-intl'
 import { Button }              from '@/components/ui/button'
 import { Checkbox }            from '@/components/ui/checkbox'
 import { Label }               from '@/components/ui/label'
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-}                              from '@/components/ui/card'
 import { Loader2 }             from 'lucide-react'
 import { useInstallerStore }   from '../../../store/useInstallerStore'
 import LocaleSwitcher          from '@/core/LocaleSwitcher'
+import {
+  FiShoppingCart,
+  FiGrid,
+  FiList,
+  FiFileText,
+  FiUsers,
+  FiCpu,
+  FiBox,
+} from 'react-icons/fi'
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
+type ProjectType =
+  | 'ecommerce'
+  | 'marketplace'
+  | 'listing'
+  | 'blog'
+  | 'social'
+  | 'saas'
+  | 'blank'
 
-/**
- * DemoPage
- *
- * The project type and demo content selection step of the installer.
- *
- * State managed here:
- * - `installDemo`       — Whether the user has checked "Include demo content".
- * - `loading`           — Whether the continue button is in its loading state.
- * - `selectedProject`   — The currently selected project template ID.
- */
+const PROJECT_ICONS: Record<ProjectType, React.ReactNode> = {
+  ecommerce:   <FiShoppingCart size={18} />,
+  marketplace: <FiGrid        size={18} />,
+  listing:     <FiList        size={18} />,
+  blog:        <FiFileText    size={18} />,
+  social:      <FiUsers       size={18} />,
+  saas:        <FiCpu         size={18} />,
+  blank:       <FiBox         size={18} />,
+}
+
 export default function DemoPage() {
-  /**
-   * t — Translation function scoped to the 'demoPage' namespace.
-   * Use t('key') to get the translated string for that key.
-   */
-  const t = useTranslations('demoPage')
-
-  /**
-   * router — Next.js router used to navigate to the next installer step.
-   */
-  const router = useRouter()
-
-  /**
-   * setInstallerValue — Function from the installer store used to save
-   * the user's selections so they are available in later installer steps.
-   */
+  const t               = useTranslations('demoPage')
+  const router          = useRouter()
   const setInstallerValue = useInstallerStore((s) => s.setInstallerValue)
 
-  // -------------------------------------------------------------------------
-  // State
-  // -------------------------------------------------------------------------
+  const [installDemo,     setInstallDemo]     = useState(false)
+  const [loading,         setLoading]         = useState(false)
+  const [selectedProject, setSelectedProject] = useState<ProjectType>('blank')
 
-  /** Whether the user has opted in to installing demo content. */
-  const [installDemo,       setInstallDemo]       = useState(false)
-
-  /** Whether the continue action is in progress (shows spinner). */
-  const [loading,           setLoading]           = useState(false)
-
-  /**
-   * The currently selected project type ID.
-   * Defaults to 'blank' so the user starts with no template selected.
-   */
-  const [selectedProject,   setSelectedProject]   = useState<string>('blank')
-
-  // -------------------------------------------------------------------------
-  // Static data
-  // -------------------------------------------------------------------------
-
-  /**
-   * projectOptions
-   *
-   * The list of project type choices shown as radio-style cards.
-   * Each has a value (ID) and a translated label with an emoji prefix.
-   */
-  const projectOptions = [
+  const projectOptions: { value: ProjectType; label: string }[] = [
     { value: 'ecommerce',   label: t('projects.ecommerce.label')   },
     { value: 'marketplace', label: t('projects.marketplace.label') },
     { value: 'listing',     label: t('projects.listing.label')     },
@@ -108,13 +57,7 @@ export default function DemoPage() {
     { value: 'blank',       label: t('projects.blank.label')       },
   ]
 
-  /**
-   * projectDescriptions
-   *
-   * A map from project type ID to a translated short description.
-   * Shown below each project option label to help the user decide.
-   */
-  const projectDescriptions: Record<string, string> = {
+  const projectDescriptions: Record<ProjectType, string> = {
     ecommerce:   t('projects.ecommerce.description'),
     marketplace: t('projects.marketplace.description'),
     listing:     t('projects.listing.description'),
@@ -124,86 +67,47 @@ export default function DemoPage() {
     blank:       t('projects.blank.description'),
   }
 
-  // -------------------------------------------------------------------------
-  // Handlers
-  // -------------------------------------------------------------------------
-
-  /**
-   * handleNext
-   *
-   * Called when the user clicks "Continue".
-   *
-   * Steps:
-   * 1. Shows the loading spinner on the button.
-   * 2. Saves `demoContentEnabled` and `selectedProjectType` to the
-   *    installer store so the finalise step can read them.
-   * 3. After a short delay (1 second), navigates to /installer/finalise.
-   *
-   * The delay gives the user visual feedback that something is happening
-   * before the page transitions.
-   */
   const handleNext = () => {
     setLoading(true)
-    console.log(t('logs.navigatingToFinalise'))
-
     setInstallerValue('demoContentEnabled',  installDemo)
     setInstallerValue('selectedProjectType', selectedProject)
-
-    setTimeout(() => {
-      router.push('/installer/finalise')
-    }, 1000)
+    setTimeout(() => router.push('/installer/finalise'), 1000)
   }
 
-  /**
-   * showDemoCard
-   *
-   * Controls whether the "Setup Demo Content" card is shown.
-   * Hidden when "Blank Project" is selected because a blank project
-   * has no demo content to offer.
-   */
   const showDemoCard = selectedProject !== 'blank'
 
-  // -------------------------------------------------------------------------
-  // Render
-  // -------------------------------------------------------------------------
-
   return (
-    <div className="max-w-2xl mx-auto px-4 py-10 space-y-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-6 py-12">
 
-      {/* ------------------------------------------------------------------
-        * Locale switcher — fixed in the top-right corner so the user can
-        * change language at any point during the installer.
-        * ------------------------------------------------------------------ */}
+      {/* Locale switcher */}
       <div className="fixed top-4 right-4 z-50">
         <LocaleSwitcher />
       </div>
 
-      {/* ------------------------------------------------------------------
-        * Page header — logo and tagline
-        * ------------------------------------------------------------------ */}
+      {/* Header */}
       <header className="mb-8 text-center flex flex-col items-center">
         <img
           src="/images/logo/NXT_Flutter_logo.png"
           alt={t('logoAlt')}
           className="h-16 w-auto mb-4"
         />
-        <p className="text-xl text-gray-700">
-          {t('tagline')}
-        </p>
+        <p className="text-xl text-gray-700">{t('tagline')}</p>
       </header>
 
-      {/* ------------------------------------------------------------------
-        * Project Type Card
-        * Radio-style list of project templates. Clicking any row selects it.
-        * The active row gets a black border and a light background.
-        * ------------------------------------------------------------------ */}
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('projectType.title')}</CardTitle>
-          <CardDescription>{t('projectType.description')}</CardDescription>
-        </CardHeader>
+      {/* Main card */}
+      <div className="w-full max-w-md p-8 bg-gray-50 rounded-2xl shadow-xl border space-y-6">
 
-        <CardContent className="space-y-1">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">
+            {t('projectType.title')}
+          </h2>
+          <p className="text-sm text-gray-500 mt-1">
+            {t('projectType.description')}
+          </p>
+        </div>
+
+        {/* Project type options — same pattern as RadioGroup in stack page */}
+        <div className="space-y-2">
           {projectOptions.map((option) => {
             const isActive = selectedProject === option.value
             return (
@@ -211,71 +115,71 @@ export default function DemoPage() {
                 key={option.value}
                 onClick={() => setSelectedProject(option.value)}
                 className={`
-                  flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition
+                  flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all
                   ${isActive
-                    ? 'border-black bg-gray-50'
-                    : 'border-gray-200 hover:border-gray-400'
+                    ? 'border-gray-900 bg-white shadow-sm'
+                    : 'border-gray-200 hover:border-gray-400 bg-white'
                   }
                 `}
               >
-                {/* Radio input — read-only, visual state driven by `isActive` */}
-                <input
-                  type="radio"
-                  name="projectType"
-                  checked={isActive}
-                  readOnly
-                  className="mt-1 h-4 w-4 accent-black bg-white border-gray-400"
-                />
+                {/* Radio dot — matches RadioGroupItem visual */}
+                <div className={`
+                  mt-0.5 flex-shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center
+                  ${isActive ? 'border-gray-900' : 'border-gray-400'}
+                `}>
+                  {isActive && (
+                    <div className="w-2 h-2 rounded-full bg-gray-900" />
+                  )}
+                </div>
 
-                {/* Project label and description */}
-                <div className="flex flex-col">
-                  <span className="text-base font-medium">
+                {/* Greyscale icon */}
+                <div className={`
+                  mt-0.5 flex-shrink-0
+                  ${isActive ? 'text-gray-900' : 'text-gray-400'}
+                `}>
+                  {PROJECT_ICONS[option.value]}
+                </div>
+
+                {/* Label + description */}
+                <div className="flex flex-col min-w-0">
+                  <span className={`text-sm font-semibold ${isActive ? 'text-gray-900' : 'text-gray-700'}`}>
                     {option.label}
                   </span>
-                  <span className="text-sm text-gray-500 mt-1">
+                  <span className="text-xs text-gray-500 mt-0.5 leading-relaxed">
                     {projectDescriptions[option.value]}
                   </span>
                 </div>
               </div>
             )
           })}
-        </CardContent>
-      </Card>
+        </div>
 
-      {/* ------------------------------------------------------------------
-        * Demo Content Card
-        * Only shown when a non-blank project type is selected.
-        * Lets the user opt in to sample data being pre-loaded.
-        * For E-commerce, shows a detailed bullet list of what's included.
-        * ------------------------------------------------------------------ */}
-      {showDemoCard && (
-        <Card>
-          <CardHeader>
-            <CardTitle>{t('demoContent.title')}</CardTitle>
-            <CardDescription>{t('demoContent.description')}</CardDescription>
-          </CardHeader>
+        {/* Demo content opt-in — only shown for non-blank projects */}
+        {showDemoCard && (
+          <div className="border border-gray-200 rounded-xl p-4 bg-white space-y-3">
+            <div>
+              <p className="text-sm font-semibold text-gray-900">
+                {t('demoContent.title')}
+              </p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                {t('demoContent.description')}
+              </p>
+            </div>
 
-          <CardContent className="space-y-6">
-
-            {/* Demo content checkbox */}
-            <div className="flex items-start gap-3">
+            <div className="flex items-center gap-3">
               <Checkbox
                 id="demoData"
                 checked={installDemo}
                 onCheckedChange={(checked) => setInstallDemo(!!checked)}
               />
-              <Label htmlFor="demoData" className="font-medium">
+              <Label htmlFor="demoData" className="text-sm font-medium text-gray-700 cursor-pointer">
                 {t('demoContent.checkboxLabel')}
               </Label>
             </div>
 
-            {/*
-             * E-commerce demo content detail list
-             * Only shown when demo is enabled AND ecommerce is selected.
-             * Lists exactly what sample data will be installed.
-             */}
+            {/* E-commerce detail list */}
             {installDemo && selectedProject === 'ecommerce' && (
-              <ul className="text-sm text-gray-600 list-disc pl-6 space-y-1">
+              <ul className="text-xs text-gray-500 list-disc pl-5 space-y-1">
                 <li>{t('demoContent.ecommerce.item1')}</li>
                 <li>{t('demoContent.ecommerce.item2')}</li>
                 <li>{t('demoContent.ecommerce.item3')}</li>
@@ -283,21 +187,20 @@ export default function DemoPage() {
                 <li>{t('demoContent.ecommerce.item5')}</li>
               </ul>
             )}
-          </CardContent>
-        </Card>
-      )}
+          </div>
+        )}
 
-      {/* ------------------------------------------------------------------
-        * Continue Button
-        * Full-width, right-aligned. Shows a spinner while loading.
-        * ------------------------------------------------------------------ */}
-      <div className="flex justify-end pt-2">
-        <Button onClick={handleNext} disabled={loading} className="w-full">
-          {loading && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
-          {loading ? t('continueButtonLoading') : t('continueButtonIdle')}
-        </Button>
+        {/* Continue button */}
+        <div className="pt-2">
+          <Button className="w-full" onClick={handleNext} disabled={loading}>
+            {loading
+              ? <Loader2 className="animate-spin h-5 w-5" />
+              : t('continueButtonIdle')
+            }
+          </Button>
+        </div>
+
       </div>
-
     </div>
   )
 }

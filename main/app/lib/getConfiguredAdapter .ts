@@ -170,7 +170,8 @@ export function getConfiguredAdapter() {
     dbConfig = {
       type:        'supabase',
       supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      anonKey:     process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY!,
+      serviceRoleKey: process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY,
+      anonKey:     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     }
 
   // -------------------------------------------------------------------------
@@ -188,7 +189,7 @@ export function getConfiguredAdapter() {
     dbConfig = {
       type:             'mongodb',
       connectionString: process.env.NEXT_DB_MONGO_URI!,
-      database:         process.env.NEXT_DB_MONGO_DB_NAME!,
+      databaseName:         process.env.NEXT_DB_MONGO_DB_NAME!,
     }
 
   // -------------------------------------------------------------------------

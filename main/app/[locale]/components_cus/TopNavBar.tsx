@@ -104,6 +104,7 @@ export default function TopNavbar({ user: propUser, logoUrl, projectName }: TopN
     // If no token is present, the user is not logged in — skip the fetch.
     // ⚠️ Never log this token value.
     const token = localStorage.getItem('authToken')
+    
     if (!token) return
 
     // Build the auth header — this is the only place the token is used
@@ -122,6 +123,8 @@ export default function TopNavbar({ user: propUser, logoUrl, projectName }: TopN
 
       const notifData = await notifRes.json()
       const msgData   = await msgRes.json()
+
+      console.log(notifData);
 
       // Only update state if the expected data shape is present in the response
       if (notifData.notifications) setNotifications(notifData.notifications)

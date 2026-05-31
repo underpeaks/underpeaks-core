@@ -1,16 +1,11 @@
-// app/api/sessions/route.ts
-
 import { NextRequest, NextResponse } from 'next/server'
 import mysql                         from 'mysql2/promise'
-import { Client as PgClient }        from 'pg'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
 
 export async function POST(req: NextRequest) {
   console.log('[Sessions API] Request received')
 
   try {
-    // ── Parse body + token fallback ─────────────────────────────────────────
-
     const body = await req.json().catch(() => ({}))
     let { token, refreshToken } = body
 
@@ -26,19 +21,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ user: null, error: 'Token is required' }, { status: 401 })
     }
 
-    // ── Resolve adapter ─────────────────────────────────────────────────────
-    // getConfiguredAdapter reads NEXT_PUBLIC_DB_TYPE — the bug was NEXT_DB_TYPE
-    // (missing PUBLIC) which returned undefined and caused the login loop.
-
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
     const dbType   = dbConfig.type
 
     console.log('[Sessions API] Using DB type:', dbType)
 
-    // ── MySQL connection test ───────────────────────────────────────────────
-    // Kept from original — verifies DB is reachable before proceeding.
-
+    // ── MySQL connection test ─────────────────────────────────────────────
     if (dbType === 'mysql') {
       const conn: mysql.Connection = await Promise.race([
         mysql.createConnection({
@@ -56,28 +45,7 @@ export async function POST(req: NextRequest) {
       console.log('[Sessions API] MySQL connection OK')
     }
 
-    // ── PostgreSQL connection test ──────────────────────────────────────────
-
-    if (dbType === 'postgres') {
-      const client = new PgClient({
-        host:     dbConfig.host,
-        port:     Number(dbConfig.port ?? 5432),
-        user:     dbConfig.user,
-        password: dbConfig.password,
-        database: dbConfig.database,
-      })
-      await Promise.race([
-        client.connect(),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Postgres connection timeout')), 5000)
-        ),
-      ])
-      await client.end()
-      console.log('[Sessions API] Postgres connection OK')
-    }
-
-    // ── Firebase ────────────────────────────────────────────────────────────
-
+    // ── Firebase ──────────────────────────────────────────────────────────
     if (dbType === 'firebase') {
       try {
         console.log('[Sessions API] Validating Firebase ID token...')
@@ -91,7 +59,6 @@ export async function POST(req: NextRequest) {
 
         console.log('[Sessions API] Firebase token valid')
 
-        // getUserById takes (uid) only — not (config, uid)
         const result = await adapter.getUserById?.(decoded.uid)
 
         if (!result?.user) {
@@ -99,7 +66,6 @@ export async function POST(req: NextRequest) {
           return NextResponse.json({ user: null, error: 'User profile not found' }, { status: 404 })
         }
 
-        // CMS-level status check — suspended/disabled blocks even with valid token
         if (adapter.checkUserStatus) {
           const statusCheck = await adapter.checkUserStatus(dbConfig, decoded.uid)
           if (!statusCheck.allowed) {
@@ -116,10 +82,12 @@ export async function POST(req: NextRequest) {
             email:          decoded.email ?? result.user.user_email,
             user_id:        result.user.user_id,
             user_email:     result.user.user_email,
-            full_name:      result.user.full_name,
-            role:           result.user.role,
-            status:         result.user.status,
+            full_name:      result.user.full_name      ?? null,
+            role:           result.user.role           ?? null,
+            status:         result.user.status         ?? null,
             avatar_url:     result.user.avatar_url     ?? null,
+            is_logged_in:   result.user.is_logged_in   ?? false,
+            last_login:     result.user.last_login      ?? null,
             email_verified: result.user.email_verified ?? false,
             created_at:     result.user.created_at     ?? null,
           }
@@ -131,33 +99,29 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    // ── Supabase ────────────────────────────────────────────────────────────
-    // Supabase needs a live client instance for session refresh.
-    // getConfiguredAdapter only sets supabaseUrl + anonKey, so we create
-    // the client here and inject it for the refresh call.
-
+    // ── Supabase ──────────────────────────────────────────────────────────
     if (dbType === 'supabase') {
       const isJwt = token.split('.').length === 3
-      let user: any = null
+      let authUser: any = null
 
       if (isJwt) {
-        user = await adapter.validateBuiltInSession?.(dbConfig, token)
+        authUser = await adapter.validateBuiltInSession?.(dbConfig, token)
         console.log('[Sessions API] Supabase built-in session validated')
       }
 
-      if (!user && refreshToken) {
+      if (!authUser && refreshToken) {
         try {
           console.log('[Sessions API] Attempting Supabase token refresh...')
           const { createClient } = await import('@supabase/supabase-js')
           const supabase = createClient(
             dbConfig.supabaseUrl!,
-            dbConfig.anonKey ?? dbConfig.supabaseKey!
+            dbConfig.anonKey ?? dbConfig.serviceRoleKey!
           )
           const { data, error } = await supabase.auth.refreshSession({
             refresh_token: refreshToken,
           })
           if (!error && data?.session) {
-            user = data.session.user
+            authUser = data.session.user
             console.log('[Sessions API] Supabase token refresh successful')
           }
         } catch (e) {
@@ -165,19 +129,66 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      if (!user) {
+      if (!authUser) {
+        console.warn('[Sessions API] Supabase auth failed — no valid token or refresh')
         return NextResponse.json(
           { user: null, error: 'Invalid or expired session' },
           { status: 401 }
         )
       }
 
-      return NextResponse.json({ user })
+      try {
+        const { createClient } = await import('@supabase/supabase-js')
+        const supabase = createClient(
+          dbConfig.supabaseUrl!,
+          dbConfig.serviceRoleKey ?? dbConfig.anonKey!
+        )
+
+        const { data: nxfUser, error: profileError } = await supabase
+          .from('nxf_users')
+          .select('*')
+          .eq('user_id', authUser.id)
+          .single()
+
+        if (profileError || !nxfUser) {
+          console.error(
+            '[Sessions API] nxf_users profile not found for id:',
+            authUser.id,
+            profileError?.message
+          )
+          return NextResponse.json(
+            { user: null, error: 'User profile not found' },
+            { status: 404 }
+          )
+        }
+
+        return NextResponse.json({
+          user: {
+            uid:            authUser.id,
+            user_id:        nxfUser.user_id,
+            email:          authUser.email    ?? nxfUser.user_email,
+            user_email:     nxfUser.user_email,
+            full_name:      nxfUser.full_name      ?? null,
+            role:           nxfUser.role           ?? null,
+            status:         nxfUser.status         ?? null,
+            avatar_url:     nxfUser.avatar_url     ?? null,
+            is_logged_in:   nxfUser.is_logged_in   ?? false,
+            last_login:     nxfUser.last_login      ?? null,
+            created_at:     nxfUser.created_at     ?? null,
+            email_verified: authUser.email_confirmed_at ? true : false,
+          }
+        })
+
+      } catch (err: any) {
+        console.error('[Sessions API] Failed to fetch nxf_users profile:', err.message)
+        return NextResponse.json(
+          { user: null, error: 'Failed to load user profile' },
+          { status: 500 }
+        )
+      }
     }
 
-    // ── Custom token flow (MongoDB / MySQL / PostgreSQL) ────────────────────
-    // Tokens stored in the database token store.
-    // Wrapped in a 3-second timeout to prevent hanging on slow DB connections.
+    // ── Custom token flow (MongoDB / MySQL / PostgreSQL) ──────────────────
 
     if (!adapter.findTokenByAccessToken) {
       throw new Error(`${dbType} adapter does not implement findTokenByAccessToken`)
@@ -199,17 +210,24 @@ export async function POST(req: NextRequest) {
       } else if (storedToken.revoked) {
         console.warn('[Sessions API] Token has been revoked')
 
-      } else if (new Date(storedToken.expires_at) < new Date()) {
+      } else if (new Date(storedToken.expires_at).getTime() < Date.now()) {
         console.log('[Sessions API] Access token expired, checking refresh token...')
+        console.log('[Sessions API] expires_at raw value:', storedToken.expires_at)
+        console.log('[Sessions API] expires_at parsed:', new Date(storedToken.expires_at))
+        console.log('[Sessions API] now:', new Date())
 
-        if (refreshToken && adapter.findTokenByRefreshToken && adapter.extendToken) {
+        if (!refreshToken) {
+          console.warn('[Sessions API] No refresh token provided by client — cannot extend session')
+        } else if (adapter.findTokenByRefreshToken && adapter.extendToken) {
           const refresh = await adapter.findTokenByRefreshToken(refreshToken)
 
-          if (
-            refresh &&
-            !refresh.revoked &&
-            new Date(refresh.refresh_expires_at) > new Date()
-          ) {
+          if (!refresh) {
+            console.warn('[Sessions API] Refresh token not found in DB')
+          } else if (refresh.revoked) {
+            console.warn('[Sessions API] Refresh token has been revoked')
+          } else if (new Date(refresh.refresh_expires_at).getTime() <= Date.now()) {
+            console.warn('[Sessions API] Refresh token expired — refresh_expires_at:', refresh.refresh_expires_at)
+          } else {
             console.log('[Sessions API] Refresh token valid, extending access token')
             const newExpiry = new Date(Date.now() + 60 * 60 * 1000).toISOString()
             await adapter.extendToken(refresh.token_id, {
@@ -217,8 +235,6 @@ export async function POST(req: NextRequest) {
               updated_at: new Date().toISOString(),
             })
             user = { user_id: refresh.user_id }
-          } else {
-            console.warn('[Sessions API] Refresh token invalid or expired')
           }
         }
 
@@ -237,6 +253,30 @@ export async function POST(req: NextRequest) {
         { user: null, error: 'Invalid or expired session' },
         { status: 401 }
       )
+    }
+
+    // ── Fetch full user profile from nxf_users ────────────────────────────
+    try {
+      const allUsers = await adapter.readAll!(dbConfig, 'nxf_users')
+      const fullUser = allUsers.find((u: any) => u.user_id === user.user_id)
+
+      if (fullUser) {
+        user = {
+          user_id:        fullUser.user_id,
+          user_email:     fullUser.user_email,
+          email:          fullUser.user_email,
+          full_name:      fullUser.full_name      ?? null,
+          role:           fullUser.role           ?? null,
+          status:         fullUser.status         ?? null,
+          avatar_url:     fullUser.avatar_url     ?? null,
+          is_logged_in:   fullUser.is_logged_in   ?? false,
+          last_login:     fullUser.last_login      ?? null,
+          created_at:     fullUser.created_at     ?? null,
+          email_verified: fullUser.email_verified ?? false,
+        }
+      }
+    } catch (err: any) {
+      console.error('[Sessions API] Failed to fetch full user profile:', err.message)
     }
 
     console.log('[Sessions API] Session valid — returning user')

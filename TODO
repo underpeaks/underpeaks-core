@@ -200,9 +200,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// UPDATED 65-DAY SCHEDULE: 43 DAYS REMAINING/65 DAYS - DAYS USED -> 22 - TODO STARTED - 7th MAY 2026 - CURRENT DAY - 28th MAY 2026 
+// UPDATED 65-DAY SCHEDULE: 40 DAYS REMAINING/65 DAYS - DAYS USED -> 25 - TODO STARTED - 7th MAY 2026 - CURRENT DAY - 31st MAY 2026 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-DAYS BEHIND SCHEDULE - +- 2 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS 
+DAYS BEHIND SCHEDULE - +- 5 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PHASE 1 — Studio CORE //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,15 +219,16 @@ DAYS BEHIND SCHEDULE - +- 2 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS
 ///DONE - DAYS 16:    Finalizing installer and cleanup                       
 ///DONE - DAYS 17:    Track when a user is logged in and on which date
 ///DONE - DAYS 17:    and fix backend translation issue.
-          DAYS 18-19: CLEANUP AND FIX ANY REMAINNING ISSUES (MESSAGES AN NOTIFICATIONS SPECIFICALLY)
+///DONE - DAYS 18-19: CLEANUP AND FIX ANY REMAINNING ISSUES (MESSAGES AN NOTIFICATIONS SPECIFICALLY)
                        -> //DONE// Signin ISSUES
                        -> //DONE// Notifications need to work on project_id and also from nxf_system_notifications collections
                        -> //DONE// updte the collection to nxf_system_messages and nxf_system_conversations
                        -> //DONE// Messages need to chanage to project id and user id 
                        -> //DONE// See why messages are not displaying 
-          DAYS 20:    FIX DEMO CONTENT - create pages and menu items based on project type
-          DAYS 21-23: Page Builder
-          Days 24:    Replicate all storage functions for Supabase, MongoDB, MySQL, PostgreSQL
+///DONE - DAYS 20:    FIX DEMO CONTENT - create pages and menu items based on project type
+///DONE - Days 20-21: Replicate all functions for Supabase, MongoDB, MySQL, PostgreSQL and test
+          DAYS 22-24: Page Builder
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PHASE 2 — Studio MVP + Paid Features //

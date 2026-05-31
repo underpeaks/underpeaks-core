@@ -6,12 +6,11 @@ import { FiPlus, FiMenu, FiChevronDown }              from 'react-icons/fi'
 import { useTranslations }                            from 'next-intl'
 import { useAuth }                                    from '../layout'
 import Loader                                         from '../Loading'
-import { AdminPage, MenuItem } from './components/types'
-import MenuRow from './components/MenuRow'
-import MenuItemDrawer from './components/MenuItemDrawer'
-import { getIcon } from '../../components_cus/getIcon'
-import { logActivity } from '@/app/lib/logActivity'
-
+import { AdminPage, MenuItem }                        from './components/types'
+import MenuRow                                        from './components/MenuRow'
+import MenuItemDrawer                                 from './components/MenuItemDrawer'
+import { getIcon }                                    from '../../components_cus/getIcon'
+import { logActivity }                                from '@/app/lib/logActivity'
 
 export default function MenuPage() {
   const t        = useTranslations('menuPage')
@@ -75,7 +74,7 @@ export default function MenuPage() {
       if (!res.ok) throw new Error(json.error || t('errors.createFailed'))
       await loadItems(userId!)
       window.dispatchEvent(new CustomEvent('nxf:menu:updated'))
-       if (userId) {
+      if (userId) {
         await logActivity(userId, 'menu_item_created', { label: data.label })
       }
       setDrawerOpen(false)
@@ -100,10 +99,9 @@ export default function MenuPage() {
       const json = await res.text().then((t) => (t ? JSON.parse(t) : {}))
       if (!res.ok) throw new Error(json.error || t('errors.updateFailed'))
       await loadItems(userId!)
-     
       setEditItem(null)
-       window.dispatchEvent(new CustomEvent('nxf:menu:updated'))
-        if (userId) {
+      window.dispatchEvent(new CustomEvent('nxf:menu:updated'))
+      if (userId) {
         await logActivity(userId, 'menu_item_updated', { label: data.label })
       }
       setDrawerOpen(false)
@@ -126,9 +124,9 @@ export default function MenuPage() {
       const json = await res.text().then((t) => (t ? JSON.parse(t) : {}))
       if (!res.ok) throw new Error(json.error || t('errors.deleteFailed'))
       setItems((prev) => prev.filter((i) => i.menu_id !== menuId && i.parent_id !== menuId))
-      setDeletingId(null) 
+      setDeletingId(null)
       window.dispatchEvent(new CustomEvent('nxf:menu:updated'))
-         if (userId) {
+      if (userId) {
         await logActivity(userId, 'menu_item_deleted', { menu_id: menuId })
       }
     } catch (err: any) {
@@ -220,13 +218,13 @@ export default function MenuPage() {
       <div className="flex-1 overflow-y-auto p-6">
         <div className="max-w-3xl mx-auto flex flex-col gap-6">
 
-          {/* Nav Preview */}
-          <div className="bg-white border border-gray-200 rounded-lg overflow-hidden">
-            <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
+          {/* Nav Preview — overflow-visible so dropdown isn't clipped */}
+          <div className="bg-white border border-gray-200 rounded-lg overflow-visible">
+            <div className="px-4 py-2.5 border-b border-gray-100 bg-gray-50 rounded-t-lg flex items-center justify-between">
               <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t('preview.title')}</p>
               <p className="text-[10px] text-gray-400">{t('preview.subtitle')}</p>
             </div>
-            <div className="px-4 py-3 flex items-center gap-1 flex-wrap">
+            <div className="px-4 py-3 flex items-center gap-1 flex-wrap overflow-visible">
               {topLevel.filter((i) => i.visible).map((item) => {
                 const children = childrenOf(item.menu_id).filter((c) => c.visible)
                 return (
@@ -237,7 +235,7 @@ export default function MenuPage() {
                       {children.length > 0 && <FiChevronDown size={11} className="text-gray-400" />}
                     </div>
                     {children.length > 0 && (
-                      <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg py-1 min-w-[140px] hidden group-hover/nav:block z-10">
+                      <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 rounded-md shadow-lg py-1 min-w-[140px] hidden group-hover/nav:block z-50">
                         {children.map((child) => (
                           <div key={child.menu_id} className="flex items-center gap-2 px-3 py-2 hover:bg-gray-50 cursor-pointer">
                             <span className="text-gray-400">{getIcon(child.icon, 12)}</span>
