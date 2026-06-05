@@ -12,6 +12,7 @@
  *   - Fields sorted by their order property when set
  *   - Server-side search, filter, sort, pagination
  *   - First image of array used as table thumbnail
+ *   - Cells have min/max widths with truncation for long values
  */
 
 import { useState, useEffect, useMemo, useCallback } from 'react'
@@ -26,7 +27,7 @@ import { Settings2, Save }                 from 'lucide-react'
 import DataDrawer                          from '../shared/DataDrawer'
 import UserKpiBar                          from '../../../cmsusers/components/UserKpiBar'
 import { computeAllKpis }                  from '../../../kpi/kpiEngine'
-import { getAuthToken, getUserId }                    from '@/app/lib/clientAuth'
+import { getAuthToken, getUserId }         from '@/app/lib/clientAuth'
 import type { KpiPageConfig, KpiResult }   from '../../../kpi/kpi'
 import type {
   AdminTemplateProps, DataRecord, ModelColumn,
@@ -140,8 +141,7 @@ function CellValue({ value, column }: { value: unknown; column: ModelColumn }) {
     )
   }
 
-  const str = String(value)
-  return <span className="text-sm text-gray-700">{str.length > 60 ? str.slice(0, 60) + '…' : str}</span>
+  return <span className="text-sm text-gray-700">{String(value)}</span>
 }
 
 // ---------------------------------------------------------------------------
@@ -196,8 +196,8 @@ export default function ListTemplate({
 
   // Resolve userId from session token
   useEffect(() => {
-  setUserId(getUserId())
-}, [])
+    setUserId(getUserId())
+  }, [])
 
   // Fetch records
   const fetchRecords = useCallback(async (
@@ -404,7 +404,7 @@ export default function ListTemplate({
           }}
           projectId={projectId}
           tenantId={tenantId}
-           page={page.page_id} 
+          page={page.page_id}
         />
 
         {/* White card */}
@@ -489,7 +489,8 @@ export default function ListTemplate({
                       key={col.name}
                       onClick={() => handleSort(col.name)}
                       className="px-4 py-3 text-left text-xs font-semibold text-gray-500
-                                 uppercase tracking-wider whitespace-nowrap cursor-pointer select-none"
+                                 uppercase tracking-wider whitespace-nowrap cursor-pointer select-none
+                                 min-w-[140px] max-w-[280px]"
                     >
                       <div className="flex items-center gap-1.5">
                         {col.name}
@@ -504,7 +505,7 @@ export default function ListTemplate({
                   [...Array(8)].map((_, i) => (
                     <tr key={i} className="border-b border-gray-100">
                       {visibleCols.map((col) => (
-                        <td key={col.name} className="px-4 py-3">
+                        <td key={col.name} className="px-4 py-3 min-w-[140px] max-w-[280px]">
                           <div className="h-4 bg-gray-100 rounded animate-pulse w-3/4" />
                         </td>
                       ))}
@@ -526,8 +527,13 @@ export default function ListTemplate({
                         className="border-b border-gray-100 last:border-0 hover:bg-gray-50 cursor-pointer transition-colors"
                       >
                         {visibleCols.map((col) => (
-                          <td key={col.name} className="px-4 py-3">
-                            <CellValue value={record[col.name]} column={col} />
+                          <td key={col.name} className="px-4 py-3 min-w-[140px] max-w-[280px]">
+                            <div
+                              className="truncate"
+                              title={typeof record[col.name] === 'string' ? (record[col.name] as string) : ''}
+                            >
+                              <CellValue value={record[col.name]} column={col} />
+                            </div>
                           </td>
                         ))}
                       </tr>

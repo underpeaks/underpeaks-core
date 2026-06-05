@@ -200,7 +200,7 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// UPDATED 65-DAY SCHEDULE: 35 DAYS REMAINING/65 DAYS - DAYS USED -> 30 - TODO STARTED - 7th MAY 2026 - CURRENT DAY - 4th June 2026 
+// UPDATED 65-DAY SCHEDULE: 35 DAYS REMAINING/65 DAYS - DAYS USED -> 30 - TODO STARTED - 7th MAY 2026 - CURRENT DAY - 5th June 2026 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 DAYS BEHIND SCHEDULE - +- 6 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -255,9 +255,15 @@ DAYS BEHIND SCHEDULE - +- 6 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS
           Days 33–34: Wire self-hosted to Studio — license validation, phone home, usage tracking
           Days 34–36: Integrations — category tabs, connect/disconnect, OAuth flows, webhook support
           Days 37–39: API Builder — custom endpoint creation, business logic editor, test panel
+                      → Also complete public API endpoints for generated apps:
+                        auth middleware, filtering/sort/pagination params, CRUD per model
           Days 40–42: Page Builder — drag and drop components, layout system, preview, publish - Studio version only
           Days 43–45: Flutter code generation — models, pages, navigation from CMS config
+                      → Client/end-user auth flow for generated app (signin/signup/forgot/reset)
+                      → App navigation system (extend nxf_menus with app_target: cms | flutter | nextjs)
           Days 46–48: Next.js code generation — models, pages, API routes from CMS config
+                      → Client/end-user auth flow for generated app (signin/signup/forgot/reset)
+                      → App navigation system reused from Flutter target
           Days 49–50: Code generation testing — generate sample apps, fix issues
           DAYS 52:    Switch between self-hosted and hosted with API keys     — 1 day
           Days 52–54: Help center — structure, categories, core articles
@@ -266,9 +272,25 @@ DAYS BEHIND SCHEDULE - +- 6 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS
           Days 60–65: Buffer — spillover, bug fixes, polish, anything that ran long, Translate all translations json pages
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// OUTSTANDING TODOs //
+// OUTSTANDING TODOs (from testing / pre-Phase 2 worries) //
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//1. Call-home telemetry function (anti-abuse / licence enforcement)  — covered Day 33-34 alongside Studio
+//2. Client/end-user auth for generated Flutter + Next.js apps        — covered Day 43-48 alongside code gen
+//3. App navigation system — separate from CMS menus                  — covered Day 43-48 alongside code gen
+//   (extend nxf_menus or add nxf_navigation with app_target column,
+//    so Flutter gets bottom tabs and Next.js gets header nav)
+//4. Complete public API endpoints for generated apps                 — covered Day 37-39 alongside API Builder
+//   (auth middleware, query params for filtering, write endpoints,
+//    default CRUD-per-model gateway)
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// CORE ENHANCEMENTS — TO MAKE SELF-HOSTED MORE POPULAR //
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//1. 3-4 default themes shipped with install (Light, Dark, High contrast, Brand demo)
+//2. CSV import/export per model (basic — hosted gets mapping, scheduling, transforms)
+//3. JSON backup/restore (manual download/upload — hosted gets automated S3 backups)
+//4. Outgoing webhook events on create/update/delete
+//   (hosted gets retry queue, log viewer, transformations)
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // DEPENDENT TODOs — blocked on other tasks being completed first //
@@ -281,7 +303,7 @@ DAYS BEHIND SCHEDULE - +- 6 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS
 //6. Link billing on Settings page       — depends on Studio version
 //7. Complete help center                — depends on app being completed
 //8. Test messages and notifications     — depends on Studio version or client-facing messages API
-//9 Connect API layer — endpoints, test panel, API keys manager
+//9. Connect API layer — endpoints, test panel, API keys manager
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // FEATURES TO ADD — HOSTED PAID VERSION //
@@ -293,8 +315,12 @@ DAYS BEHIND SCHEDULE - +- 6 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS
 //5. API builder
 //6. Integration with 3rd party APIs
 //7. Add timezone settings
+//8. Managed email (no SMTP setup needed) + branded templates
+//9. CDN + S3 file storage adapter
+//10. Automated S3 backups
+//11. Webhook retry queue + log viewer + payload transformations
+//12. Advanced CSV import/export — column mapping, scheduling, transforms
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 
 
