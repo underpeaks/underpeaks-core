@@ -657,149 +657,173 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
 
   // ─── Demo Content ──────────────────────────────────────────────────────────
 
-  async installDemoContent(
-    config: DBConfig,
-    selectedProjectType: string
-  ): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
-    const fs   = require('fs')
-    const path = require('path')
+ async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string
+): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
+  const fs   = require('fs')
+  const path = require('path')
 
+  try {
+    await this.connect()
+
+    const userResult = await this.pool.query(
+      `SELECT user_id FROM "nxf_users" WHERE role = 'admin' LIMIT 1`
+    )
+    if (!userResult.rows.length) return { success: false, error: 'No admin user found' }
+    const adminUserId = userResult.rows[0].user_id
+
+    const projectResult = await this.pool.query(
+      'SELECT project_id FROM "nxf_system_projects" LIMIT 1'
+    )
+    if (!projectResult.rows.length) return { success: false, error: 'No project found' }
+    const projectId = projectResult.rows[0].project_id
+
+    const tenantResult = await this.pool.query(
+      'SELECT ten_id FROM "nxf_system_tenants" LIMIT 1'
+    )
+    if (!tenantResult.rows.length) return { success: false, error: 'No tenant found' }
+    const tenantId = tenantResult.rows[0].ten_id
+
+    // ── Pre-build the model name → sm_id resolver map ──────────────────────
+    // Used by the nxf_pages installer to resolve "model": "nxf_product"
+    // into the actual sm_id at install time.
+
+    const modelNameToId = new Map<string, string>()
     try {
-      await this.connect()
-
-      // Resolve admin user
-      const userResult = await this.pool.query(
-        `SELECT user_id FROM "nxf_users" WHERE role = 'admin' LIMIT 1`
+      const modelResult = await this.pool.query(
+        'SELECT sm_id, name FROM "nxf_system_models" WHERE project_id = $1',
+        [projectId]
       )
-      if (!userResult.rows.length) return { success: false, error: 'No admin user found' }
-      const adminUserId = userResult.rows[0].user_id
-
-      // Resolve project
-      const projectResult = await this.pool.query(
-        'SELECT project_id FROM "nxf_system_projects" LIMIT 1'
+      for (const m of modelResult.rows) {
+        if (m.name && m.sm_id) modelNameToId.set(m.name, m.sm_id)
+      }
+      console.log(
+        `[PostgresAdapter] Built model resolver map — ${modelNameToId.size} models indexed`
       )
-      if (!projectResult.rows.length) return { success: false, error: 'No project found' }
-      const projectId = projectResult.rows[0].project_id
+    } catch (err: any) {
+      console.warn('[PostgresAdapter] Failed to build model resolver map:', err.message)
+    }
 
-      // Resolve tenant
-      const tenantResult = await this.pool.query(
-        'SELECT ten_id FROM "nxf_system_tenants" LIMIT 1'
-      )
-      if (!tenantResult.rows.length) return { success: false, error: 'No tenant found' }
-      const tenantId = tenantResult.rows[0].ten_id
+    const modelFolders = [
+      'system_models',
+      'users_models',
+      `${selectedProjectType}_models`,
+    ]
 
-      const modelFolders = [
-        'system_models',
-        'users_models',
-        `${selectedProjectType}_models`,
-      ]
+    let totalInserted = 0
 
-      let totalInserted = 0
+    for (const folder of modelFolders) {
+      const basePath = path.resolve(process.cwd(), '..', 'demo_content', folder)
 
-      for (const folder of modelFolders) {
-        const basePath = path.resolve(process.cwd(), '..', 'demo_content', folder)
+      if (!fs.existsSync(basePath)) {
+        console.log('[PostgresAdapter] Demo folder not found, skipping:', basePath)
+        continue
+      }
 
-        if (!fs.existsSync(basePath)) {
-          console.log('[PostgresAdapter] Demo folder not found, skipping:', basePath)
+      const files = fs.readdirSync(basePath).filter((f: string) => f.endsWith('.json'))
+
+      for (const file of files) {
+        const raw = fs.readFileSync(path.join(basePath, file), 'utf-8')
+
+        let json: any
+        try {
+          json = JSON.parse(raw)
+        } catch {
+          console.warn(`[PostgresAdapter] Skipping invalid JSON: ${file}`)
           continue
         }
 
-        const files = fs.readdirSync(basePath).filter((f: string) => f.endsWith('.json'))
+        const tableName = file.replace('.json', '')
+        const rows      = Array.isArray(json) ? json : json?.demo_data
 
-        for (const file of files) {
-          const raw = fs.readFileSync(path.join(basePath, file), 'utf-8')
+        if (!rows || !Array.isArray(rows)) continue
 
-          let json: any
+        const colResult = await this.pool.query(
+          `SELECT column_name, data_type
+           FROM information_schema.columns
+           WHERE table_schema = 'public' AND table_name = $1`,
+          [tableName]
+        )
+
+        if (!colResult.rows.length) {
+          console.log(`[PostgresAdapter] Skipping ${tableName} — table does not exist`)
+          continue
+        }
+
+        const tableColumns = colResult.rows.map((c: any) => c.column_name)
+
+        console.log(`[PostgresAdapter] Inserting into ${tableName} — ${rows.length} rows`)
+
+        for (const row of rows) {
           try {
-            json = JSON.parse(raw)
-          } catch {
-            console.warn(`[PostgresAdapter] Skipping invalid JSON: ${file}`)
-            continue
-          }
+            const enriched = { ...row }
 
-          const tableName = file.replace('.json', '')
-          const rows      = Array.isArray(json) ? json : json?.demo_data
-
-          if (!rows || !Array.isArray(rows)) continue
-
-          // Introspect actual columns so we never insert fields that don't exist
-          const colResult = await this.pool.query(
-            `SELECT column_name, data_type
-             FROM information_schema.columns
-             WHERE table_schema = 'public' AND table_name = $1`,
-            [tableName]
-          )
-
-          if (!colResult.rows.length) {
-            console.log(`[PostgresAdapter] Skipping ${tableName} — table does not exist`)
-            continue
-          }
-
-          const tableColumns = colResult.rows.map((c: any) => c.column_name)
-
-          console.log(`[PostgresAdapter] Inserting into ${tableName} — ${rows.length} rows`)
-
-          for (const row of rows) {
-            try {
-              const enriched = { ...row }
-
-              // Only inject if the field already exists on the row
-              if ('project_id' in enriched) enriched.project_id = projectId
-              if ('tenant_id'  in enriched) enriched.tenant_id  = tenantId
-              if ('created_by' in enriched) enriched.created_by = adminUserId
-              if ('user_id'    in enriched) enriched.user_id    = adminUserId
-
-              // Replace {{placeholder}} strings with null
-              for (const key of Object.keys(enriched)) {
-                if (typeof enriched[key] === 'string' && enriched[key].startsWith('{{')) {
-                  enriched[key] = null
-                }
+            // Resolve model name → model_id for nxf_pages rows
+            if (tableName === 'nxf_pages' && enriched.model) {
+              const resolvedId = modelNameToId.get(enriched.model)
+              if (resolvedId) {
+                enriched.model_id = resolvedId
+              } else {
+                console.warn(
+                  `[PostgresAdapter] Page "${enriched.slug}" references model "${enriched.model}" which does not exist — model_id left null`
+                )
               }
-
-              if (!enriched.created_at) enriched.created_at = new Date().toISOString()
-
-              // Filter to only columns that exist in the table
-              const filtered: Record<string, any> = {}
-              for (const key of Object.keys(enriched)) {
-                if (tableColumns.includes(key)) {
-                  filtered[key] = enriched[key]
-                }
-              }
-
-              if (!Object.keys(filtered).length) continue
-
-              // Stringify any remaining objects/arrays for JSONB columns
-              for (const key of Object.keys(filtered)) {
-                if (filtered[key] !== null && typeof filtered[key] === 'object') {
-                  filtered[key] = JSON.stringify(filtered[key])
-                }
-              }
-
-              const keys   = Object.keys(filtered)
-              const cols   = keys.map((k) => `"${k}"`).join(', ')
-              const params = keys.map((_, i) => `$${i + 1}`).join(', ')
-              const values = Object.values(filtered)
-
-              await this.pool.query(
-                `INSERT INTO "${tableName}" (${cols}) VALUES (${params}) ON CONFLICT DO NOTHING`,
-                values
-              )
-
-              totalInserted++
-            } catch (err: any) {
-              console.warn(`[PostgresAdapter] Skipping row in ${tableName}:`, err.message)
             }
+
+            if ('project_id' in enriched) enriched.project_id = projectId
+            if ('tenant_id'  in enriched) enriched.tenant_id  = tenantId
+            if ('created_by' in enriched) enriched.created_by = adminUserId
+            if ('user_id'    in enriched) enriched.user_id    = adminUserId
+
+            for (const key of Object.keys(enriched)) {
+              if (typeof enriched[key] === 'string' && enriched[key].startsWith('{{')) {
+                enriched[key] = null
+              }
+            }
+
+            if (!enriched.created_at) enriched.created_at = new Date().toISOString()
+
+            const filtered: Record<string, any> = {}
+            for (const key of Object.keys(enriched)) {
+              if (tableColumns.includes(key)) {
+                filtered[key] = enriched[key]
+              }
+            }
+
+            if (!Object.keys(filtered).length) continue
+
+            for (const key of Object.keys(filtered)) {
+              if (filtered[key] !== null && typeof filtered[key] === 'object') {
+                filtered[key] = JSON.stringify(filtered[key])
+              }
+            }
+
+            const keys   = Object.keys(filtered)
+            const cols   = keys.map((k) => `"${k}"`).join(', ')
+            const params = keys.map((_, i) => `$${i + 1}`).join(', ')
+            const values = Object.values(filtered)
+
+            await this.pool.query(
+              `INSERT INTO "${tableName}" (${cols}) VALUES (${params}) ON CONFLICT DO NOTHING`,
+              values
+            )
+
+            totalInserted++
+          } catch (err: any) {
+            console.warn(`[PostgresAdapter] Skipping row in ${tableName}:`, err.message)
           }
         }
       }
-
-      return { success: true, inserted: totalInserted }
-
-    } catch (err: any) {
-      console.error('[PostgresAdapter] installDemoContent failed:', err.message)
-      return { success: false, inserted: 0, error: 'Failed to install demo content' }
     }
+
+    return { success: true, inserted: totalInserted }
+
+  } catch (err: any) {
+    console.error('[PostgresAdapter] installDemoContent failed:', err.message)
+    return { success: false, inserted: 0, error: 'Failed to install demo content' }
   }
+}
 
   // ─── Core CRUD ─────────────────────────────────────────────────────────────
 

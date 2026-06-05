@@ -792,10 +792,39 @@ export class FirebaseAdapter implements DBAdapter {
     return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
   }
 
-  async readAll(config: DBConfig, collection: string) {
-    const snapshot = await this.firestore.collection(collection).get()
-    return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+  /**
+ * readAll
+ *
+ * Fetches documents from a Firestore collection, optionally filtered by
+ * a set of equality conditions.
+ *
+ * If a filter object is provided, each key-value pair is applied as a
+ * Firestore `where(key, '==', value)` clause. If no filter is provided
+ * (or it is empty), all documents in the collection are returned.
+ *
+ * @param config     - The DBConfig (unused here but required by interface).
+ * @param collection - The Firestore collection name.
+ * @param filter     - Optional equality filter, e.g. { slug: 'inventory' }.
+ * @returns An array of matching documents, each including its Firestore id.
+ */
+async readAll(
+  config:     DBConfig,
+  collection: string,
+  filter?:    Record<string, any>
+) {
+  let query: FirebaseFirestore.Query = this.firestore.collection(collection)
+
+  if (filter && typeof filter === 'object') {
+    for (const [key, value] of Object.entries(filter)) {
+      // Skip null/undefined to avoid accidental "where field == null" queries
+      if (value === undefined || value === null) continue
+      query = query.where(key, '==', value)
+    }
   }
+
+  const snapshot = await query.get()
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+}
   /**
    * update
    *
@@ -1017,10 +1046,26 @@ export class FirebaseAdapter implements DBAdapter {
    * @returns The result from CreateUserDataModels.
    * @throws Error if config or projectId are missing.
    */
-  async CreateDataModels(projectId: string, selectedProjectType: string) {
-    if (!this.config || !projectId) throw new Error('Missing DB config or projectId')
-    return CreateUserDataModels(this, projectId, selectedProjectType, [])
+ async CreateDataModels(projectId: string, selectedProjectType: string) {
+  if (!this.config || !projectId) throw new Error('Missing DB config or projectId')
+
+  // Resolve tenant for this project
+  let tenantId = ''
+  try {
+    const tenantsSnapshot = await this.firestore
+      .collection('nxf_system_tenants')
+      .limit(1)
+      .get()
+    if (!tenantsSnapshot.empty) {
+      const tenantDoc = tenantsSnapshot.docs[0]
+      tenantId = tenantDoc.data().ten_id ?? tenantDoc.id ?? ''
+    }
+  } catch {
+    console.warn('[FirebaseAdapter] CreateDataModels — could not resolve tenantId, using empty string')
   }
+
+  return CreateUserDataModels(this, projectId, tenantId, selectedProjectType, [])
+}
 
   /**
    * createDataModelsFromUserEmail
@@ -1063,7 +1108,7 @@ export class FirebaseAdapter implements DBAdapter {
 
   // ─── Demo Content ─────────────────────────────────────────────────────────
 
- async installDemoContent(
+async installDemoContent(
   config: DBConfig,
   selectedProjectType: string
 ): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
@@ -1075,7 +1120,6 @@ export class FirebaseAdapter implements DBAdapter {
     // Step 1: Resolve project, tenant, and admin user for this installation
     // -----------------------------------------------------------------------
 
-    // Resolve admin user — first admin in nxf_users
     const usersSnapshot = await this.firestore
       .collection('nxf_users')
       .where('role', '==', 'admin')
@@ -1090,7 +1134,6 @@ export class FirebaseAdapter implements DBAdapter {
     const adminUser   = usersSnapshot.docs[0].data()
     const adminUserId = usersSnapshot.docs[0].id || adminUser.user_id
 
-    // Resolve project — read first doc from nxf_system_projects (never query by user_id)
     const projectsSnapshot = await this.firestore
       .collection('nxf_system_projects')
       .limit(1)
@@ -1104,7 +1147,6 @@ export class FirebaseAdapter implements DBAdapter {
     const project   = projectsSnapshot.docs[0].data()
     const projectId = project.project_id || projectsSnapshot.docs[0].id
 
-    // Resolve tenant — read first doc from nxf_system_tenants (never query by user_email)
     const tenantsSnapshot = await this.firestore
       .collection('nxf_system_tenants')
       .limit(1)
@@ -1128,10 +1170,6 @@ export class FirebaseAdapter implements DBAdapter {
     // Step 2: Scan demo content folders and install rows
     // -----------------------------------------------------------------------
 
-    /**
-     * Always install universal_models first (splash, home, signin, etc.)
-     * then the project-type-specific models.
-     */
     const modelFolders = [
       'system_models',
       'users_models',
@@ -1140,6 +1178,29 @@ export class FirebaseAdapter implements DBAdapter {
 
     const basePaths = modelFolders.map((folder) =>
       path.resolve(process.cwd(), '..', 'demo_content', folder)
+    )
+
+    // -----------------------------------------------------------------------
+    // Step 2a: Pre-build the model name → sm_id resolver map.
+    //
+    // We do this ONCE before processing files so the nxf_pages installer
+    // can convert "model": "nxf_product" → "model_id": "<actual sm_id>".
+    // -----------------------------------------------------------------------
+
+    const modelMapSnapshot = await this.firestore
+      .collection('nxf_system_models')
+      .where('project_id', '==', projectId)
+      .get()
+
+    const modelNameToId = new Map<string, string>()
+    modelMapSnapshot.docs.forEach((doc) => {
+      const m  = doc.data()
+      const id = m.sm_id || doc.id
+      if (m.name && id) modelNameToId.set(m.name, id)
+    })
+
+    console.log(
+      `[FirebaseAdapter] Built model resolver map — ${modelNameToId.size} models indexed`
     )
 
     let totalInserted = 0
@@ -1184,20 +1245,46 @@ export class FirebaseAdapter implements DBAdapter {
 
         for (const row of rows) {
           try {
+            // -----------------------------------------------------------------
+            // Resolve model name → model_id for nxf_pages rows.
+            //
+            // The demo content JSON has fields like:
+            //   "model":    "nxf_product"
+            //   "model_id":  null
+            //
+            // We look up the model by name in our resolver map and set
+            // model_id to the actual sm_id. If the model doesn't exist
+            // (e.g. user hasn't created it yet), we log a warning and leave
+            // model_id null so the page still installs.
+            // -----------------------------------------------------------------
+
+            const enriched = { ...row }
+
+            if (collectionName === 'nxf_pages' && enriched.model) {
+              const resolvedId = modelNameToId.get(enriched.model)
+              if (resolvedId) {
+                enriched.model_id = resolvedId
+              } else {
+                console.warn(
+                  `[FirebaseAdapter] Page "${enriched.slug}" references model "${enriched.model}" which does not exist — model_id left null`
+                )
+              }
+            }
+
             const id =
-              row.page_id  ||
-              row.menu_id  ||
-              row.id       ||
-              row._id      ||
+              enriched.page_id  ||
+              enriched.menu_id  ||
+              enriched.id       ||
+              enriched._id      ||
               this.firestore.collection('_tmp').doc().id
 
             batch.set(collectionRef.doc(id), {
-              ...row,
+              ...enriched,
               project_id: projectId,
               tenant_id:  tenantId,
               created_by: adminUserId,
-              created_at: row.created_at || new Date().toISOString(),
-              updated_at: row.updated_at || null,
+              created_at: enriched.created_at || new Date().toISOString(),
+              updated_at: enriched.updated_at || null,
             })
 
             count++

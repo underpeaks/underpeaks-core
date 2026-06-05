@@ -2324,7 +2324,8 @@
       "addField": "Add Field",
       "removeField": "Remove field",
       "expandField": "Show advanced options",
-      "collapseField": "Hide advanced options"
+      "collapseField": "Hide advanced options",
+      "foreignKey":"Foreign Key"
     },
     "validation": {
       "modelNameRequired": "Model name is required.",
@@ -2368,7 +2369,8 @@
       "addField": "Add Field",
       "removeField": "Remove field",
       "expandField": "Show advanced options",
-      "collapseField": "Hide advanced options"
+      "collapseField": "Hide advanced options",
+      "foreignKey": "Foreign Key"
     },
     "validation": {
       "modelNameRequired": "Model name is required.",
@@ -2513,5 +2515,32 @@
   "kpi_add_to_block": "Add",
   "kpi_save": "Save changes",
   "kpi_cancel": "Cancel"
+},
+"notFound": {
+  "title":         "Page not found",
+  "description":   "We can't find the page you're looking for. It may have been moved, renamed, or never existed.",
+  "goHome":        "Go to homepage",
+  "backToConsole": "Back to console",
+  "helpfulLinks":  "Looking for something specific?",
+  "pages":         "Pages",
+  "models":        "Models",
+  "users":         "Users",
+  "settings":      "Settings"
+},
+"noModelLinked": {
+  "title":       "No model linked",
+  "description": "{pageName} uses a {templateName} template but no data model has been linked to it yet.",
+  "instruction": "Edit the page settings and assign a model so it can display data.",
+  "openPages":   "Open pages",
+  "manageModels": "Manage models"
+},
+
+"lockedTemplate": {
+  "title":       "Available on the hosted plan",
+  "description": "The {templateName} template is part of the hosted plan. Upgrade to unlock kanban, calendar, checkout, and more.",
+  "upgradeButton": "View hosted plan",
+  "backButton":  "Back to pages"
 }
+
+
 }

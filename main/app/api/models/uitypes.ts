@@ -1,29 +1,20 @@
 /**
- * uiTypes.ts
+ * uitypes.ts
  *
- * Centralised reference for all UI type options available per field type,
- * all available base field types, and foreign key on-delete options.
+ * Defines:
+ *   FIELD_TYPES      — all valid DB column types
+ *   UI_TYPE_OPTIONS  — which ui_types are valid for each field type
+ *   getDefaultUiType — returns the sensible default ui_type for a given field type
+ *   ON_DELETE_OPTIONS — FK on-delete behaviours
  *
- * Both CreateModelPage and EditModelPage import from here so the lists
- * are defined in exactly one place and never get out of sync.
- *
- * What is a UI type?
- * When a field is used on a Page (e.g. a product form or a listing card),
- * the UI type tells the page builder how to render that field — as a text
- * input, a dropdown, a date picker, etc. This is stored in the model schema
- * alongside the data type so the Pages builder can consume it later.
+ * Rules:
+ * - Every field type must have at least one ui_type option
+ * - select and multi-select only appear on string and array types
+ *   because those are the only types that make sense for option lists
+ * - hidden is available on uuid and any system field type
  */
 
-// ---------------------------------------------------------------------------
-// Field types
-// ---------------------------------------------------------------------------
-
-/**
- * FIELD_TYPES
- * All available base field types shown in the Type dropdown.
- * Covers all types seen across existing schema files.
- */
-export const FIELD_TYPES = [
+export const FIELD_TYPES: string[] = [
   'string',
   'text',
   'integer',
@@ -32,32 +23,26 @@ export const FIELD_TYPES = [
   'boolean',
   'datetime',
   'timestamp',
-  'jsonb',
   'uuid',
+  'jsonb',
   'array',
   'image',
 ]
 
-// ---------------------------------------------------------------------------
-// UI type options per field type
-// ---------------------------------------------------------------------------
+export const ON_DELETE_OPTIONS: string[] = [
+  'CASCADE',
+  'SET NULL',
+  'RESTRICT',
+  'NO ACTION',
+]
 
-/**
- * UI_TYPE_OPTIONS
- *
- * Maps each field type to the list of UI components that make sense
- * for rendering that type on a page. Stored in the model schema as
- * `ui_type` so the Pages builder knows how to render each field.
- *
- * Key   — the field's data type (must match a value in FIELD_TYPES)
- * Value — array of UI type strings the user can choose from
- */
 export const UI_TYPE_OPTIONS: Record<string, string[]> = {
   string: [
     'textfield',
     'textarea',
     'rich-text',
     'select',
+    'multi-select',
     'radio',
     'autocomplete',
     'color-picker',
@@ -95,8 +80,8 @@ export const UI_TYPE_OPTIONS: Record<string, string[]> = {
     'radio-yes-no',
   ],
   datetime: [
-    'date-picker',
     'datetime-picker',
+    'date-picker',
     'time-picker',
   ],
   timestamp: [
@@ -113,10 +98,10 @@ export const UI_TYPE_OPTIONS: Record<string, string[]> = {
     'json-viewer',
   ],
   array: [
-    'list',
     'tags-input',
     'multi-select',
     'checklist',
+    'list',
   ],
   image: [
     'image-upload',
@@ -125,36 +110,13 @@ export const UI_TYPE_OPTIONS: Record<string, string[]> = {
   ],
 }
 
-// ---------------------------------------------------------------------------
-// Foreign key on-delete options
-// ---------------------------------------------------------------------------
-
-/**
- * ON_DELETE_OPTIONS
- * The behaviour when a referenced row is deleted.
- * Shown in the On Delete dropdown when a foreign key is configured.
- */
-export const ON_DELETE_OPTIONS = [
-  'CASCADE',
-  'SET NULL',
-  'RESTRICT',
-  'NO ACTION',
-]
-
-// ---------------------------------------------------------------------------
-// Helper
-// ---------------------------------------------------------------------------
-
 /**
  * getDefaultUiType
  *
- * Returns the first (default) UI type for a given field type.
- * Used when a new field is created or the type is changed so the
- * ui_type is always initialised to a sensible value.
- *
- * @param fieldType - The data type of the field (e.g. 'string', 'boolean').
- * @returns The default UI type string for that field type.
+ * Returns the first (most sensible default) ui_type for a given field type.
+ * Called whenever a field's type changes so the ui_type resets to a valid value.
  */
 export function getDefaultUiType(fieldType: string): string {
-  return UI_TYPE_OPTIONS[fieldType]?.[0] ?? 'textfield'
+  const options = UI_TYPE_OPTIONS[fieldType]
+  return options?.[0] ?? 'textfield'
 }

@@ -35,10 +35,6 @@ export async function PUT(
   try {
     const { id } = params
 
-    // -----------------------------------------------------------------------
-    // Parse body safely
-    // -----------------------------------------------------------------------
-
     let body: any
     try {
       body = await req.json()
@@ -51,22 +47,27 @@ export async function PUT(
 
     const { user_id, name, schema, old_name, old_schema } = body
 
-    if (!user_id || !name || !schema?.length || !old_name || !old_schema) {
+    // Extract columns from both new and old schema (versioned object format)
+    // Handle legacy bare-array format defensively too
+    const newColumns: ColumnDef[] = Array.isArray(schema?.columns)
+      ? schema.columns
+      : Array.isArray(schema)
+        ? schema
+        : []
+
+    const oldColumns: ColumnDef[] = Array.isArray(old_schema?.columns)
+      ? old_schema.columns
+      : Array.isArray(old_schema)
+        ? old_schema
+        : []
+
+    if (!user_id || !name || newColumns.length === 0 || !old_name || oldColumns.length === 0) {
       return NextResponse.json(
         { error: 'Missing required fields: user_id, name, schema, old_name, old_schema' },
         { status: 400 }
       )
     }
 
-    // -----------------------------------------------------------------------
-    // Block system table edits
-    // -----------------------------------------------------------------------
-
-    /**
-     * Pure system tables (nxf_system_*) cannot be edited via the API.
-     * Editable system tables (nxf_users, nxf_messages, nxf_notifications)
-     * are allowed through — they are not prefixed with nxf_system_.
-     */
     if (
       old_name.toLowerCase().startsWith('nxf_system_') ||
       name.toLowerCase().startsWith('nxf_system_')
@@ -77,11 +78,7 @@ export async function PUT(
       )
     }
 
-    // -----------------------------------------------------------------------
-    // Enforce single primary key
-    // -----------------------------------------------------------------------
-
-    const primaryKeyCount = (schema as any[]).filter((f) => f.is_primary).length
+    const primaryKeyCount = newColumns.filter((f) => f.is_primary).length
     if (primaryKeyCount > 1) {
       return NextResponse.json(
         { error: 'A model can only have one primary key' },
@@ -92,58 +89,23 @@ export async function PUT(
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
-    // -----------------------------------------------------------------------
-    // Step 1 — Rename table if the model name changed
-    // -----------------------------------------------------------------------
-
-    /**
-     * For Firebase this is a no-op — Firestore collections are implicit
-     * and everything references models by sm_id, not by name.
-     * For SQL databases this issues ALTER TABLE RENAME (or equivalent).
-     */
+    // Step 1 — Rename table if name changed
     if (name !== old_name && adapter.renameTable) {
       await adapter.renameTable(old_name, name)
     }
 
-    // -----------------------------------------------------------------------
-    // Step 2 — Diff old and new schema to find added columns
-    // -----------------------------------------------------------------------
-
-    /**
-     * We only ADD new columns to the real DB table — we never drop columns
-     * from the DB even if the user removed a field from the model definition.
-     *
-     * Why not drop?
-     * Dropping a column is irreversible and could destroy real user data or
-     * break existing foreign key relationships. The removed field disappears
-     * from the nxf_system_models schema record but the DB column stays intact.
-     * When the project migrates to hosted, the reconciliation step will surface
-     * any mismatches for manual review.
-     *
-     * For Firebase, alterTable is a no-op (schemaless).
-     */
-    const oldFieldNames = new Set(
-      (old_schema as ColumnDef[]).map((c) => c.name)
-    )
-    const addedColumns = (schema as ColumnDef[]).filter(
-      (c) => !oldFieldNames.has(c.name)
-    )
+    // Step 2 — Diff old and new columns to find added ones
+    const oldFieldNames = new Set(oldColumns.map((c) => c.name))
+    const addedColumns  = newColumns.filter((c) => !oldFieldNames.has(c.name))
 
     if (addedColumns.length > 0 && adapter.alterTable) {
       await adapter.alterTable(name, { add: addedColumns })
     }
 
-    // -----------------------------------------------------------------------
-    // Step 3 — Update the nxf_system_models record
-    // -----------------------------------------------------------------------
-
-    /**
-     * Update name, schema, and updated_at.
-     * sm_id and project_id are immutable — never updated.
-     */
+    // Step 3 — Update the nxf_system_models record with the full versioned schema
     await adapter.update!(dbConfig, 'nxf_system_models', id, {
       name,
-      schema,
+      schema,        // ← store the full versioned object
       updated_at: new Date().toISOString(),
     })
 

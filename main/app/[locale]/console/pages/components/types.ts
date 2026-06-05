@@ -17,7 +17,7 @@ import {
   FiCreditCard,
   FiClipboard,
   FiHome,
-   FiLogIn,
+  FiLogIn,
   FiUserPlus,
   FiKey,
   FiRefreshCcw,
@@ -25,28 +25,54 @@ import {
   FiLock,
   FiMail,
   FiCheckCircle,
-  
   FiSliders,
 } from 'react-icons/fi'
 
 import { IconType } from 'react-icons'
 
+// ---------------------------------------------------------------------------
+// Page Item Types
+// ---------------------------------------------------------------------------
+
 export type PageVisibility = 'public' | 'admin' | 'draft'
 
 export interface PageItem {
-  page_id:         string
-  name:            string
-  slug:            string
-  model:           string | null
-  template:        string
-  visibility:      PageVisibility
-  seo_title:       string
-  seo_description: string
-  project_id:      string
-  created_at:      string
-  updated_at:      string
-  is_system:       boolean
-  hidden:          boolean
+  page_id:          string
+  name:             string
+  slug:             string
+
+  // Current field names (used by router and drawer)
+  model_id:         string | null
+  template_type:    string
+
+  // Legacy field names — kept optional for backwards compatibility
+  // with old records that haven't been re-saved yet
+  model?:           string | null
+  template?:        string
+
+  visibility:       PageVisibility
+  page_type?:       'admin' | 'client'
+  status?:          string
+  hidden:           boolean
+  is_system?:       boolean
+
+  seo_title?:       string
+  seo_description?: string
+  seo_keywords?:    string[]
+
+  featured_image?:  string | null
+  custom_css?:      string | null
+  custom_js?:       string | null
+
+  created_at?:      string
+  created_by?:      string
+  updated_at?:      string | null
+  published_at?:    string | null
+  view_count?:      number
+
+  project_id?:      string
+  tenant_id?:       string
+  organisation_id?: string | null
 }
 
 export interface ModelSummary {
@@ -76,251 +102,233 @@ export type TemplateGroup = {
 
 export const TEMPLATE_GROUPS: TemplateGroup[] = [
   {
-     group: 'Front End',
+    group: 'Front End',
     templates: [
-     {
-  id: 'splash',
-  name: 'Splash Screen',
-  locked: false,
-  icon: FiImage,
-},
-{
-  id: 'home',
-  name: 'Home Screen',
-  locked: false,
-  icon: FiHome,
-},
-{
-  id: 'onboarding',
-  name: 'Onboarding Screen',
-  locked: false,
-  icon: FiSliders,
-},
-    
-    ]},
-    {
+      {
+        id:     'splash',
+        name:   'Splash Screen',
+        locked: false,
+        icon:   FiImage,
+      },
+      {
+        id:     'home',
+        name:   'Home Screen',
+        locked: false,
+        icon:   FiHome,
+      },
+      {
+        id:     'onboarding',
+        name:   'Onboarding Screen',
+        locked: false,
+        icon:   FiSliders,
+      },
+    ],
+  },
+  {
     group: 'Views',
     templates: [
       {
-        id: 'list',
-        name: 'List View',
+        id:     'list',
+        name:   'List View',
         locked: false,
-        icon: FiList,
+        icon:   FiList,
       },
       {
-        id: 'grid',
-        name: 'Grid View',
+        id:     'grid',
+        name:   'Grid View',
         locked: false,
-        icon: FiGrid,
+        icon:   FiGrid,
       },
       {
-        id: 'gallery',
-        name: 'Gallery',
+        id:     'detail',
+        name:   'Detail View',
         locked: false,
-        icon: FiImage,
+        icon:   FiLayout,
       },
       {
-        id: 'kanban',
-        name: 'Kanban',
+        id:     'gallery',
+        name:   'Gallery',
+        locked: false,
+        icon:   FiImage,
+      },
+      {
+        id:     'kanban',
+        name:   'Kanban',
         locked: true,
-        icon: FiColumns,
+        icon:   FiColumns,
       },
       {
-        id: 'calendar',
-        name: 'Calendar',
+        id:     'calendar',
+        name:   'Calendar',
         locked: true,
-        icon: FiCalendar,
+        icon:   FiCalendar,
       },
     ],
   },
-   {
+  {
     group: 'Auth Flow',
     templates: [
       {
-      id: 'sign_in',
-      name: 'Sign In',
-      locked: false,
-      icon: FiLogIn,
-    },
-
-    {
-      id: 'sign_up',
-      name: 'Sign Up',
-      locked: false,
-      icon: FiUserPlus,
-    },
-
-    {
-      id: 'forgot_password',
-      name: 'Forgot Password',
-      locked: false,
-      icon: FiKey,
-    },
-
-    {
-      id: 'reset_password',
-      name: 'Reset Password',
-      locked: false,
-      icon: FiRefreshCcw,
-    },
-
-    {
-      id: 'otp_request',
-      name: 'Request OTP',
-      locked: true,
-      icon: FiShield,
-    },
-
-    {
-      id: 'otp_entry',
-      name: 'Enter OTP',
-      locked: true,
-      icon: FiLock,
-    },
-
+        id:     'sign_in',
+        name:   'Sign In',
+        locked: false,
+        icon:   FiLogIn,
+      },
+      {
+        id:     'sign_up',
+        name:   'Sign Up',
+        locked: false,
+        icon:   FiUserPlus,
+      },
+      {
+        id:     'forgot_password',
+        name:   'Forgot Password',
+        locked: false,
+        icon:   FiKey,
+      },
+      {
+        id:     'reset_password',
+        name:   'Reset Password',
+        locked: false,
+        icon:   FiRefreshCcw,
+      },
+      {
+        id:     'otp_request',
+        name:   'Request OTP',
+        locked: true,
+        icon:   FiShield,
+      },
+      {
+        id:     'otp_entry',
+        name:   'Enter OTP',
+        locked: true,
+        icon:   FiLock,
+      },
     ],
   },
-
   {
     group: 'Data Entry',
     templates: [
       {
-        id: 'form',
-        name: 'Form',
+        id:     'form',
+        name:   'Form',
         locked: false,
-        icon: FiEdit,
-      },
-      {
-        id: 'detail',
-        name: 'Detail View',
-        locked: false,
-        icon: FiFileText,
+        icon:   FiEdit,
       },
     ],
   },
-
   {
     group: 'Pages',
     templates: [
       {
-        id: 'dashboard',
-        name: 'Dashboard',
+        id:     'dashboard',
+        name:   'Dashboard',
         locked: false,
-        icon: FiLayout,
+        icon:   FiLayout,
       },
       {
-        id: 'landing',
-        name: 'Landing',
+        id:     'landing',
+        name:   'Landing',
         locked: false,
-        icon: FiHome,
+        icon:   FiHome,
       },
       {
-        id: 'blog-post',
-        name: 'Blog Post',
+        id:     'blog-post',
+        name:   'Blog Post',
         locked: false,
-        icon: FiClipboard,
+        icon:   FiClipboard,
       },
       {
-        id: 'profile',
-        name: 'Profile',
+        id:     'profile',
+        name:   'Profile',
         locked: false,
-        icon: FiUser,
-      },
-      {
-        id: 'splash',
-        name: 'Splash',
-        locked: false,
-        icon: FiLayout,
+        icon:   FiUser,
       },
     ],
   },
-
   {
     group: 'Commerce',
     templates: [
       {
-        id: 'cart',
-        name: 'Cart',
+        id:     'cart',
+        name:   'Cart',
         locked: false,
-        icon: FiShoppingCart,
+        icon:   FiShoppingCart,
       },
       {
-        id: 'checkout',
-        name: 'Checkout',
+        id:     'checkout',
+        name:   'Checkout',
         locked: true,
-        icon: FiCreditCard,
+        icon:   FiCreditCard,
       },
       {
-        id: 'wallet',
-        name: 'Wallet',
+        id:     'wallet',
+        name:   'Wallet',
         locked: true,
-        icon: FiCreditCard,
+        icon:   FiCreditCard,
       },
       {
-        id: 'invoice',
-        name: 'Invoice',
+        id:     'invoice',
+        name:   'Invoice',
         locked: true,
-        icon: FiClipboard,
+        icon:   FiClipboard,
       },
     ],
   },
-
   {
     group: 'Communication',
     templates: [
       {
-        id: 'chat',
-        name: 'Chat',
+        id:     'chat',
+        name:   'Chat',
         locked: false,
-        icon: FiMessageCircle,
+        icon:   FiMessageCircle,
       },
       {
-        id: 'messages',
-        name: 'Messages',
+        id:     'messages',
+        name:   'Messages',
         locked: true,
-        icon: FiMessageCircle,
+        icon:   FiMessageCircle,
       },
       {
-        id: 'feed',
-        name: 'Feed',
+        id:     'feed',
+        name:   'Feed',
         locked: true,
-        icon: FiLayout,
+        icon:   FiLayout,
       },
     ],
   },
-
   {
     group: 'Utility',
     templates: [
       {
-        id: 'map',
-        name: 'Map',
+        id:     'map',
+        name:   'Map',
         locked: false,
-        icon: FiMap,
+        icon:   FiMap,
       },
       {
-        id: 'search',
-        name: 'Search',
+        id:     'search',
+        name:   'Search',
         locked: true,
-        icon: FiSearch,
+        icon:   FiSearch,
       },
       {
-        id: 'settings',
-        name: 'Settings',
+        id:     'settings',
+        name:   'Settings',
         locked: true,
-        icon: FiSettings,
+        icon:   FiSettings,
       },
     ],
   },
-
   {
     group: 'Custom',
     templates: [
       {
-        id: 'custom',
-        name: 'Custom',
+        id:     'custom',
+        name:   'Custom',
         locked: false,
-        icon: FiCode,
+        icon:   FiCode,
       },
     ],
   },
@@ -330,18 +338,12 @@ export const TEMPLATE_GROUPS: TemplateGroup[] = [
 // Flat List
 // ---------------------------------------------------------------------------
 
-export const TEMPLATES = TEMPLATE_GROUPS.flatMap(
-  (group) => group.templates
-)
+export const TEMPLATES = TEMPLATE_GROUPS.flatMap((group) => group.templates)
 
 // ---------------------------------------------------------------------------
 // Labels
 // ---------------------------------------------------------------------------
 
-export const TEMPLATE_LABELS: Record<string, string> =
-  Object.fromEntries(
-    TEMPLATES.map((template) => [
-      template.id,
-      template.name,
-    ])
-  )
+export const TEMPLATE_LABELS: Record<string, string> = Object.fromEntries(
+  TEMPLATES.map((template) => [template.id, template.name])
+)

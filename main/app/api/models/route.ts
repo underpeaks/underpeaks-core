@@ -32,7 +32,23 @@ function normaliseSchema(schema: any): any[] {
   }
   return []
 }
-
+function normaliseSchemaToVersioned(schema: any): any {
+  if (!schema) {
+    return { version: '1.0', columns: [], hooks: [], integrations: [] }
+  }
+  if (Array.isArray(schema)) {
+    return { version: '1.0', columns: schema, hooks: [], integrations: [] }
+  }
+  if (typeof schema === 'object' && Array.isArray(schema.columns)) {
+    return {
+      version:      schema.version      ?? '1.0',
+      columns:      schema.columns,
+      hooks:        schema.hooks        ?? [],
+      integrations: schema.integrations ?? [],
+    }
+  }
+  return { version: '1.0', columns: [], hooks: [], integrations: [] }
+}
 /**
  * resolveDocumentId
  *
@@ -111,7 +127,7 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
          * this assignment is harmless.
          */
         sm_id:  resolveDocumentId(m),
-        schema: normaliseSchema(m.schema),
+       schema: normaliseSchemaToVersioned(m.schema),
       }))
 
     return NextResponse.json({ models })
@@ -143,7 +159,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const { user_id, name, schema } = body
 
-    if (!user_id || !name || !Array.isArray(schema) || schema.length === 0) {
+    // Schema is the versioned object: { version, columns, hooks, integrations }
+    // Extract columns for validation and table-creation logic
+    const columns = Array.isArray(schema?.columns) ? schema.columns : null
+
+    if (!user_id || !name || !columns || columns.length === 0) {
       return NextResponse.json(
         { error: 'Missing required fields: user_id, name, schema' },
         { status: 400 }
@@ -157,7 +177,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const primaryKeyCount = schema.filter((f: any) => f.is_primary).length
+    const primaryKeyCount = columns.filter((f: any) => f.is_primary).length
     if (primaryKeyCount > 1) {
       return NextResponse.json(
         { error: 'A model can only have one primary key' },
@@ -196,7 +216,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     if (adapter.createTable) {
-      await adapter.createTable(name, { columns: schema })
+      await adapter.createTable(name, { columns })
     }
 
     const now      = new Date().toISOString()
@@ -204,7 +224,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       sm_id:      uuidv4(),
       project_id: projectId,
       name,
-      schema,
+      schema,        // ← store the full versioned object
       created_at: now,
       updated_at: now,
     }

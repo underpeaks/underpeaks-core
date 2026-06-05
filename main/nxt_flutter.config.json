@@ -2,10 +2,10 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "postgres",
+  "selectedDb": "firebase",
   "deploymentType": "self-hosted",
   "dbConfig": {
-    "type": "postgres"
+    "type": "firebase"
   },
   "faviconUrl": "/images/favicon/NXT_Flutter_favicon.png",
   "ecommerceEnabled": false,

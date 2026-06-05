@@ -200,9 +200,9 @@
 
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-// UPDATED 65-DAY SCHEDULE: 40 DAYS REMAINING/65 DAYS - DAYS USED -> 25 - TODO STARTED - 7th MAY 2026 - CURRENT DAY - 31st MAY 2026 
+// UPDATED 65-DAY SCHEDULE: 35 DAYS REMAINING/65 DAYS - DAYS USED -> 30 - TODO STARTED - 7th MAY 2026 - CURRENT DAY - 4th June 2026 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-DAYS BEHIND SCHEDULE - +- 5 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS 
+DAYS BEHIND SCHEDULE - +- 6 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PHASE 1 — Studio CORE //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -228,14 +228,30 @@ DAYS BEHIND SCHEDULE - +- 5 DAYS ?????  SCHEDULED SET TO BE COMPLETED IN 60 DAYS
 ///DONE - DAYS 20:    FIX DEMO CONTENT - create pages and menu items based on project type
 ///DONE - Days 20-21: Replicate all functions for Supabase, MongoDB, MySQL, PostgreSQL and test
           DAYS 22-24: Page Builder
-
+                      //DONE -- 1. app/lib/studioApi.ts — phone-home stub
+                      //DONE -- 2. app/extensions/types.ts + registry.ts — interface stubs
+                      //DONE -- 3. Update model editor to enforce options_mode / options / options_source on select and multi-select fields, and add version, hooks: [], integrations: [] to schema JSONB
+                      //DONE -- 4. app/api-cms/data/[table]/route.ts — internal CRUD
+                      //DONE -- 5. app/api-cms/models/[id]/route.ts — fetch model schema
+                      //DONE -- 6. app/api-public/v1/[project]/[table]/route.ts — public gateway with DB-backed rate limiting
+                      //DONE -- 7. Dynamic page templates — List, Grid, Gallery, Form, Detail, Dashboard
+                      //DONE -- 8. Preview-only templates — Splash, Home, Auth Flow etc.
+                      //DONE -- 9. Preview routes — web and mobile frame
+///DONE - DAYS 24-26: Cleanup and Fix issues
+                      //DONE 1. Standardize slug format in nxf_pages (decide with/without leading /, update Firebase + demo content)
+                      //DONE 2. Migrate legacy schema arrays to versioned object format
+                      //DONE 3. Standardize field names across demo content (template_type, model_id — kill legacy template, model)
+                      //DONE 4. Fix KPI save on admin pages
+                      //DONE 5. Translation strings for NoModelLinked, LockedPlaceholder, 404 pages (all messages/*.json files)
+                      //DONE 6. Field ordering with drag-and-drop in model editor
+                      //DONE 7. Fix demo content installer to resolve references by name → ID at install time (model_id in pages, page_id in menus)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // PHASE 2 — Studio MVP + Paid Features //
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-          DAYS 25-26: Copy self-hosted version and configure to be Hosted version base
-          DAYS 27-28  CREATE FRONTEND WITH LOGIN
-          Days 29-32: Studio admin panel — accounts, billing, plans, usage, license keys
+          DAYS 27-28: Copy self-hosted version and configure to be Hosted version base
+          DAYS 29-30  CREATE FRONTEND WITH LOGIN
+          Days 30-32: Studio admin panel — accounts, billing, plans, usage, license keys
           Days 33–34: Wire self-hosted to Studio — license validation, phone home, usage tracking
           Days 34–36: Integrations — category tabs, connect/disconnect, OAuth flows, webhook support
           Days 37–39: API Builder — custom endpoint creation, business logic editor, test panel
