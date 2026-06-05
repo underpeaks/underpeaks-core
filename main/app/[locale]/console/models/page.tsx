@@ -38,10 +38,6 @@ import Loader from '../Loading'
 // Constants
 // ---------------------------------------------------------------------------
 
-/**
- * System tables that allow partial editing (users can add fields and
- * edit non-PK/FK fields). These go to the edit page, not the view page.
- */
 const EDITABLE_SYSTEM_TABLES = ['nxf_users', 'nxf_messages', 'nxf_notifications']
 
 // ---------------------------------------------------------------------------
@@ -57,11 +53,18 @@ interface ModelField {
   foreign_key?: { references: string; on_delete?: string }
 }
 
+interface VersionedSchema {
+  version:      string
+  columns:      ModelField[]
+  hooks?:       any[]
+  integrations?: any[]
+}
+
 interface Model {
   sm_id:      string
   name:       string
   project_id: string
-  schema:     ModelField[]
+  schema:     VersionedSchema | ModelField[]   // versioned object (canonical) or legacy array
   created_at: string
   updated_at: string
 }
@@ -72,11 +75,6 @@ type FilterType = 'all' | 'user' | 'system'
 // Helpers
 // ---------------------------------------------------------------------------
 
-/**
- * isSystemTable
- * Returns true for both pure system tables (nxf_system_*) and the
- * partially editable system tables (nxf_users, nxf_messages, nxf_notifications).
- */
 function isSystemTable(name: string): boolean {
   return (
     name.toLowerCase().startsWith('nxf_system_') ||
@@ -84,24 +82,26 @@ function isSystemTable(name: string): boolean {
   )
 }
 
-/**
- * isPureSystemTable
- * Returns true only for nxf_system_* tables.
- * These go to the read-only view page.
- */
 function isPureSystemTable(name: string): boolean {
   return name.toLowerCase().startsWith('nxf_system_')
 }
 
-/**
- * getRowHref
- * Returns the correct navigation target for a model row click.
- */
 function getRowHref(model: Model): string {
   if (isPureSystemTable(model.name)) {
     return `/console/models/${model.sm_id}/view`
   }
   return `/console/models/${model.sm_id}/edit`
+}
+
+/**
+ * Extracts the columns array from a model's schema, regardless of whether
+ * it's stored as the canonical versioned object or a legacy bare array.
+ */
+function getColumns(schema: VersionedSchema | ModelField[] | null | undefined): ModelField[] {
+  if (!schema) return []
+  if (Array.isArray(schema)) return schema
+  if (typeof schema === 'object' && Array.isArray(schema.columns)) return schema.columns
+  return []
 }
 
 // ---------------------------------------------------------------------------
@@ -113,44 +113,19 @@ export default function ModelsListPage() {
   const router   = useRouter()
   const { user } = useAuth()
 
-  // ── State ──────────────────────────────────────────────────────────────
-
-  /** All models fetched from nxf_system_models. */
   const [models,        setModels]        = useState<Model[]>([])
-
-  /** True while models are loading. */
   const [loading,       setLoading]       = useState(true)
-
-  /** Non-null when an error occurred — shown in the error banner. */
   const [error,         setError]         = useState<string | null>(null)
-
-  /** Current active filter. */
   const [filter,        setFilter]        = useState<FilterType>('user')
-
-  /** Whether the delete confirmation dialog is open. */
   const [confirmOpen,   setConfirmOpen]   = useState(false)
-
-  /**
-   * The model the user has chosen to delete.
-   * Stored so the dialog can show the name and the handler knows the sm_id.
-   */
   const [modelToDelete, setModelToDelete] = useState<Model | null>(null)
-
-  /** True while a delete request is in flight — disables the confirm button. */
   const [deleting,      setDeleting]      = useState(false)
-
-  // ── Load models ────────────────────────────────────────────────────────
 
   useEffect(() => {
     if (!user) return
     loadModels()
   }, [user])
 
-  /**
-   * loadModels
-   * Fetches all models for the current user's project from nxf_system_models.
-   * Reads the response as text first to guard against empty body errors.
-   */
   async function loadModels() {
     setLoading(true)
     setError(null)
@@ -169,21 +144,12 @@ export default function ModelsListPage() {
     }
   }
 
-  // ── Derived — filtered model list ──────────────────────────────────────
-
   const filteredModels = models.filter((m) => {
     if (filter === 'system') return isSystemTable(m.name)
     if (filter === 'user')   return !isSystemTable(m.name)
     return true
   })
 
-  // ── Delete handlers ────────────────────────────────────────────────────
-
-  /**
-   * onDeleteClick
-   * Opens the delete confirmation dialog for the given model.
-   * Stops the click from also navigating to the model's edit/view page.
-   */
   const onDeleteClick = (e: React.MouseEvent, model: Model) => {
     e.preventDefault()
     e.stopPropagation()
@@ -191,10 +157,6 @@ export default function ModelsListPage() {
     setConfirmOpen(true)
   }
 
-  /**
-   * handleConfirmDelete
-   * Sends DELETE /api/models/[id] and removes the model from local state.
-   */
   const handleConfirmDelete = async () => {
     if (!modelToDelete) return
     setDeleting(true)
@@ -219,13 +181,11 @@ export default function ModelsListPage() {
     }
   }
 
-  // ── Render ─────────────────────────────────────────────────────────────
-
   return (
     <div className="h-full overflow-y-auto">
       <div className="p-6 max-w-5xl mx-auto">
 
-        {/* ── Page header ── */}
+        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">
@@ -244,14 +204,14 @@ export default function ModelsListPage() {
           </Link>
         </div>
 
-        {/* ── Error banner ── */}
+        {/* Error banner */}
         {error && (
           <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
             {error}
           </div>
         )}
 
-        {/* ── Filter toggles ── */}
+        {/* Filter toggles */}
         <div className="flex items-center gap-2 mb-4">
           {(['all', 'user', 'system'] as FilterType[]).map((f) => (
             <button
@@ -274,9 +234,9 @@ export default function ModelsListPage() {
           ))}
         </div>
 
-        {/* ── Content ── */}
+        {/* Content */}
         {loading ? (
-  <Loader />
+          <Loader />
         ) : filteredModels.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-64 text-gray-400">
             <FiDatabase size={32} className="mb-3 opacity-30" />
@@ -289,8 +249,9 @@ export default function ModelsListPage() {
               const isSystem     = isSystemTable(model.name)
               const isPureSystem = isPureSystemTable(model.name)
               const href         = getRowHref(model)
-              const pkField      = model.schema.find((f) => f.is_primary)
-              const fkCount      = model.schema.filter((f) => f.foreign_key).length
+              const columns      = getColumns(model.schema)
+              const pkField      = columns.find((f) => f.is_primary)
+              const fkCount      = columns.filter((f) => f.foreign_key).length
 
               return (
                 <div
@@ -302,7 +263,7 @@ export default function ModelsListPage() {
                       : ''
                   }`}
                 >
-                  {/* ── Icon ── */}
+                  {/* Icon */}
                   <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
                     isPureSystem
                       ? 'bg-gray-100'
@@ -316,21 +277,19 @@ export default function ModelsListPage() {
                     }
                   </div>
 
-                  {/* ── Name + meta ── */}
+                  {/* Name + meta */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span className="text-sm font-semibold text-gray-900 truncate">
                         {model.name}
                       </span>
 
-                      {/* Pure system badge */}
                       {isPureSystem && (
                         <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 shrink-0">
                           {t('badges.system')}
                         </span>
                       )}
 
-                      {/* Editable system badge */}
                       {!isPureSystem && isSystem && (
                         <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 shrink-0">
                           {t('badges.partialSystem')}
@@ -339,7 +298,7 @@ export default function ModelsListPage() {
                     </div>
 
                     <div className="flex items-center gap-3 mt-0.5 text-[11px] text-gray-400">
-                      <span>{t('meta.fields', { count: model.schema.length })}</span>
+                      <span>{t('meta.fields', { count: columns.length })}</span>
                       {pkField && (
                         <span>
                           PK: <span className="font-mono">{pkField.name}</span>
@@ -351,14 +310,14 @@ export default function ModelsListPage() {
                     </div>
                   </div>
 
-                  {/* ── Updated date ── */}
+                  {/* Updated date */}
                   <span className="text-xs text-gray-400 shrink-0 hidden sm:block">
                     {new Date(model.updated_at).toLocaleDateString('en-GB', {
                       day: '2-digit', month: 'short', year: 'numeric',
                     })}
                   </span>
 
-                  {/* ── Delete button — hidden for system tables ── */}
+                  {/* Delete button — hidden for system tables */}
                   {!isSystem ? (
                     <button
                       type="button"
@@ -369,11 +328,10 @@ export default function ModelsListPage() {
                       <FiTrash2 size={15} />
                     </button>
                   ) : (
-                    /* Spacer to keep chevron aligned */
                     <div className="w-7 shrink-0" />
                   )}
 
-                  {/* ── Row chevron ── */}
+                  {/* Row chevron */}
                   <FiChevronRight size={15} className="text-gray-300 shrink-0" />
                 </div>
               )
@@ -382,7 +340,7 @@ export default function ModelsListPage() {
         )}
       </div>
 
-      {/* ── Confirm delete dialog ── */}
+      {/* Confirm delete dialog */}
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}

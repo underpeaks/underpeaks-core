@@ -1055,8 +1055,6 @@ async installDemoContent(
     let tenantId:    string | null = null
 
     // ── Resolve ownership IDs ───────────────────────────────────────────────
-    // If adminEmail wasn't passed, do a last-resort lookup from nxf_users
-    // so demo records are always inserted with correct ownership references
 
     if (!adminEmail) {
       console.log('[SupabaseAdapter] installDemoContent — adminEmail missing, attempting nxf_users lookup')
@@ -1070,7 +1068,6 @@ async installDemoContent(
 
         if (allUsers?.user_email || allUsers?.email) {
           adminEmail = allUsers.user_email ?? allUsers.email
-          console.log('[SupabaseAdapter] installDemoContent — adminEmail resolved from nxf_users:', adminEmail)
         }
       } catch (err: any) {
         console.warn('[SupabaseAdapter] installDemoContent — nxf_users admin lookup failed:', err.message)
@@ -1081,22 +1078,43 @@ async installDemoContent(
       try {
         const user = await this.findUserByEmail(config, adminEmail)
         adminUserId = user?.user_id ?? null
-        console.log('[SupabaseAdapter] installDemoContent — adminUserId:', adminUserId)
 
         if (adminUserId) {
           const project = await this.findProjectByOwnerId(config, adminUserId)
           projectId = project?.project_id ?? project?.id ?? null
-          console.log('[SupabaseAdapter] installDemoContent — projectId:', projectId)
 
           const tenant = await this.findTenantByUserID(config, adminUserId)
           tenantId = tenant?.ten_id ?? tenant?.id ?? null
-          console.log('[SupabaseAdapter] installDemoContent — tenantId:', tenantId)
         }
       } catch (err: any) {
         console.warn('[SupabaseAdapter] installDemoContent — could not resolve ownership IDs:', err.message)
       }
     } else {
       console.warn('[SupabaseAdapter] installDemoContent — no adminEmail resolved, ownership IDs will be empty')
+    }
+
+    // ── Pre-build the model name → sm_id resolver map ───────────────────────
+    // Used by the nxf_pages installer to resolve "model": "nxf_product"
+    // into the actual sm_id at install time.
+
+    const modelNameToId = new Map<string, string>()
+    if (projectId) {
+      try {
+        const { data: models } = await this.adminClient
+          .from('nxf_system_models')
+          .select('sm_id, name')
+          .eq('project_id', projectId)
+
+        for (const m of models ?? []) {
+          if (m.name && m.sm_id) modelNameToId.set(m.name, m.sm_id)
+        }
+
+        console.log(
+          `[SupabaseAdapter] Built model resolver map — ${modelNameToId.size} models indexed`
+        )
+      } catch (err: any) {
+        console.warn('[SupabaseAdapter] Failed to build model resolver map:', err.message)
+      }
     }
 
     const modelFolders = [
@@ -1117,7 +1135,6 @@ async installDemoContent(
       }
 
       const files = fs.readdirSync(basePath).filter((f: string) => f.endsWith('.json'))
-      console.log(`[SupabaseAdapter] Found ${files.length} JSON files in: ${basePath}`)
 
       if (!files.length) {
         console.log(`[SupabaseAdapter] No JSON files found in: ${basePath}`)
@@ -1157,23 +1174,32 @@ async installDemoContent(
               if (row[key] !== undefined) cleaned[key] = row[key]
             }
 
-            // Inject ownership IDs into rows that have the field but no value
-           if (projectId)   cleaned.project_id = (cleaned.project_id === '{{project_id}}' || !cleaned.project_id) ? projectId  : cleaned.project_id
-if (tenantId)    cleaned.tenant_id  = (cleaned.tenant_id  === '{{tenant_id}}'  || !cleaned.tenant_id)  ? tenantId   : cleaned.tenant_id
-if (adminUserId && 'user_id' in cleaned) {
-  cleaned.user_id = (cleaned.user_id === '{{user_id}}' || !cleaned.user_id) ? adminUserId : cleaned.user_id
-}
+            // Resolve model name → model_id for nxf_pages rows
+            if (tableName === 'nxf_pages' && cleaned.model) {
+              const resolvedId = modelNameToId.get(cleaned.model)
+              if (resolvedId) {
+                cleaned.model_id = resolvedId
+              } else {
+                console.warn(
+                  `[SupabaseAdapter] Page "${cleaned.slug}" references model "${cleaned.model}" which does not exist — model_id left null`
+                )
+              }
+            }
+
+            if (projectId)   cleaned.project_id = (cleaned.project_id === '{{project_id}}' || !cleaned.project_id) ? projectId  : cleaned.project_id
+            if (tenantId)    cleaned.tenant_id  = (cleaned.tenant_id  === '{{tenant_id}}'  || !cleaned.tenant_id)  ? tenantId   : cleaned.tenant_id
+            if (adminUserId && 'user_id' in cleaned) {
+              cleaned.user_id = (cleaned.user_id === '{{user_id}}' || !cleaned.user_id) ? adminUserId : cleaned.user_id
+            }
 
             return cleaned
           })
-
-          console.log(`[SupabaseAdapter] Inserting chunk ${Math.floor(i / chunkSize) + 1} into ${tableName}`)
 
           const { error } = await this.adminClient.from(tableName).insert(cleanedChunk)
 
           if (error) {
             console.error(`[SupabaseAdapter] Insert failed for table: ${tableName} — ${error.message}`)
-            break // skip remaining chunks for this table, continue to next file
+            break
           }
 
           totalInserted += cleanedChunk.length

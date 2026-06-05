@@ -93,6 +93,13 @@
       "hidden": false,
       "ui_type": "select"
     },
+     {
+  "name": "model",
+  "type": "string",
+  "nullable": true,
+  "description": "model name (e.g. nxf_product) — used by demo installer to resolve model_id at install time; also lets users reference a model by name independent of its sm_id",
+  "hidden": true
+},
     {
       "name": "template_type",
       "type": "string",

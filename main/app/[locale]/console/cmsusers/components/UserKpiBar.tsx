@@ -4,6 +4,8 @@
 //   Full file printed for completeness.
 // ============================================================
 
+
+
 'use client';
 
 import { useState } from 'react';
@@ -108,6 +110,7 @@ interface UserKpiBarProps {
   onConfigChange: (config: KpiPageConfig) => void;
   projectId: string;
   tenantId: string;
+   page: string;
 }
 
 export default function UserKpiBar({
@@ -118,6 +121,7 @@ export default function UserKpiBar({
   onConfigChange,
   projectId,
   tenantId,
+  page,  
 }: UserKpiBarProps) {
   const [editingKpi,    setEditingKpi]    = useState<{ blockId: string; kpi: KpiConfigExtended } | null>(null);
   const [addingToBlock, setAddingToBlock] = useState<string | null>(null);
@@ -130,10 +134,10 @@ export default function UserKpiBar({
     return results.find((r) => r.kpi_id === kpiId);
   }
 
-  function emitChange(newBlocks: KpiBlock[]) {
+ function emitChange(newBlocks: KpiBlock[]) {
     const base = config ?? {
       config_id:  crypto.randomUUID(),
-      page:       'users',
+      page,                    // ← use the prop
       project_id: projectId,
       tenant_id:  tenantId,
       updated_at: new Date().toISOString(),

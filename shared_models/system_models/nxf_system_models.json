@@ -2,49 +2,26 @@
   "table_name": "nxf_system_models",
   "schema": "public",
   "columns": {
-    "sm_id": {
-      "type": "string",
-      "default": "gen_random_uuid()",
-      "primary_key": true,
-      "nullable": false,
-      "hidden": true
-    },
-   "tenant_id": {
-  "type": "string",
-  "nullable": false,
-  "foreign_key": {
-    "references": "nxf_system_tenants(ten_id)",
-    "on_delete": "CASCADE"
-  },
-  "hidden": true
-},
-"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
-    "name": {
-      "type": "string",
-      "nullable": false,
-      "hidden": false,
-      "ui_type": "textfield"
-    },
-    "schema": {
-      "type": "jsonb",
-      "nullable": false,
-      "hidden": false,
-      "ui_type": "code-editor"
-    },
-    "created_at": {
-      "type": "timestamp with time zone",
-      "nullable": true,
-      "default": "now()",
-      "hidden": true
-    },
-    "updated_at": {
-      "type": "timestamp with time zone",
-      "nullable": true,
-      "default": "now()",
-      "hidden": true
-    }
+    "sm_id":      { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false, "hidden": true },
+    "tenant_id":  { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_tenants(ten_id)", "on_delete": "CASCADE" }, "hidden": true },
+    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
+
+    "name":         { "type": "string",  "nullable": false, "ui_type": "textfield" },
+    "display_name": { "type": "string",  "nullable": true,  "ui_type": "textfield" },
+    "description":  { "type": "string",  "nullable": true,  "ui_type": "textarea" },
+    "icon":         { "type": "string",  "nullable": true,  "ui_type": "textfield" },
+
+    "schema":       { "type": "jsonb",   "nullable": false, "ui_type": "code-editor" },
+
+    "is_system":    { "type": "boolean", "nullable": false, "default": false, "hidden": true },
+
+    "created_at":   { "type": "timestamp with time zone", "nullable": true, "default": "now()", "hidden": true },
+    "created_by":   { "type": "string", "nullable": true, "hidden": true },
+    "updated_at":   { "type": "timestamp with time zone", "nullable": true, "default": "now()", "hidden": true },
+    "updated_by":   { "type": "string", "nullable": true, "hidden": true }
   },
   "constraints": {
-    "primary_key": ["sm_id"]
+    "primary_key": ["sm_id"],
+    "unique":      [["project_id", "name"]]
   }
 }

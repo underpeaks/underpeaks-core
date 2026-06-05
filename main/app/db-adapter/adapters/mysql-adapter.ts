@@ -888,156 +888,188 @@ export class MySQLAdapter implements DBAdapter {
   // Demo content
   // -------------------------------------------------------------------------
 
-  async installDemoContent(
-    config: DBConfig,
-    selectedProjectType: string
-  ): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
-    const fs   = require('fs')
-    const path = require('path')
+async installDemoContent(
+  config: DBConfig,
+  selectedProjectType: string
+): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
+  const fs   = require('fs')
+  const path = require('path')
 
+  try {
+    const [userRows] = await this.pool.execute(
+      `SELECT user_id FROM \`nxf_users\` WHERE role = 'admin' LIMIT 1`
+    )
+    const adminUser = (userRows as any[])[0]
+    if (!adminUser) return { success: false, error: 'No admin user found' }
+    const adminUserId = adminUser.user_id
+
+    const [projectRows] = await this.pool.execute(
+      'SELECT project_id FROM `nxf_system_projects` LIMIT 1'
+    )
+    const project = (projectRows as any[])[0]
+    if (!project) return { success: false, error: 'No project found' }
+    const projectId = project.project_id
+
+    const [tenantRows] = await this.pool.execute(
+      'SELECT ten_id FROM `nxf_system_tenants` LIMIT 1'
+    )
+    const tenant = (tenantRows as any[])[0]
+    if (!tenant) return { success: false, error: 'No tenant found' }
+    const tenantId = tenant.ten_id
+
+    // ── Pre-build the model name → sm_id resolver map ──────────────────────
+    // Used by the nxf_pages installer to resolve "model": "nxf_product"
+    // into the actual sm_id at install time.
+
+    const modelNameToId = new Map<string, string>()
     try {
-      const [userRows] = await this.pool.execute(
-        `SELECT user_id FROM \`nxf_users\` WHERE role = 'admin' LIMIT 1`
+      const [modelRows] = await this.pool.execute(
+        'SELECT sm_id, name FROM `nxf_system_models` WHERE project_id = ?',
+        [projectId]
       )
-      const adminUser = (userRows as any[])[0]
-      if (!adminUser) return { success: false, error: 'No admin user found' }
-      const adminUserId = adminUser.user_id
-
-      const [projectRows] = await this.pool.execute(
-        'SELECT project_id FROM `nxf_system_projects` LIMIT 1'
+      for (const m of modelRows as any[]) {
+        if (m.name && m.sm_id) modelNameToId.set(m.name, m.sm_id)
+      }
+      console.log(
+        `[MySQLAdapter] Built model resolver map — ${modelNameToId.size} models indexed`
       )
-      const project = (projectRows as any[])[0]
-      if (!project) return { success: false, error: 'No project found' }
-      const projectId = project.project_id
+    } catch (err: any) {
+      console.warn('[MySQLAdapter] Failed to build model resolver map:', err.message)
+    }
 
-      const [tenantRows] = await this.pool.execute(
-        'SELECT ten_id FROM `nxf_system_tenants` LIMIT 1'
-      )
-      const tenant = (tenantRows as any[])[0]
-      if (!tenant) return { success: false, error: 'No tenant found' }
-      const tenantId = tenant.ten_id
+    const modelFolders = [
+      'system_models',
+      'users_models',
+      `${selectedProjectType}_models`,
+    ]
 
-      const modelFolders = [
-        'system_models',
-        'users_models',
-        `${selectedProjectType}_models`,
-      ]
+    let totalInserted = 0
 
-      let totalInserted = 0
+    for (const folder of modelFolders) {
+      const basePath = path.resolve(process.cwd(), '..', 'demo_content', folder)
 
-      for (const folder of modelFolders) {
-        const basePath = path.resolve(process.cwd(), '..', 'demo_content', folder)
+      if (!fs.existsSync(basePath)) {
+        console.log('[MySQLAdapter] Demo folder not found, skipping:', basePath)
+        continue
+      }
 
-        if (!fs.existsSync(basePath)) {
-          console.log('[MySQLAdapter] Demo folder not found, skipping:', basePath)
+      const files = fs.readdirSync(basePath).filter((f: string) => f.endsWith('.json'))
+
+      for (const file of files) {
+        const raw = fs.readFileSync(path.join(basePath, file), 'utf-8')
+
+        let json: any
+        try {
+          json = JSON.parse(raw)
+        } catch {
+          console.warn(`[MySQLAdapter] Skipping invalid JSON: ${file}`)
           continue
         }
 
-        const files = fs.readdirSync(basePath).filter((f: string) => f.endsWith('.json'))
+        const tableName = file.replace('.json', '')
+        const rows      = Array.isArray(json) ? json : json?.demo_data
 
-        for (const file of files) {
-          const raw = fs.readFileSync(path.join(basePath, file), 'utf-8')
+        if (!rows || !Array.isArray(rows)) continue
 
-          let json: any
+        const [colRows] = await this.pool.execute(
+          `SELECT COLUMN_NAME, DATA_TYPE FROM information_schema.COLUMNS
+           WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?`,
+          [tableName]
+        )
+        const tableMeta = colRows as any[]
+
+        if (!tableMeta.length) {
+          console.log(`[MySQLAdapter] Skipping ${tableName} — table does not exist`)
+          continue
+        }
+
+        const tableColumns = tableMeta.map((c) => c.COLUMN_NAME)
+        const colTypeMap   = Object.fromEntries(
+          tableMeta.map((c) => [c.COLUMN_NAME, c.DATA_TYPE])
+        )
+
+        console.log(`[MySQLAdapter] Inserting into ${tableName} — ${rows.length} rows`)
+
+        for (const row of rows) {
           try {
-            json = JSON.parse(raw)
-          } catch {
-            console.warn(`[MySQLAdapter] Skipping invalid JSON: ${file}`)
-            continue
-          }
+            const enriched = { ...row }
 
-          const tableName = file.replace('.json', '')
-          const rows      = Array.isArray(json) ? json : json?.demo_data
-
-          if (!rows || !Array.isArray(rows)) continue
-
-          const [colRows] = await this.pool.execute(
-            `SELECT COLUMN_NAME, DATA_TYPE FROM information_schema.COLUMNS
-             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?`,
-            [tableName]
-          )
-          const tableMeta = colRows as any[]
-
-          if (!tableMeta.length) {
-            console.log(`[MySQLAdapter] Skipping ${tableName} — table does not exist`)
-            continue
-          }
-
-          const tableColumns = tableMeta.map((c) => c.COLUMN_NAME)
-          const colTypeMap   = Object.fromEntries(
-            tableMeta.map((c) => [c.COLUMN_NAME, c.DATA_TYPE])
-          )
-
-          console.log(`[MySQLAdapter] Inserting into ${tableName} — ${rows.length} rows`)
-
-          for (const row of rows) {
-            try {
-              const enriched = { ...row }
-
-              if ('project_id' in enriched) enriched.project_id = projectId
-              if ('tenant_id'  in enriched) enriched.tenant_id  = tenantId
-              if ('created_by' in enriched) enriched.created_by = adminUserId
-              if ('user_id'    in enriched) enriched.user_id    = adminUserId
-
-              for (const key of Object.keys(enriched)) {
-                if (typeof enriched[key] === 'string' && enriched[key].startsWith('{{')) {
-                  enriched[key] = null
-                }
+            // Resolve model name → model_id for nxf_pages rows
+            if (tableName === 'nxf_pages' && enriched.model) {
+              const resolvedId = modelNameToId.get(enriched.model)
+              if (resolvedId) {
+                enriched.model_id = resolvedId
+              } else {
+                console.warn(
+                  `[MySQLAdapter] Page "${enriched.slug}" references model "${enriched.model}" which does not exist — model_id left null`
+                )
               }
-
-              if (!enriched.created_at) enriched.created_at = new Date().toISOString()
-
-              const filtered: Record<string, any> = {}
-              for (const key of Object.keys(enriched)) {
-                if (tableColumns.includes(key)) {
-                  filtered[key] = enriched[key]
-                }
-              }
-
-              if (!Object.keys(filtered).length) continue
-
-              for (const key of Object.keys(filtered)) {
-                const val      = filtered[key]
-                const dataType = colTypeMap[key]
-
-                if (val !== null && typeof val === 'object') {
-                  filtered[key] = JSON.stringify(val)
-                  continue
-                }
-
-                if (
-                  typeof val === 'string' &&
-                  (dataType === 'datetime' || dataType === 'timestamp') &&
-                  val.includes('T')
-                ) {
-                  filtered[key] = new Date(val).toISOString().slice(0, 19).replace('T', ' ')
-                }
-              }
-
-              const columns      = Object.keys(filtered).map((c) => `\`${c}\``).join(', ')
-              const placeholders = Object.keys(filtered).map(() => '?').join(', ')
-              const values       = Object.values(filtered)
-
-              await this.pool.execute(
-                `INSERT IGNORE INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`,
-                values
-              )
-
-              totalInserted++
-            } catch (err: any) {
-              console.warn(`[MySQLAdapter] Skipping row in ${tableName}:`, err.message)
             }
+
+            if ('project_id' in enriched) enriched.project_id = projectId
+            if ('tenant_id'  in enriched) enriched.tenant_id  = tenantId
+            if ('created_by' in enriched) enriched.created_by = adminUserId
+            if ('user_id'    in enriched) enriched.user_id    = adminUserId
+
+            for (const key of Object.keys(enriched)) {
+              if (typeof enriched[key] === 'string' && enriched[key].startsWith('{{')) {
+                enriched[key] = null
+              }
+            }
+
+            if (!enriched.created_at) enriched.created_at = new Date().toISOString()
+
+            const filtered: Record<string, any> = {}
+            for (const key of Object.keys(enriched)) {
+              if (tableColumns.includes(key)) {
+                filtered[key] = enriched[key]
+              }
+            }
+
+            if (!Object.keys(filtered).length) continue
+
+            for (const key of Object.keys(filtered)) {
+              const val      = filtered[key]
+              const dataType = colTypeMap[key]
+
+              if (val !== null && typeof val === 'object') {
+                filtered[key] = JSON.stringify(val)
+                continue
+              }
+
+              if (
+                typeof val === 'string' &&
+                (dataType === 'datetime' || dataType === 'timestamp') &&
+                val.includes('T')
+              ) {
+                filtered[key] = new Date(val).toISOString().slice(0, 19).replace('T', ' ')
+              }
+            }
+
+            const columns      = Object.keys(filtered).map((c) => `\`${c}\``).join(', ')
+            const placeholders = Object.keys(filtered).map(() => '?').join(', ')
+            const values       = Object.values(filtered)
+
+            await this.pool.execute(
+              `INSERT IGNORE INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`,
+              values
+            )
+
+            totalInserted++
+          } catch (err: any) {
+            console.warn(`[MySQLAdapter] Skipping row in ${tableName}:`, err.message)
           }
         }
       }
-
-      return { success: true, inserted: totalInserted }
-
-    } catch (err: any) {
-      console.error('[MySQLAdapter] installDemoContent failed:', err.message)
-      return { success: false, inserted: 0, error: 'Failed to install demo content' }
     }
+
+    return { success: true, inserted: totalInserted }
+
+  } catch (err: any) {
+    console.error('[MySQLAdapter] installDemoContent failed:', err.message)
+    return { success: false, inserted: 0, error: 'Failed to install demo content' }
   }
+}
 
   // ─── Core CRUD ──────────────────────────────────────────────────────────────
 

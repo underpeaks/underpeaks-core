@@ -1241,23 +1241,19 @@ async installDemoContent(
     console.log('[MongoAdapter] installDemoContent — selectedProjectType:', selectedProjectType)
     console.log('[MongoAdapter] installDemoContent — adminEmail:', adminEmail ?? 'not provided')
 
-    // ── Resolve admin user FIRST before anything else ──────────────────────
-    // Log exactly what is in nxf_users so we can see the field names
+    // ── Resolve admin user ──────────────────────────────────────────────────
 
     const testUser = await db.collection('nxf_users').findOne({})
     console.log('[MongoAdapter] installDemoContent — first nxf_users doc:', JSON.stringify(testUser, null, 2))
 
-    // Try adminEmail first, then fall back to first admin in DB
     if (!adminEmail) {
       console.log('[MongoAdapter] installDemoContent — adminEmail missing, attempting nxf_users lookup')
       const fallbackAdmin = await db.collection('nxf_users').findOne({ role: 'admin' })
       console.log('[MongoAdapter] installDemoContent — fallbackAdmin:', JSON.stringify(fallbackAdmin, null, 2))
       if (fallbackAdmin?.user_email) {
         adminEmail = fallbackAdmin.user_email
-        console.log('[MongoAdapter] installDemoContent — adminEmail resolved:', adminEmail)
       } else if (fallbackAdmin?.email) {
         adminEmail = fallbackAdmin.email
-        console.log('[MongoAdapter] installDemoContent — adminEmail resolved from email field:', adminEmail)
       }
     }
 
@@ -1276,11 +1272,8 @@ async installDemoContent(
           await db.collection('nxf_users').findOne({ email: adminEmail }) ??
           await db.collection('nxf_users').findOne({ role: 'admin' })
 
-        console.log('[MongoAdapter] installDemoContent — adminUser resolved:', JSON.stringify(adminUser, null, 2))
-
         if (adminUser) {
           adminUserId = adminUser.user_id ?? adminUser._id?.toString()
-          console.log('[MongoAdapter] installDemoContent — adminUserId:', adminUserId)
         }
 
         if (adminUserId) {
@@ -1288,26 +1281,45 @@ async installDemoContent(
             await db.collection('nxf_system_projects').findOne({ user_id: adminUserId }) ??
             await db.collection('nxf_system_projects').findOne({})
 
-          console.log('[MongoAdapter] installDemoContent — project resolved:', JSON.stringify(project, null, 2))
-
           if (project) {
             projectId = project.project_id ?? project._id?.toString()
-            console.log('[MongoAdapter] installDemoContent — projectId:', projectId)
           }
 
           const tenant =
             await db.collection('nxf_system_tenants').findOne({ user_id: adminUserId }) ??
             await db.collection('nxf_system_tenants').findOne({})
 
-          console.log('[MongoAdapter] installDemoContent — tenant resolved:', JSON.stringify(tenant, null, 2))
-
           if (tenant) {
             tenantId = tenant.ten_id ?? tenant._id?.toString()
-            console.log('[MongoAdapter] installDemoContent — tenantId:', tenantId)
           }
         }
       } catch (err: any) {
         console.warn('[MongoAdapter] installDemoContent — could not resolve ownership IDs:', err.message)
+      }
+    }
+
+    // ── Pre-build the model name → sm_id resolver map ───────────────────────
+    // Used by the nxf_pages installer to resolve "model": "nxf_product"
+    // into the actual sm_id at install time.
+
+    const modelNameToId = new Map<string, string>()
+    if (projectId) {
+      try {
+        const models = await db
+          .collection('nxf_system_models')
+          .find({ project_id: projectId })
+          .toArray()
+
+        for (const m of models) {
+          const id = m.sm_id ?? m._id?.toString()
+          if (m.name && id) modelNameToId.set(m.name, id)
+        }
+
+        console.log(
+          `[MongoAdapter] Built model resolver map — ${modelNameToId.size} models indexed`
+        )
+      } catch (err: any) {
+        console.warn('[MongoAdapter] Failed to build model resolver map:', err.message)
       }
     }
 
@@ -1365,7 +1377,18 @@ async installDemoContent(
             if (row[key] !== undefined) cleaned[key] = row[key]
           }
 
-          // Always inject project_id and tenant_id — replace {{placeholders}} or empty values
+          // Resolve model name → model_id for nxf_pages rows
+          if (collectionName === 'nxf_pages' && cleaned.model) {
+            const resolvedId = modelNameToId.get(cleaned.model)
+            if (resolvedId) {
+              cleaned.model_id = resolvedId
+            } else {
+              console.warn(
+                `[MongoAdapter] Page "${cleaned.slug}" references model "${cleaned.model}" which does not exist — model_id left null`
+              )
+            }
+          }
+
           if (projectId) {
             cleaned.project_id = (
               cleaned.project_id === '{{project_id}}' || !cleaned.project_id
@@ -1378,7 +1401,6 @@ async installDemoContent(
             ) ? tenantId : cleaned.tenant_id
           }
 
-          // Only inject user_id if the row already has that field
           if (adminUserId && 'user_id' in cleaned) {
             cleaned.user_id = (
               cleaned.user_id === '{{user_id}}' || !cleaned.user_id

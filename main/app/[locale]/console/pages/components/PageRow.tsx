@@ -59,8 +59,8 @@ export default function PageRow({
 
       {/* Model */}
       <div>
-        {page.model
-          ? <span className="inline-flex items-center gap-1 text-xs text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full font-medium">{modelName(page.model)}</span>
+        {page.model_id
+          ? <span className="inline-flex items-center gap-1 text-xs text-gray-700 bg-gray-100 px-2 py-0.5 rounded-full font-medium">{modelName(page.model_id)}</span>
           : <span className="text-xs text-gray-400">—</span>
         }
       </div>
