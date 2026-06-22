@@ -153,7 +153,7 @@ export type InstallerState = {
   // Features
   ecommerceEnabled:    boolean
   demoContentEnabled:  boolean
-
+  studioUrl: string
   // Database config
   dbConfig: DBConfig & {
     /**
@@ -223,7 +223,7 @@ export const useInstallerStore = create<InstallerState>((set) => ({
   // Features — all opt-in, disabled by default
   ecommerceEnabled:   false,
   demoContentEnabled: false,
-
+  studioUrl: 'http://localhost:3000',
   // Database config — defaults to Supabase as a starting point.
   // The type and all connection fields will be replaced when the user
   // completes the database step of the wizard.
