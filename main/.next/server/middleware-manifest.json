@@ -3,6 +3,7 @@
   "middleware": {
     "/": {
       "files": [
+        "server/edge-instrumentation.js",
         "server/edge-runtime-webpack.js",
         "server/middleware.js"
       ],
@@ -19,9 +20,9 @@
       "env": {
         "__NEXT_BUILD_ID": "development",
         "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "N5waKgTuCife2Zt3+s8dDMpVoI2ACBjzzEdOOh2JrQ0=",
-        "__NEXT_PREVIEW_MODE_ID": "46761acf9c2643adb2f20f5cd4812b56",
-        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "e267b4225d873f4bd1a54b21a927be0c557daaf07e9c2c976f3fff62eb754a8a",
-        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "e0a401b5c0a73769c8c72dfb9423d69d991b62bd2eb84b132ce9fe3b1aa4d86d"
+        "__NEXT_PREVIEW_MODE_ID": "777c4b834472b715f38fbb5b8cf01d8f",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "1c46e0e4d52fbdf81a95558100a1edb4b464ad0216461f195511dbb78c60e647",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "a53f7cff493ff71e80a3b0a6e4a33219edc651c3d12a1cb34d71368ea2ddef07"
       }
     }
   },

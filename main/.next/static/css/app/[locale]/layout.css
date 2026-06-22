@@ -1697,6 +1697,9 @@
   .\!bg-black {
     background-color: var(--color-black) !important;
   }
+  .bg-\[\#0a0a0a\] {
+    background-color: #0a0a0a;
+  }
   .bg-\[var\(--color-background\)\] {
     background-color: var(--color-background);
   }
@@ -4373,6 +4376,11 @@
   .sm\:max-w-\[400px\] {
     @media (width >= 40rem) {
       max-width: 400px;
+    }
+  }
+  .sm\:max-w-\[480px\] {
+    @media (width >= 40rem) {
+      max-width: 480px;
     }
   }
   .sm\:max-w-sm {

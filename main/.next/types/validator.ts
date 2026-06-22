@@ -398,6 +398,24 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
   type __Unused = __Check
 }
 
+// Validate ../../app/[locale]/license-expired/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/[locale]/license-expired">> = Specific
+  const handler = {} as typeof import("../../app/[locale]/license-expired/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/[locale]/license-revoked/page.tsx
+{
+  type __IsExpected<Specific extends AppPageConfig<"/[locale]/license-revoked">> = Specific
+  const handler = {} as typeof import("../../app/[locale]/license-revoked/page.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
 // Validate ../../app/[locale]/page.tsx
 {
   type __IsExpected<Specific extends AppPageConfig<"/[locale]">> = Specific
@@ -645,6 +663,15 @@ type RouteHandlerConfig<Route extends AppRouteHandlerRoutes = AppRouteHandlerRou
 {
   type __IsExpected<Specific extends RouteHandlerConfig<"/api/kpi-config">> = Specific
   const handler = {} as typeof import("../../app/api/kpi-config/route.js")
+  type __Check = __IsExpected<typeof handler>
+  // @ts-ignore
+  type __Unused = __Check
+}
+
+// Validate ../../app/api/license/phone-home/route.ts
+{
+  type __IsExpected<Specific extends RouteHandlerConfig<"/api/license/phone-home">> = Specific
+  const handler = {} as typeof import("../../app/api/license/phone-home/route.js")
   type __Check = __IsExpected<typeof handler>
   // @ts-ignore
   type __Unused = __Check

@@ -40,6 +40,8 @@
   },
 
  "include": [
+  "*.ts",
+  "*.tsx",
   "app/**/*",
   "components/**/*",
   "lib/**/*",

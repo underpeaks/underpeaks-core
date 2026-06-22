@@ -1,14 +1,9 @@
 // app/api/settings/update-project/route.ts
-
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
 import fs                            from 'fs'
 import path                          from 'path'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
-
-// ---------------------------------------------------------------------------
-// Helpers — unchanged
-// ---------------------------------------------------------------------------
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
 
 function patchEnvFile(key: string, value: string) {
   const envPath = path.resolve(process.cwd(), '.env.local')
@@ -28,14 +23,8 @@ function patchConfigFile(projectName: string, projectUrl: string) {
   fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf-8')
 }
 
-// ---------------------------------------------------------------------------
-// POST handler
-// ---------------------------------------------------------------------------
-
 export async function POST(req: NextRequest) {
   try {
-    // ── Validate body ───────────────────────────────────────────────────────
-
     const { user_id, project_name, project_url, nxf_api_key } = await req.json()
 
     if (!user_id || !project_name) {
@@ -45,48 +34,41 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // ── Resolve adapter ─────────────────────────────────────────────────────
-
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
-    if (!adapter.findSystemConfigByUserId || !adapter.update) {
-      throw new Error(`${dbConfig.type} adapter does not implement required methods`)
-    }
-
-    // ── Look up existing system config ──────────────────────────────────────
-
-    const existing = await adapter.findSystemConfigByUserId(dbConfig, user_id)
-
-    if (!existing?.id) {
-      return NextResponse.json(
-        { error: 'System config record not found for this user' },
-        { status: 404 }
-      )
-    }
-
-    // ── Build update payload ────────────────────────────────────────────────
-    // nxf_api_key only included if explicitly sent — undefined check preserves
-    // ability to clear the key with an empty string if caller intends that
+    const now = new Date().toISOString()
 
     const updatePayload: Record<string, any> = {
       project_name,
       project_url: project_url ?? '',
-      updated_at:  new Date().toISOString(),
+      updated_at:  now,
     }
 
     if (nxf_api_key !== undefined) {
       updatePayload.nxf_api_key = nxf_api_key
     }
 
-    // ── Update database ─────────────────────────────────────────────────────
+    // ── Look up existing system config ──────────────────────────────────────
+    const existing = await adapter.findSystemConfigByUserId?.(dbConfig, user_id)
 
-    await adapter.update(dbConfig, 'nxf_system_config', existing.id, updatePayload)
+    // Resolve the record ID — Firebase uses config_id, others use id
+    const recordId = existing?.id ?? null
+
+    if (recordId) {
+      await adapter.update!(dbConfig, 'nxf_system_config', recordId, updatePayload)
+    } else {
+      // No config exists yet — create one
+      await adapter.create!(dbConfig, 'nxf_system_config', {
+        ...updatePayload,
+        user_id,
+        created_at: now,
+      })
+    }
 
     // ── Patch local files ───────────────────────────────────────────────────
-
     if (project_url) patchEnvFile('NEXT_PUBLIC_APP_DOMAIN', project_url)
-    if (nxf_api_key) patchEnvFile('NXF_API_KEY', nxf_api_key)
+    if (nxf_api_key) patchEnvFile('NXF_LICENSE_KEY', nxf_api_key)
     patchConfigFile(project_name, project_url ?? '')
 
     return NextResponse.json({ success: true })
