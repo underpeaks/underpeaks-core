@@ -157,21 +157,13 @@ export function getConfiguredAdapter() {
   // -------------------------------------------------------------------------
   // Supabase
   // -------------------------------------------------------------------------
-  } else if (dbType === 'supabase') {
-    /**
-     * Supabase only needs two values:
-     *   - The project URL (identifies which Supabase project to connect to).
-     *   - The service-role key (grants full database access, bypassing RLS).
-     *
-     * The ! (non-null assertion) tells TypeScript we are confident these
-     * variables are set. In production you would want to add explicit checks
-     * and throw descriptive errors, similar to the Firebase branch above.
-     */
+  }  else if (dbType === 'supabase') {
     dbConfig = {
-      type:        'supabase',
-      supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      serviceRoleKey: process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY,
-      anonKey:     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      type:             'supabase',
+      supabaseUrl:      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      serviceRoleKey:   process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY,
+      anonKey:          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      connectionString: process.env.NEXT_DB_SUPABASE_CONNECTION_STRING,
     }
 
   // -------------------------------------------------------------------------

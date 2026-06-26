@@ -37,25 +37,13 @@ import { Button }                                    from '@/components/ui/butto
 import { Label }                                     from '@/components/ui/label'
 import { Alert, AlertTitle, AlertDescription }       from '@/components/ui/alert'
 import { FiMail, FiLock }                            from 'react-icons/fi'
+import { Eye, EyeOff }                               from 'lucide-react'
 import { useTranslations }                           from 'next-intl'
 import { getAuth, signInWithEmailAndPassword }       from 'firebase/auth'
 import { initializeApp, getApps }                    from 'firebase/app'
 import { parseFirebaseWebConfig }                    from '@/app/lib/firebaseConfig'
 import { logActivity }                               from '@/app/lib/logActivity'
 
-/**
- * @component SignInPageWrapper
- * @description
- * A wrapper that places SignInPage inside React's <Suspense> boundary.
- *
- * Why is Suspense needed here?
- * SignInPage reads from window.location.search (the URL query string).
- * In Next.js, accessing browser-only APIs like window during server-side
- * rendering (SSR) causes errors. Wrapping in Suspense with a null fallback
- * ensures the component only runs on the client side.
- *
- * @returns {JSX.Element}
- */
 export default function SignInPageWrapper() {
   return (
     <Suspense fallback={null}>
@@ -64,28 +52,10 @@ export default function SignInPageWrapper() {
   )
 }
 
-/**
- * @component SignInPage
- * @description
- * The main sign-in form. Handles:
- *   - Capturing email and password input from the user
- *   - Submitting credentials to the correct authentication backend
- *   - Updating nxf_users (is_logged_in, last_login) on success
- *   - Writing a user_login activity log entry on success
- *   - Displaying loading and error states
- *   - Redirecting the user after a successful sign-in
- *
- * @returns {JSX.Element}
- */
 function SignInPage() {
   const t            = useTranslations('signIn')
   const router       = useRouter()
 
-  /**
-   * After sign-in, redirect the user back to the page they were trying to visit.
-   * Next.js middleware adds ?redirectedFrom=/some/path when redirecting an
-   * unauthenticated user here. Falls back to /console if absent.
-   */
   const redirectedFrom =
     typeof window !== 'undefined'
       ? new URLSearchParams(window.location.search).get('redirectedFrom') || '/console'
@@ -93,39 +63,18 @@ function SignInPage() {
 
   // ─── State ───────────────────────────────────────────────────────────────────
 
-  const [email,    setEmail]    = useState('')
-  const [password, setPassword] = useState('')
-  const [loading,  setLoading]  = useState(false)
-  const [error,    setError]    = useState<string | null>(null)
+  const [email,        setEmail]        = useState('')
+  const [password,     setPassword]     = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading,      setLoading]      = useState(false)
+  const [error,        setError]        = useState<string | null>(null)
 
   // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-  /**
-   * recordLogin
-   *
-   * Called after a successful sign-in regardless of DB type.
-   * Performs two fire-and-forget operations in parallel:
-   *
-   * 1. PATCH /api/users — sets is_logged_in: true and last_login: now on the
-   *    user's nxf_users document. Uses the same PATCH route used by the CMS
-   *    users page, extended to accept is_logged_in and last_login fields.
-   *
-   * 2. POST /api/activity-log — writes a user_login event to
-   *    nxf_system_activity_logs. project_id and tenant_id are resolved
-   *    server-side — we only pass user_id, action, and context.
-   *
-   * Both calls are best-effort. A failure here must never block the redirect —
-   * the user successfully authenticated and should reach the app regardless.
-   *
-   * @param userId — The resolved user ID (Firebase UID or nxf_users.user_id).
-   */
-
-  
   async function recordLogin(userId: string): Promise<void> {
     const now = new Date().toISOString()
 
     await Promise.allSettled([
-      // Update nxf_users — mark online and record login time
       fetch('/api/cmsusers', {
         method:  'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -136,34 +85,12 @@ function SignInPage() {
           last_login:     now,
         }),
       }),
-
-      // Write activity log entry
       logActivity(userId, 'user_login', { email }),
     ])
   }
 
   // ─── Sign-In Handler ─────────────────────────────────────────────────────────
 
-  /**
-   * handleSignin
-   *
-   * Triggered when the user clicks "Sign In".
-   *
-   * Firebase flow:
-   *   1. Initialise Firebase app once (guards against re-init).
-   *   2. signInWithEmailAndPassword → UserCredential.
-   *   3. getIdToken → POST /api/session (sets HTTP-only session cookie).
-   *   4. Store token in localStorage.
-   *   5. recordLogin(uid).
-   *
-   * Custom flow:
-   *   1. POST /api/signin with email + password.
-   *   2. Store returned accessToken in localStorage.
-   *   3. recordLogin(data.user.user_id).
-   *
-   * On success: redirect to redirectedFrom.
-   * On failure: display error in UI.
-   */
   async function handleSignin() {
     setLoading(true)
     setError(null)
@@ -172,12 +99,6 @@ function SignInPage() {
       const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE
 
       if (DB_TYPE === 'firebase') {
-        // ── Firebase Authentication Flow ──────────────────────────────────
-
-        /**
-         * Initialise Firebase once. getApps() guards against the
-         * "app already exists" error on re-renders or double calls.
-         */
         if (!getApps().length) {
           const firebaseConfig = parseFirebaseWebConfig(
             process.env.NEXT_PUBLIC_FIREBASE_CONFIG
@@ -188,10 +109,6 @@ function SignInPage() {
         const auth           = getAuth()
         const userCredential = await signInWithEmailAndPassword(auth, email, password)
 
-        /**
-         * Exchange the Firebase ID token for a server-side session cookie.
-         * ⚠️ Never log idToken — it is a short-lived security credential.
-         */
         const idToken = await userCredential.user.getIdToken()
 
         const res  = await fetch('/api/session', {
@@ -207,20 +124,10 @@ function SignInPage() {
           throw new Error(data.error || t('errors.signinFailed'))
         }
 
-        // ⚠️ Never log this value
         localStorage.setItem('authToken', idToken)
-
-        /**
-         * Record the login in nxf_users and nxf_system_activity_logs.
-         * Uses the Firebase UID as the user identifier — this matches the
-         * user_id stored in nxf_users for Firebase installations.
-         * Best-effort: await but never let a failure here block the redirect.
-         */
         await recordLogin(userCredential.user.uid)
 
       } else {
-        // ── Custom (Non-Firebase) Authentication Flow ─────────────────────
-
         const res  = await fetch('/api/signin', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -232,30 +139,14 @@ function SignInPage() {
           throw new Error(data.error || t('errors.signinFailed'))
         }
 
-        // ⚠️ Never log this value
         localStorage.setItem('authToken', data.accessToken)
-
-        /**
-         * Record the login. Uses data.user.user_id — the ID field returned
-         * by the custom /api/signin endpoint from nxf_users.
-         */
-
         console.log('[DEBUG] user_id being passed to recordLogin:', data.user.user_id)
         await recordLogin(data.user.user_id)
       }
 
-      /**
-       * Sign-in succeeded — navigate to destination.
-       * router.replace() removes the sign-in page from history so the user
-       * cannot press Back and land here again after logging in.
-       */
       router.replace(redirectedFrom)
 
     } catch (err: any) {
-      /**
-       * Sign-in failed — show the error in the UI.
-       * Raw errors are never logged to avoid exposing auth details in production.
-       */
       setError(err.message)
     } finally {
       setLoading(false)
@@ -297,12 +188,24 @@ function SignInPage() {
         </Label>
         <div className="flex items-center gap-2 mb-6">
           <FiLock className="text-gray-500" />
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative flex-1">
+            <Input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600"
+              tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
 
         <p className="mb-4 text-right text-sm">

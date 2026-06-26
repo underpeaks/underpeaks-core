@@ -6,18 +6,14 @@
       "name": "ten_id",
       "type": "string",
       "nullable": false,
-      "default": "extensions.uuid_generate_v4()",
+      "default": "gen_random_uuid()",
       "is_primary": true,
       "hidden": true
     },
-      {
+    {
       "name": "user_id",
       "type": "string",
-      "nullable": false,
-      "unique": true,
-      "foreign_key": {
-        "references": "nxf_users(user_id)"
-      },
+      "nullable": true,
       "hidden": true
     },
     {

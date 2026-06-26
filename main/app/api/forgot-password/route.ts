@@ -7,7 +7,7 @@
  *
  * All DB types go through the same path — the adapter handles the difference:
  *   Firebase  → generatePasswordResetLink via Admin SDK (adapter.sendPasswordResetLink)
- *   Supabase  → Supabase Auth resetPasswordForEmail   (adapter.sendPasswordResetLink)
+ *   Supabase  → Supabase Auth resetPasswordForEmail   (adapter.sendResetEmail)
  *   Mongo/MySQL/Postgres → token created + SMTP email sent
  *
  * SMTP feature flags (Mongo/MySQL/Postgres only):
@@ -25,7 +25,7 @@
  *   500 { error: string }                 — Unexpected server error
  */
 
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer                    from 'nodemailer'
 
@@ -33,11 +33,6 @@ import nodemailer                    from 'nodemailer'
 // SMTP transporter factory
 // ---------------------------------------------------------------------------
 
-/**
- * buildTransporter
- * Creates a Nodemailer SMTP transporter from environment variables.
- * Called as a factory (not a singleton) so env vars are read fresh each time.
- */
 function buildTransporter() {
   return nodemailer.createTransport({
     host:   process.env.NEXT_PUBLIC_SMTP_HOST,
@@ -45,7 +40,6 @@ function buildTransporter() {
     secure: process.env.NEXT_PUBLIC_SMTP_ENCRYPTION === 'SSL',
     auth: {
       user: process.env.NEXT_PUBLIC_SMTP_USER,
-      // Some .env parsers escape # as \# — strip that before use
       pass: process.env.NEXT_SMTP_PASSWORD?.replace(/\\#/g, '#'),
     },
   })
@@ -57,9 +51,7 @@ function buildTransporter() {
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
-    // -----------------------------------------------------------------------
-    // Parse and validate request body
-    // -----------------------------------------------------------------------
+    // ── Parse and validate request body ──────────────────────────────────
 
     const { email } = await req.json()
 
@@ -70,26 +62,30 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    // -----------------------------------------------------------------------
-    // Get the configured adapter — config is resolved from env vars here,
-    // never manually built in the route
-    // -----------------------------------------------------------------------
+    // ── Get the configured adapter ────────────────────────────────────────
 
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
     const dbType   = dbConfig.type
 
-    // -----------------------------------------------------------------------
-    // Firebase + Supabase — adapter handles everything, no SMTP needed
-    // -----------------------------------------------------------------------
+    // ── Firebase + Supabase — adapter handles everything ──────────────────
 
     if (dbType === 'firebase' || dbType === 'supabase') {
-      if (!adapter.sendPasswordResetLink) {
-        throw new Error(`${dbType} adapter does not implement sendPasswordResetLink`)
+      /**
+       * Firebase adapter exposes sendPasswordResetLink.
+       * Supabase adapter exposes sendResetEmail.
+       * Try both so neither adapter needs to be changed.
+       */
+      const resetMethod = adapter.sendPasswordResetLink ?? adapter.sendResetEmail
+
+      if (!resetMethod) {
+        throw new Error(
+          `${dbType} adapter does not implement sendPasswordResetLink or sendResetEmail`
+        )
       }
 
       const redirectUrl = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/reset-password`
-      const result      = await adapter.sendPasswordResetLink(dbConfig, email, redirectUrl)
+      const result      = await resetMethod.call(adapter, dbConfig, email, redirectUrl)
 
       if (!result.success) {
         return NextResponse.json(
@@ -102,15 +98,14 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       return NextResponse.json({ success: true })
     }
 
-    // -----------------------------------------------------------------------
-    // MongoDB / MySQL / PostgreSQL — manual token + optional SMTP flow
-    // -----------------------------------------------------------------------
+    // ── MongoDB / MySQL / PostgreSQL — manual token + optional SMTP ───────
 
     if (!adapter.findUserByEmail || !adapter.createPasswordResetToken) {
-      throw new Error('Adapter is missing required methods: findUserByEmail, createPasswordResetToken')
+      throw new Error(
+        'Adapter is missing required methods: findUserByEmail, createPasswordResetToken'
+      )
     }
 
-    // Look up the user — 404 if not found
     const user = await adapter.findUserByEmail(dbConfig, email)
     if (!user) {
       return NextResponse.json(
@@ -119,15 +114,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    // Generate and store the reset token, build the reset link
     const token     = await adapter.createPasswordResetToken(email)
     const resetLink = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/reset-password?token=${token}`
 
-    // -----------------------------------------------------------------------
-    // Send reset email via SMTP (if both flags are enabled)
-    // -----------------------------------------------------------------------
+    // ── Send reset email via SMTP (if both flags are enabled) ─────────────
 
-    // Read flags inside the handler — not at module level — so they're fresh per request
     const canSendEmail =
       process.env.NEXT_PUBLIC_SMTP_ENABLED   === 'true' &&
       process.env.NEXT_PUBLIC_SMTP_FORGOT_PW === 'true'

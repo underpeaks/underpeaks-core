@@ -299,15 +299,15 @@ export async function CreateUserDataModels(
        * - When they were created/last updated.
        */
       const modelData = {
-        sm_id:      uuidv4(),
-        tenant_id: tenant_id,
-        project_id: projectId,
-        name:       tableName,
-        schema:     columns,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-
+  sm_id:      uuidv4(),
+  tenant_id:  tenant_id,
+  project_id: projectId,
+  name:       tableName,
+  schema:     columns,
+  is_system:  false,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+}
       await adapter.create(dbConfig, 'nxf_system_models', modelData);
 
       createdModels.push(modelData);

@@ -201,16 +201,79 @@ export class MongoDBAdapter implements DBAdapter {
    * @returns { success: true, message } on success, or
    *          { success: false, message } with the error reason on failure.
    */
-  async testConnection() {
-    try {
-      await this.client.connect()
-      await this.client.db().command({ ping: 1 })
-      return { success: true, message: 'Connected to MongoDB successfully.' }
-    } catch (err: any) {
-      return { success: false, message: err.message || 'Failed to connect to MongoDB.' }
-    }
-  }
 
+  
+async testConnection() {
+  let client: MongoClient | null = null
+
+  try {
+    const connectionString = this._config.connectionString
+
+    if (!connectionString) {
+      throw new Error('Connection string is missing')
+    }
+
+    const safeConnectionString = this.sanitizeMongoConnectionString(connectionString)
+
+    client = new MongoClient(safeConnectionString)
+
+    await client.connect()
+
+    const dbName = this._config.databaseName || 'admin'
+
+    await client.db(dbName).command({ ping: 1 })
+
+    return {
+      success: true,
+      message: 'Connected to MongoDB successfully.',
+    }
+  } catch (err: any) {
+    return {
+      success: false,
+      message: err?.message || 'Failed to connect to MongoDB.',
+    }
+  } finally {
+    if (client) await client.close()
+  }
+}
+
+ sanitizeMongoConnectionString(
+  connectionString: string
+): string {
+  try {
+    const protocol = 'mongodb+srv://'
+
+    if (!connectionString.startsWith(protocol)) {
+      return connectionString
+    }
+
+    const withoutProtocol = connectionString.slice(protocol.length)
+
+    const atIndex = withoutProtocol.lastIndexOf('@')
+
+    if (atIndex === -1) {
+      return connectionString
+    }
+
+    const credentials = withoutProtocol.slice(0, atIndex)
+    const remainder = withoutProtocol.slice(atIndex + 1)
+
+    const colonIndex = credentials.indexOf(':')
+
+    if (colonIndex === -1) {
+      return connectionString
+    }
+
+    const username = credentials.slice(0, colonIndex)
+    const password = credentials.slice(colonIndex + 1)
+
+    return `${protocol}${encodeURIComponent(
+      username
+    )}:${encodeURIComponent(password)}@${remainder}`
+  } catch {
+    return connectionString
+  }
+}
   // -------------------------------------------------------------------------
   // Password helpers
   // -------------------------------------------------------------------------

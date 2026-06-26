@@ -22,34 +22,27 @@
  * - Data model creation from project type.
  * - Demo content installation from local JSON files.
  *
+ * DDL operations (CREATE TABLE, ALTER TABLE, DROP TABLE, RENAME TABLE):
+ * - Uses a direct pg Pool via the Session pooler connection string when
+ *   available. This bypasses PostgREST entirely and requires no custom
+ *   functions on the Supabase project.
+ * - Falls back to rpc('pg_execute_sql') if no connection string is provided.
+ *
  * Two Supabase clients are maintained:
  *   - client      — Used for standard database and auth operations.
  *   - adminClient — Used for admin-level operations (creating users, storage
  *                   bucket management) that require elevated permissions.
- *                   Currently uses the same anonKey — swap for a service role
- *                   key in production for true admin access.
- *
- * How to use:
- *   import { getSupabaseAdapter } from './supabase-adapter'
- *   const adapter = getSupabaseAdapter(dbConfig)
- *   await adapter.create(adapter.config, 'nxf_users', { ... })
- *
- * This file should never be imported on the client side — it uses server-side
- * credentials and node-only modules (bcrypt, nodemailer, fs).
  */
 
 import { createClient, SupabaseClient }  from '@supabase/supabase-js'
 import bcrypt                            from 'bcrypt'
+import { Pool }                          from 'pg'
 import { ColumnDef, DBAdapter, DBConfig } from '../types'
 import { randomBytes }                   from 'crypto'
 import nodemailer                        from 'nodemailer'
 import { loadAllModels }                 from '../utils/load-model'
 import { CreateUserDataModels }          from '../utils/create-data-models'
 
-/**
- * StorageFile
- * Shape returned by listFiles() and importFromUrl().
- */
 interface StorageFile {
   id:         string
   name:       string
@@ -61,72 +54,34 @@ interface StorageFile {
   uploaded:   string
 }
 
-/**
- * DEFAULT_BUCKETS
- *
- * The list of default storage folders created when Supabase Storage is
- * first configured. Each folder is initialised with a hidden .keep file
- * so the folder placeholder exists in storage.
- */
 const DEFAULT_BUCKETS = [
   'system', 'themes', 'extensions', 'projects',
   'avatars', 'logos', 'uploads',
 ]
 
-// ---------------------------------------------------------------------------
-// Class
-// ---------------------------------------------------------------------------
-
 export class SupabaseAdapter implements DBAdapter {
-  /**
-   * supportsBuiltInAuth — Tells the rest of the application that this adapter
-   * has its own authentication system (Supabase Auth) and does not need an
-   * external auth provider.
-   */
   supportsBuiltInAuth = true
 
-  /**
-   * _config — The DBConfig object containing all Supabase connection details.
-   * Stored privately and exposed via the config getter below.
-   */
-  private _config: DBConfig
-
-  /**
-   * client — The standard Supabase client used for database reads/writes and
-   * auth operations available to regular users.
-   */
-  private client: SupabaseClient
-
-  /**
-   * adminClient — The Supabase client used for privileged operations such as
-   * creating auth users and managing storage buckets.
-   * In production this should use a service role key rather than the anon key
-   * to ensure proper access control.
-   */
+  private _config:     DBConfig
+  private client:      SupabaseClient
   private adminClient: SupabaseClient
+
+  /**
+   * pgPool — optional direct Postgres connection pool.
+   * Created when a connectionString is present in the config.
+   * Used exclusively for DDL operations to bypass PostgREST.
+   */
+  private pgPool?: Pool
 
   // ─── Constructor ──────────────────────────────────────────────────────────
 
-  /**
-   * constructor
-   *
-   * Initialises the SupabaseAdapter by validating the config and creating
-   * the public and admin Supabase client instances.
-   *
-   * Both clients are created with the same credentials for now — to use a
-   * service role key for the adminClient, replace config.anonKey with the
-   * service role key when creating adminClient.
-   *
-   * @param config - The DBConfig object. Must contain supabaseUrl and anonKey.
-   * @throws Error if supabaseUrl or anonKey are missing from the config.
-   */
   constructor(config: DBConfig) {
     console.log('[SupabaseAdapter] Constructor started')
 
     this._config = config
 
     if (!config.supabaseUrl || !config.serviceRoleKey || !config.anonKey) {
-      throw new Error('SupabaseAdapter requires both supabaseUrl and anonKey in config')
+      throw new Error('SupabaseAdapter requires supabaseUrl, serviceRoleKey and anonKey in config')
     }
 
     this.client      = createClient(config.supabaseUrl, config.anonKey)
@@ -134,23 +89,62 @@ export class SupabaseAdapter implements DBAdapter {
 
     this.adminClient = createClient(config.supabaseUrl, config.serviceRoleKey)
     console.log('[SupabaseAdapter] Admin client created')
+
+    /**
+     * Create a direct Postgres pool if a connection string was provided.
+     * This is the Session pooler string from the Supabase dashboard:
+     * postgresql://postgres.[ref]:[password]@aws-0-[region].pooler.supabase.com:5432/postgres
+     *
+     * ssl: rejectUnauthorized: false is required for Supabase pooler connections.
+     */
+ if (config.connectionString) {
+  const safeConnectionString = this.sanitizeConnectionString(config.connectionString)
+  
+  this.pgPool = new Pool({
+    connectionString:        safeConnectionString,
+    ssl:                     { rejectUnauthorized: false },
+    max:                     3,
+    connectionTimeoutMillis: 10000,
+  })
+  console.log('[SupabaseAdapter] Direct Postgres pool created')
+}
   }
 
-  /**
-   * config — Getter that exposes the private _config object publicly.
-   */
   get config(): DBConfig {
     return this._config
   }
 
   // ─── Connection ───────────────────────────────────────────────────────────
+/**
+ * sanitizeConnectionString
+ *
+ * URL-encodes special characters in the password portion of a Postgres
+ * connection string. Characters like !, #, @, $ etc. break URL parsing
+ * if not encoded.
+ */
+private sanitizeConnectionString(connectionString: string): string {
+  try {
+    // Match: protocol://username:PASSWORD@host:port/db
+    const match = connectionString.match(
+      /^(postgresql|postgres):\/\/([^:]+):(.+)@([^:]+):(\d+)\/(.+)$/
+    )
 
+    if (!match) return connectionString
+
+    const [, protocol, username, password, host, port, db] = match
+    const encodedPassword = encodeURIComponent(password)
+
+    return `${protocol}://${username}:${encodedPassword}@${host}:${port}/${db}`
+  } catch {
+    return connectionString
+  }
+}
   async testConnection() {
     console.log('[SupabaseAdapter] testConnection started')
 
     try {
       const response = await fetch(`${this.config.supabaseUrl}/auth/v1/settings`, {
-        headers: { apikey: this.config.anonKey!},
+        headers: { apikey: this.config.anonKey! },
       })
 
       console.log(`[SupabaseAdapter] testConnection response status: ${response.status}`)
@@ -162,7 +156,7 @@ export class SupabaseAdapter implements DBAdapter {
       console.log('[SupabaseAdapter] testConnection succeeded')
       return { success: true, message: 'Connected to Supabase successfully.' }
 
-     }catch (error: any) {
+    } catch (error: any) {
       console.error('[SupabaseAdapter] testConnection failed')
       return {
         success: false,
@@ -174,29 +168,41 @@ export class SupabaseAdapter implements DBAdapter {
   // ─── CRUD ──────────────────────────────────────────────────────────────────
 
   async create(config: DBConfig, table: string, data: any) {
-    console.log(`[SupabaseAdapter] create — table: ${table}`)
-    const { data: inserted, error } = await this.client.from(table).insert(data).select()
-    if (error) {
-      console.error(`[SupabaseAdapter] create failed — table: ${table}`)
-      throw error
-    }
-    return inserted
+  console.log(`[SupabaseAdapter] create — table: ${table}`)
+  const { data: inserted, error } = await this.adminClient
+    .from(table)
+    .insert(data)
+    .select()
+  if (error) {
+    console.error(`[SupabaseAdapter] create failed — table: ${table}`)
+    throw error
   }
+  return inserted
+}
 
   async read(config: DBConfig, table: string, query?: any) {
-    console.log(`[SupabaseAdapter] read — table: ${table}`)
-    let qb = this.client.from(table).select('*')
-    if (query) {
-      Object.entries(query).forEach(([key, value]) => (qb = qb.eq(key, value as string)))
-    }
-    const { data, error } = await qb
-    if (error) {
-      console.error(`[SupabaseAdapter] read failed — table: ${table}`)
-      throw error
-    }
-    return data
+  console.log(`[SupabaseAdapter] read — table: ${table}`)
+  let qb = this.adminClient.from(table).select('*')
+  if (query) {
+    Object.entries(query).forEach(([key, value]) => (qb = qb.eq(key, value as string)))
   }
+  const { data, error } = await qb
+  if (error) {
+    console.error(`[SupabaseAdapter] read failed — table: ${table}`)
+    throw error
+  }
+  return data
+}
 
+async readAll(config: DBConfig, table: string): Promise<any[]> {
+  console.log(`[SupabaseAdapter] readAll — table: ${table}`)
+  const { data, error } = await this.adminClient.from(table).select('*')
+  if (error) {
+    console.error(`[SupabaseAdapter] readAll failed — table: ${table}`)
+    throw error
+  }
+  return data ?? []
+}
   async update(
     config: DBConfig,
     table: string,
@@ -227,15 +233,6 @@ export class SupabaseAdapter implements DBAdapter {
     return deleted
   }
 
-  async readAll(config: DBConfig, table: string): Promise<any[]> {
-    console.log(`[SupabaseAdapter] readAll — table: ${table}`)
-    const { data, error } = await this.client.from(table).select('*')
-    if (error) {
-      console.error(`[SupabaseAdapter] readAll failed — table: ${table}`)
-      throw error
-    }
-    return data ?? []
-  }
 
   async findSystemConfigByUserId(config: DBConfig, userId: string) {
     try {
@@ -274,32 +271,33 @@ export class SupabaseAdapter implements DBAdapter {
     }
   }
 
-  async createProject(_config: DBConfig, data: { name: string; user_id: string; tenant_ID: string }): Promise<string> {
-    const project_id = crypto.randomUUID()
-    const { data: inserted, error } = await this.client
-      .from('nxf_system_projects')
-      .insert({
-        project_id,
-        name:       data.name,
-        user_id:    data.user_id,
-        tenant_id: data.tenant_ID,
-        created_at: new Date().toISOString(),
-      })
-      .select()
-      .single()
-    if (error) throw error
-    return inserted.project_id
-  }
+ async createProject(_config: DBConfig, data: { name: string; user_id: string; tenant_ID: string }): Promise<string> {
+  const project_id = crypto.randomUUID()
 
-  async findProjectByOwnerId(config: DBConfig, ownerId: string) {
-    const { data, error } = await this.client
-      .from('nxf_system_projects')
-      .select('*')
-      .eq('user_id', ownerId)
-      .maybeSingle()
-    if (error) throw error
-    return data || null
-  }
+  const { error } = await this.adminClient
+    .from('nxf_system_projects')
+    .insert({
+      project_id,
+      name:       data.name,
+      user_id:    data.user_id,
+      tenant_id:  data.tenant_ID,
+      created_at: new Date().toISOString(),
+    })
+
+  if (error) throw error
+  return project_id
+}
+
+ async findProjectByOwnerId(config: DBConfig, ownerId: string) {
+  const { data, error } = await this.adminClient
+    .from('nxf_system_projects')
+    .select('*')
+    .eq('user_id', ownerId)
+    .maybeSingle()
+
+  if (error) throw error
+  return data || null
+}
 
   // ─── Auth ──────────────────────────────────────────────────────────────────
 
@@ -356,15 +354,16 @@ export class SupabaseAdapter implements DBAdapter {
     return bcrypt.hash(password, 10)
   }
 
-  async findUserByEmail(config: DBConfig, email: string) {
-    const { data, error } = await this.client
-      .from('nxf_users')
-      .select('*')
-      .eq('user_email', email)
-      .limit(1)
-    if (error) throw error
-    return data?.[0] || null
-  }
+ async findUserByEmail(config: DBConfig, email: string) {
+  const { data, error } = await this.adminClient
+    .from('nxf_users')
+    .select('*')
+    .eq('user_email', email)
+    .limit(1)
+
+  if (error) throw error
+  return data?.[0] || null
+}
 
   // ─── Register ─────────────────────────────────────────────────────────────
 
@@ -383,10 +382,10 @@ export class SupabaseAdapter implements DBAdapter {
     }
 
     const { data: authData, error: authError } = await this.adminClient.auth.admin.createUser({
-      email:          data.email,
-      password:       data.password,
-      email_confirm:  true,
-      user_metadata:  { full_name: data.full_name },
+      email:         data.email,
+      password:      data.password,
+      email_confirm: true,
+      user_metadata: { full_name: data.full_name },
     })
 
     if (authError || !authData?.user) {
@@ -438,10 +437,10 @@ export class SupabaseAdapter implements DBAdapter {
     }
 
     const { data: authData, error: authError } = await this.adminClient.auth.admin.createUser({
-      email:          data.email,
-      password:       data.password,
-      email_confirm:  false,
-      user_metadata:  { full_name: data.full_name },
+      email:         data.email,
+      password:      data.password,
+      email_confirm: false,
+      user_metadata: { full_name: data.full_name },
     })
 
     if (authError || !authData?.user) {
@@ -493,11 +492,21 @@ export class SupabaseAdapter implements DBAdapter {
 
   // ─── User helpers ──────────────────────────────────────────────────────────
 
-  async createAdminUser(config: DBConfig, data: any) {
-    const { user_id, user_email, password, role = 'admin', ...rest } = data
-    const hashed = await this.hashPassword(password)
+ async createAdminUser(config: DBConfig, data: any) {
+  const { user_id, user_email, password, role = 'admin', ...rest } = data
 
-    return this.create(config, 'nxf_users', {
+  // Check if user already exists — if so skip creation entirely
+  const existing = await this.findUserByEmail(config, user_email)
+  if (existing) {
+    console.log('[SupabaseAdapter] createAdminUser — user already exists, skipping')
+    return existing
+  }
+
+  const hashed = await this.hashPassword(password)
+
+  const { data: inserted, error } = await this.adminClient
+    .from('nxf_users')
+    .upsert({
       user_id:        user_id || crypto.randomUUID(),
       user_email,
       password_hash:  hashed,
@@ -512,8 +521,12 @@ export class SupabaseAdapter implements DBAdapter {
       updated_at:     new Date().toISOString(),
       is_logged_in:   false,
       last_login:     new Date().toISOString(),
-    })
-  }
+    }, { onConflict: 'user_email' })
+    .select()
+
+  if (error) throw error
+  return inserted
+}
 
   async findUserByToken(token: string) {
     const { data, error } = await this.client
@@ -661,7 +674,7 @@ export class SupabaseAdapter implements DBAdapter {
     emailVerifiedRequired = true
   ) {
     const user = await this.findUserByEmail(config, email)
-    if (!user)              return { success: false, error: 'User not found.' }
+    if (!user)               return { success: false, error: 'User not found.' }
     if (!user.password_hash) return { success: false, error: 'Invalid password' }
 
     const valid = await bcrypt.compare(password.trim(), user.password_hash.trim())
@@ -712,40 +725,64 @@ export class SupabaseAdapter implements DBAdapter {
   }
 
   async validateBuiltInSession(config: DBConfig, token: string) {
-  console.log('[SupabaseAdapter] validateBuiltInSession started')
-  try {
-    const { data, error } = await this.client.auth.getUser(token)
-    if (error) throw error
-    
-    return data.user
-  } catch (err: any) {
-    console.error('[SupabaseAdapter] Session validation failed:', err.message, err.cause ?? '')
-    return null
+    console.log('[SupabaseAdapter] validateBuiltInSession started')
+    try {
+      const { data, error } = await this.client.auth.getUser(token)
+      if (error) throw error
+      return data.user
+    } catch (err: any) {
+      console.error('[SupabaseAdapter] Session validation failed:', err.message, err.cause ?? '')
+      return null
+    }
   }
-}
 
   // ─── Tenants ───────────────────────────────────────────────────────────────
 
-  async createTenant(config: DBConfig, data: { subdomain: string; user_email: string; user_id: string }) {
-    const ten_id = crypto.randomUUID()
-    await this.create(config, 'nxf_system_tenants', {
+ async createTenant(config: DBConfig, data: { subdomain: string; user_email: string; user_id: string }) {
+  const ten_id = crypto.randomUUID()
+
+  // Check if tenant already exists for this email
+  const existing = await this.findTenantByUserEmail(config, data.user_email)
+  if (existing) {
+    console.log('[SupabaseAdapter] createTenant — tenant already exists, skipping')
+    return existing.ten_id ?? existing.id
+  }
+
+  const { error } = await this.adminClient
+    .from('nxf_system_tenants')
+    .insert({
       ten_id,
       subdomain:  data.subdomain,
       user_email: data.user_email,
-      user_id: data.user_id,
+      user_id:    data.user_id,
       created_at: new Date().toISOString(),
     })
-    return ten_id
-  }
+
+  if (error) throw error
+  return ten_id
+}
 
   async findTenantByUserEmail(config: DBConfig, email: string) {
-    const tenants = await this.read(config, 'nxf_system_tenants', { user_email: email })
-    return tenants?.[0] || null
-  }
+  const { data, error } = await this.adminClient
+    .from('nxf_system_tenants')
+    .select('*')
+    .eq('user_email', email)
+    .maybeSingle()
+
+  if (error) throw error
+  return data || null
+}
+
   async findTenantByUserID(config: DBConfig, userID: string) {
-    const tenants = await this.read(config, 'nxf_system_tenants', { user_id: userID })
-    return tenants?.[0] || null
-  }
+  const { data, error } = await this.adminClient
+    .from('nxf_system_tenants')
+    .select('*')
+    .eq('user_id', userID)
+    .maybeSingle()
+
+  if (error) throw error
+  return data || null
+}
 
   async sendResetEmail(
     config: DBConfig,
@@ -808,42 +845,63 @@ export class SupabaseAdapter implements DBAdapter {
 
   // ─── Data Models ──────────────────────────────────────────────────────────
 
-  async CreateDataModels(projectId: string, selectedProjectType: string,tenant_id: string) {
+  async CreateDataModels(projectId: string, selectedProjectType: string, tenant_id: string) {
     if (!projectId) throw new Error('Project ID is required')
-
     console.log('[SupabaseAdapter] CreateDataModels started')
-    return await CreateUserDataModels(this, projectId,tenant_id ,selectedProjectType, [])
+    return await CreateUserDataModels(this, projectId, tenant_id, selectedProjectType, [])
   }
 
-  async createDataModelsFromUserEmail(email: string, selectedProjectType: string) {
-    const user = await this.findUserByEmail(this.config, email)
-    if (!user?.user_id) throw new Error('User not found')
+async createDataModelsFromUserEmail(email: string, selectedProjectType: string) {
+  const user = await this.findUserByEmail(this.config, email)
+  console.log('[SupabaseAdapter] createDataModelsFromUserEmail — user:', JSON.stringify(user))
+  if (!user?.user_id) throw new Error('User not found')
 
-    const project = await this.findProjectByOwnerId(this.config, user.user_id)
-    if (!project?.project_id) throw new Error('Project not found')
+  const project = await this.findProjectByOwnerId(this.config, user.user_id)
+  console.log('[SupabaseAdapter] createDataModelsFromUserEmail — project:', JSON.stringify(project))
+  if (!project?.project_id) throw new Error('Project not found')
 
-      const tenant = await this.findTenantByUserID(this.config, user.user_id)
-    if (!project?.project_id) throw new Error('Project not found')
+  // Try by user_id first, fall back to email, then create if missing
+  let tenant = await this.findTenantByUserID(this.config, user.user_id)
+  console.log('[SupabaseAdapter] createDataModelsFromUserEmail — tenant by user_id:', JSON.stringify(tenant))
 
-    return this.CreateDataModels(project.project_id, selectedProjectType,tenant)
+  if (!tenant) {
+    tenant = await this.findTenantByUserEmail(this.config, email)
+    console.log('[SupabaseAdapter] createDataModelsFromUserEmail — tenant by email:', JSON.stringify(tenant))
   }
+
+  if (!tenant) {
+    console.log('[SupabaseAdapter] createDataModelsFromUserEmail — no tenant found, creating one')
+    const ten_id = await this.createTenant(this.config, {
+      subdomain:  email.split('@')[0],
+      user_email: email,
+      user_id:    user.user_id,
+    })
+    tenant = { ten_id }
+  }
+
+  const tenantId = tenant.ten_id ?? tenant.id
+  console.log('[SupabaseAdapter] createDataModelsFromUserEmail — tenantId resolved:', tenantId)
+  if (!tenantId) throw new Error('Tenant ID could not be resolved')
+
+  return this.CreateDataModels(project.project_id, selectedProjectType, tenantId)
+}
 
   async saveInstallerConfig(config: DBConfig, data: any): Promise<string> {
-    if (!data.project_id) throw new Error('project_id is required')
+  if (!data.project_id) throw new Error('project_id is required')
 
-    const { data: inserted, error } = await this.client
-      .from('nxf_system_config')
-      .insert({
-        ...data,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      })
-      .select()
-      .single()
+  const { data: inserted, error } = await this.adminClient
+    .from('nxf_system_config')
+    .insert({
+      ...data,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+    })
+    .select()
+    .single()
 
-    if (error) throw new Error(`Failed to save installer config: ${error.message}`)
-    return inserted.id
-  }
+  if (error) throw new Error(`Failed to save installer config: ${error.message}`)
+  return inserted.id
+}
 
   // ─── Table management ──────────────────────────────────────────────────────
 
@@ -863,71 +921,124 @@ export class SupabaseAdapter implements DBAdapter {
     }))
   }
 
-  async createTable(
-    tableName: string,
-    schema: { columns: ColumnDef[] | Record<string, ColumnDef>; schema?: string }
-  ) {
-    console.log(`[SupabaseAdapter] createTable: ${tableName}`)
+  // ─── Direct SQL execution ──────────────────────────────────────────────────
 
-    let columnsArray: ColumnDef[] = []
-    if (Array.isArray(schema.columns)) {
-      columnsArray = schema.columns
-    } else if (typeof schema.columns === 'object') {
-      columnsArray = Object.entries(schema.columns).map(([name, col]) => ({
-        ...col,
-        name,
-      }))
+  /**
+   * executeDdl
+   *
+   * Runs raw DDL SQL against the database. Uses the direct pg Pool when a
+   * connectionString is available, bypassing PostgREST entirely. Falls back
+   * to rpc('pg_execute_sql') if no connection string was provided.
+   *
+   * @param sql - The DDL statement to execute.
+   */
+  private async executeDdl(sql: string): Promise<void> {
+  if (this.pgPool) {
+    console.log('[SupabaseAdapter] executeDdl — using direct Postgres pool')
+    const client = await this.pgPool.connect()
+    try {
+      await client.query(sql)
+    } finally {
+      client.release()
     }
-
-    const columnsSql = columnsArray
-      .map((col) => {
-        let typeSql = ''
-
-        switch (col.type.toLowerCase()) {
-          case 'uuid':                      typeSql = 'UUID';             break
-          case 'string':
-          case 'text':                      typeSql = 'TEXT';             break
-          case 'json':
-          case 'jsonb':
-          case 'array':                     typeSql = 'JSONB';            break
-          case 'datetime':
-          case 'date':
-          case 'timestamp':
-          case 'timestamp with time zone':  typeSql = 'TIMESTAMP';        break
-          case 'integer':
-          case 'int':                       typeSql = 'INTEGER';          break
-          case 'bigint':                    typeSql = 'BIGINT';           break
-          case 'boolean':                   typeSql = 'BOOLEAN';          break
-          case 'float':
-          case 'number':
-          case 'decimal':
-          case 'double':                    typeSql = 'DOUBLE PRECISION'; break
-          default:
-            throw new Error(`Unsupported column type: ${col.type}`)
-        }
-
-        const constraints: string[] = []
-        if (col.is_primary)           constraints.push('PRIMARY KEY')
-        if (col.unique)               constraints.push('UNIQUE')
-        if (col.nullable === false)   constraints.push('NOT NULL')
-
-        return `"${col.name}" ${typeSql} ${constraints.join(' ')}`.trim()
-      })
-      .join(', ')
-
-    const sql = `CREATE TABLE IF NOT EXISTS "${schema.schema || 'public'}"."${tableName}" (${columnsSql});`
-
-    console.log(`[SupabaseAdapter] Executing SQL for table: ${tableName}`)
-
-    const { error } = await this.adminClient.rpc('pg_execute_sql', { sql } as any)
-
-    if (error) {
-      console.error(`[SupabaseAdapter] createTable failed: ${tableName}`)
-      throw new Error(`Failed to create table: ${error.message}`)
-    }
-
-    console.log(`[SupabaseAdapter] Table created successfully: ${tableName}`)
+    return
   }
+
+  console.log('[SupabaseAdapter] executeDdl — falling back to rpc pg_execute_sql')
+  const { error } = await this.adminClient.rpc('pg_execute_sql', { sql } as any)
+  if (error) throw new Error(`SQL execution failed: ${error.message}`)
+}
+
+  // ─── DDL methods ───────────────────────────────────────────────────────────
+
+ async createTable(
+  tableName: string,
+  schema: { columns: ColumnDef[] | Record<string, ColumnDef>; schema?: string }
+) {
+  console.log(`[SupabaseAdapter] createTable: ${tableName}`)
+
+  let columnsArray: ColumnDef[] = []
+  if (Array.isArray(schema.columns)) {
+    columnsArray = schema.columns
+  } else if (typeof schema.columns === 'object') {
+    columnsArray = Object.entries(schema.columns).map(([name, col]) => ({
+      ...col,
+      name,
+    }))
+  }
+
+  const columnsSql = columnsArray
+    .map((col) => {
+      let typeSql = ''
+      switch (col.type.toLowerCase()) {
+        case 'uuid':                      typeSql = 'UUID';             break
+        case 'string':
+        case 'text':                      typeSql = 'TEXT';             break
+        case 'json':
+        case 'jsonb':
+        case 'array':                     typeSql = 'JSONB';            break
+        case 'datetime':
+        case 'date':
+        case 'timestamp':
+        case 'timestamp with time zone':  typeSql = 'TIMESTAMP';        break
+        case 'integer':
+        case 'int':                       typeSql = 'INTEGER';          break
+        case 'bigint':                    typeSql = 'BIGINT';           break
+        case 'boolean':                   typeSql = 'BOOLEAN';          break
+        case 'float':
+        case 'number':
+        case 'decimal':
+        case 'double':                    typeSql = 'DOUBLE PRECISION'; break
+        default:
+          throw new Error(`Unsupported column type: ${col.type}`)
+      }
+
+      // ── DEFAULT clause ───────────────────────────────────────────────────
+      // Build a DEFAULT clause when the column definition includes a default.
+      // Raw SQL expressions (functions, booleans, numbers) are written as-is.
+      // Plain string values are quoted.
+      let defaultClause = ''
+      if (col.default !== undefined && col.default !== null) {
+        if (
+          typeof col.default === 'boolean' ||
+          typeof col.default === 'number'
+        ) {
+          defaultClause = ` DEFAULT ${col.default}`
+        } else if (typeof col.default === 'string') {
+          // Raw SQL functions or keywords — write unquoted
+          if (
+            col.default.includes('(')  ||
+            col.default === 'true'     ||
+            col.default === 'false'    ||
+            col.default === 'null'
+          ) {
+            defaultClause = ` DEFAULT ${col.default}`
+          } else {
+            defaultClause = ` DEFAULT '${col.default}'`
+          }
+        }
+      }
+
+      // ── Constraints ───────────────────────────────────────────────────────
+      // Only add NOT NULL when the column has no default — a column with
+      // DEFAULT false is effectively non-null without needing the constraint.
+      const constraints: string[] = []
+      if (col.is_primary)         constraints.push('PRIMARY KEY')
+      if (col.unique)             constraints.push('UNIQUE')
+      if (col.nullable === false && (col.default === undefined || col.default === null)) {
+        constraints.push('NOT NULL')
+      }
+
+      return `"${col.name}" ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
+    })
+    .join(', ')
+
+  const sql = `CREATE TABLE IF NOT EXISTS "${schema.schema || 'public'}"."${tableName}" (${columnsSql});`
+
+  console.log(`[SupabaseAdapter] Executing SQL for table: ${tableName}`)
+  await this.executeDdl(sql)
+  console.log(`[SupabaseAdapter] Table created successfully: ${tableName}`)
+}
 
   async alterTable(
     tableName: string,
@@ -962,7 +1073,9 @@ export class SupabaseAdapter implements DBAdapter {
             throw new Error(`Unsupported column type: ${col.type}`)
         }
         const notNull = col.nullable === false ? ' NOT NULL' : ''
-        statements.push(`ALTER TABLE "${tableName}" ADD COLUMN IF NOT EXISTS "${col.name}" ${typeSql}${notNull};`)
+        statements.push(
+          `ALTER TABLE "${tableName}" ADD COLUMN IF NOT EXISTS "${col.name}" ${typeSql}${notNull};`
+        )
       }
     }
 
@@ -980,11 +1093,7 @@ export class SupabaseAdapter implements DBAdapter {
 
     for (const sql of statements) {
       console.log(`[SupabaseAdapter] alterTable executing: ${sql}`)
-      const { error } = await this.adminClient.rpc('pg_execute_sql', { sql } as any)
-      if (error) {
-        console.error(`[SupabaseAdapter] alterTable failed on: ${sql}`)
-        throw new Error(`alterTable failed: ${error.message}`)
-      }
+      await this.executeDdl(sql)
     }
 
     console.log(`[SupabaseAdapter] alterTable completed for ${tableName}`)
@@ -993,41 +1102,21 @@ export class SupabaseAdapter implements DBAdapter {
 
   async dropTable(tableName: string): Promise<any> {
     console.log(`[SupabaseAdapter] dropTable — ${tableName}`)
-
-    const sql = `DROP TABLE IF EXISTS "${tableName}";`
-
-    const { error } = await this.adminClient.rpc('pg_execute_sql', { sql } as any)
-
-    if (error) {
-      console.error(`[SupabaseAdapter] dropTable failed — ${tableName}`)
-      throw new Error(`dropTable failed: ${error.message}`)
-    }
-
+    await this.executeDdl(`DROP TABLE IF EXISTS "${tableName}";`)
     console.log(`[SupabaseAdapter] dropTable completed — ${tableName}`)
     return true
   }
 
   async renameTable(oldName: string, newName: string): Promise<any> {
     console.log(`[SupabaseAdapter] renameTable — ${oldName} → ${newName}`)
-
-    const sql = `ALTER TABLE "${oldName}" RENAME TO "${newName}";`
-
-    const { error } = await this.adminClient.rpc('pg_execute_sql', { sql } as any)
-
-    if (error) {
-      console.error(`[SupabaseAdapter] renameTable failed`)
-      throw new Error(`renameTable failed: ${error.message}`)
-    }
-
+    await this.executeDdl(`ALTER TABLE "${oldName}" RENAME TO "${newName}";`)
     console.log(`[SupabaseAdapter] renameTable completed — ${oldName} → ${newName}`)
     return true
   }
 
   // ─── Demo content ──────────────────────────────────────────────────────────
 
-  // ─── Demo content ──────────────────────────────────────────────────────────
-
-async installDemoContent(
+  async installDemoContent(
   config: DBConfig,
   selectedProjectType: string,
   adminEmail?: string
@@ -1054,8 +1143,6 @@ async installDemoContent(
     let projectId:   string | null = null
     let tenantId:    string | null = null
 
-    // ── Resolve ownership IDs ───────────────────────────────────────────────
-
     if (!adminEmail) {
       console.log('[SupabaseAdapter] installDemoContent — adminEmail missing, attempting nxf_users lookup')
       try {
@@ -1078,13 +1165,21 @@ async installDemoContent(
       try {
         const user = await this.findUserByEmail(config, adminEmail)
         adminUserId = user?.user_id ?? null
+        console.log('[SupabaseAdapter] installDemoContent — adminUserId:', adminUserId)
 
         if (adminUserId) {
           const project = await this.findProjectByOwnerId(config, adminUserId)
           projectId = project?.project_id ?? project?.id ?? null
+          console.log('[SupabaseAdapter] installDemoContent — projectId:', projectId)
 
-          const tenant = await this.findTenantByUserID(config, adminUserId)
+          // Try by user_id first, fall back to email
+          let tenant = await this.findTenantByUserID(config, adminUserId)
+          if (!tenant) {
+            console.log('[SupabaseAdapter] installDemoContent — tenant not found by user_id, trying email')
+            tenant = await this.findTenantByUserEmail(config, adminEmail)
+          }
           tenantId = tenant?.ten_id ?? tenant?.id ?? null
+          console.log('[SupabaseAdapter] installDemoContent — tenantId:', tenantId)
         }
       } catch (err: any) {
         console.warn('[SupabaseAdapter] installDemoContent — could not resolve ownership IDs:', err.message)
@@ -1093,9 +1188,9 @@ async installDemoContent(
       console.warn('[SupabaseAdapter] installDemoContent — no adminEmail resolved, ownership IDs will be empty')
     }
 
-    // ── Pre-build the model name → sm_id resolver map ───────────────────────
-    // Used by the nxf_pages installer to resolve "model": "nxf_product"
-    // into the actual sm_id at install time.
+    if (!tenantId) {
+      console.warn('[SupabaseAdapter] installDemoContent — tenantId still null, demo content with tenant_id NOT NULL will fail')
+    }
 
     const modelNameToId = new Map<string, string>()
     if (projectId) {
@@ -1109,9 +1204,7 @@ async installDemoContent(
           if (m.name && m.sm_id) modelNameToId.set(m.name, m.sm_id)
         }
 
-        console.log(
-          `[SupabaseAdapter] Built model resolver map — ${modelNameToId.size} models indexed`
-        )
+        console.log(`[SupabaseAdapter] Built model resolver map — ${modelNameToId.size} models indexed`)
       } catch (err: any) {
         console.warn('[SupabaseAdapter] Failed to build model resolver map:', err.message)
       }
@@ -1123,7 +1216,7 @@ async installDemoContent(
       `${selectedProjectType}_models`,
     ]
 
-    const basePaths = modelFolders.map((folder) => path.join(DEMO_ROOT, folder))
+    const basePaths   = modelFolders.map((folder) => path.join(DEMO_ROOT, folder))
     let totalInserted = 0
 
     for (const basePath of basePaths) {
@@ -1186,14 +1279,38 @@ async installDemoContent(
               }
             }
 
-            if (projectId)   cleaned.project_id = (cleaned.project_id === '{{project_id}}' || !cleaned.project_id) ? projectId  : cleaned.project_id
-            if (tenantId)    cleaned.tenant_id  = (cleaned.tenant_id  === '{{tenant_id}}'  || !cleaned.tenant_id)  ? tenantId   : cleaned.tenant_id
+            // Inject ownership IDs
+            if (projectId) {
+              cleaned.project_id = (
+                cleaned.project_id === '{{project_id}}' || !cleaned.project_id
+              ) ? projectId : cleaned.project_id
+            }
+
+            if (tenantId) {
+              cleaned.tenant_id = (
+                cleaned.tenant_id === '{{tenant_id}}' || !cleaned.tenant_id
+              ) ? tenantId : cleaned.tenant_id
+            }
+
             if (adminUserId && 'user_id' in cleaned) {
-              cleaned.user_id = (cleaned.user_id === '{{user_id}}' || !cleaned.user_id) ? adminUserId : cleaned.user_id
+              cleaned.user_id = (
+                cleaned.user_id === '{{user_id}}' || !cleaned.user_id
+              ) ? adminUserId : cleaned.user_id
             }
 
             return cleaned
           })
+
+          // Skip chunk if tenant_id is still null and any row requires it
+          const missingTenant = cleanedChunk.some(
+            (row: any) => 'tenant_id' in row && !row.tenant_id
+          )
+          if (missingTenant && !tenantId) {
+            console.warn(
+              `[SupabaseAdapter] Skipping ${tableName} — tenant_id is null and rows require it`
+            )
+            break
+          }
 
           const { error } = await this.adminClient.from(tableName).insert(cleanedChunk)
 
@@ -1225,6 +1342,7 @@ async installDemoContent(
     }
   }
 }
+
   // ─── User status & activity ────────────────────────────────────────────────
 
   async getUserById(uid: string): Promise<{ user?: any; error?: string }> {
@@ -1270,13 +1388,8 @@ async installDemoContent(
 
       if (!data) return { allowed: false, reason: 'User not found' }
 
-      if (data.status === 'suspended') {
-        return { allowed: false, user: data, reason: 'Account suspended' }
-      }
-
-      if (data.status === 'inactive') {
-        return { allowed: false, user: data, reason: 'Account inactive' }
-      }
+      if (data.status === 'suspended') return { allowed: false, user: data, reason: 'Account suspended' }
+      if (data.status === 'inactive')  return { allowed: false, user: data, reason: 'Account inactive' }
 
       return { allowed: true, user: data }
 
@@ -1338,7 +1451,7 @@ async installDemoContent(
 
     if (!conversations?.length) return []
 
-    const seen = new Set<string>()
+    const seen    = new Set<string>()
     const deduped = conversations.filter((conv) => {
       const con_id = conv.con_id ?? conv.id
       if (seen.has(con_id)) return false
@@ -1551,13 +1664,8 @@ async installDemoContent(
       .eq('id', notificationId)
       .single()
 
-    if (fetchError || !data) {
-      throw new Error('Notification not found')
-    }
-
-    if (data.user_id !== uid) {
-      throw new Error('Forbidden — notification does not belong to this user')
-    }
+    if (fetchError || !data) throw new Error('Notification not found')
+    if (data.user_id !== uid) throw new Error('Forbidden — notification does not belong to this user')
 
     const now = new Date().toISOString()
 
@@ -1609,42 +1717,38 @@ async installDemoContent(
 
   // ─── API Keys ─────────────────────────────────────────────────────────────
 
-async listApiKeys(
-  config: DBConfig,
-  project_id: string
-): Promise<Array<{
-  api_id: string
-  name: string
-  key_prefix: string
-  status: string
-  last_used_at: string | null
-  created_at: string
-}>> {
-  const { data, error } = await this.client
-    .from('nxf_system_apis')
-    .select(
-      'api_id, name, key_prefix, status, last_used_at, created_at'
-    )
-    .eq('project_id', project_id)
-    .eq('status', 'active')
-    .order('created_at', { ascending: false })
+  async listApiKeys(
+    config: DBConfig,
+    project_id: string
+  ): Promise<Array<{
+    api_id:       string
+    name:         string
+    key_prefix:   string
+    status:       string
+    last_used_at: string | null
+    created_at:   string
+  }>> {
+    const { data, error } = await this.client
+      .from('nxf_system_apis')
+      .select('api_id, name, key_prefix, status, last_used_at, created_at')
+      .eq('project_id', project_id)
+      .eq('status', 'active')
+      .order('created_at', { ascending: false })
 
-  if (error) {
-    console.error('[SupabaseAdapter] listApiKeys failed', error)
-    throw error
-  }
+    if (error) {
+      console.error('[SupabaseAdapter] listApiKeys failed', error)
+      throw error
+    }
 
-  return (
-    data as Array<{
-      api_id: string
-      name: string
-      key_prefix: string
-      status: string
+    return (data as Array<{
+      api_id:       string
+      name:         string
+      key_prefix:   string
+      status:       string
       last_used_at: string | null
-      created_at: string
-    }>
-  ) ?? []
-}
+      created_at:   string
+    }>) ?? []
+  }
 
   async getApiKey(
     config: DBConfig,
@@ -1676,13 +1780,8 @@ async listApiKeys(
       .eq('api_id', api_id)
       .single()
 
-    if (fetchError || !data) {
-      throw new Error('API key not found')
-    }
-
-    if (data.project_id !== project_id) {
-      throw new Error('Forbidden')
-    }
+    if (fetchError || !data) throw new Error('API key not found')
+    if (data.project_id !== project_id) throw new Error('Forbidden')
 
     const now = new Date().toISOString()
 
@@ -1708,7 +1807,7 @@ async listApiKeys(
 
   async listFolders(): Promise<string[]> {
     try {
-      const bucketName = 'NXT_Flutter_storage'
+      const bucketName  = 'NXT_Flutter_storage'
       const { data, error } = await this.adminClient.storage
         .from(bucketName)
         .list('', { limit: 1000 })
@@ -1746,8 +1845,8 @@ async listApiKeys(
       const results: StorageFile[] = []
 
       for (const item of data ?? []) {
-        if (item.id === null)              continue
-        if (item.name.endsWith('.keep'))   continue
+        if (item.id === null)            continue
+        if (item.name.endsWith('.keep')) continue
 
         const filePath = `${folder}/${item.name}`
 
@@ -1898,10 +1997,7 @@ async listApiKeys(
     try {
       await this.client
         .from('nxf_storage')
-        .update({
-          file_name: newName,
-          file_path: newPath,
-        })
+        .update({ file_name: newName, file_path: newPath })
         .eq('file_path', oldPath)
     } catch {
       console.warn('[SupabaseAdapter] renameFile — nxf_storage update failed')
@@ -1925,10 +2021,7 @@ async listApiKeys(
     try {
       await this.client
         .from('nxf_storage')
-        .update({
-          folder:    toFolder,
-          file_path: newPath,
-        })
+        .update({ folder: toFolder, file_path: newPath })
         .eq('file_path', oldPath)
     } catch {
       console.warn('[SupabaseAdapter] moveFile — nxf_storage update failed')
@@ -2026,21 +2119,12 @@ async listApiKeys(
 
     return user.uid
   }
-
 }
 
 // ---------------------------------------------------------------------------
 // Factory function
 // ---------------------------------------------------------------------------
 
-/**
- * getSupabaseAdapter
- *
- * A factory function that creates and returns a new SupabaseAdapter instance.
- *
- * @param config - The DBConfig containing Supabase credentials.
- * @returns A new SupabaseAdapter instance.
- */
 export function getSupabaseAdapter(config: DBConfig) {
   console.log('[SupabaseAdapter] getSupabaseAdapter called')
   return new SupabaseAdapter(config)

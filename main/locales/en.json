@@ -1641,7 +1641,8 @@
       "writeConfigFailed": "Failed to write config file: {message}",
       "setupStorageFailed": "Failed to setup storage: {message}",
       "installDemoFailed": "Failed to install demo content: {message}",
-      "stepFailed": "Step failed: {step} - {message}"
+      "stepFailed": "Step failed: {step} - {message}",
+      "nameInvalid": "Project name must contain letters only"
     },
     "logs": {
       "tablesCreated": "Tables created:",
@@ -1911,7 +1912,8 @@
     "fields": {
       "name": {
         "label": "Project Name",
-        "placeholder": "e.g., MyApp Studio"
+        "placeholder": "e.g., MyApp Studio",
+        "hint": "Lowercase letters only — no numbers, spaces,no capitalisation, or special characters."
       },
       "domain": {
         "label": "Domain",
@@ -1927,7 +1929,8 @@
     "errors": {
       "nameRequired": "Project name is required",
       "subdomainRequired": "Subdomain is required",
-      "domainRequired": "Domain is required"
+      "domainRequired": "Domain is required",
+      "nameInvalid": "Project name must contain letters only"
     }
   },
   "welcomePage": {

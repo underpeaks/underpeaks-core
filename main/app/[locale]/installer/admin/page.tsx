@@ -34,71 +34,43 @@
  * hashing it before storing it in the database.
  *
  * State managed here:
- *   - fullName   : value of the Full Name input.
- *   - email      : value of the Email Address input.
- *   - password   : value of the Password input.
- *   - loading    : true for 500 ms after successful validation, while
- *                  navigating to the next step.
- *   - nameError  : validation error message for the Full Name field.
- *   - emailError : validation error message for the Email field.
- *   - passError  : validation error message for the Password field.
+ *   - fullName      : value of the Full Name input.
+ *   - email         : value of the Email Address input.
+ *   - password      : value of the Password input.
+ *   - showPassword  : toggles the password input between text and password type.
+ *   - loading       : true for 500 ms after successful validation, while
+ *                     navigating to the next step.
+ *   - nameError     : validation error message for the Full Name field.
+ *   - emailError    : validation error message for the Email field.
+ *   - passError     : validation error message for the Password field.
  */
 
-import { Button }              from '@/components/ui/button'
-import { Input }               from '@/components/ui/input'
-import { useRouter }           from 'next/navigation'
+import { Button }                from '@/components/ui/button'
+import { Input }                 from '@/components/ui/input'
+import { useRouter }             from 'next/navigation'
 import { useState, useCallback } from 'react'
-import { useTranslations }     from 'next-intl'
-import { useInstallerStore }   from '../../../store/useInstallerStore'
-import { Loader2 }             from 'lucide-react'
-import LocaleSwitcher          from '@/core/LocaleSwitcher'
+import { useTranslations }       from 'next-intl'
+import { useInstallerStore }     from '../../../store/useInstallerStore'
+import { Loader2, Eye, EyeOff } from 'lucide-react'
+import LocaleSwitcher            from '@/core/LocaleSwitcher'
 
-/**
- * AdminSetupPage
- *
- * The installer wizard step for creating the initial admin account.
- * See the file-level JSDoc above for a full description.
- */
 export default function AdminSetupPage() {
-  /**
-   * t — Translation function scoped to the 'adminSetupPage' namespace.
-   * Call t('some.key') to get the translated string for that key.
-   */
-  const t = useTranslations('adminSetupPage')
-
-  /** Next.js router — used to navigate to /installer/config after validation. */
+  const t      = useTranslations('adminSetupPage')
   const router = useRouter()
 
   // -------------------------------------------------------------------------
   // State
   // -------------------------------------------------------------------------
 
-  /** Current value of the Full Name input field. */
-  const [fullName,   setFullName]   = useState('')
+  const [fullName,      setFullName]      = useState('')
+  const [email,         setEmail]         = useState('')
+  const [password,      setPassword]      = useState('')
+  const [showPassword,  setShowPassword]  = useState(false)
+  const [loading,       setLoading]       = useState(false)
+  const [nameError,     setNameError]     = useState('')
+  const [emailError,    setEmailError]    = useState('')
+  const [passError,     setPassError]     = useState('')
 
-  /** Current value of the Email Address input field. */
-  const [email,      setEmail]      = useState('')
-
-  /** Current value of the Password input field. */
-  const [password,   setPassword]   = useState('')
-
-  /**
-   * True for 500 ms after the user passes validation, while the app saves
-   * their details to the store and navigates to the next step.
-   * Disables the Continue button and shows a spinner to prevent double-clicks.
-   */
-  const [loading,    setLoading]    = useState(false)
-
-  /** Validation error message for the Full Name field. Empty string = no error. */
-  const [nameError,  setNameError]  = useState('')
-
-  /** Validation error message for the Email field. Empty string = no error. */
-  const [emailError, setEmailError] = useState('')
-
-  /** Validation error message for the Password field. Empty string = no error. */
-  const [passError,  setPassError]  = useState('')
-
-  /** setInstallerValue — Zustand action to write a single key into the installer store. */
   const { setInstallerValue } = useInstallerStore()
 
   // -------------------------------------------------------------------------
@@ -116,15 +88,11 @@ export default function AdminSetupPage() {
    *
    * @param pwd — The password string to validate.
    * @returns   true if all three rules pass, false otherwise.
-   *
-   * Example:
-   *   isValidPassword('hello')       // false — too short, no uppercase, no symbol
-   *   isValidPassword('Hello123!')   // true
    */
   const isValidPassword = (pwd: string): boolean => {
-    const minLength   = /.{8,}/
+    const minLength    = /.{8,}/
     const hasUpperCase = /[A-Z]/
-    const hasSymbol   = /[!@#$%^&*(),.?":{}|<>]/
+    const hasSymbol    = /[!@#$%^&*(),.?":{}|<>]/
     return minLength.test(pwd) && hasUpperCase.test(pwd) && hasSymbol.test(pwd)
   }
 
@@ -143,16 +111,11 @@ export default function AdminSetupPage() {
    * 2. Sets loading to true to disable the button and show the spinner.
    * 3. Saves { fullName, email, password } to the installer store under the
    *    'adminUser' key so the install step can send them to the backend.
-   * 4. After 500 ms (to allow the spinner to render), navigates to
-   *    /installer/config — the next step in the wizard.
-   *
-   * Wrapped in useCallback so the function reference is stable across renders,
-   * avoiding unnecessary re-creation when unrelated state changes.
+   * 4. After 500 ms, navigates to /installer/config.
    */
   const handleContinue = useCallback(() => {
     let hasError = false
 
-    // Validate Full Name — must not be blank
     if (!fullName.trim()) {
       setNameError(t('errors.nameRequired'))
       hasError = true
@@ -160,7 +123,6 @@ export default function AdminSetupPage() {
       setNameError('')
     }
 
-    // Validate Email — must not be blank
     if (!email.trim()) {
       setEmailError(t('errors.emailRequired'))
       hasError = true
@@ -168,7 +130,6 @@ export default function AdminSetupPage() {
       setEmailError('')
     }
 
-    // Validate Password — must meet the minimum security requirements
     if (!password.trim() || !isValidPassword(password)) {
       setPassError(t('errors.passwordInvalid'))
       hasError = true
@@ -176,10 +137,8 @@ export default function AdminSetupPage() {
       setPassError('')
     }
 
-    // At least one field failed — show the errors and stop here
     if (hasError) return
 
-    // All fields are valid — save to store and navigate to the next step
     setLoading(true)
     setInstallerValue('adminUser', { fullName, email, password })
 
@@ -195,18 +154,10 @@ export default function AdminSetupPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white px-6 py-6">
 
-      {/* ----------------------------------------------------------------
-        * Locale Switcher
-        * Fixed to the top-right corner so the user can change language at
-        * any point during the installer flow without losing their progress.
-        * ---------------------------------------------------------------- */}
       <div className="fixed top-4 right-4 z-50">
         <LocaleSwitcher />
       </div>
 
-      {/* ----------------------------------------------------------------
-        * Page Header — Logo and tagline
-        * ---------------------------------------------------------------- */}
       <header className="mb-8 text-center flex flex-col items-center">
         <img
           src="/images/logo/NXT_Flutter_logo.png"
@@ -216,13 +167,8 @@ export default function AdminSetupPage() {
         <p className="text-xl text-gray-700">{t('tagline')}</p>
       </header>
 
-      {/* ----------------------------------------------------------------
-        * Setup Card
-        * Centred form card containing the three admin account fields.
-        * ---------------------------------------------------------------- */}
       <div className="w-full max-w-md p-8 space-y-6 bg-gray-50 rounded-2xl shadow-xl border">
 
-        {/* Card title and description */}
         <h2 className="text-3xl font-bold text-gray-900 text-center">
           {t('heading')}
         </h2>
@@ -230,11 +176,6 @@ export default function AdminSetupPage() {
           {t('description')}
         </p>
 
-        {/* ----------------------------------------------------------------
-          * Form Fields
-          * Each field has a label, an input, and a conditional error message
-          * shown in red beneath the input when validation fails.
-          * ---------------------------------------------------------------- */}
         <div className="space-y-4 text-left">
 
           {/* Full Name */}
@@ -248,7 +189,6 @@ export default function AdminSetupPage() {
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
             />
-            {/* Validation error — only rendered when nameError is non-empty */}
             {nameError && (
               <p className="text-sm text-red-500 mt-1">{nameError}</p>
             )}
@@ -266,25 +206,42 @@ export default function AdminSetupPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {/* Validation error — only rendered when emailError is non-empty */}
             {emailError && (
               <p className="text-sm text-red-500 mt-1">{emailError}</p>
             )}
           </div>
 
-          {/* Password */}
+          {/* ----------------------------------------------------------------
+            * Password Field
+            * The eye icon toggles between showing and hiding the password.
+            * The input type switches between 'password' and 'text' accordingly.
+            * ---------------------------------------------------------------- */}
           <div>
             <label htmlFor="password" className="block text-sm font-medium text-gray-700">
               {t('fields.password.label')}
             </label>
-            <Input
-              id="password"
-              type="password"
-              placeholder={t('fields.password.placeholder')}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {/* Validation error — only rendered when passError is non-empty */}
+            <div className="relative">
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder={t('fields.password.placeholder')}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="pr-10"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600"
+                tabIndex={-1}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword
+                  ? <EyeOff className="w-4 h-4" />
+                  : <Eye    className="w-4 h-4" />
+                }
+              </button>
+            </div>
             {passError && (
               <p className="text-sm text-red-500 mt-1">{passError}</p>
             )}
@@ -292,16 +249,10 @@ export default function AdminSetupPage() {
 
         </div>
 
-        {/* Disclaimer note — clarifies that this is a system account, not a DB account */}
         <p className="text-xs text-gray-500 italic text-center mt-2">
           {t('disclaimer')}
         </p>
 
-        {/* ----------------------------------------------------------------
-          * Continue Button
-          * Disabled while loading. Shows a spinner icon while the app saves
-          * the admin details and transitions to the next wizard step.
-          * ---------------------------------------------------------------- */}
         <div className="pt-4">
           <Button
             className="w-full"
@@ -309,7 +260,6 @@ export default function AdminSetupPage() {
             disabled={loading}
           >
             {loading ? (
-              // Spinner shown while navigating to the next step
               <Loader2 className="w-4 h-4 animate-spin mx-auto" />
             ) : (
               t('continueButton')
