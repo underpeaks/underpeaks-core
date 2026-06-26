@@ -73,7 +73,7 @@ export async function POST(req: Request) {
      */
     const config: DBConfig = await req.json()
     
-console.log('[test-db-connection] Received config:', JSON.stringify(config, null, 2))  // <-- here
+
 
 
 

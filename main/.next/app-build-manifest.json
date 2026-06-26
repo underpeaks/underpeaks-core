@@ -11,25 +11,30 @@
       "static/chunks/main-app.js",
       "static/chunks/app/[locale]/not-found.js"
     ],
-    "/[locale]/(auth)/signin/page": [
+    "/[locale]/(auth)/signup/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/(auth)/signin/page.js"
+      "static/chunks/app/[locale]/(auth)/signup/page.js"
     ],
     "/api/get-system-config/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
       "static/chunks/app/api/get-system-config/route.js"
     ],
-    "/api/license/phone-home/route": [
+    "/api/signup/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/api/license/phone-home/route.js"
+      "static/chunks/app/api/signup/route.js"
     ],
-    "/[locale]/page": [
+    "/api/activity-log/route": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/[locale]/page.js"
+      "static/chunks/app/api/activity-log/route.js"
+    ],
+    "/[locale]/(auth)/signin/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/[locale]/(auth)/signin/page.js"
     ]
   }
 }

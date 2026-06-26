@@ -14,6 +14,8 @@
  *   escaped newline characters (\n) converted to real line breaks for
  *   readability (useful for multi-line values like JSON keys or certs).
  * - Provides a "Continue to Sign In" button that navigates to /signin.
+ * - Shows a localhost restart notice when running on localhost, prompting
+ *   the user to restart their dev server before continuing.
  *
  * Security note:
  * - The password is masked in the UI and is NEVER logged to the console.
@@ -306,6 +308,27 @@ export default function DonePage() {
 
         </CardContent>
       </Card>
+
+      {/* ------------------------------------------------------------------
+        * Localhost restart notice
+        * Only shown when the app is running on localhost. The installer
+        * writes config values that are only picked up on a fresh server
+        * start — skipping this step causes the console to load with stale
+        * or missing config.
+        * ------------------------------------------------------------------ */}
+      {typeof window !== 'undefined' && window.location.hostname === 'localhost' && (
+        <div className="w-full max-w-xl mt-6 rounded-lg border border-amber-300 bg-amber-50 px-5 py-4 text-sm text-amber-800">
+          <p className="font-semibold mb-1">⚠️ Before you continue</p>
+          <p>
+            You are running on{' '}
+            <code className="font-mono text-xs bg-amber-100 px-1 py-0.5 rounded">localhost</code>.
+            Please <strong>stop your dev server and restart it</strong> before
+            clicking "Continue to Sign In" — the installer has written new
+            environment values that will only take effect after a fresh server
+            start.
+          </p>
+        </div>
+      )}
 
       {/* ------------------------------------------------------------------
         * Continue to Sign In button

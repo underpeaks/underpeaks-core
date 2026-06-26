@@ -359,29 +359,28 @@ async function writeEnvFileFromObject(env: Record<string, any>): Promise<void> {
   // -------------------------------------------------------------------------
 
   if (env.type === 'supabase') {
-    /**
-     * Supabase requires a project URL at minimum.
-     * Anon key and service key are written if provided.
-     * Note: if both anonKey and serviceKey are provided, serviceKey overwrites
-     * NEXT_PUBLIC_SUPABASE_SERVICE_KEY — this matches the original behaviour.
-     */
-    const url = env.supabaseUrl || env.url
-    if (!url) throw new Error('Supabase URL missing')
+  const url = env.supabaseUrl || env.url
+  if (!url) throw new Error('Supabase URL missing')
 
-    lines.push(`NEXT_PUBLIC_SUPABASE_URL=${envSafe(ensureHttp(url))}`)
+  lines.push(`NEXT_PUBLIC_SUPABASE_URL=${envSafe(ensureHttp(url))}`)
 
-    if (env.anonKey) {
-      lines.push(`NEXT_PUBLIC_SUPABASE_ANON_KEY=${envSafe(env.anonKey)}`)
-    }
-
-    if (env.serviceRoleKey) {
-      lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.serviceRoleKey)}`)
-    }
-
-    if (env.storageUrl) {
-      lines.push(`NEXT_DB_STORAGE_URL=${envSafe(ensureHttp(env.storageUrl))}`)
-    }
+  if (env.anonKey) {
+    lines.push(`NEXT_PUBLIC_SUPABASE_ANON_KEY=${envSafe(env.anonKey)}`)
   }
+
+  if (env.serviceRoleKey) {
+    lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.serviceRoleKey)}`)
+  }
+
+  if (env.storageUrl) {
+    lines.push(`NEXT_DB_STORAGE_URL=${envSafe(ensureHttp(env.storageUrl))}`)
+  }
+
+  // ── NEW — write the direct Postgres connection string for DDL operations
+  if (env.connectionString) {
+    lines.push(`NEXT_DB_SUPABASE_CONNECTION_STRING=${envSafe(env.connectionString)}`)
+  }
+}
 
   // -------------------------------------------------------------------------
   // Firebase variables

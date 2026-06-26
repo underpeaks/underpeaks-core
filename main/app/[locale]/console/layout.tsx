@@ -128,12 +128,13 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     return () => clearInterval(interval)
   }, [])
 
-  useEffect(() => {
-    if (!checkingAuth && user && config !== null && config !== undefined) {
-      const hasKey = !!(config?.nxf_api_key)
-      setShowLicenseGate(!hasKey)
-    }
-  }, [checkingAuth, user, config])
+  // TODO: RE-ENABLE BEFORE LAUNCH — temporarily disabled so testers can bypass license gate
+  // useEffect(() => {
+  //   if (!checkingAuth && user && config !== null && config !== undefined) {
+  //     const hasKey = !!(config?.nxf_api_key)
+  //     setShowLicenseGate(!hasKey)
+  //   }
+  // }, [checkingAuth, user, config])
 
   const handleSaveLicenseKey = async () => {
     if (!licenseInput.trim()) return
@@ -141,24 +142,26 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     setLicenseError(null)
 
     try {
-      const studioUrl   = process.env.NEXT_PUBLIC_STUDIO_URL ?? 'http://localhost:3000'
-      const validateRes = await fetch(`${studioUrl}/api/license/validate`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({
-          license_key:  licenseInput.trim(),
-          instance_url: process.env.NEXT_PUBLIC_APP_DOMAIN,
-          db_type:      process.env.NEXT_PUBLIC_DB_TYPE,
-          project_name: config?.project_name ?? '',
-        }),
-      })
 
-      const validateData = await validateRes.json()
+      ///TODO PUT BACK BFOR LAUNCH
+      // const studioUrl   = process.env.NEXT_PUBLIC_STUDIO_URL ?? 'http://localhost:3000'
+      // const validateRes = await fetch(`${studioUrl}/api/license/validate`, {
+      //   method:  'POST',
+      //   headers: { 'Content-Type': 'application/json' },
+      //   body:    JSON.stringify({
+      //     license_key:  licenseInput.trim(),
+      //     instance_url: process.env.NEXT_PUBLIC_APP_DOMAIN,
+      //     db_type:      process.env.NEXT_PUBLIC_DB_TYPE,
+      //     project_name: config?.project_name ?? '',
+      //   }),
+      // })
 
-      if (!validateRes.ok || !validateData.valid) {
-        setLicenseError(validateData.error ?? 'Invalid license key — please check and try again.')
-        return
-      }
+      // const validateData = await validateRes.json()
+
+      // if (!validateRes.ok || !validateData.valid) {
+      //   setLicenseError(validateData.error ?? 'Invalid license key — please check and try again.')
+      //   return
+      // }
 
       const saveRes = await fetch('/api/update-project-settings', {
         method:  'POST',

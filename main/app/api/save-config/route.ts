@@ -143,6 +143,11 @@ export async function POST(req: Request) {
 
     const adapter = getAdapter(selectedDb as DBType, dbConfig)
 
+    // Log what keys are available in the config for debugging
+    console.log('[save-config] adapter config keys:', Object.keys(dbConfig))
+    console.log('[save-config] has serviceRoleKey:', !!dbConfig.serviceRoleKey)
+    console.log('[save-config] has connectionString:', !!dbConfig.connectionString)
+
     if (!adapter.findUserByEmailWithRetry || !adapter.createAdminUser) {
       return NextResponse.json(
         { error: 'Adapter does not support required methods' },
@@ -181,9 +186,9 @@ export async function POST(req: Request) {
 
     console.log('[save-config] Admin user resolved successfully')
 
-    // ── Find or create tenant — look up by email, not user ID ─────────────
+    // ── Find or create tenant ──────────────────────────────────────────────
 
-    let tenant = await adapter.findTenantByUserEmail?.(adapter.config, adminUser.email)
+    let tenant   = await adapter.findTenantByUserEmail?.(adapter.config, adminUser.email)
     let tenantId = tenant?.ten_id || tenant?.id || null
 
     if (!tenantId && adapter.createTenant) {
@@ -191,6 +196,7 @@ export async function POST(req: Request) {
       tenantId = await adapter.createTenant(adapter.config, {
         subdomain:  adminUser.email.split('@')[0] || 'console',
         user_email: adminUser.email,
+        user_id:    userId,
       })
     }
 

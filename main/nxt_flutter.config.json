@@ -1,11 +1,12 @@
 {
-  "projectName": "muapp",
+  "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "firebase",
+  "selectedDb": "mysql",
   "deploymentType": "self-hosted",
+  "studioUrl": "https://www.nxtflutter.com",
   "dbConfig": {
-    "type": "firebase"
+    "type": "mysql"
   },
   "faviconUrl": "/images/favicon/NXT_Flutter_favicon.png",
   "ecommerceEnabled": false,
@@ -13,14 +14,13 @@
   "selectedPages": [],
   "models": [],
   "adminUser": {
-    "fullName": "Carmen Wentzel",
-    "email": "Anton@idigisolweb.com"
+    "fullName": "Anton Wentzel",
+    "email": "anton@her.co.za"
   },
   "featureFlags": {
     "ecommerce": false,
     "demoContent": true
   },
   "selectedProjectType": "ecommerce",
-  "installed": true,
-  "projectUrl": "http://localhost:3001"
+  "installed": true
 }

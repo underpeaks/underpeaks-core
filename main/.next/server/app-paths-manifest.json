@@ -1,4 +1,7 @@
 {
-  "/api/license/phone-home/route": "app/api/license/phone-home/route.js",
+  "/api/get-system-config/route": "app/api/get-system-config/route.js",
+  "/api/signup/route": "app/api/signup/route.js",
+  "/api/activity-log/route": "app/api/activity-log/route.js",
+  "/[locale]/(auth)/signup/page": "app/[locale]/(auth)/signup/page.js",
   "/[locale]/(auth)/signin/page": "app/[locale]/(auth)/signin/page.js"
 }

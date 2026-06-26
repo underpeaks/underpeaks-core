@@ -8,6 +8,7 @@ import { Button }                                            from '@/components/
 import { Label }                                             from '@/components/ui/label'
 import { Alert, AlertTitle, AlertDescription }               from '@/components/ui/alert'
 import { FiMail, FiLock, FiUser }                            from 'react-icons/fi'
+import { Eye, EyeOff }                                       from 'lucide-react'
 import { useTranslations }                                   from 'next-intl'
 import { initializeApp, getApps }                            from 'firebase/app'
 import {
@@ -19,6 +20,7 @@ import {
 }                                                            from 'firebase/auth'
 import { createClient }                                      from '@supabase/supabase-js'
 import { logActivity }                                       from '@/app/lib/logActivity'
+import { parseFirebaseWebConfig }                            from '@/app/lib/firebaseConfig'
 
 const DB_TYPE = process.env.NEXT_PUBLIC_DB_TYPE
 
@@ -26,7 +28,7 @@ let auth: any     = null
 let supabase: any = null
 
 if (DB_TYPE === 'firebase' && process.env.NEXT_PUBLIC_FIREBASE_CONFIG) {
-  const firebaseConfig = JSON.parse(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
+  const firebaseConfig = parseFirebaseWebConfig(process.env.NEXT_PUBLIC_FIREBASE_CONFIG)
   const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig)
   auth = getAuth(app)
 }
@@ -46,12 +48,13 @@ export default function SignUpPage() {
   const t      = useTranslations('signUp')
   const router = useRouter()
 
-  const [full_name,   setFullName]   = useState('')
-  const [email,       setEmail]      = useState('')
-  const [password,    setPassword]   = useState('')
-  const [loading,     setLoading]    = useState(false)
-  const [error,       setError]      = useState<string | null>(null)
-  const [successMsg,  setSuccessMsg] = useState<string | null>(null)
+  const [full_name,    setFullName]    = useState('')
+  const [email,        setEmail]       = useState('')
+  const [password,     setPassword]    = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [loading,      setLoading]     = useState(false)
+  const [error,        setError]       = useState<string | null>(null)
+  const [successMsg,   setSuccessMsg]  = useState<string | null>(null)
 
   async function handleSignup() {
     setError(null)
@@ -74,7 +77,6 @@ export default function SignUpPage() {
 
       setSuccessMsg(t('success.accountCreated'))
 
-      // Log signup — use the user_id returned by the API if available
       const newUserId = res.user_id ?? res.user?.user_id ?? null
       if (newUserId) {
         await logActivity(newUserId, 'user_signup', { email })
@@ -179,13 +181,25 @@ export default function SignUpPage() {
         <Label htmlFor="password" className="mb-1 text-black">{t('fields.password')}</Label>
         <div className="flex items-center gap-2 mb-6">
           <FiLock className="text-gray-500" />
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <div className="relative flex-1">
+            <Input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600"
+              tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+            </button>
+          </div>
         </div>
 
         <Button className="w-full mb-4" onClick={handleSignup} disabled={loading}>

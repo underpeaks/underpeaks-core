@@ -38,40 +38,22 @@ import { DBConfig, DBAdapter, ColumnDef, StorageFile } from '../types'
 import { CreateUserDataModels } from '../utils/create-data-models'
 
 export class MySQLAdapter implements DBAdapter {
-  /** The default connection pool created from the constructor config. */
   private pool: mysql.Pool
-
-  /** The database config this adapter was initialised with. */
   public config: DBConfig
-
-  /**
-   * A cache of additional connection pools keyed by connection parameters.
-   * Used when different DBConfig objects are passed to individual methods,
-   * as is common in multi-tenant or installer scenarios.
-   */
   private pools: Record<string, mysql.Pool> = {}
 
-  /**
-   * DEFAULT_BUCKETS
-   *
-   * The list of storage folder names created during initial setup.
-   * Each entry becomes a row in the `nxf_storage` table representing
-   * a logical storage "bucket" for file organisation.
-   */
   private readonly DEFAULT_BUCKETS = [
     'system', 'themes', 'extensions', 'projects',
     'avatars', 'logos', 'uploads',
   ]
 
-  // -------------------------------------------------------------------------
-  // Constructor
-  // -------------------------------------------------------------------------
+  // ─── Constructor ───────────────────────────────────────────────────────────
 
   constructor(config: DBConfig) {
-    if (!config)           throw new Error('DBConfig must be provided via adapter')
-    if (!config.user)      throw new Error('MySQLAdapter: config.user is required')
-    if (!config.password)  throw new Error('MySQLAdapter: config.password is required')
-    if (!config.database)  throw new Error('MySQLAdapter: config.database is required')
+    if (!config)          throw new Error('DBConfig must be provided via adapter')
+    if (!config.user)     throw new Error('MySQLAdapter: config.user is required')
+    if (!config.password) throw new Error('MySQLAdapter: config.password is required')
+    if (!config.database) throw new Error('MySQLAdapter: config.database is required')
 
     this.config = config
 
@@ -87,9 +69,7 @@ export class MySQLAdapter implements DBAdapter {
     })
   }
 
-  // -------------------------------------------------------------------------
-  // Private: pool management
-  // -------------------------------------------------------------------------
+  // ─── Pool management ───────────────────────────────────────────────────────
 
   private async getPool(config: DBConfig): Promise<mysql.Pool> {
     const key = `${config.host}_${config.database}_${config.user}`
@@ -114,9 +94,7 @@ export class MySQLAdapter implements DBAdapter {
     return this.pools[key]
   }
 
-  // -------------------------------------------------------------------------
-  // Connection
-  // -------------------------------------------------------------------------
+  // ─── Connection ────────────────────────────────────────────────────────────
 
   async connect(): Promise<void> {
     const conn = await this.pool.getConnection()
@@ -133,9 +111,7 @@ export class MySQLAdapter implements DBAdapter {
     }
   }
 
-  // -------------------------------------------------------------------------
-  // Password helpers
-  // -------------------------------------------------------------------------
+  // ─── Password ──────────────────────────────────────────────────────────────
 
   async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, 10)
@@ -145,57 +121,27 @@ export class MySQLAdapter implements DBAdapter {
     return bcrypt.compare(password, hash)
   }
 
-  // -------------------------------------------------------------------------
-  // Basic CRUD
-  // -------------------------------------------------------------------------
+  // ─── Basic CRUD ────────────────────────────────────────────────────────────
 
-  /**
-   * create
-   *
-   * Inserts a new row into the specified table.
-   *
-   * Pre-processes values before insertion:
-   * - `undefined` ID fields → auto-generates a UUID.
-   * - `Date` objects → converted to UTC MySQL DATETIME string (YYYY-MM-DD HH:MM:SS).
-   * - ISO 8601 strings → converted to UTC MySQL DATETIME string to prevent
-   *   timezone offset issues when MySQL reads the value back.
-   * - Objects/arrays → JSON-serialised to strings.
-   *
-   * Why UTC for datetimes?
-   * MySQL DATETIME columns store naive datetimes with no timezone info.
-   * If we store local time and the server timezone differs from UTC, MySQL
-   * reads it back and appends .000Z making it appear as UTC when it isn't.
-   * Always storing UTC values ensures what goes in equals what comes out.
-   */
-  async create(
-    config: DBConfig,
-    table: string,
-    data: Record<string, any>
-  ): Promise<any> {
+  async create(config: DBConfig, table: string, data: Record<string, any>): Promise<any> {
     const pool    = await this.getPool(config)
     const cleaned: Record<string, any> = {}
 
     for (const key in data) {
       let value = data[key]
 
-      // Auto-generate UUID for undefined ID fields
       if (value === undefined && key.toLowerCase().includes('id')) {
         value = crypto.randomUUID()
       }
 
       if (value instanceof Date) {
-        // Convert Date to UTC MySQL DATETIME string
         cleaned[key] = value.toISOString().slice(0, 19).replace('T', ' ')
       } else if (
         typeof value === 'string' &&
         /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value)
       ) {
-        // Convert ISO 8601 string to UTC MySQL DATETIME string
-        // Using new Date() ensures any timezone offset in the string is
-        // normalised to UTC before slicing — prevents 1-hour drift
         cleaned[key] = new Date(value).toISOString().slice(0, 19).replace('T', ' ')
       } else if (typeof value === 'object' && value !== null) {
-        // Serialise objects/arrays to JSON strings for storage
         cleaned[key] = JSON.stringify(value)
       } else {
         cleaned[key] = value
@@ -211,11 +157,6 @@ export class MySQLAdapter implements DBAdapter {
     return result
   }
 
-  /**
-   * read
-   *
-   * Reads rows from the specified table with optional filtering and limiting.
-   */
   async read(config: DBConfig, table: string, query?: any): Promise<any> {
     const pool = await this.getPool(config)
 
@@ -244,7 +185,6 @@ export class MySQLAdapter implements DBAdapter {
 
     const [rows]: any = await pool.query(sql, values)
 
-    // Auto-parse JSON strings back into objects/arrays
     return rows.map((row: any) => {
       for (const key in row) {
         const val = row[key]
@@ -256,11 +196,6 @@ export class MySQLAdapter implements DBAdapter {
     })
   }
 
-  /**
-   * update
-   *
-   * Updates a row in the specified table identified by a given ID value.
-   */
   async update(
     config:   DBConfig,
     table:    string,
@@ -290,11 +225,6 @@ export class MySQLAdapter implements DBAdapter {
     return result
   }
 
-  /**
-   * delete
-   *
-   * Deletes a row from the specified table by its id column value.
-   */
   async delete(
     config:   DBConfig,
     table:    string,
@@ -307,14 +237,9 @@ export class MySQLAdapter implements DBAdapter {
     return result
   }
 
-  // -------------------------------------------------------------------------
-  // System config
-  // -------------------------------------------------------------------------
+  // ─── System config ─────────────────────────────────────────────────────────
 
-  async findSystemConfigByUserId(
-    config: DBConfig,
-    userId: string
-  ): Promise<any> {
+  async findSystemConfigByUserId(config: DBConfig, userId: string): Promise<any> {
     try {
       console.log('[mysql-adapter] findSystemConfigByUserId: Starting lookup')
 
@@ -347,9 +272,7 @@ export class MySQLAdapter implements DBAdapter {
     }
   }
 
-  // -------------------------------------------------------------------------
-  // Table creation
-  // -------------------------------------------------------------------------
+  // ─── Table creation ────────────────────────────────────────────────────────
 
   async createTable(
     tableName: string,
@@ -397,12 +320,34 @@ export class MySQLAdapter implements DBAdapter {
             throw new Error(`Unsupported MySQL column type: ${col.type}`)
         }
 
-        const constraints: string[] = []
-        if (col.is_primary)         constraints.push('PRIMARY KEY')
-        if (col.unique)             constraints.push('UNIQUE')
-        if (col.nullable === false) constraints.push('NOT NULL')
+        // ── DEFAULT clause ─────────────────────────────────────────────────
+        let defaultClause = ''
+        if (col.default !== undefined && col.default !== null) {
+          if (typeof col.default === 'boolean' || typeof col.default === 'number') {
+            defaultClause = ` DEFAULT ${col.default}`
+          } else if (typeof col.default === 'string') {
+            if (
+              col.default.includes('(') ||
+              col.default === 'true'    ||
+              col.default === 'false'   ||
+              col.default === 'null'
+            ) {
+              defaultClause = ` DEFAULT ${col.default}`
+            } else {
+              defaultClause = ` DEFAULT '${col.default}'`
+            }
+          }
+        }
 
-        return `\`${col.name}\` ${typeSql} ${constraints.join(' ')}`.trim()
+        // ── Constraints ────────────────────────────────────────────────────
+        const constraints: string[] = []
+        if (col.is_primary) constraints.push('PRIMARY KEY')
+        if (col.unique)     constraints.push('UNIQUE')
+        if (col.nullable === false && (col.default === undefined || col.default === null)) {
+          constraints.push('NOT NULL')
+        }
+
+        return `\`${col.name}\` ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
       })
       .join(', ')
 
@@ -410,14 +355,9 @@ export class MySQLAdapter implements DBAdapter {
     await this.pool.query(sql)
   }
 
-  // -------------------------------------------------------------------------
-  // Data models
-  // -------------------------------------------------------------------------
+  // ─── Data models ───────────────────────────────────────────────────────────
 
-  async CreateDataModels(
-    projectId: string,
-    selectedProjectType: string
-  ): Promise<any> {
+  async CreateDataModels(projectId: string, selectedProjectType: string): Promise<any> {
     const [tenantRows] = await this.pool.execute(
       'SELECT ten_id FROM `nxf_system_tenants` LIMIT 1'
     )
@@ -433,25 +373,41 @@ export class MySQLAdapter implements DBAdapter {
     )
   }
 
-  async createDataModelsFromUserEmail(
-    email: string,
-    selectedProjectType: string
-  ): Promise<any> {
+  async createDataModelsFromUserEmail(email: string, selectedProjectType: string): Promise<any> {
     const user = await this.findUserByEmail(this.config, email)
     if (!user?.user_id) throw new Error('User not found')
 
     const project = await this.findProjectByOwnerId(this.config, user.user_id)
     if (!project?.project_id) throw new Error('Project not found')
 
-    return this.CreateDataModels(project.project_id, selectedProjectType)
+    // Look up tenant — try by user_id first, fall back to email
+    let tenant = await this.findTenantByUserID(this.config, user.user_id)
+    if (!tenant) {
+      tenant = await this.findTenantByUserEmail(this.config, email)
+    }
+    const tenantId = tenant?.ten_id ?? ''
+
+    return await CreateUserDataModels(
+      this,
+      project.project_id,
+      tenantId,
+      selectedProjectType,
+      []
+    )
   }
 
-  // -------------------------------------------------------------------------
-  // User helpers
-  // -------------------------------------------------------------------------
+  // ─── User helpers ──────────────────────────────────────────────────────────
 
   async createAdminUser(config: DBConfig, data: any): Promise<any> {
     const { user_id, user_email, password, role = 'admin', ...rest } = data
+
+    // Skip if user already exists
+    const existing = await this.findUserByEmail(config, user_email)
+    if (existing) {
+      console.log('[MySQLAdapter] createAdminUser — user already exists, skipping')
+      return existing
+    }
+
     const hashed = await this.hashPassword(password)
 
     return this.create(config, 'nxf_users', {
@@ -489,11 +445,7 @@ export class MySQLAdapter implements DBAdapter {
     return null
   }
 
-  async loginBasic(
-    config:   DBConfig,
-    email:    string,
-    password: string
-  ): Promise<any> {
+  async loginBasic(config: DBConfig, email: string, password: string): Promise<any> {
     const user = await this.findUserByEmail(config, email)
     if (!user) return { success: false, error: 'Invalid email or password' }
     if (!user.email_verified) return { success: false, error: 'Please verify your email before logging in' }
@@ -563,17 +515,15 @@ export class MySQLAdapter implements DBAdapter {
     })
 
     return {
-      success:      true,
-      user:         basicLogin.user,
+      success:   true,
+      user:      basicLogin.user,
       accessToken,
       refreshToken,
-      projectId:    project.project_id,
+      projectId: project.project_id,
     }
   }
 
-  // -------------------------------------------------------------------------
-  // Password reset
-  // -------------------------------------------------------------------------
+  // ─── Password reset ────────────────────────────────────────────────────────
 
   async createPasswordResetToken(email: string): Promise<string> {
     const token = crypto.randomBytes(32).toString('hex')
@@ -607,10 +557,7 @@ export class MySQLAdapter implements DBAdapter {
     return rows?.[0] || null
   }
 
-  async updatePasswordByToken(
-    token:       string,
-    newPassword: string
-  ): Promise<{ success: boolean }> {
+  async updatePasswordByToken(token: string, newPassword: string): Promise<{ success: boolean }> {
     if (!token) throw new Error('Token is required')
 
     const pool = await this.getPool(this.config)
@@ -637,9 +584,7 @@ export class MySQLAdapter implements DBAdapter {
     return { success: true }
   }
 
-  // -------------------------------------------------------------------------
-  // Email verification
-  // -------------------------------------------------------------------------
+  // ─── Email verification ────────────────────────────────────────────────────
 
   async verifyEmail(
     config: DBConfig,
@@ -696,9 +641,7 @@ export class MySQLAdapter implements DBAdapter {
     return { success: true, token: newToken }
   }
 
-  // -------------------------------------------------------------------------
-  // Registration
-  // -------------------------------------------------------------------------
+  // ─── Registration ──────────────────────────────────────────────────────────
 
   async registerUser(
     config: DBConfig,
@@ -735,9 +678,17 @@ export class MySQLAdapter implements DBAdapter {
       updated_at:     new Date(),
     })
 
-    const project_id = await this.createProject(config, {
-      name:    `${full_name || email}'s Project`,
+    // Create tenant first so project can reference it
+    const ten_id = await this.createTenant(config, {
+      subdomain:  email.split('@')[0] || 'console',
+      user_email: email,
       user_id,
+    })
+
+    const project_id = await this.createProject(config, {
+      name:      full_name ? `${full_name}'s Project` : 'Default Project',
+      user_id,
+      tenant_ID: ten_id,
     })
 
     return {
@@ -749,9 +700,7 @@ export class MySQLAdapter implements DBAdapter {
     }
   }
 
-  // -------------------------------------------------------------------------
-  // Session / token management
-  // -------------------------------------------------------------------------
+  // ─── Session / token management ────────────────────────────────────────────
 
   async findTokenByAccessToken(accessToken: string): Promise<any> {
     const [rows]: any = await this.pool.query(
@@ -794,9 +743,7 @@ export class MySQLAdapter implements DBAdapter {
     return true
   }
 
-  // -------------------------------------------------------------------------
-  // Projects and tenants
-  // -------------------------------------------------------------------------
+  // ─── Projects and tenants ──────────────────────────────────────────────────
 
   async createProject(
     config: DBConfig,
@@ -821,13 +768,21 @@ export class MySQLAdapter implements DBAdapter {
 
   async createTenant(
     config: DBConfig,
-    data: { subdomain: string; user_email: string }
+    data: { subdomain: string; user_email: string; user_id?: string }
   ): Promise<string> {
+    // Check if tenant already exists for this email
+    const existing = await this.findTenantByUserEmail(config, data.user_email)
+    if (existing) {
+      console.log('[MySQLAdapter] createTenant — tenant already exists, skipping')
+      return existing.ten_id
+    }
+
     const ten_id = crypto.randomUUID()
     await this.create(config, 'nxf_system_tenants', {
       ten_id,
       subdomain:  data.subdomain,
       user_email: data.user_email,
+      user_id:    data.user_id || null,
       created_at: new Date(),
     })
     return ten_id
@@ -839,7 +794,7 @@ export class MySQLAdapter implements DBAdapter {
   }
 
   async findTenantByUserID(config: DBConfig, user_id: string): Promise<any> {
-    const rows: any = await this.read(config, 'nxf_system_tenants', { user_id: user_id })
+    const rows: any = await this.read(config, 'nxf_system_tenants', { user_id })
     return rows?.[0] || null
   }
 
@@ -854,9 +809,7 @@ export class MySQLAdapter implements DBAdapter {
     return config_id
   }
 
-  // -------------------------------------------------------------------------
-  // Storage
-  // -------------------------------------------------------------------------
+  // ─── Storage buckets ───────────────────────────────────────────────────────
 
   async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
     for (const folder of this.DEFAULT_BUCKETS) {
@@ -884,194 +837,202 @@ export class MySQLAdapter implements DBAdapter {
     })
   }
 
-  // -------------------------------------------------------------------------
-  // Demo content
-  // -------------------------------------------------------------------------
+  // ─── Demo content ──────────────────────────────────────────────────────────
 
-async installDemoContent(
-  config: DBConfig,
-  selectedProjectType: string
-): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
-  const fs   = require('fs')
-  const path = require('path')
+  async installDemoContent(
+    config: DBConfig,
+    selectedProjectType: string
+  ): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
+    const fs   = require('fs')
+    const path = require('path')
 
-  try {
-    const [userRows] = await this.pool.execute(
-      `SELECT user_id FROM \`nxf_users\` WHERE role = 'admin' LIMIT 1`
-    )
-    const adminUser = (userRows as any[])[0]
-    if (!adminUser) return { success: false, error: 'No admin user found' }
-    const adminUserId = adminUser.user_id
-
-    const [projectRows] = await this.pool.execute(
-      'SELECT project_id FROM `nxf_system_projects` LIMIT 1'
-    )
-    const project = (projectRows as any[])[0]
-    if (!project) return { success: false, error: 'No project found' }
-    const projectId = project.project_id
-
-    const [tenantRows] = await this.pool.execute(
-      'SELECT ten_id FROM `nxf_system_tenants` LIMIT 1'
-    )
-    const tenant = (tenantRows as any[])[0]
-    if (!tenant) return { success: false, error: 'No tenant found' }
-    const tenantId = tenant.ten_id
-
-    // ── Pre-build the model name → sm_id resolver map ──────────────────────
-    // Used by the nxf_pages installer to resolve "model": "nxf_product"
-    // into the actual sm_id at install time.
-
-    const modelNameToId = new Map<string, string>()
     try {
-      const [modelRows] = await this.pool.execute(
-        'SELECT sm_id, name FROM `nxf_system_models` WHERE project_id = ?',
-        [projectId]
+      const [userRows] = await this.pool.execute(
+        `SELECT user_id FROM \`nxf_users\` WHERE role = 'admin' LIMIT 1`
       )
-      for (const m of modelRows as any[]) {
-        if (m.name && m.sm_id) modelNameToId.set(m.name, m.sm_id)
-      }
-      console.log(
-        `[MySQLAdapter] Built model resolver map — ${modelNameToId.size} models indexed`
+      const adminUser = (userRows as any[])[0]
+      if (!adminUser) return { success: false, error: 'No admin user found' }
+      const adminUserId = adminUser.user_id
+
+      const [projectRows] = await this.pool.execute(
+        'SELECT project_id FROM `nxf_system_projects` LIMIT 1'
       )
-    } catch (err: any) {
-      console.warn('[MySQLAdapter] Failed to build model resolver map:', err.message)
-    }
+      const project = (projectRows as any[])[0]
+      if (!project) return { success: false, error: 'No project found' }
+      const projectId = project.project_id
 
-    const modelFolders = [
-      'system_models',
-      'users_models',
-      `${selectedProjectType}_models`,
-    ]
+      const [tenantRows] = await this.pool.execute(
+        'SELECT ten_id FROM `nxf_system_tenants` LIMIT 1'
+      )
+      const tenant = (tenantRows as any[])[0]
+      if (!tenant) return { success: false, error: 'No tenant found' }
+      const tenantId = tenant.ten_id
 
-    let totalInserted = 0
+      console.log('[MySQLAdapter] installDemoContent — adminUserId:', adminUserId)
+      console.log('[MySQLAdapter] installDemoContent — projectId:', projectId)
+      console.log('[MySQLAdapter] installDemoContent — tenantId:', tenantId)
 
-    for (const folder of modelFolders) {
-      const basePath = path.resolve(process.cwd(), '..', 'demo_content', folder)
-
-      if (!fs.existsSync(basePath)) {
-        console.log('[MySQLAdapter] Demo folder not found, skipping:', basePath)
-        continue
+      const modelNameToId = new Map<string, string>()
+      try {
+        const [modelRows] = await this.pool.execute(
+          'SELECT sm_id, name FROM `nxf_system_models` WHERE project_id = ?',
+          [projectId]
+        )
+        for (const m of modelRows as any[]) {
+          if (m.name && m.sm_id) modelNameToId.set(m.name, m.sm_id)
+        }
+        console.log(`[MySQLAdapter] Built model resolver map — ${modelNameToId.size} models indexed`)
+      } catch (err: any) {
+        console.warn('[MySQLAdapter] Failed to build model resolver map:', err.message)
       }
 
-      const files = fs.readdirSync(basePath).filter((f: string) => f.endsWith('.json'))
+      const modelFolders = [
+        'system_models',
+        'users_models',
+        `${selectedProjectType}_models`,
+      ]
 
-      for (const file of files) {
-        const raw = fs.readFileSync(path.join(basePath, file), 'utf-8')
+      let totalInserted = 0
 
-        let json: any
-        try {
-          json = JSON.parse(raw)
-        } catch {
-          console.warn(`[MySQLAdapter] Skipping invalid JSON: ${file}`)
+      for (const folder of modelFolders) {
+        const basePath = path.resolve(process.cwd(), '..', 'demo_content', folder)
+
+        if (!fs.existsSync(basePath)) {
+          console.log('[MySQLAdapter] Demo folder not found, skipping:', basePath)
           continue
         }
 
-        const tableName = file.replace('.json', '')
-        const rows      = Array.isArray(json) ? json : json?.demo_data
+        const files = fs.readdirSync(basePath).filter((f: string) => f.endsWith('.json'))
 
-        if (!rows || !Array.isArray(rows)) continue
+        for (const file of files) {
+          const raw = fs.readFileSync(path.join(basePath, file), 'utf-8')
 
-        const [colRows] = await this.pool.execute(
-          `SELECT COLUMN_NAME, DATA_TYPE FROM information_schema.COLUMNS
-           WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?`,
-          [tableName]
-        )
-        const tableMeta = colRows as any[]
-
-        if (!tableMeta.length) {
-          console.log(`[MySQLAdapter] Skipping ${tableName} — table does not exist`)
-          continue
-        }
-
-        const tableColumns = tableMeta.map((c) => c.COLUMN_NAME)
-        const colTypeMap   = Object.fromEntries(
-          tableMeta.map((c) => [c.COLUMN_NAME, c.DATA_TYPE])
-        )
-
-        console.log(`[MySQLAdapter] Inserting into ${tableName} — ${rows.length} rows`)
-
-        for (const row of rows) {
+          let json: any
           try {
-            const enriched = { ...row }
+            json = JSON.parse(raw)
+          } catch {
+            console.warn(`[MySQLAdapter] Skipping invalid JSON: ${file}`)
+            continue
+          }
 
-            // Resolve model name → model_id for nxf_pages rows
-            if (tableName === 'nxf_pages' && enriched.model) {
-              const resolvedId = modelNameToId.get(enriched.model)
-              if (resolvedId) {
-                enriched.model_id = resolvedId
-              } else {
-                console.warn(
-                  `[MySQLAdapter] Page "${enriched.slug}" references model "${enriched.model}" which does not exist — model_id left null`
-                )
+          const tableName = file.replace('.json', '')
+          const rows      = Array.isArray(json) ? json : json?.demo_data
+
+          if (!rows || !Array.isArray(rows)) continue
+
+          const [colRows] = await this.pool.execute(
+            `SELECT COLUMN_NAME, DATA_TYPE FROM information_schema.COLUMNS
+             WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?`,
+            [tableName]
+          )
+          const tableMeta = colRows as any[]
+
+          if (!tableMeta.length) {
+            console.log(`[MySQLAdapter] Skipping ${tableName} — table does not exist`)
+            continue
+          }
+
+          const tableColumns = tableMeta.map((c) => c.COLUMN_NAME)
+          const colTypeMap   = Object.fromEntries(
+            tableMeta.map((c) => [c.COLUMN_NAME, c.DATA_TYPE])
+          )
+
+          console.log(`[MySQLAdapter] Inserting into ${tableName} — ${rows.length} rows`)
+
+          for (const row of rows) {
+            try {
+              const enriched = { ...row }
+
+              // ── Step 1: Resolve model name → model_id for nxf_pages ────
+              if (tableName === 'nxf_pages' && enriched.model) {
+                const resolvedId = modelNameToId.get(enriched.model)
+                if (resolvedId) {
+                  enriched.model_id = resolvedId
+                } else {
+                  console.warn(
+                    `[MySQLAdapter] Page "${enriched.slug}" references model "${enriched.model}" which does not exist — model_id left null`
+                  )
+                }
               }
+
+              // ── Step 2: Null out remaining {{placeholders}} except ownership fields ──
+              for (const key of Object.keys(enriched)) {
+                if (
+                  typeof enriched[key] === 'string' &&
+                  enriched[key].startsWith('{{') &&
+                  key !== 'project_id' &&
+                  key !== 'tenant_id'  &&
+                  key !== 'user_id'    &&
+                  key !== 'created_by'
+                ) {
+                  enriched[key] = null
+                }
+              }
+
+              // ── Step 3: Always inject ownership IDs unconditionally ────
+              enriched.project_id = projectId
+              enriched.tenant_id  = tenantId
+              enriched.created_by = adminUserId
+              if ('user_id' in enriched) enriched.user_id = adminUserId
+
+              if (!enriched.created_at) enriched.created_at = new Date().toISOString()
+
+              // ── Step 4: Filter to only columns that exist in the table ──
+              const filtered: Record<string, any> = {}
+              for (const key of Object.keys(enriched)) {
+                if (tableColumns.includes(key)) {
+                  filtered[key] = enriched[key]
+                }
+              }
+
+              if (!Object.keys(filtered).length) continue
+
+              // ── Step 5: Serialize and convert types ────────────────────
+              for (const key of Object.keys(filtered)) {
+                const val      = filtered[key]
+                const dataType = colTypeMap[key]
+
+                if (val !== null && typeof val === 'object') {
+                  filtered[key] = JSON.stringify(val)
+                  continue
+                }
+
+                if (
+                  typeof val === 'string' &&
+                  (dataType === 'datetime' || dataType === 'timestamp') &&
+                  val.includes('T')
+                ) {
+                  filtered[key] = new Date(val).toISOString().slice(0, 19).replace('T', ' ')
+                }
+              }
+
+              const columns      = Object.keys(filtered).map((c) => `\`${c}\``).join(', ')
+              const placeholders = Object.keys(filtered).map(() => '?').join(', ')
+              const values       = Object.values(filtered)
+
+              await this.pool.execute(
+                `INSERT IGNORE INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`,
+                values
+              )
+
+              totalInserted++
+            } catch (err: any) {
+              console.warn(`[MySQLAdapter] Skipping row in ${tableName}:`, err.message)
             }
-
-            if ('project_id' in enriched) enriched.project_id = projectId
-            if ('tenant_id'  in enriched) enriched.tenant_id  = tenantId
-            if ('created_by' in enriched) enriched.created_by = adminUserId
-            if ('user_id'    in enriched) enriched.user_id    = adminUserId
-
-            for (const key of Object.keys(enriched)) {
-              if (typeof enriched[key] === 'string' && enriched[key].startsWith('{{')) {
-                enriched[key] = null
-              }
-            }
-
-            if (!enriched.created_at) enriched.created_at = new Date().toISOString()
-
-            const filtered: Record<string, any> = {}
-            for (const key of Object.keys(enriched)) {
-              if (tableColumns.includes(key)) {
-                filtered[key] = enriched[key]
-              }
-            }
-
-            if (!Object.keys(filtered).length) continue
-
-            for (const key of Object.keys(filtered)) {
-              const val      = filtered[key]
-              const dataType = colTypeMap[key]
-
-              if (val !== null && typeof val === 'object') {
-                filtered[key] = JSON.stringify(val)
-                continue
-              }
-
-              if (
-                typeof val === 'string' &&
-                (dataType === 'datetime' || dataType === 'timestamp') &&
-                val.includes('T')
-              ) {
-                filtered[key] = new Date(val).toISOString().slice(0, 19).replace('T', ' ')
-              }
-            }
-
-            const columns      = Object.keys(filtered).map((c) => `\`${c}\``).join(', ')
-            const placeholders = Object.keys(filtered).map(() => '?').join(', ')
-            const values       = Object.values(filtered)
-
-            await this.pool.execute(
-              `INSERT IGNORE INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`,
-              values
-            )
-
-            totalInserted++
-          } catch (err: any) {
-            console.warn(`[MySQLAdapter] Skipping row in ${tableName}:`, err.message)
           }
         }
       }
+
+      console.log(`[MySQLAdapter] installDemoContent complete — total inserted: ${totalInserted}`)
+      return { success: true, inserted: totalInserted }
+
+    } catch (err: any) {
+      console.error('[MySQLAdapter] installDemoContent failed:', err.message)
+      return { success: false, inserted: 0, error: 'Failed to install demo content' }
     }
-
-    return { success: true, inserted: totalInserted }
-
-  } catch (err: any) {
-    console.error('[MySQLAdapter] installDemoContent failed:', err.message)
-    return { success: false, inserted: 0, error: 'Failed to install demo content' }
   }
-}
 
-  // ─── Core CRUD ──────────────────────────────────────────────────────────────
+  // ─── Core CRUD ─────────────────────────────────────────────────────────────
 
   async readAll(config: DBConfig, table: string): Promise<any[]> {
     try {
@@ -1084,7 +1045,7 @@ async installDemoContent(
     }
   }
 
-  // ─── Users & Auth ────────────────────────────────────────────────────────────
+  // ─── Users & Auth ──────────────────────────────────────────────────────────
 
   async getUserById(uid: string): Promise<{ user?: any; error?: string }> {
     try {
@@ -1214,7 +1175,7 @@ async installDemoContent(
     }
   }
 
-  // ─── Table / Schema Management ───────────────────────────────────────────────
+  // ─── Table / Schema Management ─────────────────────────────────────────────
 
   async alterTable(
     tableName: string,
@@ -1290,7 +1251,7 @@ async installDemoContent(
     return true
   }
 
-  // ─── Messages ────────────────────────────────────────────────────────────────
+  // ─── Messages ──────────────────────────────────────────────────────────────
 
   async listConversations(
     config:     DBConfig,
@@ -1423,10 +1384,7 @@ async installDemoContent(
     return { success: true }
   }
 
-  async markAllMessagesRead(
-    config: DBConfig,
-    uid:    string
-  ): Promise<{ success: boolean }> {
+  async markAllMessagesRead(config: DBConfig, uid: string): Promise<{ success: boolean }> {
     await this.pool.execute(
       `UPDATE \`nxf_system_messages\`
        SET is_read = 1, updated_at = ?
@@ -1455,7 +1413,7 @@ async installDemoContent(
     }
   }
 
-  // ─── Notifications ───────────────────────────────────────────────────────────
+  // ─── Notifications ─────────────────────────────────────────────────────────
 
   async listNotifications(
     config:     DBConfig,
@@ -1517,7 +1475,7 @@ async installDemoContent(
     return { success: true, updated }
   }
 
-  // ─── API Keys ────────────────────────────────────────────────────────────────
+  // ─── API Keys ──────────────────────────────────────────────────────────────
 
   async listApiKeys(
     config: DBConfig,
@@ -1538,20 +1496,10 @@ async installDemoContent(
       [project_id]
     )
 
-    return rows as Array<{
-      api_id:       string
-      name:         string
-      key_prefix:   string
-      status:       string
-      last_used_at: string | null
-      created_at:   string
-    }>
+    return rows as any[]
   }
 
-  async getApiKey(
-    config: DBConfig,
-    api_id: string
-  ): Promise<Record<string, any> | null> {
+  async getApiKey(config: DBConfig, api_id: string): Promise<Record<string, any> | null> {
     const [rows] = await this.pool.execute(
       'SELECT * FROM `nxf_system_apis` WHERE api_id = ? LIMIT 1',
       [api_id]
@@ -1587,7 +1535,7 @@ async installDemoContent(
     return { success: true }
   }
 
-  // ─── Storage ─────────────────────────────────────────────────────────────────
+  // ─── Storage ───────────────────────────────────────────────────────────────
 
   async listFolders(): Promise<string[]> {
     try {
@@ -1785,9 +1733,7 @@ async installDemoContent(
   }
 }
 
-// ---------------------------------------------------------------------------
-// Factory function
-// ---------------------------------------------------------------------------
+// ─── Factory ───────────────────────────────────────────────────────────────
 
 export function getMySQLAdapter(config: DBConfig): MySQLAdapter {
   return new MySQLAdapter(config)

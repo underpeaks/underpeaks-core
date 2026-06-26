@@ -14,23 +14,22 @@ export class PostgresAdapter implements DBAdapter {
     'avatars', 'logos', 'uploads',
   ]
 
- constructor(config: DBConfig) {
-  if (!config) throw new Error('DBConfig must be provided via adapter')
-  this.config = config
+  constructor(config: DBConfig) {
+    if (!config) throw new Error('DBConfig must be provided via adapter')
+    this.config = config
 
-  this.pool = new Pool({
-    host:     config.host,
-    user:     config.user,
-    password: config.password,
-    database: config.database,
-    port:     config.port ? Number(config.port) : 5432,
-    max:      10,
-    options:  `-c timezone=UTC`,
-  })
-}
+    this.pool = new Pool({
+      host:     config.host,
+      user:     config.user,
+      password: config.password,
+      database: config.database,
+      port:     config.port ? Number(config.port) : 5432,
+      max:      10,
+      options:  `-c timezone=UTC`,
+    })
+  }
 
   private async connect(): Promise<void> {
-    // Pool manages connections automatically — just verify it works
     const client = await this.pool.connect()
     client.release()
   }
@@ -206,12 +205,34 @@ export class PostgresAdapter implements DBAdapter {
           default: throw new Error(`Unsupported Postgres column type: ${col.type}`)
         }
 
-        const constraints: string[] = []
-        if (col.is_primary)         constraints.push('PRIMARY KEY')
-        if (col.unique)             constraints.push('UNIQUE')
-        if (col.nullable === false) constraints.push('NOT NULL')
+        // ── DEFAULT clause ─────────────────────────────────────────────────
+        let defaultClause = ''
+        if (col.default !== undefined && col.default !== null) {
+          if (typeof col.default === 'boolean' || typeof col.default === 'number') {
+            defaultClause = ` DEFAULT ${col.default}`
+          } else if (typeof col.default === 'string') {
+            if (
+              col.default.includes('(') ||
+              col.default === 'true'    ||
+              col.default === 'false'   ||
+              col.default === 'null'
+            ) {
+              defaultClause = ` DEFAULT ${col.default}`
+            } else {
+              defaultClause = ` DEFAULT '${col.default}'`
+            }
+          }
+        }
 
-        return `"${col.name}" ${typeSql} ${constraints.join(' ')}`
+        // ── Constraints ────────────────────────────────────────────────────
+        const constraints: string[] = []
+        if (col.is_primary) constraints.push('PRIMARY KEY')
+        if (col.unique)     constraints.push('UNIQUE')
+        if (col.nullable === false && (col.default === undefined || col.default === null)) {
+          constraints.push('NOT NULL')
+        }
+
+        return `"${col.name}" ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
       })
       .join(',')
 
@@ -225,7 +246,6 @@ export class PostgresAdapter implements DBAdapter {
   async CreateDataModels(projectId: string, selectedProjectType: string): Promise<any> {
     if (!projectId) throw new Error('Project ID is required')
 
-    // Look up tenant to pass as 3rd arg — CreateUserDataModels now requires it
     const tenantResult = await this.pool.query(
       'SELECT ten_id FROM "nxf_system_tenants" LIMIT 1'
     )
@@ -248,13 +268,34 @@ export class PostgresAdapter implements DBAdapter {
     const project = await this.findProjectByOwnerId(this.config, user.user_id)
     if (!project?.project_id) throw new Error('Project not found')
 
-    return this.CreateDataModels(project.project_id, selectedProjectType)
+    // Look up tenant — try by user_id first, fall back to email
+    let tenant = await this.findTenantByUserID(this.config, user.user_id)
+    if (!tenant) {
+      tenant = await this.findTenantByUserEmail(this.config, email)
+    }
+    const tenantId = tenant?.ten_id ?? ''
+
+    return await CreateUserDataModels(
+      this,
+      project.project_id,
+      tenantId,
+      selectedProjectType,
+      []
+    )
   }
 
   // ─── User Helpers ──────────────────────────────────────────────────────────
 
   async createAdminUser(config: DBConfig, data: any): Promise<any> {
     const { user_id, user_email, password, role = 'admin', ...rest } = data
+
+    // Skip if user already exists
+    const existing = await this.findUserByEmail(config, user_email)
+    if (existing) {
+      console.log('[PostgresAdapter] createAdminUser — user already exists, skipping')
+      return existing
+    }
+
     const hashed = await this.hashPassword(password)
 
     return this.create(config, 'nxf_users', {
@@ -373,7 +414,7 @@ export class PostgresAdapter implements DBAdapter {
     emailVerifiedRequired: boolean = true
   ): Promise<any> {
     const user = await this.findUserByEmail(config, email)
-    if (!user)              return { success: false, error: 'User not found.' }
+    if (!user)               return { success: false, error: 'User not found.' }
     if (!user.password_hash) return { success: false, error: 'Invalid password' }
 
     const valid = await bcrypt.compare(password.trim(), user.password_hash.trim())
@@ -395,60 +436,60 @@ export class PostgresAdapter implements DBAdapter {
     }
   }
 
-async loginWithPostgres(
-  config:   DBConfig,
-  email:    string,
-  password: string,
-  ip?:      string,
-  ua?:      string
-): Promise<any> {
-  const basic = await this.loginBasic(config, email, password)
-  if (!basic.success || !basic.user) return { success: false, error: basic.error }
+  async loginWithPostgres(
+    config:   DBConfig,
+    email:    string,
+    password: string,
+    ip?:      string,
+    ua?:      string
+  ): Promise<any> {
+    const basic = await this.loginBasic(config, email, password)
+    if (!basic.success || !basic.user) return { success: false, error: basic.error }
 
-  if (basic.user.role !== 'admin') {
+    if (basic.user.role !== 'admin') {
+      return {
+        success: false,
+        error:   'You do not have admin rights to access the console',
+        user:    basic.user,
+      }
+    }
+
+    const project = await this.findProjectByOwnerId(config, basic.user.user_id)
+    if (!project) return { success: false, error: 'No project found for user' }
+
+    const tenantResult = await this.pool.query(
+      'SELECT ten_id FROM "nxf_system_tenants" LIMIT 1'
+    )
+    const tenant_id = tenantResult.rows[0]?.ten_id ?? null
+
+    const accessToken  = crypto.randomUUID()
+    const refreshToken = crypto.randomUUID()
+
+    await this.create(config, 'nxf_system_tokens', {
+      token_id:           crypto.randomUUID(),
+      user_id:            basic.user.user_id,
+      tenant_id,
+      project_id:         project.project_id,
+      access_token:       accessToken,
+      refresh_token:      refreshToken,
+      token_type:         'bearer',
+      expires_at:         new Date(Date.now() + 8 * 60 * 60 * 1000),
+      refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
+      ip_address:         ip || null,
+      user_agent:         ua || null,
+      revoked:            false,
+      created_at:         new Date(),
+      updated_at:         new Date(),
+    })
+
     return {
-      success: false,
-      error:   'You do not have admin rights to access the console',
-      user:    basic.user,
+      success:   true,
+      user:      basic.user,
+      accessToken,
+      refreshToken,
+      projectId: project.project_id,
     }
   }
-
-  const project = await this.findProjectByOwnerId(config, basic.user.user_id)
-  if (!project) return { success: false, error: 'No project found for user' }
-
-  const tenantResult = await this.pool.query(
-    'SELECT ten_id FROM "nxf_system_tenants" LIMIT 1'
-  )
-  const tenant_id = tenantResult.rows[0]?.ten_id ?? null
-
-  const accessToken  = crypto.randomUUID()
-  const refreshToken = crypto.randomUUID()
-
-  await this.create(config, 'nxf_system_tokens', {
-    token_id:           crypto.randomUUID(),
-    user_id:            basic.user.user_id,
-    tenant_id,
-    project_id:         project.project_id,
-    access_token:       accessToken,
-    refresh_token:      refreshToken,
-    token_type:         'bearer',
-    expires_at:         new Date(Date.now() + 8 * 60 * 60 * 1000),    // 8 hours
-refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 30 days
-    ip_address:         ip || null,
-    user_agent:         ua || null,
-    revoked:            false,
-    created_at:         new Date(),
-    updated_at:         new Date(),
-  })
-
-  return {
-    success:   true,
-    user:      basic.user,
-    accessToken,
-    refreshToken,
-    projectId: project.project_id,
-  }
-}
 
   // ─── Registration ──────────────────────────────────────────────────────────
 
@@ -483,9 +524,17 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
       updated_at:     new Date(),
     })
 
-    const project_id = await this.createProject(config, {
-      name:    'Default Project',
+    // Create tenant first so project can reference it
+    const ten_id = await this.createTenant(config, {
+      subdomain:  data.email.split('@')[0] || 'console',
+      user_email: data.email,
       user_id,
+    })
+
+    const project_id = await this.createProject(config, {
+      name:      data.full_name ? `${data.full_name}'s Project` : 'Default Project',
+      user_id,
+      tenant_ID: ten_id,
     })
 
     return { success: true, user_id, project_id, token: data.token, token_ttl: data.token_ttl }
@@ -566,19 +615,26 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
   }
 
   async createTenant(
-  config: DBConfig,
-  data: { subdomain: string; user_email: string; user_id?: string }
-): Promise<string> {
-  const ten_id = crypto.randomUUID()
-  await this.create(config, 'nxf_system_tenants', {
-    ten_id,
-    subdomain:  data.subdomain,
-    user_email: data.user_email,
-    user_id:    data.user_id || null,
-    created_at: new Date(),
-  })
-  return ten_id
-}
+    config: DBConfig,
+    data: { subdomain: string; user_email: string; user_id?: string }
+  ): Promise<string> {
+    // Check if tenant already exists for this email
+    const existing = await this.findTenantByUserEmail(config, data.user_email)
+    if (existing) {
+      console.log('[PostgresAdapter] createTenant — tenant already exists, skipping')
+      return existing.ten_id
+    }
+
+    const ten_id = crypto.randomUUID()
+    await this.create(config, 'nxf_system_tenants', {
+      ten_id,
+      subdomain:  data.subdomain,
+      user_email: data.user_email,
+      user_id:    data.user_id || null,
+      created_at: new Date(),
+    })
+    return ten_id
+  }
 
   async findTenantByUserEmail(config: DBConfig, email: string): Promise<any> {
     const rows = await this.read(config, 'nxf_system_tenants', { user_email: email })
@@ -603,47 +659,45 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
 
   // ─── Storage Buckets ───────────────────────────────────────────────────────
 
- async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
-  await this.connect()
+  async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
+    await this.connect()
 
-  // Resolve project and tenant to satisfy NOT NULL constraints
-  const projectResult = await this.pool.query(
-    'SELECT project_id FROM "nxf_system_projects" LIMIT 1'
-  )
-  const project_id = projectResult.rows[0]?.project_id ?? null
-
-  const tenantResult = await this.pool.query(
-    'SELECT ten_id FROM "nxf_system_tenants" LIMIT 1'
-  )
-  const tenant_id = tenantResult.rows[0]?.ten_id ?? null
-
-  for (const folder of this.DEFAULT_BUCKETS) {
-    // Use client directly — avoids re-entrant connection issues with single-client adapter
-    const existing = await this.pool.query(
-      'SELECT storage_id FROM "nxf_storage" WHERE folder = $1 LIMIT 1',
-      [folder]
+    const projectResult = await this.pool.query(
+      'SELECT project_id FROM "nxf_system_projects" LIMIT 1'
     )
+    const project_id = projectResult.rows[0]?.project_id ?? null
 
-    if (!existing.rows.length) {
-      await this.pool.query(
-        `INSERT INTO "nxf_storage"
-         (storage_id, project_id, tenant_id, folder, file_name, file_path, created_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-        [
-          crypto.randomUUID(),
-          project_id,
-          tenant_id,
-          folder,
-          '',
-          folder,
-          new Date().toISOString(),
-        ]
+    const tenantResult = await this.pool.query(
+      'SELECT ten_id FROM "nxf_system_tenants" LIMIT 1'
+    )
+    const tenant_id = tenantResult.rows[0]?.ten_id ?? null
+
+    for (const folder of this.DEFAULT_BUCKETS) {
+      const existing = await this.pool.query(
+        'SELECT storage_id FROM "nxf_storage" WHERE folder = $1 LIMIT 1',
+        [folder]
       )
-    }
-  }
 
-  return { success: true, buckets: this.DEFAULT_BUCKETS }
-}
+      if (!existing.rows.length) {
+        await this.pool.query(
+          `INSERT INTO "nxf_storage"
+           (storage_id, project_id, tenant_id, folder, file_name, file_path, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+          [
+            crypto.randomUUID(),
+            project_id,
+            tenant_id,
+            folder,
+            '',
+            folder,
+            new Date().toISOString(),
+          ]
+        )
+      }
+    }
+
+    return { success: true, buckets: this.DEFAULT_BUCKETS }
+  }
 
   async createBucket(folder: string): Promise<any> {
     return this.create(this.config, 'nxf_storage', {
@@ -657,7 +711,7 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
 
   // ─── Demo Content ──────────────────────────────────────────────────────────
 
- async installDemoContent(
+  async installDemoContent(
   config: DBConfig,
   selectedProjectType: string
 ): Promise<{ success: boolean; error?: string; inserted?: number; skipped?: boolean }> {
@@ -685,9 +739,9 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
     if (!tenantResult.rows.length) return { success: false, error: 'No tenant found' }
     const tenantId = tenantResult.rows[0].ten_id
 
-    // ── Pre-build the model name → sm_id resolver map ──────────────────────
-    // Used by the nxf_pages installer to resolve "model": "nxf_product"
-    // into the actual sm_id at install time.
+    console.log('[PostgresAdapter] installDemoContent — adminUserId:', adminUserId)
+    console.log('[PostgresAdapter] installDemoContent — projectId:', projectId)
+    console.log('[PostgresAdapter] installDemoContent — tenantId:', tenantId)
 
     const modelNameToId = new Map<string, string>()
     try {
@@ -698,9 +752,7 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
       for (const m of modelResult.rows) {
         if (m.name && m.sm_id) modelNameToId.set(m.name, m.sm_id)
       }
-      console.log(
-        `[PostgresAdapter] Built model resolver map — ${modelNameToId.size} models indexed`
-      )
+      console.log(`[PostgresAdapter] Built model resolver map — ${modelNameToId.size} models indexed`)
     } catch (err: any) {
       console.warn('[PostgresAdapter] Failed to build model resolver map:', err.message)
     }
@@ -759,7 +811,7 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
           try {
             const enriched = { ...row }
 
-            // Resolve model name → model_id for nxf_pages rows
+            // ── Step 1: Resolve model name → model_id for nxf_pages ──────
             if (tableName === 'nxf_pages' && enriched.model) {
               const resolvedId = modelNameToId.get(enriched.model)
               if (resolvedId) {
@@ -771,19 +823,31 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
               }
             }
 
-            if ('project_id' in enriched) enriched.project_id = projectId
-            if ('tenant_id'  in enriched) enriched.tenant_id  = tenantId
-            if ('created_by' in enriched) enriched.created_by = adminUserId
-            if ('user_id'    in enriched) enriched.user_id    = adminUserId
-
+            // ── Step 2: Null out remaining {{placeholders}} except ownership fields ──
             for (const key of Object.keys(enriched)) {
-              if (typeof enriched[key] === 'string' && enriched[key].startsWith('{{')) {
+              if (
+                typeof enriched[key] === 'string' &&
+                enriched[key].startsWith('{{') &&
+                key !== 'project_id' &&
+                key !== 'tenant_id' &&
+                key !== 'user_id'   &&
+                key !== 'created_by'
+              ) {
                 enriched[key] = null
               }
             }
 
+            // ── Step 3: Always inject ownership IDs unconditionally ───────
+            // The tableColumns filter in Step 4 will strip these out
+            // for tables that don't have these columns.
+            enriched.project_id = projectId
+            enriched.tenant_id  = tenantId
+            enriched.created_by = adminUserId
+            if ('user_id' in enriched) enriched.user_id = adminUserId
+
             if (!enriched.created_at) enriched.created_at = new Date().toISOString()
 
+            // ── Step 4: Filter to only columns that exist in the table ────
             const filtered: Record<string, any> = {}
             for (const key of Object.keys(enriched)) {
               if (tableColumns.includes(key)) {
@@ -793,6 +857,7 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
 
             if (!Object.keys(filtered).length) continue
 
+            // ── Step 5: Serialize objects to JSON strings ─────────────────
             for (const key of Object.keys(filtered)) {
               if (filtered[key] !== null && typeof filtered[key] === 'object') {
                 filtered[key] = JSON.stringify(filtered[key])
@@ -817,6 +882,7 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
       }
     }
 
+    console.log(`[PostgresAdapter] installDemoContent complete — total inserted: ${totalInserted}`)
     return { success: true, inserted: totalInserted }
 
   } catch (err: any) {
@@ -824,21 +890,19 @@ refresh_expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),   // 24 hours// 
     return { success: false, inserted: 0, error: 'Failed to install demo content' }
   }
 }
-
   // ─── Core CRUD ─────────────────────────────────────────────────────────────
 
-async readAll(config: DBConfig, table: string): Promise<any[]> {
-  try {
-    console.log(`[PostgresAdapter] readAll — table: ${table}`)
-    const result = await this.pool.query(`SELECT * FROM "${table}"`)
-    console.log(`[PostgresAdapter] readAll — table: ${table} — returned ${result.rows.length} rows`)
-    return result.rows
-  } catch (err: any) {
-    console.error(`[PostgresAdapter] readAll FAILED — table: ${table} — ${err.message}`)
-    console.error(`[PostgresAdapter] readAll full error:`, err)
-    throw new Error(`readAll failed on table "${table}": ${err.message}`)
+  async readAll(config: DBConfig, table: string): Promise<any[]> {
+    try {
+      console.log(`[PostgresAdapter] readAll — table: ${table}`)
+      const result = await this.pool.query(`SELECT * FROM "${table}"`)
+      console.log(`[PostgresAdapter] readAll — table: ${table} — returned ${result.rows.length} rows`)
+      return result.rows
+    } catch (err: any) {
+      console.error(`[PostgresAdapter] readAll FAILED — table: ${table} — ${err.message}`)
+      throw new Error(`readAll failed on table "${table}": ${err.message}`)
+    }
   }
-}
 
   // ─── Users & Auth ──────────────────────────────────────────────────────────
 
