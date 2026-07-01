@@ -2,11 +2,11 @@
   "projectName": "myapp",
   "subdomain": "console",
   "selectedStack": "both",
-  "selectedDb": "mysql",
+  "selectedDb": "postgres",
   "deploymentType": "self-hosted",
   "studioUrl": "https://www.nxtflutter.com",
   "dbConfig": {
-    "type": "mysql"
+    "type": "postgres"
   },
   "faviconUrl": "/images/favicon/NXT_Flutter_favicon.png",
   "ecommerceEnabled": false,

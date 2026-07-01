@@ -71,13 +71,15 @@ import {
  */
 export async function POST(request: Request): Promise<NextResponse> {
   try {
-    /**
-     * Parse the incoming request body.
-     * selectedProjectType is received here and passed to the project-specific
-     * table step (step 3) once that step is enabled.
-     */
-    const { config, selectedProjectType } = await request.json();
+    const { config, selectedProjectType } = await request.json()
 
+    // Temporary debug — remove after fix confirmed
+    console.log('[create-system-tables] config.type:', config?.type)
+    console.log('[create-system-tables] config.host:', config?.host)
+    console.log('[create-system-tables] config.user:', config?.user)
+    console.log('[create-system-tables] config.database:', config?.database)
+    console.log('[create-system-tables] password length:', config?.password?.length)
+    console.log('[create-system-tables] password value:', config?.password)
     // -----------------------------------------------------------------------
     // Validation
     // -----------------------------------------------------------------------
