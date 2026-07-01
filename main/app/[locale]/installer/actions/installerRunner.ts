@@ -74,6 +74,8 @@ function delay(ms: number): Promise<void> {
 async function createDatabaseSchemaAndTables(): Promise<void> {
   const { dbConfig, selectedProjectType } = useInstallerStore.getState()
 
+  console.log('[installer] dbConfig being sent:', JSON.stringify(dbConfig, null, 2))  // ← add this
+
   if (!dbConfig) throw new Error('Database config not found in installer store')
 
   const response = await fetch('/api/create-system-tables', {
