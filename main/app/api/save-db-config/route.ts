@@ -1,5 +1,5 @@
 /**
- * POST /api/installer/write-env
+ * POST D:\NXTFLUTTER_CORE\NXTFlutter_Core\main\app\api\save-db-config\route.ts
  *
  * A Next.js API route that generates and writes a `.env.local` file to the
  * server's file system based on the database configuration collected during
@@ -290,8 +290,11 @@ async function writeEnvFileFromObject(env: Record<string, any>): Promise<void> {
    * SECURITY: Never logged — written directly to the file.
    */
   const apiKeySecret = generateApiKeySecret()
+  const jwtAccessSecret  = crypto.randomBytes(48).toString("hex");
+const jwtRefreshSecret = crypto.randomBytes(48).toString("hex");
   lines.push(`NXF_API_KEY_SECRET=${envSafe(apiKeySecret)}`)
-
+lines.push(`JWT_ACCESS_SECRET=${envSafe(jwtAccessSecret)}`)
+lines.push(`JWT_REFRESH_SECRET=${envSafe(jwtRefreshSecret)}`)
   // -------------------------------------------------------------------------
   // MongoDB variables
   // -------------------------------------------------------------------------

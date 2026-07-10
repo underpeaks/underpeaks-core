@@ -1393,22 +1393,29 @@ export class PostgresAdapter implements DBAdapter {
         [folder]
       )
 
-      return result.rows.map((row: any) => ({
-        id:         row.id?.toString(),
-        name:       row.file_name,
-        url:        row.url,
-        size:       row.size_label ?? '—',
-        mimeType:   row.mime_type ?? 'application/octet-stream',
-        folder:     row.folder,
-        folderPath: row.file_path,
-        uploaded:   row.created_at
-          ? new Date(row.created_at).toLocaleDateString('en-GB', {
-              day:   '2-digit',
-              month: 'short',
-              year:  'numeric',
-            })
-          : '—',
-      }))
+      return result.rows.map((row: any) => {
+        const bytes = Number(row.size ?? 0)
+        const sizeLabel = bytes > 1024 * 1024
+          ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+          : `${Math.round(bytes / 1024)} KB`
+
+        return {
+          id:         row.storage_id?.toString(),
+          name:       row.file_name,
+          url:        row.url,
+          size:       sizeLabel,
+          mimeType:   row.mime_type ?? 'application/octet-stream',
+          folder:     row.folder,
+          folderPath: row.file_path,
+          uploaded:   row.created_at
+            ? new Date(row.created_at).toLocaleDateString('en-GB', {
+                day:   '2-digit',
+                month: 'short',
+                year:  'numeric',
+              })
+            : '—',
+        }
+      })
     } catch {
       console.error('[PostgresAdapter] listFiles failed')
       return []
@@ -1430,17 +1437,13 @@ export class PostgresAdapter implements DBAdapter {
     fs.mkdirSync(uploadsDir, { recursive: true })
     fs.writeFileSync(path.join(uploadsDir, fileName), buffer)
 
-    const url       = `/uploads/${folder}/${fileName}`
-    const sizeBytes = buffer.length
-    const sizeLabel = sizeBytes > 1024 * 1024
-      ? `${(sizeBytes / (1024 * 1024)).toFixed(1)} MB`
-      : `${Math.round(sizeBytes / 1024)} KB`
+    const url = `/uploads/${folder}/${fileName}`
 
     await this.pool.query(
       `INSERT INTO "nxf_storage"
-       (file_name, file_path, folder, url, mime_type, size_label, created_at)
-       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-      [fileName, `${folder}/${fileName}`, folder, url, mimeType, sizeLabel, new Date().toISOString()]
+       (storage_id, file_name, file_path, folder, url, mime_type, size, created_at)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
+      [crypto.randomUUID(), fileName, `${folder}/${fileName}`, folder, url, mimeType, buffer.length, new Date().toISOString()]
     )
 
     return url

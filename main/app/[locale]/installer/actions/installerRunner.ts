@@ -381,22 +381,51 @@ async function runTests(): Promise<void> {
  * Clears sensitive data from the installer store and redirects to the
  * console dashboard now that installation is complete.
  */
+// File: app/[locale]/installer/steps/installerSteps.ts (Core)
+// Replace the finalizeInstaller function with:
+
 async function finalizeInstaller(): Promise<void> {
   // ── Clear sensitive data from memory ────────────────────────────────────
   useInstallerStore.setState((state) => ({
     adminUser: {
       ...state.adminUser,
-      password: '', // only sensitive field — email/fullName can stay
+      password: '',
     },
   }))
 
-  console.log('[installer] Installer finalized — redirecting to dashboard')
+  // ── Issue CodeGen license ─────────────────────────────────────────────
+  try {
+    const { adminUser } = useInstallerStore.getState()
+    const studioUrl = useInstallerStore.getState().studioUrl ?? 'https://studio.nxtflutter.com'
 
-  // ── Redirect ─────────────────────────────────────────────────────────────
-  // This is a non-React async function so we can't use Next.js router.
-  // window.location.href is fine here — a full navigation is appropriate
-  // since the installer is now complete and the app state should reset cleanly.
- // window.location.href = '/installer/done'
+    const res = await fetch(`${studioUrl}/api/codegen-private/license/issue`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({
+        user_id: adminUser.email, // Core uses email as identifier
+        plan:    'free',
+        source:  'core',
+      }),
+    })
+
+    if (res.ok) {
+      const data = await res.json()
+      // Write the license key to .env.local
+      await fetch('/api/installer/write-env', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          NXF_CODEGEN_LICENSE_KEY: data.license_key,
+        }),
+      })
+      console.log('[installer] CodeGen license issued successfully')
+    }
+  } catch (err) {
+    // Don't fail the installer if license issue fails — log and continue
+    console.warn('[installer] CodeGen license issue failed — user can run nxf login manually')
+  }
+
+  console.log('[installer] Installer finalized — redirecting to dashboard')
 }
 
 // ---------------------------------------------------------------------------

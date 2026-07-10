@@ -1,54 +1,66 @@
-// File: app/api/page-routes/route.ts
-
+// app/api/page-routes/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient }              from '@supabase/supabase-js'
-import { withTenant }                from '@/app/lib/withTenant'
-import crypto                        from 'crypto'
-
-const serviceClient = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.NEXT_PUBLIC_SUPABASE_SERVICE_KEY!
-)
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
 
 export async function GET(req: NextRequest) {
-  const tenant = await withTenant(req)
-  if (!tenant) return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+  const adapter  = getConfiguredAdapter()
+  const dbConfig = adapter.config
 
-  const { data, error } = await serviceClient
-    .from('nxf_page_routes')
-    .select('*')
-    .eq('project_id', tenant.project_id)
-    .eq('tenant_id', tenant.tenant_id)
+  // Single-project install — resolve project from first row, never by owner.
+  const allProjects = await adapter.readAll!(dbConfig, 'nxf_system_projects')
+  const project     = (allProjects ?? [])[0]
+  if (!project) {
+    return NextResponse.json({ routes: [] })
+  }
+  const projectId = project.project_id ?? project.id
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ routes: data ?? [] })
+  const allRoutes = await adapter.readAll!(dbConfig, 'nxf_page_routes')
+  const routes = (allRoutes ?? []).filter((r: any) => r.project_id === projectId)
+
+  return NextResponse.json({ routes })
 }
 
 export async function POST(req: NextRequest) {
-  const tenant = await withTenant(req)
-  if (!tenant) return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+  let body: any
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
 
-  const body = await req.json()
   const { from_page_id, to_page_id, trigger, label } = body
 
   if (!from_page_id || !to_page_id) {
-    return NextResponse.json({ error: 'from_page_id and to_page_id are required' }, { status: 400 })
+    return NextResponse.json(
+      { error: 'from_page_id and to_page_id are required' },
+      { status: 400 }
+    )
   }
 
-  const { data, error } = await serviceClient
-    .from('nxf_page_routes')
-    .insert({
-      route_id:     crypto.randomUUID(),
-      project_id:   tenant.project_id,
-      tenant_id:    tenant.tenant_id,
-      from_page_id,
-      to_page_id,
-      trigger:      trigger ?? 'tap',
-      label:        label ?? null,
-    })
-    .select()
-    .single()
+  const adapter  = getConfiguredAdapter()
+  const dbConfig = adapter.config
 
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ route: data }, { status: 201 })
+  const allProjects = await adapter.readAll!(dbConfig, 'nxf_system_projects')
+  const project     = (allProjects ?? [])[0]
+  if (!project) {
+    return NextResponse.json({ error: 'No project found' }, { status: 400 })
+  }
+  const projectId = project.project_id ?? project.id
+  const tenantId  = project.tenant_id ?? ''
+
+  const route = {
+    route_id:   `route_${Date.now()}`,
+    project_id: projectId,
+    tenant_id:  tenantId,
+    from_page_id,
+    to_page_id,
+    trigger:    trigger ?? 'tap',
+    label:      label ?? null,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }
+
+  await adapter.create!(dbConfig, 'nxf_page_routes', route)
+
+  return NextResponse.json({ route }, { status: 201 })
 }

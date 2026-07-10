@@ -1549,29 +1549,36 @@ export class MySQLAdapter implements DBAdapter {
     }
   }
 
-  async listFiles(folder: string): Promise<StorageFile[]> {
+ async listFiles(folder: string): Promise<StorageFile[]> {
     try {
       const [rows] = await this.pool.execute(
         'SELECT * FROM `nxf_storage` WHERE folder = ?',
         [folder]
       )
 
-      return (rows as any[]).map((row) => ({
-        id:         row.id?.toString(),
-        name:       row.file_name,
-        url:        row.url,
-        size:       row.size_label ?? '—',
-        mimeType:   row.mime_type ?? 'application/octet-stream',
-        folder:     row.folder,
-        folderPath: row.file_path,
-        uploaded:   row.created_at
-          ? new Date(row.created_at).toLocaleDateString('en-GB', {
-              day:   '2-digit',
-              month: 'short',
-              year:  'numeric',
-            })
-          : '—',
-      }))
+      return (rows as any[]).map((row) => {
+        const bytes = Number(row.size ?? 0)
+        const sizeLabel = bytes > 1024 * 1024
+          ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+          : `${Math.round(bytes / 1024)} KB`
+
+        return {
+          id:         row.storage_id?.toString(),
+          name:       row.file_name,
+          url:        row.url,
+          size:       sizeLabel,
+          mimeType:   row.mime_type ?? 'application/octet-stream',
+          folder:     row.folder,
+          folderPath: row.file_path,
+          uploaded:   row.created_at
+            ? new Date(row.created_at).toLocaleDateString('en-GB', {
+                day:   '2-digit',
+                month: 'short',
+                year:  'numeric',
+              })
+            : '—',
+        }
+      })
     } catch {
       console.error('[MySQLAdapter] listFiles failed')
       return []
@@ -1593,23 +1600,20 @@ export class MySQLAdapter implements DBAdapter {
     fs.mkdirSync(uploadsDir, { recursive: true })
     fs.writeFileSync(path.join(uploadsDir, fileName), buffer)
 
-    const url       = `/uploads/${folder}/${fileName}`
-    const sizeBytes = buffer.length
-    const sizeLabel = sizeBytes > 1024 * 1024
-      ? `${(sizeBytes / (1024 * 1024)).toFixed(1)} MB`
-      : `${Math.round(sizeBytes / 1024)} KB`
+    const url = `/uploads/${folder}/${fileName}`
 
     await this.pool.execute(
       `INSERT INTO \`nxf_storage\`
-       (file_name, file_path, folder, url, mime_type, size_label, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+       (storage_id, file_name, file_path, folder, url, mime_type, size, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
+        crypto.randomUUID(),
         fileName,
         `${folder}/${fileName}`,
         folder,
         url,
         mimeType,
-        sizeLabel,
+        buffer.length,
         new Date().toISOString().slice(0, 19).replace('T', ' '),
       ]
     )
