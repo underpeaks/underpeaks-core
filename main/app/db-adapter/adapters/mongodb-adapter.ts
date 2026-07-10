@@ -1994,22 +1994,29 @@ async listFiles(folder: string): Promise<StorageFile[]> {
       .find({ folder })
       .toArray()
 
-    return docs.map((doc) => ({
-      id:         doc._id?.toString(),
-      name:       doc.file_name,
-      url:        doc.url,
-      size:       doc.size_label ?? '—',
-      mimeType:   doc.mime_type ?? 'application/octet-stream',
-      folder:     doc.folder,
-      folderPath: doc.file_path,
-      uploaded:   doc.created_at
-        ? new Date(doc.created_at).toLocaleDateString('en-GB', {
-            day:   '2-digit',
-            month: 'short',
-            year:  'numeric',
-          })
-        : '—',
-    }))
+    return docs.map((doc) => {
+      const bytes = Number(doc.size ?? 0)
+      const sizeLabel = bytes > 1024 * 1024
+        ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+        : `${Math.round(bytes / 1024)} KB`
+
+      return {
+        id:         doc.storage_id ?? doc._id?.toString(),
+        name:       doc.file_name,
+        url:        doc.url,
+        size:       sizeLabel,
+        mimeType:   doc.mime_type ?? 'application/octet-stream',
+        folder:     doc.folder,
+        folderPath: doc.file_path,
+        uploaded:   doc.created_at
+          ? new Date(doc.created_at).toLocaleDateString('en-GB', {
+              day:   '2-digit',
+              month: 'short',
+              year:  'numeric',
+            })
+          : '—',
+      }
+    })
   } catch {
     console.error('[MongoAdapter] listFiles failed')
     return []
@@ -2038,19 +2045,16 @@ async uploadFile(
   const url = `/uploads/${folder}/${fileName}`
 
   // Save metadata to nxf_storage
-  const db        = this.client.db(this._config.mongoDatabase)
-  const sizeBytes = buffer.length
-  const sizeLabel = sizeBytes > 1024 * 1024
-    ? `${(sizeBytes / (1024 * 1024)).toFixed(1)} MB`
-    : `${Math.round(sizeBytes / 1024)} KB`
+  const db = await this.getDb()
 
   await db.collection('nxf_storage').insertOne({
+    storage_id: crypto.randomUUID(),
     file_name:  fileName,
     file_path:  `${folder}/${fileName}`,
     folder,
     url,
     mime_type:  mimeType,
-    size_label: sizeLabel,
+    size:       buffer.length,
     created_at: new Date().toISOString(),
   })
 

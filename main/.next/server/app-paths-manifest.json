@@ -1,6 +1,0 @@
-{
-  "/api/get-system-config/route": "app/api/get-system-config/route.js",
-  "/_not-found/page": "app/_not-found/page.js",
-  "/[locale]/(auth)/signin/page": "app/[locale]/(auth)/signin/page.js",
-  "/[locale]/console/pages/page": "app/[locale]/console/pages/page.js"
-}

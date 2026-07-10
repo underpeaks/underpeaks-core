@@ -324,7 +324,7 @@ export default function UsersPage() {
       </div>
 
       {/* KPI bar — sits on page background (grey) */}
-      <UserKpiBar
+     <UserKpiBar
         config={kpiConfig}
         results={kpiResults}
         availableFields={USER_KPI_FIELDS}
@@ -341,6 +341,7 @@ export default function UsersPage() {
         }}
         projectId=""
         tenantId=""
+        page="users"
       />
 
       {/* White card — search, filters, table */}
