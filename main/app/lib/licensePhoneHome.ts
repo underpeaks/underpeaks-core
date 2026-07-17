@@ -15,7 +15,7 @@ function readConfig(): { projectName: string; studioUrl: string } {
       console.log('[phone-home] project name from config:', config.projectName)
       console.log('[phone-home] studio url from config:', config.studioUrl)
       return {
-        projectName: config.projectName ?? 'NXTFlutter Core',
+        projectName: config.projectName ?? 'Underpeaks Core',
         studioUrl:   config.studioUrl   ?? process.env.NEXT_PUBLIC_STUDIO_URL ?? 'https://studio.underpeaks.com',
       }
     } else {
@@ -25,7 +25,7 @@ function readConfig(): { projectName: string; studioUrl: string } {
     console.error('[phone-home] readConfig error:', err.message)
   }
   return {
-    projectName: 'NXTFlutter Core',
+    projectName: 'Underpeaks Core',
     studioUrl:   process.env.NEXT_PUBLIC_STUDIO_URL ?? 'https://studio.underpeaks.com',
   }
 }
