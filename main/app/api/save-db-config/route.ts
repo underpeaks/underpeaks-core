@@ -127,7 +127,7 @@ function ensureHttp(url: string): string {
  *
  * This function extracts the `databaseName` portion between the last `/`
  * and the `?` query string. Falls back to the provided `fallback` value
- * or 'nxt_flutter' if extraction fails.
+ * or 'underpeaks' if extraction fails.
  *
  * @param uri      - The MongoDB connection string URI.
  * @param fallback - Optional fallback database name if extraction fails.
@@ -137,9 +137,9 @@ function extractMongoDbName(uri: string, fallback?: string): string {
   try {
     const afterSlash = uri.split('.net/')[1] || ''
     const dbName     = afterSlash.split('?')[0]
-    return dbName || fallback || 'nxt_flutter'
+    return dbName || fallback || 'underpeaks'
   } catch {
-    return fallback || 'nxt_flutter'
+    return fallback || 'underpeaks'
   }
 }
 
@@ -303,7 +303,7 @@ lines.push(`JWT_REFRESH_SECRET=${envSafe(jwtRefreshSecret)}`)
     /**
      * MongoDB requires a connection string (URI) at minimum.
      * The database name is extracted from the URI or falls back to the
-     * explicitly provided `databaseName` or 'nxt_flutter'.
+     * explicitly provided `databaseName` or 'underpeaks'.
      */
     if (!env.connectionString) {
       throw new Error('MongoDB connectionString is required')

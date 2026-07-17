@@ -267,7 +267,7 @@ const DATABASES: DatabaseDefinition[] = [
       {
         key:         'databaseName',
         label:       'Database Name',
-        placeholder: 'nxt_flutter',
+        placeholder: 'underpeaks',
       },
     ],
   },
