@@ -4,7 +4,7 @@
  * POST /api/create-models
  *
  * Next.js App Router API route that generates and inserts the initial data
- * models for a newly installed NXT_Flutter project.
+ * models for a newly installed Underpeaks project.
  *
  * This route is called by the installer wizard during the "Creating data models"
  * step. It resolves the correct database adapter for the project's DB type and
@@ -14,7 +14,7 @@
  * What are "data models" here?
  * ─────────────────────────────
  * Data models are the base schema records (e.g. table definitions, collection
- * structures, or seed rows) that the NXT_Flutter system needs to exist in the
+ * structures, or seed rows) that the Underpeaks system needs to exist in the
  * database before the app can function. The exact models created depend on the
  * selectedProjectType (e.g. 'ecommerce', 'cms', 'saas') and are scoped to the
  * admin user's email so they can be associated with the correct account.

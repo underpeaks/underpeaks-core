@@ -2,7 +2,7 @@
  * getSystemConfig Utility
  *
  * This file provides a single utility function that reads a project-level
- * configuration file (nxt_flutter.config.json) and returns key branding
+ * configuration file (underpeaks.config.json) and returns key branding
  * values such as the favicon URL, logo URL, and project name.
  *
  * It is used to allow each deployment (or client project) to customise
@@ -14,9 +14,9 @@
  * - Any server-side code that needs to know the current project's name.
  *
  * Config file location:
- *   <project-root>/nxt_flutter.config.json
+ *   <project-root>/underpeaks.config.json
  *
- * Expected shape of nxt_flutter.config.json:
+ * Expected shape of underpeaks.config.json:
  * {
  *   "faviconUrl":   "/images/favicon/my-favicon.png",
  *   "logoUrl":      "/images/logo/my-logo.png",
@@ -61,7 +61,7 @@ interface SystemConfig {
 /**
  * getSystemConfig
  *
- * Reads the `nxt_flutter.config.json` file from the root of the project
+ * Reads the `underpeaks.config.json` file from the root of the project
  * and returns the branding configuration values found inside it.
  *
  * This function is designed to be called on the **server side only**
@@ -97,7 +97,7 @@ export function getSystemConfig(): SystemConfig {
      * package.json). `join` then appends the filename to that path in a
      * cross-platform safe way (handles Windows vs Unix path separators).
      */
-    const filePath = join(process.cwd(), 'nxt_flutter.config.json')
+    const filePath = join(process.cwd(), 'underpeaks.config.json')
 
     /*
      * Read the file from disk and parse it as JSON.
@@ -120,8 +120,8 @@ export function getSystemConfig(): SystemConfig {
      * empty strings or null.
      */
     return {
-      faviconUrl:  config?.faviconUrl  || '/images/favicon/NXT_Flutter_favicon.png',
-      logoUrl:     config?.logoUrl     || '/images/logo/NXT_Flutter_logo.png',
+      faviconUrl:  config?.faviconUrl  || '/images/favicon/underpeaks_favi.png',
+      logoUrl:     config?.logoUrl     || '/images/logo/underpeaks_logo.png',
       projectName: config?.projectName || '',
        installed:   config.installed   ?? false,
     }
@@ -135,8 +135,8 @@ export function getSystemConfig(): SystemConfig {
      * branding until a proper config file is provided.
      */
     return {
-      faviconUrl:  '/images/favicon/NXT_Flutter_favicon.png',
-      logoUrl:     '/images/logo/NXT_Flutter_logo.png',
+      faviconUrl:  '/images/favicon/underpeaks_favi.png',
+      logoUrl:     '/images/logo/underpeaks_logo.png',
       projectName: '',
        installed:  false,
     }

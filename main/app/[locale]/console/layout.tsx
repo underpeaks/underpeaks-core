@@ -301,8 +301,8 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
               Activate Your License
             </DialogTitle>
             <DialogDescription className="mt-2 text-sm text-gray-500">
-              Enter your NXTFlutter license key to activate this installation.
-              You can find your key in your NXTFlutter Studio account under
+              Enter your Underpeaks license key to activate this installation.
+              You can find your key in your Underpeaks Studio account under
               Settings → License Keys.
             </DialogDescription>
           </DialogHeader>

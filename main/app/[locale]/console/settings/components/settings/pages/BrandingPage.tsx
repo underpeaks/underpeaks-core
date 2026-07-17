@@ -273,7 +273,7 @@ export default function BrandingPage() {
 
             {/* Logo preview image — falls back to the default logo if none uploaded */}
             <img
-              src={logoUrl || '/images/logo/NXT_Flutter_logo.png'}
+              src={logoUrl || '/images/logo/underpeaks_logo.png'}
               alt={('logoSection.imageAlt')}
               className="h-7 w-auto object-contain"
             />
@@ -320,7 +320,7 @@ export default function BrandingPage() {
 
             {/* Favicon preview image — falls back to the default favicon if none uploaded */}
             <img
-              src={faviconUrl || '/images/favicon/NXT_Flutter_favicon.png'}
+              src={faviconUrl || '/images/favicon/underpeaks_favi.png'}
               alt={('faviconSection.imageAlt')}
               className="h-7 w-auto object-contain"
             />

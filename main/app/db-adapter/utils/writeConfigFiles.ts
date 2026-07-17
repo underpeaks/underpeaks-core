@@ -7,7 +7,7 @@ const { DB_TYPE, DB_URL, DB_ANON_KEY } = process.env;
 
 export async function writeConfigFromStore(store: InstallerState) {
   const rootDir  = process.cwd();
-  const filePath = path.join(rootDir, "nxt_flutter.config.json");
+  const filePath = path.join(rootDir, "underpeaks.config.json");
 
   const config = {
     projectName:         store.projectName,
@@ -15,11 +15,11 @@ export async function writeConfigFromStore(store: InstallerState) {
     selectedStack:       store.selectedStack,
     selectedDb:          store.selectedDb,
     deploymentType:      "self-hosted",
-    studioUrl:           store.studioUrl ?? 'https://www.nxtflutter.com',
+    studioUrl:           store.studioUrl ?? 'https://studio.underpeaks.com',
     dbConfig: {
       type: DB_TYPE || store.selectedDb || "supabase",
     },
-    faviconUrl:          '/images/favicon/NXT_Flutter_favicon.png',
+    faviconUrl:          '/images/favicon/underpeaks_favi.png',
     ecommerceEnabled:    store.ecommerceEnabled,
     demoContentEnabled:  store.demoContentEnabled,
     selectedPages:       store.selectedPages,

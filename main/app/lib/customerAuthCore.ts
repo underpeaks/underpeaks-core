@@ -1,11 +1,11 @@
-// File: D:\NXTFLUTTER_CORE\NXTFlutter_Core\main\app\lib\customerAuthCore.ts
+// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\lib\customerAuthCore.ts
 
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 import { signJwt } from '@/app/lib/jwt'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret'
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET;
 
 export function coreCors(): Record<string, string> {
   return {
@@ -21,7 +21,7 @@ export function safeCustomer(row: any): Record<string, unknown> {
 }
 
 export function verifyAccessToken(token: string): any {
-  return jwt.verify(token, JWT_SECRET)
+  return jwt.verify(token, JWT_SECRET!)
 }
 
 export async function issueCoreCustomerToken(input: {

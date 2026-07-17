@@ -4,12 +4,12 @@
  * MongoDBAdapter
  *
  * This class implements the DBAdapter interface for MongoDB. It acts as the
- * single point of contact between the NXT_Flutter platform and a MongoDB
+ * single point of contact between the Underpeaks platform and a MongoDB
  * database — all reads, writes, and admin operations go through this adapter.
  *
  * What is a DB adapter?
  * ──────────────────────
- * NXT_Flutter supports multiple database backends (MongoDB, Supabase, Firebase,
+ * Underpeaks supports multiple database backends (MongoDB, Supabase, Firebase,
  * MySQL, PostgreSQL). Each backend has its own adapter class that implements
  * the shared DBAdapter interface. This means the rest of the app can call the
  * same methods (e.g. findUserByEmail, createTable) regardless of which database

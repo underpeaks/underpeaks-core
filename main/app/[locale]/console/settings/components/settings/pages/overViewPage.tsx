@@ -2,7 +2,7 @@
  * OverviewPage Component
  *
  * This is the Project Overview page inside the CMS Settings area.
- * It gives the user a high-level snapshot of their self-hosted NXTFlutter
+ * It gives the user a high-level snapshot of their self-hosted Underpeaks
  * project and lets them update key project settings.
  *
  * What this page does:

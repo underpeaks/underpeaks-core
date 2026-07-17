@@ -1,4 +1,4 @@
-// File: D:\NXTFLUTTER_CORE\NXTFlutter_Core\main\app\lib\coreApiAuth.ts
+// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\lib\coreApiAuth.ts
 
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 import { decryptApiKey } from '@/app/lib/apiKeyEncryption'

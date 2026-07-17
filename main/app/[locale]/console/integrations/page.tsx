@@ -142,7 +142,7 @@ const initialIntegrations: Integration[] = [
       { key: 'bucket',     label: 'Bucket Name',       type: 'text',     placeholder: 'my-bucket'   },
       { key: 'region',     label: 'Region',            type: 'text',     placeholder: 'us-east-1'   },
     ],
-    values: { access_key: 'AKIA••••••••XYZ', secret_key: '', bucket: 'nxtflutter-assets', region: 'us-east-1' },
+    values: { access_key: 'AKIA••••••••XYZ', secret_key: '', bucket: 'underpeaks-assets', region: 'us-east-1' },
   },
   {
     id: 'cloudflare-r2', name: 'Cloudflare R2', description: 'S3-compatible object storage with zero egress fees.',

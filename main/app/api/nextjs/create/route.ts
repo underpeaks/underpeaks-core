@@ -94,7 +94,7 @@ export async function POST(req: Request) {
      * of the installer app's root).
      *
      * Example:
-     *   CWD:         /home/user/nxtflutter-installer
+     *   CWD:         /home/user/underpeaks-installer
      *   installDir:  /home/user/nextjs
      *   projectPath: /home/user/nextjs/<projectName>
      *

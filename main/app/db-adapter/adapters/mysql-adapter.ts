@@ -2,7 +2,7 @@
  * MySQLAdapter
  *
  * A database adapter class that implements the DBAdapter interface for MySQL.
- * It provides all the database operations needed by the NXTFlutter CMS —
+ * It provides all the database operations needed by the Underpeaks CMS —
  * from basic CRUD to user authentication, project management, session tokens,
  * installer config saving, and demo content installation.
  *

@@ -3,7 +3,7 @@
  *
  * A server-side endpoint that takes the completed installer state and writes
  * it out to the project's local configuration files (e.g. .env.local,
- * nxt_flutter.config.json, etc.) so the application is fully configured
+ * underpeaks.config.json, etc.) so the application is fully configured
  * after the installer wizard finishes.
  *
  * What this route does:
@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
      * This utility function is responsible for taking the InstallerState
      * and writing its values out to the appropriate local files, such as:
      *   - .env.local            (environment variables for the Next.js app)
-     *   - nxt_flutter.config.json (runtime config consumed by the server)
+     *   - underpeaks.config.json (runtime config consumed by the server)
      *
      * The function returns a result object that indicates whether the writes
      * succeeded. We pass that result directly back to the client.

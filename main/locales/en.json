@@ -180,7 +180,7 @@
     }
   },
   "signIn": {
-    "heading": "Sign in to Your NxtFlutter Account",
+    "heading": "Sign in to Your Underpeaks Account",
     "fields": {
       "email": "Email",
       "password": "Password"
@@ -200,7 +200,7 @@
     }
   },
   "signUp": {
-    "heading": "Create Your NxtFlutter Account",
+    "heading": "Create Your Underpeaks Account",
     "fields": {
       "fullName": "Full Name",
       "fullNamePlaceholder": "Your full name",
@@ -432,7 +432,7 @@
       "selfHostedDescription": "Core features included. Upgrade for integrations, advanced auth, and white-labelling.",
       "paidDescription": "All features unlocked.",
       "upgradeButton": "Upgrade",
-      "upgradeAriaLabel": "Upgrade to NXTFlutter Pro",
+      "upgradeAriaLabel": "Upgrade to Underpeaks Pro",
       "proFeaturesTitle": "What you get on Pro",
       "proFeature1": "Integrations (Stripe, Mailchimp, and more)",
       "proFeature2": "Advanced auth — 2FA, social login, magic link, SSO",
@@ -609,7 +609,7 @@
     },
     "branding": {
       "title": "Branding",
-      "description": "Customise the look and feel of your NXTFlutter console.",
+      "description": "Customise the look and feel of your Underpeaks console.",
       "logo": "Logo",
       "favicon": "Favicon",
       "primaryColor": "Primary Color",
@@ -1319,7 +1319,7 @@
   },
   "overviewPage": {
     "heading": "Project Overview",
-    "subheading": "A snapshot of your self-hosted NXTFlutter project.",
+    "subheading": "A snapshot of your self-hosted Underpeaks project.",
     "stats": {
       "dbType": "DB Type",
       "environment": "Environment",
@@ -1351,7 +1351,7 @@
     "projectInfo": {
       "sectionTitle": "Project Info",
       "nameLabel": "Project Name",
-      "namePlaceholder": "My NXTFlutter App",
+      "namePlaceholder": "My Underpeaks App",
       "urlLabel": "Project URL",
       "urlHint": "The public URL of your deployed app.",
       "urlPlaceholder": "https://app.example.com"
@@ -1460,7 +1460,7 @@
     "saveButtonSaving": "Saving…",
     "upgrade": {
       "title": "Hosted plan required",
-      "description": "These features require NXTFlutter's hosted infrastructure. Upgrade to unlock them.",
+      "description": "These features require Underpeaks's hosted infrastructure. Upgrade to unlock them.",
       "button": "Upgrade"
     },
     "groups": {
@@ -1662,11 +1662,11 @@
     }
   },
   "adminSetupPage": {
-    "logoAlt": "NXT_Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "heading": "Admin User Setup",
-    "description": "Please provide the admin user details to secure your NXT_Flutter system. This account will have full administrative access within the platform.",
-    "disclaimer": "Please note: This creates an admin account on the NXT_Flutter system and may be different from your database admin account.",
+    "description": "Please provide the admin user details to secure your Underpeaks system. This account will have full administrative access within the platform.",
+    "disclaimer": "Please note: This creates an admin account on the Underpeaks system and may be different from your database admin account.",
     "fields": {
       "fullName": {
         "label": "Full Name",
@@ -1689,7 +1689,7 @@
     "continueButton": "Continue"
   },
   "stackConfigPage": {
-    "logoAlt": "NXT_Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "heading": "Choose Your Stack",
     "description": "Select the technology stack that best fits your project needs. You can change this later if you want to add more platforms or switch your approach.",
@@ -1714,7 +1714,7 @@
     "nextButton": "Next"
   },
   "databaseConfigPage": {
-    "logoAlt": "NXT_Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "heading": "Database Configuration",
     "selectPlaceholder": "Select database",
@@ -1904,7 +1904,7 @@
     }
   },
   "projectInfoPage": {
-    "logoAlt": "NXT_Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "heading": "Project Setup",
     "subheading": "Enter project name, subdomain, and domain for your self-hosted studio.",
@@ -1934,12 +1934,12 @@
     }
   },
   "welcomePage": {
-    "logoAlt": "NXT_Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "continueButton": "Continue →",
     "continueLoading": "Loading...",
     "benefits": {
-      "heading": "Why NXT_Flutter?",
+      "heading": "Why Underpeaks?",
       "item1": "🔧 Fullstack codebase generator (Next.js + Flutter)",
       "item2": "⚙️ No more boilerplate – just real production-ready code",
       "item3": "🌍 Multi-language and multi-tenant ready",

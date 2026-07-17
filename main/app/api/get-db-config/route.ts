@@ -8,7 +8,7 @@
  * What is "system config"?
  * ─────────────────────────
  * A per-user record stored in the database holding the runtime configuration
- * for that user's NXTFlutter project — branding, feature flags, active modules,
+ * for that user's Underpeaks project — branding, feature flags, active modules,
  * project metadata, etc. Loaded by ConsoleLayout on every session refresh.
  *
  * Query parameters:

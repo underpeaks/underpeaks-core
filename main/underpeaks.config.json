@@ -4,11 +4,11 @@
   "selectedStack": "both",
   "selectedDb": "postgres",
   "deploymentType": "self-hosted",
-  "studioUrl": "https://www.nxtflutter.com",
+  "studioUrl": "https://www.underpeaks.com",
   "dbConfig": {
     "type": "postgres"
   },
-  "faviconUrl": "/images/favicon/NXT_Flutter_favicon.png",
+  "faviconUrl": "/images/favicon/underpeaks_favi.png",
   "ecommerceEnabled": false,
   "demoContentEnabled": true,
   "selectedPages": [],

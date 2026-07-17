@@ -212,7 +212,7 @@ export type ConsoleState = {
  * The fallback logo path used when no branding override is configured.
  * This path is relative to the /public directory in Next.js.
  */
-const DEFAULT_LOGO = '/images/logo/NXT_Flutter_logo.png'
+const DEFAULT_LOGO = '/images/logo/underpeaks_logo.png'
 
 /**
  * DEFAULT_PROJECT

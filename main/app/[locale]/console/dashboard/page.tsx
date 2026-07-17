@@ -380,7 +380,7 @@ const displayName = user?.full_name?.trim() || user?.user_email?.split('@')[0] |
     {displayName ? `${greeting}, ${displayName}` : 'Dashboard'}
   </h1>
   <p className="text-sm text-[var(--color-text-muted)]">
-    NXT_Flutter Core Studio overview
+    Underpeaks Core Studio overview
   </p>
 </div>
         <div className="flex items-center gap-2">

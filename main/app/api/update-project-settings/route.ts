@@ -15,7 +15,7 @@ function patchEnvFile(key: string, value: string) {
 }
 
 function patchConfigFile(projectName: string, projectUrl: string) {
-  const filePath = path.resolve(process.cwd(), 'nxt_flutter.config.json')
+  const filePath = path.resolve(process.cwd(), 'underpeaks.config.json')
   if (!fs.existsSync(filePath)) return
   const config       = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
   config.projectName = projectName

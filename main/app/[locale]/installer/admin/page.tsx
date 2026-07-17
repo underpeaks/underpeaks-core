@@ -4,7 +4,7 @@
  * AdminSetupPage Component
  *
  * This is the installer wizard step where the user creates the initial
- * administrator account for their NXT_Flutter system. It is one of the early
+ * administrator account for their Underpeaks system. It is one of the early
  * steps in the setup flow, appearing before the final configuration and
  * installation screens.
  *
@@ -160,7 +160,7 @@ export default function AdminSetupPage() {
 
       <header className="mb-8 text-center flex flex-col items-center">
         <img
-          src="/images/logo/NXT_Flutter_logo.png"
+          src="/images/logo/underpeaks_logo.png"
           alt={t('logoAlt')}
           className="h-16 w-auto mb-4"
         />

@@ -6,7 +6,7 @@
  *
  * What is a "tenant"?
  * --------------------
- * In a multi-tenant CMS like NXTFlutter, each customer account is called a "tenant".
+ * In a multi-tenant CMS like Underpeaks, each customer account is called a "tenant".
  * A tenant has its own subdomain (e.g. "myapp.nextflutter.com") and is isolated
  * from all other tenants. This page lets the user choose and register their subdomain.
  *
@@ -20,7 +20,7 @@
  *
  * What is a "dbAdapter"?
  * -----------------------
- * NXTFlutter supports multiple databases (Supabase, Firebase, PostgreSQL, etc.).
+ * Underpeaks supports multiple databases (Supabase, Firebase, PostgreSQL, etc.).
  * The dbAdapter is an object that provides a consistent set of database functions
  * regardless of which database the user has chosen. This page uses two adapter methods:
  *  - findTenantByUserEmail() — checks if this user already has a tenant

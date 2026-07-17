@@ -1,22 +1,23 @@
-// app/api-public/v1/[project]/[table]/route.ts
+// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api-public\v1\[project]\[table]\route.ts
+
 /**
  * api-public/v1/[project]/[table]/route.ts
  *
- * Public developer-facing REST API gateway (Core, self-hosted).
+ * Public developer-facing REST API gateway.
  *
  * Used by Flutter apps, Next.js frontends, and third-party integrations
- * to read and write data from a self-hosted NXTFlutter instance.
+ * to read and write data from a self-hosted Underpeaks instance.
  *
- * Auth: API key passed as X-API-Key header. Validated via validateCoreApiKey
- *       (prefix lookup + AES-256-GCM decrypt-compare against nxf_system_apis).
+ * Auth: API key passed as X-API-Key header, validated via validateCoreApiKey
+ * (prefix lookup + decrypt-compare against nxf_system_apis).
  *
- * Rate limiting: DB-backed. Key record carries rate_limit_count and
- * rate_limit_reset_at. On each request:
- *   1. If now > rate_limit_reset_at → reset count to 1, set new window
- *   2. Else increment count
- *   3. If count exceeds limit within window → return 429
+ * Rate limiting: DB-backed. Each API key has rate_limit_count and
+ * rate_limit_reset_at columns on nxf_system_apis. On each request:
+ *   1. If now > rate_limit_reset_at → reset count to 0, set new window
+ *   2. Increment count
+ *   3. If count > limit → return 429
  *
- * Self-hosted limit: 100 req/min per key.
+ * Self-hosted limits: 100 req/min per key (upgradeable in hosted version).
  *
  * CORS: permissive by default for self-hosted (developer controls their server).
  */
@@ -25,8 +26,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
 import { validateCoreApiKey }        from '@/app/lib/coreApiAuth'
 
-const RATE_LIMIT = 100     // requests per window
-const WINDOW_MS  = 60_000  // 1 minute
+const RATE_LIMIT     = 100   // requests per window
+const WINDOW_MS      = 60_000 // 1 minute in milliseconds
 
 // ---------------------------------------------------------------------------
 // CORS headers
@@ -36,7 +37,7 @@ function corsHeaders(): Record<string, string> {
   return {
     'Access-Control-Allow-Origin':  '*',
     'Access-Control-Allow-Methods': 'GET, POST, PATCH, DELETE, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type, X-API-Key, Authorization',
+    'Access-Control-Allow-Headers': 'Content-Type, X-API-Key, X-Customer-Token, Authorization',
   }
 }
 
@@ -49,82 +50,78 @@ export async function OPTIONS() {
 }
 
 // ---------------------------------------------------------------------------
-// API key validation + rate limiting (shared helper)
+// API key validation + rate limiting
 // ---------------------------------------------------------------------------
 
-async function requireApiKey(
-  req: NextRequest
-): Promise<{
-  valid:      boolean
-  error?:     string
-  status?:    number
-  projectId?: string
-  tenantId?:  string
-}> {
-  const apiKey = req.headers.get('X-API-Key') ?? req.headers.get('x-api-key')
+async function validateApiKey(
+  req:       NextRequest,
+  projectId: string
+): Promise<{ valid: boolean; error?: string; status?: number; key?: any }> {
+  const apiKey = req.headers.get('X-API-Key') ?? req.headers.get('x-api-key') ?? ''
 
-  if (!apiKey) {
-    return { valid: false, error: 'X-API-Key header is required', status: 401 }
-  }
-
-  // ── Authoritative validation (prefix + decrypt-compare + status active) ──
-  const result = await validateCoreApiKey(apiKey)
-  if (!result.ok) {
-    return { valid: false, error: 'Invalid or revoked API key', status: 401 }
-  }
-
-  // ── Rate limiting ────────────────────────────────────────────────────────
-  // Reload the key record by prefix to read/update the counters. Validation
-  // already passed, so exactly one active record matches this prefix.
   try {
+    // Shared helper: prefix lookup + decrypt-compare + status active.
+    const auth = await validateCoreApiKey(apiKey)
+    if (!auth.ok) {
+      return { valid: false, error: auth.message, status: auth.status }
+    }
+
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
-    const prefix   = apiKey.slice(0, 16)
 
-    const allKeys   = await adapter.readAllAdmin!(dbConfig, 'nxf_system_apis')
+    // Re-fetch the key row for rate-limit counters (helper returns ids only).
+    const prefix = apiKey.slice(0, 16)
+    const allKeys: any[] = await (adapter as any).readAllAdmin(dbConfig, 'nxf_system_apis')
     const keyRecord = (allKeys ?? []).find(
-      (k: any) => k.key_prefix === prefix && k.status === 'active'
+      (k: any) =>
+        k.key_prefix === prefix &&
+        k.status     === 'active' &&
+        k.project_id === auth.projectId
     )
 
-    if (keyRecord) {
-      const now           = Date.now()
-      const resetAt       = keyRecord.rate_limit_reset_at
-        ? new Date(keyRecord.rate_limit_reset_at).getTime()
-        : 0
-      const count         = keyRecord.rate_limit_count ?? 0
-      const windowExpired = now > resetAt
+    if (!keyRecord) {
+      return { valid: false, error: 'Invalid or revoked API key', status: 401 }
+    }
 
-      const newCount   = windowExpired ? 1 : count + 1
-      const newResetAt = windowExpired
-        ? new Date(now + WINDOW_MS).toISOString()
-        : keyRecord.rate_limit_reset_at
+    // ── Rate limiting ──────────────────────────────────────────────────────
 
-      const api_id = keyRecord.api_id ?? keyRecord.id
-      const idCol  = keyRecord.api_id ? 'api_id' : 'id'
+    const now         = Date.now()
+    const resetAt     = keyRecord.rate_limit_reset_at
+      ? new Date(keyRecord.rate_limit_reset_at).getTime()
+      : 0
+    const count       = keyRecord.rate_limit_count ?? 0
+    const windowExpired = now > resetAt
 
-      // Fire and forget — don't block the response on the counter write.
-      adapter.update!(dbConfig, 'nxf_system_apis', api_id, {
-        rate_limit_count:    newCount,
-        rate_limit_reset_at: newResetAt,
-        last_used_at:        new Date().toISOString(),
-      }, idCol).catch((err: any) =>
-        console.error('[api-public] Rate limit update failed:', err.message)
-      )
+    const newCount    = windowExpired ? 1 : count + 1
+    const newResetAt  = windowExpired
+      ? new Date(now + WINDOW_MS).toISOString()
+      : keyRecord.rate_limit_reset_at
 
-      if (!windowExpired && count >= RATE_LIMIT) {
-        return {
-          valid:  false,
-          error:  `Rate limit exceeded. Limit is ${RATE_LIMIT} requests per minute.`,
-          status: 429,
-        }
+    // Update count in DB — fire and forget, don't block the response
+    const api_id  = keyRecord.api_id ?? keyRecord.id
+    const idCol   = keyRecord.api_id ? 'api_id' : 'id'
+
+    adapter.update!(dbConfig, 'nxf_system_apis', api_id, {
+      rate_limit_count:    newCount,
+      rate_limit_reset_at: newResetAt,
+      last_used_at:        new Date().toISOString(),
+    }, idCol).catch((err: any) =>
+      console.error('[api-public] Rate limit update failed:', err.message)
+    )
+
+    if (!windowExpired && count >= RATE_LIMIT) {
+      return {
+        valid:  false,
+        error:  `Rate limit exceeded. Limit is ${RATE_LIMIT} requests per minute.`,
+        status: 429,
       }
     }
-  } catch (err: any) {
-    // Rate limiting must never take down a validated request.
-    console.error('[api-public] Rate limit check failed:', err.message)
-  }
 
-  return { valid: true, projectId: result.projectId, tenantId: result.tenantId }
+    return { valid: true, key: keyRecord }
+  } catch (err: any) {
+    console.error('[api-public] API key validation failed:', err.message)
+    return { valid: false, error: 'API key validation failed', status: 500 }
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -159,16 +156,15 @@ export async function GET(
   context: { params: Promise<{ project: string; table: string }> }
 ) {
   try {
-    const { table } = await context.params
+    const { project: projectId, table } = await context.params
 
-    const auth = await requireApiKey(req)
+    const auth = await validateApiKey(req, projectId)
     if (!auth.valid) {
       return NextResponse.json(
         { error: auth.error },
         { status: auth.status ?? 401, headers: corsHeaders() }
       )
     }
-    const projectId = auth.projectId!
 
     // Check model exists and is accessible
     const model = await getModelForTable(table, projectId)
@@ -298,16 +294,15 @@ export async function POST(
   context: { params: Promise<{ project: string; table: string }> }
 ) {
   try {
-    const { table } = await context.params
+    const { project: projectId, table } = await context.params
 
-    const auth = await requireApiKey(req)
+    const auth = await validateApiKey(req, projectId)
     if (!auth.valid) {
       return NextResponse.json(
         { error: auth.error },
         { status: auth.status ?? 401, headers: corsHeaders() }
       )
     }
-    const projectId = auth.projectId!
 
     const model = await getModelForTable(table, projectId)
     if (!model) {
@@ -325,7 +320,7 @@ export async function POST(
     const record = {
       ...body,
       project_id: projectId,
-      tenant_id:  model.tenant_id ?? auth.tenantId ?? null,
+      tenant_id:  model.tenant_id ?? null,
       created_at: now,
       updated_at: now,
     }
@@ -351,23 +346,13 @@ export async function PATCH(
   context: { params: Promise<{ project: string; table: string }> }
 ) {
   try {
-    const { table } = await context.params
+    const { project: projectId, table } = await context.params
 
-    const auth = await requireApiKey(req)
+    const auth = await validateApiKey(req, projectId)
     if (!auth.valid) {
       return NextResponse.json(
         { error: auth.error },
         { status: auth.status ?? 401, headers: corsHeaders() }
-      )
-    }
-    const projectId = auth.projectId!
-
-    // Project/model access check
-    const model = await getModelForTable(table, projectId)
-    if (!model) {
-      return NextResponse.json(
-        { error: `Table '${table}' not found for this project` },
-        { status: 404, headers: corsHeaders() }
       )
     }
 
@@ -404,28 +389,22 @@ export async function PATCH(
 // DELETE — delete record
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// DELETE — delete record
+// ---------------------------------------------------------------------------
+
 export async function DELETE(
   req:     NextRequest,
   context: { params: Promise<{ project: string; table: string }> }
 ) {
   try {
-    const { table } = await context.params
+    const { project: projectId, table } = await context.params
 
-    const auth = await requireApiKey(req)
+    const auth = await validateApiKey(req, projectId)
     if (!auth.valid) {
       return NextResponse.json(
         { error: auth.error },
         { status: auth.status ?? 401, headers: corsHeaders() }
-      )
-    }
-    const projectId = auth.projectId!
-
-    // Project/model access check
-    const model = await getModelForTable(table, projectId)
-    if (!model) {
-      return NextResponse.json(
-        { error: `Table '${table}' not found for this project` },
-        { status: 404, headers: corsHeaders() }
       )
     }
 
@@ -441,8 +420,11 @@ export async function DELETE(
 
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
-   // const idCol    = id_column ?? 'id'
 
+    // FIXED: was passing idCol (the column name) where the id value belongs.
+    // NOTE: adapter.delete only supports the default id column. Tables with a
+    // non-'id' primary key (e.g. route_id) won't match — tracked as
+    // "DELETE hardening — id_column for route_id on Postgres/MySQL".
     await adapter.delete!(dbConfig, table, id)
 
     return NextResponse.json({ success: true }, { headers: corsHeaders() })

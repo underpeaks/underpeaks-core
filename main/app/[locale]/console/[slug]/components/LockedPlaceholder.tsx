@@ -33,7 +33,7 @@ export default function LockedPlaceholder({ templateName, page }: LockedPlacehol
       </p>
 
       <a
-        href="https://nxtflutter.com/pricing"
+        href="https://underpeaks.com/pricing"
         target="_blank"
         rel="noopener noreferrer"
         className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg

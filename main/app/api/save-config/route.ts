@@ -235,7 +235,7 @@ export async function POST(req: Request) {
 
     const safeBranding = {
       logo_url:      branding?.logoUrl      || '',
-      favicon_url:   branding?.faviconUrl   || '/images/favicon/NXT_Flutter_favicon.png',
+      favicon_url:   branding?.faviconUrl   || '/images/favicon/underpeaks_favi.png',
       primary_color: branding?.primaryColor || '#000000',
     }
 

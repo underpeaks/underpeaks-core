@@ -1,4 +1,4 @@
-// File: D:\NXTFLUTTER_CORE\NXTFlutter_Core\main\app\api-public\v1\[project]\auth\forgot-password\route.ts
+// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api-public\v1\[project]\auth\forgot-password\route.ts
 
 import { NextRequest, NextResponse } from 'next/server'
 import crypto from 'crypto'

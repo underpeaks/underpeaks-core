@@ -396,7 +396,7 @@ async function finalizeInstaller(): Promise<void> {
   // ── Issue CodeGen license ─────────────────────────────────────────────
   try {
     const { adminUser } = useInstallerStore.getState()
-    const studioUrl = useInstallerStore.getState().studioUrl ?? 'https://studio.nxtflutter.com'
+    const studioUrl = useInstallerStore.getState().studioUrl ?? 'https://studio.underpeaks.com'
 
     const res = await fetch(`${studioUrl}/api/codegen-private/license/issue`, {
       method:  'POST',

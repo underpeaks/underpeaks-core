@@ -2,7 +2,7 @@
  * studioApi.ts
  *
  * Single entry point for all calls from the self-hosted instance
- * to the NXTFlutter Studio hosted API.
+ * to the Underpeaks Studio hosted API.
  *
  * Every phone-home feature — license validation, code generation,
  * AI model generation, template marketplace — routes through this
@@ -14,7 +14,7 @@
  * without a Studio connection.
  */
 
-const STUDIO_API = process.env.NEXT_PUBLIC_STUDIO_API_URL ?? 'https://api.nxtflutter.com'
+const STUDIO_API = process.env.NEXT_PUBLIC_STUDIO_API_URL ?? 'https://studio.underpeaks.com'
 
 async function getLicenseKey(): Promise<string> {
   try {
@@ -55,11 +55,11 @@ export async function studioCall(
   })
 
   if (res.status === 401) {
-    throw new Error('License invalid or expired — visit nxtflutter.com to renew')
+    throw new Error('License invalid or expired — visit underpeaks.com to renew')
   }
 
   if (res.status === 429) {
-    throw new Error('Plan limit reached — upgrade to continue at nxtflutter.com')
+    throw new Error('Plan limit reached — upgrade to continue at underpeaks.com')
   }
 
   if (!res.ok) {

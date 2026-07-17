@@ -8,12 +8,12 @@ export default function LicenseExpiredPage() {
       <div className="text-5xl">⏰</div>
       <h1 className="text-2xl font-bold text-white">License Expired</h1>
       <p className="text-sm max-w-md" style={{ color: '#888' }}>
-        Your NXTFlutter installation has not been able to reach Studio for more than 30 days.
+        Your Underpeaks installation has not been able to reach Studio for more than 30 days.
         Please ensure your server can reach Studio and restart the application.
       </p>
       <div className="flex gap-3">
         <a
-          href="https://www.nxtflutter.com"
+          href="https://underpeaks.com"
           className="px-6 py-3 rounded-lg text-sm font-medium"
           style={{ backgroundColor: accent, color: '#000' }}
         >

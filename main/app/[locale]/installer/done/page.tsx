@@ -1,7 +1,7 @@
 /**
  * DonePage Component
  *
- * This is the final step of the NXTFlutter installer wizard.
+ * This is the final step of the Underpeaks installer wizard.
  * It is shown after the installation process has completed successfully.
  *
  * What this page does:
@@ -184,7 +184,7 @@ export default function DonePage() {
         * ------------------------------------------------------------------ */}
       <header className="mb-8 text-center flex flex-col items-center">
         <img
-          src="/images/logo/NXT_Flutter_logo.png"
+          src="/images/logo/underpeaks_logo.png"
           alt={t('logoAlt')}
           className="h-16 w-auto mb-4"
         />

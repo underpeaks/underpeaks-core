@@ -4,7 +4,7 @@
  * GET  /api/themes?user_id=xxx  — fetch theme for the user's project
  * POST /api/themes              — save theme for the user's project
  *
- * If no theme exists for the project, GET returns the default NXTFlutter theme.
+ * If no theme exists for the project, GET returns the default Underpeaks theme.
  * POST creates or overwrites the theme document.
  */
 
@@ -12,7 +12,7 @@ import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
 import { NextRequest, NextResponse } from 'next/server'
 
 // ---------------------------------------------------------------------------
-// Default theme — NXTFlutter brand defaults
+// Default theme — Underpeaks brand defaults
 // ---------------------------------------------------------------------------
 
 export const DEFAULT_THEME = {

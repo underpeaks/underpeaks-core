@@ -75,7 +75,7 @@ export default function HostedUpgradeDialog({
                   <p style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'rgba(255,255,255,0.5)' }}>
                     Hosted Platform
                   </p>
-                  <p style={{ fontSize: '1.1rem', fontWeight: 700 }}>NXT_Flutter Cloud</p>
+                  <p style={{ fontSize: '1.1rem', fontWeight: 700 }}>Underpeaks Cloud</p>
                 </div>
               </div>
 
@@ -204,7 +204,7 @@ export default function HostedUpgradeDialog({
               </AlertDialogPrimitive.Cancel>
               <AlertDialogPrimitive.Action asChild>
                 <a
-                  href="https://nxtflutter.com"
+                  href="https://underpeaks.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
