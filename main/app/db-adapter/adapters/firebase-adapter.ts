@@ -1797,7 +1797,7 @@ async dropTable(tableName: string): Promise<any> {
  * renameTable
  *
  * Firestore has no rename operation for collections. Since all relationships
- * in NXTFlutter reference models by sm_id (not by collection name), renaming
+ * in Underpeaks reference models by sm_id (not by collection name), renaming
  * only needs to update the nxf_system_models record — which the API route
  * handles. This is a no-op at the adapter level for Firebase.
  *

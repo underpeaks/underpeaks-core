@@ -15,7 +15,7 @@
  * 4. Renders the full HTML shell (<html>, <head>, <body>) with:
  *    - The correct `lang` attribute for accessibility and SEO.
  *    - A dynamic favicon that uses the system config value, falling back to
- *      the default NXT_Flutter favicon if the config is unavailable.
+ *      the default Underpeaks favicon if the config is unavailable.
  * 5. Wraps all children in:
  *    - NextIntlClientProvider  — makes translations available to client components.
  *    - AuthProvider            — makes authentication state available app-wide.
@@ -160,12 +160,12 @@ try {
         {/*
          * Dynamic Favicon
          * Uses the favicon URL from the system config if one has been set
-         * by the admin. Falls back to the default NXT_Flutter favicon if the
+         * by the admin. Falls back to the default Underpeaks favicon if the
          * config is empty or the field is missing.
          */}
         <link
           rel="icon"
-          href={config?.faviconUrl || '/images/favicon/NXT_Flutter_favicon.png'}
+          href={config?.faviconUrl || '/images/favicon/underpeaks_favi.png'}
         />
       </head>
       <body className="flex-1 overflow-y-auto">

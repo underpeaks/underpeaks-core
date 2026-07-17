@@ -817,7 +817,7 @@ async readAll(config: DBConfig, table: string): Promise<any[]> {
   async setupStorageBuckets() {
     console.log('[SupabaseAdapter] setupStorageBuckets started')
     try {
-      const bucketName = 'NXT_Flutter_storage'
+      const bucketName = 'underpeaks_storage'
       const { error: bucketError } = await this.adminClient.storage.createBucket(
         bucketName,
         { public: false }
@@ -1807,7 +1807,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
 
   async listFolders(): Promise<string[]> {
     try {
-      const bucketName  = 'NXT_Flutter_storage'
+      const bucketName  = 'underpeaks_storage'
       const { data, error } = await this.adminClient.storage
         .from(bucketName)
         .list('', { limit: 1000 })
@@ -1832,7 +1832,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
 
   async listFiles(folder: string): Promise<StorageFile[]> {
     try {
-      const bucketName = 'NXT_Flutter_storage'
+      const bucketName = 'underpeaks_storage'
       const { data, error } = await this.adminClient.storage
         .from(bucketName)
         .list(folder, { limit: 1000 })
@@ -1898,7 +1898,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   ): Promise<string> {
     console.log('[SupabaseAdapter] uploadFile started')
 
-    const bucketName = 'NXT_Flutter_storage'
+    const bucketName = 'underpeaks_storage'
     const filePath   = `${folder}/${fileName}`
 
     const { error: uploadError } = await this.adminClient.storage
@@ -1925,7 +1925,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   }
 
   async deleteFile(folder: string, fileName: string): Promise<void> {
-    const bucketName = 'NXT_Flutter_storage'
+    const bucketName = 'underpeaks_storage'
     const filePath   = `${folder}/${fileName}`
 
     const { error } = await this.adminClient.storage
@@ -1939,7 +1939,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   }
 
   async deleteFolder(folder: string): Promise<void> {
-    const bucketName = 'NXT_Flutter_storage'
+    const bucketName = 'underpeaks_storage'
 
     const { data, error: listError } = await this.adminClient.storage
       .from(bucketName)
@@ -1965,7 +1965,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   }
 
   async createFolder(folder: string): Promise<void> {
-    const bucketName = 'NXT_Flutter_storage'
+    const bucketName = 'underpeaks_storage'
 
     const { error } = await this.adminClient.storage
       .from(bucketName)
@@ -1981,7 +1981,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   }
 
   async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
-    const bucketName = 'NXT_Flutter_storage'
+    const bucketName = 'underpeaks_storage'
     const oldPath    = `${folder}/${oldName}`
     const newPath    = `${folder}/${newName}`
 
@@ -2005,7 +2005,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   }
 
   async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
-    const bucketName = 'NXT_Flutter_storage'
+    const bucketName = 'underpeaks_storage'
     const oldPath    = `${fromFolder}/${fileName}`
     const newPath    = `${toFolder}/${fileName}`
 

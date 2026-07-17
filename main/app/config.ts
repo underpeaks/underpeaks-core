@@ -118,7 +118,7 @@ import { fileURLToPath } from 'url'
 
 // config.ts
 export function hasValidConfig(): { selectedDb: string; installed: boolean } | null {
-  const configPath = path.resolve(process.cwd(), 'nxt_flutter.config.json')
+  const configPath = path.resolve(process.cwd(), 'underpeaks.config.json')
 
   if (!fs.existsSync(configPath)) return null
 

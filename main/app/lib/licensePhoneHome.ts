@@ -8,7 +8,7 @@ function readConfig(): { projectName: string; studioUrl: string } {
   try {
     const fs         = require('fs')
     const path       = require('path')
-    const configPath = path.resolve(process.cwd(), 'nxt_flutter.config.json')
+    const configPath = path.resolve(process.cwd(), 'underpeaks.config.json')
     console.log('[phone-home] config path:', configPath)
     if (fs.existsSync(configPath)) {
       const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
@@ -16,7 +16,7 @@ function readConfig(): { projectName: string; studioUrl: string } {
       console.log('[phone-home] studio url from config:', config.studioUrl)
       return {
         projectName: config.projectName ?? 'NXTFlutter Core',
-        studioUrl:   config.studioUrl   ?? process.env.NEXT_PUBLIC_STUDIO_URL ?? 'https://app.nxtflutter.com',
+        studioUrl:   config.studioUrl   ?? process.env.NEXT_PUBLIC_STUDIO_URL ?? 'https://studio.underpeaks.com',
       }
     } else {
       console.warn('[phone-home] config file not found at:', configPath)
@@ -26,7 +26,7 @@ function readConfig(): { projectName: string; studioUrl: string } {
   }
   return {
     projectName: 'NXTFlutter Core',
-    studioUrl:   process.env.NEXT_PUBLIC_STUDIO_URL ?? 'https://app.nxtflutter.com',
+    studioUrl:   process.env.NEXT_PUBLIC_STUDIO_URL ?? 'https://studio.underpeaks.com',
   }
 }
 

@@ -589,7 +589,7 @@ export default function AccountPage() {
             {/* Upgrade button — only shown for self-hosted users */}
             {isSelfHosted && (
               <a
-                href="https://console.nxtflutter.com/upgrade"
+                href="https://console.underpeaks.com/upgrade"
                 target="_blank"
                 rel="noreferrer"
                 className="flex items-center gap-1.5 px-4 py-2 bg-gray-900 text-white text-xs font-medium rounded-lg hover:bg-gray-700 transition shrink-0"

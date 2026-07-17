@@ -4,7 +4,7 @@
  * POST /api/create-admin-user
  *
  * Next.js App Router API route that creates the initial administrator account
- * for a newly installed NXT_Flutter project.
+ * for a newly installed Underpeaks project.
  *
  * This route is called by the installer wizard during the "Creating admin user"
  * step. It acts as a thin validation layer between the installer UI and the

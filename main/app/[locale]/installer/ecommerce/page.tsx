@@ -156,7 +156,7 @@ export default function EcommercePage() {
         * ---------------------------------------------------------------- */}
       <header className="mb-8 text-center flex flex-col items-center">
         <img
-          src="/images/logo/NXT_Flutter_logo.png"
+          src="/images/logo/underpeaks_logo.png"
           alt={t('logoAlt')}
           className="h-16 w-auto mb-4"
         />

@@ -6,7 +6,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html>
       <head>
-        <link rel="icon" href="/images/favicon/NXT_Flutter_favicon.png" type="image/png" />
+        <link rel="icon" href="/images/favicon/underpeaks_favi.png" type="image/png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

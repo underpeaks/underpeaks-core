@@ -4,7 +4,7 @@
  * POST /api/create-system-tables
  *
  * Next.js App Router API route that creates all required database tables for
- * a newly installed NXT_Flutter project.
+ * a newly installed Underpeaks project.
  *
  * This route is called by the installer wizard during the "Creating database
  * schema and tables" step. It runs a fixed sequence of table-creation
@@ -14,7 +14,7 @@
  * Table creation sequence:
  * ─────────────────────────
  * 1. Core system tables   (createSystemTables)
- *    The foundational tables required by the NXT_Flutter platform itself —
+ *    The foundational tables required by the Underpeaks platform itself —
  *    e.g. configuration, audit logs, platform metadata. These are always
  *    created regardless of project type.
  *
@@ -100,7 +100,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     // -----------------------------------------------------------------------
 
     /**
-     * Creates the foundational NXT_Flutter platform tables.
+     * Creates the foundational Underpeaks platform tables.
      * These must exist before any other tables are created because later
      * steps (user tables, project tables) may reference them via foreign keys
      * or platform-level configuration records.

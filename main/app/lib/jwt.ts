@@ -52,7 +52,7 @@ import jwt from 'jsonwebtoken'
  * This value is intentionally a module-level constant so it is read once
  * when the module is first imported, rather than on every function call.
  */
-const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret'
+const JWT_SECRET = process.env.JWT_ACCESS_SECRET
 
 /**
  * signJwt
@@ -94,7 +94,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret'
  *   const token = signJwt({ userId: '123' }, { expiresIn: '7d' })
  */
 export function signJwt(payload: object, options?: jwt.SignOptions): string {
-  return jwt.sign(payload, JWT_SECRET, {
+  return jwt.sign(payload, JWT_SECRET!, {
     expiresIn: '1h',  // Default: token becomes invalid after 1 hour
     ...(options || {}), // Spread any caller-supplied options last so they
                         // take precedence over the defaults above

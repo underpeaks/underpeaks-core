@@ -1,7 +1,7 @@
 /**
  * extensions/types.ts
  *
- * Type definitions for the NXTFlutter extension system.
+ * Type definitions for the Underpeaks extension system.
  * No actual extensions are built in the self-hosted version — this file
  * exists so the architecture is locked in and future extensions snap on
  * cleanly without requiring structural changes.

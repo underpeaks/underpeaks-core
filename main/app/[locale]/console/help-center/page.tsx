@@ -58,12 +58,12 @@ const faqs = [
   {
     id: 1,
     question: 'How do I connect my database?',
-    answer: 'Go to Settings → Overview and select your database type. NXTFlutter supports Supabase, Firebase, PostgreSQL, MySQL, and MongoDB. Enter your connection credentials and click Save — the platform will test the connection automatically.',
+    answer: 'Go to Settings → Overview and select your database type. Underpeaks supports Supabase, Firebase, PostgreSQL, MySQL, and MongoDB. Enter your connection credentials and click Save — the platform will test the connection automatically.',
   },
   {
     id: 2,
     question: 'What is the difference between self-hosted and hosted?',
-    answer: 'Self-hosted is free and open source — you run it on your own server and manage your own database. Hosted (console.nxtflutter.com) is a managed service with two tiers: Pro (dedicated schema) and Enterprise (dedicated database), and includes integrations, advanced auth, and white-labelling.',
+    answer: 'Self-hosted is free and open source — you run it on your own server and manage your own database. Hosted (console.underpeaks.com) is a managed service with two tiers: Pro (dedicated schema) and Enterprise (dedicated database), and includes integrations, advanced auth, and white-labelling.',
   },
   {
     id: 3,
@@ -93,9 +93,9 @@ const faqs = [
  * Labels and descriptions are translated via t() at render time.
  */
 const docLinks = [
-  { icon: FiBook,          key: 'gettingStarted', href: 'https://docs.nxtflutter.com/getting-started' },
-  { icon: FiCode,          key: 'apiReference',   href: 'https://docs.nxtflutter.com/api'             },
-  { icon: FiMessageSquare, key: 'community',       href: 'https://community.nxtflutter.com'            },
+  { icon: FiBook,          key: 'gettingStarted', href: 'https://docs.underpeaks.com/getting-started' },
+  { icon: FiCode,          key: 'apiReference',   href: 'https://docs.underpeaks.com/api'             },
+  { icon: FiMessageSquare, key: 'community',       href: 'https://community.underpeaks.com'            },
 ];
 
 /**

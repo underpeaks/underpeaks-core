@@ -47,6 +47,19 @@
       "hidden": false,
       "ui_type": "select"
     },
+    "rate_limit_count": {
+      "type": "integer",
+      "nullable": true,
+      "default": "0",
+      "description": "Requests made in the current rate-limit window",
+      "hidden": true
+    },
+    "rate_limit_reset_at": {
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "description": "When the current rate-limit window resets",
+      "hidden": true
+    },
     "last_used_at": {
       "type": "timestamp with time zone",
       "nullable": true,

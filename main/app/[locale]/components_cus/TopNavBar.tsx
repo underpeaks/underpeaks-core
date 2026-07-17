@@ -1,7 +1,7 @@
 /**
  * TopNavbar.tsx
  * --------------
- * The top navigation bar rendered across the entire NXTFlutter console.
+ * The top navigation bar rendered across the entire Underpeaks console.
  * It is fixed to the top of the viewport and always visible while the user
  * is in the console, regardless of which page they are on.
  *

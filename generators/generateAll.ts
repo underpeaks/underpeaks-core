@@ -1,7 +1,7 @@
 /**
  * index.ts  (Code Generator Entry Point)
  * ----------------------------------------
- * This is the main orchestrator for NXTFlutter's code generation system.
+ * This is the main orchestrator for Underpeaks's code generation system.
  *
  * What does this file do?
  * ------------------------

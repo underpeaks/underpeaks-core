@@ -4,7 +4,7 @@
  * POST /api/create-storage-buckets
  *
  * Next.js App Router API route that sets up the required storage buckets for
- * a newly installed NXT_Flutter project.
+ * a newly installed Underpeaks project.
  *
  * This route is called by the installer wizard during the "Setting up storage"
  * step. It resolves the correct database adapter for the project's DB type and

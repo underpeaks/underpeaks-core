@@ -1,4 +1,4 @@
-// File: D:\NXTFLUTTER_CORE\NXTFlutter_Core\main\app\api-public\v1\[project]\auth\signout\route.ts
+// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api-public\v1\[project]\auth\signout\route.ts
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '

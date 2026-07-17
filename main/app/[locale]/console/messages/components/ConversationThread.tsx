@@ -15,7 +15,7 @@
  * What is a "system message"?
  * ----------------------------
  * Some conversations are created by the system itself (e.g. welcome messages,
- * notifications from NXTFlutter). These are marked with is_system: true.
+ * notifications from Underpeaks). These are marked with is_system: true.
  * System conversations are read-only — the reply bar is shown but disabled.
  *
  * How does message loading work?
