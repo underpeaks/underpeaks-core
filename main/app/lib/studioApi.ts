@@ -18,7 +18,7 @@ const STUDIO_API = process.env.NEXT_PUBLIC_STUDIO_API_URL ?? 'https://studio.und
 
 async function getLicenseKey(): Promise<string> {
   try {
-    const { getConfiguredAdapter } = await import('@/app/lib/getConfiguredAdapter ')
+    const { getConfiguredAdapter } = await import('@/app/lib/getConfiguredAdapter')
     const adapter   = getConfiguredAdapter()
     const dbConfig  = adapter.config
     const allConfig = await adapter.readAll!(dbConfig, 'nxf_system_config')

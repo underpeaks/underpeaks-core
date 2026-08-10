@@ -5,7 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { KpiFormula, KpiFormat } from '@/app/[locale]/console/kpi/kpi';
 import { computeKpi } from '@/app/[locale]/console/kpi/kpiEngine';
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter ';
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
 
 
 type KpiComputeRequest = {

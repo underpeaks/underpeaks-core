@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { DashboardCollection } from '@/app/[locale]/console/types/dashboard';
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter ';
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
 
 
 // System collections always available

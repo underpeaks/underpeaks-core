@@ -412,6 +412,22 @@
       "savingButton": "Saving…",
       "savedButton": "Saved"
     },
+    "danger": {
+      "title": "Danger Zone",
+      "description": "Irreversible actions. Proceed with caution.",
+      "cancelTitle": "Cancel subscription",
+      "cancelDescription": "Your plan stays active until the end of the current billing period, then reverts to self-hosted.",
+      "cancelButton": "Cancel plan",
+      "cancelModalBody": "Your subscription will be cancelled but you'll keep access until the end of your current billing period. This cannot be undone.",
+      "resetTitle": "Reset project",
+      "resetDescription": "Permanently delete all project content and start onboarding again. Your account is kept.",
+      "resetButton": "Reset project",
+      "resetModalBody": "This permanently deletes all your project content — models, pages, data, and media. Your account and billing are kept. This cannot be undone.",
+      "deleteTitle": "Delete account",
+      "deleteDescription": "Permanently delete your account and all associated data.",
+      "deleteButton": "Delete account",
+      "deleteModalBody": "This permanently deletes your account and all content. Billing records are retained where legally required. This cannot be undone."
+    },
     "password": {
       "title": "Change Password",
       "description": "Use a strong password you don't use elsewhere.",
@@ -437,7 +453,8 @@
       "proFeature1": "Integrations (Stripe, Mailchimp, and more)",
       "proFeature2": "Advanced auth — 2FA, social login, magic link, SSO",
       "proFeature3": "White-label the CMS with your own branding",
-      "proFeature4": "Custom domain for your console"
+      "proFeature4": "Custom domain for your console",
+      "contactSalesButton": "Contact Sales"
     },
     "errors": {
       "profileUpdateFailed": "Profile update failed. Please try again.",
@@ -594,6 +611,8 @@
       "savedSuccess": "Settings saved successfully"
     },
     "apiKeys": {
+      "heading": "API Keys",
+    "subheading": "Manage keys used to authenticate API requests from your apps.",
       "title": "API Keys",
       "description": "Manage API keys for programmatic access to your project.",
       "generateKey": "Generate New Key",
@@ -605,7 +624,16 @@
       "revoked": "Revoked",
       "keyCopied": "Key copied to clipboard",
       "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "noKeys": "No API keys yet. Generate one to get started.",
+      "sectionTitle": "Active Keys",
+    "createdDate": "Created {{date}}",
+    "lastUsedDate": "Last used {{date}}",
+    "hideKey": "Hide key",
+    "revealKey": "Reveal key",
+    "copyKey": "Copy key",
+    "revoke": "Revoke",
+    "emptyTitle": "No API keys yet",
+    "emptySubtitle": "Generate a key below to get started."
     },
     "branding": {
       "title": "Branding",
@@ -665,6 +693,26 @@
     "you": "You",
     "system": "System"
   },
+  "apiKeys": {
+  "heading": "API Keys",
+  "subheading": "Manage keys used to authenticate API requests from your apps.",
+  "sectionTitle": "Active Keys",
+  "createdDate": "Created {date}",
+  "lastUsedDate": "Last used {date}",
+  "neverUsed": "Never used",
+  "hideKey": "Hide key",
+  "revealKey": "Reveal key",
+  "copyKey": "Copy key",
+  "revoke": "Revoke",
+  "emptyTitle": "No API keys yet",
+  "emptySubtitle": "Generate a key below to get started.",
+  "errors": {
+    "loadFailed": "Failed to load API keys",
+    "generateFailed": "Failed to generate key",
+    "revokeFailed": "Failed to revoke key"
+  }
+},
+
   "notifications": {
     "title": "Notifications",
     "noNotifications": "No notifications",
@@ -916,6 +964,10 @@
       "metadata": "Metadata",
       "rename": "Rename",
       "moveToFolder": "Move to Folder"
+    },
+     "altText": {
+      "placeholder": "Describe this image for accessibility…",
+      "empty": "No alt text set"
     },
     "metadata": {
       "folder": "Folder",
@@ -1236,17 +1288,8 @@
       }
     }
   },
-  "apiKeys": {
-    "sectionTitle": "Active Keys",
-    "createdDate": "Created {{date}}",
-    "lastUsedDate": "Last used {{date}}",
-    "neverUsed": "Never used",
-    "hideKey": "Hide key",
-    "revealKey": "Reveal key",
-    "copyKey": "Copy key",
-    "revoke": "Revoke",
-    "emptyTitle": "No API keys yet",
-    "emptySubtitle": "Generate a key below to get started."
+  "api-Keys": {
+    
   },
   "generateKeyForm": {
     "sectionTitle": "Generate New Key",
@@ -1262,11 +1305,11 @@
     "doneButton": "Done"
   },
   "revokeModal": {
-    "title": "Revoke API Key",
-    "message": "Are you sure you want to revoke <keyName></keyName>? Any apps using this key will immediately lose access.",
-    "cancelButton": "Cancel",
-    "revokeButtonIdle": "Revoke Key",
-    "revokeButtonRevoking": "Revoking…"
+     "title": "Revoke API Key",
+  "message": "Any apps using this key will immediately lose access:",
+  "cancelButton": "Cancel",
+  "revokeButtonIdle": "Revoke Key",
+  "revokeButtonRevoking": "Revoking…"
   },
   "apiKeysPage": {
     "heading": "API Keys",
@@ -1317,9 +1360,9 @@
     "saveButtonIdle": "Save Branding",
     "saveButtonSaving": "Saving…"
   },
-  "overviewPage": {
+ "overviewPage": {
     "heading": "Project Overview",
-    "subheading": "A snapshot of your self-hosted Underpeaks project.",
+    "subheading": "A snapshot of your Underpeaks  project.",
     "stats": {
       "dbType": "DB Type",
       "environment": "Environment",
@@ -1328,6 +1371,7 @@
       "statusActive": "Active"
     },
     "userInfo": {
+      "sectionTitle": "User Info",
       "fullName": "Full Name",
       "email": "Email",
       "role": "Role",
@@ -1338,29 +1382,28 @@
       "memberSince": "Member Since"
     },
     "licenseKey": {
-      "sectionTitle": "NXT Flutter License Key",
-      "description": "Paste your license key from NXT Flutter Studio. This authenticates your self-hosted instance and enables hosted vs self-hosted feature distinction.",
+      "sectionTitle": "Underpeaks License Key",
+      "description": "Your license key authenticates this instance and enables hosted vs self-hosted feature distinction.",
       "inputLabel": "License Key",
-      "inputPlaceholder": "nxf_live_••••••••••••••••",
-      "buttonSaving": "Saving…",
-      "buttonSaved": "✓ Saved",
-      "buttonUpdate": "Update",
+      "inputPlaceholder": "Enter your license key",
       "buttonSave": "Save",
-      "keyOnFile": "Key on file: {prefix}••••••••••••"
+      "buttonUpdate": "Update",
+      "buttonSaving": "Saving…",
+      "buttonSaved": "Saved",
+      "reveal": "Reveal",
+      "hide": "Hide",
+      "copy": "Copy",
+      "copied": "Copied",
+      "loading": "Loading…",
+      "notFound": "No license key found"
     },
     "projectInfo": {
       "sectionTitle": "Project Info",
       "nameLabel": "Project Name",
-      "namePlaceholder": "My Underpeaks App",
+      "namePlaceholder": "e.g. My Project",
       "urlLabel": "Project URL",
-      "urlHint": "The public URL of your deployed app.",
-      "urlPlaceholder": "https://app.example.com"
-    },
-    "logs": {
-      "savingLicenseKey": "Saving NXT Flutter license key...",
-      "licenseKeySaved": "License key saved successfully",
-      "savingProjectInfo": "Saving project info...",
-      "projectInfoSaved": "Project info saved successfully"
+      "urlHint": "The public URL for this project",
+      "urlPlaceholder": "https://example.com"
     }
   },
   "smtpPage": {
@@ -1460,7 +1503,7 @@
     "saveButtonSaving": "Saving…",
     "upgrade": {
       "title": "Hosted plan required",
-      "description": "These features require Underpeaks's hosted infrastructure. Upgrade to unlock them.",
+      "description": "These features require NXTFlutter's hosted infrastructure. Upgrade to unlock them.",
       "button": "Upgrade"
     },
     "groups": {
@@ -1589,7 +1632,8 @@
       "colours": "Colours",
       "typography": "Typography",
       "spacing": "Spacing & Radius",
-      "featureFlags": "Feature Flags"
+      "featureFlags": "Feature Flags",
+      "presets": "Presets"
     }
   },
   "consoleLayout": {
@@ -1641,8 +1685,7 @@
       "writeConfigFailed": "Failed to write config file: {message}",
       "setupStorageFailed": "Failed to setup storage: {message}",
       "installDemoFailed": "Failed to install demo content: {message}",
-      "stepFailed": "Step failed: {step} - {message}",
-      "nameInvalid": "Project name must contain letters only"
+      "stepFailed": "Step failed: {step} - {message}"
     },
     "logs": {
       "tablesCreated": "Tables created:",
@@ -1744,7 +1787,7 @@
     }
   },
   "demoPage": {
-    "logoAlt": "NXT Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "projectType": {
       "title": "Select Project Type",
@@ -1778,7 +1821,7 @@
     }
   },
   "donePage": {
-    "logoAlt": "NXT Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "installComplete": "🎉 Installation Complete!",
     "stack": {
@@ -1818,7 +1861,7 @@
     "continueButton": "Continue to → Sign In"
   },
   "ecommercePage": {
-    "logoAlt": "NXT Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "card": {
       "title": "Customize your e-commerce modules"
@@ -1843,7 +1886,7 @@
     }
   },
   "finalizePage": {
-    "logoAlt": "NXT Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "card": {
       "title": "Finalize Setup"
@@ -1881,7 +1924,7 @@
     }
   },
   "modelsSelectionPage": {
-    "logoAlt": "NXT Flutter Logo",
+    "logoAlt": "Underpeaks Logo",
     "tagline": "Your All-in-One SaaS Installer & Code Generator",
     "heading": "Select Default Models",
     "subheading": "Choose the default data models you want to include in your project. You can create or edit models later.",
@@ -1912,8 +1955,7 @@
     "fields": {
       "name": {
         "label": "Project Name",
-        "placeholder": "e.g., MyApp Studio",
-        "hint": "Lowercase letters only — no numbers, spaces,no capitalisation, or special characters."
+        "placeholder": "e.g., MyApp Studio"
       },
       "domain": {
         "label": "Domain",
@@ -1929,8 +1971,7 @@
     "errors": {
       "nameRequired": "Project name is required",
       "subdomainRequired": "Subdomain is required",
-      "domainRequired": "Domain is required",
-      "nameInvalid": "Project name must contain letters only"
+      "domainRequired": "Domain is required"
     }
   },
   "welcomePage": {
@@ -1939,7 +1980,7 @@
     "continueButton": "Continue →",
     "continueLoading": "Loading...",
     "benefits": {
-      "heading": "Why Underpeaks?",
+      "heading": "Why Underpeaks ?",
       "item1": "🔧 Fullstack codebase generator (Next.js + Flutter)",
       "item2": "⚙️ No more boilerplate – just real production-ready code",
       "item3": "🌍 Multi-language and multi-tenant ready",
@@ -2543,6 +2584,24 @@
   "description": "The {templateName} template is part of the hosted plan. Upgrade to unlock kanban, calendar, checkout, and more.",
   "upgradeButton": "View hosted plan",
   "backButton":  "Back to pages"
+},
+"CookieBanner": {
+  "eyebrow": "PRIVACY",
+  "title": "We value your privacy",
+  "description": "We use cookies to keep you signed in, remember your language, and (with your consent) understand how visitors use the site. You can change your choices any time.",
+  "necessaryTitle": "Strictly necessary",
+  "necessaryDescription": "Required for sign-in, language preferences, and saving your cookie choice. Cannot be turned off.",
+  "analyticsTitle": "Analytics",
+  "analyticsDescription": "Help us understand which pages people visit and how the site performs. No personal data shared.",
+  "marketingTitle": "Marketing",
+  "marketingDescription": "Used to show relevant ads and measure campaign effectiveness across other sites.",
+  "alwaysOn": "Always on",
+  "acceptAll": "Accept all",
+  "rejectAll": "Reject all",
+  "customise": "Customise",
+  "savePreferences": "Save preferences",
+  "cookiePreferences": "Cookie preferences",
+  "policyLink": "Privacy policy"
 }
 
 

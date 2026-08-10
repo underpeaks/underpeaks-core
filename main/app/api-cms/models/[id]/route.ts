@@ -9,7 +9,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 
 async function getSessionUser(req: NextRequest): Promise<{ user_id: string } | null> {
   try {

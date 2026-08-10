@@ -46,6 +46,15 @@
       "description": "Ordered array of KpiBlock objects — each block holds 1-4 KPI configs"
     },
     {
+      "name": "widgets",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "[]",
+      "hidden": false,
+      "ui_type": "code-editor",
+      "description": "Ordered array of dashboard chart/stat widgets — separate from blocks, which is the KPI number-card layout"
+    },
+    {
       "name": "updated_at",
       "type": "timestamp with time zone",
       "nullable": false,

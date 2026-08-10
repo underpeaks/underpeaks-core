@@ -116,19 +116,19 @@ export default function TopNavbar({ user: propUser, logoUrl, projectName }: TopN
       // Fetch notifications and messages simultaneously.
       // Promise.all() runs both requests in parallel and waits for both to complete.
       // This is faster than awaiting them one at a time.
-      const [notifRes, msgRes] = await Promise.all([
+      const [notifRes, ] = await Promise.all([
         fetch('/api/notifications/list', { headers }),
-        fetch('/api/messages/list',      { headers }),
+       //fetch('/api/messages/list',      { headers }),
       ])
 
       const notifData = await notifRes.json()
-      const msgData   = await msgRes.json()
+      //const msgData   = await msgRes.json()
 
       console.log(notifData);
 
       // Only update state if the expected data shape is present in the response
       if (notifData.notifications) setNotifications(notifData.notifications)
-      if (msgData.conversations)   setConversations(msgData.conversations)
+      //if (msgData.conversations)   setConversations(msgData.conversations)
 
     } catch {
       // Log that the fetch failed without exposing the raw error (which may contain
@@ -298,11 +298,11 @@ export default function TopNavbar({ user: propUser, logoUrl, projectName }: TopN
             onMarkAllRead={handleMarkAllNotificationsRead}
           />
 
-          {/* Messages dropdown */}
+          {/* Messages dropdown
           <MessagesDropdown
             conversations={conversations}
             onMarkRead={handleMarkConversationRead}
-          />
+          /> */}
 
           <Separator orientation="vertical" className="h-6 bg-gray-200 mx-1" aria-hidden="true" />
 

@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import crypto                        from 'crypto'
 import nodemailer                    from 'nodemailer'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 export async function POST(req: NextRequest) {
   console.log('[Signin API] Request received')

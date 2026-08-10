@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { KpiPageConfig }             from '@/app/[locale]/console/kpi/kpi';
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter ';
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
 
 interface StoredKpiConfig extends KpiPageConfig {
   id?:      string;

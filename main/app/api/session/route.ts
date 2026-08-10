@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import mysql                         from 'mysql2/promise'
-import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 
 export async function POST(req: NextRequest) {
   console.log('[Sessions API] Request received')

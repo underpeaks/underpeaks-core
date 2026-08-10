@@ -3,7 +3,7 @@
  * POST /api/models  — Create a new model in nxf_system_models and the real DB table.
  */
 
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 import { v4 as uuidv4 }             from 'uuid'
 

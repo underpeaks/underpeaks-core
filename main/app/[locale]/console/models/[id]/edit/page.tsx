@@ -1,3 +1,4 @@
+//app/[locale]/console/models/[id]/edit/page.tsx
 'use client'
 
 import { useState, useEffect }   from 'react'
@@ -57,7 +58,6 @@ export default function EditModelPage() {
   const [warningFieldIndex, setWarningFieldIndex] = useState<number | null>(null)
   const [tagInputs,         setTagInputs]         = useState<Record<number, string>>({})
 
-  // Reassign order values based on current array position
   const reindexOrder = (arr: Field[]): Field[] =>
     arr.map((f, i) => ({ ...f, order: i }))
 
@@ -69,61 +69,61 @@ export default function EditModelPage() {
   }, [user, id])
 
   async function loadModel(userId: string) {
-  setLoading(true)
-  setError(null)
-  try {
-    const res  = await fetch(`/api/models?user_id=${userId}`)
-    const text = await res.text()
-    if (!text) throw new Error(t('errors.loadModelFailed'))
-    const data = JSON.parse(text)
-    if (!res.ok) throw new Error(data.error || t('errors.loadModelFailed'))
-    const model = (data.models ?? []).find((m: any) => m.sm_id === id)
-    if (!model) throw new Error(t('errors.modelNotFound'))
-    setModelName(model.name)
-    setOriginalName(model.name)
+    setLoading(true)
+    setError(null)
+    try {
+      const res  = await fetch(`/api/models?user_id=${userId}`)
+      const text = await res.text()
+      if (!text) throw new Error(t('errors.loadModelFailed'))
+      const data = JSON.parse(text)
+      if (!res.ok) throw new Error(data.error || t('errors.loadModelFailed'))
+      const model = (data.models ?? []).find((m: any) => m.sm_id === id)
+      if (!model) throw new Error(t('errors.modelNotFound'))
+      setModelName(model.name)
+      setOriginalName(model.name)
 
-    // Extract columns array from any schema shape:
-    //   - { version, columns: [...], hooks, integrations }  ← canonical
-    //   - [ col, col, col ]                                  ← legacy bare array
-    //   - anything else                                      ← empty
-    let rawColumns: any[] = []
-    const rawSchema = model.schema
+      let rawColumns: any[] = []
+      const rawSchema = model.schema
 
-    if (Array.isArray(rawSchema)) {
-      rawColumns = rawSchema
-    } else if (rawSchema && typeof rawSchema === 'object' && Array.isArray(rawSchema.columns)) {
-      rawColumns = rawSchema.columns
+      if (Array.isArray(rawSchema)) {
+        rawColumns = rawSchema
+      } else if (rawSchema && typeof rawSchema === 'object' && Array.isArray(rawSchema.columns)) {
+        rawColumns = rawSchema.columns
+      }
+
+      const sorted = [...rawColumns].sort((a: any, b: any) => {
+        const ao = a.order ?? Number.MAX_SAFE_INTEGER
+        const bo = b.order ?? Number.MAX_SAFE_INTEGER
+        return ao - bo
+      })
+
+      const schema: Field[] = sorted.map((f: any, i: number) => {
+        const ui_type  = f.ui_type ?? getDefaultUiType(f.type ?? 'string')
+        const isSelect = SELECT_UI_TYPES.includes(ui_type) && !f.foreign_key
+
+        return {
+          name:            f.name            ?? '',
+          type:            f.type            ?? 'string',
+          nullable:        f.nullable        ?? true,
+          unique:          f.unique          ?? false,
+          is_primary:      f.is_primary      ?? false,
+          hidden:          f.hidden          ?? false,
+          ui_type,
+          foreign_key:     f.foreign_key,
+          options_mode:    f.options_mode ?? (isSelect ? 'manual' : undefined),
+          options:         f.options ?? (isSelect ? [] : undefined),
+          options_source:  f.options_source,
+          order:           f.order ?? i,
+        }
+      })
+      setFields(schema)
+      setOriginalSchema(JSON.parse(JSON.stringify(schema)))
+    } catch (err: any) {
+      setError(err.message || t('errors.loadModelFailed'))
+    } finally {
+      setLoading(false)
     }
-
-    // Sort by order if present
-    const sorted = [...rawColumns].sort((a: any, b: any) => {
-      const ao = a.order ?? Number.MAX_SAFE_INTEGER
-      const bo = b.order ?? Number.MAX_SAFE_INTEGER
-      return ao - bo
-    })
-
-    const schema: Field[] = sorted.map((f: any, i: number) => ({
-      name:            f.name            ?? '',
-      type:            f.type            ?? 'string',
-      nullable:        f.nullable        ?? true,
-      unique:          f.unique          ?? false,
-      is_primary:      f.is_primary      ?? false,
-      hidden:          f.hidden          ?? false,
-      ui_type:         f.ui_type         ?? getDefaultUiType(f.type ?? 'string'),
-      foreign_key:     f.foreign_key,
-      options_mode:    f.options_mode,
-      options:         f.options,
-      options_source:  f.options_source,
-      order:           f.order ?? i,
-    }))
-    setFields(schema)
-    setOriginalSchema(JSON.parse(JSON.stringify(schema)))
-  } catch (err: any) {
-    setError(err.message || t('errors.loadModelFailed'))
-  } finally {
-    setLoading(false)
   }
-}
 
   async function loadModelNames(userId: string) {
     try {
@@ -146,6 +146,9 @@ export default function EditModelPage() {
           delete updated[index].options_mode
           delete updated[index].options
           delete updated[index].options_source
+        } else if (!updated[index].options_mode) {
+          updated[index].options_mode = 'manual'
+          updated[index].options      = []
         }
       }
 
@@ -244,7 +247,6 @@ export default function EditModelPage() {
     setWarningChecked(false)
   }
 
-  // Drag-and-drop reorder
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return
     if (result.destination.index === result.source.index) return
@@ -256,7 +258,6 @@ export default function EditModelPage() {
       return reindexOrder(updated)
     })
 
-    // Keep expanded row tracking the moved field
     if (expandedIndex === result.source.index) {
       setExpandedIndex(result.destination.index)
     } else if (
@@ -274,23 +275,11 @@ export default function EditModelPage() {
     }
   }
 
+  // RELAXED FOR CORE: select fields no longer require populated options or a
+  // fully-configured dynamic source to save. options_mode still gets tagged
+  // if present, but an empty/unset select is allowed through — Anton's call:
+  // self-hosted users can leave a select's options empty if they don't need them.
   const validateSelectFields = (): string | null => {
-    for (let i = 0; i < fields.length; i++) {
-      const f = fields[i]
-      if (!SELECT_UI_TYPES.includes(f.ui_type ?? '')) continue
-      if (!f.options_mode) {
-        return `Field "${f.name || `#${i + 1}`}" is a ${f.ui_type} — please choose Manual options or Dynamic source.`
-      }
-      if (f.options_mode === 'manual' && (!f.options || f.options.length === 0)) {
-        return `Field "${f.name || `#${i + 1}`}" is a ${f.ui_type} with manual options — add at least one option.`
-      }
-      if (f.options_mode === 'dynamic') {
-        const src = f.options_source
-        if (!src?.table || !src?.label_column || !src?.value_column) {
-          return `Field "${f.name || `#${i + 1}`}" is a ${f.ui_type} with dynamic source — select a table, label column, and value column.`
-        }
-      }
-    }
     return null
   }
 
@@ -307,7 +296,6 @@ export default function EditModelPage() {
 
     setSaving(true)
     try {
-      // Ensure order is set on every field before saving
       const columnsWithOrder = reindexOrder(fields)
 
       const schemaPayload = {
@@ -351,7 +339,6 @@ export default function EditModelPage() {
     <div className="h-full overflow-y-auto">
       <div className="p-6 max-w-4xl mx-auto">
 
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <Link
@@ -376,14 +363,12 @@ export default function EditModelPage() {
           </button>
         </div>
 
-        {/* Error banner */}
         {error && (
           <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
             {error}
           </div>
         )}
 
-        {/* Model name */}
         <div className="mb-6 bg-white border border-gray-200 rounded-xl p-4">
           <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
             {t('form.modelNameLabel')}
@@ -397,7 +382,6 @@ export default function EditModelPage() {
           />
         </div>
 
-        {/* Fields — draggable */}
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="fields-list">
             {(provided) => (
@@ -430,9 +414,7 @@ export default function EditModelPage() {
                               : 'border-gray-200'
                           }`}
                         >
-                          {/* Basic row */}
                           <div className="flex items-center gap-3 px-4 py-3">
-                            {/* Drag handle */}
                             <div
                               {...dragProvided.dragHandleProps}
                               className="cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 p-1 -ml-1"
@@ -482,7 +464,6 @@ export default function EditModelPage() {
                             </button>
                           </div>
 
-                          {/* Advanced options */}
                           {isExpanded && (
                             <div className="px-4 pb-4 pt-1 border-t border-gray-100 space-y-4">
                               <div className="grid grid-cols-2 gap-4">
@@ -536,16 +517,12 @@ export default function EditModelPage() {
                                 </div>
                               </div>
 
-                              {/* Select / Multi-select options */}
                               {isSelectType && (
                                 <div className="border border-amber-200 bg-amber-50 rounded-lg p-4 space-y-3">
                                   <div className="flex items-center justify-between">
                                     <p className="text-xs font-semibold text-amber-700 uppercase tracking-wide">
                                       {field.ui_type === 'select' ? 'Select Options' : 'Multi-Select Options'}
                                     </p>
-                                    {!field.options_mode && (
-                                      <span className="text-[10px] text-red-500 font-medium">Required</span>
-                                    )}
                                   </div>
 
                                   <div className="flex rounded-lg border border-gray-200 overflow-hidden">
@@ -622,7 +599,7 @@ export default function EditModelPage() {
                                         </div>
                                       )}
                                       {(field.options ?? []).length === 0 && (
-                                        <p className="text-xs text-gray-400">No options added yet — add at least one.</p>
+                                        <p className="text-xs text-gray-400">No options added yet (optional).</p>
                                       )}
                                     </div>
                                   )}
@@ -677,7 +654,6 @@ export default function EditModelPage() {
                                 </div>
                               )}
 
-                              {/* Foreign key */}
                               <div>
                                 <label className="block text-xs font-medium text-gray-500 mb-1">
                                   {t('form.foreignKey')}
@@ -710,7 +686,6 @@ export default function EditModelPage() {
           </Droppable>
         </DragDropContext>
 
-        {/* Add field */}
         <button
           type="button"
           onClick={addField}

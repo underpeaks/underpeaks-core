@@ -20,7 +20,7 @@
  *   500 { config: null }          — Unexpected server error.
  */
 
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse }  from 'next/server'
 
 export async function GET(req: NextRequest): Promise<NextResponse> {

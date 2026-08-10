@@ -7,7 +7,9 @@
       "type": "string",
       "nullable": false,
       "is_primary": true,
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     },
     {
     "name": "project_id",
@@ -16,7 +18,9 @@
     "foreign_key": {
       "references": "nxf_system_projects(project_id)"
     },
-    "hidden": true
+    "hidden": true,
+    "options_mode": "manual",
+    "options": []
   },
   {
     "name": "tenant_id",
@@ -25,56 +29,72 @@
     "foreign_key": {
       "references": "nxf_system_tenants(ten_id)"
     },
-    "hidden": true
+    "hidden": true,
+    "options_mode": "manual",
+    "options": []
   },
     {
       "name": "full_name",
       "type": "string",
       "nullable": false,
       "hidden": false,
-      "ui_type": "textfield"
+      "ui_type": "textfield",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "username",
       "type": "string",
       "nullable": false,
       "hidden": false,
-      "ui_type": "slug-input"
+      "ui_type": "slug-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "email",
       "type": "string",
       "nullable": false,
       "hidden": false,
-      "ui_type": "email-input"
+      "ui_type": "email-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "bio",
       "type": "string",
       "nullable": true,
       "hidden": false,
-      "ui_type": "textarea"
+      "ui_type": "textarea",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "avatar_url",
       "type": "string",
       "nullable": true,
       "hidden": false,
-      "ui_type": "image-upload"
+      "ui_type": "image-upload",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "cover_image_url",
       "type": "string",
       "nullable": true,
       "hidden": false,
-      "ui_type": "image-upload"
+      "ui_type": "image-upload",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "website_url",
       "type": "string",
       "nullable": true,
       "hidden": false,
-      "ui_type": "url-input"
+      "ui_type": "url-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "social_links",
@@ -82,7 +102,9 @@
       "nullable": true,
       "default": "{}",
       "hidden": false,
-      "ui_type": "code-editor"
+      "ui_type": "code-editor",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "roles",
@@ -90,7 +112,9 @@
       "nullable": true,
       "default": "{}",
       "hidden": false,
-      "ui_type": "tags-input"
+      "ui_type": "tags-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "is_verified",
@@ -98,7 +122,9 @@
       "nullable": true,
       "default": false,
       "hidden": false,
-      "ui_type": "toggle"
+      "ui_type": "toggle",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "is_active",
@@ -106,28 +132,36 @@
       "nullable": true,
       "default": true,
       "hidden": false,
-      "ui_type": "toggle"
+      "ui_type": "toggle",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "seo_slug",
       "type": "string",
       "nullable": false,
       "hidden": false,
-      "ui_type": "slug-input"
+      "ui_type": "slug-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "seo_title",
       "type": "string",
       "nullable": true,
       "hidden": false,
-      "ui_type": "textfield"
+      "ui_type": "textfield",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "seo_description",
       "type": "string",
       "nullable": true,
       "hidden": false,
-      "ui_type": "textarea"
+      "ui_type": "textarea",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "seo_keywords",
@@ -135,7 +169,9 @@
       "nullable": true,
       "default": "{}",
       "hidden": false,
-      "ui_type": "tags-input"
+      "ui_type": "tags-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "total_posts",
@@ -143,7 +179,9 @@
       "nullable": true,
       "default": 0,
       "hidden": false,
-      "ui_type": "number-input"
+      "ui_type": "number-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "total_views",
@@ -151,19 +189,25 @@
       "nullable": true,
       "default": 0,
       "hidden": false,
-      "ui_type": "number-input"
+      "ui_type": "number-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "created_at",
       "type": "datetime",
       "nullable": false,
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "updated_at",
       "type": "datetime",
       "nullable": true,
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     }
   ],
   "constraints": []

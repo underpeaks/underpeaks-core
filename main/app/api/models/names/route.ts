@@ -8,7 +8,7 @@
  * route so sm_id always contains the real Firestore document ID.
  */
 
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
 function normaliseSchema(schema: any): any[] {

@@ -49,7 +49,9 @@
       "nullable": false,
       "comment": "self_hosted | hosted",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["self_hosted", "hosted"]
     },
     {
       "name": "hosted_api_key",
@@ -65,7 +67,9 @@
       "default": "draft",
       "comment": "draft | configured | generated | deployed | disabled",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["draft", "configured", "generated", "deployed", "disabled"]
     },
     {
       "name": "selected_stack",
@@ -73,7 +77,9 @@
       "nullable": false,
       "comment": "next | flutter | both",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["next", "flutter", "both"]
     },
     {
       "name": "selected_project_type",
@@ -82,7 +88,9 @@
       "default": "blank",
       "comment": "blank | ecommerce | saas | social | etc",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["blank", "ecommerce", "saas", "social", "marketplace", "blog"]
     },
     {
       "name": "selected_db",
@@ -90,7 +98,9 @@
       "nullable": false,
       "comment": "firebase | supabase | postgres | mysql | mongodb",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["firebase", "supabase", "postgres", "mysql", "mongodb"]
     },
     {
       "name": "db_config",

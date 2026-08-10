@@ -3,7 +3,7 @@
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
 import { decryptApiKey }             from '@/app/lib/apiKeyEncryption'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 export async function POST(req: NextRequest) {
   try {

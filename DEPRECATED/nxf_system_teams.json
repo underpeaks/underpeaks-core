@@ -1,37 +1,63 @@
-[
-  {
-    "st_id": "team_001",
-    "project_id": "proj_001",
-    "name": "Core Platform Team",
-    "created_at": "2026-03-01T08:00:00Z",
-    "updated_at": "2026-04-15T09:00:00Z"
+{
+  "table_name": "nxf_system_teams",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "st_id",
+      "type": "string",
+      "nullable": false,
+      "default": "gen_random_uuid()",
+      "hidden": true
+    },
+{
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
   },
   {
-    "st_id": "team_002",
-    "project_id": "proj_001",
-    "name": "Frontend Flutter Team",
-    "created_at": "2026-03-05T10:00:00Z",
-    "updated_at": "2026-04-15T09:10:00Z"
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
   },
-  {
-    "st_id": "team_003",
-    "project_id": "proj_001",
-    "name": "Backend API Team",
-    "created_at": "2026-03-10T12:00:00Z",
-    "updated_at": "2026-04-15T09:20:00Z"
-  },
-  {
-    "st_id": "team_004",
-    "project_id": "proj_002",
-    "name": "Marketplace Operations",
-    "created_at": "2026-03-15T09:30:00Z",
-    "updated_at": "2026-04-15T09:30:00Z"
-  },
-  {
-    "st_id": "team_005",
-    "project_id": "proj_003",
-    "name": "DevOps & Infrastructure",
-    "created_at": "2026-03-20T14:00:00Z",
-    "updated_at": "2026-04-15T09:40:00Z"
-  }
-]
+    {
+      "name": "name",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    },
+    {
+      "name": "updated_at",
+      "type": "timestamp with time zone",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    }
+  ],
+  "primary_key": ["st_id"],
+  "foreign_keys": [
+    {
+      "column": "project_id",
+      "references": {
+        "table": "nxf_system_projects",
+        "column": "project_id",
+        "on_delete": "CASCADE"
+      }
+    }
+  ]
+}

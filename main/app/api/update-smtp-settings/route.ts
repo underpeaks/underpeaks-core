@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto                        from 'crypto'
 import fs                            from 'fs'
 import path                          from 'path'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 // ---------------------------------------------------------------------------
 // Constants + helpers — all unchanged

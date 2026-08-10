@@ -7,7 +7,9 @@
       "type": "string",
       "nullable": false,
       "is_primary": true,
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "project_id",
@@ -16,7 +18,9 @@
       "foreign_key": {
         "references": "nxf_system_projects(project_id)"
       },
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "tenant_id",
@@ -25,7 +29,9 @@
       "foreign_key": {
         "references": "nxf_system_tenants(ten_id)"
       },
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "page_id",
@@ -44,7 +50,9 @@
       "nullable": false,
       "description": "display text shown in the navigation menu",
       "hidden": false,
-      "ui_type": "textfield"
+      "ui_type": "textfield",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "icon",
@@ -53,7 +61,9 @@
       "default": "FiFileText",
       "description": "icon name from react-icons/fi (e.g. FiHome, FiPackage)",
       "hidden": false,
-      "ui_type": "icon-picker"
+      "ui_type": "icon-picker",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "order",
@@ -62,7 +72,9 @@
       "default": 0,
       "description": "sort order within the menu level — lower numbers appear first",
       "hidden": false,
-      "ui_type": "number-input"
+      "ui_type": "number-input",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "parent_id",
@@ -83,7 +95,9 @@
       "default": "_self",
       "description": "_self | _blank — whether the link opens in the same or a new tab",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["_self", "_blank"]
     },
     {
       "name": "visible",
@@ -92,7 +106,9 @@
       "default": true,
       "description": "whether this item is shown in the nav — hidden items are saved but not rendered",
       "hidden": false,
-      "ui_type": "toggle"
+      "ui_type": "toggle",
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "is_system",
@@ -100,19 +116,25 @@
       "nullable": false,
       "default": false,
       "description": "system menu items (Dashboard, Users) cannot be edited or deleted",
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "created_at",
       "type": "datetime",
       "nullable": false,
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "updated_at",
       "type": "datetime",
       "nullable": true,
-      "hidden": true
+      "hidden": true,
+      "options_mode": "manual",
+      "options": []
     }
   ],
   "indexes": [

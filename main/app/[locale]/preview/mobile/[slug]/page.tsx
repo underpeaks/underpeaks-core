@@ -10,7 +10,7 @@ import LockedPlaceholder      from '@/app/[locale]/console/[slug]/components/Loc
 import type {
   PageRecord, ModelRecord,
 } from '@/app/[locale]/console/[slug]/types'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 interface MobilePreviewProps {
   params: Promise<{ locale: string; slug: string }>

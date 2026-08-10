@@ -4,7 +4,7 @@ import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
 import fs                            from 'fs'
 import path                          from 'path'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 // ---------------------------------------------------------------------------
 // Helper: patch local config file

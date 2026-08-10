@@ -45,7 +45,7 @@ import fs                            from 'fs'
 import path                          from 'path'
 import sharp                         from 'sharp'
 import { v4 as uuidv4 }              from 'uuid'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 // ---------------------------------------------------------------------------
 // POST handler

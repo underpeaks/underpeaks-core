@@ -7,7 +7,7 @@ import { cookies }            from 'next/headers'
 import { notFound }           from 'next/navigation'
 import DetailTemplate         from '../components/admin/DetailTemplate'
 import type { PageRecord, ModelRecord } from '../types'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 interface DetailPageProps {
   params: Promise<{ locale: string; slug: string; id: string }>

@@ -1,3 +1,4 @@
+//app/api/models/[id]/route.ts
 /**
  * PUT    /api/models/[id] — Update a model's name and/or schema.
  * DELETE /api/models/[id] — Delete a model and drop the underlying table.
@@ -22,7 +23,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { ColumnDef }                 from '@/app/db-adapter/types'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 // ---------------------------------------------------------------------------
 // PUT — Update an existing model
@@ -47,8 +48,6 @@ export async function PUT(
 
     const { user_id, name, schema, old_name, old_schema } = body
 
-    // Extract columns from both new and old schema (versioned object format)
-    // Handle legacy bare-array format defensively too
     const newColumns: ColumnDef[] = Array.isArray(schema?.columns)
       ? schema.columns
       : Array.isArray(schema)
@@ -103,11 +102,13 @@ export async function PUT(
     }
 
     // Step 3 — Update the nxf_system_models record with the full versioned schema
+    // FIX: PK is sm_id, not id — missing idColumn 5th arg meant this always
+    // targeted a non-existent 'id' column.
     await adapter.update!(dbConfig, 'nxf_system_models', id, {
       name,
-      schema,        // ← store the full versioned object
+      schema,
       updated_at: new Date().toISOString(),
-    })
+    }, 'sm_id')
 
     return NextResponse.json({ success: true })
 
@@ -131,10 +132,6 @@ export async function DELETE(
   try {
     const { id } = params
 
-    // -----------------------------------------------------------------------
-    // Parse body safely
-    // -----------------------------------------------------------------------
-
     let body: any
     try {
       body = await req.json()
@@ -154,10 +151,6 @@ export async function DELETE(
       )
     }
 
-    // -----------------------------------------------------------------------
-    // Block system table deletion
-    // -----------------------------------------------------------------------
-
     if (name.toLowerCase().startsWith('nxf_system_')) {
       return NextResponse.json(
         { error: 'System tables cannot be deleted' },
@@ -168,30 +161,14 @@ export async function DELETE(
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
-    // -----------------------------------------------------------------------
     // Step 1 — Drop the actual table / delete all documents
-    // -----------------------------------------------------------------------
-
-    /**
-     * For Firebase: dropTable now batch-deletes all documents in the
-     * collection. Firestore collections disappear naturally when empty.
-     *
-     * For SQL databases: issues DROP TABLE CASCADE so all dependent
-     * foreign key references are also cleaned up.
-     *
-     * We drop the table BEFORE removing the nxf_system_models record so
-     * that if the drop fails, the metadata record is still intact and
-     * the user can retry.
-     */
     if (adapter.dropTable) {
       await adapter.dropTable(name)
     }
 
-    // -----------------------------------------------------------------------
     // Step 2 — Remove the model metadata from nxf_system_models
-    // -----------------------------------------------------------------------
-
-    await adapter.delete!(dbConfig, 'nxf_system_models', id)
+    // FIX: PK is sm_id, not id — same missing idColumn issue as PUT above.
+    await adapter.delete!(dbConfig, 'nxf_system_models',  'sm_id')
 
     return NextResponse.json({ success: true })
 

@@ -45,7 +45,9 @@
       "default": "active",
       "description": "active, revoked",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["active", "revoked"]
     },
     "rate_limit_count": {
       "type": "integer",

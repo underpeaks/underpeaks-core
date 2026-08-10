@@ -72,6 +72,7 @@ import { useState, useRef, useEffect } from 'react'
 import { FiUpload, FiX, FiFile, FiCheck } from 'react-icons/fi'
 import { UploadConfig, UploadResult }  from './types'
 import { getAcceptString }             from './acceptString'
+import { useTranslations } from 'next-intl'
 
 // ---------------------------------------------------------------------------
 // Props
@@ -113,7 +114,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
    * t — Translation function scoped to the 'uploadZone' namespace.
    * Use t('key') to retrieve the translated string for that key.
    */
-  
+  const t = useTranslations('uploadZone')
 
   // -------------------------------------------------------------------------
   // Refs
@@ -242,7 +243,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
    */
   const processFile = async (file: File) => {
     if (!effectiveFolder.trim()) {
-      onError(('errors.noFolder'))
+      onError(t('errors.noFolder'))
       return
     }
 
@@ -314,15 +315,15 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
           } else {
             try {
               const data = JSON.parse(xhr.responseText)
-              reject(new Error(data.error ?? ('errors.uploadFailed')))
+              reject(new Error(data.error ?? t('errors.uploadFailed')))
             } catch {
-              reject(new Error(`${('errors.uploadFailedStatus')} ${xhr.status} ${xhr.statusText}`))
+              reject(new Error(`${t('errors.uploadFailedStatus')} ${xhr.status} ${xhr.statusText}`))
             }
           }
         })
 
         /** Handle network-level failures (no response received at all). */
-        xhr.addEventListener('error', () => reject(new Error(('errors.networkError'))))
+        xhr.addEventListener('error', () => reject(new Error(t('errors.networkError'))))
 
         xhr.open('POST', '/api/storage/upload-file')
 
@@ -343,7 +344,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
 
     } catch (err: any) {
       /** Upload failed — notify parent and reset visual state. */
-      onError(err.message ?? ('errors.uploadFailed'))
+      onError(err.message ?? t('errors.uploadFailed'))
       setPreview(null)
       setProgress(0)
     } finally {
@@ -415,7 +416,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
 
           {/* Section label */}
           <label className="text-xs font-semibold text-gray-700">
-            {('folderSelector.label')}
+            {t('folderSelector.label')}
           </label>
 
           {/* Existing folder pills — one button per folder returned by the API */}
@@ -449,8 +450,8 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
             }`}
           >
             {folders.length > 0
-              ? ('folderSelector.customFolder')
-              : ('folderSelector.enterFolderName')
+              ? t('folderSelector.customFolder')
+              : t('folderSelector.enterFolderName')
             }
           </button>
 
@@ -460,7 +461,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
               type="text"
               value={customFolder}
               onChange={(e) => setCustomFolder(e.target.value)}
-              placeholder={('folderSelector.placeholder')}
+              placeholder={t('folderSelector.placeholder')}
               className="w-full px-3 py-2 text-sm border border-gray-200 rounded-md bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300"
             />
           )}
@@ -468,7 +469,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
           {/* Displays the resolved destination path to reassure the user */}
           {effectiveFolder && (
             <p className="text-[11px] text-gray-400">
-              {('folderSelector.uploadingTo')}{' '}
+              {t('folderSelector.uploadingTo')}{' '}
               <span className="font-mono text-gray-600">/{effectiveFolder}/</span>
             </p>
           )}
@@ -494,7 +495,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
           {/* Thumbnail for images, generic file icon for other types */}
           <div className="w-16 h-16 rounded-md border border-gray-200 bg-white flex items-center justify-center overflow-hidden shrink-0">
             {isImage(preview)
-              ? <img src={preview} alt={('preview.alt')} className="w-full h-full object-contain" />
+              ? <img src={preview} alt={t('preview.alt')} className="w-full h-full object-contain" />
               : <FiFile size={24} className="text-gray-400" />
             }
           </div>
@@ -504,7 +505,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
             <div className="flex items-center gap-1.5">
               <FiCheck size={13} className="text-green-500 shrink-0" />
               <p className="text-sm font-medium text-gray-700 truncate">
-                {fileName ?? ('preview.uploaded')}
+                {fileName ?? t('preview.uploaded')}
               </p>
             </div>
             <p className="text-xs text-gray-400 font-mono mt-0.5">
@@ -519,13 +520,13 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
               onClick={() => inputRef.current?.click()}
               className="px-3 py-1.5 text-xs font-medium border border-gray-200 rounded-md hover:bg-gray-100 transition text-gray-600"
             >
-              {('preview.replace')}
+              {t('preview.replace')}
             </button>
             <button
               type="button"
               onClick={handleClear}
               className="p-1.5 rounded-md hover:bg-red-50 text-gray-400 hover:text-red-500 transition"
-              aria-label={('preview.clear')}
+              aria-label={t('preview.clear')}
             >
               <FiX size={14} />
             </button>
@@ -573,8 +574,8 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
           <div className="text-center">
             <p className="text-sm font-medium text-gray-600">
               {uploading
-                ? `${('dropzone.uploading')} ${progress}%`
-                : <>{('dropzone.idle')} <span className="text-blue-500">{('dropzone.browse')}</span></>
+                ? `${t('dropzone.uploading')} ${progress}%`
+                : <>{t('dropzone.idle')} <span className="text-blue-500">{t('dropzone.browse')}</span></>
               }
             </p>
             {config.hint && (
@@ -595,7 +596,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
           {/* Recommended spec label — shown only when provided and not uploading */}
           {config.recommended && !uploading && (
             <p className="text-[10px] text-gray-400 bg-gray-100 px-2 py-0.5 rounded">
-              {('dropzone.recommended')} {config.recommended}
+              {t('dropzone.recommended')} {config.recommended}
             </p>
           )}
 

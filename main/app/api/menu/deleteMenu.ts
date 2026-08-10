@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { resolveDocumentId }         from './resolveDocumentId'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 export async function handleDeleteMenu(req: NextRequest): Promise<NextResponse> {
   let body: any
