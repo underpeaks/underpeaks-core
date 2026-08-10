@@ -46,7 +46,9 @@
       "type": "string",
       "nullable": false,
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["create", "update", "delete"]
     },
     {
       "name": "user_id",

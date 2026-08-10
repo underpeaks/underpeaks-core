@@ -57,7 +57,9 @@
       "default": "string",
       "description": "string, number, boolean, json",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["string", "number", "boolean", "json"]
     },
     {
       "name": "category",
@@ -65,7 +67,9 @@
       "nullable": false,
       "description": "ui, auth, billing, notifications, system, integrations",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["ui", "auth", "billing", "notifications", "system", "integrations"]
     },
     {
       "name": "is_public",

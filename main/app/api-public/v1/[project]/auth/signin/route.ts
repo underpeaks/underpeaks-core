@@ -2,7 +2,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { validateCoreApiKey } from '@/app/lib/coreApiAuth'
 import { coreCors, safeCustomer, issueCoreCustomerToken } from '@/app/lib/customerAuthCore'
 

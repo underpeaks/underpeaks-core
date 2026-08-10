@@ -110,15 +110,15 @@ export default function HostedUpgradeDialog({
                 ))}
               </div>
             </div>
-
+{/* 
             <div style={{ marginTop: '1.5rem', padding: '1rem', borderRadius: '0.75rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)' }}>
               <p style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Starting from</p>
               <p style={{ fontSize: '1.6rem', fontWeight: 700, marginTop: '0.2rem' }}>
-                $29.95<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.5)' }}>/mo</span>
+                $39.95<span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'rgba(255,255,255,0.5)' }}>/mo</span>
               </p>
               <p style={{ fontSize: '0.72rem', color: 'rgba(255,255,255,0.4)', marginTop: '0.2rem' }}>Hosting, updates & support included.</p>
-            </div>
-          </div>
+            </div>*/}
+          </div> 
 
           {/* RIGHT SIDE */}
           <div
@@ -161,10 +161,8 @@ export default function HostedUpgradeDialog({
             {/* 3x3 GRID */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.65rem', flex: 1 }}>
               {[
-                { icon: <Database size={16} />, title: 'Multi-DB Support', desc: 'Firebase, Supabase, PostgreSQL, MySQL & MongoDB via one unified adapter.' },
                 { icon: <Code size={16} />, title: 'Code Generation', desc: 'Auto-generate schemas, models and CMS UI from your data definitions.' },
                 { icon: <Share2 size={16} />, title: 'Schema Sharing', desc: 'Share and reuse model schemas across projects and teams instantly.' },
-                { icon: <ShieldCheck size={16} />, title: 'Self-Hosted', desc: 'Deploy on your own infrastructure with complete data ownership.' },
                 { icon: <Sparkles size={16} />, title: 'CMS Built-in', desc: 'Manage content, users and projects through a ready-made console.' },
                 { icon: <Globe size={16} />, title: 'i18n Ready', desc: 'Multi-language support out of the box — ship to global audiences.' },
                 { icon: <Layers size={16} />, title: 'Project Scoping', desc: 'Everything scoped to a project_id — clean multi-tenant architecture.' },

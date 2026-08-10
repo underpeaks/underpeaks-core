@@ -1,4 +1,4 @@
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function handleCreateMenu(req: NextRequest): Promise<NextResponse> {

@@ -14,7 +14,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 
 type Params = { project: string; id: string }
 

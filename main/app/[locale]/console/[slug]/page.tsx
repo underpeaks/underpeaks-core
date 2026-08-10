@@ -20,7 +20,7 @@
 
 import { cookies }              from 'next/headers'
 import { notFound }             from 'next/navigation'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import {
   getTemplate, templateRequiresModel,
 }                                from './components/templateRegistry'

@@ -32,12 +32,16 @@
     "transaction_status": {
       "type": "string",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["pending", "completed", "failed", "refunded", "cancelled"]
     },
     "payment_method": {
       "type": "string",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["card", "eft", "payfast", "paddle", "manual"]
     },
     "payment_gateway_response": {
       "type": "jsonb",
@@ -51,7 +55,9 @@
     "currency": {
       "type": "string",
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["ZAR", "USD", "EUR", "GBP"]
     },
     "transaction_date": {
       "type": "datetime",

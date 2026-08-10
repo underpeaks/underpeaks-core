@@ -8,7 +8,7 @@
  * POST creates or overwrites the theme document.
  */
 
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
 // ---------------------------------------------------------------------------
@@ -165,13 +165,13 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     if (theme_id) {
       // Update existing
-      await adapter.update!(dbConfig, 'nxf_themes', theme_id, {
+     await adapter.update!(dbConfig, 'nxf_themes', theme_id, {
         colours:    colours    ?? DEFAULT_THEME.colours,
         typography: typography ?? DEFAULT_THEME.typography,
         spacing:    spacing    ?? DEFAULT_THEME.spacing,
         flags:      flags      ?? DEFAULT_THEME.flags,
         updated_at: now,
-      })
+      }, 'theme_id')
     } else {
       // Create new
       await adapter.create!(dbConfig, 'nxf_themes', {

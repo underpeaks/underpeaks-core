@@ -2,7 +2,7 @@
 
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { signJwt } from '@/app/lib/jwt'
 
 const JWT_SECRET = process.env.JWT_ACCESS_SECRET;

@@ -23,7 +23,7 @@
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 import { validateCoreApiKey }        from '@/app/lib/coreApiAuth'
 
 const RATE_LIMIT     = 100   // requests per window

@@ -18,7 +18,7 @@
  *   500 { error: string } — Server error.
  */
 
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {

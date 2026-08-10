@@ -32,7 +32,7 @@
  *   500 { success: false, error }    — Unexpected server error.
  */
 
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest): Promise<NextResponse> {

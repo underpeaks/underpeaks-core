@@ -3,7 +3,7 @@
 import { NextRequest, NextResponse }              from 'next/server'
 import { getAvatarColour, getAvatarInitials }     from '@/app/lib/avatarColour'
 import { NxfUser, UpdateUserPayload, UserListRow } from '@/app/[locale]/console/types/users'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 async function getSupabaseAdminClient(dbConfig: any) {
   const { createClient } = await import('@supabase/supabase-js')

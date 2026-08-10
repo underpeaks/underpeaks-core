@@ -6,7 +6,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { NxfUser } from '@/app/[locale]/console/types/users';
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter ';
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
 
 
 export async function GET(

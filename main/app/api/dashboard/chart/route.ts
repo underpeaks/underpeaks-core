@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ChartComputeRequest, ChartDataPoint } from '@/app/[locale]/console/types/dashboard';
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter ';
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
 
 
 // ── Date helpers ──────────────────────────────────────────────

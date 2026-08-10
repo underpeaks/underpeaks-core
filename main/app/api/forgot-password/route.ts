@@ -25,7 +25,7 @@
  *   500 { error: string }                 — Unexpected server error
  */
 
-import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 import nodemailer                    from 'nodemailer'
 

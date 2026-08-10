@@ -33,7 +33,9 @@
       "type": "string",
       "nullable": false,
       "hidden": false,
-      "ui_type": "select"
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["pending", "in_progress", "success", "failed", "cancelled"]
     },
     "logs": {
       "type": "string",

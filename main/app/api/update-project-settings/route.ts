@@ -1,9 +1,9 @@
-// app/api/settings/update-project/route.ts
+//app/api/update-project-settings/route.ts
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
 import fs                            from 'fs'
 import path                          from 'path'
-import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 
 function patchEnvFile(key: string, value: string) {
   const envPath = path.resolve(process.cwd(), '.env.local')
@@ -14,12 +14,11 @@ function patchEnvFile(key: string, value: string) {
   fs.writeFileSync(envPath, content, 'utf-8')
 }
 
-function patchConfigFile(projectName: string, projectUrl: string) {
+function patchConfigFile(projectName: string) {
   const filePath = path.resolve(process.cwd(), 'underpeaks.config.json')
   if (!fs.existsSync(filePath)) return
   const config       = JSON.parse(fs.readFileSync(filePath, 'utf-8'))
   config.projectName = projectName
-  config.projectUrl  = projectUrl
   fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf-8')
 }
 
@@ -39,26 +38,24 @@ export async function POST(req: NextRequest) {
 
     const now = new Date().toISOString()
 
+    // FIX: nxf_system_config has no project_url column — dropped from the
+    // payload entirely (was causing every save to fail). nxf_api_key maps
+    // to the real column hosted_api_key.
     const updatePayload: Record<string, any> = {
       project_name,
-      project_url: project_url ?? '',
       updated_at:  now,
     }
 
     if (nxf_api_key !== undefined) {
-      updatePayload.nxf_api_key = nxf_api_key
+      updatePayload.hosted_api_key = nxf_api_key
     }
 
-    // ── Look up existing system config ──────────────────────────────────────
     const existing = await adapter.findSystemConfigByUserId?.(dbConfig, user_id)
-
-    // Resolve the record ID — Firebase uses config_id, others use id
-    const recordId = existing?.id ?? null
+    const recordId = existing?.config_id ?? null
 
     if (recordId) {
-      await adapter.update!(dbConfig, 'nxf_system_config', recordId, updatePayload)
+      await adapter.update!(dbConfig, 'nxf_system_config', recordId, updatePayload, 'config_id')
     } else {
-      // No config exists yet — create one
       await adapter.create!(dbConfig, 'nxf_system_config', {
         ...updatePayload,
         user_id,
@@ -66,10 +63,10 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // ── Patch local files ───────────────────────────────────────────────────
+    // project_url only patched into local files — not stored in DB.
     if (project_url) patchEnvFile('NEXT_PUBLIC_APP_DOMAIN', project_url)
     if (nxf_api_key) patchEnvFile('NXF_LICENSE_KEY', nxf_api_key)
-    patchConfigFile(project_name, project_url ?? '')
+    patchConfigFile(project_name)
 
     return NextResponse.json({ success: true })
 

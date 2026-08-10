@@ -1,6 +1,6 @@
 // app/api/auth/status-check/route.ts
 
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {

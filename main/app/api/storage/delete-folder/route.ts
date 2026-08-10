@@ -55,7 +55,7 @@
 
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 // ---------------------------------------------------------------------------
 // Route Handler

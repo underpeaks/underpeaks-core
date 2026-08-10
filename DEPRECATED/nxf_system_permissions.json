@@ -1,53 +1,81 @@
-[
-  {
-    "sp_id": "p1c9f0e2-8001-4c8d-9a2a-000000000001",
-    "project_id": "proj_001",
-    "role": "admin",
-    "model_name": "nxf_orders",
-    "field_name": "*",
-    "can_read": true,
-    "can_write": true,
-    "created_at": "2026-04-01T08:00:00Z",
-    "updated_at": "2026-04-15T07:00:00Z"
+{
+  "table_name": "nxf_system_permissions",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "sp_id",
+      "type": "string",
+      "nullable": true,
+      "hidden": true
+    },
+   {
+    "name": "project_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_projects(project_id)"
+    },
+    "hidden": true
   },
   {
-    "sp_id": "p1c9f0e2-8001-4c8d-9a2a-000000000002",
-    "project_id": "proj_001",
-    "role": "vendor",
-    "model_name": "nxf_orders",
-    "field_name": "cost_price",
-    "can_read": false,
-    "can_write": false,
-    "created_at": "2026-04-01T08:10:00Z"
+    "name": "tenant_id",
+    "type": "string",
+    "nullable": false,
+    "foreign_key": {
+      "references": "nxf_system_tenants(ten_id)"
+    },
+    "hidden": true
   },
-  {
-    "sp_id": "p1c9f0e2-8001-4c8d-9a2a-000000000003",
-    "project_id": "proj_001",
-    "role": "vendor",
-    "model_name": "nxf_products",
-    "field_name": "stock_quantity",
-    "can_read": true,
-    "can_write": true,
-    "created_at": "2026-04-01T08:15:00Z"
-  },
-  {
-    "sp_id": "p1c9f0e2-8001-4c8d-9a2a-000000000004",
-    "project_id": "proj_002",
-    "role": "customer",
-    "model_name": "nxf_orders",
-    "field_name": "total",
-    "can_read": true,
-    "can_write": false,
-    "created_at": "2026-04-10T10:00:00Z"
-  },
-  {
-    "sp_id": "p1c9f0e2-8001-4c8d-9a2a-000000000005",
-    "project_id": "proj_003",
-    "role": "tester",
-    "model_name": "nxf_system_config",
-    "field_name": "*",
-    "can_read": true,
-    "can_write": false,
-    "created_at": "2026-04-15T08:00:00Z"
-  }
-]
+    {
+      "name": "role",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "model_name",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "field_name",
+      "type": "string",
+      "nullable": false,
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "can_read",
+      "type": "boolean",
+      "nullable": true,
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
+    },
+    {
+      "name": "can_write",
+      "type": "boolean",
+      "nullable": true,
+      "default": false,
+      "hidden": false,
+      "ui_type": "toggle"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": true,
+      "default": "now()",
+      "hidden": true
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true,
+      "hidden": true
+    }
+  ],
+  "constraints": []
+}

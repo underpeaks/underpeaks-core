@@ -6,7 +6,9 @@
       "name": "like_id",
       "type": "string",
       "nullable": false,
-      "is_primary": true
+      "is_primary": true,
+      "options_mode": "manual",
+      "options": []
     },
  {
     "name": "project_id",
@@ -15,7 +17,9 @@
     "foreign_key": {
       "references": "nxf_system_projects(project_id)"
     },
-    "hidden": true
+    "hidden": true,
+    "options_mode": "manual",
+    "options": []
   },
   {
     "name": "tenant_id",
@@ -24,65 +28,85 @@
     "foreign_key": {
       "references": "nxf_system_tenants(ten_id)"
     },
-    "hidden": true
+    "hidden": true,
+    "options_mode": "manual",
+    "options": []
   },
-    
+
     {
       "name": "user_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "options_mode": "manual",
+      "options": []
     },
 
-    
+
     {
       "name": "entity_type",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "entity_id",
       "type": "string",
-      "nullable": false
+      "nullable": false,
+      "options_mode": "manual",
+      "options": []
     },
 
-    
+
     {
       "name": "reaction_type",
       "type": "string",
       "nullable": false,
-      "default": "like"
+      "default": "like",
+      "options_mode": "manual",
+      "options": []
     },
 
-    
+
     {
       "name": "is_active",
       "type": "boolean",
       "nullable": true,
-      "default": true
+      "default": true,
+      "options_mode": "manual",
+      "options": []
     },
 
-    
+
     {
       "name": "ip_address",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "user_agent",
       "type": "string",
-      "nullable": true
+      "nullable": true,
+      "options_mode": "manual",
+      "options": []
     },
 
-    
+
     {
       "name": "created_at",
       "type": "datetime",
-      "nullable": false
+      "nullable": false,
+      "options_mode": "manual",
+      "options": []
     },
     {
       "name": "updated_at",
       "type": "datetime",
-      "nullable": true
+      "nullable": true,
+      "options_mode": "manual",
+      "options": []
     }
   ],
   "constraints": [

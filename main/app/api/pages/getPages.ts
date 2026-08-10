@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse }  from 'next/server'
 import { resolveDocumentId }          from './resolveDocumentId'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 export async function handleGetPages(req: NextRequest): Promise<NextResponse> {
   const { searchParams } = new URL(req.url)

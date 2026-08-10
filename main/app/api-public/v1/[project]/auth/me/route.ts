@@ -1,7 +1,7 @@
 // File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api-public\v1\[project]\auth\me\route.ts
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter '
+import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { validateCoreApiKey } from '@/app/lib/coreApiAuth'
 import { coreCors, safeCustomer, verifyAccessToken } from '@/app/lib/customerAuthCore'
 

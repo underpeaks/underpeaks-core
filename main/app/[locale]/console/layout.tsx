@@ -1,3 +1,4 @@
+//app/[locale]/console/ConsoleLayout.tsx
 'use client'
 
 import {
@@ -128,13 +129,19 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     return () => clearInterval(interval)
   }, [])
 
+  // FIX: the license key lives in NXF_LICENSE_KEY on the server's .env file,
+  // not in nxf_system_config / config store at all — there is no DB column
+  // for it. The gate must ask the server whether the env var is set, via
+  // GET /api/license/status, rather than reading a client-side config field
+  // that was never the right source of truth.
   // TODO: RE-ENABLE BEFORE LAUNCH — temporarily disabled so testers can bypass license gate
-  // useEffect(() => {
-  //   if (!checkingAuth && user && config !== null && config !== undefined) {
-  //     const hasKey = !!(config?.nxf_api_key)
-  //     setShowLicenseGate(!hasKey)
-  //   }
-  // }, [checkingAuth, user, config])
+  useEffect(() => {
+    if (checkingAuth || !user) return
+    fetch('/api/license/status')
+      .then((r) => r.json())
+      .then((d) => setShowLicenseGate(!d.hasKey))
+      .catch(() => setShowLicenseGate(false))
+  }, [checkingAuth, user])
 
   const handleSaveLicenseKey = async () => {
     if (!licenseInput.trim()) return
@@ -144,25 +151,27 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     try {
 
       ///TODO PUT BACK BFOR LAUNCH
-      // const studioUrl   = process.env.NEXT_PUBLIC_STUDIO_URL ?? 'http://localhost:3000'
-      // const validateRes = await fetch(`${studioUrl}/api/license/validate`, {
-      //   method:  'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body:    JSON.stringify({
-      //     license_key:  licenseInput.trim(),
-      //     instance_url: process.env.NEXT_PUBLIC_APP_DOMAIN,
-      //     db_type:      process.env.NEXT_PUBLIC_DB_TYPE,
-      //     project_name: config?.project_name ?? '',
-      //   }),
-      // })
+      const studioUrl   = (process.env.NEXT_PUBLIC_STUDIO_URL ?? 'http://localhost:3000').replace(/\/$/, '')
+      const validateRes = await fetch(`${studioUrl}/api/license/validate`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          license_key:  licenseInput.trim(),
+          instance_url: process.env.NEXT_PUBLIC_APP_DOMAIN,
+          db_type:      process.env.NEXT_PUBLIC_DB_TYPE,
+          project_name: config?.project_name ?? '',
+        }),
+      })
 
-      // const validateData = await validateRes.json()
+      const validateData = await validateRes.json()
 
-      // if (!validateRes.ok || !validateData.valid) {
-      //   setLicenseError(validateData.error ?? 'Invalid license key — please check and try again.')
-      //   return
-      // }
+      if (!validateRes.ok || !validateData.valid) {
+        setLicenseError(validateData.error ?? 'Invalid license key — please check and try again.')
+        return
+      }
 
+      // update-project-settings writes NXF_LICENSE_KEY to .env.local via
+      // patchEnvFile — that's the real source of truth the gate checks.
       const saveRes = await fetch('/api/update-project-settings', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -179,7 +188,6 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
         return
       }
 
-      loadConfig({ ...(config ?? {}), nxf_api_key: licenseInput.trim() })
       setShowLicenseGate(false)
 
     } catch {
