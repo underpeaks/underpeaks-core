@@ -891,11 +891,22 @@ export class PostgresAdapter implements DBAdapter {
   }
 }
   // ─── Core CRUD ─────────────────────────────────────────────────────────────
-
-  async readAll(config: DBConfig, table: string): Promise<any[]> {
+async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Promise<any[]> {
     try {
-      console.log(`[PostgresAdapter] readAll — table: ${table}`)
-      const result = await this.pool.query(`SELECT * FROM "${table}"`)
+      console.log(`[PostgresAdapter] readAll — table: ${table}`, filter ? `filter: ${JSON.stringify(filter)}` : '')
+
+      let sql = `SELECT * FROM "${table}"`
+      const values: any[] = []
+
+      if (filter && Object.keys(filter).length > 0) {
+        const conditions = Object.keys(filter).map((key, i) => {
+          values.push(filter[key])
+          return `"${key}" = $${i + 1}`
+        })
+        sql += ` WHERE ${conditions.join(' AND ')}`
+      }
+
+      const result = await this.pool.query(sql, values)
       console.log(`[PostgresAdapter] readAll — table: ${table} — returned ${result.rows.length} rows`)
       return result.rows
     } catch (err: any) {
@@ -903,6 +914,17 @@ export class PostgresAdapter implements DBAdapter {
       throw new Error(`readAll failed on table "${table}": ${err.message}`)
     }
   }
+  // async readAll(config: DBConfig, table: string): Promise<any[]> {
+  //   try {
+  //     console.log(`[PostgresAdapter] readAll — table: ${table}`)
+  //     const result = await this.pool.query(`SELECT * FROM "${table}"`)
+  //     console.log(`[PostgresAdapter] readAll — table: ${table} — returned ${result.rows.length} rows`)
+  //     return result.rows
+  //   } catch (err: any) {
+  //     console.error(`[PostgresAdapter] readAll FAILED — table: ${table} — ${err.message}`)
+  //     throw new Error(`readAll failed on table "${table}": ${err.message}`)
+  //   }
+  // }
 
   // ─── Users & Auth ──────────────────────────────────────────────────────────
 

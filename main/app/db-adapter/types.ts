@@ -794,7 +794,7 @@ export interface DBAdapter {
    * @param id         - The ID of the record to delete.
    * @returns          The result of the delete operation.
    */
-  delete?(config: DBConfig, collection: string, id: string): Promise<any>;
+  delete?(config: DBConfig, collection: string, id: string, page_id?:string): Promise<any>;
 
   /**
    * installDemoContent

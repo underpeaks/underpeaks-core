@@ -31,20 +31,20 @@ import DashboardTemplate from './admin/DashboardTemplate'
 import DetailTemplate    from './admin/DetailTemplate'
 
 // ── Preview-only templates (mockups) ─────────────────────────────────────
-import SplashTemplate         from './preview/SplashTemplate'
-import HomeTemplate           from './preview/HomeTemplate'
-import OnboardingTemplate     from './preview/OnboardingTemplate'
-import SignInTemplate         from './preview/SignInTemplate'
-import SignUpTemplate         from './preview/SignUpTemplate'
-import ForgotPasswordTemplate from './preview/ForgotPasswordTemplate'
-import ResetPasswordTemplate  from './preview/ResetPasswordTemplate'
-import LandingTemplate        from './preview/LandingTemplate'
-import BlogPostTemplate       from './preview/BlogPostTemplate'
-import ProfileTemplate        from './preview/ProfileTemplate'
-import CartTemplate           from './preview/CartTemplate'
-import ChatTemplate           from './preview/ChatTemplate'
-import MapTemplate            from './preview/MapTemplate'
-import CustomTemplate         from './preview/CustomTemplate'
+// import SplashTemplate         from './preview/SplashTemplate'
+// import HomeTemplate           from './preview/HomeTemplate'
+// import OnboardingTemplate     from './preview/OnboardingTemplate'
+// import SignInTemplate         from './preview/SignInTemplate'
+// import SignUpTemplate         from './preview/SignUpTemplate'
+// import ForgotPasswordTemplate from './preview/ForgotPasswordTemplate'
+// import ResetPasswordTemplate  from './preview/ResetPasswordTemplate'
+// import LandingTemplate        from './preview/LandingTemplate'
+// import BlogPostTemplate       from './preview/BlogPostTemplate'
+// import ProfileTemplate        from './preview/ProfileTemplate'
+// import CartTemplate           from './preview/CartTemplate'
+// import ChatTemplate           from './preview/ChatTemplate'
+// import MapTemplate            from './preview/MapTemplate'
+// import CustomTemplate         from './preview/CustomTemplate'
 
 // -------------------------------------------------------------------------
 // Template categories
@@ -70,8 +70,8 @@ export interface TemplateRegistryEntry {
   category:     TemplateCategory
   component:    ComponentType<any>     // intentionally permissive — see notes below
   locked:       boolean                // true = hosted-only, renders LockedPlaceholder
-  fullScreenPreview?: boolean          // true = supports /preview/[slug] full-screen route
-  mobilePreview?:     boolean          // true = supports /preview/mobile/[slug] phone-frame route
+  //fullScreenPreview?: boolean          // true = supports /preview/[slug] full-screen route
+  //mobilePreview?:     boolean          // true = supports /preview/mobile/[slug] phone-frame route
   description?:       string
 }
 
@@ -132,132 +132,132 @@ export const TEMPLATE_REGISTRY: Record<string, TemplateRegistryEntry> = {
   },
 
   // ── Preview-only mockup templates ──────────────────────────────────────
-  splash: {
-    id:                'splash',
-    name:              'Splash Screen',
-    category:          'preview',
-    component:         SplashTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  home: {
-    id:                'home',
-    name:              'Home Screen',
-    category:          'preview',
-    component:         HomeTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  onboarding: {
-    id:                'onboarding',
-    name:              'Onboarding',
-    category:          'preview',
-    component:         OnboardingTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  sign_in: {
-    id:                'sign_in',
-    name:              'Sign In',
-    category:          'preview',
-    component:         SignInTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  sign_up: {
-    id:                'sign_up',
-    name:              'Sign Up',
-    category:          'preview',
-    component:         SignUpTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  forgot_password: {
-    id:                'forgot_password',
-    name:              'Forgot Password',
-    category:          'preview',
-    component:         ForgotPasswordTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  reset_password: {
-    id:                'reset_password',
-    name:              'Reset Password',
-    category:          'preview',
-    component:         ResetPasswordTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  landing: {
-    id:                'landing',
-    name:              'Landing',
-    category:          'preview',
-    component:         LandingTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  'blog-post': {
-    id:                'blog-post',
-    name:              'Blog Post',
-    category:          'preview',
-    component:         BlogPostTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  profile: {
-    id:                'profile',
-    name:              'Profile',
-    category:          'preview',
-    component:         ProfileTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  cart: {
-    id:                'cart',
-    name:              'Cart',
-    category:          'preview',
-    component:         CartTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  chat: {
-    id:                'chat',
-    name:              'Chat',
-    category:          'preview',
-    component:         ChatTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  map: {
-    id:                'map',
-    name:              'Map',
-    category:          'preview',
-    component:         MapTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
-  custom: {
-    id:                'custom',
-    name:              'Custom',
-    category:          'preview',
-    component:         CustomTemplate,
-    locked:            false,
-    fullScreenPreview: true,
-    mobilePreview:     true,
-  },
+  // splash: {
+  //   id:                'splash',
+  //   name:              'Splash Screen',
+  //   category:          'preview',
+  //   component:         SplashTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // home: {
+  //   id:                'home',
+  //   name:              'Home Screen',
+  //   category:          'preview',
+  //   component:         HomeTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // onboarding: {
+  //   id:                'onboarding',
+  //   name:              'Onboarding',
+  //   category:          'preview',
+  //   component:         OnboardingTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // sign_in: {
+  //   id:                'sign_in',
+  //   name:              'Sign In',
+  //   category:          'preview',
+  //   component:         SignInTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // sign_up: {
+  //   id:                'sign_up',
+  //   name:              'Sign Up',
+  //   category:          'preview',
+  //   component:         SignUpTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // forgot_password: {
+  //   id:                'forgot_password',
+  //   name:              'Forgot Password',
+  //   category:          'preview',
+  //   component:         ForgotPasswordTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // reset_password: {
+  //   id:                'reset_password',
+  //   name:              'Reset Password',
+  //   category:          'preview',
+  //   component:         ResetPasswordTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // landing: {
+  //   id:                'landing',
+  //   name:              'Landing',
+  //   category:          'preview',
+  //   component:         LandingTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // 'blog-post': {
+  //   id:                'blog-post',
+  //   name:              'Blog Post',
+  //   category:          'preview',
+  //   component:         BlogPostTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // profile: {
+  //   id:                'profile',
+  //   name:              'Profile',
+  //   category:          'preview',
+  //   component:         ProfileTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // cart: {
+  //   id:                'cart',
+  //   name:              'Cart',
+  //   category:          'preview',
+  //   component:         CartTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // chat: {
+  //   id:                'chat',
+  //   name:              'Chat',
+  //   category:          'preview',
+  //   component:         ChatTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // map: {
+  //   id:                'map',
+  //   name:              'Map',
+  //   category:          'preview',
+  //   component:         MapTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
+  // custom: {
+  //   id:                'custom',
+  //   name:              'Custom',
+  //   category:          'preview',
+  //   component:         CustomTemplate,
+  //   locked:            false,
+  //   fullScreenPreview: true,
+  //   mobilePreview:     true,
+  // },
 }
 
 // -------------------------------------------------------------------------
@@ -283,16 +283,16 @@ export function getTemplatesByCategory(category: TemplateCategory): TemplateRegi
 /**
  * Returns all templates that support full-screen preview at /preview/[slug].
  */
-export function getFullScreenPreviewTemplates(): TemplateRegistryEntry[] {
-  return Object.values(TEMPLATE_REGISTRY).filter((t) => t.fullScreenPreview)
-}
+// export function getFullScreenPreviewTemplates(): TemplateRegistryEntry[] {
+//   return Object.values(TEMPLATE_REGISTRY).filter((t) => t.fullScreenPreview)
+// }
 
-/**
- * Returns all templates that support mobile phone-frame preview.
- */
-export function getMobilePreviewTemplates(): TemplateRegistryEntry[] {
-  return Object.values(TEMPLATE_REGISTRY).filter((t) => t.mobilePreview)
-}
+// /**
+//  * Returns all templates that support mobile phone-frame preview.
+//  */
+// export function getMobilePreviewTemplates(): TemplateRegistryEntry[] {
+//   return Object.values(TEMPLATE_REGISTRY).filter((t) => t.mobilePreview)
+// }
 
 /**
  * Returns all template IDs as an array of strings.

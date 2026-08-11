@@ -78,34 +78,35 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
   return () => window.removeEventListener('nxf:menu:updated', handleMenuUpdate)
 }, [user])
 
-  async function fetchDynamicMenu(userId: string) {
+ async function fetchDynamicMenu(userId: string) {
     try {
       const res  = await fetch(`/api/menu?user_id=${userId}`)
       const text = await res.text()
       if (!text) return
       const data = JSON.parse(text)
+
+      console.log('[DEBUG] /api/menu response:', data)
+
       if (data.success) {
-        // Also fetch page slugs so we can build proper hrefs
         const pagesRes  = await fetch(`/api/menu/pages?user_id=${userId}`)
         const pagesText = await pagesRes.text()
         const pagesData = pagesText ? JSON.parse(pagesText) : { pages: [] }
         const pages     = pagesData.pages ?? []
 
-        // Attach slug to each menu item
-        // ✅ After
-const itemsWithSlugs = (data.items ?? []).map((item: DynamicMenuItem) => {
-  const page = pages.find((p: any) => p.page_id === item.page_id)
-  // Strip leading slash from slug — Next.js Link handles it
-  // Admin pages live under /console/[slug]
-  const rawSlug = page?.slug?.replace(/^\//, '') ?? null
-  const href    = rawSlug ? `/console/${rawSlug}` : '#'
-  return { ...item, slug: href }
-})
+        console.log('[DEBUG] /api/menu/pages response:', pages)
+
+        const itemsWithSlugs = (data.items ?? []).map((item: DynamicMenuItem) => {
+          const page = pages.find((p: any) => p.page_id === item.page_id)
+          console.log('[DEBUG] menu item page_id:', item.page_id, '-> matched page:', page)
+          const rawSlug = page?.slug?.replace(/^\//, '') ?? null
+          const href    = rawSlug ? `/console/${rawSlug}` : '#'
+          return { ...item, slug: href }
+        })
 
         setDynamicItems(itemsWithSlugs)
       }
-    } catch {
-      // Fail silently — sidebar should never crash the whole layout
+    } catch (err) {
+      console.error('[DEBUG] fetchDynamicMenu error:', err)
     }
   }
 

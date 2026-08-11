@@ -1,3 +1,4 @@
+//app/api/pages/handlers/handleUpdatePage.ts
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -21,10 +22,12 @@ export async function handleUpdatePage(req: NextRequest): Promise<NextResponse> 
   const adapter  = getConfiguredAdapter()
   const dbConfig = adapter.config
 
+  // FIX: real PK is page_id, not id — missing idColumn 5th arg meant this
+  // always targeted a non-existent 'id' column.
   await adapter.update!(dbConfig, 'nxf_pages', page_id, {
     ...updates,
     updated_at: new Date().toISOString(),
-  })
+  }, 'page_id')
 
   return NextResponse.json({ success: true })
 }
