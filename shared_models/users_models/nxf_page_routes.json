@@ -1,0 +1,90 @@
+{
+  "table_name": "nxf_page_routes",
+  "schema": "public",
+  "columns": [
+    {
+      "name": "route_id",
+      "type": "string",
+      "nullable": false,
+      "is_primary": true,
+      "hidden": true
+    },
+    {
+      "name": "project_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_projects(project_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "tenant_id",
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_tenants(ten_id)"
+      },
+      "hidden": true
+    },
+    {
+      "name": "from_page_id",
+      "type": "string",
+      "nullable": false,
+      "description": "source page for this navigation route",
+      "foreign_key": {
+        "references": "nxf_pages(page_id)"
+      },
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "to_page_id",
+      "type": "string",
+      "nullable": false,
+      "description": "destination page for this navigation route",
+      "foreign_key": {
+        "references": "nxf_pages(page_id)"
+      },
+      "hidden": false,
+      "ui_type": "select"
+    },
+    {
+      "name": "trigger",
+      "type": "string",
+      "nullable": false,
+      "default": "tap",
+      "description": "tap | swipe | button | auto",
+      "hidden": false,
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["tap", "swipe", "button", "auto"]
+    },
+    {
+      "name": "label",
+      "type": "string",
+      "nullable": true,
+      "description": "optional label shown on the route in the Navigator diagram",
+      "hidden": false,
+      "ui_type": "textfield"
+    },
+    {
+      "name": "created_at",
+      "type": "datetime",
+      "nullable": false,
+      "hidden": true
+    },
+    {
+      "name": "updated_at",
+      "type": "datetime",
+      "nullable": true,
+      "hidden": true
+    }
+  ],
+  "indexes": [
+    { "name": "idx_page_routes_project", "fields": ["project_id"] },
+    { "name": "idx_page_routes_from",    "fields": ["from_page_id"] },
+    { "name": "idx_page_routes_to",      "fields": ["to_page_id"] }
+  ],
+  "constraints": []
+}

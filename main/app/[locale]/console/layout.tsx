@@ -123,18 +123,28 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     }
   }
 
-  useEffect(() => { refreshSession() }, [])
+  // FIX: the Zustand store is a module-level singleton — it is NOT reset on
+  // client-side navigation, only on full page reload or explicit logout.
+  // If the user was previously redirected away from /console while
+  // unauthenticated (checkingAuth: false, user: null), that stale state is
+  // still sitting in the store the instant this component mounts again
+  // after a successful sign-in — BEFORE the fresh refreshSession() call
+  // below has had a chance to resolve. The redirect effect further down
+  // was firing on that one stale render and bouncing the user straight
+  // back to /signin, even though a valid new token had just been stored.
+  // Forcing checkingAuth back to true synchronously on every mount closes
+  // that window — the redirect effect can never see a stale "logged out"
+  // state again.
+  useEffect(() => {
+    setConsoleValue('checkingAuth', true)
+    refreshSession()
+  }, [])
+
   useEffect(() => {
     const interval = setInterval(refreshSession, 5 * 60 * 1000)
     return () => clearInterval(interval)
   }, [])
 
-  // FIX: the license key lives in NXF_LICENSE_KEY on the server's .env file,
-  // not in nxf_system_config / config store at all — there is no DB column
-  // for it. The gate must ask the server whether the env var is set, via
-  // GET /api/license/status, rather than reading a client-side config field
-  // that was never the right source of truth.
-  // TODO: RE-ENABLE BEFORE LAUNCH — temporarily disabled so testers can bypass license gate
   useEffect(() => {
     if (checkingAuth || !user) return
     fetch('/api/license/status')
@@ -150,7 +160,6 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
 
     try {
 
-      ///TODO PUT BACK BFOR LAUNCH
       const studioUrl   = (process.env.NEXT_PUBLIC_STUDIO_URL ?? 'http://localhost:3000').replace(/\/$/, '')
       const validateRes = await fetch(`${studioUrl}/api/license/validate`, {
         method:  'POST',
@@ -170,8 +179,6 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
         return
       }
 
-      // update-project-settings writes NXF_LICENSE_KEY to .env.local via
-      // patchEnvFile — that's the real source of truth the gate checks.
       const saveRes = await fetch('/api/update-project-settings', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -328,7 +335,6 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
             )}
           </div>
 
-          {/* Plain div instead of DialogFooter to keep buttons inside the modal */}
           <div className="mt-6 flex flex-col gap-2 w-full">
             <Button
               onClick={handleSaveLicenseKey}

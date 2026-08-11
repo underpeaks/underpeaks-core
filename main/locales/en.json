@@ -395,7 +395,8 @@
       "account": "Account",
       "settings": "Settings",
       "helpAndDocs": "Help & Docs",
-      "logout": "Logout"
+      "logout": "Logout",
+      "loggingOut": "Logging out…"
     }
   },
   "accountPage": {
@@ -1503,7 +1504,7 @@
     "saveButtonSaving": "Saving…",
     "upgrade": {
       "title": "Hosted plan required",
-      "description": "These features require NXTFlutter's hosted infrastructure. Upgrade to unlock them.",
+      "description": "These features require Underpeaks's hosted infrastructure. Upgrade to unlock them.",
       "button": "Upgrade"
     },
     "groups": {
@@ -1955,7 +1956,8 @@
     "fields": {
       "name": {
         "label": "Project Name",
-        "placeholder": "e.g., MyApp Studio"
+        "placeholder": "e.g., MyApp Studio",
+        "hint":"e.g., myappstudio - ALL LOWERCASE"
       },
       "domain": {
         "label": "Domain",

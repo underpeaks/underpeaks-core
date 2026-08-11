@@ -283,7 +283,9 @@ async function writeEnvFileFromObject(env: Record<string, any>): Promise<void> {
   lines.push(
     `NEXT_PUBLIC_APP_DOMAIN=${envSafe(ensureHttp(env.domain || 'localhost:3000'))}`
   )
-
+lines.push(
+    `NEXT_PUBLIC_STUDIO_URL=${'https://studio.underpeaks.com'}`
+  )
   /**
    * NXF_API_KEY_SECRET
    * A freshly generated secret used to sign and verify API keys.

@@ -1,5 +1,5 @@
+//app/api/menu/pages/route.ts
 import { NextRequest, NextResponse } from 'next/server'
-import { resolveDocumentId }         from '../resolveDocumentId'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
@@ -13,7 +13,6 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
-    // Resolve project from nxf_system_projects[0] — never by owner
     const allProjects = await adapter.readAll!(dbConfig, 'nxf_system_projects')
     const project     = (allProjects ?? [])[0]
 
@@ -33,7 +32,11 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       .map((p: any) => {
         const model = (allModels ?? []).find((m: any) => (m.id || m.sm_id) === p.model_id)
         return {
-          page_id:    resolveDocumentId(p),
+          // FIX: resolveDocumentId() only checks doc.id / doc.menu_id, but
+          // nxf_pages' real PK is page_id — neither field it checks exists
+          // on a page row, so every page_id came back undefined and the
+          // sidebar's menu-to-page matching silently failed for every item.
+          page_id:    p.page_id,
           title:      p.title ?? '',
           slug:       p.slug ?? '',
           model_id:   p.model_id ?? null,

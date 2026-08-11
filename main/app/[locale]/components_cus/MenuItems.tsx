@@ -3,6 +3,7 @@ import {
   FiTruck, FiCalendar, FiDatabase, FiLayout,
   FiFileText, FiImage, FiLink, FiGrid, FiGift,
   FiDroplet, FiZap, FiLock,
+  FiCompass,
 } from 'react-icons/fi'
 import type { ReactNode } from 'react'
 
@@ -65,6 +66,7 @@ export const menuSections: MenuSection[] = [
       { label: 'Shared Models', path: '/console/models',     icon: <FiDatabase size={14} /> },
       { label: 'Menu',         path: '/console/layouts',    icon: <FiLayout size={14} />   },
       { label: 'Pages',        path: '/console/pages',      icon: <FiFileText size={14} /> },
+      { label: 'Navigator',        path: '/console/navigator',  icon: <FiCompass size={14} />  },
       { label: 'Theme',        path: '/console/themePage',  icon: <FiDroplet size={14} />  },
     ],
   },

@@ -1,21 +1,6 @@
 /**
  * Admin dynamic page router
  * Location: app/[locale]/console/[slug]/page.tsx
- *
- * Reads page from DB by slug, loads linked model, picks template from
- * the registry, renders it. Behind console layout's admin auth.
- *
- * Features:
- *   - Single-format slug lookup (canonical: no leading slash in DB)
- *   - Legacy field fallback (template/template_type, model/model_id)
- *     while old records get migrated through edit/save
- *   - "No model linked" placeholder for data templates without a model
- *   - LockedPlaceholder for hosted-plan templates
- *
- * URL examples:
- *   /en/console/inventory
- *   /en/console/products
- *   /en/console/orders
  */
 
 import { cookies }              from 'next/headers'
@@ -32,14 +17,6 @@ interface PageProps {
   params: Promise<{ locale: string; slug: string }>
 }
 
-// ---------------------------------------------------------------------------
-// Load page + linked model from DB
-//
-// Slugs are stored WITHOUT a leading slash (canonical format).
-// We still strip any leading slash from the URL param defensively in case
-// someone types one manually, but the DB lookup is single-format.
-// ---------------------------------------------------------------------------
-
 async function loadPageAndModel(slug: string): Promise<{
   page:      PageRecord | null
   model:     ModelRecord | null
@@ -50,37 +27,41 @@ async function loadPageAndModel(slug: string): Promise<{
     const adapter   = await getConfiguredAdapter()
     const dbConfig  = (adapter as any).dbConfig
 
-    // Defensive strip — DB stores slugs without leading slash
     const cleanSlug = slug.startsWith('/') ? slug.slice(1) : slug
 
-    const pages = await adapter.readAll!(dbConfig, 'nxf_pages', { slug: cleanSlug })
+    // FIX: adapter.readAll's filter argument is being ignored by the
+    // Postgres adapter (it always runs SELECT * with no WHERE clause) —
+    // this returned the whole table every time, so pages[0] grabbed
+    // whatever row happened to be first (e.g. the splash page) instead
+    // of the actual slug requested. Filtering here client-side, on the
+    // full result set, sidesteps that broken filter without touching the
+    // shared adapter — matching only admin pages for this exact slug.
+    const allPages = await adapter.readAll!(dbConfig, 'nxf_pages')
+    const pages = (allPages ?? []).filter(
+      (p: any) => p.slug === cleanSlug && p.page_type === 'admin'
+    )
+
     if (!pages || pages.length === 0) {
       return { page: null, model: null, projectId: '', tenantId: '' }
     }
 
     const rawPage = pages[0] as any
 
-    // Normalize the page — handle legacy field names so old records
-    // (saved before the field rename) still work until migrated
     const page: PageRecord = {
       ...rawPage,
       template_type: rawPage.template_type ?? rawPage.template ?? 'list',
       model_id:      rawPage.model_id      ?? rawPage.model      ?? null,
     }
 
-    // Load the linked model
     let model: ModelRecord | null = null
     if (page.model_id) {
-      const models = await adapter.readAll!(
-        dbConfig,
-        'nxf_system_models',
-        { sm_id: page.model_id }
-      )
+      const allModels = await adapter.readAll!(dbConfig, 'nxf_system_models')
+      const models = (allModels ?? []).filter((m: any) => m.sm_id === page.model_id)
+
       if (models && models.length > 0) {
         const raw = models[0] as any
         let schema = raw.schema
 
-        // Normalize schema — handle legacy array and new versioned object
         if (Array.isArray(schema)) {
           schema = { version: '1.0', columns: schema, hooks: [], integrations: [] }
         } else if (schema && !schema.columns) {
@@ -102,18 +83,10 @@ async function loadPageAndModel(slug: string): Promise<{
   }
 }
 
-// ---------------------------------------------------------------------------
-// Auth token
-// ---------------------------------------------------------------------------
-
 async function getAuthToken(): Promise<string> {
   const cookieStore = await cookies()
   return cookieStore.get('access_token')?.value ?? ''
 }
-
-// ---------------------------------------------------------------------------
-// Page component
-// ---------------------------------------------------------------------------
 
 export default async function ConsoleDynamicPage({ params }: PageProps) {
   const { locale, slug } = await params
@@ -129,14 +102,12 @@ export default async function ConsoleDynamicPage({ params }: PageProps) {
     notFound()
   }
 
-  // Locked template (hosted-plan only)
   if (registryEntry.locked) {
     return <LockedPlaceholder templateName={registryEntry.name} page={page} />
   }
 
   const Template = registryEntry.component
 
-  // Data templates require a linked model
   if (templateRequiresModel(page.template_type) && !model) {
     return (
       <NoModelLinked

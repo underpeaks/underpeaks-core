@@ -3,12 +3,11 @@
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import {
-  FiX, FiLock, FiEye, FiSmartphone, FiMonitor, FiExternalLink,
+  FiX, FiLock,
 } from 'react-icons/fi'
 import Select from 'react-select'
 
 import { TEMPLATE_GROUPS, TEMPLATES } from './types'
-import { getTemplate }                from '@/app/[locale]/console/[slug]/components/templateRegistry'
 
 import type { PageItem, ModelSummary, PageVisibility } from './types'
 
@@ -75,10 +74,10 @@ export default function PageDrawer({
 
   const canSave = name.trim() && slug.trim()
 
-  const handleSave = async () => {
+ const handleSave = async () => {
     if (!canSave) return
     await onSave({
-      name: name.trim(),
+      title: name.trim(),
       slug: slug.trim(),
       model_id: modelId || null,
       template_type: template,
@@ -86,10 +85,7 @@ export default function PageDrawer({
       seo_title: seoTitle,
       seo_description: seoDesc,
       hidden,
-      // Also clear legacy fields so the DB doesn't keep stale values
-      model: null,
-      template: null,
-    } as unknown as Partial<PageItem> & { model?: null; template?: null })
+    } as unknown as Partial<PageItem>)
   }
 
   const templateOptions = TEMPLATE_GROUPS.map((group) => ({
@@ -136,15 +132,6 @@ export default function PageDrawer({
       </div>
     )
   }
-
-  // ── Preview support — read from template registry ─────────────────────
-  const registryEntry          = getTemplate(template)
-  const supportsDesktopPreview = isEdit && Boolean(registryEntry?.fullScreenPreview) && Boolean(slug)
-  const supportsMobilePreview  = isEdit && Boolean(registryEntry?.mobilePreview)     && Boolean(slug)
-  const supportsAnyPreview     = supportsDesktopPreview || supportsMobilePreview
-
-  // Strip leading slash for preview URLs since the route already includes it
-  const previewSlug = (slug ?? '').replace(/^\//, '')
 
   if (!open) return null
 
@@ -313,90 +300,6 @@ export default function PageDrawer({
               </div>
             </div>
           </section>
-
-          {/* ── PREVIEW SECTION ───────────────────────────────────────────── */}
-          {supportsAnyPreview && (
-            <section>
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3">
-                Preview
-              </p>
-
-              <p className="text-[11px] text-gray-500 mb-3">
-                Preview how this page will render. Opens in a new tab so you don't lose
-                your changes.
-              </p>
-
-              <div className="grid grid-cols-2 gap-2">
-                {supportsDesktopPreview && (
-                  <a
-                    href={`/${locale}/preview/${previewSlug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-3 py-2.5
-                               text-xs font-medium rounded-md border border-gray-200
-                               text-gray-700 hover:bg-gray-50 transition group"
-                  >
-                    <FiMonitor size={14} className="text-[var(--color-primary)]" />
-                    Desktop
-                    <FiExternalLink size={11} className="text-gray-300 group-hover:text-gray-500" />
-                  </a>
-                )}
-
-                {supportsMobilePreview && (
-                  <a
-                    href={`/${locale}/preview/mobile/${previewSlug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-3 py-2.5
-                               text-xs font-medium rounded-md border border-gray-200
-                               text-gray-700 hover:bg-gray-50 transition group"
-                  >
-                    <FiSmartphone size={14} className="text-[var(--color-primary)]" />
-                    Mobile
-                    <FiExternalLink size={11} className="text-gray-300 group-hover:text-gray-500" />
-                  </a>
-                )}
-              </div>
-
-              {/* In-console "view live" link for data templates */}
-              {registryEntry?.category === 'data' && (
-                <a
-                  href={`/${locale}/console${slug}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-2 flex items-center justify-center gap-2 px-3 py-2
-                             text-[11px] font-medium rounded-md
-                             text-[var(--color-primary)] hover:bg-[var(--color-primary)]/5 transition"
-                >
-                  <FiEye size={12} />
-                  Open page in console
-                  <FiExternalLink size={10} />
-                </a>
-              )}
-            </section>
-          )}
-
-          {/* Hint shown when editing but template doesn't support preview */}
-          {isEdit && !supportsAnyPreview && registryEntry?.category !== 'data' && (
-            <section>
-              <div className="px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-md">
-                <p className="text-[11px] text-gray-500">
-                  Preview not available for this template type.
-                </p>
-              </div>
-            </section>
-          )}
-
-          {/* Hint shown when creating a new page */}
-          {!isEdit && (
-            <section>
-              <div className="px-3 py-2.5 bg-blue-50 border border-blue-200 rounded-md">
-                <p className="text-[11px] text-blue-600">
-                  Save this page first to enable preview.
-                </p>
-              </div>
-            </section>
-          )}
 
           {/* SEO */}
           <section>

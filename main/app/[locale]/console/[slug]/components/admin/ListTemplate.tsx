@@ -51,7 +51,7 @@ function resolveId(record: DataRecord, cols: ModelColumn[]): string {
 }
 
 function getVisibleColumns(columns: ModelColumn[]): ModelColumn[] {
-  const visible = columns.filter((c) => !c.hidden && !c.is_primary)
+  const visible = columns.filter((c) => !c.hidden)
   return visible.sort((a, b) => {
     const ao = (a as any).order ?? Number.MAX_SAFE_INTEGER
     const bo = (b as any).order ?? Number.MAX_SAFE_INTEGER

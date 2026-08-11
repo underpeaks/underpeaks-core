@@ -1,4 +1,4 @@
-// File: app/[locale]/console/navigator/page.tsx (Core version — replace Studio's if building for Core repo)
+// File: app/[locale]/console/navigator/page.tsx
 
 'use client'
 
@@ -36,13 +36,18 @@ export default function NavigatorPage() {
   async function loadData() {
     setLoading(true)
     try {
+      const userId = user?.user_id || user?.id
+      // FIX: /api/pages requires user_id as a query param (same pattern as
+      // every other pages/models fetch in the app) — this was calling it
+      // with no params at all, causing a 400 missingUserId every time.
       const [pagesRes, routesRes] = await Promise.all([
-        fetch('/api/pages'),
+        fetch(`/api/pages?user_id=${userId}`),
         fetch('/api/page-routes'),
       ])
       const pagesData  = await pagesRes.json()
       const routesData = await routesRes.json()
-      setPages((pagesData.pages ?? []).map((p: any) => ({ page_id: p.page_id, name: p.name, slug: p.slug })))
+      // FIX: nxf_pages has no "name" column — the real column is "title".
+      setPages((pagesData.pages ?? []).map((p: any) => ({ page_id: p.page_id, name: p.title, slug: p.slug })))
       setRoutes(routesData.routes ?? [])
     } finally {
       setLoading(false)

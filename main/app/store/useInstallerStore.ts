@@ -303,6 +303,7 @@ export const useInstallerStore = create<InstallerState>((set) => ({
       ecommerceEnabled:    false,
       demoContentEnabled:  false,
       installed:           true,
+      studioUrl: 'http://localhost:3000',
       dbConfig: {
         type:          'supabase',
         storageBucket: '',
