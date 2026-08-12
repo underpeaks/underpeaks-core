@@ -1,9 +1,0 @@
-{
-    "name": "OptionalFieldsModel",
-    "fields": {
-      "id": "string",
-      "description": { "type": "string", "optional": true },
-      "rating": { "type": "number", "optional": true },
-      "published": { "type": "boolean", "optional": true }
-    }
-  }
