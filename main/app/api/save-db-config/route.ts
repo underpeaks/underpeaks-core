@@ -286,6 +286,7 @@ async function writeEnvFileFromObject(env: Record<string, any>): Promise<void> {
 lines.push(
     `NEXT_PUBLIC_STUDIO_URL=${'https://studio.underpeaks.com'}`
   )
+  lines.push(`NXF_LICENSE_GRACE_UNTIL=${envSafe('')}`)
   /**
    * NXF_API_KEY_SECRET
    * A freshly generated secret used to sign and verify API keys.
