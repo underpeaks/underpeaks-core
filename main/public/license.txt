@@ -1,199 +1,552 @@
+# UNDERPEAKS
+## TERMS OF SERVICE
 
-NEXTFLUTTER STUDIO
-COMPREHENSIVE LICENSE AGREEMENT, TERMS & CONDITIONS, AND PRIVACY POLICY
+**Last updated: [DATE]**
 
----------------------------------------------------------
-TABLE OF CONTENTS
----------------------------------------------------------
-1. Definitions and Interpretation
-2. Grant of License
-3. License Restrictions and Obligations
-4. Intellectual Property Rights
-5. Payment Terms and Fees
-6. User Accounts and Security
-7. User Content and Conduct
-8. Data Privacy and Protection
-9. Confidentiality
-10. Warranties and Disclaimers
-11. Limitation of Liability
-12. Indemnification
-13. Term and Termination
-14. Effects of Termination
-15. Governing Law and Jurisdiction
-16. Dispute Resolution
-17. Force Majeure
-18. Miscellaneous
-19. Privacy Policy
-20. Cookies Policy
-21. Contact Information
+Please read these Terms of Service ("Terms," "Agreement") carefully before using Underpeaks Studio or Underpeaks Core (together, "Underpeaks," the "Service," or the "Software"), operated by Underpeaks ("we," "us," "our"), a software business based in Cape Town, South Africa.
 
----------------------------------------------------------
-1. Definitions and Interpretation
----------------------------------------------------------
-1.1 Definitions of key terms used in this Agreement.
-1.2 Interpretation rules and references.
+By creating an account, installing the Software, generating a license key, or otherwise accessing or using Underpeaks in any form, you ("User," "you," "your") agree to be bound by these Terms. If you do not agree, you must not access or use the Service.
 
----------------------------------------------------------
-2. Grant of License
----------------------------------------------------------
-2.1 License grant for Self-Hosted Use
-2.2 Conditions for Hosted Services usage
-2.3 Limitations on sublicensing, resale, or redistribution.
+---
 
----------------------------------------------------------
-3. License Restrictions and Obligations
----------------------------------------------------------
-3.1 Prohibited uses including reverse engineering, competing products.
-3.2 Obligation to comply with laws and export regulations.
-3.3 Responsibility for compliance with third-party licenses.
+### TABLE OF CONTENTS
 
----------------------------------------------------------
-4. Intellectual Property Rights
----------------------------------------------------------
-4.1 Ownership retention by NextFlutter Studio.
-4.2 No transfer of ownership except license.
-4.3 Protection of trademarks, branding, and trade secrets.
+1. Definitions
+2. Eligibility
+3. The Service
+4. Grant of License
+5. License Restrictions
+6. Intellectual Property Rights
+7. User Accounts and Security
+8. User Content and Conduct
+9. Fees, Billing, and Payment
+10. Free Tier and Trial Terms
+11. Data Ownership, Privacy, and Protection
+12. Confidentiality
+13. Third-Party Services and Integrations
+14. Service Availability and Support
+15. Warranties and Disclaimers
+16. Limitation of Liability
+17. Indemnification
+18. Suspension and Termination
+19. Effects of Termination
+20. Governing Law and Dispute Resolution
+21. Changes to These Terms
+22. General Provisions
+23. Contact Information
 
----------------------------------------------------------
-5. Payment Terms and Fees
----------------------------------------------------------
-5.1 Fee structures for hosted services.
-5.2 Billing and payment schedules.
-5.3 Taxes, refunds, and invoicing.
-5.4 Consequences of non-payment.
+---
 
----------------------------------------------------------
-6. User Accounts and Security
----------------------------------------------------------
-6.1 Account creation, maintenance, and authentication.
-6.2 User responsibility for account confidentiality.
-6.3 Reporting security incidents.
-6.4 Suspension for security violations.
+### 1. Definitions
 
----------------------------------------------------------
-7. User Content and Conduct
----------------------------------------------------------
-7.1 Responsibility for all data and content uploaded or generated.
-7.2 Prohibited content and activities.
-7.3 Monitoring and removal of unlawful content.
-7.4 Cooperation with law enforcement.
+**1.1** "Underpeaks Core" means the open-source, self-hosted version of the Software, distributed under the Apache License 2.0, which the User installs and operates on their own infrastructure.
 
----------------------------------------------------------
-8. Data Privacy and Protection
----------------------------------------------------------
-8.1 Data collected, purposes, and retention.
-8.2 Compliance with GDPR, POPIA, and other laws.
-8.3 Data subject rights.
-8.4 Data security measures.
-8.5 Third-party processors and data transfers.
+**1.2** "Underpeaks Studio" means the hosted, managed version of the Software, operated by Underpeaks on its own infrastructure and made available to Users on a subscription basis.
 
----------------------------------------------------------
-9. Confidentiality
----------------------------------------------------------
-9.1 Definition and obligations.
-9.2 Exclusions and permitted disclosures.
-9.3 Duration of confidentiality obligations.
+**1.3** "Generated Code" means the Flutter and/or Next.js application source code produced by the Software's code-generation features, based on models, pages, menus, and themes configured by the User.
 
----------------------------------------------------------
-10. Warranties and Disclaimers
----------------------------------------------------------
-10.1 Disclaimer of all warranties, express and implied.
-10.2 No guarantee of uninterrupted operation.
-10.3 Disclaimer regarding third-party integrations.
+**1.4** "License Key" means the unique credential issued by Underpeaks Studio that authorizes and authenticates a given installation of Underpeaks Core, and/or governs the User's access to features of Underpeaks Studio.
 
----------------------------------------------------------
-11. Limitation of Liability
----------------------------------------------------------
-11.1 Limitation on damages.
-11.2 Cap on total liability.
-11.3 Exclusion of consequential damages.
-11.4 Applicability to claims under statute.
+**1.5** "User Content" means any data, models, schemas, media, text, or other content that a User creates, uploads, configures, or stores using the Service, excluding the Software itself.
 
----------------------------------------------------------
-12. Indemnification
----------------------------------------------------------
-12.1 Indemnity obligations of the User.
-12.2 Procedures for indemnification claims.
-12.3 Survival of indemnity obligations.
+**1.6** "Subscription Plan" means any of the paid tiers made available through Underpeaks Studio, as described on the Underpeaks pricing page from time to time.
 
----------------------------------------------------------
-13. Term and Termination
----------------------------------------------------------
-13.1 Effective date and duration.
-13.2 Grounds for termination.
-13.3 Notice and cure periods.
-13.4 Automatic termination provisions.
+---
 
----------------------------------------------------------
-14. Effects of Termination
----------------------------------------------------------
-14.1 Cessation of use.
-14.2 Data deletion or return.
-14.3 Survival of certain provisions.
+### 2. Eligibility
 
----------------------------------------------------------
-15. Governing Law and Jurisdiction
----------------------------------------------------------
-15.1 Choice of law: South Africa.
-15.2 Jurisdiction and venue.
-15.3 Waiver of jury trial or other rights (where applicable).
+**2.1** You must be at least 18 years old, or the age of legal majority in your jurisdiction, to use the Service.
 
----------------------------------------------------------
-16. Dispute Resolution
----------------------------------------------------------
-16.1 Good faith negotiations.
-16.2 Mediation and arbitration procedures.
-16.3 Litigation rights and remedies.
+**2.2** You represent that you have the legal authority to enter into this Agreement, whether on your own behalf or on behalf of an organization, business, or other legal entity.
 
----------------------------------------------------------
-17. Force Majeure
----------------------------------------------------------
-17.1 Definition and examples.
-17.2 Suspension of obligations.
-17.3 Notice requirements.
+**2.3** The Service is not directed at, and must not be used by, individuals under the age of 18.
 
----------------------------------------------------------
-18. Miscellaneous
----------------------------------------------------------
-18.1 Entire agreement clause.
-18.2 Amendments and modifications.
-18.3 Assignment and delegation.
-18.4 Severability.
-18.5 No waiver.
-18.6 Notices.
-18.7 Relationship of parties.
+---
 
----------------------------------------------------------
-19. Privacy Policy
----------------------------------------------------------
-19.1 Personal information collected.
-19.2 Use of personal data.
-19.3 Data sharing and disclosures.
-19.4 Security of data.
-19.5 User rights to access, correction, deletion.
-19.6 International data transfers.
-19.7 Retention period.
-19.8 Cookies and tracking technologies.
+### 3. The Service
 
----------------------------------------------------------
-20. Cookies Policy
----------------------------------------------------------
-20.1 What are cookies.
-20.2 Types of cookies used.
-20.3 Managing cookies.
-20.4 Consent and withdrawal.
+**3.1** Underpeaks is a content-model-driven platform that allows Users to define data models, pages, menus, and themes, and to generate corresponding Flutter and Next.js applications, and/or operate a headless content management system.
 
----------------------------------------------------------
-21. Contact Information
----------------------------------------------------------
-For any questions or concerns, please contact:
+**3.2** Underpeaks is made available in two forms:
 
-NextFlutter Studio  
-Legal Department  
-Email: legal@nextflutter.com  
-Website: https://nextflutter.com  
+- **Underpeaks Core** — free, open-source, self-hosted software that the User installs and operates on infrastructure of their own choosing.
+- **Underpeaks Studio** — a paid, hosted service operated by Underpeaks, providing managed infrastructure, additional integrations, and support.
 
----------------------------------------------------------
+**3.3** Features, integrations, and capabilities may differ between Underpeaks Core and Underpeaks Studio, and between Subscription Plans, as described on the Underpeaks website and documentation from time to time.
 
-© 2025 NextFlutter Studio. All rights reserved.
+**3.4** Underpeaks reserves the right to modify, add, or discontinue features of the Service at any time, with reasonable notice where practicable, particularly with respect to Underpeaks Studio.
 
+---
+
+### 4. Grant of License
+
+**4.1 Underpeaks Core.** Subject to your compliance with these Terms, Underpeaks grants you a limited, non-exclusive, non-transferable, revocable license to download, install, and use Underpeaks Core, in accordance with the terms of the Apache License 2.0, for lawful purposes only.
+
+**4.2 Underpeaks Studio.** Subject to your compliance with these Terms and payment of applicable fees, Underpeaks grants you a limited, non-exclusive, non-transferable, revocable right to access and use Underpeaks Studio during the term of your active Subscription Plan.
+
+**4.3 Generated Code.** Code generated by the Software for your own projects is yours to use, modify, deploy, and distribute as part of your own applications, without additional licensing fees or royalties, subject to Section 5 below.
+
+**4.4** No license is granted to you under this Agreement except as expressly set out in this Section 4.
+
+---
+
+### 5. License Restrictions
+
+You agree that you will NOT, and will not permit any third party to:
+
+**5.1** Use the Service, Underpeaks Core, Underpeaks Studio, or any Generated Code for any unlawful purpose, including but not limited to fraud, distribution of illegal content, facilitation of criminal activity, or infringement of the rights of others.
+
+**5.2** Resell, sublicense, rent, lease, or otherwise redistribute Underpeaks Core, Underpeaks Studio, or any component of the Software (whether modified or unmodified) as a standalone competing product or service, whether for commercial gain or otherwise. This restriction does not prevent you from building, operating, and selling your own applications, products, or services that were built using or generated by Underpeaks.
+
+**5.3** Alter, obscure, or remove any Underpeaks branding, license notices, or copyright notices embedded in the Software, for the purpose of representing the Software (as opposed to your own Generated Code or applications) as your own or a third party's original work.
+
+**5.4** Circumvent, disable, or interfere with any licensing, security, or license-validation mechanism within the Software, including any phone-home, license-key validation, or usage-limit enforcement mechanism.
+
+**5.5** Reverse engineer, decompile, or disassemble any portion of Underpeaks Studio's hosted infrastructure or closed-source components, except to the extent such restriction is prohibited by applicable law.
+
+**5.6** Use the Service to build a product or service that is substantially similar to, and directly competitive with, Underpeaks itself (i.e., another headless CMS with Flutter/Next.js code generation), using Underpeaks' own source code, infrastructure, or Confidential Information as the basis for doing so.
+
+**5.7** Exceed the usage limits (projects, models, team members, API requests, storage, or otherwise) associated with your Subscription Plan, except as otherwise agreed in writing.
+
+**5.8** Use the Service in any manner that could damage, disable, overburden, or impair Underpeaks' infrastructure, or interfere with any other party's use of the Service.
+
+---
+
+### 6. Intellectual Property Rights
+
+**6.1** Underpeaks and its licensors retain all right, title, and interest in and to the Software, including all underlying source code, infrastructure, trademarks, logos, and branding, except for the portions of Underpeaks Core licensed under the Apache License 2.0 and except for Generated Code as described in Section 4.3.
+
+**6.2** Nothing in this Agreement transfers any intellectual property rights in the Software (other than the licenses expressly granted in Section 4) to the User.
+
+**6.3** "Underpeaks," the Underpeaks logo, and associated branding are trademarks of Underpeaks. Nothing in this Agreement grants you any right to use Underpeaks' trademarks, except as reasonably necessary to describe that your application was built using Underpeaks (e.g., "built with Underpeaks"), and subject to Underpeaks' reasonable trademark guidelines.
+
+**6.4** You retain all ownership rights in your User Content and in the specific Generated Code produced for your own projects. Underpeaks claims no ownership over your models, data, or the applications you build using the Service.
+
+**6.5** You grant Underpeaks a limited, non-exclusive license to host, store, process, and transmit your User Content solely as necessary to provide the Service to you.
+
+---
+
+### 7. User Accounts and Security
+
+**7.1** You are responsible for maintaining the confidentiality of your account credentials, license keys, and API keys, and for all activity that occurs under your account.
+
+**7.2** You must notify Underpeaks promptly of any unauthorized use of your account or any other breach of security.
+
+**7.3** Underpeaks reserves the right to suspend or terminate accounts that we reasonably believe have been compromised, are being used fraudulently, or are in violation of these Terms.
+
+**7.4** You are responsible for ensuring that any team members you invite to your project comply with these Terms.
+
+---
+
+### 8. User Content and Conduct
+
+**8.1** You are solely responsible for all User Content you create, upload, or generate using the Service, including its legality, reliability, and appropriateness.
+
+**8.2** You agree not to use the Service to store, process, or transmit content that is illegal, defamatory, obscene, infringing, or that violates the rights of any third party.
+
+**8.3** Underpeaks does not actively monitor User Content stored via Underpeaks Studio, but reserves the right to investigate and take appropriate action, including removal of content and/or suspension or termination of accounts, where we become aware of a violation of these Terms or applicable law.
+
+**8.4** Underpeaks will cooperate with law enforcement requests to the extent required by applicable law.
+
+---
+
+### 9. Fees, Billing, and Payment
+
+**9.1** Underpeaks Core is, and will remain, free of charge under the Apache License 2.0.
+
+**9.2** Access to Underpeaks Studio Subscription Plans requires payment of the applicable fees, as set out on the Underpeaks pricing page at the time of purchase. Pricing may be adjusted based on your billing region.
+
+**9.3** Fees are billed in advance on a recurring basis (monthly or annually, as selected), via the payment processor(s) made available at checkout (currently PayFast and/or Paddle).
+
+**9.4** All fees are exclusive of applicable taxes unless stated otherwise; you are responsible for any applicable taxes, other than taxes on Underpeaks' income.
+
+**9.5** Except as required by law or as otherwise expressly stated in these Terms, fees are non-refundable.
+
+**9.6** Underpeaks reserves the right to change Subscription Plan pricing. Where practicable, we will provide at least 30 days' notice of a price increase to existing subscribers before it takes effect on their next billing cycle.
+
+**9.7** If payment fails or is not received, Underpeaks may suspend or downgrade your access to Underpeaks Studio until payment is received.
+
+---
+
+### 10. Free Tier and Trial Terms
+
+**10.1** Underpeaks may offer free trials or free-tier access to Underpeaks Studio from time to time. Such offerings may be modified, limited, or discontinued at Underpeaks' sole discretion.
+
+**10.2** Underpeaks Core's free, self-hosted nature is not a "trial" — it is provided free of charge indefinitely under the Apache License 2.0, subject to these Terms.
+
+---
+
+### 11. Data Ownership, Privacy, and Protection
+
+**11.1** As between you and Underpeaks, you own all data and content you store using the Service.
+
+**11.2** Underpeaks' collection, use, and protection of personal information is governed by the Underpeaks Privacy Policy, incorporated into these Terms by reference.
+
+**11.3** For Underpeaks Core, since the Software runs on infrastructure you control, you are solely responsible for the security, backup, and legal compliance (including data protection law compliance) of the data you store.
+
+**11.4** For Underpeaks Studio, Underpeaks implements reasonable technical and organizational security measures to protect User Content, as further described in the Privacy Policy.
+
+**11.5** Underpeaks complies with applicable data protection laws, including South Africa's Protection of Personal Information Act (POPIA) and, where applicable to Users in the European Union or United Kingdom, the General Data Protection Regulation (GDPR).
+
+---
+
+### 12. Confidentiality
+
+**12.1** "Confidential Information" means any non-public technical, business, or commercial information disclosed by one party to the other in connection with this Agreement, including but not limited to source code, infrastructure design, security practices, and unreleased features.
+
+**12.2** Each party agrees to use the other's Confidential Information solely for the purposes of this Agreement, and not to disclose it to any third party without the disclosing party's prior written consent, except as required by law.
+
+**12.3** This Section 12 does not apply to information that is or becomes publicly available through no fault of the receiving party, was already known to the receiving party prior to disclosure, or is independently developed without reference to the Confidential Information.
+
+**12.4** Confidentiality obligations under this Section survive termination of this Agreement.
+
+---
+
+### 13. Third-Party Services and Integrations
+
+**13.1** Underpeaks Studio may offer optional integrations with third-party services (including, without limitation, payment processors, email providers, SMS/OTP providers, and AI providers).
+
+**13.2** Your use of any third-party integration is subject to that third party's own terms of service and privacy policy. Underpeaks is not responsible for the acts, omissions, availability, or performance of any third-party service.
+
+**13.3** Underpeaks Core does not include hosted-only integrations that depend on Underpeaks' own infrastructure or credentials.
+
+---
+
+### 14. Service Availability and Support
+
+**14.1** Underpeaks Studio is provided on an "as available" basis. While Underpeaks aims for high availability, we do not guarantee uninterrupted, error-free, or continuous operation of the Service.
+
+**14.2** Support for Underpeaks Studio is provided according to your Subscription Plan (community, email, priority email, or dedicated support, as applicable). Support for Underpeaks Core is provided on a community basis (e.g., via Discord), on a reasonable-efforts basis, without any guaranteed response time.
+
+**14.3** Underpeaks is operated by a small team (currently a single developer). While we aim to respond to support requests within 48–72 hours, this is a target, not a guaranteed service level, except where an explicit Service Level Agreement ("SLA") has been separately agreed in writing (e.g., for Enterprise plans).
+
+---
+
+### 15. Warranties and Disclaimers
+
+**15.1** THE SERVICE, INCLUDING UNDERPEAKS CORE, UNDERPEAKS STUDIO, AND ANY GENERATED CODE, IS PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OF ANY KIND, WHETHER EXPRESS, IMPLIED, OR STATUTORY, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT, TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW.
+
+**15.2** Underpeaks does not warrant that the Service will be uninterrupted, secure, or error-free, that defects will be corrected, or that the Service or the servers that make it available are free of harmful components.
+
+**15.3** Underpeaks does not warrant the accuracy, reliability, or suitability of Generated Code for any particular purpose. You are solely responsible for testing, reviewing, and securing any application built using Generated Code before deploying it to production or relying on it for any critical purpose.
+
+**15.4** Nothing in this Agreement excludes or limits any warranty, right, or remedy that cannot lawfully be excluded or limited under applicable law, including consumer protection law.
+
+---
+
+### 16. Limitation of Liability
+
+**16.1** TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL UNDERPEAKS, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING BUT NOT LIMITED TO LOSS OF PROFITS, DATA, USE, GOODWILL, OR OTHER INTANGIBLE LOSSES, ARISING OUT OF OR IN CONNECTION WITH YOUR USE OF, OR INABILITY TO USE, THE SERVICE.
+
+**16.2** TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, UNDERPEAKS' TOTAL AGGREGATE LIABILITY ARISING OUT OF OR RELATING TO THIS AGREEMENT SHALL NOT EXCEED THE GREATER OF (A) THE TOTAL AMOUNT PAID BY YOU TO UNDERPEAKS IN THE TWELVE (12) MONTHS PRECEDING THE EVENT GIVING RISE TO THE CLAIM, OR (B) ONE HUNDRED US DOLLARS (USD 100), OR THE EQUIVALENT IN YOUR LOCAL CURRENCY.
+
+**16.3** THE LIMITATIONS IN THIS SECTION 16 APPLY REGARDLESS OF THE LEGAL THEORY ON WHICH A CLAIM IS BASED, WHETHER IN CONTRACT, TORT, NEGLIGENCE, STRICT LIABILITY, OR OTHERWISE, AND EVEN IF UNDERPEAKS HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+**16.4** Nothing in this Agreement limits or excludes liability for death or personal injury caused by negligence, fraud or fraudulent misrepresentation, or any other liability that cannot be limited or excluded under applicable law.
+
+**16.5** For Underpeaks Core, given that it is provided free of charge and self-hosted on your own infrastructure, Underpeaks' liability is limited to the maximum extent permitted by law, and in no event shall exceed the amount you paid for Underpeaks Core (i.e., zero).
+
+---
+
+### 17. Indemnification
+
+**17.1** You agree to indemnify, defend, and hold harmless Underpeaks and its officers, directors, employees, and agents from and against any claims, liabilities, damages, losses, and expenses (including reasonable legal fees) arising out of or in any way connected with:
+
+(a) your use or misuse of the Service;
+(b) your User Content;
+(c) your violation of these Terms;
+(d) your violation of any applicable law or the rights of any third party; or
+(e) any application, product, or service you build, deploy, or distribute using the Service or Generated Code.
+
+**17.2** Underpeaks reserves the right, at its own expense, to assume the exclusive defense and control of any matter otherwise subject to indemnification by you, in which case you agree to cooperate with Underpeaks' defense of such claim.
+
+---
+
+### 18. Suspension and Termination
+
+**18.1** You may stop using Underpeaks Core at any time by ceasing to use the software. You may cancel your Underpeaks Studio Subscription Plan at any time through your account settings; cancellation will take effect at the end of your current billing period.
+
+**18.2** Underpeaks reserves the right to suspend or revoke your license key, suspend your account, or terminate your access to the Service, with or without notice, if:
+
+(a) you breach these Terms, including the License Restrictions in Section 5;
+(b) your account is used for illegal or fraudulent purposes;
+(c) payment for Underpeaks Studio is not received when due; or
+(d) Underpeaks reasonably believes such action is necessary to protect the Service, other Users, or third parties.
+
+**18.3** Underpeaks will make reasonable efforts to provide notice of suspension or termination where practicable, except where immediate action is necessary to prevent harm or address a violation of Section 5.
+
+**18.4** Revocation of a license key under this Section renders the corresponding installation of Underpeaks Core or access to Underpeaks Studio unauthorized, and you must immediately cease use of the affected installation or account.
+
+---
+
+### 19. Effects of Termination
+
+**19.1** Upon termination of your Underpeaks Studio Subscription Plan, your access to the hosted Service will cease. Your data will be retained for a period of 30 days following cancellation or termination, after which it may be permanently deleted, unless a longer retention period is required by law.
+
+**19.2** Termination of your Underpeaks Studio account does not affect your rights to continue using Underpeaks Core under the Apache License 2.0.
+
+**19.3** Sections of this Agreement that by their nature should survive termination (including but not limited to Sections 6, 9.5, 11, 12, 15, 16, 17, and 20) shall survive.
+
+---
+
+### 20. Governing Law and Dispute Resolution
+
+**20.1** This Agreement is governed by, and construed in accordance with, the laws of South Africa, without regard to its conflict of laws principles.
+
+**20.2** The parties agree to first attempt to resolve any dispute arising out of or relating to this Agreement through good-faith negotiation.
+
+**20.3** If a dispute cannot be resolved through good-faith negotiation within 30 days, the parties agree to submit the dispute to mediation before pursuing formal legal proceedings, unless interim or injunctive relief is required.
+
+**20.4** Subject to Section 20.3, the courts of South Africa shall have exclusive jurisdiction over any dispute arising out of or relating to this Agreement, except where mandatory consumer protection law in your jurisdiction provides otherwise.
+
+---
+
+### 21. Changes to These Terms
+
+**21.1** Underpeaks may update these Terms from time to time. Where changes are material, we will make reasonable efforts to notify Users, such as by email or an in-app notice, at least 14 days before the changes take effect.
+
+**21.2** Continued use of the Service after changes to these Terms take effect constitutes acceptance of the revised Terms.
+
+---
+
+### 22. General Provisions
+
+**22.1 Entire Agreement.** This Agreement, together with the Privacy Policy and any other documents expressly incorporated by reference, constitutes the entire agreement between you and Underpeaks regarding the Service, and supersedes any prior agreements.
+
+**22.2 Severability.** If any provision of this Agreement is found to be unenforceable, the remaining provisions will remain in full force and effect.
+
+**22.3 No Waiver.** Underpeaks' failure to enforce any right or provision of this Agreement will not be considered a waiver of such right or provision.
+
+**22.4 Assignment.** You may not assign or transfer this Agreement without Underpeaks' prior written consent. Underpeaks may assign this Agreement in connection with a merger, acquisition, or sale of assets.
+
+**22.5 Force Majeure.** Underpeaks shall not be liable for any failure or delay in performance resulting from causes beyond its reasonable control, including but not limited to acts of God, natural disasters, war, terrorism, riots, embargoes, acts of civil or military authorities, fire, floods, accidents, network or infrastructure failures, strikes, or shortages of transportation, facilities, fuel, energy, labor, or materials.
+
+**22.6 Independent Contractors.** Nothing in this Agreement creates a partnership, joint venture, agency, or employment relationship between you and Underpeaks.
+
+**22.7 Notices.** Notices to Underpeaks should be sent to the email address listed in Section 23. Notices to you may be sent to the email address associated with your account.
+
+---
+
+### 23. Contact Information
+
+For questions about these Terms, please contact:
+
+**Underpeaks**
+Cape Town, South Africa
+Email: [hello@underpeaks.com](mailto:hello@underpeaks.com)
+Website: [https://underpeaks.com](https://underpeaks.com)
+
+---
+
+© 2026 Underpeaks. All rights reserved.
+
+# UNDERPEAKS
+## PRIVACY POLICY
+
+**Last updated: [DATE]**
+
+This Privacy Policy explains how Underpeaks ("we," "us," "our") collects, uses, discloses, and protects personal information when you use Underpeaks Studio, Underpeaks Core, or our website (together, the "Service").
+
+Underpeaks is based in Cape Town, South Africa, and complies with the Protection of Personal Information Act (POPIA), and, where applicable to Users in the European Union or United Kingdom, the General Data Protection Regulation (GDPR).
+
+---
+
+### TABLE OF CONTENTS
+
+1. Information We Collect
+2. How We Use Your Information
+3. Legal Basis for Processing (GDPR)
+4. Data Sharing and Disclosure
+5. Third-Party Service Providers
+6. International Data Transfers
+7. Data Retention
+8. Data Security
+9. Your Rights
+10. Cookies and Tracking Technologies
+11. Underpeaks Core (Self-Hosted) Data
+12. Children's Privacy
+13. Changes to This Policy
+14. Contact Information
+
+---
+
+### 1. Information We Collect
+
+**1.1 Account Information.** When you create an Underpeaks Studio account, we collect your name, email address, and password (stored in hashed form). If you subscribe to a paid plan, our payment processors (PayFast and/or Paddle) collect billing information directly; we do not store full payment card details ourselves.
+
+**1.2 Project and Content Data.** Data models, content, media, and configuration you create within Underpeaks Studio, in order to provide the Service to you.
+
+**1.3 Usage Data.** Information about how you use the Service, including log data, API request patterns, feature usage, and error reports, collected to maintain, secure, and improve the Service.
+
+**1.4 Communications.** If you contact us for support (via email or Discord), we retain the content of that communication in order to respond to and resolve your request.
+
+**1.5 Website Analytics.** If you visit our website, we may use analytics tools (such as Google Analytics) to understand aggregate visitor behavior. See Section 10 for more on cookies and tracking.
+
+---
+
+### 2. How We Use Your Information
+
+We use the information we collect to:
+
+**2.1** Provide, operate, and maintain Underpeaks Studio;
+
+**2.2** Process payments and manage your subscription;
+
+**2.3** Communicate with you about your account, updates, security notices, or support requests;
+
+**2.4** Monitor and improve the performance, security, and reliability of the Service;
+
+**2.5** Detect, prevent, and address fraud, abuse, security incidents, or violations of our Terms of Service;
+
+**2.6** Comply with legal obligations; and
+
+**2.7** With your consent, send you marketing communications about Underpeaks (which you may opt out of at any time).
+
+---
+
+### 3. Legal Basis for Processing (GDPR)
+
+Where GDPR applies, we process personal information on the following legal bases:
+
+**3.1** **Performance of a contract** — to provide the Service you've signed up for;
+
+**3.2** **Legitimate interests** — to secure, maintain, and improve the Service, and to prevent fraud and abuse;
+
+**3.3** **Consent** — for optional marketing communications, which you may withdraw at any time; and
+
+**3.4** **Legal obligation** — where we are required to process or retain information to comply with applicable law.
+
+---
+
+### 4. Data Sharing and Disclosure
+
+We do not sell your personal information. We may share information in the following circumstances:
+
+**4.1** With third-party service providers who process data on our behalf (see Section 5), under contractual obligations to protect it;
+
+**4.2** If required by law, regulation, legal process, or governmental request;
+
+**4.3** To protect the rights, property, or safety of Underpeaks, our Users, or the public, including enforcing our Terms of Service;
+
+**4.4** In connection with a merger, acquisition, or sale of assets, subject to standard confidentiality protections; and
+
+**4.5** With your consent, in any other circumstance we disclose to you at the time of collection.
+
+---
+
+### 5. Third-Party Service Providers
+
+We use the following categories of third-party providers to operate the Service. Specific providers may change over time; we will update this list as our integrations evolve.
+
+**5.1** **Infrastructure & database** — Supabase, Vercel.
+
+**5.2** **Payment processing** — PayFast, Paddle.
+
+**5.3** **Email delivery** — for transactional emails (e.g., password resets), and, where connected by you, third-party providers such as Resend or SendGrid for your own project's email needs.
+
+**5.4** **Analytics** — Google Analytics (website only).
+
+**5.5** **Optional integrations you connect** — Underpeaks Studio allows you to optionally connect additional third-party providers (e.g., Stripe, Twilio, OpenAI, Cloudinary) to your own projects. Data shared with these providers is governed by their own privacy policies, and by your configuration choices.
+
+Each provider processes data only as necessary to provide their respective service to us, and is bound by appropriate data processing agreements where required by law.
+
+---
+
+### 6. International Data Transfers
+
+**6.1** Underpeaks is based in South Africa, and our infrastructure providers may process and store data in other countries, including the United States and European Union.
+
+**6.2** Where we transfer personal information internationally, we take steps to ensure an adequate level of protection is applied, consistent with POPIA and, where applicable, GDPR requirements (including the use of standard contractual clauses where appropriate).
+
+---
+
+### 7. Data Retention
+
+**7.1** We retain your account and project data for as long as your Underpeaks Studio account remains active.
+
+**7.2** Following cancellation or termination of your account, we retain your data for 30 days, after which it may be permanently deleted, unless a longer period is required by law or you request earlier deletion.
+
+**7.3** We may retain certain information for longer periods where necessary to comply with legal obligations, resolve disputes, or enforce our agreements.
+
+---
+
+### 8. Data Security
+
+**8.1** We implement reasonable technical and organizational measures designed to protect personal information against unauthorized access, alteration, disclosure, or destruction, including encryption in transit, access controls, and Row Level Security on our hosted database infrastructure.
+
+**8.2** No method of transmission or storage is completely secure. While we strive to protect your information, we cannot guarantee absolute security.
+
+**8.3** If we become aware of a data breach affecting your personal information, we will notify you and any applicable regulator in accordance with our obligations under POPIA, GDPR, or other applicable law.
+
+---
+
+### 9. Your Rights
+
+Depending on your location, you may have the following rights regarding your personal information:
+
+**9.1** **Access** — to request a copy of the personal information we hold about you;
+
+**9.2** **Correction** — to request correction of inaccurate or incomplete information;
+
+**9.3** **Deletion** — to request deletion of your personal information, subject to legal retention requirements;
+
+**9.4** **Objection/Restriction** — to object to, or request restriction of, certain processing activities;
+
+**9.5** **Portability** — to receive your data in a structured, commonly used, machine-readable format, where technically feasible;
+
+**9.6** **Withdraw consent** — where processing is based on consent, to withdraw it at any time; and
+
+**9.7** **Lodge a complaint** — with the South African Information Regulator (POPIA) or your local data protection authority (GDPR), if you believe your rights have been violated.
+
+To exercise any of these rights, contact us using the details in Section 14.
+
+---
+
+### 10. Cookies and Tracking Technologies
+
+**10.1** Our website and Underpeaks Studio use cookies and similar technologies for the following purposes:
+
+- **Essential cookies** — required for authentication, security, and core functionality (cannot be disabled without affecting the Service);
+- **Analytics cookies** — to understand aggregate usage of our website (e.g., Google Analytics);
+- **Preference cookies** — to remember your settings and preferences.
+
+**10.2** You can manage your cookie preferences at any time via the cookie preferences control available in the website footer.
+
+**10.3** For more detail, see our separate Cookie Policy at [underpeaks.com/legal/cookies](https://underpeaks.com/legal/cookies).
+
+---
+
+### 11. Underpeaks Core (Self-Hosted) Data
+
+**11.1** When you self-host Underpeaks Core, all User Content and end-user data you collect is stored on infrastructure you control, not on Underpeaks' servers.
+
+**11.2** Underpeaks does not have access to data stored within a self-hosted Underpeaks Core installation, except for limited license-validation metadata transmitted via the phone-home mechanism (e.g., license key status, installation identifier), which is used solely to validate your license.
+
+**11.3** As the operator of a self-hosted Underpeaks Core instance, you are responsible for your own compliance with applicable data protection laws with respect to the data you collect and process using the software.
+
+---
+
+### 12. Children's Privacy
+
+The Service is not directed at individuals under the age of 18, and we do not knowingly collect personal information from children. If we become aware that we have inadvertently collected personal information from a child, we will take steps to delete it promptly.
+
+---
+
+### 13. Changes to This Policy
+
+We may update this Privacy Policy from time to time. Material changes will be communicated via email or an in-app notice at least 14 days before they take effect. Your continued use of the Service after such changes take effect constitutes acceptance of the updated policy.
+
+---
+
+### 14. Contact Information
+
+For questions about this Privacy Policy, or to exercise your data rights, contact:
+
+**Underpeaks**
+Cape Town, South Africa
+Email: [hello@underpeaks.com](mailto:hello@underpeaks.com)
+Website: [https://underpeaks.com](https://underpeaks.com)
+
+---
+
+© 2026 Underpeaks. All rights reserved.

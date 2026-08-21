@@ -1,8 +1,48 @@
-# Getting Started with Underpeaks Core
+<!-- File: underpeaks-core/README.md -->
 
-Underpeaks Core is the open-source, self-hosted engine behind Underpeaks. Define your data models once in the Core console, and generate Flutter and Next.js apps directly from them — no need to hand-wire the backend for every platform separately. Core also functions as a full headless CMS on its own: pages, menus, media, and users, all manageable through the same console.
+# Underpeaks Core
 
-This guide walks you through registering an account, setting up your database, running the installer, and taking your first look around.
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![npm version](https://img.shields.io/npm/v/underpeaks-nxf.svg)](https://www.npmjs.com/package/underpeaks-nxf)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/underpeaks/underpeaks-core/pulls)
+[![Discord](https://img.shields.io/discord/000000000000000000?label=discord&logo=discord)](https://discord.gg/fNjwWrFPG)
+
+**Build your backend once. Generate the rest.**
+
+Underpeaks is a self-hosted, developer-first headless CMS that generates production-ready Flutter and Next.js applications from a single content model. Define your data once, and get a real backend, a content editor, a REST API, and — if you want it — a working mobile and web app, generated straight from it.
+
+![Underpeaks console dashboard](./main/public/images/assets/dash.png)
+
+<!-- NOTE: this is currently a static dashboard screenshot. A short GIF/screen
+     recording (model → nxf generate flutter → running app) would be an even
+     stronger hook for GitHub browsers deciding in the first 10 seconds — worth
+     swapping in post-launch if you get time to record one. -->
+
+---
+
+## Why Underpeaks
+
+If you've ever built the same app for web and mobile, you know the tax: two codebases, two sets of backend glue code, one data model you're keeping in sync by hand. Change a field, update it in both places, miss one, ship a bug.
+
+Underpeaks makes that one action — change the model, regenerate both. It also handles the backend work that quietly eats your week: auth that holds across devices, file storage without leaked keys, rate limits, consistent data.
+
+No website builder, no drag-and-drop page editor. You already know how to build a frontend — Underpeaks builds the backend.
+
+---
+
+## Underpeaks Core vs Underpeaks Studio
+
+| | **Underpeaks Core** | **Underpeaks Studio** |
+|---|---|---|
+| Hosting | Self-hosted, your infrastructure | Hosted, managed for you |
+| Cost | Free, forever, open source | Paid, tiered plans |
+| Database | 5 adapters: Supabase, PostgreSQL, MySQL, MongoDB, Firebase | Supabase (managed) |
+| Code generation | Full Flutter + Next.js | Full Flutter + Next.js |
+| Team members | Unlimited | Scales with plan |
+| Integrations | — | AI, email, SMS/OTP, payments, and more |
+| Support | Community (Discord) | Email → priority → Slack → dedicated, by plan |
+
+Not sure which one you need? Start with Core — you can always move to Studio later once you know your usage.
 
 ---
 
@@ -10,7 +50,7 @@ This guide walks you through registering an account, setting up your database, r
 
 Underpeaks Core needs a license key issued from Underpeaks Studio, even when you're running everything yourself.
 
-1. Go to **[https://underpeaks-studio-beta.vercel.app/](https://underpeaks-studio-beta.vercel.app/)**
+1. Go to **[https://studio.underpeaks.com](https://studio.underpeaks.com)**
 2. Sign up for a free account
 3. Once logged in, generate a license key from your dashboard — you'll paste this into Core during setup
 
@@ -90,6 +130,35 @@ Sign in with the admin credentials you just created. You'll land in the **Consol
 
 ---
 
+## Generate a Flutter or Next.js App
+
+Once you've defined a model and attached it to a page, install the CLI and generate:
+
+```bash
+npm install -g underpeaks-nxf
+nxf login
+nxf generate flutter   # or nextjs
+```
+
+See the [docs](https://docs.underpeaks.com) for the full code generation guide.
+
+---
+
+## Links
+
+- 📖 [Documentation](https://docs.underpeaks.com)
+- 💬 [Discord](https://discord.gg/fNjwWrFPG)
+- 🏠 [Underpeaks Studio](https://studio.underpeaks.com)
+- 🌐 [underpeaks.com](https://underpeaks.com)
+
+---
+
+## Contributing
+
+Issues and pull requests are welcome. If you're planning a larger change, please open an issue first to discuss it — this project is actively maintained by a single developer, so a heads-up saves everyone time.
+
+---
+
 ## Next Steps
 
 - Create your first model under **Shared Models**
@@ -100,4 +169,10 @@ If you run into issues, check that your `.env.local` values match your database 
 
 ---
 
-**Questions or feedback?** Reach out through your Underpeaks Studio dashboard or the project's GitHub issues page.
+**Questions or feedback?** Join the [Discord](https://discord.gg/fNjwWrFPG) or open an issue on GitHub. Underpeaks is built and maintained by one person, so please be patient with response times.
+
+---
+
+## License
+
+Underpeaks Core is licensed under the [Apache License 2.0](./LICENSE).
