@@ -50,7 +50,7 @@ Not sure which one you need? Start with Core — you can always move to Studio l
 
 Underpeaks Core needs a license key issued from Underpeaks Studio, even when you're running everything yourself.
 
-1. Go to **[https://studio.underpeaks.com](https://studio.underpeaks.com)**
+1. Go to **[https://underpeaks.com](https://underpeaks.com)**
 2. Sign up for a free account
 3. Once logged in, generate a license key from your dashboard — you'll paste this into Core during setup
 
