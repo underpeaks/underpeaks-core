@@ -140,13 +140,13 @@ nxf login
 nxf generate flutter   # or nextjs
 ```
 
-See the [docs](https://docs.underpeaks.com) for the full code generation guide.
+See the [docs](https://underpeaks.com/docs/getting-started/introduction) for the full code generation guide.
 
 ---
 
 ## Links
 
-- 📖 [Documentation](https://docs.underpeaks.com)
+- 📖 [Documentation](https://underpeaks.com/docs/getting-started/introduction)
 - 💬 [Discord](https://discord.gg/fNjwWrFPG)
 - 🏠 [Underpeaks Studio](https://studio.underpeaks.com)
 - 🌐 [underpeaks.com](https://underpeaks.com)
