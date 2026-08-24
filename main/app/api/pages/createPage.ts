@@ -49,7 +49,10 @@ export async function handleCreatePage(req: NextRequest): Promise<NextResponse> 
     slug:            slug.trim(),
     model:           model ?? null,
     template_type:   template_type ?? 'list',
-    nav_settings:    nav_settings ?? { mobile: 'none', web: 'none' },
+    nav_settings:    nav_settings ?? {
+      mobile: { header: 'none', bottom: 'none' },
+      web:    { header: 'none', footer: 'none' },
+    },
     visibility:      visibility ?? 'public',
     page_type:       body.page_type ?? 'admin',
     is_system:       false,
