@@ -20,7 +20,7 @@ import { GripVertical }          from 'lucide-react'
 import { useAuth }               from '../../../layout'
 import { ConfirmDialog }         from '../../../../components_cus/confirmDialog'
 import {
-  FIELD_TYPES, getDefaultUiType, UI_TYPE_OPTIONS,
+  FIELD_TYPES, getDefaultUiType, UI_TYPE_OPTIONS, UI_TYPE_GROUPS,
   DISPLAY_UI_TYPE_OPTIONS, getDefaultDisplayUiType,
 }                                from '@/app/api/models/uitypes'
 import ForeignKeySelector        from '@/app/[locale]/console/models/components/ForeignKeySelector'
@@ -519,8 +519,12 @@ export default function EditModelPage() {
                                     onChange={(e) => updateField(index, 'ui_type', e.target.value)}
                                     className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
                                   >
-                                    {(UI_TYPE_OPTIONS[field.type] ?? ['textfield']).map((opt) => (
-                                      <option key={opt} value={opt}>{opt}</option>
+                                    {(UI_TYPE_GROUPS[field.type] ?? [{ label: 'Options', options: UI_TYPE_OPTIONS[field.type] ?? ['textfield'] }]).map((group) => (
+                                      <optgroup key={group.label} label={group.label}>
+                                        {group.options.map((opt) => (
+                                          <option key={opt} value={opt}>{opt}</option>
+                                        ))}
+                                      </optgroup>
                                     ))}
                                   </select>
                                   <p className="text-[10px] text-gray-400 mt-1">
