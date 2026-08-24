@@ -19,7 +19,10 @@ import {
 import { GripVertical }          from 'lucide-react'
 import { useAuth }               from '../../../layout'
 import { ConfirmDialog }         from '../../../../components_cus/confirmDialog'
-import { FIELD_TYPES, getDefaultUiType, UI_TYPE_OPTIONS } from '@/app/api/models/uitypes'
+import {
+  FIELD_TYPES, getDefaultUiType, UI_TYPE_OPTIONS,
+  DISPLAY_UI_TYPE_OPTIONS, getDefaultDisplayUiType,
+}                                from '@/app/api/models/uitypes'
 import ForeignKeySelector        from '@/app/[locale]/console/models/components/ForeignKeySelector'
 import Loader                    from '../../../Loading'
 import { logActivity }           from '@/app/lib/logActivity'
@@ -109,6 +112,7 @@ export default function EditModelPage() {
           is_primary:      f.is_primary      ?? false,
           hidden:          f.hidden          ?? false,
           ui_type,
+          display_ui_type: f.display_ui_type ?? getDefaultDisplayUiType(ui_type),
           foreign_key:     f.foreign_key,
           options_mode:    f.options_mode ?? (isSelect ? 'manual' : undefined),
           options:         f.options ?? (isSelect ? [] : undefined),
@@ -142,6 +146,7 @@ export default function EditModelPage() {
 
       if (key === 'type') {
         updated[index].ui_type = getDefaultUiType(value as string)
+        updated[index].display_ui_type = getDefaultDisplayUiType(updated[index].ui_type ?? '')
         if (!SELECT_UI_TYPES.includes(updated[index].ui_type ?? '')) {
           delete updated[index].options_mode
           delete updated[index].options
@@ -153,6 +158,7 @@ export default function EditModelPage() {
       }
 
       if (key === 'ui_type') {
+        updated[index].display_ui_type = getDefaultDisplayUiType(value as string)
         if (!SELECT_UI_TYPES.includes(value as string)) {
           delete updated[index].options_mode
           delete updated[index].options
@@ -210,10 +216,12 @@ export default function EditModelPage() {
   }
 
   const addField = () => {
+    const ui_type = getDefaultUiType('string')
     setFields((prev) => reindexOrder([...prev, {
       name: '', type: 'string', nullable: true,
       unique: false, is_primary: false, hidden: false,
-      ui_type: getDefaultUiType('string'),
+      ui_type,
+      display_ui_type: getDefaultDisplayUiType(ui_type),
     }]))
     setExpandedIndex(fields.length)
   }
@@ -397,6 +405,7 @@ export default function EditModelPage() {
                   const dynamicModel = field.options_mode === 'dynamic' && field.options_source?.table
                     ? existingModels.find((m) => m.name === field.options_source!.table)
                     : null
+                  const displayOptions = DISPLAY_UI_TYPE_OPTIONS[field.ui_type ?? ''] ?? ['label']
 
                   return (
                     <Draggable
@@ -514,6 +523,27 @@ export default function EditModelPage() {
                                       <option key={opt} value={opt}>{opt}</option>
                                     ))}
                                   </select>
+                                  <p className="text-[10px] text-gray-400 mt-1">
+                                    Editable widget used on admin pages.
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                                    Public Display As
+                                  </label>
+                                  <select
+                                    value={field.display_ui_type ?? getDefaultDisplayUiType(field.ui_type ?? '')}
+                                    onChange={(e) => updateField(index, 'display_ui_type', e.target.value)}
+                                    className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                  >
+                                    {displayOptions.map((opt) => (
+                                      <option key={opt} value={opt}>{opt}</option>
+                                    ))}
+                                  </select>
+                                  <p className="text-[10px] text-gray-400 mt-1">
+                                    Read-only rendering used on public pages.
+                                  </p>
                                 </div>
                               </div>
 

@@ -7,9 +7,9 @@ import {
 } from 'react-icons/fi'
 import Select from 'react-select'
 
-import { TEMPLATE_GROUPS, TEMPLATES } from './types'
+import { TEMPLATE_GROUPS, TEMPLATES, MOBILE_NAV_TYPES, WEB_NAV_TYPES } from './types'
 
-import type { PageItem, ModelSummary, PageVisibility } from './types'
+import type { PageItem, ModelSummary, PageVisibility, MobileNavType, WebNavType, NavSettings } from './types'
 
 
 interface PageDrawerProps {
@@ -32,6 +32,8 @@ export default function PageDrawer({
   const [slug,       setSlug]       = useState('')
   const [modelId,    setModelId]    = useState('')
   const [template,   setTemplate]   = useState('list')
+  const [mobileNav,  setMobileNav]  = useState<MobileNavType>('none')
+  const [webNav,     setWebNav]     = useState<WebNavType>('none')
   const [visibility, setVisibility] = useState<PageVisibility>('public')
   const [seoTitle,   setSeoTitle]   = useState('')
   const [seoDesc,    setSeoDesc]    = useState('')
@@ -46,6 +48,11 @@ export default function PageDrawer({
       setModelId(init.model_id ?? init.model ?? '')
       // Read template_type, fall back to legacy 'template' field
       setTemplate(init.template_type ?? init.template ?? 'list')
+
+      const navSettings: NavSettings | null = init.nav_settings ?? null
+      setMobileNav(navSettings?.mobile ?? 'none')
+      setWebNav(navSettings?.web ?? 'none')
+
       setVisibility(initial.visibility ?? 'public')
       setSeoTitle(initial.seo_title ?? '')
       setSeoDesc(initial.seo_description ?? '')
@@ -55,6 +62,8 @@ export default function PageDrawer({
       setSlug('')
       setModelId('')
       setTemplate('list')
+      setMobileNav('none')
+      setWebNav('none')
       setVisibility('public')
       setSeoTitle('')
       setSeoDesc('')
@@ -81,6 +90,7 @@ export default function PageDrawer({
       slug: slug.trim(),
       model_id: modelId || null,
       template_type: template,
+      nav_settings: { mobile: mobileNav, web: webNav },
       visibility,
       seo_title: seoTitle,
       seo_description: seoDesc,
@@ -131,6 +141,16 @@ export default function PageDrawer({
         <span>{data.label}</span>
       </div>
     )
+  }
+
+  const navSelectStyles = {
+    control: (base: any) => ({
+      ...base,
+      minHeight:   35,
+      borderRadius: 6,
+      borderColor: '#e5e7eb',
+      boxShadow:   'none',
+    }),
   }
 
   if (!open) return null
@@ -297,6 +317,44 @@ export default function PageDrawer({
                     This template is available on the hosted plan.
                   </p>
                 )}
+              </div>
+
+              {/* NAV — MOBILE */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-gray-700">
+                  Mobile Navigation
+                </label>
+                <Select
+                  options={MOBILE_NAV_TYPES.map((n) => ({ value: n.id, label: n.name, icon: n.icon }))}
+                  value={MOBILE_NAV_TYPES.filter((n) => n.id === mobileNav)
+                    .map((n) => ({ value: n.id, label: n.name, icon: n.icon }))[0]}
+                  onChange={(option: any) => setMobileNav(option.value)}
+                  components={{ Option: CustomOption, SingleValue: CustomSingleValue }}
+                  className="text-sm"
+                  styles={navSelectStyles}
+                />
+                <p className="text-[11px] text-gray-400">
+                  Which navigation shows on this page in the Flutter app.
+                </p>
+              </div>
+
+              {/* NAV — WEB */}
+              <div className="flex flex-col gap-1">
+                <label className="text-xs font-semibold text-gray-700">
+                  Web Navigation
+                </label>
+                <Select
+                  options={WEB_NAV_TYPES.map((n) => ({ value: n.id, label: n.name, icon: n.icon }))}
+                  value={WEB_NAV_TYPES.filter((n) => n.id === webNav)
+                    .map((n) => ({ value: n.id, label: n.name, icon: n.icon }))[0]}
+                  onChange={(option: any) => setWebNav(option.value)}
+                  components={{ Option: CustomOption, SingleValue: CustomSingleValue }}
+                  className="text-sm"
+                  styles={navSelectStyles}
+                />
+                <p className="text-[11px] text-gray-400">
+                  Which navigation shows on this page in the Next.js app.
+                </p>
               </div>
             </div>
           </section>

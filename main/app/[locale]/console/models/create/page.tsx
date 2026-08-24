@@ -1,3 +1,4 @@
+//app/[locale]/console/models/create/page.tsx
 'use client'
 
 import { useState, useEffect }   from 'react'
@@ -18,7 +19,10 @@ import {
 import { GripVertical }          from 'lucide-react'
 import { useAuth }               from '../../layout'
 import { ConfirmDialog }         from '../../../components_cus/confirmDialog'
-import { FIELD_TYPES, getDefaultUiType, ON_DELETE_OPTIONS, UI_TYPE_OPTIONS } from '@/app/api/models/uitypes'
+import {
+  FIELD_TYPES, getDefaultUiType, ON_DELETE_OPTIONS, UI_TYPE_OPTIONS,
+  DISPLAY_UI_TYPE_OPTIONS, getDefaultDisplayUiType,
+}                                from '@/app/api/models/uitypes'
 import ForeignKeySelector        from '@/app/[locale]/console/models/components/ForeignKeySelector'
 import { logActivity }           from '@/app/lib/logActivity'
 import { defaultField, Field, ForeignKey, ModelSummary, OptionsSource } from '../modelTypes'
@@ -54,7 +58,6 @@ export default function CreateModelPage() {
       .catch(() => {})
   }, [user])
 
-  // Reassign order values based on current array position
   const reindexOrder = (arr: Field[]): Field[] =>
     arr.map((f, i) => ({ ...f, order: i }))
 
@@ -65,6 +68,7 @@ export default function CreateModelPage() {
 
       if (key === 'type') {
         updated[index].ui_type = getDefaultUiType(value as string)
+        updated[index].display_ui_type = getDefaultDisplayUiType(updated[index].ui_type ?? '')
         if (!['string', 'uuid', 'integer'].includes(value as string)) {
           delete updated[index].foreign_key
         }
@@ -76,6 +80,7 @@ export default function CreateModelPage() {
       }
 
       if (key === 'ui_type') {
+        updated[index].display_ui_type = getDefaultDisplayUiType(value as string)
         if (!SELECT_UI_TYPES.includes(value as string)) {
           delete updated[index].options_mode
           delete updated[index].options
@@ -166,7 +171,6 @@ export default function CreateModelPage() {
     setConfirmOpen(false)
   }
 
-  // Drag-and-drop reorder
   const onDragEnd = (result: DropResult) => {
     if (!result.destination) return
     if (result.destination.index === result.source.index) return
@@ -178,7 +182,6 @@ export default function CreateModelPage() {
       return reindexOrder(updated)
     })
 
-    // Keep expanded row tracking the moved field
     if (expandedIndex === result.source.index) {
       setExpandedIndex(result.destination.index)
     } else if (
@@ -233,7 +236,6 @@ export default function CreateModelPage() {
       const userId   = user?.user_id || user?.id
       const fullName = 'nxf_' + modelName.trim()
 
-      // Ensure order is set on every field before saving
       const columnsWithOrder = reindexOrder(fields)
 
       const schemaPayload = {
@@ -293,14 +295,12 @@ export default function CreateModelPage() {
           </button>
         </div>
 
-        {/* Error banner */}
         {error && (
           <div className="mb-4 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
             {error}
           </div>
         )}
 
-        {/* Model name */}
         <div className="mb-6 bg-white border border-gray-200 rounded-xl p-4">
           <label className="block text-xs font-semibold text-gray-600 mb-1.5 uppercase tracking-wide">
             {t('form.modelNameLabel')}
@@ -317,7 +317,6 @@ export default function CreateModelPage() {
           </div>
         </div>
 
-        {/* Field rows — draggable */}
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="fields-list">
             {(provided) => (
@@ -336,6 +335,7 @@ export default function CreateModelPage() {
                   const dynamicModel  = field.options_mode === 'dynamic' && field.options_source?.table
                     ? existingModels.find((m) => m.name === field.options_source!.table)
                     : null
+                  const displayOptions = DISPLAY_UI_TYPE_OPTIONS[field.ui_type ?? ''] ?? ['label']
 
                   return (
                     <Draggable
@@ -353,9 +353,7 @@ export default function CreateModelPage() {
                               : 'border-gray-200'
                           }`}
                         >
-                          {/* Basic row */}
                           <div className="flex items-center gap-3 px-4 py-3">
-                            {/* Drag handle */}
                             <div
                               {...dragProvided.dragHandleProps}
                               className="cursor-grab active:cursor-grabbing text-gray-300 hover:text-gray-500 p-1 -ml-1"
@@ -405,7 +403,6 @@ export default function CreateModelPage() {
                             </button>
                           </div>
 
-                          {/* Advanced options */}
                           {isExpanded && (
                             <div className="px-4 pb-4 pt-1 border-t border-gray-100 space-y-4">
                               <div className="grid grid-cols-2 gap-4">
@@ -456,10 +453,30 @@ export default function CreateModelPage() {
                                       <option key={opt} value={opt}>{opt}</option>
                                     ))}
                                   </select>
+                                  <p className="text-[10px] text-gray-400 mt-1">
+                                    Editable widget used on admin pages.
+                                  </p>
+                                </div>
+
+                                <div>
+                                  <label className="block text-xs font-medium text-gray-500 mb-1">
+                                    Public Display As
+                                  </label>
+                                  <select
+                                    value={field.display_ui_type ?? getDefaultDisplayUiType(field.ui_type ?? '')}
+                                    onChange={(e) => updateField(index, 'display_ui_type', e.target.value)}
+                                    className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
+                                  >
+                                    {displayOptions.map((opt) => (
+                                      <option key={opt} value={opt}>{opt}</option>
+                                    ))}
+                                  </select>
+                                  <p className="text-[10px] text-gray-400 mt-1">
+                                    Read-only rendering used on public pages.
+                                  </p>
                                 </div>
                               </div>
 
-                              {/* Select / Multi-select options */}
                               {isSelectType && (
                                 <div className="border border-amber-200 bg-amber-50 rounded-lg p-4 space-y-3">
                                   <div className="flex items-center justify-between">
@@ -600,7 +617,6 @@ export default function CreateModelPage() {
                                 </div>
                               )}
 
-                              {/* Foreign key */}
                               <div>
                                 <label className="block text-xs font-medium text-gray-500 mb-1">
                                   {t('form.foreignKey')}
@@ -621,7 +637,6 @@ export default function CreateModelPage() {
                                 )}
                               </div>
 
-                              {/* FK column */}
                               {fkModel && (
                                 <div>
                                   <label className="block text-xs font-medium text-gray-500 mb-1">
@@ -644,7 +659,6 @@ export default function CreateModelPage() {
                                 </div>
                               )}
 
-                              {/* On delete */}
                               {field.foreign_key?.references?.match(/\(.+\)/) && (
                                 <div>
                                   <label className="block text-xs font-medium text-gray-500 mb-1">
@@ -674,7 +688,6 @@ export default function CreateModelPage() {
           </Droppable>
         </DragDropContext>
 
-        {/* Add field */}
         <button
           type="button"
           onClick={addField}

@@ -12,6 +12,7 @@ export async function handleCreatePage(req: NextRequest): Promise<NextResponse> 
 
   const {
     user_id, title, slug, model, template_type,
+    nav_settings,
     visibility, seo_title, seo_description, is_system, hidden,
   } = body
 
@@ -48,6 +49,7 @@ export async function handleCreatePage(req: NextRequest): Promise<NextResponse> 
     slug:            slug.trim(),
     model:           model ?? null,
     template_type:   template_type ?? 'list',
+    nav_settings:    nav_settings ?? { mobile: 'none', web: 'none' },
     visibility:      visibility ?? 'public',
     page_type:       body.page_type ?? 'admin',
     is_system:       false,

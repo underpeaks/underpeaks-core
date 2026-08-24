@@ -20,18 +20,22 @@ export interface OptionsSource {
 }
 
 export interface Field {
-  name:            string
-  type:            string
-  nullable:        boolean
-  unique:          boolean
-  is_primary:      boolean
-  foreign_key?:    ForeignKey
-  ui_type?:        string
-  hidden:          boolean
-  options_mode?:   'manual' | 'dynamic'
-  options?:        string[]
-  options_source?: OptionsSource
-  order?:          number
+  name:             string
+  type:             string
+  nullable:         boolean
+  unique:           boolean
+  is_primary:       boolean
+  foreign_key?:     ForeignKey
+  ui_type?:         string
+  // Read-only render variant used on public pages. Independent of ui_type
+  // (which is the ADMIN/editable widget). Defaults via getDefaultDisplayUiType
+  // when the field's ui_type is set/changed and this hasn't been chosen yet.
+  display_ui_type?: string
+  hidden:           boolean
+  options_mode?:    'manual' | 'dynamic'
+  options?:         string[]
+  options_source?:  OptionsSource
+  order?:           number
 }
 
 export interface ModelSummary {
@@ -46,14 +50,16 @@ export interface ModelSummary {
 }
 
 export function defaultField(): Field {
+  const ui_type = getDefaultUiType('string')
   return {
-    name:       '',
-    type:       'string',
-    nullable:   true,
-    unique:     false,
-    is_primary: false,
-    hidden:     false,
-    ui_type:    getDefaultUiType('string'),
-    order:      0,
+    name:            '',
+    type:            'string',
+    nullable:        true,
+    unique:          false,
+    is_primary:      false,
+    hidden:          false,
+    ui_type,
+    display_ui_type: undefined,
+    order:           0,
   }
 }

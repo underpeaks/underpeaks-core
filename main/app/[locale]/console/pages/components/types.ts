@@ -26,6 +26,8 @@ import {
   FiMail,
   FiCheckCircle,
   FiSliders,
+  FiMenu,
+  FiMinus,
 } from 'react-icons/fi'
 
 import { IconType } from 'react-icons'
@@ -36,6 +38,14 @@ import { IconType } from 'react-icons'
 
 export type PageVisibility = 'public' | 'admin' | 'draft'
 
+export type MobileNavType = 'none' | 'bottom-nav' | 'drawer-nav'
+export type WebNavType    = 'none' | 'top-nav' | 'sidebar-nav' | 'footer'
+
+export interface NavSettings {
+  mobile: MobileNavType
+  web:    WebNavType
+}
+
 export interface PageItem {
   page_id:          string
   name:             string
@@ -44,6 +54,7 @@ export interface PageItem {
   // Current field names (used by router and drawer)
   model_id:         string | null
   template_type:    string
+  nav_settings:      NavSettings | null
 
   // Legacy field names — kept optional for backwards compatibility
   // with old records that haven't been re-saved yet
@@ -332,6 +343,35 @@ export const TEMPLATE_GROUPS: TemplateGroup[] = [
       },
     ],
   },
+]
+
+// ---------------------------------------------------------------------------
+// Per-platform Nav Types
+// ---------------------------------------------------------------------------
+
+export type MobileNavTypeDef = {
+  id:   MobileNavType
+  name: string
+  icon: IconType
+}
+
+export type WebNavTypeDef = {
+  id:   WebNavType
+  name: string
+  icon: IconType
+}
+
+export const MOBILE_NAV_TYPES: MobileNavTypeDef[] = [
+  { id: 'none',        name: 'None',       icon: FiCode },
+  { id: 'bottom-nav',  name: 'Bottom Nav', icon: FiMenu },
+  { id: 'drawer-nav',  name: 'Drawer Nav', icon: FiMenu },
+]
+
+export const WEB_NAV_TYPES: WebNavTypeDef[] = [
+  { id: 'none',        name: 'None',        icon: FiCode },
+  { id: 'top-nav',     name: 'Top Nav',     icon: FiMenu },
+  { id: 'sidebar-nav', name: 'Sidebar Nav', icon: FiMenu },
+  { id: 'footer',      name: 'Footer',      icon: FiMinus },
 ]
 
 // ---------------------------------------------------------------------------
