@@ -270,6 +270,13 @@ export default function CreateModelPage() {
     }
   }
 
+  // FIX: the "Source table" dropdown for dynamic select options was
+  // rendering every model returned by /api/models/names with no filtering
+  // — including internal system tables (nxf_system_*, nxf_users, etc.).
+  // /api/models/names already returns an is_system flag on every row, same
+  // as the FK selector uses; filter it out here too.
+  const selectableSourceModels = existingModels.filter((m: any) => !m.is_system)
+
   return (
     <div className="h-full overflow-y-auto">
       <div className="p-6 max-w-4xl mx-auto">
@@ -340,7 +347,7 @@ export default function CreateModelPage() {
                   const hasPk         = fields.some((f, i) => f.is_primary && i !== index)
                   const isSelectType  = SELECT_UI_TYPES.includes(field.ui_type ?? '')
                   const dynamicModel  = field.options_mode === 'dynamic' && field.options_source?.table
-                    ? existingModels.find((m) => m.name === field.options_source!.table)
+                    ? selectableSourceModels.find((m) => m.name === field.options_source!.table)
                     : null
                   const displayOptions = DISPLAY_UI_TYPE_OPTIONS[field.ui_type ?? ''] ?? ['label']
 
@@ -592,7 +599,7 @@ export default function CreateModelPage() {
                                           className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
                                         >
                                           <option value="">Select a model…</option>
-                                          {existingModels.map((m) => (
+                                          {selectableSourceModels.map((m) => (
                                             <option key={m.sm_id} value={m.name}>{m.name}</option>
                                           ))}
                                         </select>
@@ -632,7 +639,6 @@ export default function CreateModelPage() {
                                 </div>
                               )}
 
-                              {/* Foreign key */}
                               <div>
                                 <label className="block text-xs font-medium text-gray-500 mb-1">
                                   {t('form.foreignKey')}
