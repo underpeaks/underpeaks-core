@@ -109,6 +109,15 @@
       "hidden": false,
       "ui_type": "select"
     },
+        {
+      "name": "nav_settings",
+      "type": "jsonb",
+      "nullable": true,
+      "default": "{\"mobile\":\"none\",\"web\":\"none\"}",
+      "description": "per-platform navigation — { mobile: 'none'|'bottom-nav'|'drawer-nav', web: 'none'|'top-nav'|'sidebar-nav'|'footer' }",
+      "hidden": false,
+      "ui_type": "code-editor"
+    },
     {
       "name": "status",
       "type": "string",

@@ -1,0 +1,26 @@
+{
+  "projectName": "myapp",
+  "subdomain": "console",
+  "selectedStack": "both",
+  "selectedDb": "postgres",
+  "deploymentType": "self-hosted",
+  "studioUrl": "https://studio.underpeaks.com",
+  "dbConfig": {
+    "type": "postgres"
+  },
+  "faviconUrl": "/images/favicon/underpeaks_favi.png",
+  "ecommerceEnabled": false,
+  "demoContentEnabled": true,
+  "selectedPages": [],
+  "models": [],
+  "adminUser": {
+    "fullName": "Anton Wentzel",
+    "email": "antonwwc1982@gmail.com"
+  },
+  "featureFlags": {
+    "ecommerce": false,
+    "demoContent": true
+  },
+  "selectedProjectType": "marketplace",
+  "installed": true
+}

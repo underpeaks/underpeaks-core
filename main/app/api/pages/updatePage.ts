@@ -24,6 +24,8 @@ export async function handleUpdatePage(req: NextRequest): Promise<NextResponse> 
 
   // FIX: real PK is page_id, not id — missing idColumn 5th arg meant this
   // always targeted a non-existent 'id' column.
+  // nav_settings flows through automatically since this spreads all `updates`
+  // (no allow-list filtering here, unlike Studio's updatePage.ts).
   await adapter.update!(dbConfig, 'nxf_pages', page_id, {
     ...updates,
     updated_at: new Date().toISOString(),
