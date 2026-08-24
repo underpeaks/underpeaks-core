@@ -38,12 +38,24 @@ import { IconType } from 'react-icons'
 
 export type PageVisibility = 'public' | 'admin' | 'draft'
 
-export type MobileNavType = 'none' | 'bottom-nav' | 'drawer-nav'
-export type WebNavType    = 'none' | 'top-nav' | 'sidebar-nav' | 'footer'
+export type MobileHeaderType = 'none' | 'app-bar'
+export type MobileBottomType = 'none' | 'bottom-nav' | 'drawer-nav'
+export type WebHeaderType    = 'none' | 'top-nav' | 'sidebar-nav'
+export type WebFooterType    = 'none' | 'footer'
+
+export interface MobileNavSettings {
+  header: MobileHeaderType
+  bottom: MobileBottomType
+}
+
+export interface WebNavSettings {
+  header: WebHeaderType
+  footer: WebFooterType
+}
 
 export interface NavSettings {
-  mobile: MobileNavType
-  web:    WebNavType
+  mobile: MobileNavSettings
+  web:    WebNavSettings
 }
 
 export interface PageItem {
@@ -346,32 +358,34 @@ export const TEMPLATE_GROUPS: TemplateGroup[] = [
 ]
 
 // ---------------------------------------------------------------------------
-// Per-platform Nav Types
+// Per-platform, per-slot Nav Types
 // ---------------------------------------------------------------------------
 
-export type MobileNavTypeDef = {
-  id:   MobileNavType
-  name: string
-  icon: IconType
-}
+export type MobileHeaderTypeDef = { id: MobileHeaderType; name: string; icon: IconType }
+export type MobileBottomTypeDef = { id: MobileBottomType; name: string; icon: IconType }
+export type WebHeaderTypeDef    = { id: WebHeaderType;    name: string; icon: IconType }
+export type WebFooterTypeDef    = { id: WebFooterType;    name: string; icon: IconType }
 
-export type WebNavTypeDef = {
-  id:   WebNavType
-  name: string
-  icon: IconType
-}
-
-export const MOBILE_NAV_TYPES: MobileNavTypeDef[] = [
-  { id: 'none',        name: 'None',       icon: FiCode },
-  { id: 'bottom-nav',  name: 'Bottom Nav', icon: FiMenu },
-  { id: 'drawer-nav',  name: 'Drawer Nav', icon: FiMenu },
+export const MOBILE_HEADER_TYPES: MobileHeaderTypeDef[] = [
+  { id: 'none',    name: 'None',    icon: FiCode },
+  { id: 'app-bar', name: 'App Bar', icon: FiMenu },
 ]
 
-export const WEB_NAV_TYPES: WebNavTypeDef[] = [
+export const MOBILE_BOTTOM_TYPES: MobileBottomTypeDef[] = [
+  { id: 'none',       name: 'None',       icon: FiCode },
+  { id: 'bottom-nav', name: 'Bottom Nav', icon: FiMenu },
+  { id: 'drawer-nav', name: 'Drawer Nav', icon: FiMenu },
+]
+
+export const WEB_HEADER_TYPES: WebHeaderTypeDef[] = [
   { id: 'none',        name: 'None',        icon: FiCode },
   { id: 'top-nav',     name: 'Top Nav',     icon: FiMenu },
   { id: 'sidebar-nav', name: 'Sidebar Nav', icon: FiMenu },
-  { id: 'footer',      name: 'Footer',      icon: FiMinus },
+]
+
+export const WEB_FOOTER_TYPES: WebFooterTypeDef[] = [
+  { id: 'none',   name: 'None',   icon: FiCode },
+  { id: 'footer', name: 'Footer', icon: FiMinus },
 ]
 
 // ---------------------------------------------------------------------------
