@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import {
-  FiX, FiLock,
+  FiX, FiLock, FiAlertTriangle,
 } from 'react-icons/fi'
 import Select from 'react-select'
 
@@ -11,6 +11,7 @@ import {
   TEMPLATE_GROUPS, TEMPLATES,
   MOBILE_HEADER_TYPES, MOBILE_BOTTOM_TYPES, WEB_HEADER_TYPES, WEB_FOOTER_TYPES,
 } from './types'
+import { useAuth } from '../../layout'
 
 import type {
   PageItem, ModelSummary, PageVisibility,
@@ -32,6 +33,7 @@ export default function PageDrawer({
 }: PageDrawerProps) {
   const t      = useTranslations('pagesPage')
   const locale = useLocale()
+  const { user } = useAuth()
   const isEdit = !!initial
 
   const [name,          setName]          = useState('')
@@ -46,6 +48,15 @@ export default function PageDrawer({
   const [seoTitle,      setSeoTitle]      = useState('')
   const [seoDesc,       setSeoDesc]       = useState('')
   const [hidden,        setHidden]        = useState(false)
+
+  // Original visibility as loaded, used to detect an admin -> public flip
+  const [originalVisibility, setOriginalVisibility] = useState<PageVisibility>('public')
+
+  // Linked menu item (if any) for the page currently being edited
+  const [linkedMenuId, setLinkedMenuId] = useState<string | null>(null)
+
+  // Confirm dialog shown when saving would remove the linked menu item
+  const [menuRemovalConfirmOpen, setMenuRemovalConfirmOpen] = useState(false)
 
   useEffect(() => {
     if (initial) {
@@ -62,6 +73,7 @@ export default function PageDrawer({
       setWebFooter(navSettings?.web?.footer ?? 'none')
 
       setVisibility(initial.visibility ?? 'public')
+      setOriginalVisibility(initial.visibility ?? 'public')
       setSeoTitle(initial.seo_title ?? '')
       setSeoDesc(initial.seo_description ?? '')
       setHidden(initial.hidden ?? false)
@@ -75,11 +87,42 @@ export default function PageDrawer({
       setWebHeader('none')
       setWebFooter('none')
       setVisibility('public')
+      setOriginalVisibility('public')
       setSeoTitle('')
       setSeoDesc('')
       setHidden(false)
+      setLinkedMenuId(null)
     }
   }, [initial, open])
+
+  // Look up whether this page has a linked menu item, so we know whether
+  // flipping visibility to public needs to warn about removing it.
+  useEffect(() => {
+    if (!open || !initial) {
+      setLinkedMenuId(null)
+      return
+    }
+
+    const userId = (user as any)?.user_id || (user as any)?.id
+    if (!userId) return
+
+    let cancelled = false
+
+    fetch(`/api/menu?user_id=${userId}`)
+      .then((r) => r.text())
+      .then((text) => {
+        if (cancelled || !text) return
+        const data = JSON.parse(text)
+        const pageId = (initial as any).page_id
+        const match = (data.items ?? []).find((m: any) => m.page_id === pageId)
+        setLinkedMenuId(match ? (match.menu_id ?? match.id) : null)
+      })
+      .catch(() => {
+        if (!cancelled) setLinkedMenuId(null)
+      })
+
+    return () => { cancelled = true }
+  }, [open, initial, user])
 
  const autoSlug = (n: string) =>
   n.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
@@ -93,22 +136,59 @@ export default function PageDrawer({
 
   const canSave = name.trim() && slug.trim()
 
- const handleSave = async () => {
+  // Only relevant when editing: visibility is flipping from admin to
+  // public AND a menu item is linked to this page.
+  const willRemoveMenuItem =
+    isEdit &&
+    originalVisibility === 'admin' &&
+    visibility === 'public' &&
+    !!linkedMenuId
+
+  const buildSavePayload = (): Partial<PageItem> => ({
+    title: name.trim(),
+    slug: slug.trim(),
+    model_id: modelId || null,
+    template_type: template,
+    nav_settings: {
+      mobile: { header: mobileHeader, bottom: mobileBottom },
+      web:    { header: webHeader,    footer: webFooter },
+    },
+    visibility,
+    seo_title: seoTitle,
+    seo_description: seoDesc,
+    hidden,
+  } as unknown as Partial<PageItem>)
+
+  const handleSave = async () => {
     if (!canSave) return
-    await onSave({
-      title: name.trim(),
-      slug: slug.trim(),
-      model_id: modelId || null,
-      template_type: template,
-      nav_settings: {
-        mobile: { header: mobileHeader, bottom: mobileBottom },
-        web:    { header: webHeader,    footer: webFooter },
-      },
-      visibility,
-      seo_title: seoTitle,
-      seo_description: seoDesc,
-      hidden,
-    } as unknown as Partial<PageItem>)
+
+    if (willRemoveMenuItem) {
+      setMenuRemovalConfirmOpen(true)
+      return
+    }
+
+    await onSave(buildSavePayload())
+  }
+
+  const confirmMenuRemovalAndSave = async () => {
+    const userId = (user as any)?.user_id || (user as any)?.id
+
+    if (linkedMenuId && userId) {
+      try {
+        await fetch('/api/menu', {
+          method:  'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify({ menu_id: linkedMenuId, user_id: userId }),
+        })
+      } catch {
+        // Non-fatal — proceed with the page save even if the menu delete
+        // request itself failed; the user has already confirmed intent.
+      }
+    }
+
+    setMenuRemovalConfirmOpen(false)
+    setLinkedMenuId(null)
+    await onSave(buildSavePayload())
   }
 
   const templateOptions = TEMPLATE_GROUPS.map((group) => ({
@@ -246,6 +326,12 @@ export default function PageDrawer({
                     </button>
                   ))}
                 </div>
+                {isEdit && originalVisibility === 'admin' && visibility === 'public' && linkedMenuId && (
+                  <p className="text-[11px] text-amber-600 flex items-center gap-1 mt-1">
+                    <FiAlertTriangle size={11} />
+                    Switching to Public will remove this page's menu item.
+                  </p>
+                )}
               </div>
 
               <div className="flex items-center justify-between py-2 px-3 bg-gray-50
@@ -487,6 +573,42 @@ export default function PageDrawer({
           </button>
         </div>
       </div>
+
+      {/* Confirm: switching to public will remove the linked menu item */}
+      {menuRemovalConfirmOpen && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl shadow-xl max-w-md w-full mx-4 p-6">
+            <div className="flex items-start gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center shrink-0">
+                <FiAlertTriangle className="text-amber-600" size={18} />
+              </div>
+              <div>
+                <h2 className="text-base font-bold text-gray-900">Remove menu item?</h2>
+                <p className="text-sm text-gray-500 mt-0.5">
+                  This page currently has an admin menu item. Switching its visibility to Public will remove that menu item.
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 justify-end">
+              <button
+                type="button"
+                onClick={() => setMenuRemovalConfirmOpen(false)}
+                className="px-4 py-2 text-sm text-gray-600 border border-gray-200 rounded-lg hover:bg-gray-50 transition"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={confirmMenuRemovalAndSave}
+                disabled={saving}
+                className="px-4 py-2 text-sm font-medium bg-amber-600 text-white rounded-lg hover:bg-amber-700 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              >
+                Remove menu item &amp; save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   )
 }

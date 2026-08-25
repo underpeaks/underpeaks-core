@@ -951,7 +951,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
 
   // ─── DDL methods ───────────────────────────────────────────────────────────
 
- async createTable(
+  async createTable(
   tableName: string,
   schema: { columns: ColumnDef[] | Record<string, ColumnDef>; schema?: string }
 ) {
@@ -970,13 +970,19 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   const columnsSql = columnsArray
     .map((col) => {
       let typeSql = ''
+      // FIX: added 'image', 'file', 'geo' — same gap as the hosted
+      // Supabase adapter, Postgres adapter, and MySQL adapter. image/file
+      // stored as TEXT (URL/path string), geo as JSONB.
       switch (col.type.toLowerCase()) {
         case 'uuid':                      typeSql = 'UUID';             break
         case 'string':
-        case 'text':                      typeSql = 'TEXT';             break
+        case 'text':
+        case 'image':
+        case 'file':                      typeSql = 'TEXT';             break
         case 'json':
         case 'jsonb':
-        case 'array':                     typeSql = 'JSONB';            break
+        case 'array':
+        case 'geo':                       typeSql = 'JSONB';            break
         case 'datetime':
         case 'date':
         case 'timestamp':
@@ -994,9 +1000,6 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       }
 
       // ── DEFAULT clause ───────────────────────────────────────────────────
-      // Build a DEFAULT clause when the column definition includes a default.
-      // Raw SQL expressions (functions, booleans, numbers) are written as-is.
-      // Plain string values are quoted.
       let defaultClause = ''
       if (col.default !== undefined && col.default !== null) {
         if (
@@ -1005,7 +1008,6 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
         ) {
           defaultClause = ` DEFAULT ${col.default}`
         } else if (typeof col.default === 'string') {
-          // Raw SQL functions or keywords — write unquoted
           if (
             col.default.includes('(')  ||
             col.default === 'true'     ||
@@ -1020,8 +1022,6 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       }
 
       // ── Constraints ───────────────────────────────────────────────────────
-      // Only add NOT NULL when the column has no default — a column with
-      // DEFAULT false is effectively non-null without needing the constraint.
       const constraints: string[] = []
       if (col.is_primary)         constraints.push('PRIMARY KEY')
       if (col.unique)             constraints.push('UNIQUE')
@@ -1040,7 +1040,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   console.log(`[SupabaseAdapter] Table created successfully: ${tableName}`)
 }
 
-  async alterTable(
+   async alterTable(
     tableName: string,
     changes: { add?: ColumnDef[]; drop?: string[]; rename?: { from: string; to: string } }
   ): Promise<any> {
@@ -1051,13 +1051,17 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     if (changes.add?.length) {
       for (const col of changes.add) {
         let typeSql = ''
+        // FIX: added 'image', 'file', 'geo' — same gap as createTable above.
         switch (col.type.toLowerCase()) {
           case 'uuid':                      typeSql = 'UUID';             break
           case 'string':
-          case 'text':                      typeSql = 'TEXT';             break
+          case 'text':
+          case 'image':
+          case 'file':                      typeSql = 'TEXT';             break
           case 'json':
           case 'jsonb':
-          case 'array':                     typeSql = 'JSONB';            break
+          case 'array':
+          case 'geo':                       typeSql = 'JSONB';            break
           case 'datetime':
           case 'date':
           case 'timestamp':                 typeSql = 'TIMESTAMP';        break

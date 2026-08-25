@@ -177,7 +177,7 @@ export class PostgresAdapter implements DBAdapter {
 
   // ─── Table Creation ────────────────────────────────────────────────────────
 
-  async createTable(
+    async createTable(
     tableName: string,
     schema: { columns: ColumnDef[] | Record<string, ColumnDef> }
   ): Promise<void> {
@@ -192,10 +192,16 @@ export class PostgresAdapter implements DBAdapter {
     const columnsSql = columnsArray
       .map((col) => {
         let typeSql = ''
+        // FIX: added 'image', 'file', 'geo' — these field types were added
+        // to the model editor's FIELD_TYPES this session but this switch
+        // never got matching cases, so creating a field of any of these
+        // types threw "Unsupported column type" and silently failed the
+        // whole model save. image/file are stored as a URL/path string
+        // (same as 'string'); geo is stored as JSONB ({ lat, lng, address }).
         switch (col.type.toLowerCase()) {
           case 'uuid':                                                typeSql = 'UUID';             break
-          case 'string': case 'text':                                 typeSql = 'TEXT';             break
-          case 'json':   case 'jsonb': case 'array':                  typeSql = 'JSONB';            break
+          case 'string': case 'text': case 'image': case 'file':      typeSql = 'TEXT';             break
+          case 'json':   case 'jsonb': case 'array': case 'geo':      typeSql = 'JSONB';            break
           case 'datetime': case 'date': case 'timestamp':
           case 'timestamp with time zone':                            typeSql = 'TIMESTAMP';        break
           case 'integer': case 'int':                                 typeSql = 'INTEGER';          break
@@ -240,7 +246,6 @@ export class PostgresAdapter implements DBAdapter {
       `CREATE TABLE IF NOT EXISTS "${tableName}" (${columnsSql})`
     )
   }
-
   // ─── Data Models ───────────────────────────────────────────────────────────
 
   async CreateDataModels(projectId: string, selectedProjectType: string): Promise<any> {
@@ -1044,7 +1049,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
 
   // ─── Table / Schema Management ─────────────────────────────────────────────
 
-  async alterTable(
+    async alterTable(
     tableName: string,
     changes: { add?: ColumnDef[]; drop?: string[]; rename?: { from: string; to: string } }
   ): Promise<any> {
@@ -1055,11 +1060,14 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     if (changes.add?.length) {
       for (const col of changes.add) {
         let typeSql = ''
+        // FIX: same 'image'/'file'/'geo' cases added here as in
+        // createTable above — alterTable had the identical gap.
         switch (col.type.toLowerCase()) {
           case 'uuid':                      typeSql = 'UUID';             break
-          case 'string': case 'text':       typeSql = 'TEXT';             break
+          case 'string': case 'text':
+          case 'image': case 'file':        typeSql = 'TEXT';             break
           case 'json': case 'jsonb':
-          case 'array':                     typeSql = 'JSONB';            break
+          case 'array': case 'geo':         typeSql = 'JSONB';            break
           case 'datetime': case 'date':
           case 'timestamp':                 typeSql = 'TIMESTAMP';        break
           case 'integer': case 'int':       typeSql = 'INTEGER';          break

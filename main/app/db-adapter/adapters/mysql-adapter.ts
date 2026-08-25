@@ -274,7 +274,7 @@ export class MySQLAdapter implements DBAdapter {
 
   // ─── Table creation ────────────────────────────────────────────────────────
 
-  async createTable(
+   async createTable(
     tableName: string,
     schema: { columns: ColumnDef[] | Record<string, ColumnDef> }
   ): Promise<void> {
@@ -295,15 +295,20 @@ export class MySQLAdapter implements DBAdapter {
     const columnsSql = columnsArray
       .map((col) => {
         let typeSql = ''
+        // FIX: added 'image', 'file', 'geo' — same gap as Postgres/Supabase.
+        // image/file stored as TEXT (URL/path string), geo as JSON.
         switch (col.type.toLowerCase()) {
           case 'uuid':                       typeSql = 'CHAR(36)';      break
           case 'string':
           case 'text':
+          case 'image':
+          case 'file':
             typeSql = col.is_primary || col.unique ? 'VARCHAR(255)' : 'TEXT'
             break
           case 'jsonb':
           case 'json':
-          case 'array':                      typeSql = 'JSON';          break
+          case 'array':
+          case 'geo':                        typeSql = 'JSON';          break
           case 'datetime':
           case 'timestamp':
           case 'date':
@@ -354,7 +359,6 @@ export class MySQLAdapter implements DBAdapter {
     const sql = `CREATE TABLE IF NOT EXISTS \`${tableName}\` (${columnsSql})`
     await this.pool.query(sql)
   }
-
   // ─── Data models ───────────────────────────────────────────────────────────
 
   async CreateDataModels(projectId: string, selectedProjectType: string): Promise<any> {
@@ -1177,7 +1181,7 @@ export class MySQLAdapter implements DBAdapter {
 
   // ─── Table / Schema Management ─────────────────────────────────────────────
 
-  async alterTable(
+   async alterTable(
     tableName: string,
     changes: { add?: ColumnDef[]; drop?: string[]; rename?: { from: string; to: string } }
   ): Promise<any> {
@@ -1188,13 +1192,18 @@ export class MySQLAdapter implements DBAdapter {
     if (changes.add?.length) {
       for (const col of changes.add) {
         let typeSql = ''
+        // FIX: added 'image', 'file', 'geo' — alterTable had the same gap
+        // as createTable above.
         switch (col.type.toLowerCase()) {
           case 'uuid':
           case 'string':
-          case 'text':      typeSql = 'TEXT';       break
+          case 'text':
+          case 'image':
+          case 'file':      typeSql = 'TEXT';       break
           case 'json':
           case 'jsonb':
-          case 'array':     typeSql = 'JSON';       break
+          case 'array':
+          case 'geo':       typeSql = 'JSON';       break
           case 'datetime':
           case 'date':
           case 'timestamp': typeSql = 'DATETIME';   break
