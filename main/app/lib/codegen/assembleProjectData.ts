@@ -16,6 +16,13 @@
  *
  * Core has no API Builder or integrations (per product decision), so
  * endpoints/integrations are always omitted from the returned ProjectData.
+ *
+ * FIX (Core parity): pages/routes mappers were dropping nav_settings and
+ * attach_to even when present on the row — Navigator triggers that depend
+ * on attach_to (card-tap/button/primary-action) and nav-bar rendering that
+ * depends on nav_settings would silently never match on Core-generated
+ * output. Requires the nxf_page_routes.attach_to and nxf_pages.nav_settings
+ * columns to exist — run the migration before relying on this.
  */
 
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
@@ -80,6 +87,7 @@ export async function assembleProjectData(projectId: string) {
       slug:          p.slug ?? '',
       template_type: p.template_type ?? 'list',
       nav_type:      p.nav_type ?? 'none',
+      nav_settings:  p.nav_settings ?? null,
       model_id:      p.model_id ?? null,
       visibility:    p.visibility ?? 'public',
     }))
@@ -92,6 +100,7 @@ export async function assembleProjectData(projectId: string) {
       to_page_id:   r.to_page_id,
       trigger:      r.trigger ?? 'tap',
       label:        r.label ?? null,
+      attach_to:    r.attach_to ?? null,
     }))
 
   const themeRow = (allThemes ?? []).find(

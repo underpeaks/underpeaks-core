@@ -19,6 +19,7 @@ interface PageRoute {
   to_page_id:   string
   trigger:      string
   label:        string | null
+  attach_to:    string | null
 }
 
 export default function NavigatorPage() {
@@ -37,18 +38,14 @@ export default function NavigatorPage() {
     setLoading(true)
     try {
       const userId = user?.user_id || user?.id
-      // FIX: /api/pages requires user_id as a query param (same pattern as
-      // every other pages/models fetch in the app) — this was calling it
-      // with no params at all, causing a 400 missingUserId every time.
       const [pagesRes, routesRes] = await Promise.all([
         fetch(`/api/pages?user_id=${userId}`),
         fetch('/api/page-routes'),
       ])
       const pagesData  = await pagesRes.json()
       const routesData = await routesRes.json()
-      // FIX: nxf_pages has no "name" column — the real column is "title".
       setPages((pagesData.pages ?? []).map((p: any) => ({ page_id: p.page_id, name: p.title, slug: p.slug })))
-      setRoutes(routesData.routes ?? [])
+      setRoutes((routesData.routes ?? []).map((r: any) => ({ ...r, attach_to: r.attach_to ?? null })))
     } finally {
       setLoading(false)
     }
@@ -59,7 +56,7 @@ export default function NavigatorPage() {
     const res = await fetch('/api/page-routes', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ from_page_id: pages[0].page_id, to_page_id: pages[1].page_id, trigger: 'tap', label: '' }),
+      body:    JSON.stringify({ from_page_id: pages[0].page_id, to_page_id: pages[1].page_id, trigger: 'tap', label: '', attach_to: null }),
     })
     const data = await res.json()
     if (res.ok) setRoutes((prev) => [...prev, data.route])
@@ -134,6 +131,18 @@ export default function NavigatorPage() {
                     <option value="button">Button</option>
                     <option value="back">Back</option>
                     <option value="swipe">Swipe</option>
+                    <option value="timer">Timer</option>
+                  </select>
+                  <select
+                    value={route.attach_to ?? ''}
+                    onChange={(e) => updateRoute(route.route_id, 'attach_to', e.target.value)}
+                    className="w-32 px-3 py-2 text-sm border border-gray-200 rounded-md bg-gray-50 shrink-0"
+                  >
+                    <option value="">Attach to…</option>
+                    <option value="nav-icon">Nav icon</option>
+                    <option value="footer-link">Footer link</option>
+                    <option value="card-tap">Card tap</option>
+                    <option value="primary-action">Primary action</option>
                   </select>
                   <button onClick={() => deleteRoute(route.route_id)} className="p-2 text-gray-400 hover:text-red-500 transition shrink-0">
                     <FiTrash2 size={14} />

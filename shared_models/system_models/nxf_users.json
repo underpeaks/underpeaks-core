@@ -14,7 +14,6 @@
       "name": "user_email",
       "type": "string",
       "nullable": false,
-      "unique": true,
       "hidden": false,
       "ui_type": "email-input"
     },
@@ -43,6 +42,14 @@
       "type": "string",
       "nullable": false,
       "default": "admin",
+      "hidden": true
+    },
+    {
+      "name": "is_anonymous",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "true for a session created via /auth/anonymous before any real sign-up. Excluded from signin/signup/forgot-password email lookups — see those routes.",
       "hidden": true
     },
     {

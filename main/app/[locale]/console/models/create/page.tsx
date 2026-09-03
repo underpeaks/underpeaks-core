@@ -229,7 +229,16 @@ export default function CreateModelPage() {
     if (fields.some((f) => !f.name.trim()))   { setError(t('validation.fieldsInvalid'));     return }
     const names = fields.map((f) => f.name.trim().toLowerCase())
     if (new Set(names).size !== names.length) { setError(t('validation.fieldNameUnique'));   return }
-    if (fields.filter((f) => f.is_primary).length > 1) { setError(t('validation.singlePrimaryKey')); return }
+    // FIX: previously only guarded against MORE than one primary key —
+    // nothing stopped saving a model with ZERO fields marked is_primary,
+    // which is exactly how nxf_returns/nxf_reviews/nxf_shipping ended up
+    // with no real PK and broke every provider/repository template that
+    // assumes one exists (undefined_getter 'id' at Flutter analyze time).
+    // Plain hardcoded string rather than a translation key — adding a new
+    // key here means updating 18 other locale files, deferred to a
+    // post-launch i18n pass per Anton's call.
+    if (fields.filter((f) => f.is_primary).length === 0) { setError('Select one field as the primary key before saving.'); return }
+    if (fields.filter((f) => f.is_primary).length > 1)   { setError(t('validation.singlePrimaryKey')); return }
 
     const selectError = validateSelectFields()
     if (selectError) { setError(selectError); return }

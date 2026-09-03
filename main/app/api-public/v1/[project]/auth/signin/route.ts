@@ -33,8 +33,13 @@ export async function POST(req: NextRequest) {
 
   const user = await (adapter as any).findUserByEmail(dbConfig, email)
 
-  // Must be a customer — never let an admin row sign in through the app.
-  if (!user || user.user_type !== 'customer' || !user.password_hash) {
+  // FIX: findUserByEmail matches purely on user_email across all 5
+  // adapters with no is_anonymous filtering — every anonymous account
+  // shares the placeholder '-', so reject any anonymous match explicitly
+  // rather than letting it through as if it were a real credentialed
+  // account. Must be a customer — never let an admin row sign in
+  // through the app either.
+  if (!user || user.user_type !== 'customer' || user.is_anonymous || !user.password_hash) {
     return NextResponse.json({ error: 'Invalid email or password' }, { status: 401, headers: coreCors() })
   }
 

@@ -1,4 +1,5 @@
-// app/api/page-routes/route.ts
+// File: app/api/page-routes/route.ts
+
 import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 
@@ -28,7 +29,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
   }
 
-  const { from_page_id, to_page_id, trigger, label } = body
+  // FIX (Core parity): attach_to was missing from both the destructure and
+  // the inserted row — same bug already fixed on Studio's /api/page-routes.
+  const { from_page_id, to_page_id, trigger, label, attach_to } = body
 
   if (!from_page_id || !to_page_id) {
     return NextResponse.json(
@@ -56,6 +59,7 @@ export async function POST(req: NextRequest) {
     to_page_id,
     trigger:    trigger ?? 'tap',
     label:      label ?? null,
+    attach_to:  attach_to ?? null,
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
   }

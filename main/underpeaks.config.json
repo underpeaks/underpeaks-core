@@ -21,6 +21,6 @@
     "ecommerce": false,
     "demoContent": true
   },
-  "selectedProjectType": "marketplace",
+  "selectedProjectType": "ecommerce",
   "installed": true
 }

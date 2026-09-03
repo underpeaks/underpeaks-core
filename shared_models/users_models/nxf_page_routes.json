@@ -54,11 +54,21 @@
       "type": "string",
       "nullable": false,
       "default": "tap",
-      "description": "tap | swipe | button | auto",
+      "description": "tap | swipe | button | back | timer | auto",
       "hidden": false,
       "ui_type": "select",
       "options_mode": "manual",
-      "options": ["tap", "swipe", "button", "auto"]
+      "options": ["tap", "swipe", "button", "back", "timer", "auto"]
+    },
+    {
+      "name": "attach_to",
+      "type": "string",
+      "nullable": true,
+      "description": "nav-icon | footer-link | card-tap | primary-action — where this route's trigger attaches on the source page. nav-icon and footer-link are currently non-functional in codegen (nav_settings already controls the nav bar/footer) — parked post-testing.",
+      "hidden": false,
+      "ui_type": "select",
+      "options_mode": "manual",
+      "options": ["nav-icon", "footer-link", "card-tap", "primary-action"]
     },
     {
       "name": "label",
