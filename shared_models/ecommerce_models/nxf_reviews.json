@@ -4,6 +4,7 @@
   "columns": {
     "rev_id": {
       "type": "string",
+      "is_primary": true,
       "hidden": true
     },
     "product_id": {
@@ -16,15 +17,15 @@
       "hidden": true
     },
     "tenant_id": {
-  "type": "string",
-  "nullable": false,
-  "foreign_key": {
-    "references": "nxf_system_tenants(ten_id)",
-    "on_delete": "CASCADE"
-  },
-  "hidden": true
-},
-"project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
+      "type": "string",
+      "nullable": false,
+      "foreign_key": {
+        "references": "nxf_system_tenants(ten_id)",
+        "on_delete": "CASCADE"
+      },
+      "hidden": true
+    },
+    "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
     "product_variant_id": {
       "type": "string",
       "nullable": true,

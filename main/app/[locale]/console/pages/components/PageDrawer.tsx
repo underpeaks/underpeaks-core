@@ -18,6 +18,11 @@ import type {
   MobileHeaderType, MobileBottomType, WebHeaderType, WebFooterType, NavSettings,
 } from './types'
 
+// NEW: template types whose data model is forced to nxf_users, never
+// user-editable — same agreed decision and same list as Studio's
+// PageDrawer.tsx (matches template_type strings generator.ts checks
+// against for both platforms).
+const AUTH_TEMPLATE_TYPES = ['sign_in', 'sign_up', 'forgot_password', 'reset_password'] as const
 
 interface PageDrawerProps {
   open:     boolean
@@ -144,10 +149,26 @@ export default function PageDrawer({
     visibility === 'public' &&
     !!linkedMenuId
 
+  // NEW: is the current template one of the four auth types whose model
+  // is forced to nxf_users? Same logic as Studio's PageDrawer.tsx.
+  const isAuthTemplate = (AUTH_TEMPLATE_TYPES as readonly string[]).includes(template)
+  const nxfUsersModel  = models.find((m) => m.name === 'nxf_users')
+
+  // Forces modelId to nxf_users whenever the template is (or becomes) an
+  // auth type — covers both picking an auth template fresh and loading
+  // an existing auth page for edit. If nxf_users can't be found at all,
+  // modelId is left as-is rather than silently clearing a valid existing
+  // value.
+  useEffect(() => {
+    if (isAuthTemplate && nxfUsersModel) {
+      setModelId(nxfUsersModel.sm_id)
+    }
+  }, [isAuthTemplate, nxfUsersModel])
+
   const buildSavePayload = (): Partial<PageItem> => ({
     title: name.trim(),
     slug: slug.trim(),
-    model_id: modelId || null,
+    model_id: isAuthTemplate ? ((nxfUsersModel?.sm_id ?? modelId) || null) : (modelId || null),
     template_type: template,
     nav_settings: {
       mobile: { header: mobileHeader, bottom: mobileBottom },
@@ -374,18 +395,37 @@ export default function PageDrawer({
                 <label className="text-xs font-semibold text-gray-700">
                   {t('drawer.fields.model.label')}
                 </label>
-                <select
-                  value={modelId}
-                  onChange={(e) => setModelId(e.target.value)}
-                  className="px-3 py-2 text-sm border border-gray-200 rounded-md bg-gray-50
-                             focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
-                >
-                  <option value="">{t('drawer.fields.model.noModel')}</option>
-                  {models.map((m) => (
-                    <option key={m.sm_id} value={m.sm_id}>{m.name}</option>
-                  ))}
-                </select>
-                <p className="text-[11px] text-gray-400">{t('drawer.fields.model.hint')}</p>
+                {isAuthTemplate ? (
+                  <>
+                    {/* NEW: auth template types (sign_in, sign_up, forgot_password,
+                        reset_password) always use nxf_users — never user-editable.
+                        Rendered as a locked, non-interactive field instead of the
+                        normal <select>. Matches Studio's PageDrawer.tsx behavior. */}
+                    <div className="flex items-center justify-between px-3 py-2 text-sm
+                                    border border-gray-200 rounded-md bg-gray-100 text-gray-600">
+                      <span>{nxfUsersModel?.name ?? 'nxf_users'}</span>
+                      <FiLock size={13} className="text-gray-400" />
+                    </div>
+                    <p className="text-[11px] text-gray-400">
+                      Auth pages always use the nxf_users model and can&apos;t be changed.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <select
+                      value={modelId}
+                      onChange={(e) => setModelId(e.target.value)}
+                      className="px-3 py-2 text-sm border border-gray-200 rounded-md bg-gray-50
+                                 focus:outline-none focus:ring-2 focus:ring-gray-300 transition"
+                    >
+                      <option value="">{t('drawer.fields.model.noModel')}</option>
+                      {models.map((m) => (
+                        <option key={m.sm_id} value={m.sm_id}>{m.name}</option>
+                      ))}
+                    </select>
+                    <p className="text-[11px] text-gray-400">{t('drawer.fields.model.hint')}</p>
+                  </>
+                )}
               </div>
 
               {/* TEMPLATE */}

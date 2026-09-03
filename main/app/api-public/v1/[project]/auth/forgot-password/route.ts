@@ -32,8 +32,11 @@ export async function POST(req: NextRequest) {
 
   const user = await (adapter as any).findUserByEmail(dbConfig, email)
 
-  // Always return success — don't reveal whether the email exists.
-  if (user && user.user_type === 'customer') {
+  // FIX: an anonymous account has no real email and no way to receive a
+  // reset link, and shares the placeholder '-' with every other anonymous
+  // row — reject it explicitly rather than letting findUserByEmail's
+  // unfiltered match issue a reset token for one.
+  if (user && user.user_type === 'customer' && !user.is_anonymous) {
     const token = crypto.randomBytes(32).toString('hex')
     const ttl   = new Date(Date.now() + 60 * 60 * 1000)
     await (adapter as any).update(dbConfig, 'nxf_users', user.user_id, {
