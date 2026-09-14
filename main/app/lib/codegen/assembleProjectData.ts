@@ -23,6 +23,17 @@
  * depends on nav_settings would silently never match on Core-generated
  * output. Requires the nxf_page_routes.attach_to and nxf_pages.nav_settings
  * columns to exist — run the migration before relying on this.
+ *
+ * FIX (single-tenant ID mismatch): the `projectId` argument passed in comes
+ * from Studio's project_id (embedded in the license key / phone-home
+ * response), which is NEVER the same value as this Core instance's own
+ * local nxf_system_projects.project_id — nothing reconciles the two IDs,
+ * and nothing should have to, because Core's local Postgres only ever
+ * holds ONE project. So: stop matching/filtering the project row by the
+ * incoming projectId entirely — just take whatever single local project
+ * row exists. All other tables (models/pages/routes/theme) are then
+ * filtered against THAT row's own project_id, not the argument, so they
+ * still resolve correctly.
  */
 
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
@@ -39,15 +50,20 @@ export async function assembleProjectData(projectId: string) {
     adapter.readAll!(dbConfig, 'nxf_themes'),
   ])
 
-  const projectRow = (allProjects ?? []).find((p: any) => p.project_id === projectId)
+  // Single-tenant: don't match against the passed-in projectId at all —
+  // just take the one local project row that exists.
+  const projectRow = (allProjects ?? [])[0]
   if (!projectRow) {
     throw new Error('Project not found')
   }
 
+  // Use the LOCAL row's own project_id for all subsequent filtering —
+  // NOT the argument passed into this function.
+  const localProjectId = projectRow.project_id
   const tenantId = projectRow.tenant_id ?? null
 
   const models = (allModels ?? [])
-    .filter((m: any) => m.project_id === projectId)
+    .filter((m: any) => m.project_id === localProjectId)
     .map((m: any) => {
       const rawSchema = m.schema
       const schema =
@@ -77,7 +93,7 @@ export async function assembleProjectData(projectId: string) {
   // in case that convention is ever reused here.
   const pages = (allPages ?? [])
     .filter((p: any) =>
-      p.project_id === projectId &&
+      p.project_id === localProjectId &&
       p.page_type  !== 'admin' &&
       p.visibility !== 'admin'
     )
@@ -93,7 +109,7 @@ export async function assembleProjectData(projectId: string) {
     }))
 
   const routes = (allRoutes ?? [])
-    .filter((r: any) => r.project_id === projectId)
+    .filter((r: any) => r.project_id === localProjectId)
     .map((r: any) => ({
       route_id:     r.route_id,
       from_page_id: r.from_page_id,
@@ -104,7 +120,7 @@ export async function assembleProjectData(projectId: string) {
     }))
 
   const themeRow = (allThemes ?? []).find(
-    (t: any) => t.project_id === projectId
+    (t: any) => t.project_id === localProjectId
   )
 
   const theme = {
@@ -139,7 +155,7 @@ export async function assembleProjectData(projectId: string) {
   }
 
   return {
-    project_id:    projectId,
+    project_id:    localProjectId,
     project_name:  projectRow.name ?? 'Untitled Project',
     project_type:  projectRow.project_type ?? 'custom',
     models,

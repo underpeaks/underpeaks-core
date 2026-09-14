@@ -5,7 +5,7 @@
     {
       "name": "storage_id",
       "type": "uuid",
-      "primary_key": true,
+      "is_primary": true,
       "unique": true,
       "nullable": false,
       "hidden": true

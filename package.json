@@ -14,6 +14,9 @@
   "description": "",
   "dependencies": {
     "@supabase/supabase-js": "^2.50.5",
+    "@underpeaks/generator-core": "^1.0.90",
+    "@underpeaks/generator-flutter": "^1.0.92",
+    "@underpeaks/generator-nextjs": "^1.0.88",
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
     "framer-motion": "^12.23.3",
@@ -24,7 +27,8 @@
     "react-icons": "^5.5.0",
     "sonner": "^2.0.6",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "underpeaks-nxf": "^1.0.87"
   },
   "devDependencies": {
     "@types/commander": "^2.12.0",

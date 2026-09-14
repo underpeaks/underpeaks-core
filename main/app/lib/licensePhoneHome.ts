@@ -30,6 +30,33 @@ function readConfig(): { projectName: string; studioUrl: string } {
   }
 }
 
+// NEW: writes/overwrites project_id in underpeaks.config.json — the fix
+// for tonight's "0 pages generated" bug. The config previously had no
+// project_id field at all, so a Core instance set up before (or
+// independently of) its matching Studio project record had no way to
+// ever learn the real project_id. Called on every successful ping so a
+// mismatch self-corrects rather than requiring manual intervention.
+function writeProjectId(projectId: string): void {
+  try {
+    const fs         = require('fs')
+    const path       = require('path')
+    const configPath = path.resolve(process.cwd(), 'underpeaks.config.json')
+    if (!fs.existsSync(configPath)) {
+      console.warn('[phone-home] Cannot write project_id — config file not found at:', configPath)
+      return
+    }
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'))
+    if (config.project_id === projectId) return // already correct, avoid an unnecessary write
+
+    const previous = config.project_id ?? '(none)'
+    config.project_id = projectId
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2), 'utf-8')
+    console.log(`[phone-home] project_id synced from Studio: ${previous} -> ${projectId}`)
+  } catch (err: any) {
+    console.error('[phone-home] Could not write project_id to config:', err.message)
+  }
+}
+
 function writeGraceUntil(graceUntil: string): void {
   try {
     const fs      = require('fs')
@@ -75,11 +102,12 @@ export async function pingStudio(): Promise<{
   expired:     boolean
   grace_until: string | null
   plan_id:     string | null
+  project_id:  string | null
 }> {
   try {
     if (!LICENSE_KEY) {
       console.warn('[phone-home] NXF_LICENSE_KEY not set — skipping ping')
-      return { success: false, revoked: false, expired: false, grace_until: null, plan_id: null }
+      return { success: false, revoked: false, expired: false, grace_until: null, plan_id: null, project_id: null }
     }
 
     const { projectName, studioUrl } = readConfig()
@@ -102,10 +130,10 @@ export async function pingStudio(): Promise<{
 
     if (!res.ok) {
       console.error('[phone-home] Ping failed:', data.error)
-      return { success: false, revoked: data.revoked ?? false, expired: data.expired ?? false, grace_until: null, plan_id: null }
+      return { success: false, revoked: data.revoked ?? false, expired: data.expired ?? false, grace_until: null, plan_id: null, project_id: null }
     }
 
-    console.log('[phone-home] Ping successful — plan:', data.plan_id, '| grace_until:', data.grace_until)
+    console.log('[phone-home] Ping successful — plan:', data.plan_id, '| grace_until:', data.grace_until, '| project_id:', data.project_id)
 
     if (data.revoked) {
       console.error('[phone-home] License has been revoked — instance will degrade at grace period expiry')
@@ -115,17 +143,24 @@ export async function pingStudio(): Promise<{
       writeRevocationFlag(false)
     }
 
+    // NEW: sync project_id from Studio's authoritative response into local
+    // config — this is the actual fix for tonight's empty-generation bug.
+    if (data.project_id) {
+      writeProjectId(data.project_id)
+    }
+
     return {
       success:     true,
       revoked:     data.revoked     ?? false,
       expired:     data.expired     ?? false,
       grace_until: data.grace_until ?? null,
       plan_id:     data.plan_id     ?? null,
+      project_id:  data.project_id  ?? null,
     }
 
   } catch (err: any) {
     console.error('[phone-home] Network error — Studio unreachable:', err.message)
-    return { success: false, revoked: false, expired: false, grace_until: null, plan_id: null }
+    return { success: false, revoked: false, expired: false, grace_until: null, plan_id: null, project_id: null }
   }
 }
 
