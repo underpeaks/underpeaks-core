@@ -2,7 +2,7 @@
   "table_name": "nxf_system_models",
   "schema": "public",
   "columns": {
-    "sm_id":      { "type": "string", "default": "gen_random_uuid()", "primary_key": true, "nullable": false, "hidden": true },
+    "sm_id":      { "type": "string", "default": "gen_random_uuid()", "is_primary": true, "nullable": false, "hidden": true },
     "tenant_id":  { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_tenants(ten_id)", "on_delete": "CASCADE" }, "hidden": true },
     "project_id": { "type": "string", "nullable": false, "foreign_key": { "references": "nxf_system_projects(project_id)", "on_delete": "CASCADE" }, "hidden": true },
 

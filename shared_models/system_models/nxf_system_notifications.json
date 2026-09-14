@@ -6,7 +6,7 @@
       "name": "sn_id",
       "type": "string",
       "default": "gen_random_uuid()",
-      "primary_key": true,
+      "is_primary": true,
       "nullable": false,
       "hidden": true
     },

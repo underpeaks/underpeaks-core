@@ -5,7 +5,7 @@
     {
       "name": "config_id",
       "type": "string",
-      "primary_key": true,
+      "is_primary": true,
       "nullable": false,
       "default": "gen_random_uuid()",
       "hidden": true

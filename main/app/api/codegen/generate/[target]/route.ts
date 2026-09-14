@@ -13,12 +13,37 @@
  * ~/.nxf/credentials.json license_key (JWT) is forwarded as the
  * Authorization header on the call to hosted. Hosted validates it exactly
  * as it does for its own users.
+ *
+ * FIX: this route was building its own NextResponse with only
+ * Content-Type/Content-Disposition/Content-Length — every debug/metadata
+ * header hosted's response actually sets (X-Underpeaks-Project-Name,
+ * X-Debug-Page-Count, X-Debug-Page-Types, X-Debug-Presentation-Files,
+ * X-Debug-Total-Files, X-Debug-Widget-Missing) was silently dropped,
+ * never forwarded to the CLI. That made the CLI fall back to a hardcoded
+ * default project name ('underpeaks-project') instead of the real one,
+ * which in turn made it check/scaffold the wrong output folder — looked
+ * like a broken folder-existence check, but the check was fine; it was
+ * just checking the wrong path. Debug info also always printed as null
+ * for the same reason. Now explicitly forwarded. (Header names below are
+ * lowercase but .get() on a Headers object matches case-insensitively,
+ * so this works regardless of how hosted capitalizes them.)
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { assembleProjectData }       from '@/app/lib/codegen/assembleProjectData'
 
 type Params = { target: string }
+
+// Headers hosted's generate route sets that the CLI actually reads.
+// Keep this list in sync with whatever hosted's route emits.
+const FORWARDED_HEADERS = [
+  'x-underpeaks-project-name',
+  'x-debug-page-count',
+  'x-debug-page-types',
+  'x-debug-presentation-files',
+  'x-debug-total-files',
+  'x-debug-widget-missing',
+]
 
 export async function POST(req: NextRequest, { params }: { params: Promise<Params> }) {
   try {
@@ -67,13 +92,22 @@ export async function POST(req: NextRequest, { params }: { params: Promise<Param
 
     const zipBuffer = Buffer.from(await hostedRes.arrayBuffer())
 
+    const responseHeaders: Record<string, string> = {
+      'Content-Type':        'application/zip',
+      'Content-Disposition': `attachment; filename="nxf-${target}-${Date.now()}.zip"`,
+      'Content-Length':      String(zipBuffer.length),
+    }
+
+    for (const headerName of FORWARDED_HEADERS) {
+      const value = hostedRes.headers.get(headerName)
+      if (value !== null) {
+        responseHeaders[headerName] = value
+      }
+    }
+
     return new NextResponse(zipBuffer, {
       status:  200,
-      headers: {
-        'Content-Type':        'application/zip',
-        'Content-Disposition': `attachment; filename="nxf-${target}-${Date.now()}.zip"`,
-        'Content-Length':      String(zipBuffer.length),
-      },
+      headers: responseHeaders,
     })
   } catch (err: any) {
     console.error('[codegen/generate/target]', err.message)
