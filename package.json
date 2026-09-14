@@ -14,9 +14,9 @@
   "description": "",
   "dependencies": {
     "@supabase/supabase-js": "^2.50.5",
-    "@underpeaks/generator-core": "^1.0.94",
-    "@underpeaks/generator-flutter": "^1.0.96",
-    "@underpeaks/generator-nextjs": "^1.0.91",
+    "@underpeaks/generator-core": "^1.0.95",
+    "@underpeaks/generator-flutter": "^1.0.97",
+    "@underpeaks/generator-nextjs": "^1.0.92",
     "chalk": "^5.4.1",
     "commander": "^14.0.0",
     "framer-motion": "^12.23.3",
@@ -28,7 +28,7 @@
     "sonner": "^2.0.6",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "underpeaks-nxf": "^1.0.89"
+    "underpeaks-nxf": "^1.0.90"
   },
   "devDependencies": {
     "@types/commander": "^2.12.0",
