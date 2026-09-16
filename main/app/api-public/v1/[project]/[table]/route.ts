@@ -20,6 +20,28 @@
  * Self-hosted limits: 100 req/min per key (upgradeable in hosted version).
  *
  * CORS: permissive by default for self-hosted (developer controls their server).
+ *
+ * FIX (single-tenant project_id mismatch): [project] in the URL is Studio's
+ * project_id (decoded from the license key / phone-home), which is NEVER
+ * guaranteed to match the project_id value actually stored on Core's own
+ * local rows — same root cause already fixed today in
+ * assembleProjectData.ts. Core is single-tenant: the local DB only ever
+ * holds one project's data, so there is nothing to filter by project_id —
+ * every row already belongs to this install's one project. getModelForTable
+ * and the list GET no longer filter by project_id.
+ *
+ * FIX (hidden fields stripping the primary key): `hidden: true` on a schema
+ * column is a presentation-layer concept (don't render this field on the
+ * admin form) — it was also being used to strip that field from every API
+ * response, including the primary key column, which is routinely marked
+ * hidden for exactly that admin-form reason. That meant the client never
+ * received the id it needs for findById/update/delete, crashing every
+ * generated model with "null is not a subtype of String" the moment a real
+ * record was fetched (confirmed via trace logging on the Flutter side).
+ * The primary key (and treat this as a template going forward — likely
+ * foreign keys too) must never be stripped from the API response, only
+ * from admin-form rendering. Both the single-record and list fetch below
+ * now explicitly exempt the primary key column from the hidden-field set.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -71,7 +93,7 @@ async function validateApiKey(
 
     // Re-fetch the key row for rate-limit counters (helper returns ids only).
     const prefix = apiKey.slice(0, 16)
-    const allKeys: any[] = await (adapter as any).readAllAdmin(dbConfig, 'nxf_system_apis')
+    const allKeys: any[] = await (adapter as any).readAll(dbConfig, 'nxf_system_apis')
     const keyRecord = (allKeys ?? []).find(
       (k: any) =>
         k.key_prefix === prefix &&
@@ -137,10 +159,10 @@ async function getModelForTable(
     const dbConfig  = adapter.config
     const allModels = await adapter.readAll!(dbConfig, 'nxf_system_models')
 
+    // Single-tenant — don't filter by projectId (Studio's ID, not
+    // guaranteed to match Core's local rows). Match on table name alone.
     return (allModels ?? []).find(
-      (m: any) =>
-        m.name       === tableName &&
-        m.project_id === projectId
+      (m: any) => m.name === tableName
     ) ?? null
   } catch {
     return null
@@ -202,11 +224,16 @@ export async function GET(
         )
       }
 
-      // Strip hidden fields
+      // Strip hidden fields — but never strip the primary key, since the
+      // client needs it for findById/update/delete regardless of whether
+      // it's marked hidden for admin-form purposes.
       const schema  = model.schema ?? {}
       const columns = Array.isArray(schema) ? schema : (schema.columns ?? [])
+      const pk      = columns.find((c: any) => c.is_primary || c.primary_key)
       const hidden  = new Set(
-        columns.filter((c: any) => c.hidden).map((c: any) => c.name)
+        columns
+          .filter((c: any) => c.hidden && c.name !== pk?.name)
+          .map((c: any) => c.name)
       )
       const safeRecord: Record<string, unknown> = {}
       Object.entries(record).forEach(([k, v]) => {
@@ -220,8 +247,10 @@ export async function GET(
     let records = await adapter.readAll!(dbConfig, table)
     if (!records) records = []
 
-    // Filter to this project only
-    records = records.filter((r: any) => r.project_id === projectId)
+    // Single-tenant — don't filter by project_id (Studio's ID, not
+    // guaranteed to match Core's local rows). Every row in this local DB
+    // already belongs to this install's one project.
+    // records = records.filter((r: any) => r.project_id === projectId)
 
     // Search
     if (search.trim()) {
@@ -254,11 +283,15 @@ export async function GET(
       })
     }
 
-    // Strip hidden fields
+    // Strip hidden fields — but never strip the primary key. Same reasoning
+    // as the single-record branch above.
     const schema  = model.schema ?? {}
     const columns = Array.isArray(schema) ? schema : (schema.columns ?? [])
+    const pk      = columns.find((c: any) => c.is_primary || c.primary_key)
     const hidden  = new Set(
-      columns.filter((c: any) => c.hidden).map((c: any) => c.name)
+      columns
+        .filter((c: any) => c.hidden && c.name !== pk?.name)
+        .map((c: any) => c.name)
     )
 
     const safeRecords = records
@@ -389,10 +422,6 @@ export async function PATCH(
 // DELETE — delete record
 // ---------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------
-// DELETE — delete record
-// ---------------------------------------------------------------------------
-
 export async function DELETE(
   req:     NextRequest,
   context: { params: Promise<{ project: string; table: string }> }
@@ -421,7 +450,6 @@ export async function DELETE(
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
-    // FIXED: was passing idCol (the column name) where the id value belongs.
     // NOTE: adapter.delete only supports the default id column. Tables with a
     // non-'id' primary key (e.g. route_id) won't match — tracked as
     // "DELETE hardening — id_column for route_id on Postgres/MySQL".

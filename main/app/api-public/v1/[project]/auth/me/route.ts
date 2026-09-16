@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
   const dbConfig = adapter.config
 
   // Confirm token not revoked.
-  const tokenRows: any[] = await (adapter as any).readAllAdmin(dbConfig, 'nxf_system_tokens')
+  const tokenRows: any[] = await (adapter as any).readAll(dbConfig, 'nxf_system_tokens')
   const tokenRow = (tokenRows ?? []).find((t: any) => t.access_token === customerToken)
   if (!tokenRow || tokenRow.revoked) {
     return NextResponse.json({ error: 'Session revoked' }, { status: 401, headers: coreCors() })

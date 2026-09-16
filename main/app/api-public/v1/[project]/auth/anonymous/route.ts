@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
     user_id,
     user_email:     '-',
     password_hash,
-    full_name:      null,
+    full_name:      'Anonymous',
     role:           'user',
     user_type:      'customer',
     status:         'active',
