@@ -15,4 +15,8 @@ packages/**/dist/
 
 # Env
 .env
+.env.local
 *.log
+
+.next/
+main/.next/
