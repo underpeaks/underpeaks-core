@@ -1,105 +1,25 @@
+// WelcomePage.tsx  (installer step 1: replaces the version I sent earlier)
 'use client'
 
-/**
- * WelcomePage Component
- *
- * This is the very first page the user sees when they start the installer wizard.
- * It serves as an introduction to the platform and requires the user to read and
- * accept the license agreement before they can proceed.
- *
- * What this page does:
- * - Displays the platform logo and tagline at the top.
- * - Shows a bullet-point list of platform benefits so the user understands
- *   what they are installing.
- * - Fetches and displays the contents of /public/license.txt in a scrollable
- *   box so the user can read the full license agreement.
- * - Provides a checkbox the user must tick to confirm they accept the terms.
- * - Enables the "Continue" button only after the checkbox is ticked.
- * - Navigates the user to /installer/project when they click "Continue".
- *
- * Component hierarchy:
- *   WelcomePage         ← this file (owns all state + side effects)
- *   ├── LocaleSwitcher  ← language selector fixed to the top-right corner
- *   ├── <header>        ← logo + tagline
- *   ├── Benefits        ← bullet list of platform highlights
- *   ├── License Box     ← scrollable area showing license.txt content
- *   ├── Checkbox        ← accept-terms toggle
- *   └── Continue Button ← disabled until terms are accepted
- */
+import { useEffect, useState } from 'react'
+import { useRouter }           from 'next/navigation'
+import { useTranslations }     from 'next-intl'
+import { Checkbox }            from '@/components/ui/checkbox'
+import { Button }              from '@/components/ui/button'
+import { Check, Loader2, ArrowRight, LifeBuoy } from 'lucide-react'
+import InstallerShell, { PRIMARY_BUTTON } from '@/core/InstallerShell'
+import { HelpDialog }          from '@/core/HelpCenter'
+import { DISCORD_URL, GITHUB_ISSUES_URL } from '@/core/known-issues'
 
-import { useEffect, useState }  from 'react'
-import { useRouter }            from 'next/navigation'
-import { useTranslations }      from 'next-intl'
-import { Checkbox }             from '@/components/ui/checkbox'
-import { Loader2 }              from 'lucide-react'
-import { Button }               from '@/components/ui/button'
-import LocaleSwitcher           from '@/core/LocaleSwitcher'
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
-/**
- * WelcomePage
- *
- * The entry point of the installer wizard. Presents platform benefits,
- * displays the license agreement fetched from the server, and requires the
- * user to accept the terms before continuing to the project setup step.
- */
 export default function WelcomePage() {
-  /**
-   * t — Translation function scoped to the 'welcomePage' namespace.
-   * Use t('someKey') to retrieve the translated string for that key.
-   * All user-visible text in this component comes through this function.
-   */
-  const t = useTranslations('welcomePage')
-
-  // -------------------------------------------------------------------------
-  // State
-  // -------------------------------------------------------------------------
-
-  /**
-   * accepted — Tracks whether the user has ticked the "Accept the license
-   * terms" checkbox. The Continue button stays disabled until this is true.
-   */
-  const [accepted, setAccepted] = useState(false)
-
-  /**
-   * licenseText — The raw text content of the license agreement file
-   * (/public/license.txt). Starts empty and is populated by the useEffect
-   * below once the file has been fetched from the server.
-   */
-  const [licenseText, setLicenseText] = useState('')
-
-  /**
-   * loading — Whether the page is in a transitional "loading" state after
-   * the user clicked Continue. While true, the button shows a spinner and
-   * is disabled to prevent duplicate clicks.
-   */
-  const [loading, setLoading] = useState(false)
-
-  /**
-   * router — Next.js router used to navigate to the next installer step
-   * (/installer/project) once the user accepts the terms and clicks Continue.
-   */
+  const t      = useTranslations('welcomePage')
   const router = useRouter()
 
-  // -------------------------------------------------------------------------
-  // Fetch license text on mount
-  // -------------------------------------------------------------------------
+  const [accepted,    setAccepted]    = useState(false)
+  const [licenseText, setLicenseText] = useState('')
+  const [loading,     setLoading]     = useState(false)
+  const [helpOpen,    setHelpOpen]    = useState(false)
 
-  /**
-   * useEffect — Fetches the license agreement text when the page first loads.
-   *
-   * This runs once (empty dependency array []) immediately after the component
-   * mounts. It requests /license.txt from the public folder and stores the
-   * plain-text result in the `licenseText` state so it can be rendered in the
-   * scrollable license box below.
-   *
-   * If the fetch fails for any reason (network error, file missing, etc.),
-   * a translated fallback message is shown instead so the user is not left
-   * with a blank box.
-   */
   useEffect(() => {
     fetch('/license.txt')
       .then((res) => res.text())
@@ -107,23 +27,6 @@ export default function WelcomePage() {
       .catch(() => setLicenseText(t('license.loadFailed')))
   }, [])
 
-  // -------------------------------------------------------------------------
-  // Handlers
-  // -------------------------------------------------------------------------
-
-  /**
-   * handleContinue
-   *
-   * Called when the user clicks the "Continue" button.
-   *
-   * Steps:
-   * 1. Sets loading to true — disables the button and shows the spinner.
-   * 2. After a short 100ms delay (to allow React to re-render the spinner),
-   *    navigates the user to the project setup page: /installer/project.
-   *
-   * The button is already disabled if `accepted` is false, so this function
-   * will only ever be called when the user has ticked the checkbox.
-   */
   const handleContinue = () => {
     setLoading(true)
     setTimeout(() => {
@@ -131,118 +34,137 @@ export default function WelcomePage() {
     }, 100)
   }
 
-  // -------------------------------------------------------------------------
-  // Render
-  // -------------------------------------------------------------------------
+  const benefits = [
+    t('benefits.item1'),
+    t('benefits.item2'),
+    t('benefits.item3'),
+    t('benefits.item4'),
+    t('benefits.item5'),
+    t('benefits.item6'),
+  ]
 
   return (
-    <div className="min-h-screen bg-white flex flex-col px-6 py-12">
+    <InstallerShell step={1} width="lg" logoAlt={t('logoAlt')}>
 
-      {/* ----------------------------------------------------------------
-        * Locale Switcher
-        * Fixed to the top-right corner so the user can change language
-        * at any point before or during the installer flow.
-        * ---------------------------------------------------------------- */}
-      <div className="fixed top-4 right-4 z-50">
-        <LocaleSwitcher />
-      </div>
-
-      {/* ----------------------------------------------------------------
-        * Page Header
-        * Displays the platform logo and a short descriptive tagline.
-        * ---------------------------------------------------------------- */}
-      <header className="mb-8 text-center flex flex-col items-center">
-        <img
-          src="/images/logo/underpeaks_logo.png"
-          alt={t('logoAlt')}
-          className="h-16 w-auto mb-4"
-        />
-        <p className="text-xl text-gray-700">{t('tagline')}</p>
-      </header>
-
-      {/* ----------------------------------------------------------------
-        * Benefits Section
-        * A bullet-point list explaining why the user should use this
-        * platform. Each bullet is independently translated so they can
-        * be localised naturally in each language.
-        * ---------------------------------------------------------------- */}
-      <section className="max-w-3xl mx-auto text-gray-800 mb-10">
-        <h2 className="text-2xl font-semibold mb-4 text-center">
-          {t('benefits.heading')}
-        </h2>
-        <ul className="list-disc pl-5 space-y-2 text-base">
-          <li>{t('benefits.item1')}</li>
-          <li>{t('benefits.item2')}</li>
-          <li>{t('benefits.item3')}</li>
-          <li>{t('benefits.item4')}</li>
-          <li>{t('benefits.item5')}</li>
-          <li>{t('benefits.item6')}</li>
-        </ul>
+      {/* Hero */}
+      <section className="text-center">
+        <h1 className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl">
+          {t('tagline')}
+        </h1>
       </section>
 
-      {/* ----------------------------------------------------------------
-        * License Agreement Section
-        * Shows the heading, the scrollable license text box, and the
-        * accept-terms checkbox beneath it.
-        * ---------------------------------------------------------------- */}
-      <section className="max-w-4xl mx-auto flex flex-col space-y-4 mb-8">
-        <h3 className="text-xl font-semibold text-gray-900">
-          {t('license.heading')}
-        </h3>
-
-        {/*
-         * Scrollable license text box.
-         * While the file is still being fetched, shows a translated
-         * "Loading license..." placeholder. Once loaded, displays the
-         * raw text with whitespace preserved (whitespace-pre-wrap).
-         */}
-        <div className="bg-gray-100 border border-gray-300 p-4 rounded max-h-72 overflow-y-auto text-sm text-black whitespace-pre-wrap">
-          {licenseText || t('license.loading')}
-        </div>
-
-        {/* --------------------------------------------------------------
-          * Accept Terms Checkbox
-          * The user must tick this before the Continue button is enabled.
-          * Ticking sets `accepted` to true; unticking sets it back to false.
-          * -------------------------------------------------------------- */}
-        <div className="flex justify-center items-center mt-4">
-          <div className="flex items-center space-x-3 bg-white text-black px-4 py-2 rounded shadow-md">
-            <Checkbox
-              id="accept"
-              checked={accepted}
-              onCheckedChange={(val) => setAccepted(!!val)}
-              className="border-black bg-white text-black"
-            />
-            <label htmlFor="accept" className="text-black font-medium">
-              {t('license.acceptLabel')}
-            </label>
+      {/* Help box */}
+      <section className="mt-10 rounded-2xl bg-black p-6 text-white shadow-sm">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-4">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-black">
+              <LifeBuoy className="h-5 w-5" />
+            </span>
+            <div>
+              <h2 className="text-base font-semibold">Need help during setup?</h2>
+              <p className="mt-1 text-sm leading-relaxed text-neutral-300">
+                If you run into any issues, check the known issues first, join our
+                Discord, or log an issue on GitHub. We read everything.
+              </p>
+            </div>
+          </div>
+          <div className="flex shrink-0 flex-wrap gap-2">
+            <Button
+              size="sm"
+              onClick={() => setHelpOpen(true)}
+              className="bg-white text-black hover:bg-neutral-200"
+            >
+              Known issues
+            </Button>
+            <a
+              href={DISCORD_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-8 items-center rounded-lg border border-neutral-600 px-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+            >
+              Discord
+            </a>
+            <a
+              href={GITHUB_ISSUES_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex h-8 items-center rounded-lg border border-neutral-600 px-3 text-sm font-medium text-white transition-colors hover:bg-neutral-800"
+            >
+              GitHub
+            </a>
           </div>
         </div>
       </section>
 
-      {/* ----------------------------------------------------------------
-        * Continue Button
-        * Disabled when the user has not yet accepted the terms OR while
-        * the loading state is active. Shows a spinner during the short
-        * navigation delay so the user gets visual feedback.
-        * ---------------------------------------------------------------- */}
-      <div className="flex justify-end mt-auto max-w-6xl mx-auto">
+      {/* Benefits */}
+      <section className="mt-12">
+        <h2 className="mb-5 text-center text-sm font-medium uppercase tracking-widest text-neutral-500">
+          {t('benefits.heading')}
+        </h2>
+        <ul className="grid gap-3 sm:grid-cols-2">
+          {benefits.map((text, i) => (
+            <li
+              key={i}
+              className="flex items-start gap-3 rounded-xl border border-neutral-200 bg-white p-4 shadow-sm"
+            >
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-black text-white">
+                <Check className="h-3 w-3" strokeWidth={3} />
+              </span>
+              <span className="text-sm leading-relaxed text-neutral-800">{text}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      {/* License agreement */}
+      <section className="mt-12 overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-sm">
+        <div className="border-b border-neutral-200 px-5 py-4">
+          <h3 className="text-base font-semibold">{t('license.heading')}</h3>
+        </div>
+
+        <div className="max-h-64 overflow-y-auto bg-neutral-50 px-5 py-4 font-mono text-xs leading-relaxed text-neutral-700 whitespace-pre-wrap">
+          {licenseText || t('license.loading')}
+        </div>
+
+        <label
+          htmlFor="accept"
+          className="flex cursor-pointer items-center gap-3 border-t border-neutral-200 px-5 py-4 transition-colors hover:bg-neutral-50"
+        >
+          <Checkbox
+            id="accept"
+            checked={accepted}
+            onCheckedChange={(val) => setAccepted(!!val)}
+            className="h-5 w-5 rounded border-neutral-400 data-[state=checked]:border-black data-[state=checked]:bg-black data-[state=checked]:text-white"
+          />
+          <span className="text-sm font-medium text-neutral-900">
+            {t('license.acceptLabel')}
+          </span>
+        </label>
+      </section>
+
+      {/* Continue */}
+      <div className="mt-8 flex justify-end">
         <Button
+          size="lg"
           disabled={!accepted || loading}
           onClick={handleContinue}
-          className="px-8 py-6 text-lg"
+          className={`${PRIMARY_BUTTON} w-full px-8 sm:w-auto`}
         >
           {loading ? (
             <span className="flex items-center gap-2">
-              <Loader2 className="w-5 h-5 animate-spin" />
+              <Loader2 className="h-5 w-5 animate-spin" />
               {t('continueLoading')}
             </span>
           ) : (
-            t('continueButton')
+            <span className="flex items-center gap-2">
+              {t('continueButton')}
+              <ArrowRight className="h-4 w-4" />
+            </span>
           )}
         </Button>
       </div>
 
-    </div>
+      <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
+    </InstallerShell>
   )
 }

@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
+    "save": "Opslaan",
+    "saving": "Bezig met opslaan...",
+    "saveChanges": "Wijzigingen Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "create": "Aanmaken",
+    "add": "Toevoegen",
+    "remove": "Verwijderen",
+    "close": "Sluiten",
+    "confirm": "Bevestigen",
+    "back": "Terug",
+    "next": "Volgende",
+    "done": "Klaar",
+    "loading": "Bezig met laden...",
+    "search": "Zoeken",
+    "filter": "Filteren",
+    "refresh": "Vernieuwen",
+    "copy": "Kopiëren",
+    "copied": "Gekopieerd!",
+    "upload": "Uploaden",
+    "rename": "Hernoemen",
+    "move": "Verplaatsen",
+    "preview": "Voorbeeld",
+    "revoke": "Intrekken",
+    "generate": "Genereren",
+    "reveal": "Tonen",
+    "hide": "Verbergen",
+    "active": "Actief",
+    "inactive": "Inactief",
     "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "actions": "Acties",
+    "name": "Naam",
+    "email": "E-mail",
+    "password": "Wachtwoord",
+    "role": "Rol",
+    "createdAt": "Aangemaakt op",
+    "noResults": "Geen resultaten gevonden",
+    "error": "Er is een fout opgetreden",
+    "success": "Succes",
+    "required": "Dit veld is verplicht",
+    "optional": "Optioneel",
+    "yes": "Ja",
+    "no": "Nee",
+    "areYouSure": "Weet je het zeker?",
+    "thisActionCannotBeUndone": "Deze actie kan niet ongedaan worden gemaakt.",
+    "comingSoon": "Binnenkort beschikbaar"
   },
   "nav": {
     "dashboard": "Dashboard",
-    "pages": "Pages",
+    "pages": "Pagina's",
     "menu": "Menu",
     "media": "Media",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
+    "integrations": "Integraties",
+    "theming": "Thema",
+    "settings": "Instellingen",
     "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "messages": "Berichten",
+    "notifications": "Meldingen",
+    "logout": "Afmelden"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "Zoeken...",
+    "notifications": "Meldingen",
+    "messages": "Berichten",
+    "viewAccount": "Account bekijken",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
+      "self_hosted": "Zelf gehost",
+      "hosted": "Gehost",
       "enterprise": "Enterprise"
     }
   },
+  "nextModelGenerator": {
+    "nullJsonError": "Kan {{modelName}}Model niet aanmaken: null of ongedefinieerde JSON ontvangen",
+    "missingRequiredField": "Verplicht veld ontbreekt: {{fieldName}} in {{modelName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "Code genereren voor {{count}} model(len)...",
+    "modelUndefined": "Model is niet gedefinieerd — zorg dat een geldige ModelDefinition is doorgegeven",
+    "modelMissingName": "Model mist de eigenschap \"name\" — elk model moet een naam hebben",
+    "modelInvalidFields": "Model \"{{name}}\" heeft ongeldige of ontbrekende \"fields\" — fields moet een eenvoudig object zijn",
+    "generationSuccess": "Code succesvol gegenereerd voor model: {{name}}",
+    "generationFailed": "Codegeneratie mislukt voor model: {{name}}"
+  },
+  "completeProfile": {
+    "title": "Voltooi Je Profiel",
+    "welcome": "Welkom,",
+    "loading": {
+      "checkingProfile": "Bezig met controleren van je profiel..."
+    },
+    "subdomain": {
+      "label": "Kies een subdomein",
+      "placeholder": "jouwapp",
+      "hint": "Je app zal bereikbaar zijn op"
+    },
+    "button": {
+      "save": "Opslaan & Doorgaan",
+      "saving": "Bezig met opslaan..."
+    },
+    "validation": {
+      "subdomainRequired": "Voer een subdomein in",
+      "adapterMissingCreateTenant": "Je database-adapter ondersteunt het aanmaken van een tenant niet"
+    },
+    "errors": {
+      "saveFailed": "Fout bij opslaan van subdomein: {{message}}",
+      "unknownError": "Er is een onbekende fout opgetreden"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Wachtwoord opnieuw instellen wordt niet ondersteund door de huidige database-adapter",
+      "noAccountFound": "Geen account gevonden met dat e-mailadres."
+    }
+  },
+  "forgotPassword": {
+    "title": "Wachtwoord Vergeten",
+    "description": "Voer je e-mailadres in en we sturen je een link om je wachtwoord opnieuw in te stellen.",
+    "form": {
+      "emailLabel": "E-mailadres",
+      "emailPlaceholder": "jij@voorbeeld.com",
+      "buttonSend": "Verstuur Resetlink",
+      "buttonSending": "Bezig met verzenden..."
+    },
+    "validation": {
+      "emailRequired": "Voer je e-mailadres in."
+    },
+    "errors": {
+      "firebaseConfigMissing": "Firebase-configuratie ontbreekt. Controleer je omgevingsvariabelen.",
+      "sendFailed": "Kon de resetlink niet verzenden. Probeer het opnieuw."
+    },
+    "success": {
+      "title": "Controleer je inbox",
+      "description": "Er is een e-mail verzonden om je wachtwoord opnieuw in te stellen. Controleer je inbox en volg de link om je wachtwoord opnieuw in te stellen.",
+      "button": "Terug naar Inloggen"
+    },
+    "notice": {
+      "title": "Aanvraag Verzonden",
+      "button": "OK"
+    },
+    "error": {
+      "title": "Er is iets misgegaan"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Wachtwoord opnieuw instellen wordt niet ondersteund door de huidige database-adapter",
+      "invalidToken": "Ongeldige of verlopen resetlink. Vraag een nieuwe aan.",
+      "tokenAlreadyUsed": "Deze resetlink is al gebruikt. Vraag een nieuwe aan.",
+      "tokenExpired": "Deze resetlink is verlopen. Vraag een nieuwe aan."
+    }
+  },
+  "resetPassword": {
+    "title": "Wachtwoord Opnieuw Instellen",
+    "form": {
+      "passwordLabel": "Nieuw Wachtwoord",
+      "buttonReset": "Wachtwoord Opnieuw Instellen",
+      "buttonResetting": "Bezig met opnieuw instellen..."
+    },
+    "errors": {
+      "invalidLink": "Ongeldige of ontbrekende resetlink. Vraag een nieuwe aan.",
+      "passwordRequired": "Voer een nieuw wachtwoord in.",
+      "missingToken": "Resettoken ontbreekt. Gebruik de link uit je e-mail.",
+      "resetFailed": "Kon wachtwoord niet opnieuw instellen. Probeer het opnieuw."
+    },
+    "error": {
+      "title": "Er is iets misgegaan"
+    },
+    "expired": {
+      "title": "Resetlink Verlopen",
+      "description": "Je link om het wachtwoord opnieuw in te stellen is verlopen. Je wordt doorgestuurd naar de pagina Wachtwoord Vergeten..."
+    },
+    "success": {
+      "title": "Wachtwoord Succesvol Opnieuw Ingesteld",
+      "description": "Je kunt nu",
+      "signinLink": "inloggen",
+      "descriptionSuffix": "met je nieuwe wachtwoord."
+    }
+  },
+  "signIn": {
+    "heading": "Log in op je Underpeaks-account",
+    "fields": {
+      "email": "E-mail",
+      "password": "Wachtwoord"
+    },
+    "button": {
+      "signIn": "Inloggen",
+      "signingIn": "Bezig met inloggen..."
+    },
+    "links": {
+      "forgotPassword": "Wachtwoord vergeten?",
+      "noAccount": "Heb je nog geen account?",
+      "signUp": "Registreer nu"
+    },
+    "errors": {
+      "title": "Fout",
+      "signinFailed": "Inloggen mislukt. Controleer je gegevens en probeer het opnieuw."
+    }
+  },
+  "signUp": {
+    "heading": "Maak je Underpeaks-account aan",
+    "fields": {
+      "fullName": "Volledige Naam",
+      "fullNamePlaceholder": "Je volledige naam",
+      "email": "E-mail",
+      "emailPlaceholder": "jij@voorbeeld.com",
+      "password": "Wachtwoord"
+    },
+    "button": {
+      "signUp": "Registreren",
+      "creating": "Bezig met aanmaken..."
+    },
+    "alerts": {
+      "errorTitle": "Fout",
+      "successTitle": "Succes"
+    },
+    "success": {
+      "accountCreated": "Account succesvol aangemaakt!"
+    },
+    "links": {
+      "alreadyHaveAccount": "Heb je al een account?",
+      "loginNow": "Log nu in"
+    },
+    "errors": {
+      "nameRequired": "Volledige naam is verplicht.",
+      "emailRequired": "E-mail is verplicht.",
+      "passwordRequired": "Wachtwoord is verplicht.",
+      "emailInUse": "Dit e-mailadres is al geregistreerd. Probeer in te loggen.",
+      "invalidEmail": "Voer een geldig e-mailadres in.",
+      "weakPassword": "Wachtwoord is te zwak. Minimaal 6 tekens.",
+      "signupFailed": "Registratie mislukt. Probeer het opnieuw.",
+      "supabaseSignupFailed": "Supabase-registratie mislukt. Probeer het opnieuw."
+    },
+    "console": {
+      "firebaseVerificationSent": "Firebase-verificatie-e-mail succesvol verzonden.",
+      "firebaseVerificationFailed": "Firebase-verificatie-e-mail kon niet worden verzonden.",
+      "supabaseVerificationSent": "Supabase-verificatie-e-mail succesvol verzonden."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "E-mail Verifiëren",
+      "success": "E-mail Geverifieerd ✅",
+      "error": "Verificatie Mislukt"
+    },
+    "status": {
+      "verifying": "Bezig met verifiëren van je e-mail...",
+      "verified": "Je e-mail is geverifieerd.",
+      "supabaseRedirecting": "Doorsturen naar wachtwoordinstelling..."
+    },
+    "button": {
+      "goToSignIn": "Ga naar Inloggen"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] Aanvraag ontvangen",
+      "verificationNotSupported": "[verify-email] Verificatie wordt niet ondersteund voor deze adapter"
+    },
+    "errors": {
+      "missingTokenOrEmail": "Token of e-mail ontbreekt",
+      "dbTypeNotSet": "Databasetype is niet geconfigureerd",
+      "unsupportedDbType": "Niet-ondersteund databasetype",
+      "sqlAdapterMissingMethods": "SQL-adapter mist verplichte methoden",
+      "firebaseAdapterMissingMethods": "Firebase-adapter mist verplichte methoden",
+      "invalidToken": "Ongeldig token",
+      "tokenExpired": "Token verlopen",
+      "userNotFound": "Gebruiker niet gevonden",
+      "verificationNotSupported": "Verificatie wordt niet ondersteund voor deze adapter",
+      "verificationFailed": "Verificatie is mislukt"
+    }
+  },
+  "schemaPreview": {
+    "title": "Schema-voorbeeld",
+    "columns": {
+      "field": "Veld",
+      "type": "Type"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "Actie bevestigen",
+      "description": "Weet je zeker dat je door wilt gaan?"
+    },
+    "buttons": {
+      "confirm": "Bevestigen",
+      "cancel": "Annuleren"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "Bedrijf",
+      "content": "Inhoud",
+      "assets": "Middelen",
+      "configuration": "Configuratie"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "products": "Producten",
+      "categories": "Categorieën",
+      "orders": "Bestellingen",
+      "coupons": "Kortingsbonnen",
+      "users": "Gebruikers",
+      "shipping": "Verzending",
+      "services": "Diensten",
+      "sharedModels": "Gedeelde Modellen",
+      "menu": "Menu",
+      "pages": "Pagina's",
+      "theme": "Thema",
+      "storage": "Opslag",
+      "integrations": "Integraties",
+      "apisAndWebhooks": "API's en Webhooks"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "Berichten",
+      "unreadCount": "{count} ongelezen"
+    },
+    "empty": "Nog geen berichten",
+    "viewAll": "Alle berichten bekijken",
+    "unreadBadge": "{count} ongelezen",
+    "systemInitials": "SY",
+    "fallbackUser": "Gebruiker"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "Meldingen",
+      "unreadCount": "{count} ongelezen",
+      "markAllRead": "Alles als gelezen markeren"
+    },
+    "empty": "Nog geen meldingen",
+    "viewAll": "Alle meldingen bekijken"
+  },
+  "previewSchema": {
+    "fieldsHeading": "Velden",
+    "fieldNamePlaceholder": "Veldnaam",
+    "requiredLabel": "Verplicht",
+    "removeButton": "Verwijderen",
+    "saveButton": "Opslaan",
+    "previewButton": "Voorbeeld",
+    "hidePreviewButton": "Voorbeeld Verbergen",
+    "addFieldButton": "Veld Toevoegen",
+    "types": {
+      "string": "tekst",
+      "num": "getal",
+      "boolean": "booleaans",
+      "datetime": "datum/tijd",
+      "array": "array",
+      "map": "map",
+      "null": "null"
+    },
+    "aria": {
+      "fieldName": "Veld {{index}} naam",
+      "fieldType": "Veld {{index}} type",
+      "elementType": "Veld {{index}} elementtype",
+      "required": "Veld {{index}} verplicht",
+      "removeField": "Veld {{index}} verwijderen"
+    }
+  },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "Bezig met afmelden…",
+    "footer": {
+      "settings": "Instellingen",
+      "logout": "Afmelden",
+      "collapse": "Zijbalk inklappen",
+      "expand": "Zijbalk uitklappen",
+      "business": "Bedrijf",
+      "developer": "Ontwikkelaar",
+      "design": "Ontwerp",
+      "system": "Systeem"
+    },
+    "aria": {
+      "sidebar": "Consolenavigatie",
+      "navigation": "Hoofdnavigatie",
+      "expandSidebar": "Zijbalk uitklappen",
+      "collapseSidebar": "Zijbalk inklappen"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "Projectlogo",
+    "projectLabel": "Project:",
+    "signIn": "Inloggen",
+    "register": "Registreren",
+    "aria": {
+      "navbar": "Bovenste navigatiebalk",
+      "goToDashboard": "Ga naar dashboard"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "Gebruikersmenu voor {name}"
+    },
+    "menu": {
+      "account": "Account",
+      "settings": "Instellingen",
+      "helpAndDocs": "Hulp & Documentatie",
+      "logout": "Afmelden"
+    }
+  },
+  "accountPage": {
+    "title": "Account",
+    "subtitle": "Beheer je profiel en beveiliging.",
+    "profile": {
+      "title": "Profiel",
+      "description": "Werk je weergavenaam bij.",
+      "fullNameLabel": "Volledige naam",
+      "fullNamePlaceholder": "Je volledige naam",
+      "emailLabel": "E-mailadres",
+      "emailReadOnlyNote": "E-mail wordt beheerd door je auth-provider en kan hier niet worden gewijzigd.",
+      "saveButton": "Wijzigingen opslaan",
+      "savingButton": "Bezig met opslaan…",
+      "savedButton": "Opgeslagen"
+    },
+    "danger": {
+      "title": "Gevarenzone",
+      "description": "Onomkeerbare acties. Ga voorzichtig te werk.",
+      "cancelTitle": "Abonnement opzeggen",
+      "cancelDescription": "Je plan blijft actief tot het einde van de huidige factureringsperiode en gaat daarna terug naar zelf gehost.",
+      "cancelButton": "Plan opzeggen",
+      "cancelModalBody": "Je abonnement wordt opgezegd, maar je behoudt toegang tot het einde van je huidige factureringsperiode. Dit kan niet ongedaan worden gemaakt.",
+      "resetTitle": "Project resetten",
+      "resetDescription": "Verwijdert permanent alle projectinhoud en begint opnieuw met onboarding. Je account blijft behouden.",
+      "resetButton": "Project resetten",
+      "resetModalBody": "Dit verwijdert permanent alle inhoud van je project — modellen, pagina's, gegevens en media. Je account en facturering blijven behouden. Dit kan niet ongedaan worden gemaakt.",
+      "deleteTitle": "Account verwijderen",
+      "deleteDescription": "Verwijdert permanent je account en alle bijbehorende gegevens.",
+      "deleteButton": "Account verwijderen",
+      "deleteModalBody": "Dit verwijdert permanent je account en alle inhoud. Factureringsgegevens worden bewaard indien wettelijk vereist. Dit kan niet ongedaan worden gemaakt."
+    },
+    "password": {
+      "title": "Wachtwoord Wijzigen",
+      "description": "Gebruik een sterk wachtwoord dat je niet elders gebruikt.",
+      "currentLabel": "Huidig wachtwoord",
+      "newLabel": "Nieuw wachtwoord",
+      "confirmLabel": "Bevestig nieuw wachtwoord",
+      "showPassword": "Wachtwoord tonen",
+      "hidePassword": "Wachtwoord verbergen",
+      "minLengthHint": "Minimaal 8 tekens",
+      "mismatchHint": "Wachtwoorden komen niet overeen",
+      "updateButton": "Wachtwoord bijwerken",
+      "updatingButton": "Bezig met bijwerken…",
+      "updatedButton": "Bijgewerkt"
+    },
+    "billing": {
+      "title": "Facturering & Plan",
+      "description": "Je huidige plan en upgrademogelijkheden.",
+      "selfHostedDescription": "Kernfuncties inbegrepen. Upgrade voor integraties, geavanceerde authenticatie en white-labelling.",
+      "paidDescription": "Alle functies ontgrendeld.",
+      "upgradeButton": "Upgraden",
+      "upgradeAriaLabel": "Upgraden naar Underpeaks Pro",
+      "proFeaturesTitle": "Wat je krijgt met Pro",
+      "proFeature1": "Integraties (Stripe, Mailchimp, en meer)",
+      "proFeature2": "Geavanceerde authenticatie — 2FA, sociale login, magic link, SSO",
+      "proFeature3": "White-label het CMS met je eigen huisstijl",
+      "proFeature4": "Aangepast domein voor je console",
+      "contactSalesButton": "Contact Verkoop"
+    },
+    "errors": {
+      "profileUpdateFailed": "Profiel bijwerken mislukt. Probeer het opnieuw.",
+      "passwordUpdateFailed": "Wachtwoord bijwerken mislukt. Probeer het opnieuw."
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "Generieke eindpunten automatisch gegenereerd op basis van je modellen",
+    "customEndpointButton": "Aangepast Eindpunt",
+    "tabsLabel": "API-paginatabbladen",
+    "copy": "Kopiëren naar klembord",
+    "copied": "Gekopieerd!",
+    "tabs": {
+      "endpoints": "Eindpunten",
+      "keys": "API-sleutels",
+      "reference": "Referentie"
+    },
+    "endpoints": {
+      "searchPlaceholder": "Eindpunten zoeken…",
+      "typeFilterLabel": "Filteren op eindpunttype",
+      "modelFilterLabel": "Filteren op model",
+      "type": {
+        "all": "alle",
+        "auto": "auto",
+        "custom": "aangepast"
+      },
+      "colMethod": "Methode",
+      "colPath": "Pad",
+      "colDescription": "Beschrijving",
+      "colActions": "Acties",
+      "noResults": "Geen eindpunten komen overeen met je filter",
+      "customBadge": "Aangepast",
+      "requiresAuth": "Vereist authenticatie",
+      "public": "Openbaar eindpunt",
+      "testButton": "Testen",
+      "exampleRequest": "Voorbeeldverzoek",
+      "requiredHeaders": "Verplichte Headers",
+      "testLabel": "Test",
+      "sendRequest": "Verzoek Versturen",
+      "running": "Bezig…"
+    },
+    "drawer": {
+      "title": "Nieuw Aangepast Eindpunt",
+      "subtitle": "Schrijf bedrijfslogica die de generieke API aanroept",
+      "close": "Paneel sluiten",
+      "methodLabel": "Methode",
+      "pathLabel": "Pad",
+      "descriptionLabel": "Beschrijving",
+      "descriptionPlaceholder": "Wat doet dit eindpunt?",
+      "authLabel": "Authenticatie",
+      "authRequired": "Vereist",
+      "authPublic": "Openbaar",
+      "codeLabel": "Handlercode",
+      "cancelButton": "Annuleren",
+      "createButton": "Eindpunt Aanmaken"
+    },
+    "keys": {
+      "title": "API-sleutels",
+      "keepSecret": "Houd deze geheim",
+      "createTitle": "Nieuwe Sleutel Aanmaken",
+      "nameLabel": "Sleutelnaam",
+      "namePlaceholder": "Sleutelnaam, bijv. Mobiele App",
+      "generateButton": "Genereren",
+      "active": "Actief",
+      "inactive": "Inactief",
+      "never": "Nooit",
+      "created": "Aangemaakt",
+      "lastUsed": "Laatst gebruikt",
+      "revealKey": "API-sleutel tonen",
+      "hideKey": "API-sleutel verbergen",
+      "deleteKey": "Sleutel {{name}} verwijderen",
+      "confirmDelete": "Verwijdering bevestigen",
+      "cancelDelete": "Verwijdering annuleren"
+    },
+    "reference": {
+      "queryParamsTitle": "Queryparameters",
+      "queryParamsSubtitle": "Beschikbaar op alle GET-eindpunten",
+      "operatorsTitle": "Filteroperators",
+      "operatorsSubtitle": "Gebruik met de",
+      "operatorsFormat": "parameter als",
+      "exampleTitle": "Volledig Voorbeeld",
+      "exampleDescription": "Haal actieve producten onder R500 op, gesorteerd op prijs, met alleen id/naam/prijs:",
+      "responseLabel": "Antwoord:"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "welcome": "Welkom terug, {name}",
+    "addWidget": "Widget toevoegen",
+    "editLayout": "Indeling bewerken",
+    "saveLayout": "Indeling opslaan",
+    "resetLayout": "Indeling resetten",
+    "toolbar": {
+      "title": "Dashboard",
+      "subtitle": "Sleep widgets om te herschikken · zweef om te bewerken",
+      "refresh": "Vernieuwen",
+      "last30Days": "Laatste 30 dagen",
+      "addWidget": "Widget Toevoegen"
+    },
+    "grid": {
+      "addWidget": "Widget toevoegen"
+    },
+    "addPanel": {
+      "title": "Widget Toevoegen",
+      "subtitle": "Klik om toe te voegen aan dashboard"
+    },
+    "widget": {
+      "dragToReorder": "Slepen om te herschikken",
+      "vsLastPeriod": "vs vorige periode"
+    },
+    "chart": {
+      "day": "Dag",
+      "daysAgo": "30 dagen geleden",
+      "today": "Vandaag"
+    },
+    "formula": {
+      "placeholder": "bijv. SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "Voorinstellingen"
+    }
   },
   "media": {
     "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "uploadFiles": "Bestanden Uploaden",
+    "createFolder": "Map Aanmaken",
+    "folderName": "Mapnaam",
+    "rootFolder": "Hoofdmap",
+    "noFiles": "Geen bestanden in deze map",
+    "dropToUpload": "Sleep bestanden hierheen om te uploaden",
+    "orClickToUpload": "of klik om te bladeren",
+    "gridView": "Rasterweergave",
+    "listView": "Lijstweergave",
+    "fileSize": "Bestandsgrootte",
+    "fileType": "Bestandstype",
+    "uploadedAt": "Geüpload",
+    "deleteFileConfirm": "Weet je zeker dat je \"{name}\" wilt verwijderen?",
+    "deleteFolderConfirm": "Weet je zeker dat je de map \"{name}\" en alle inhoud ervan wilt verwijderen?",
+    "importFromUrl": "Importeren vanaf URL",
+    "copyUrl": "URL kopiëren",
+    "urlCopied": "URL gekopieerd naar klembord",
+    "details": "Bestandsdetails",
+    "selectFile": "Selecteer een bestand om details te bekijken"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Instellingen",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "Overzicht",
+      "projectName": "Projectnaam",
+      "projectUrl": "Project-URL",
+      "projectId": "Project-ID",
+      "dbType": "Databasetype",
+      "environment": "Omgeving",
+      "deploymentType": "Implementatietype",
+      "savedSuccess": "Instellingen succesvol opgeslagen"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "API-sleutels",
+      "subheading": "Beheer sleutels die worden gebruikt om API-verzoeken van je apps te authenticeren.",
+      "title": "API-sleutels",
+      "description": "Beheer API-sleutels voor programmatische toegang tot je project.",
+      "generateKey": "Nieuwe Sleutel Genereren",
+      "keyName": "Naam",
+      "keyPrefix": "Sleutelprefix",
+      "lastUsed": "Laatst gebruikt",
+      "neverUsed": "Nooit gebruikt",
+      "revokeConfirm": "Weet je zeker dat je \"{name}\" wilt intrekken? Dit kan niet ongedaan worden gemaakt.",
+      "revoked": "Ingetrokken",
+      "keyCopied": "Sleutel gekopieerd naar klembord",
+      "newKeyGenerated": "Nieuwe API-sleutel gegenereerd. Kopieer deze nu — hij wordt niet opnieuw getoond.",
+      "noKeys": "Nog geen API-sleutels. Genereer er een om te beginnen.",
+      "sectionTitle": "Actieve Sleutels",
+      "createdDate": "Aangemaakt {{date}}",
+      "lastUsedDate": "Laatst gebruikt {{date}}",
+      "hideKey": "Sleutel verbergen",
+      "revealKey": "Sleutel tonen",
+      "copyKey": "Sleutel kopiëren",
+      "revoke": "Intrekken",
+      "emptyTitle": "Nog geen API-sleutels",
+      "emptySubtitle": "Genereer hieronder een sleutel om te beginnen."
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
+      "title": "Huisstijl",
+      "description": "Pas het uiterlijk van je Underpeaks-console aan.",
       "logo": "Logo",
       "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "primaryColor": "Primaire Kleur",
+      "uploadLogo": "Logo uploaden",
+      "uploadFavicon": "Favicon uploaden",
+      "logoHint": "Aanbevolen: 200×50px, PNG of SVG met transparante achtergrond.",
+      "faviconHint": "Aanbevolen: 32×32px ICO, PNG, of SVG.",
+      "livePreview": "Live Voorbeeld",
+      "brandingSaved": "Huisstijl succesvol bijgewerkt"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
-      "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "host": "SMTP-host",
+      "port": "Poort",
+      "username": "Gebruikersnaam",
+      "fromEmail": "Afzender-e-mail",
+      "fromName": "Afzendernaam",
+      "encryption": "Versleuteling",
+      "testEmail": "Testmail versturen",
+      "testEmailSuccess": "Testmail succesvol verzonden"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "Domeinen",
+      "addDomain": "Domein toevoegen",
+      "verified": "Geverifieerd",
+      "unverified": "Niet geverifieerd",
+      "primary": "Primair",
+      "setPrimary": "Instellen als primair"
     }
   },
   "account": {
     "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "fullName": "Volledige naam",
+    "emailReadOnly": "E-mailadres (alleen-lezen)",
+    "changePassword": "Wachtwoord Wijzigen",
+    "currentPassword": "Huidig wachtwoord",
+    "newPassword": "Nieuw wachtwoord",
+    "confirmPassword": "Bevestig nieuw wachtwoord",
+    "passwordsDoNotMatch": "Wachtwoorden komen niet overeen",
+    "profileUpdated": "Profiel succesvol bijgewerkt",
+    "passwordChanged": "Wachtwoord succesvol gewijzigd",
+    "memberSince": "Lid sinds {date}"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
-    "system": "System"
+    "title": "Berichten",
+    "newConversation": "Nieuw Gesprek",
+    "noConversations": "Nog geen gesprekken",
+    "noMessages": "Geen berichten in dit gesprek",
+    "typeMessage": "Typ een bericht...",
+    "send": "Versturen",
+    "markAllRead": "Alles als gelezen markeren",
+    "reply": "Beantwoorden",
+    "you": "Jij",
+    "system": "Systeem"
+  },
+  "apiKeys": {
+    "heading": "API-sleutels",
+    "subheading": "Beheer sleutels die worden gebruikt om API-verzoeken van je apps te authenticeren.",
+    "sectionTitle": "Actieve Sleutels",
+    "createdDate": "Aangemaakt {date}",
+    "lastUsedDate": "Laatst gebruikt {date}",
+    "neverUsed": "Nooit gebruikt",
+    "hideKey": "Sleutel verbergen",
+    "revealKey": "Sleutel tonen",
+    "copyKey": "Sleutel kopiëren",
+    "revoke": "Intrekken",
+    "emptyTitle": "Nog geen API-sleutels",
+    "emptySubtitle": "Genereer hieronder een sleutel om te beginnen.",
+    "errors": {
+      "loadFailed": "Kon API-sleutels niet laden",
+      "generateFailed": "Kon sleutel niet genereren",
+      "revokeFailed": "Kon sleutel niet intrekken"
+    }
   },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "Meldingen",
+    "noNotifications": "Geen meldingen",
+    "noUnread": "Je bent helemaal bij!",
+    "markAllRead": "Alles als gelezen markeren",
+    "viewAll": "Alle meldingen bekijken",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
-      "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "all": "Alle",
+      "unread": "Ongelezen",
+      "comment": "Reacties",
+      "system": "Systeem",
+      "payment": "Betalingen",
+      "security": "Beveiliging",
+      "message": "Berichten"
     },
     "priority": {
-      "low": "Low",
-      "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "low": "Laag",
+      "normal": "Normaal",
+      "high": "Hoog",
+      "urgent": "Dringend"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "Inloggen",
+    "logout": "Afmelden",
+    "email": "E-mailadres",
+    "password": "Wachtwoord",
+    "forgotPassword": "Wachtwoord vergeten?",
+    "resetPassword": "Wachtwoord opnieuw instellen",
+    "sessionExpired": "Je sessie is verlopen. Log opnieuw in.",
+    "idleWarning": "Je bent een tijdje inactief geweest.",
+    "idleLogoutIn": "Je wordt over {seconds} seconden afgemeld.",
+    "stayLoggedIn": "Ingelogd blijven"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "Pagina niet gevonden",
+    "serverError": "Serverfout",
+    "networkError": "Netwerkfout — controleer je verbinding",
+    "sessionError": "Sessiefout — log opnieuw in",
+    "unknown": "Er is een onverwachte fout opgetreden"
+  },
+  "grid": {
+    "addWidget": "Widget toevoegen"
+  },
+  "addPanel": {
+    "title": "Widget Toevoegen",
+    "subtitle": "Klik om toe te voegen aan dashboard"
+  },
+  "widget": {
+    "dragToReorder": "Slepen om te herschikken",
+    "vsLastPeriod": "vs vorige periode"
+  },
+  "chart": {
+    "day": "Dag",
+    "daysAgo": "30 dagen geleden",
+    "today": "Vandaag"
+  },
+  "formula": {
+    "placeholder": "bijv. SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "Voorinstellingen"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Helpcentrum",
+      "subtitle": "Vind antwoorden, lees de documentatie, of neem contact met ons op.",
+      "searchPlaceholder": "FAQ's doorzoeken…"
+    },
+    "resources": {
+      "title": "Bronnen",
+      "links": {
+        "gettingStarted": {
+          "label": "Aan de Slag",
+          "description": "Stel je eerste project in enkele minuten in."
+        },
+        "apiReference": {
+          "label": "API-referentie",
+          "description": "Volledige referentie voor alle API-eindpunten en -operators."
+        },
+        "community": {
+          "label": "Communityforum",
+          "description": "Stel vragen en deel projecten met de community."
+        }
+      }
+    },
+    "faq": {
+      "title": "Veelgestelde Vragen",
+      "resultCount": "{count} resulta(a)t(en)",
+      "noResults": "Geen resultaten voor \"{query}\"",
+      "noResultsHint": "Probeer een andere zoekterm of neem hieronder contact op met support."
+    },
+    "api": {
+      "title": "API Snelreferentie",
+      "baseUrl": "Basis-URL:",
+      "endpoints": {
+        "get": "Toont alle records van een model. Ondersteunt filteren, sorteren, paginering.",
+        "post": "Maakt een nieuw record aan.",
+        "put": "Werkt een bestaand record bij op ID.",
+        "delete": "Verwijdert een record op ID."
+      },
+      "operators": {
+        "title": "Query-operators",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "Contact Support",
+      "submit": "Bericht versturen",
+      "success": {
+        "title": "Bericht verzonden!",
+        "subtitle": "We reageren zo snel mogelijk."
+      },
+      "fields": {
+        "name": "Naam",
+        "namePlaceholder": "Jan Jansen",
+        "email": "E-mail",
+        "emailPlaceholder": "jij@voorbeeld.com",
+        "message": "Bericht",
+        "messagePlaceholder": "Beschrijf je probleem of vraag…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "Integraties",
+      "connectedCount": "{count} verbonden",
+      "errorCount": "{count} fout(en)",
+      "infoBanner": "Verbonden integraties zijn beschikbaar in aangepaste eindpunten en codegeneratie"
+    },
+    "categories": {
+      "all": "Alle",
+      "payments": "Betalingen",
+      "email": "E-mail & SMS",
+      "storage": "Opslag",
+      "ai": "AI",
+      "analytics": "Analyse",
+      "automation": "Automatisering"
+    },
+    "status": {
+      "connected": "Verbonden",
+      "disconnected": "Niet verbonden",
+      "error": "Fout"
+    },
+    "card": {
+      "viewDocs": "Documentatie bekijken",
+      "buttons": {
+        "saveAndConnect": "Opslaan & Verbinden",
+        "saving": "Bezig met opslaan…",
+        "saved": "Opgeslagen!",
+        "disconnect": "Verbinding verbreken",
+        "retryConnection": "Verbinding opnieuw proberen"
+      }
+    },
+    "empty": "Geen integraties in deze categorie"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "Menu",
+      "subtitle": "{count} item(s) · slepen om te herschikken",
+      "addItem": "Item Toevoegen"
+    },
+    "preview": {
+      "title": "Navigatievoorbeeld",
+      "subtitle": "Alleen zichtbare items",
+      "empty": "Nog geen zichtbare items."
+    },
+    "list": {
+      "title": "Alle Items",
+      "empty": "Nog geen menu-items",
+      "emptyAction": "Voeg je eerste item toe"
+    },
+    "row": {
+      "hidden": "verborgen",
+      "external": "Extern",
+      "actions": {
+        "moveUp": "Omhoog verplaatsen",
+        "moveDown": "Omlaag verplaatsen",
+        "toggleVisibility": "Zichtbaarheid wisselen",
+        "edit": "Bewerken",
+        "delete": "Verwijderen",
+        "confirmDelete": "Verwijdering bevestigen",
+        "cancelDelete": "Annuleren"
+      }
+    },
+    "errors": {
+      "loadFailed": "Kon menu-items niet laden",
+      "createFailed": "Kon menu-item niet aanmaken",
+      "updateFailed": "Kon menu-item niet bijwerken",
+      "deleteFailed": "Kon menu-item niet verwijderen"
+    },
+    "drawer": {
+      "titleAdd": "Menu-item Toevoegen",
+      "titleEdit": "Menu-item Bewerken",
+      "subtitle": "Configureer label, link, icoon en zichtbaarheid",
+      "sections": {
+        "labelVisibility": "Label & Zichtbaarheid",
+        "link": "Link",
+        "icon": "Icoon",
+        "nesting": "Nesting",
+        "preview": "Voorbeeld"
+      },
+      "fields": {
+        "pageRequired": "Er moet een pagina worden geselecteerd voordat een menu-item wordt opgeslagen.",
+        "menuLabel": "Menulabel",
+        "menuLabelPlaceholder": "bijv. Producten",
+        "menuLabelHint": "Dit is de tekst die in het navigatiemenu wordt getoond.",
+        "visibility": "Zichtbaarheid",
+        "visible": "Zichtbaar",
+        "hidden": "Verborgen",
+        "linkTypePage": "Pagina",
+        "linkTypeExternal": "Externe URL",
+        "selectPage": "Pagina Selecteren",
+        "selectPagePlaceholder": "— Selecteer een pagina —",
+        "noPagesHint": "Geen admin-pagina's gevonden. Maak eerst een pagina aan met het paginatype ingesteld op Admin.",
+        "externalUrl": "Externe URL",
+        "openIn": "Openen in",
+        "sameTab": "Zelfde Tabblad",
+        "newTab": "Nieuw Tabblad",
+        "parentItem": "Bovenliggend Item",
+        "parentItemPlaceholder": "— Bovenste niveau —",
+        "parentItemHint": "Geneste items verschijnen als vervolgkeuzeonderdelen in de navigatie."
+      },
+      "icons": {
+        "home": "Home",
+        "grid": "Raster",
+        "package": "Pakket",
+        "users": "Gebruikers",
+        "settings": "Instellingen",
+        "file": "Bestand",
+        "cart": "Winkelwagen",
+        "mail": "Mail",
+        "star": "Ster",
+        "info": "Info"
+      },
+      "preview": {
+        "hidden": "verborgen"
+      },
+      "buttons": {
+        "cancel": "Annuleren",
+        "saveChanges": "Wijzigingen Opslaan",
+        "addItem": "Item Toevoegen",
+        "saving": "Bezig met opslaan…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "Bestands-URL",
+      "metadata": "Metadata",
+      "rename": "Hernoemen",
+      "moveToFolder": "Naar Map Verplaatsen"
+    },
+    "altText": {
+      "placeholder": "Beschrijf deze afbeelding voor toegankelijkheid…",
+      "empty": "Geen alt-tekst ingesteld"
+    },
+    "metadata": {
+      "folder": "Map",
+      "path": "Pad",
+      "size": "Grootte",
+      "type": "Type",
+      "uploaded": "Geüpload",
+      "dimensions": "Afmetingen"
+    },
+    "actions": {
+      "save": "Opslaan",
+      "saving": "Bezig met opslaan…",
+      "cancel": "Annuleren",
+      "move": "Verplaatsen",
+      "moving": "Bezig met verplaatsen…",
+      "deleteFile": "Bestand Verwijderen"
+    },
+    "move": {
+      "currentlyIn": "Momenteel in"
+    },
+    "errors": {
+      "renameFailed": "Hernoemen mislukt",
+      "moveFailed": "Verplaatsen mislukt"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "Verplicht veld ontbreekt: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "Mappen",
+      "all": "Alle",
+      "newFolderTitle": "Nieuwe map",
+      "collapse": "Inklappen",
+      "expand": "Uitklappen"
+    },
+    "folder": {
+      "selectTitle": "Map selecteren"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "Map verwijderen",
+      "fileCount": "{count} bestanden"
+    },
+    "empty": {
+      "message": "Deze map is leeg"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "Deze map is leeg"
+    },
+    "header": {
+      "name": "Naam",
+      "size": "Grootte",
+      "type": "Type",
+      "uploaded": "Geüpload"
+    },
+    "row": {
+      "deleteTitle": "Bestand verwijderen"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "Media"
+    },
+    "actions": {
+      "delete": "Verwijderen ({count})",
+      "clear": "Wissen",
+      "upload": "Uploaden"
+    },
+    "viewMode": {
+      "grid": "Rasterweergave",
+      "list": "Lijstweergave"
+    }
+  },
+  "newFolderPopup": {
+    "title": "Nieuwe Map",
+    "placeholder": "Mapnaam",
+    "buttons": {
+      "create": "Aanmaken",
+      "cancel": "Annuleren"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "Upload bestanden of importeer media via URL naar de geselecteerde map.",
+    "title": "Media Toevoegen",
+    "tabs": {
+      "upload": "Bestand Uploaden",
+      "url": "Toevoegen via URL"
+    },
+    "uploadZone": {
+      "hint": "Elk bestandstype — afbeeldingen, video's, documenten"
+    },
+    "urlTab": {
+      "description": "Plak een openbare URL om het bestand rechtstreeks in de opslag te importeren.",
+      "placeholder": "https://voorbeeld.com/bestand.jpg",
+      "import": "Importeren",
+      "importing": "Bezig met importeren…",
+      "previewAlt": "URL-voorbeeld"
+    },
+    "errors": {
+      "importFailed": "Importeren mislukt"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "Kon mappen niet laden",
+      "loadFiles": "Kon bestanden niet laden",
+      "createFolder": "Kon map niet aanmaken",
+      "deleteFailed": "Verwijderen mislukt"
+    },
+    "confirmDelete": {
+      "titleFolder": "Map Verwijderen",
+      "titleFile": "Bestand Verwijderen",
+      "message": "Weet je zeker dat je wilt verwijderen",
+      "folderWarning": "Dit verwijdert alle bestanden binnen de map.",
+      "undoWarning": "Deze actie kan niet ongedaan worden gemaakt.",
+      "selectionLabel": "{count} items",
+      "cancel": "Annuleren",
+      "confirm": "Verwijderen",
+      "deleting": "Bezig met verwijderen…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "Geen berichten",
+      "subUnread": "Helemaal bij!",
+      "subAll": "Je inbox is leeg."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "zojuist",
+      "minutesAgo": "{count}m geleden",
+      "hoursAgo": "{count}u geleden",
+      "daysAgo": "{count}d geleden"
+    },
+    "unread": {
+      "badge": "{count} ongelezen"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "Systeembericht",
+    "from": "Van: {name}",
+    "deleteButton": "Verwijderen",
+    "deleteAriaLabel": "Gesprek verwijderen: {subject}",
+    "messagesAriaLabel": "Berichtenthread",
+    "loading": "Bezig met laden van berichten...",
+    "emptyTitle": "Nog geen berichten",
+    "emptySub": "Verstuur hieronder het eerste bericht."
+  },
+  "messageBubble": {
+    "justNow": "Zojuist",
+    "minutesAgo": "{count}m geleden",
+    "hoursAgo": "{count}u geleden",
+    "daysAgo": "{count}d geleden"
+  },
+  "replyBar": {
+    "placeholder": "Schrijf een antwoord… (Enter om te versturen)",
+    "sendAriaLabel": "Bericht versturen"
+  },
+  "messagesPage": {
+    "title": "Berichten",
+    "unreadCount": "{count} ongelezen bericht(en)",
+    "filters": {
+      "all": "Alle",
+      "unread": "Ongelezen"
+    },
+    "markAllRead": "Alles als gelezen markeren",
+    "closeError": "Foutmelding sluiten",
+    "empty": {
+      "title": "Selecteer een gesprek",
+      "sub": "Kies een gesprek uit de lijst om het hier te lezen."
+    },
+    "errors": {
+      "load": "Kon berichten niet laden",
+      "delete": "Kon gesprek niet verwijderen",
+      "markAll": "Kon niet alles als gelezen markeren"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "Dringend",
+      "high": "Hoog"
+    },
+    "actions": {
+      "markRead": "Als gelezen markeren",
+      "view": "Bekijken",
+      "delete": "Verwijderen"
+    }
+  },
+  "notificationsHeader": {
+    "title": "Meldingen",
+    "unreadCount": "{count} ongelezen melding(en)",
+    "filters": {
+      "all": "Alle",
+      "unread": "Ongelezen"
+    },
+    "markAllRead": "Alles als gelezen markeren"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "Geen meldingen",
+      "subUnread": "Helemaal bij!",
+      "subAll": "Je hebt nog geen meldingen."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "Kon meldingen niet laden",
+      "markReadFailed": "Kon niet als gelezen markeren",
+      "markAllReadFailed": "Kon niet alles als gelezen markeren",
+      "deleteFailed": "Kon melding niet verwijderen"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "Openbaar",
+      "admin": "Admin",
+      "draft": "Concept",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "Pagina's",
+      "pageCount": "{count} pagina('s) in totaal",
+      "searchPlaceholder": "Pagina's zoeken…",
+      "newPage": "Nieuwe Pagina"
+    },
+    "filter": {
+      "all": "Alle"
+    },
+    "table": {
+      "page": "Pagina",
+      "model": "Model",
+      "template": "Sjabloon",
+      "visibility": "Zichtbaarheid",
+      "actions": "Acties",
+      "seoPrefix": "SEO",
+      "systemBadge": "Systeem",
+      "hiddenBadge": "Verborgen"
+    },
+    "emptyState": {
+      "message": "Geen pagina's gevonden",
+      "cta": "Maak je eerste pagina aan"
+    },
+    "actions": {
+      "edit": "Pagina bewerken",
+      "delete": "Pagina verwijderen",
+      "view": "Pagina bekijken",
+      "confirmDelete": "Verwijdering bevestigen",
+      "cancel": "Annuleren",
+      "systemLocked": "Systeempagina's kunnen niet worden bewerkt of verwijderd"
+    },
+    "errors": {
+      "loadFailed": "Kon pagina's niet laden",
+      "createFailed": "Kon pagina niet aanmaken",
+      "updateFailed": "Kon pagina niet bijwerken",
+      "deleteFailed": "Kon pagina niet verwijderen"
+    },
+    "drawer": {
+      "title": "Pagina Aanmaken",
+      "editTitle": "Pagina Bewerken",
+      "subtitle": "Definieer een nieuwe pagina en koppel een model",
+      "sections": {
+        "basicInfo": "Basisinformatie",
+        "modelTemplate": "Model & Sjabloon",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "Pagina Verbergen",
+          "hint": "Verborgen pagina's worden niet getoond in navigatie of sitemaps"
+        },
+        "name": {
+          "label": "Paginanaam",
+          "placeholder": "bijv. Productoverzicht"
+        },
+        "slug": {
+          "label": "Slug / URL",
+          "placeholder": "/jouw-pagina-slug",
+          "hint": "Gebruik :id voor dynamische routes, bijv. /producten/:id"
+        },
+        "visibility": {
+          "label": "Zichtbaarheid"
+        },
+        "model": {
+          "label": "Model Koppelen",
+          "noModel": "— Geen model (aangepaste pagina) —",
+          "hint": "Eén model kan meerdere pagina's voeden."
+        },
+        "template": {
+          "label": "Sjabloon"
+        },
+        "seoTitle": {
+          "label": "SEO-titel",
+          "placeholder": "Paginatitel voor zoekmachines",
+          "charCount": "{count}/60 tekens"
+        },
+        "seoDesc": {
+          "label": "Metabeschrijving",
+          "placeholder": "Korte beschrijving voor zoekresultaten…",
+          "charCount": "{count}/160 tekens"
+        }
+      },
+      "seoPreview": {
+        "label": "Zoekvoorbeeld",
+        "titleFallback": "Paginatitel",
+        "urlPrefix": "jouwsite.com",
+        "descFallback": "Geen beschrijving opgegeven."
+      },
+      "actions": {
+        "cancel": "Annuleren",
+        "create": "Pagina Aanmaken",
+        "update": "Pagina Bijwerken",
+        "saving": "Bezig met opslaan…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "Nieuwe Sleutel Genereren",
+    "keyNameLabel": "Sleutelnaam",
+    "keyNameHint": "Geef een beschrijvende naam zodat je onthoudt waarvoor deze wordt gebruikt.",
+    "keyNamePlaceholder": "bijv. Flutter App — Productie",
+    "buttonGenerating": "Bezig met genereren…",
+    "buttonIdle": "Sleutel Genereren"
+  },
+  "newKeyModal": {
+    "title": "API-sleutel Gegenereerd",
+    "instructions": "Je sleutel is aangemaakt en klaar voor gebruik. Klik op het <eyeIcon>oogicoon</eyeIcon> naast de sleutel in de lijst om deze te tonen en te kopiëren.",
+    "doneButton": "Klaar"
+  },
+  "revokeModal": {
+    "title": "API-sleutel Intrekken",
+    "message": "Elke app die deze sleutel gebruikt, verliest onmiddellijk toegang:",
+    "cancelButton": "Annuleren",
+    "revokeButtonIdle": "Sleutel Intrekken",
+    "revokeButtonRevoking": "Bezig met intrekken…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "Kon API-sleutels niet laden",
+      "generateFailed": "Kon sleutel niet genereren",
+      "revokeFailed": "Kon sleutel niet intrekken"
+    },
+    "logs": {
+      "loadingKeys": "Bezig met laden van API-sleutels...",
+      "keysLoaded": "API-sleutels succesvol geladen",
+      "generatingKey": "Bezig met genereren van nieuwe API-sleutel...",
+      "keyGenerated": "API-sleutel succesvol gegenereerd",
+      "revokingKey": "Bezig met intrekken van API-sleutel...",
+      "keyRevoked": "API-sleutel succesvol ingetrokken"
+    }
+  },
+  "brandingPage": {
+    "heading": "CMS-huisstijl",
+    "subheading": "Pas aan hoe het CMS eruitziet voor je team.",
+    "errors": {
+      "saveFailed": "Kon huisstijl niet opslaan"
+    },
+    "logs": {
+      "savingBranding": "Bezig met opslaan van huisstijlinstellingen...",
+      "brandingSaved": "Huisstijl succesvol opgeslagen"
+    },
+    "logoSection": {
+      "title": "CMS-logo",
+      "uploadLabel": "Logo",
+      "uploadHint": "PNG of SVG met transparante achtergrond",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "Logovoorbeeld"
+    },
+    "faviconSection": {
+      "title": "Favicon",
+      "uploadLabel": "Favicon",
+      "uploadHint": "ICO, PNG of SVG — getoond in browsertabbladen",
+      "uploadRecommended": "32×32px of 64×64px",
+      "imageAlt": "Faviconvoorbeeld"
+    },
+    "preview": {
+      "label": "Voorbeeld Bovenbalk",
+      "projectLabel": "Project:"
+    },
+    "saveSuccess": "Huisstijl succesvol opgeslagen",
+    "saveButtonIdle": "Huisstijl Opslaan",
+    "saveButtonSaving": "Bezig met opslaan…"
+  },
+  "overviewPage": {
+    "heading": "Projectoverzicht",
+    "subheading": "Een overzicht van je Underpeaks-project.",
+    "stats": {
+      "dbType": "DB-type",
+      "environment": "Omgeving",
+      "deployment": "Implementatie",
+      "status": "Status",
+      "statusActive": "Actief"
+    },
+    "userInfo": {
+      "sectionTitle": "Gebruikersinformatie",
+      "fullName": "Volledige Naam",
+      "email": "E-mail",
+      "role": "Rol",
+      "status": "Status",
+      "verified": "Geverifieerd",
+      "verifiedYes": "Ja",
+      "verifiedNo": "Nee",
+      "memberSince": "Lid Sinds"
+    },
+    "licenseKey": {
+      "sectionTitle": "Underpeaks-licentiesleutel",
+      "description": "Je licentiesleutel authenticeert deze instantie en maakt onderscheid mogelijk tussen gehoste en zelf gehoste functies.",
+      "reveal": "Tonen",
+      "hide": "Verbergen",
+      "copy": "Kopiëren",
+      "copied": "Gekopieerd",
+      "loading": "Bezig met laden…",
+      "notFound": "Geen licentiesleutel gevonden"
+    }
+  },
+  "smtpPage": {
+    "heading": "SMTP-instellingen",
+    "subheading": "Configureer uitgaande e-mail voor je project.",
+    "emailFeatures": {
+      "sectionTitle": "E-mailfuncties",
+      "verifyEmailLabel": "E-mailverificatie bij registratie inschakelen",
+      "forgotPasswordLabel": "E-mails voor vergeten wachtwoord inschakelen",
+      "builtInNotice": "{provider} verzorgt native e-mailverificatie en wachtwoordherstel — geen SMTP nodig voor deze functies.",
+      "smtpToggleLabel": "Aangepaste SMTP-server gebruiken"
+    },
+    "smtpConfig": {
+      "sectionTitle": "SMTP-configuratie",
+      "hostLabel": "SMTP-host",
+      "hostPlaceholder": "smtp.voorbeeld.com",
+      "portLabel": "Poort",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "Afzenderadres",
+      "fromAddressPlaceholder": "no-reply@voorbeeld.com",
+      "usernameLabel": "Gebruikersnaam",
+      "usernamePlaceholder": "SMTP-gebruikersnaam",
+      "passwordLabel": "Wachtwoord",
+      "passwordPlaceholder": "SMTP-wachtwoord",
+      "showPassword": "Wachtwoord tonen",
+      "hidePassword": "Wachtwoord verbergen",
+      "encryptionLabel": "Versleuteling",
+      "encryptionNone": "Geen"
+    },
+    "logs": {
+      "savingSmtp": "Bezig met opslaan van SMTP-instellingen...",
+      "smtpSaved": "SMTP-instellingen succesvol opgeslagen"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "Instellingen",
+    "toggleAriaLabel": "Instellingennavigatie wisselen",
+    "nav": {
+      "overview": "Overzicht",
+      "api-keys": "API-sleutels",
+      "smtp": "SMTP-instellingen",
+      "branding": "CMS-huisstijl"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "Bezig met laden van instellingen…"
+  },
+  "saveButton": {
+    "savedMessage": "Succesvol opgeslagen",
+    "buttonSaving": "Bezig met opslaan…",
+    "buttonIdle": "Wijzigingen Opslaan"
+  },
+  "coloursPage": {
+    "heading": "Kleuren",
+    "subheading": "Definieer de kleurtokens die worden gebruikt in je gegenereerde Flutter- en Next.js-apps.",
+    "preview": {
+      "title": "Live Voorbeeld",
+      "primaryButton": "Primaire Knop",
+      "secondaryButton": "Secundair",
+      "accentBadge": "Accentbadge",
+      "success": "✓ Succes",
+      "warning": "⚠ Waarschuwing",
+      "danger": "✕ Gevaar"
+    },
+    "tokensSectionTitle": "Kleurtokens",
+    "resetTokenTitle": "Terugzetten naar standaard",
+    "resetAllButton": "Alles terugzetten naar standaardwaarden",
+    "savedMessage": "Opgeslagen",
+    "saveButtonIdle": "Kleuren Opslaan",
+    "saveButtonSaving": "Bezig met opslaan…",
+    "logs": {
+      "savingColours": "Bezig met opslaan van kleurtokens...",
+      "coloursSaved": "Kleurtokens succesvol opgeslagen"
+    },
+    "tokens": {
+      "primary":      { "label": "Primair",             "description": "Belangrijkste merkkleur — knoppen, links, accenten" },
+      "primary-fg":   { "label": "Primaire Voorgrond",  "description": "Tekst op primaire kleurachtergronden" },
+      "secondary":    { "label": "Secundair",           "description": "Ondersteunende merkkleur" },
+      "secondary-fg": { "label": "Secundaire Voorgrond","description": "Tekst op secundaire kleurachtergronden" },
+      "accent":       { "label": "Accent",              "description": "Accentkleur voor badges en tags" },
+      "background":   { "label": "Achtergrond",          "description": "Belangrijkste app-achtergrond" },
+      "surface":      { "label": "Oppervlak",             "description": "Achtergrond van kaarten en panelen" },
+      "border":       { "label": "Rand",              "description": "Standaard randkleur" },
+      "success":      { "label": "Succes",             "description": "Positieve statussen en bevestigingen" },
+      "warning":      { "label": "Waarschuwing",             "description": "Waarschuwingen en voorzichtigheidsstatussen" },
+      "danger":       { "label": "Gevaar",              "description": "Fouten en destructieve acties" },
+      "text":         { "label": "Primaire Tekst",        "description": "Belangrijkste tekstkleur van de body" },
+      "text-muted":   { "label": "Gedempte Tekst",          "description": "Secundaire tekst en placeholder-tekst" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "Functievlaggen",
+    "comingSoonBadge": "BINNENKORT BESCHIKBAAR",
+    "subheading": "Schakel functies in die worden opgenomen in je gegenereerde Flutter- en Next.js-apps.",
+    "paidBadge": "BETAALD",
+    "savedMessage": "Opgeslagen",
+    "saveButtonIdle": "Vlaggen Opslaan",
+    "saveButtonSaving": "Bezig met opslaan…",
+    "upgrade": {
+      "title": "Gehost plan vereist",
+      "description": "Deze functies vereisen de gehoste infrastructuur van Underpeaks. Upgrade om ze te ontgrendelen.",
+      "button": "Upgraden"
+    },
+    "groups": {
+      "Appearance": "Uiterlijk",
+      "Localisation": "Lokalisatie",
+      "App Behaviour": "App-gedrag",
+      "Authentication — Paid": "Authenticatie — Betaald",
+      "Advanced — Paid": "Geavanceerd — Betaald"
+    },
+    "flags": {
+      "dark-mode":          { "label": "Donkere Modus",                 "description": "Sta gebruikers toe om te wisselen tussen licht en donker thema in de app" },
+      "system-theme":       { "label": "Systeemthema Volgen",       "description": "Automatisch aanpassen aan de licht-/donkermodusinstelling van het apparaat" },
+      "multi-language":     { "label": "Meertalige Ondersteuning",    "description": "Ondersteuning voor meerdere talen in de gegenereerde app inschakelen" },
+      "rtl-support":        { "label": "RTL-ondersteuning",               "description": "Van-rechts-naar-links-indeling voor Arabisch, Hebreeuws en vergelijkbare talen" },
+      "offline-mode":       { "label": "Offline Modus",              "description": "Gegevens lokaal opslaan zodat de app zonder internetverbinding werkt" },
+      "push-notifications": { "label": "Pushmeldingen",        "description": "Pushmeldingondersteuning via FCM inschakelen — jij levert de sleutels" },
+      "splash-screen":      { "label": "Opstartscherm",             "description": "Toon een gebrand opstartscherm wanneer de app start" },
+      "onboarding":         { "label": "Onboardingflow",           "description": "Toon een welkoms-/onboardingflow voor nieuwe gebruikers" },
+      "2fa":                { "label": "Tweefactorauthenticatie", "description": "OTP of authenticator-app vereisen om in te loggen" },
+      "biometric":          { "label": "Biometrische Login",           "description": "Vingerafdruk- en Face ID-login op mobiel" },
+      "social-login":       { "label": "Sociale Login",              "description": "OAuth van Google, GitHub, Apple en Facebook" },
+      "magic-link":         { "label": "Magic Link",                "description": "Wachtwoordloze login via e-maillink" },
+      "sso":                { "label": "SSO / SAML",                "description": "Integratie van enterprise single sign-on" },
+      "analytics":          { "label": "Analyse In-app",          "description": "Schermweergaven en gebeurtenissen bijhouden binnen de gegenereerde app" },
+      "ab-testing":         { "label": "A/B-testen",               "description": "Voer functie-experimenten uit binnen je gebruikersbestand" },
+      "feature-gating":     { "label": "Functiebeheer",            "description": "Toon of verberg functies op basis van gebruikersplan of -rol" }
+    },
+    "logs": {
+      "savingFlags": "Bezig met opslaan van functievlaggen...",
+      "flagsSaved": "Functievlaggen succesvol opgeslagen"
+    }
+  },
+  "spacingPage": {
+    "heading": "Afstand & Radius",
+    "subheading": "Beheer de vorm, dichtheid en verhoging van componenten in je gegenereerde apps.",
+    "preview": {
+      "title": "Live Voorbeeld",
+      "button": "Knop",
+      "card": "Kaartcomponent",
+      "input": "Invoerveld"
+    },
+    "sections": {
+      "radius": {
+        "title": "Randradius",
+        "description": "Toegepast op knoppen, kaarten, invoervelden en modals"
+      },
+      "density": {
+        "title": "Afstandsdichtheid",
+        "description": "Beheert de padding binnen componenten"
+      },
+      "shadow": {
+        "title": "Verhoging / Schaduw",
+        "description": "Schaduwdiepte van kaarten en componenten"
+      }
+    },
+    "radius": {
+      "none": "Geen",
+      "sm": "Klein",
+      "md": "Middel",
+      "lg": "Groot",
+      "xl": "Extra Groot",
+      "full": "Pil"
+    },
+    "density": {
+      "compact": { "label": "Compact", "desc": "Krappe padding, meer inhoud zichtbaar" },
+      "default": { "label": "Standaard", "desc": "Uitgebalanceerde afstand voor de meeste gebruiksscenario's" },
+      "relaxed": { "label": "Ruim", "desc": "Ruime padding, gemakkelijker aan te raken" }
+    },
+    "shadow": {
+      "none": "Geen",
+      "sm": "Subtiel",
+      "md": "Middel",
+      "lg": "Sterk"
+    },
+    "save": {
+      "button": "Afstand Opslaan",
+      "saving": "Bezig met opslaan…",
+      "savedConfirmation": "Opgeslagen"
+    }
+  },
+  "typographyPage": {
+    "heading": "Typografie",
+    "subheading": "Kies lettertypen en schaal voor je gegenereerde apps. Lettertypen worden geladen vanuit Google Fonts.",
+    "preview": {
+      "title": "Live Voorbeeld",
+      "headingSuffix": "— Kop",
+      "bodySample": "Pa's wijze lynx bezag vroom het fikse aquaduct. Voorbeeldtekst in standaardgrootte.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "Lettertypefamilies",
+        "description": "Selecteer uit Google Fonts — automatisch opgenomen in codegeneratie"
+      },
+      "weights": {
+        "title": "Lettergewichten"
+      },
+      "scale": {
+        "title": "Lettergrootteschaal",
+        "description": "Beheert de algehele tekstgrootte in de hele app"
+      }
+    },
+    "fonts": {
+      "headingFont": "Koplettertype",
+      "bodyFont": "Body-lettertype",
+      "monoFont": "Mono-lettertype"
+    },
+    "weights": {
+      "headingWeight": "Kopgewicht",
+      "bodyWeight": "Body-gewicht"
+    },
+    "scale": {
+      "compact": { "label": "Compact", "desc": "Kleinere tekst, krappere afstand" },
+      "default": { "label": "Standaard", "desc": "Uitgebalanceerd voor de meeste apps" },
+      "relaxed": { "label": "Ruim", "desc": "Grotere tekst, meer ruimte" }
+    },
+    "save": {
+      "button": "Typografie Opslaan",
+      "saving": "Bezig met opslaan…",
+      "savedConfirmation": "Opgeslagen"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "Thema",
+    "nav": {
+      "colours": "Kleuren",
+      "typography": "Typografie",
+      "spacing": "Afstand & Radius",
+      "featureFlags": "Functievlaggen",
+      "presets": "Voorinstellingen"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "Inactieve Sessie",
+      "description": "Je bent inactief geweest. Afmelden over:",
+      "logoutButton": "Afmelden",
+      "keepAliveButton": "Actief Houden"
+    },
+    "logs": {
+      "logoutFailed": "Afmelden mislukt:"
+    }
+  },
+  "loader": {
+    "label": "Bezig met laden…"
+  },
+  "userStatus": {
+    "active": "Actief",
+    "needsEmailVerification": "E-mailverificatie Vereist",
+    "passwordResetRequested": "Wachtwoordherstel Aangevraagd",
+    "blocked": "Geblokkeerd",
+    "disabled": "Uitgeschakeld"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Aanmaken van Flutter-project mislukt"
+    },
+    "logs": {
+      "skipped": "Aanmaken van Flutter-project overgeslagen: {output}",
+      "created": "Flutter-project aangemaakt: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "Aanmaken van NextJS-project mislukt"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "Databaseconfiguratie niet gevonden.",
+      "dbConfigMissing": "DB-configuratie ontbreekt",
+      "dbConfigMissingStore": "DB-configuratie ontbreekt in store",
+      "adminEmailMissing": "E-mail van admin-gebruiker ontbreekt",
+      "adminEmailMissingStore": "E-mail van admin-gebruiker ontbreekt in store",
+      "projectTypeMissing": "selectedProjectType ontbreekt",
+      "createTablesFailed": "Kon tabellen niet aanmaken: {message}",
+      "createAdminFailed": "Kon admin-gebruiker niet aanmaken: {message}",
+      "createModelsFailed": "Kon modellen niet aanmaken: {message}",
+      "writeConfigFailed": "Kon configuratiebestand niet schrijven: {message}",
+      "setupStorageFailed": "Kon opslag niet configureren: {message}",
+      "installDemoFailed": "Kon demo-inhoud niet installeren: {message}",
+      "stepFailed": "Stap mislukt: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "Tabellen aangemaakt:",
+      "adminCreated": "Admin-gebruiker aangemaakt:",
+      "modelsCreated": "Antwoord op modelaanmaak:",
+      "modelsSkipped": "Aanmaken van modellen overgeslagen: {message}",
+      "configWritten": "Configuratiebestand succesvol geschreven:",
+      "storageCreated": "Opslagbuckets aangemaakt:",
+      "demoContentSkipped": "Demo-inhoud overgeslagen",
+      "demoContentInstalled": "Demo-inhoud geïnstalleerd:",
+      "creatingApiEndpoints": "Bezig met aanmaken van API-eindpunten...",
+      "settingUpAuth": "Bezig met configureren van authenticatie...",
+      "configuringSession": "Bezig met configureren van sessiebeheer...",
+      "runningTests": "Bezig met uitvoeren van tests...",
+      "finalizing": "Bezig met afronden van installer...",
+      "noImplementation": "Geen implementatie voor stap: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "heading": "Admin-gebruikersinstelling",
+    "description": "Geef de gegevens van de admin-gebruiker op om je Underpeaks-systeem te beveiligen. Dit account krijgt volledige administratieve toegang tot het platform.",
+    "disclaimer": "Let op: dit maakt een admin-account aan in het Underpeaks-systeem en kan afwijken van je database-admin-account.",
+    "fields": {
+      "fullName": {
+        "label": "Volledige Naam",
+        "placeholder": "bijv., Jan Jansen"
+      },
+      "email": {
+        "label": "E-mailadres",
+        "placeholder": "admin@voorbeeld.com"
+      },
+      "password": {
+        "label": "Wachtwoord",
+        "placeholder": "Maak een veilig wachtwoord aan"
+      }
+    },
+    "errors": {
+      "nameRequired": "Volledige naam is verplicht",
+      "emailRequired": "E-mail is verplicht",
+      "passwordInvalid": "Wachtwoord is verplicht | Wachtwoord moet 8 tekens lang zijn | Moet een hoofdletter bevatten | Moet een speciaal teken bevatten (bijv. !@#$%^&*)"
+    },
+    "continueButton": "Doorgaan"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "heading": "Kies Je Stack",
+    "description": "Selecteer de technologiestack die het beste bij je projectbehoeften past. Je kunt dit later wijzigen als je meer platformen wilt toevoegen of van aanpak wilt veranderen.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "Volledige combo! Next.js voor web en Flutter voor cross-platform mobiele en desktop-apps."
+      },
+      "next": {
+        "title": "Alleen Next.js",
+        "description": "Gebruik Next.js als een krachtig React SSR-framework en <strong>als headless CMS om inhoud en API's te beheren.</strong>"
+      },
+      "flutter": {
+        "title": "Alleen Flutter",
+        "description": "Bouw cross-platform mobiele en desktop-apps met Flutter met behulp van een gedeelde codebase, en <strong>gebruik het indien gewenst als headless CMS-backend.</strong>"
+      },
+      "cms": {
+        "title": "Headless CMS",
+        "description": "Alleen implementeren als headless CMS-backend. Stel je gegevens beschikbaar via API's en verbind ze met elke aangepaste frontend, mobiele applicatie of service van derden met volledige flexibiliteit."
+      }
+    },
+    "nextButton": "Volgende"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "heading": "Databaseconfiguratie",
+    "selectPlaceholder": "Selecteer database",
+    "fieldExample": "(bijv. {placeholder})",
+    "savingWarning": "⚠️ Even geduld, dit kan even duren...",
+    "infoBlock": {
+      "whereLabel": "Waar te vinden:"
+    },
+    "testSteps": {
+      "validating": "Bezig met valideren van configuratie...",
+      "sending": "Bezig met versturen van configuratie naar server...",
+      "testing": "Bezig met testen van databaseverbinding...",
+      "finalizing": "Bezig met afronden van verbindingscontrole..."
+    },
+    "errors": {
+      "serverRejected": "Server heeft verbinding geweigerd",
+      "connectionFailed": "Verbinding Mislukt: {message}"
+    },
+    "buttons": {
+      "testConnection": "Verbinding Testen",
+      "testing": "Bezig met testen...",
+      "saving": "Bezig met opslaan...",
+      "continue": "Doorgaan"
+    },
+    "logs": {
+      "firebaseParseError": "Analyseren van Firebase-configuratie mislukt"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "projectType": {
+      "title": "Selecteer Projecttype",
+      "description": "Kies een sjabloon om automatisch standaardmodellen voor je project te installeren."
+    },
+    "projects": {
+      "ecommerce":   { "label": "E-commerce",         "description": "Bevat producten, categorieën, bestellingen, klanten en winkelpagina's." },
+      "marketplace": { "label": "Marktplaats",         "description": "Ondersteunt meerdere verkopers, aanbiedingen, commissies en verkopersdashboards." },
+      "listing":     { "label": "Advertentieplatform",    "description": "Voor advertenties voor onroerend goed, banen of diensten met categorieën, zoeken en filters." },
+      "blog":        { "label": "Blog / Contentsite", "description": "Contentgedreven site met berichten, categorieën, tags, auteurs en reacties." },
+      "social":      { "label": "Sociaal Netwerk",      "description": "Gebruikersprofielen, berichten, reacties, likes, volgers, berichten en meldingen." },
+      "saas":        { "label": "SaaS / Webapp",      "description": "Webappstructuur met gebruikers, rollen, machtigingen en abonnementen." },
+      "blank":       { "label": "Leeg Project",       "description": "Geen demo-inhoud; begin met een leeg projectskelet." }
+    },
+    "demoContent": {
+      "title": "Demo-inhoud Instellen",
+      "description": "Bekijk je winkel met voorbeeldgegevens die al geladen zijn.",
+      "checkboxLabel": "Demo-inhoud voor het geselecteerde project opnemen",
+      "ecommerce": {
+        "item1": "Demoproducten met categorieën en tags",
+        "item2": "Voorbeeldklanten en -bestellingen",
+        "item3": "Winkelpagina's (home, producten, winkelwagen, afrekenen)",
+        "item4": "Basale CMS-inhoud",
+        "item5": "Vooraf geconfigureerde menu's en modules"
+      }
+    },
+    "continueButtonIdle": "Doorgaan",
+    "continueButtonLoading": "Bezig met doorgaan...",
+    "logs": {
+      "navigatingToFinalise": "Bezig met opslaan van installerselecties en navigeren naar afrondingsstap..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "installComplete": "🎉 Installatie Voltooid!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "Projectinformatie",
+      "subtitle": "Basisinformatie over je projectconfiguratie.",
+      "name": "Naam:",
+      "stack": "Stack:"
+    },
+    "database": {
+      "title": "Database",
+      "subtitle": "Je geselecteerde database en configuratie.",
+      "type": "Type:",
+      "noneSelected": "Geen geselecteerd"
+    },
+    "adminUser": {
+      "title": "Admin-gebruiker",
+      "subtitle": "Je initiële admin-gegevens.",
+      "name": "Naam:",
+      "email": "E-mail:",
+      "password": "Wachtwoord:"
+    },
+    "projectType": {
+      "title": "Geselecteerd Projecttype",
+      "subtitle": "Projectsjabloon gekozen tijdens de instelling."
+    },
+    "demoContent": {
+      "title": "Demo-inhoud",
+      "subtitle": "Of voorbeeldwinkelgegevens vooraf worden geladen.",
+      "installed": "Geïnstalleerd",
+      "notInstalled": "Niet Geïnstalleerd"
+    },
+    "continueButton": "Doorgaan naar → Inloggen"
+  },
+  "ecommercePage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "card": {
+      "title": "Pas je e-commerce-modules aan"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "E-commerce-module Inschakelen",
+        "description": "Voegt productcatalogus, winkelwagen, afrekenen en bestellingsbeheer toe."
+      },
+      "physical": {
+        "label": "Fysieke Producten Opnemen",
+        "description": "Ondersteunt voorraad, verzending, retouren en tracking voor tastbare goederen."
+      },
+      "digital": {
+        "label": "Digitale Producten Opnemen",
+        "description": "Verkoop downloadbare content zoals PDF's, video's of softwarelicenties."
+      }
+    },
+    "button": {
+      "next": "Volgende",
+      "continuing": "Bezig met doorgaan..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "card": {
+      "title": "Instelling Afronden"
+    },
+    "summary": {
+      "project": "Project:",
+      "defaultProject": "MijnApp",
+      "stack": "Stack:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "Database:",
+      "notSelected": "Niet geselecteerd"
+    },
+    "steps": {
+      "heading": "Installatiestappen:",
+      "skipped": "overgeslagen!"
+    },
+    "progress": {
+      "finishing": "Bezig met afronden...",
+      "ready": "Klaar om je project te installeren"
+    },
+    "errors": {
+      "label": "Fout:",
+      "noDatabase": "Geen database geselecteerd, kan configuratie niet opslaan.",
+      "saveFailed": "Kon installerconfiguratie niet opslaan",
+      "unknown": "Er is een onbekende fout opgetreden"
+    },
+    "button": {
+      "start": "Installatie Starten",
+      "installing": "Bezig met installeren..."
+    },
+    "logs": {
+      "sendingConfig": "Bezig met versturen van installerconfiguratie naar server...",
+      "configSaved": "Installerconfiguratie succesvol opgeslagen",
+      "installError": "Installatiefout:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "heading": "Standaardmodellen Selecteren",
+    "subheading": "Kies de standaard datamodellen die je in je project wilt opnemen. Je kunt later modellen aanmaken of bewerken.",
+    "required": "(verplicht)",
+    "toggleAll": {
+      "deselect": "Alles Deselecteren",
+      "select": "Alles Selecteren"
+    },
+    "models": {
+      "users":      { "label": "Gebruikers",      "description": "Beheer applicatiegebruikers en authenticatie" },
+      "products":   { "label": "Producten",   "description": "Catalogus van producten of diensten" },
+      "orders":     { "label": "Bestellingen",     "description": "Volg klantbestellingen en aankopen" },
+      "coupons":    { "label": "Kortingsbonnen",    "description": "Kortingsbonnen en promoties" },
+      "categories": { "label": "Categorieën", "description": "Organiseer producten of inhoud" },
+      "reviews":    { "label": "Beoordelingen",    "description": "Feedback en beoordelingen van gebruikers" }
+    },
+    "button": {
+      "continue": "Doorgaan",
+      "continuing": "Bezig met doorgaan..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "heading": "Projectinstelling",
+    "subheading": "Voer projectnaam, subdomein en domein in voor je zelf gehoste studio.",
+    "continueButton": "Doorgaan",
+    "fields": {
+      "name": {
+        "label": "Projectnaam",
+        "placeholder": "bijv., MijnApp Studio"
+      },
+      "domain": {
+        "label": "Domein",
+        "placeholder": "bijv., http://localhost:3000",
+        "hint": "Volledig domein voor je app. Standaard is"
+      },
+      "subdomain": {
+        "label": "Subdomein",
+        "placeholder": "bijv., console",
+        "hint": "Dit wordt gebruikt voor de URL:"
+      }
+    },
+    "errors": {
+      "nameRequired": "Projectnaam is verplicht",
+      "subdomainRequired": "Subdomein is verplicht",
+      "domainRequired": "Domein is verplicht"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Jouw Alles-in-één SaaS-installer & Codegenerator",
+    "continueButton": "Doorgaan →",
+    "continueLoading": "Bezig met laden...",
+    "benefits": {
+      "heading": "Waarom Underpeaks?",
+      "item1": "🔧 Volledige codebase-generator (Next.js + Flutter)",
+      "item2": "⚙️ Geen boilerplate meer – alleen productieklare code",
+      "item3": "🌍 Klaar voor meertaligheid en multi-tenant",
+      "item4": "📦 Zelf gehost of in de cloud gehost – jouw keuze",
+      "item5": "🔐 Ingebouwde authenticatie, rollen, machtigingen, installer-UI",
+      "item6": "💼 Ideaal voor startups, bureaus en enterpriseprojecten"
+    },
+    "license": {
+      "heading": "Licentieovereenkomst",
+      "loading": "Bezig met laden van licentie...",
+      "loadFailed": "Kon licentieovereenkomst niet laden.",
+      "acceptLabel": "Accepteer de licentievoorwaarden."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "Huidig en nieuw wachtwoord zijn verplicht",
+      "passwordTooShort": "Wachtwoord moet minstens 8 tekens lang zijn",
+      "unauthorized": "Niet geautoriseerd",
+      "invalidToken": "Ongeldig token",
+      "userNotFound": "Gebruiker niet gevonden",
+      "incorrectCurrentPassword": "Huidig wachtwoord is onjuist",
+      "internalError": "Er is een onverwachte fout opgetreden"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Firebase Auth-wachtwoord bijgewerkt",
+      "firebasePasswordUpdateFailed": "[change-password] Bijwerken van Firebase Auth-wachtwoord mislukt"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "Admin-gebruiker succesvol aangemaakt"
+    },
+    "errors": {
+      "missingConfig": "DB-configuratie ontbreekt",
+      "missingAdminUser": "Gegevens van admin-gebruiker ontbreken",
+      "genericFailure": "Kon admin-gebruiker niet aanmaken"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "DB-configuratie of admin-e-mail ontbreekt",
+      "adapterNotSupported": "Deze database-adapter ondersteunt het aanmaken van datamodellen niet",
+      "genericFailure": "Kon datamodellen niet invoegen"
+    },
+    "logs": {
+      "createModelsError": "Fout in create-data-models API:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "DB-configuratie/type ontbreekt",
+      "adapterNotSupported": "Adapter {type} implementeert geen opslagconfiguratie"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "Alle systeem-, gebruikers- en projecttabellen aangemaakt"
+    },
+    "errors": {
+      "missingConfig": "DB-configuratie ontbreekt",
+      "genericFailure": "Kon tabellen niet aanmaken"
+    },
+    "logs": {
+      "createTablesError": "[FOUT BIJ AANMAKEN TABELLEN]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Firebase-omgevingsvariabele ontbreekt: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "projectName ontbreekt",
+      "flutterNotInstalled": "Flutter is niet geïnstalleerd of niet in PATH.",
+      "stepFailed": "Stap mislukt: Aanmaken Flutter-project - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Flutter-project \"{projectName}\" bestaat al. Aanmaken overgeslagen.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Aanmaken van Flutter mislukt:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "E-mail is verplicht",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE niet ingesteld",
+      "firebaseClientSide": "Wachtwoordherstel via Firebase wordt clientzijdig afgehandeld",
+      "supabaseMissingMethod": "Supabase-adapter mist de methode sendResetEmail",
+      "unsupportedDbType": "Niet-ondersteund DB-type: {dbType}",
+      "adapterMissingMethods": "${dbType}-adapter mist verplichte methoden",
+      "userNotFound": "Gebruiker niet gevonden",
+      "genericFailure": "Kon resetlink niet verzenden"
+    },
+    "notices": {
+      "smtpDisabled": "E-mailverzending is uitgeschakeld. Vraag je beheerder om je wachtwoord opnieuw in te stellen."
+    },
+    "email": {
+      "subject": "Verzoek om Wachtwoord Opnieuw In Te Stellen",
+      "body": "<p>Hallo {name},</p><p>Klik op de onderstaande link om je wachtwoord opnieuw in te stellen:</p><a href=\"{resetLink}\">{resetLink}</a><p>Als je dit niet hebt aangevraagd, negeer dan deze e-mail.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Supabase-reset-e-mail verzonden",
+      "resetEmailSent": "Reset-e-mail verzonden",
+      "smtpDisabled": "SMTP/forgot-password uitgeschakeld — e-mail overgeslagen",
+      "forgotPasswordError": "Fout bij wachtwoord vergeten:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Firebase-serviceaccount ontbreekt",
+      "unsupportedDbType": "Niet-ondersteund DB-type: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[FOUT IN SYSTEEMCONFIGURATIE]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "DB-configuratie ontbreekt",
+      "missingProjectType": "Projecttype ontbreekt",
+      "adapterNotSupported": "installDemoContent niet geïmplementeerd voor deze adapter"
+    },
+    "logs": {
+      "installDemoContentError": "install-demo-content-fout:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "Succesvol afgemeld"
+    },
+    "errors": {
+      "tokenRequired": "Token is verplicht",
+      "dbTypeNotSet": "NEXT_DB_TYPE is niet ingesteld",
+      "firebaseServiceAccountMissing": "Firebase-serviceaccount ontbreekt",
+      "mysqlEnvMissing": "MySQL-omgevingsvariabelen ontbreken",
+      "postgresEnvMissing": "Postgres-omgevingsvariabelen ontbreken",
+      "unsupportedDbType": "Niet-ondersteund DB-type: {dbType}",
+      "tokenNotFound": "Token niet gevonden"
+    },
+    "logs": {
+      "logoutError": "AFMELD-API-FOUT:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id is verplicht",
+      "unauthorized": "Niet geautoriseerd",
+      "invalidToken": "Ongeldig token"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder is verplicht",
+      "internalError": "Er is een onverwachte fout opgetreden"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] Mappen succesvol verrijkt met bestandsaantallen"
+    },
+    "errors": {
+      "internalError": "Er is een onverwachte fout opgetreden"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder, toFolder en fileName zijn verplicht",
+      "moveFileNotSupported": "moveFile niet ondersteund",
+      "internalError": "Er is een onverwachte fout opgetreden"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder, oldName en newName zijn verplicht",
+      "renameFileNotSupported": "renameFile niet ondersteund",
+      "internalError": "Er is een onverwachte fout opgetreden"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "Bestand en map zijn verplicht",
+      "uploadFileNotSupported": "uploadFile niet ondersteund",
+      "internalError": "Uploaden mislukt"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] modus:",
+      "projectIdLookupFailed": "[upload-file] opzoeken van project_id mislukt",
+      "metadataSaved": "[upload-file] metadata opgeslagen in nxf_storage",
+      "metadataSaveFailed": "[upload-file] opslaan van metadata mislukt",
+      "localUploadSuccess": "[upload-file] lokale upload opgeslagen:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "Kon databaseverbinding niet testen"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id is verplicht",
+      "firebaseServiceAccountMissing": "Firebase-serviceaccount ontbreekt",
+      "unsupportedDbType": "Niet-ondersteund databasetype",
+      "systemConfigNotFound": "Systeemconfiguratie niet gevonden",
+      "internalError": "Interne Serverfout"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "Volledige naam is verplicht",
+      "unauthorized": "Niet geautoriseerd",
+      "invalidToken": "Ongeldig token",
+      "internalError": "Er is een onverwachte fout opgetreden"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id en project_name zijn verplicht",
+      "firebaseServiceAccountMissing": "Firebase-serviceaccount ontbreekt",
+      "unsupportedDbType": "Niet-ondersteund databasetype",
+      "systemConfigNotFound": "Systeemconfiguratie niet gevonden voor deze gebruiker",
+      "internalError": "Interne Serverfout"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id is verplicht",
+      "firebaseServiceAccountMissing": "Firebase-serviceaccount ontbreekt",
+      "unsupportedDbType": "Niet-ondersteund databasetype",
+      "systemConfigNotFound": "Systeemconfiguratie niet gevonden voor deze gebruiker",
+      "internalError": "Interne Serverfout"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "Kon configuratiebestanden niet schrijven"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "Bestaande auth-gebruiker gevonden:",
+      "newAuthUserCreated": "Nieuwe auth-gebruiker aangemaakt:",
+      "creatingAdminInDb": "Bezig met aanmaken van admin-gebruiker in DB...",
+      "userAlreadyInDb": "Gebruiker bestaat al in DB:",
+      "existingProjectFound": "Bestaand project gevonden:",
+      "newProjectCreated": "Nieuw project aangemaakt:",
+      "existingTenantFound": "Bestaande tenant gevonden:",
+      "newTenantCreated": "Nieuwe tenant aangemaakt:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "Dubbele CreateDataModels-uitvoering overgeslagen — dit project en type-combinatie is al verwerkt.",
+      "creatingTable": "Bezig met aanmaken van tabel:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable niet geïmplementeerd, aanmaken van tabel overgeslagen"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "Uploadmap",
+      "customFolder": "Aangepaste map…",
+      "enterFolderName": "Voer mapnaam in",
+      "placeholder": "bijv. banners/zomer",
+      "uploadingTo": "Bezig met uploaden naar:"
+    },
+    "preview": {
+      "alt": "Voorbeeld",
+      "uploaded": "Geüpload",
+      "replace": "Vervangen",
+      "clear": "Bestand wissen"
+    },
+    "dropzone": {
+      "uploading": "Bezig met uploaden…",
+      "idle": "Sleep en zet neer of",
+      "browse": "bladeren",
+      "recommended": "Aanbevolen:"
+    },
+    "errors": {
+      "noFolder": "Selecteer of voer een map in voordat je uploadt.",
+      "uploadFailed": "Uploaden mislukt",
+      "uploadFailedStatus": "Uploaden mislukt:",
+      "networkError": "Netwerkfout"
+    }
+  },
+  "modelView": {
+    "systemBadge": "Systeem",
+    "subtitle": "Alleen-lezen — dit is een beveiligde systeemtabel.",
+    "fieldsHeading": "Velden",
+    "actions": {
+      "back": "Terug naar modellen"
+    },
+    "stats": {
+      "fields": "Velden",
+      "created": "Aangemaakt",
+      "updated": "Laatst bijgewerkt"
+    },
+    "table": {
+      "name": "Veldnaam",
+      "type": "Type",
+      "constraints": "Beperkingen",
+      "nullable": "Verplicht",
+      "default": "Standaard",
+      "uiType": "UI-type"
+    },
+    "badges": {
+      "hidden": "Verborgen",
+      "required": "Verplicht",
+      "optional": "Optioneel"
+    },
+    "errors": {
+      "loadFailed": "Kon model niet laden.",
+      "notFound": "Model niet gevonden."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "Modellen",
+      "subtitle": "Definieer en beheer de datastructuur van je project.",
+      "createButton": "Model Aanmaken"
+    },
+    "filter": {
+      "all": "Alle",
+      "user": "Gebruiker",
+      "system": "Systeem"
+    },
+    "states": {
+      "empty": "Geen modellen gevonden.",
+      "emptyHint": "Maak je eerste model aan om te beginnen."
+    },
+    "badges": {
+      "system": "Systeem",
+      "partialSystem": "Bewerkbaar Systeem"
+    },
+    "meta": {
+      "fields": "{count} velden",
+      "foreignKeys": "{count} FK"
+    },
+    "card": {
+      "editAriaLabel": "{name} bewerken",
+      "deleteAriaLabel": "{name} verwijderen"
+    },
+    "confirmDelete": {
+      "title": "Model Verwijderen?",
+      "description": "Weet je zeker dat je \"{name}\" wilt verwijderen? Alle gegevens in deze tabel worden permanent verwijderd. Dit kan niet ongedaan worden gemaakt.",
+      "confirm": "Verwijderen",
+      "deleting": "Bezig met verwijderen…",
+      "cancel": "Annuleren"
+    },
+    "errors": {
+      "loadFailed": "Kon modellen niet laden.",
+      "deleteFailed": "Kon model niet verwijderen."
+    }
+  },
+  "createModel": {
+    "title": "Model Aanmaken",
+    "subtitle": "Definieer een nieuw datamodel en de velden ervan.",
+    "actions": {
+      "save": "Model Opslaan",
+      "saving": "Bezig met opslaan…",
+      "back": "Terug naar modellen"
+    },
+    "form": {
+      "modelNameLabel": "Modelnaam",
+      "modelNamePlaceholder": "bijv. Product",
+      "fieldNamePlaceholder": "Veldnaam",
+      "required": "Verplicht",
+      "unique": "Uniek",
+      "primaryKey": "Primaire Sleutel",
+      "primaryKeyTaken": "al ingesteld",
+      "hidden": "Verborgen",
+      "uiType": "UI-type",
+      "foreignKeyTable": "Refererende Sleutel — Tabel",
+      "foreignKeyColumn": "Refererende Sleutel — Kolom",
+      "noForeignKey": "— Geen refererende sleutel —",
+      "selectColumn": "— Selecteer kolom —",
+      "onDelete": "Bij Verwijderen",
+      "addField": "Veld Toevoegen",
+      "removeField": "Veld verwijderen",
+      "expandField": "Geavanceerde opties tonen",
+      "collapseField": "Geavanceerde opties verbergen",
+      "foreignKey": "Refererende Sleutel"
+    },
+    "validation": {
+      "modelNameRequired": "Modelnaam is verplicht.",
+      "fieldsInvalid": "Alle velden moeten een naam hebben.",
+      "fieldNameUnique": "Veldnamen moeten uniek zijn.",
+      "singlePrimaryKey": "Slechts één primaire sleutel is toegestaan per model."
+    },
+    "confirmDelete": {
+      "title": "Veld Verwijderen?",
+      "description": "Weet je zeker dat je dit veld wilt verwijderen?",
+      "confirm": "Verwijderen",
+      "cancel": "Annuleren"
+    },
+    "errors": {
+      "createFailed": "Kon model niet aanmaken."
+    }
+  },
+  "editModel": {
+    "title": "Model Bewerken",
+    "subtitle": "Werk de modelnaam en zijn velddefinities bij.",
+    "actions": {
+      "save": "Wijzigingen Opslaan",
+      "saving": "Bezig met opslaan…",
+      "back": "Terug naar modellen"
+    },
+    "form": {
+      "modelNameLabel": "Modelnaam",
+      "modelNamePlaceholder": "Modelnaam",
+      "fieldNamePlaceholder": "Veldnaam",
+      "required": "Verplicht",
+      "unique": "Uniek",
+      "primaryKey": "Primaire Sleutel",
+      "primaryKeyTaken": "al ingesteld",
+      "hidden": "Verborgen",
+      "uiType": "UI-type",
+      "foreignKeyTable": "Refererende Sleutel — Tabel",
+      "foreignKeyColumn": "Refererende Sleutel — Kolom",
+      "noForeignKey": "— Geen refererende sleutel —",
+      "selectColumn": "— Selecteer kolom —",
+      "onDelete": "Bij Verwijderen",
+      "addField": "Veld Toevoegen",
+      "removeField": "Veld verwijderen",
+      "expandField": "Geavanceerde opties tonen",
+      "collapseField": "Geavanceerde opties verbergen",
+      "foreignKey": "Refererende Sleutel"
+    },
+    "validation": {
+      "modelNameRequired": "Modelnaam is verplicht.",
+      "fieldsInvalid": "Alle velden moeten een naam hebben.",
+      "fieldNameUnique": "Veldnamen moeten uniek zijn.",
+      "singlePrimaryKey": "Slechts één primaire sleutel is toegestaan per model."
+    },
+    "confirmDelete": {
+      "title": "Veld Verwijderen?",
+      "description": "Weet je zeker dat je dit veld wilt verwijderen?",
+      "confirm": "Verwijderen",
+      "cancel": "Annuleren"
+    },
+    "warningDialog": {
+      "title": "Ernstige Waarschuwing",
+      "subtitle": "Je staat op het punt een beveiligd veld te verwijderen.",
+      "primaryKeyWarning": "Dit veld is de primaire sleutel van deze tabel. Het verwijderen ervan verbreekt alle relaties die naar deze tabel verwijzen en kan bestaande gegevens in je hele project permanent beschadigen.",
+      "foreignKeyWarning": "Dit veld is een refererende sleutel die deze tabel koppelt aan een andere. Het verwijderen ervan verbreekt de relatie en kan gegevensintegriteitsproblemen veroorzaken voor bestaande records.",
+      "checkboxLabel": "Ik begrijp dat dit mijn gegevens permanent kan beschadigen en niet ongedaan kan worden gemaakt.",
+      "confirm": "Toch Verwijderen",
+      "cancel": "Annuleren"
+    },
+    "errors": {
+      "loadModelFailed": "Kon model niet laden.",
+      "modelNotFound": "Model niet gevonden.",
+      "updateModelFailed": "Kon model niet bijwerken."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id is verplicht",
+      "invalidBody": "Ongeldige of lege aanvraaginhoud",
+      "missingFields": "Verplichte velden ontbreken",
+      "projectNotFound": "Geen project gevonden voor deze gebruiker",
+      "nameAlreadyExists": "Er bestaat al een model met deze naam",
+      "fetchFailed": "Kon modellen niet ophalen",
+      "createFailed": "Kon model niet aanmaken",
+      "updateFailed": "Kon model niet bijwerken",
+      "deleteFailed": "Kon model niet verwijderen",
+      "multiplePrimaryKeys": "Slechts één primaire sleutel is toegestaan per model",
+      "systemTableProtected": "Systeemtabellen kunnen niet worden aangemaakt, gewijzigd of verwijderd"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— Selecteer een veld —",
+    "clear": "Refererende sleutel wissen",
+    "searchPlaceholder": "Modellen zoeken…",
+    "noResults": "Geen modellen gevonden.",
+    "systemBadge": "Systeem",
+    "fieldsLabel": "velden",
+    "onDelete": "Bij Verwijderen",
+    "filter": {
+      "all": "Alle",
+      "user": "Gebruiker",
+      "system": "Systeem"
+    }
+  },
+  "users": {
+    "page_title": "Gebruikers",
+    "page_description": "Beheer CMS admin- en gebruikersaccounts",
+    "edit_kpis": "KPI's Bewerken",
+    "editing_kpis": "Bezig met bewerken van KPI's",
+    "save_layout": "Indeling opslaan",
+    "saving": "Bezig met opslaan…",
+    "search_placeholder": "Zoeken op naam of e-mail…",
+    "showing_count": "{filtered} van {total} gebruikers weergegeven",
+    "no_users_found": "Geen gebruikers gevonden",
+    "filter": "Filteren",
+    "sort": "Sorteren",
+    "clear_all": "Alles wissen",
+    "filters": "Filters",
+    "role": "Rol",
+    "all_roles": "Alle rollen",
+    "all_statuses": "Alle statussen",
+    "status": "Status",
+    "joined_from": "Lid geworden vanaf",
+    "joined_to": "Lid geworden tot",
+    "sort_by": "Sorteren op",
+    "direction": "Richting",
+    "asc": "Oplopend (A → Z)",
+    "desc": "Aflopend (Z → A)",
+    "col_name": "Naam",
+    "col_email": "E-mail",
+    "col_role": "Rol",
+    "col_status": "Status",
+    "col_last_login": "Laatst ingelogd",
+    "col_joined": "Lid geworden",
+    "role_admin": "Admin",
+    "role_user": "Gebruiker",
+    "status_active": "Actief",
+    "status_suspended": "Geschorst",
+    "status_disabled": "Uitgeschakeld",
+    "drawer_title": "Gebruikersdetails",
+    "actions": "Acties",
+    "change_role": "Rol",
+    "change_status": "Status",
+    "send_reset": "Wachtwoordherstel-e-mail versturen",
+    "sending_reset": "Bezig met verzenden…",
+    "delete_user": "Gebruiker verwijderen",
+    "delete_confirm": "Deze gebruiker permanent verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "cancel": "Annuleren",
+    "confirm_delete": "Ja, verwijderen",
+    "deleting": "Bezig met verwijderen…",
+    "last_admin_warning": "Kan niet degraderen — dit is de laatste admin",
+    "login_history": "Inloggeschiedenis",
+    "no_history": "Nog geen inloggeschiedenis vastgelegd",
+    "event_login": "Ingelogd",
+    "event_logout": "Uitgelogd",
+    "event_online": "Online",
+    "event_offline": "Offline gegaan",
+    "joined": "Lid geworden",
+    "last_login": "Laatst ingelogd",
+    "toast_role_updated": "Rol bijgewerkt",
+    "toast_status_updated": "Status bijgewerkt",
+    "toast_user_deleted": "Gebruiker verwijderd",
+    "toast_reset_sent": "Wachtwoordherstel verzonden naar {email}",
+    "toast_kpi_saved": "KPI-indeling opgeslagen",
+    "toast_load_failed": "Kon gebruikers niet laden",
+    "toast_save_failed": "Opslaan mislukt",
+    "kpi_add": "KPI Toevoegen",
+    "kpi_add_block": "Blok",
+    "kpi_edit": "KPI Bewerken",
+    "kpi_label_required": "Label is verplicht",
+    "kpi_select_field": "Selecteer een veld",
+    "kpi_select_both_fields": "Selecteer beide velden",
+    "kpi_select_field_and_value": "Selecteer een veld en voer een waarde in om te vergelijken",
+    "kpi_max_reached": "Maximaal 5 KPI's toegestaan",
+    "kpi_label": "Label",
+    "kpi_formula": "Formule",
+    "kpi_format": "Weergaveformaat",
+    "kpi_icon": "Icoon",
+    "kpi_accent_colour": "Accentkleur",
+    "kpi_field": "Veld",
+    "kpi_field_a": "Veld A",
+    "kpi_field_b": "Veld B",
+    "kpi_numerator": "Tellerveld (A)",
+    "kpi_denominator": "Noemerveld (B)",
+    "kpi_operator": "Operator",
+    "kpi_value_to_match": "Waarde om te vergelijken",
+    "kpi_make_wide": "Breed maken",
+    "kpi_make_compact": "Compact maken",
+    "kpi_add_to_block": "Toevoegen",
+    "kpi_save": "Wijzigingen opslaan",
+    "kpi_cancel": "Annuleren"
+  },
+  "notFound": {
+    "title": "Pagina niet gevonden",
+    "description": "We kunnen de pagina die je zoekt niet vinden. Mogelijk is deze verplaatst, hernoemd, of heeft deze nooit bestaan.",
+    "goHome": "Ga naar startpagina",
+    "backToConsole": "Terug naar console",
+    "helpfulLinks": "Op zoek naar iets specifieks?",
+    "pages": "Pagina's",
+    "models": "Modellen",
+    "users": "Gebruikers",
+    "settings": "Instellingen"
+  },
+  "noModelLinked": {
+    "title": "Geen model gekoppeld",
+    "description": "{pageName} gebruikt een {templateName}-sjabloon, maar er is nog geen datamodel aan gekoppeld.",
+    "instruction": "Bewerk de pagina-instellingen en wijs een model toe zodat gegevens kunnen worden weergegeven.",
+    "openPages": "Pagina's openen",
+    "manageModels": "Modellen beheren"
+  },
+  "lockedTemplate": {
+    "title": "Beschikbaar in het gehoste plan",
+    "description": "De {templateName}-sjabloon maakt deel uit van het gehoste plan. Upgrade om kanban, kalender, afrekenen, en meer te ontgrendelen.",
+    "upgradeButton": "Gehost plan bekijken",
+    "backButton": "Terug naar pagina's"
+  },
+  "CookieBanner": {
+    "eyebrow": "PRIVACY",
+    "title": "We hechten waarde aan je privacy",
+    "description": "We gebruiken cookies om je ingelogd te houden, je taal te onthouden, en (met jouw toestemming) te begrijpen hoe bezoekers de site gebruiken. Je kunt je keuzes op elk moment wijzigen.",
+    "necessaryTitle": "Strikt noodzakelijk",
+    "necessaryDescription": "Vereist voor inloggen, taalvoorkeuren en het opslaan van je cookiekeuze. Kan niet worden uitgeschakeld.",
+    "analyticsTitle": "Analyse",
+    "analyticsDescription": "Helpen ons begrijpen welke pagina's mensen bezoeken en hoe de site presteert. Geen persoonlijke gegevens gedeeld.",
+    "marketingTitle": "Marketing",
+    "marketingDescription": "Gebruikt om relevante advertenties te tonen en de effectiviteit van campagnes op andere sites te meten.",
+    "alwaysOn": "Altijd aan",
+    "acceptAll": "Alles accepteren",
+    "rejectAll": "Alles weigeren",
+    "customise": "Aanpassen",
+    "savePreferences": "Voorkeuren opslaan",
+    "cookiePreferences": "Cookievoorkeuren",
+    "policyLink": "Privacybeleid"
   }
 }

@@ -1,29 +1,20 @@
+// SignInPage.tsx  (app/[locale]/(auth)/signin/page.tsx)
 'use client'
 
 /**
  * @file SignInPage.tsx
- * @description
- * This is the Sign In page for the application. It allows existing users to log in
- * using their email and password.
+ * Sign In page. Supports two authentication backends, controlled by
+ * NEXT_PUBLIC_DB_TYPE:
+ *   1. Firebase – Firebase Authentication, then exchanges the ID token for a
+ *      server-side session via /api/session.
+ *   2. Custom (non-Firebase) – posts credentials to /api/signin and stores the
+ *      returned access token in localStorage.
  *
- * It supports two authentication backends:
- *   1. Firebase – Uses Firebase Authentication to verify credentials, then exchanges
- *      the Firebase ID token for a server-side session via /api/session.
- *   2. Custom (Non-Firebase) – Sends credentials directly to /api/signin and
- *      stores the returned access token in localStorage.
+ * After a successful sign-in the user is redirected to the page they originally
+ * tried to visit (redirectedFrom), or /console. On success nxf_users is updated
+ * (is_logged_in, last_login) and an activity log entry is written.
  *
- * The active backend is controlled by the environment variable NEXT_PUBLIC_DB_TYPE.
- * If it equals "firebase", the Firebase flow is used; otherwise the custom flow runs.
- *
- * After a successful sign-in, the user is redirected to either:
- *   - The page they originally tried to visit (via the redirectedFrom query param), or
- *   - The default /console page.
- *
- * On successful sign-in (both flows):
- *   - nxf_users is updated: is_logged_in → true, last_login → now
- *   - An activity log entry is written via POST /api/activity-log
- *
- * ⚠️  Security rules for this page:
+ * Security rules for this page:
  *   - Never log the user's email or password
  *   - Never log the Firebase ID token or access token
  *   - Never expose raw internal errors to the console in production
@@ -36,13 +27,14 @@ import { Input }                                     from '@/components/ui/input
 import { Button }                                    from '@/components/ui/button'
 import { Label }                                     from '@/components/ui/label'
 import { Alert, AlertTitle, AlertDescription }       from '@/components/ui/alert'
-import { FiMail, FiLock }                            from 'react-icons/fi'
-import { Eye, EyeOff }                               from 'lucide-react'
+import { Mail, Lock, Eye, EyeOff, Loader2 }          from 'lucide-react'
 import { useTranslations }                           from 'next-intl'
 import { getAuth, signInWithEmailAndPassword }       from 'firebase/auth'
 import { initializeApp, getApps }                    from 'firebase/app'
 import { parseFirebaseWebConfig }                    from '@/app/lib/firebaseConfig'
 import { logActivity }                               from '@/app/lib/logActivity'
+import AuthShell                                     from '@/core/AuthShell'
+import { CARD, PRIMARY_BUTTON, INPUT_CLASS }         from '@/core/InstallerShell'
 
 export default function SignInPageWrapper() {
   return (
@@ -53,15 +45,15 @@ export default function SignInPageWrapper() {
 }
 
 function SignInPage() {
-  const t            = useTranslations('signIn')
-  const router       = useRouter()
+  const t      = useTranslations('signIn')
+  const router = useRouter()
 
   const redirectedFrom =
     typeof window !== 'undefined'
       ? new URLSearchParams(window.location.search).get('redirectedFrom') || '/console'
       : '/console'
 
-  // ─── State ───────────────────────────────────────────────────────────────────
+  // ─── State ───────────────────────────────────────────────────────────────
 
   const [email,        setEmail]        = useState('')
   const [password,     setPassword]     = useState('')
@@ -69,7 +61,7 @@ function SignInPage() {
   const [loading,      setLoading]      = useState(false)
   const [error,        setError]        = useState<string | null>(null)
 
-  // ─── Helpers ─────────────────────────────────────────────────────────────────
+  // ─── Helpers ─────────────────────────────────────────────────────────────
 
   async function recordLogin(userId: string): Promise<void> {
     const now = new Date().toISOString()
@@ -89,7 +81,7 @@ function SignInPage() {
     ])
   }
 
-  // ─── Sign-In Handler ─────────────────────────────────────────────────────────
+  // ─── Sign-In Handler ─────────────────────────────────────────────────────
 
   async function handleSignin() {
     setLoading(true)
@@ -140,7 +132,7 @@ function SignInPage() {
         }
 
         localStorage.setItem('authToken', data.accessToken)
-        
+
         await recordLogin(data.user.user_id)
       }
 
@@ -153,86 +145,106 @@ function SignInPage() {
     }
   }
 
-  // ─── Render ──────────────────────────────────────────────────────────────────
+  // ─── Render ──────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-sm p-8">
+    <AuthShell>
+      <form
+        className={CARD}
+        onSubmit={(e) => {
+          e.preventDefault()
+          if (!loading) handleSignin()
+        }}
+      >
 
-        <h1 className="text-2xl font-bold text-black mb-6">
-          {t('heading')}
-        </h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t('heading')}</h1>
 
         {error && (
-          <Alert variant="destructive" className="mb-4">
+          <Alert variant="destructive" className="mt-5">
             <AlertTitle>{t('errors.title')}</AlertTitle>
             <AlertDescription>{error}</AlertDescription>
           </Alert>
         )}
 
-        <Label htmlFor="email" className="mb-1 text-black">
-          {t('fields.email')}
-        </Label>
-        <div className="flex items-center gap-2 mb-4">
-          <FiMail className="text-gray-500" />
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+        <div className="mt-6 space-y-5">
 
-        <Label htmlFor="password" className="mb-1 text-black">
-          {t('fields.password')}
-        </Label>
-        <div className="flex items-center gap-2 mb-6">
-          <FiLock className="text-gray-500" />
-          <div className="relative flex-1">
-            <Input
-              id="password"
-              type={showPassword ? 'text' : 'password'}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="pr-10"
-            />
-            <button
-              type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-gray-600"
-              tabIndex={-1}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
-            >
-              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-            </button>
-          </div>
-        </div>
-
-        <p className="mb-4 text-right text-sm">
-          <Link href="/forgot-password" className="text-blue-600 hover:underline">
-            {t('links.forgotPassword')}
-          </Link>
-        </p>
-
-        <Button className="w-full mb-4" onClick={handleSignin} disabled={loading}>
-          {loading ? (
-            <div className="flex items-center justify-center gap-2">
-              <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full" />
-              {t('button.signingIn')}
+          {/* Email */}
+          <div className="space-y-1.5">
+            <Label htmlFor="email" className="text-sm font-medium text-neutral-800">
+              {t('fields.email')}
+            </Label>
+            <div className="relative">
+              <Mail className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+              <Input
+                id="email"
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`${INPUT_CLASS} pl-9`}
+              />
             </div>
+          </div>
+
+          {/* Password */}
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="text-sm font-medium text-neutral-800">
+                {t('fields.password')}
+              </Label>
+              <Link
+                href="/forgot-password"
+                className="text-xs font-medium text-neutral-600 underline-offset-4 hover:text-black hover:underline"
+              >
+                {t('links.forgotPassword')}
+              </Link>
+            </div>
+            <div className="relative">
+              <Lock className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
+              <Input
+                id="password"
+                type={showPassword ? 'text' : 'password'}
+                autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`${INPUT_CLASS} pl-9 pr-10`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute inset-y-0 right-3 flex items-center text-neutral-400 hover:text-neutral-700"
+                tabIndex={-1}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <Button type="submit" className={`${PRIMARY_BUTTON} mt-7 w-full`} disabled={loading}>
+          {loading ? (
+            <span className="flex items-center justify-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              {t('button.signingIn')}
+            </span>
           ) : (
             t('button.signIn')
           )}
         </Button>
 
-        <p className="text-center text-sm text-gray-600">
+        <p className="mt-6 border-t border-neutral-200 pt-6 text-center text-sm text-neutral-600">
           {t('links.noAccount')}{' '}
-          <Link href="/signup" className="text-blue-600 hover:underline">
+          <Link
+            href="/signup"
+            className="font-medium text-black underline-offset-4 hover:underline"
+          >
             {t('links.signUp')}
           </Link>
         </p>
 
-      </div>
-    </div>
+      </form>
+    </AuthShell>
   )
 }

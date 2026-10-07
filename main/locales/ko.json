@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
-    "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "save": "저장",
+    "saving": "저장 중...",
+    "saveChanges": "변경사항 저장",
+    "cancel": "취소",
+    "delete": "삭제",
+    "edit": "편집",
+    "create": "생성",
+    "add": "추가",
+    "remove": "제거",
+    "close": "닫기",
+    "confirm": "확인",
+    "back": "뒤로",
+    "next": "다음",
+    "done": "완료",
+    "loading": "불러오는 중...",
+    "search": "검색",
+    "filter": "필터",
+    "refresh": "새로고침",
+    "copy": "복사",
+    "copied": "복사됨!",
+    "upload": "업로드",
+    "rename": "이름 변경",
+    "move": "이동",
+    "preview": "미리보기",
+    "revoke": "취소",
+    "generate": "생성",
+    "reveal": "표시",
+    "hide": "숨기기",
+    "active": "활성",
+    "inactive": "비활성",
+    "status": "상태",
+    "actions": "작업",
+    "name": "이름",
+    "email": "이메일",
+    "password": "비밀번호",
+    "role": "역할",
+    "createdAt": "생성일",
+    "noResults": "결과가 없습니다",
+    "error": "오류가 발생했습니다",
+    "success": "성공",
+    "required": "이 필드는 필수입니다",
+    "optional": "선택 사항",
+    "yes": "예",
+    "no": "아니요",
+    "areYouSure": "확실합니까?",
+    "thisActionCannotBeUndone": "이 작업은 되돌릴 수 없습니다.",
+    "comingSoon": "곧 제공 예정"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
-    "menu": "Menu",
-    "media": "Media",
+    "dashboard": "대시보드",
+    "pages": "페이지",
+    "menu": "메뉴",
+    "media": "미디어",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "통합",
+    "theming": "테마",
+    "settings": "설정",
+    "account": "계정",
+    "messages": "메시지",
+    "notifications": "알림",
+    "logout": "로그아웃"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "검색...",
+    "notifications": "알림",
+    "messages": "메시지",
+    "viewAccount": "계정 보기",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
-      "enterprise": "Enterprise"
+      "self_hosted": "자체 호스팅",
+      "hosted": "호스팅됨",
+      "enterprise": "엔터프라이즈"
+    }
+  },
+  "nextModelGenerator": {
+    "nullJsonError": "{{modelName}}Model을 생성할 수 없습니다: null 또는 undefined JSON을 수신했습니다",
+    "missingRequiredField": "필수 필드가 없습니다: {{modelName}}의 {{fieldName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "{{count}}개 모델의 코드를 생성 중입니다...",
+    "modelUndefined": "모델이 정의되지 않았습니다 — 유효한 ModelDefinition이 전달되었는지 확인하세요",
+    "modelMissingName": "모델에 \"name\" 속성이 없습니다 — 모든 모델에는 이름이 있어야 합니다",
+    "modelInvalidFields": "모델 \"{{name}}\"의 \"fields\"가 유효하지 않거나 누락되었습니다 — fields는 단순 객체여야 합니다",
+    "generationSuccess": "모델 \"{{name}}\"의 코드를 성공적으로 생성했습니다",
+    "generationFailed": "모델 \"{{name}}\"의 코드 생성에 실패했습니다"
+  },
+  "completeProfile": {
+    "title": "프로필 완성하기",
+    "welcome": "환영합니다,",
+    "loading": {
+      "checkingProfile": "프로필을 확인하는 중입니다..."
+    },
+    "subdomain": {
+      "label": "서브도메인 선택",
+      "placeholder": "yourapp",
+      "hint": "앱은 다음 주소에서 접속할 수 있습니다:"
+    },
+    "button": {
+      "save": "저장하고 계속하기",
+      "saving": "저장 중..."
+    },
+    "validation": {
+      "subdomainRequired": "서브도메인을 입력하세요",
+      "adapterMissingCreateTenant": "데이터베이스 어댑터가 테넌트 생성을 지원하지 않습니다"
+    },
+    "errors": {
+      "saveFailed": "서브도메인 저장 중 오류가 발생했습니다: {{message}}",
+      "unknownError": "알 수 없는 오류가 발생했습니다"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "현재 데이터베이스 어댑터는 비밀번호 재설정을 지원하지 않습니다",
+      "noAccountFound": "해당 이메일 주소로 등록된 계정을 찾을 수 없습니다."
+    }
+  },
+  "forgotPassword": {
+    "title": "비밀번호 찾기",
+    "description": "이메일 주소를 입력하시면 비밀번호를 재설정할 수 있는 링크를 보내드립니다.",
+    "form": {
+      "emailLabel": "이메일 주소",
+      "emailPlaceholder": "you@example.com",
+      "buttonSend": "재설정 링크 보내기",
+      "buttonSending": "전송 중..."
+    },
+    "validation": {
+      "emailRequired": "이메일 주소를 입력하세요."
+    },
+    "errors": {
+      "firebaseConfigMissing": "Firebase 설정이 누락되었습니다. 환경 변수를 확인해 주세요.",
+      "sendFailed": "재설정 링크 전송에 실패했습니다. 다시 시도해 주세요."
+    },
+    "success": {
+      "title": "받은 편지함을 확인하세요",
+      "description": "비밀번호 재설정 이메일이 발송되었습니다. 받은 편지함을 확인하고 링크를 통해 비밀번호를 재설정하세요.",
+      "button": "로그인으로 돌아가기"
+    },
+    "notice": {
+      "title": "요청이 접수되었습니다",
+      "button": "확인"
+    },
+    "error": {
+      "title": "문제가 발생했습니다"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "현재 데이터베이스 어댑터는 비밀번호 재설정을 지원하지 않습니다",
+      "invalidToken": "재설정 링크가 유효하지 않거나 만료되었습니다. 새 링크를 요청하세요.",
+      "tokenAlreadyUsed": "이 재설정 링크는 이미 사용되었습니다. 새 링크를 요청하세요.",
+      "tokenExpired": "이 재설정 링크가 만료되었습니다. 새 링크를 요청하세요."
+    }
+  },
+  "resetPassword": {
+    "title": "비밀번호 재설정",
+    "form": {
+      "passwordLabel": "새 비밀번호",
+      "buttonReset": "비밀번호 재설정",
+      "buttonResetting": "재설정 중..."
+    },
+    "errors": {
+      "invalidLink": "재설정 링크가 유효하지 않거나 누락되었습니다. 새 링크를 요청하세요.",
+      "passwordRequired": "새 비밀번호를 입력하세요.",
+      "missingToken": "재설정 토큰이 없습니다. 이메일에 포함된 링크를 이용하세요.",
+      "resetFailed": "비밀번호 재설정에 실패했습니다. 다시 시도해 주세요."
+    },
+    "error": {
+      "title": "문제가 발생했습니다"
+    },
+    "expired": {
+      "title": "재설정 링크가 만료되었습니다",
+      "description": "비밀번호 재설정 링크가 만료되었습니다. 비밀번호 찾기 페이지로 이동합니다..."
+    },
+    "success": {
+      "title": "비밀번호가 성공적으로 재설정되었습니다",
+      "description": "이제 새 비밀번호로",
+      "signinLink": "로그인",
+      "descriptionSuffix": "할 수 있습니다."
+    }
+  },
+  "signIn": {
+    "heading": "Underpeaks 계정에 로그인",
+    "fields": {
+      "email": "이메일",
+      "password": "비밀번호"
+    },
+    "button": {
+      "signIn": "로그인",
+      "signingIn": "로그인 중..."
+    },
+    "links": {
+      "forgotPassword": "비밀번호를 잊으셨나요?",
+      "noAccount": "계정이 없으신가요?",
+      "signUp": "지금 가입하기"
+    },
+    "errors": {
+      "title": "오류",
+      "signinFailed": "로그인에 실패했습니다. 계정 정보를 확인한 후 다시 시도해 주세요."
+    }
+  },
+  "signUp": {
+    "heading": "Underpeaks 계정 만들기",
+    "fields": {
+      "fullName": "이름",
+      "fullNamePlaceholder": "이름을 입력하세요",
+      "email": "이메일",
+      "emailPlaceholder": "you@example.com",
+      "password": "비밀번호"
+    },
+    "button": {
+      "signUp": "가입하기",
+      "creating": "생성 중..."
+    },
+    "alerts": {
+      "errorTitle": "오류",
+      "successTitle": "성공"
+    },
+    "success": {
+      "accountCreated": "계정이 성공적으로 생성되었습니다!"
+    },
+    "links": {
+      "alreadyHaveAccount": "이미 계정이 있으신가요?",
+      "loginNow": "지금 로그인하기"
+    },
+    "errors": {
+      "nameRequired": "이름은 필수입니다.",
+      "emailRequired": "이메일은 필수입니다.",
+      "passwordRequired": "비밀번호는 필수입니다.",
+      "emailInUse": "이미 등록된 이메일입니다. 로그인을 시도해 보세요.",
+      "invalidEmail": "유효한 이메일 주소를 입력하세요.",
+      "weakPassword": "비밀번호가 너무 약합니다. 최소 6자 이상이어야 합니다.",
+      "signupFailed": "가입에 실패했습니다. 다시 시도해 주세요.",
+      "supabaseSignupFailed": "Supabase 가입에 실패했습니다. 다시 시도해 주세요."
+    },
+    "console": {
+      "firebaseVerificationSent": "Firebase 인증 이메일이 성공적으로 발송되었습니다.",
+      "firebaseVerificationFailed": "Firebase 인증 이메일을 발송하지 못했습니다.",
+      "supabaseVerificationSent": "Supabase 인증 이메일이 성공적으로 발송되었습니다."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "이메일 인증 중",
+      "success": "이메일이 인증되었습니다 ✅",
+      "error": "인증 실패"
+    },
+    "status": {
+      "verifying": "이메일을 인증하는 중입니다...",
+      "verified": "이메일이 인증되었습니다.",
+      "supabaseRedirecting": "비밀번호 설정 페이지로 이동 중입니다..."
+    },
+    "button": {
+      "goToSignIn": "로그인으로 이동"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] 요청을 수신했습니다",
+      "verificationNotSupported": "[verify-email] 이 어댑터에서는 인증이 지원되지 않습니다"
+    },
+    "errors": {
+      "missingTokenOrEmail": "토큰 또는 이메일이 없습니다",
+      "dbTypeNotSet": "데이터베이스 유형이 설정되지 않았습니다",
+      "unsupportedDbType": "지원되지 않는 데이터베이스 유형입니다",
+      "sqlAdapterMissingMethods": "SQL 어댑터에 필요한 메서드가 없습니다",
+      "firebaseAdapterMissingMethods": "Firebase 어댑터에 필요한 메서드가 없습니다",
+      "invalidToken": "유효하지 않은 토큰입니다",
+      "tokenExpired": "토큰이 만료되었습니다",
+      "userNotFound": "사용자를 찾을 수 없습니다",
+      "verificationNotSupported": "이 어댑터에서는 인증이 지원되지 않습니다",
+      "verificationFailed": "인증에 실패했습니다"
+    }
+  },
+  "schemaPreview": {
+    "title": "스키마 미리보기",
+    "columns": {
+      "field": "필드",
+      "type": "유형"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "작업 확인",
+      "description": "계속 진행하시겠습니까?"
+    },
+    "buttons": {
+      "confirm": "확인",
+      "cancel": "취소"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "비즈니스",
+      "content": "콘텐츠",
+      "assets": "자산",
+      "configuration": "구성"
+    },
+    "items": {
+      "dashboard": "대시보드",
+      "products": "제품",
+      "categories": "카테고리",
+      "orders": "주문",
+      "coupons": "쿠폰",
+      "users": "사용자",
+      "shipping": "배송",
+      "services": "서비스",
+      "sharedModels": "공유 모델",
+      "menu": "메뉴",
+      "pages": "페이지",
+      "theme": "테마",
+      "storage": "저장소",
+      "integrations": "통합",
+      "apisAndWebhooks": "API 및 웹훅"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "메시지",
+      "unreadCount": "읽지 않은 메시지 {count}개"
+    },
+    "empty": "아직 메시지가 없습니다",
+    "viewAll": "모든 메시지 보기",
+    "unreadBadge": "읽지 않은 메시지 {count}개",
+    "systemInitials": "SY",
+    "fallbackUser": "사용자"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "알림",
+      "unreadCount": "읽지 않은 알림 {count}개",
+      "markAllRead": "모두 읽음으로 표시"
+    },
+    "empty": "아직 알림이 없습니다",
+    "viewAll": "모든 알림 보기"
+  },
+  "previewSchema": {
+    "fieldsHeading": "필드",
+    "fieldNamePlaceholder": "필드 이름",
+    "requiredLabel": "필수",
+    "removeButton": "제거",
+    "saveButton": "저장",
+    "previewButton": "미리보기",
+    "hidePreviewButton": "미리보기 숨기기",
+    "addFieldButton": "필드 추가",
+    "types": {
+      "string": "문자열",
+      "num": "숫자",
+      "boolean": "불리언",
+      "datetime": "날짜/시간",
+      "array": "배열",
+      "map": "맵",
+      "null": "null"
+    },
+    "aria": {
+      "fieldName": "필드 {{index}} 이름",
+      "fieldType": "필드 {{index}} 유형",
+      "elementType": "필드 {{index}} 요소 유형",
+      "required": "필드 {{index}} 필수",
+      "removeField": "필드 {{index}} 제거"
     }
   },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "로그아웃 중…",
+    "footer": {
+      "settings": "설정",
+      "logout": "로그아웃",
+      "collapse": "사이드바 접기",
+      "expand": "사이드바 펼치기",
+      "business": "비즈니스",
+      "developer": "개발자",
+      "design": "디자인",
+      "system": "시스템"
+    },
+    "aria": {
+      "sidebar": "콘솔 내비게이션",
+      "navigation": "메인 내비게이션",
+      "expandSidebar": "사이드바 펼치기",
+      "collapseSidebar": "사이드바 접기"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "프로젝트 로고",
+    "projectLabel": "프로젝트:",
+    "signIn": "로그인",
+    "register": "가입하기",
+    "aria": {
+      "navbar": "상단 내비게이션 바",
+      "goToDashboard": "대시보드로 이동"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "{name}의 사용자 메뉴"
+    },
+    "menu": {
+      "account": "계정",
+      "settings": "설정",
+      "helpAndDocs": "도움말 및 문서",
+      "logout": "로그아웃"
+    }
+  },
+  "accountPage": {
+    "title": "계정",
+    "subtitle": "프로필과 보안을 관리하세요.",
+    "profile": {
+      "title": "프로필",
+      "description": "표시 이름을 업데이트하세요.",
+      "fullNameLabel": "이름",
+      "fullNamePlaceholder": "이름을 입력하세요",
+      "emailLabel": "이메일 주소",
+      "emailReadOnlyNote": "이메일은 인증 제공업체에서 관리하며 여기서 변경할 수 없습니다.",
+      "saveButton": "변경사항 저장",
+      "savingButton": "저장 중…",
+      "savedButton": "저장됨"
+    },
+    "danger": {
+      "title": "위험 구역",
+      "description": "되돌릴 수 없는 작업입니다. 신중하게 진행하세요.",
+      "cancelTitle": "구독 취소",
+      "cancelDescription": "요금제는 현재 결제 주기가 끝날 때까지 유지되며, 이후 자체 호스팅으로 전환됩니다.",
+      "cancelButton": "요금제 취소",
+      "cancelModalBody": "구독이 취소되지만 현재 결제 주기가 끝날 때까지 이용할 수 있습니다. 이 작업은 되돌릴 수 없습니다.",
+      "resetTitle": "프로젝트 초기화",
+      "resetDescription": "모든 프로젝트 콘텐츠를 영구적으로 삭제하고 온보딩을 다시 시작합니다. 계정은 유지됩니다.",
+      "resetButton": "프로젝트 초기화",
+      "resetModalBody": "모델, 페이지, 데이터, 미디어를 포함한 프로젝트의 모든 콘텐츠가 영구적으로 삭제됩니다. 계정 및 결제 정보는 유지됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "deleteTitle": "계정 삭제",
+      "deleteDescription": "계정 및 관련된 모든 데이터를 영구적으로 삭제합니다.",
+      "deleteButton": "계정 삭제",
+      "deleteModalBody": "계정 및 모든 콘텐츠가 영구적으로 삭제됩니다. 법적으로 필요한 경우 결제 기록은 보관됩니다. 이 작업은 되돌릴 수 없습니다."
+    },
+    "password": {
+      "title": "비밀번호 변경",
+      "description": "다른 곳에서 사용하지 않는 강력한 비밀번호를 사용하세요.",
+      "currentLabel": "현재 비밀번호",
+      "newLabel": "새 비밀번호",
+      "confirmLabel": "새 비밀번호 확인",
+      "showPassword": "비밀번호 표시",
+      "hidePassword": "비밀번호 숨기기",
+      "minLengthHint": "최소 8자 이상",
+      "mismatchHint": "비밀번호가 일치하지 않습니다",
+      "updateButton": "비밀번호 업데이트",
+      "updatingButton": "업데이트 중…",
+      "updatedButton": "업데이트됨"
+    },
+    "billing": {
+      "title": "결제 및 요금제",
+      "description": "현재 요금제 및 업그레이드 옵션입니다.",
+      "selfHostedDescription": "핵심 기능이 포함되어 있습니다. 통합, 고급 인증, 화이트라벨링을 원하시면 업그레이드하세요.",
+      "paidDescription": "모든 기능이 잠금 해제되었습니다.",
+      "upgradeButton": "업그레이드",
+      "upgradeAriaLabel": "Underpeaks Pro로 업그레이드",
+      "proFeaturesTitle": "Pro에서 제공하는 기능",
+      "proFeature1": "통합 기능 (Stripe, Mailchimp 등)",
+      "proFeature2": "고급 인증 — 2단계 인증, 소셜 로그인, 매직 링크, SSO",
+      "proFeature3": "나만의 브랜드로 CMS 화이트라벨링",
+      "proFeature4": "콘솔용 커스텀 도메인",
+      "contactSalesButton": "영업팀 문의"
+    },
+    "errors": {
+      "profileUpdateFailed": "프로필 업데이트에 실패했습니다. 다시 시도해 주세요.",
+      "passwordUpdateFailed": "비밀번호 업데이트에 실패했습니다. 다시 시도해 주세요."
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "모델로부터 자동 생성된 범용 엔드포인트",
+    "customEndpointButton": "커스텀 엔드포인트",
+    "tabsLabel": "API 페이지 탭",
+    "copy": "클립보드에 복사",
+    "copied": "복사됨!",
+    "tabs": {
+      "endpoints": "엔드포인트",
+      "keys": "API 키",
+      "reference": "레퍼런스"
+    },
+    "endpoints": {
+      "searchPlaceholder": "엔드포인트 검색…",
+      "typeFilterLabel": "엔드포인트 유형별 필터",
+      "modelFilterLabel": "모델별 필터",
+      "type": {
+        "all": "전체",
+        "auto": "자동",
+        "custom": "커스텀"
+      },
+      "colMethod": "메서드",
+      "colPath": "경로",
+      "colDescription": "설명",
+      "colActions": "작업",
+      "noResults": "필터와 일치하는 엔드포인트가 없습니다",
+      "customBadge": "커스텀",
+      "requiresAuth": "인증 필요",
+      "public": "공개 엔드포인트",
+      "testButton": "테스트",
+      "exampleRequest": "요청 예시",
+      "requiredHeaders": "필수 헤더",
+      "testLabel": "테스트",
+      "sendRequest": "요청 보내기",
+      "running": "실행 중…"
+    },
+    "drawer": {
+      "title": "새 커스텀 엔드포인트",
+      "subtitle": "범용 API를 호출하는 비즈니스 로직을 작성하세요",
+      "close": "패널 닫기",
+      "methodLabel": "메서드",
+      "pathLabel": "경로",
+      "descriptionLabel": "설명",
+      "descriptionPlaceholder": "이 엔드포인트는 무엇을 하나요?",
+      "authLabel": "인증",
+      "authRequired": "필수",
+      "authPublic": "공개",
+      "codeLabel": "핸들러 코드",
+      "cancelButton": "취소",
+      "createButton": "엔드포인트 생성"
+    },
+    "keys": {
+      "title": "API 키",
+      "keepSecret": "이 키는 안전하게 보관하세요",
+      "createTitle": "새 키 생성",
+      "nameLabel": "키 이름",
+      "namePlaceholder": "키 이름, 예: 모바일 앱",
+      "generateButton": "생성",
+      "active": "활성",
+      "inactive": "비활성",
+      "never": "사용 안 함",
+      "created": "생성일",
+      "lastUsed": "마지막 사용",
+      "revealKey": "API 키 표시",
+      "hideKey": "API 키 숨기기",
+      "deleteKey": "키 {{name}} 삭제",
+      "confirmDelete": "삭제 확인",
+      "cancelDelete": "삭제 취소"
+    },
+    "reference": {
+      "queryParamsTitle": "쿼리 매개변수",
+      "queryParamsSubtitle": "모든 GET 엔드포인트에서 사용 가능",
+      "operatorsTitle": "필터 연산자",
+      "operatorsSubtitle": "다음과 함께 사용:",
+      "operatorsFormat": "매개변수 형식:",
+      "exampleTitle": "전체 예시",
+      "exampleDescription": "R500 미만의 활성 제품을 가격순으로 정렬하여 id/name/price만 반환:",
+      "responseLabel": "응답:"
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "대시보드",
+    "welcome": "다시 오신 것을 환영합니다, {name}님",
+    "addWidget": "위젯 추가",
+    "editLayout": "레이아웃 편집",
+    "saveLayout": "레이아웃 저장",
+    "resetLayout": "레이아웃 초기화",
+    "toolbar": {
+      "title": "대시보드",
+      "subtitle": "위젯을 드래그하여 재정렬 · 호버하여 편집",
+      "refresh": "새로고침",
+      "last30Days": "최근 30일",
+      "addWidget": "위젯 추가"
+    },
+    "grid": {
+      "addWidget": "위젯 추가"
+    },
+    "addPanel": {
+      "title": "위젯 추가",
+      "subtitle": "클릭하여 대시보드에 추가"
+    },
+    "widget": {
+      "dragToReorder": "드래그하여 재정렬",
+      "vsLastPeriod": "이전 기간 대비"
+    },
+    "chart": {
+      "day": "일",
+      "daysAgo": "30일 전",
+      "today": "오늘"
+    },
+    "formula": {
+      "placeholder": "예: SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "사전 설정"
+    }
   },
   "media": {
-    "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "title": "미디어",
+    "uploadFiles": "파일 업로드",
+    "createFolder": "폴더 생성",
+    "folderName": "폴더 이름",
+    "rootFolder": "루트",
+    "noFiles": "이 폴더에 파일이 없습니다",
+    "dropToUpload": "파일을 여기에 드롭하여 업로드",
+    "orClickToUpload": "또는 클릭하여 찾아보기",
+    "gridView": "그리드 보기",
+    "listView": "목록 보기",
+    "fileSize": "파일 크기",
+    "fileType": "파일 유형",
+    "uploadedAt": "업로드일",
+    "deleteFileConfirm": "\"{name}\"을(를) 삭제하시겠습니까?",
+    "deleteFolderConfirm": "\"{name}\" 폴더와 모든 내용을 삭제하시겠습니까?",
+    "importFromUrl": "URL에서 가져오기",
+    "copyUrl": "URL 복사",
+    "urlCopied": "URL이 클립보드에 복사되었습니다",
+    "details": "파일 세부정보",
+    "selectFile": "세부정보를 보려면 파일을 선택하세요"
   },
   "settings": {
-    "title": "Settings",
+    "title": "설정",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "개요",
+      "projectName": "프로젝트 이름",
+      "projectUrl": "프로젝트 URL",
+      "projectId": "프로젝트 ID",
+      "dbType": "데이터베이스 유형",
+      "environment": "환경",
+      "deploymentType": "배포 유형",
+      "savedSuccess": "설정이 성공적으로 저장되었습니다"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "API 키",
+      "subheading": "앱의 API 요청을 인증하는 데 사용되는 키를 관리하세요.",
+      "title": "API 키",
+      "description": "프로젝트에 대한 프로그래밍 방식 액세스를 위한 API 키를 관리하세요.",
+      "generateKey": "새 키 생성",
+      "keyName": "이름",
+      "keyPrefix": "키 접두사",
+      "lastUsed": "마지막 사용",
+      "neverUsed": "사용 안 함",
+      "revokeConfirm": "\"{name}\"을(를) 취소하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+      "revoked": "취소됨",
+      "keyCopied": "키가 클립보드에 복사되었습니다",
+      "newKeyGenerated": "새 API 키가 생성되었습니다. 지금 복사하세요 — 다시 표시되지 않습니다.",
+      "noKeys": "아직 API 키가 없습니다. 시작하려면 하나 생성하세요.",
+      "sectionTitle": "활성 키",
+      "createdDate": "{{date}} 생성",
+      "lastUsedDate": "{{date}} 마지막 사용",
+      "hideKey": "키 숨기기",
+      "revealKey": "키 표시",
+      "copyKey": "키 복사",
+      "revoke": "취소",
+      "emptyTitle": "아직 API 키가 없습니다",
+      "emptySubtitle": "시작하려면 아래에서 키를 생성하세요."
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
-      "logo": "Logo",
-      "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "title": "브랜딩",
+      "description": "Underpeaks 콘솔의 모양을 사용자 지정하세요.",
+      "logo": "로고",
+      "favicon": "파비콘",
+      "primaryColor": "기본 색상",
+      "uploadLogo": "로고 업로드",
+      "uploadFavicon": "파비콘 업로드",
+      "logoHint": "권장: 200×50px, 배경이 투명한 PNG 또는 SVG.",
+      "faviconHint": "권장: 32×32px ICO, PNG 또는 SVG.",
+      "livePreview": "실시간 미리보기",
+      "brandingSaved": "브랜딩이 성공적으로 업데이트되었습니다"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
-      "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "host": "SMTP 호스트",
+      "port": "포트",
+      "username": "사용자 이름",
+      "fromEmail": "발신 이메일",
+      "fromName": "발신자 이름",
+      "encryption": "암호화",
+      "testEmail": "테스트 이메일 보내기",
+      "testEmailSuccess": "테스트 이메일이 성공적으로 발송되었습니다"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "도메인",
+      "addDomain": "도메인 추가",
+      "verified": "확인됨",
+      "unverified": "확인되지 않음",
+      "primary": "기본",
+      "setPrimary": "기본으로 설정"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "계정",
+    "fullName": "이름",
+    "emailReadOnly": "이메일 주소 (읽기 전용)",
+    "changePassword": "비밀번호 변경",
+    "currentPassword": "현재 비밀번호",
+    "newPassword": "새 비밀번호",
+    "confirmPassword": "새 비밀번호 확인",
+    "passwordsDoNotMatch": "비밀번호가 일치하지 않습니다",
+    "profileUpdated": "프로필이 성공적으로 업데이트되었습니다",
+    "passwordChanged": "비밀번호가 성공적으로 변경되었습니다",
+    "memberSince": "{date}부터 회원"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
-    "system": "System"
+    "title": "메시지",
+    "newConversation": "새 대화",
+    "noConversations": "아직 대화가 없습니다",
+    "noMessages": "이 대화에 메시지가 없습니다",
+    "typeMessage": "메시지를 입력하세요...",
+    "send": "보내기",
+    "markAllRead": "모두 읽음으로 표시",
+    "reply": "답장",
+    "you": "나",
+    "system": "시스템"
+  },
+  "apiKeys": {
+    "heading": "API 키",
+    "subheading": "앱의 API 요청을 인증하는 데 사용되는 키를 관리하세요.",
+    "sectionTitle": "활성 키",
+    "createdDate": "{date} 생성",
+    "lastUsedDate": "{date} 마지막 사용",
+    "neverUsed": "사용 안 함",
+    "hideKey": "키 숨기기",
+    "revealKey": "키 표시",
+    "copyKey": "키 복사",
+    "revoke": "취소",
+    "emptyTitle": "아직 API 키가 없습니다",
+    "emptySubtitle": "시작하려면 아래에서 키를 생성하세요.",
+    "errors": {
+      "loadFailed": "API 키를 불러오지 못했습니다",
+      "generateFailed": "키 생성에 실패했습니다",
+      "revokeFailed": "키 취소에 실패했습니다"
+    }
   },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "알림",
+    "noNotifications": "알림이 없습니다",
+    "noUnread": "모두 확인했습니다!",
+    "markAllRead": "모두 읽음으로 표시",
+    "viewAll": "모든 알림 보기",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
-      "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "all": "전체",
+      "unread": "읽지 않음",
+      "comment": "댓글",
+      "system": "시스템",
+      "payment": "결제",
+      "security": "보안",
+      "message": "메시지"
     },
     "priority": {
-      "low": "Low",
-      "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "low": "낮음",
+      "normal": "보통",
+      "high": "높음",
+      "urgent": "긴급"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "로그인",
+    "logout": "로그아웃",
+    "email": "이메일 주소",
+    "password": "비밀번호",
+    "forgotPassword": "비밀번호를 잊으셨나요?",
+    "resetPassword": "비밀번호 재설정",
+    "sessionExpired": "세션이 만료되었습니다. 다시 로그인해 주세요.",
+    "idleWarning": "잠시 활동이 없었습니다.",
+    "idleLogoutIn": "{seconds}초 후 로그아웃됩니다.",
+    "stayLoggedIn": "로그인 상태 유지"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "페이지를 찾을 수 없습니다",
+    "serverError": "서버 오류",
+    "networkError": "네트워크 오류 — 연결을 확인해 주세요",
+    "sessionError": "세션 오류 — 다시 로그인해 주세요",
+    "unknown": "예상치 못한 오류가 발생했습니다"
+  },
+  "grid": {
+    "addWidget": "위젯 추가"
+  },
+  "addPanel": {
+    "title": "위젯 추가",
+    "subtitle": "클릭하여 대시보드에 추가"
+  },
+  "widget": {
+    "dragToReorder": "드래그하여 재정렬",
+    "vsLastPeriod": "이전 기간 대비"
+  },
+  "chart": {
+    "day": "일",
+    "daysAgo": "30일 전",
+    "today": "오늘"
+  },
+  "formula": {
+    "placeholder": "예: SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "사전 설정"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "고객센터",
+      "subtitle": "답변을 찾거나, 문서를 읽거나, 문의해 주세요.",
+      "searchPlaceholder": "FAQ 검색…"
+    },
+    "resources": {
+      "title": "리소스",
+      "links": {
+        "gettingStarted": {
+          "label": "시작하기",
+          "description": "몇 분 만에 첫 프로젝트를 설정하세요."
+        },
+        "apiReference": {
+          "label": "API 레퍼런스",
+          "description": "모든 API 엔드포인트와 연산자에 대한 전체 레퍼런스입니다."
+        },
+        "community": {
+          "label": "커뮤니티 포럼",
+          "description": "질문을 하거나 커뮤니티와 프로젝트를 공유하세요."
+        }
+      }
+    },
+    "faq": {
+      "title": "자주 묻는 질문",
+      "resultCount": "{count}개의 결과",
+      "noResults": "\"{query}\"에 대한 결과가 없습니다",
+      "noResultsHint": "다른 검색어를 시도하거나 아래 고객지원팀에 문의하세요."
+    },
+    "api": {
+      "title": "API 빠른 참조",
+      "baseUrl": "기본 URL:",
+      "endpoints": {
+        "get": "모델의 모든 레코드를 나열합니다. 필터링, 정렬, 페이지네이션을 지원합니다.",
+        "post": "새 레코드를 생성합니다.",
+        "put": "ID로 기존 레코드를 업데이트합니다.",
+        "delete": "ID로 레코드를 삭제합니다."
+      },
+      "operators": {
+        "title": "쿼리 연산자",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "고객지원팀 문의",
+      "submit": "메시지 보내기",
+      "success": {
+        "title": "메시지가 전송되었습니다!",
+        "subtitle": "최대한 빨리 답변드리겠습니다."
+      },
+      "fields": {
+        "name": "이름",
+        "namePlaceholder": "홍길동",
+        "email": "이메일",
+        "emailPlaceholder": "you@example.com",
+        "message": "메시지",
+        "messagePlaceholder": "문제나 질문을 설명해 주세요…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "통합",
+      "connectedCount": "{count}개 연결됨",
+      "errorCount": "{count}개 오류",
+      "infoBanner": "연결된 통합은 커스텀 엔드포인트와 코드 생성에서 사용할 수 있습니다"
+    },
+    "categories": {
+      "all": "전체",
+      "payments": "결제",
+      "email": "이메일 및 SMS",
+      "storage": "저장소",
+      "ai": "AI",
+      "analytics": "분석",
+      "automation": "자동화"
+    },
+    "status": {
+      "connected": "연결됨",
+      "disconnected": "연결 해제됨",
+      "error": "오류"
+    },
+    "card": {
+      "viewDocs": "문서 보기",
+      "buttons": {
+        "saveAndConnect": "저장 및 연결",
+        "saving": "저장 중…",
+        "saved": "저장됨!",
+        "disconnect": "연결 해제",
+        "retryConnection": "연결 재시도"
+      }
+    },
+    "empty": "이 카테고리에 통합이 없습니다"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "메뉴",
+      "subtitle": "{count}개 항목 · 드래그하여 재정렬",
+      "addItem": "항목 추가"
+    },
+    "preview": {
+      "title": "내비게이션 미리보기",
+      "subtitle": "표시되는 항목만",
+      "empty": "아직 표시되는 항목이 없습니다."
+    },
+    "list": {
+      "title": "모든 항목",
+      "empty": "아직 메뉴 항목이 없습니다",
+      "emptyAction": "첫 항목을 추가하세요"
+    },
+    "row": {
+      "hidden": "숨김",
+      "external": "외부",
+      "actions": {
+        "moveUp": "위로 이동",
+        "moveDown": "아래로 이동",
+        "toggleVisibility": "표시 여부 전환",
+        "edit": "편집",
+        "delete": "삭제",
+        "confirmDelete": "삭제 확인",
+        "cancelDelete": "취소"
+      }
+    },
+    "errors": {
+      "loadFailed": "메뉴 항목을 불러오지 못했습니다",
+      "createFailed": "메뉴 항목 생성에 실패했습니다",
+      "updateFailed": "메뉴 항목 업데이트에 실패했습니다",
+      "deleteFailed": "메뉴 항목 삭제에 실패했습니다"
+    },
+    "drawer": {
+      "titleAdd": "메뉴 항목 추가",
+      "titleEdit": "메뉴 항목 편집",
+      "subtitle": "라벨, 링크, 아이콘 및 표시 여부를 구성하세요",
+      "sections": {
+        "labelVisibility": "라벨 및 표시 여부",
+        "link": "링크",
+        "icon": "아이콘",
+        "nesting": "중첩",
+        "preview": "미리보기"
+      },
+      "fields": {
+        "pageRequired": "메뉴 항목을 저장하기 전에 페이지를 선택해야 합니다.",
+        "menuLabel": "메뉴 라벨",
+        "menuLabelPlaceholder": "예: 제품",
+        "menuLabelHint": "내비게이션 메뉴에 표시되는 텍스트입니다.",
+        "visibility": "표시 여부",
+        "visible": "표시",
+        "hidden": "숨김",
+        "linkTypePage": "페이지",
+        "linkTypeExternal": "외부 URL",
+        "selectPage": "페이지 선택",
+        "selectPagePlaceholder": "— 페이지 선택 —",
+        "noPagesHint": "관리자 페이지를 찾을 수 없습니다. 먼저 페이지 유형을 관리자로 설정하여 페이지를 만드세요.",
+        "externalUrl": "외부 URL",
+        "openIn": "여는 방식",
+        "sameTab": "같은 탭",
+        "newTab": "새 탭",
+        "parentItem": "상위 항목",
+        "parentItemPlaceholder": "— 최상위 —",
+        "parentItemHint": "중첩된 항목은 내비게이션에서 드롭다운 하위 항목으로 표시됩니다."
+      },
+      "icons": {
+        "home": "홈",
+        "grid": "그리드",
+        "package": "패키지",
+        "users": "사용자",
+        "settings": "설정",
+        "file": "파일",
+        "cart": "장바구니",
+        "mail": "메일",
+        "star": "별표",
+        "info": "정보"
+      },
+      "preview": {
+        "hidden": "숨김"
+      },
+      "buttons": {
+        "cancel": "취소",
+        "saveChanges": "변경사항 저장",
+        "addItem": "항목 추가",
+        "saving": "저장 중…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "파일 URL",
+      "metadata": "메타데이터",
+      "rename": "이름 변경",
+      "moveToFolder": "폴더로 이동"
+    },
+    "altText": {
+      "placeholder": "접근성을 위해 이 이미지를 설명하세요…",
+      "empty": "대체 텍스트가 설정되지 않았습니다"
+    },
+    "metadata": {
+      "folder": "폴더",
+      "path": "경로",
+      "size": "크기",
+      "type": "유형",
+      "uploaded": "업로드일",
+      "dimensions": "크기"
+    },
+    "actions": {
+      "save": "저장",
+      "saving": "저장 중…",
+      "cancel": "취소",
+      "move": "이동",
+      "moving": "이동 중…",
+      "deleteFile": "파일 삭제"
+    },
+    "move": {
+      "currentlyIn": "현재 위치:"
+    },
+    "errors": {
+      "renameFailed": "이름 변경에 실패했습니다",
+      "moveFailed": "이동에 실패했습니다"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "필수 필드가 없습니다: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "폴더",
+      "all": "전체",
+      "newFolderTitle": "새 폴더",
+      "collapse": "접기",
+      "expand": "펼치기"
+    },
+    "folder": {
+      "selectTitle": "폴더 선택"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "폴더 삭제",
+      "fileCount": "파일 {count}개"
+    },
+    "empty": {
+      "message": "이 폴더는 비어 있습니다"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "이 폴더는 비어 있습니다"
+    },
+    "header": {
+      "name": "이름",
+      "size": "크기",
+      "type": "유형",
+      "uploaded": "업로드일"
+    },
+    "row": {
+      "deleteTitle": "파일 삭제"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "미디어"
+    },
+    "actions": {
+      "delete": "삭제 ({count})",
+      "clear": "지우기",
+      "upload": "업로드"
+    },
+    "viewMode": {
+      "grid": "그리드 보기",
+      "list": "목록 보기"
+    }
+  },
+  "newFolderPopup": {
+    "title": "새 폴더",
+    "placeholder": "폴더 이름",
+    "buttons": {
+      "create": "생성",
+      "cancel": "취소"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "선택한 폴더에 파일을 업로드하거나 URL을 통해 미디어를 가져옵니다.",
+    "title": "미디어 추가",
+    "tabs": {
+      "upload": "파일 업로드",
+      "url": "URL로 추가"
+    },
+    "uploadZone": {
+      "hint": "모든 파일 유형 가능 — 이미지, 동영상, 문서"
+    },
+    "urlTab": {
+      "description": "공개 URL을 붙여넣어 파일을 저장소로 직접 가져옵니다.",
+      "placeholder": "https://example.com/file.jpg",
+      "import": "가져오기",
+      "importing": "가져오는 중…",
+      "previewAlt": "URL 미리보기"
+    },
+    "errors": {
+      "importFailed": "가져오기에 실패했습니다"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "폴더를 불러오지 못했습니다",
+      "loadFiles": "파일을 불러오지 못했습니다",
+      "createFolder": "폴더 생성에 실패했습니다",
+      "deleteFailed": "삭제에 실패했습니다"
+    },
+    "confirmDelete": {
+      "titleFolder": "폴더 삭제",
+      "titleFile": "파일 삭제",
+      "message": "삭제하시겠습니까:",
+      "folderWarning": "이렇게 하면 폴더 내의 모든 파일이 삭제됩니다.",
+      "undoWarning": "이 작업은 되돌릴 수 없습니다.",
+      "selectionLabel": "{count}개 항목",
+      "cancel": "취소",
+      "confirm": "삭제",
+      "deleting": "삭제 중…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "메시지가 없습니다",
+      "subUnread": "모두 확인했습니다!",
+      "subAll": "받은 편지함이 비어 있습니다."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "방금 전",
+      "minutesAgo": "{count}분 전",
+      "hoursAgo": "{count}시간 전",
+      "daysAgo": "{count}일 전"
+    },
+    "unread": {
+      "badge": "읽지 않은 메시지 {count}개"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "시스템 메시지",
+    "from": "보낸 사람: {name}",
+    "deleteButton": "삭제",
+    "deleteAriaLabel": "대화 삭제: {subject}",
+    "messagesAriaLabel": "메시지 스레드",
+    "loading": "메시지를 불러오는 중입니다...",
+    "emptyTitle": "아직 메시지가 없습니다",
+    "emptySub": "아래에서 첫 메시지를 보내세요."
+  },
+  "messageBubble": {
+    "justNow": "방금 전",
+    "minutesAgo": "{count}분 전",
+    "hoursAgo": "{count}시간 전",
+    "daysAgo": "{count}일 전"
+  },
+  "replyBar": {
+    "placeholder": "답장을 입력하세요… (Enter로 전송)",
+    "sendAriaLabel": "메시지 보내기"
+  },
+  "messagesPage": {
+    "title": "메시지",
+    "unreadCount": "읽지 않은 메시지 {count}개",
+    "filters": {
+      "all": "전체",
+      "unread": "읽지 않음"
+    },
+    "markAllRead": "모두 읽음으로 표시",
+    "closeError": "오류 메시지 닫기",
+    "empty": {
+      "title": "대화를 선택하세요",
+      "sub": "목록에서 대화를 선택하면 여기서 읽을 수 있습니다."
+    },
+    "errors": {
+      "load": "메시지를 불러오지 못했습니다",
+      "delete": "대화 삭제에 실패했습니다",
+      "markAll": "모두 읽음으로 표시하지 못했습니다"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "긴급",
+      "high": "높음"
+    },
+    "actions": {
+      "markRead": "읽음으로 표시",
+      "view": "보기",
+      "delete": "삭제"
+    }
+  },
+  "notificationsHeader": {
+    "title": "알림",
+    "unreadCount": "읽지 않은 알림 {count}개",
+    "filters": {
+      "all": "전체",
+      "unread": "읽지 않음"
+    },
+    "markAllRead": "모두 읽음으로 표시"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "알림이 없습니다",
+      "subUnread": "모두 확인했습니다!",
+      "subAll": "아직 알림이 없습니다."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "알림을 불러오지 못했습니다",
+      "markReadFailed": "읽음으로 표시하지 못했습니다",
+      "markAllReadFailed": "모두 읽음으로 표시하지 못했습니다",
+      "deleteFailed": "알림 삭제에 실패했습니다"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "공개",
+      "admin": "관리자",
+      "draft": "초안",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "페이지",
+      "pageCount": "총 {count}개 페이지",
+      "searchPlaceholder": "페이지 검색…",
+      "newPage": "새 페이지"
+    },
+    "filter": {
+      "all": "전체"
+    },
+    "table": {
+      "page": "페이지",
+      "model": "모델",
+      "template": "템플릿",
+      "visibility": "표시 여부",
+      "actions": "작업",
+      "seoPrefix": "SEO",
+      "systemBadge": "시스템",
+      "hiddenBadge": "숨김"
+    },
+    "emptyState": {
+      "message": "페이지를 찾을 수 없습니다",
+      "cta": "첫 페이지를 만드세요"
+    },
+    "actions": {
+      "edit": "페이지 편집",
+      "delete": "페이지 삭제",
+      "view": "페이지 보기",
+      "confirmDelete": "삭제 확인",
+      "cancel": "취소",
+      "systemLocked": "시스템 페이지는 편집하거나 삭제할 수 없습니다"
+    },
+    "errors": {
+      "loadFailed": "페이지를 불러오지 못했습니다",
+      "createFailed": "페이지 생성에 실패했습니다",
+      "updateFailed": "페이지 업데이트에 실패했습니다",
+      "deleteFailed": "페이지 삭제에 실패했습니다"
+    },
+    "drawer": {
+      "title": "페이지 생성",
+      "editTitle": "페이지 편집",
+      "subtitle": "새 페이지를 정의하고 모델을 연결하세요",
+      "sections": {
+        "basicInfo": "기본 정보",
+        "modelTemplate": "모델 및 템플릿",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "페이지 숨기기",
+          "hint": "숨겨진 페이지는 내비게이션이나 사이트맵에 표시되지 않습니다"
+        },
+        "name": {
+          "label": "페이지 이름",
+          "placeholder": "예: 제품 목록"
+        },
+        "slug": {
+          "label": "슬러그 / URL",
+          "placeholder": "/your-page-slug",
+          "hint": "동적 라우트에는 :id를 사용하세요, 예: /products/:id"
+        },
+        "visibility": {
+          "label": "표시 여부"
+        },
+        "model": {
+          "label": "모델 연결",
+          "noModel": "— 모델 없음 (커스텀 페이지) —",
+          "hint": "하나의 모델을 여러 페이지에서 사용할 수 있습니다."
+        },
+        "template": {
+          "label": "템플릿"
+        },
+        "seoTitle": {
+          "label": "SEO 제목",
+          "placeholder": "검색 엔진용 페이지 제목",
+          "charCount": "{count}/60자"
+        },
+        "seoDesc": {
+          "label": "메타 설명",
+          "placeholder": "검색 결과용 간단한 설명…",
+          "charCount": "{count}/160자"
+        }
+      },
+      "seoPreview": {
+        "label": "검색 미리보기",
+        "titleFallback": "페이지 제목",
+        "urlPrefix": "yoursite.com",
+        "descFallback": "설명이 제공되지 않았습니다."
+      },
+      "actions": {
+        "cancel": "취소",
+        "create": "페이지 생성",
+        "update": "페이지 업데이트",
+        "saving": "저장 중…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "새 키 생성",
+    "keyNameLabel": "키 이름",
+    "keyNameHint": "용도를 기억할 수 있도록 설명적인 이름을 지정하세요.",
+    "keyNamePlaceholder": "예: Flutter 앱 — 프로덕션",
+    "buttonGenerating": "생성 중…",
+    "buttonIdle": "키 생성"
+  },
+  "newKeyModal": {
+    "title": "API 키가 생성되었습니다",
+    "instructions": "키가 생성되어 사용할 준비가 되었습니다. 목록에서 키 옆의 <eyeIcon>눈 아이콘</eyeIcon>을 클릭하여 표시하고 복사하세요.",
+    "doneButton": "완료"
+  },
+  "revokeModal": {
+    "title": "API 키 취소",
+    "message": "이 키를 사용하는 모든 앱은 즉시 액세스 권한을 잃게 됩니다:",
+    "cancelButton": "취소",
+    "revokeButtonIdle": "키 취소",
+    "revokeButtonRevoking": "취소 중…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "API 키를 불러오지 못했습니다",
+      "generateFailed": "키 생성에 실패했습니다",
+      "revokeFailed": "키 취소에 실패했습니다"
+    },
+    "logs": {
+      "loadingKeys": "API 키를 불러오는 중입니다...",
+      "keysLoaded": "API 키를 성공적으로 불러왔습니다",
+      "generatingKey": "새 API 키를 생성하는 중입니다...",
+      "keyGenerated": "API 키가 성공적으로 생성되었습니다",
+      "revokingKey": "API 키를 취소하는 중입니다...",
+      "keyRevoked": "API 키가 성공적으로 취소되었습니다"
+    }
+  },
+  "brandingPage": {
+    "heading": "CMS 브랜딩",
+    "subheading": "팀을 위한 CMS의 모양을 사용자 지정하세요.",
+    "errors": {
+      "saveFailed": "브랜딩 저장에 실패했습니다"
+    },
+    "logs": {
+      "savingBranding": "브랜딩 설정을 저장하는 중입니다...",
+      "brandingSaved": "브랜딩이 성공적으로 저장되었습니다"
+    },
+    "logoSection": {
+      "title": "CMS 로고",
+      "uploadLabel": "로고",
+      "uploadHint": "배경이 투명한 PNG 또는 SVG",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "로고 미리보기"
+    },
+    "faviconSection": {
+      "title": "파비콘",
+      "uploadLabel": "파비콘",
+      "uploadHint": "ICO, PNG 또는 SVG — 브라우저 탭에 표시됩니다",
+      "uploadRecommended": "32×32px 또는 64×64px",
+      "imageAlt": "파비콘 미리보기"
+    },
+    "preview": {
+      "label": "상단 내비게이션 미리보기",
+      "projectLabel": "프로젝트:"
+    },
+    "saveSuccess": "브랜딩이 성공적으로 저장되었습니다",
+    "saveButtonIdle": "브랜딩 저장",
+    "saveButtonSaving": "저장 중…"
+  },
+  "overviewPage": {
+    "heading": "프로젝트 개요",
+    "subheading": "Underpeaks 프로젝트의 스냅샷입니다.",
+    "stats": {
+      "dbType": "DB 유형",
+      "environment": "환경",
+      "deployment": "배포",
+      "status": "상태",
+      "statusActive": "활성"
+    },
+    "userInfo": {
+      "sectionTitle": "사용자 정보",
+      "fullName": "이름",
+      "email": "이메일",
+      "role": "역할",
+      "status": "상태",
+      "verified": "인증됨",
+      "verifiedYes": "예",
+      "verifiedNo": "아니요",
+      "memberSince": "가입일"
+    },
+    "licenseKey": {
+      "sectionTitle": "Underpeaks 라이선스 키",
+      "description": "라이선스 키는 이 인스턴스를 인증하고 호스팅형과 자체 호스팅형 기능을 구분할 수 있게 합니다.",
+      "reveal": "표시",
+      "hide": "숨기기",
+      "copy": "복사",
+      "copied": "복사됨",
+      "loading": "불러오는 중…",
+      "notFound": "라이선스 키를 찾을 수 없습니다"
+    }
+  },
+  "smtpPage": {
+    "heading": "SMTP 설정",
+    "subheading": "프로젝트의 발신 이메일을 구성하세요.",
+    "emailFeatures": {
+      "sectionTitle": "이메일 기능",
+      "verifyEmailLabel": "가입 시 이메일 인증 활성화",
+      "forgotPasswordLabel": "비밀번호 찾기 이메일 활성화",
+      "builtInNotice": "{provider}는 이메일 인증 및 비밀번호 재설정을 자체적으로 처리합니다 — 이 기능들에는 SMTP가 필요하지 않습니다.",
+      "smtpToggleLabel": "커스텀 SMTP 서버 사용"
+    },
+    "smtpConfig": {
+      "sectionTitle": "SMTP 구성",
+      "hostLabel": "SMTP 호스트",
+      "hostPlaceholder": "smtp.example.com",
+      "portLabel": "포트",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "발신 주소",
+      "fromAddressPlaceholder": "no-reply@example.com",
+      "usernameLabel": "사용자 이름",
+      "usernamePlaceholder": "SMTP 사용자 이름",
+      "passwordLabel": "비밀번호",
+      "passwordPlaceholder": "SMTP 비밀번호",
+      "showPassword": "비밀번호 표시",
+      "hidePassword": "비밀번호 숨기기",
+      "encryptionLabel": "암호화",
+      "encryptionNone": "없음"
+    },
+    "logs": {
+      "savingSmtp": "SMTP 설정을 저장하는 중입니다...",
+      "smtpSaved": "SMTP 설정이 성공적으로 저장되었습니다"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "설정",
+    "toggleAriaLabel": "설정 내비게이션 전환",
+    "nav": {
+      "overview": "개요",
+      "api-keys": "API 키",
+      "smtp": "SMTP 설정",
+      "branding": "CMS 브랜딩"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "설정을 불러오는 중입니다…"
+  },
+  "saveButton": {
+    "savedMessage": "성공적으로 저장되었습니다",
+    "buttonSaving": "저장 중…",
+    "buttonIdle": "변경사항 저장"
+  },
+  "coloursPage": {
+    "heading": "색상",
+    "subheading": "생성된 Flutter 및 Next.js 앱에서 사용되는 색상 토큰을 정의하세요.",
+    "preview": {
+      "title": "실시간 미리보기",
+      "primaryButton": "기본 버튼",
+      "secondaryButton": "보조",
+      "accentBadge": "강조 배지",
+      "success": "✓ 성공",
+      "warning": "⚠ 경고",
+      "danger": "✕ 위험"
+    },
+    "tokensSectionTitle": "색상 토큰",
+    "resetTokenTitle": "기본값으로 초기화",
+    "resetAllButton": "모두 기본값으로 초기화",
+    "savedMessage": "저장됨",
+    "saveButtonIdle": "색상 저장",
+    "saveButtonSaving": "저장 중…",
+    "logs": {
+      "savingColours": "색상 토큰을 저장하는 중입니다...",
+      "coloursSaved": "색상 토큰이 성공적으로 저장되었습니다"
+    },
+    "tokens": {
+      "primary":      { "label": "기본",             "description": "메인 브랜드 색상 — 버튼, 링크, 강조 표시" },
+      "primary-fg":   { "label": "기본 전경색",  "description": "기본 색상 배경 위의 텍스트" },
+      "secondary":    { "label": "보조",           "description": "보조 브랜드 색상" },
+      "secondary-fg": { "label": "보조 전경색","description": "보조 색상 배경 위의 텍스트" },
+      "accent":       { "label": "강조",              "description": "배지 및 태그의 강조 색상" },
+      "background":   { "label": "배경",          "description": "앱의 메인 배경" },
+      "surface":      { "label": "표면",             "description": "카드 및 패널 배경" },
+      "border":       { "label": "테두리",              "description": "기본 테두리 색상" },
+      "success":      { "label": "성공",             "description": "긍정적 상태 및 확인" },
+      "warning":      { "label": "경고",             "description": "경고 및 주의 상태" },
+      "danger":       { "label": "위험",              "description": "오류 및 파괴적 작업" },
+      "text":         { "label": "기본 텍스트",        "description": "본문의 메인 텍스트 색상" },
+      "text-muted":   { "label": "흐린 텍스트",          "description": "보조 텍스트 및 자리 표시자 텍스트" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "기능 플래그",
+    "comingSoonBadge": "곧 제공 예정",
+    "subheading": "생성된 Flutter 및 Next.js 앱에 포함될 기능을 전환하세요.",
+    "paidBadge": "유료",
+    "savedMessage": "저장됨",
+    "saveButtonIdle": "플래그 저장",
+    "saveButtonSaving": "저장 중…",
+    "upgrade": {
+      "title": "호스팅형 요금제가 필요합니다",
+      "description": "이 기능들은 Underpeaks의 호스팅 인프라가 필요합니다. 잠금 해제하려면 업그레이드하세요.",
+      "button": "업그레이드"
+    },
+    "groups": {
+      "Appearance": "외관",
+      "Localisation": "현지화",
+      "App Behaviour": "앱 동작",
+      "Authentication — Paid": "인증 — 유료",
+      "Advanced — Paid": "고급 — 유료"
+    },
+    "flags": {
+      "dark-mode":          { "label": "다크 모드",                 "description": "앱 내에서 라이트/다크 테마를 전환할 수 있게 합니다" },
+      "system-theme":       { "label": "시스템 테마 따르기",       "description": "기기의 라이트/다크 모드 설정에 자동으로 맞춥니다" },
+      "multi-language":     { "label": "다국어 지원",    "description": "생성된 앱에서 여러 언어 지원을 활성화합니다" },
+      "rtl-support":        { "label": "RTL 지원",               "description": "아랍어, 히브리어 등에 사용되는 우측에서 좌측 레이아웃" },
+      "offline-mode":       { "label": "오프라인 모드",              "description": "데이터를 로컬에 캐시하여 인터넷 연결 없이도 앱이 작동하도록 합니다" },
+      "push-notifications": { "label": "푸시 알림",        "description": "FCM을 통한 푸시 알림 지원을 활성화합니다 — 키는 직접 제공해야 합니다" },
+      "splash-screen":      { "label": "스플래시 화면",             "description": "앱 실행 시 브랜드가 표시된 스플래시 화면을 보여줍니다" },
+      "onboarding":         { "label": "온보딩 흐름",           "description": "신규 사용자를 위한 환영/온보딩 흐름을 보여줍니다" },
+      "2fa":                { "label": "2단계 인증", "description": "로그인 시 OTP 또는 인증 앱을 요구합니다" },
+      "biometric":          { "label": "생체 인증 로그인",           "description": "모바일에서의 지문 및 Face ID 로그인" },
+      "social-login":       { "label": "소셜 로그인",              "description": "Google, GitHub, Apple, Facebook OAuth" },
+      "magic-link":         { "label": "매직 링크",                "description": "이메일 링크를 통한 비밀번호 없는 로그인" },
+      "sso":                { "label": "SSO / SAML",                "description": "엔터프라이즈 싱글 사인온 통합" },
+      "analytics":          { "label": "앱 내 분석",          "description": "생성된 앱 내에서 화면 조회 및 이벤트를 추적합니다" },
+      "ab-testing":         { "label": "A/B 테스트",               "description": "사용자 기반 전반에 걸쳐 기능 실험을 실행합니다" },
+      "feature-gating":     { "label": "기능 게이팅",            "description": "사용자 요금제 또는 역할에 따라 기능을 표시하거나 숨깁니다" }
+    },
+    "logs": {
+      "savingFlags": "기능 플래그를 저장하는 중입니다...",
+      "flagsSaved": "기능 플래그가 성공적으로 저장되었습니다"
+    }
+  },
+  "spacingPage": {
+    "heading": "간격 및 모서리 반경",
+    "subheading": "생성된 앱에서 컴포넌트의 모양, 밀도, 고도를 조절하세요.",
+    "preview": {
+      "title": "실시간 미리보기",
+      "button": "버튼",
+      "card": "카드 컴포넌트",
+      "input": "입력 필드"
+    },
+    "sections": {
+      "radius": {
+        "title": "모서리 반경",
+        "description": "버튼, 카드, 입력창, 모달에 적용됩니다"
+      },
+      "density": {
+        "title": "간격 밀도",
+        "description": "컴포넌트 내부의 패딩을 제어합니다"
+      },
+      "shadow": {
+        "title": "고도 / 그림자",
+        "description": "카드와 컴포넌트의 그림자 깊이"
+      }
+    },
+    "radius": {
+      "none": "없음",
+      "sm": "작게",
+      "md": "중간",
+      "lg": "크게",
+      "xl": "매우 크게",
+      "full": "알약형"
+    },
+    "density": {
+      "compact": { "label": "컴팩트", "desc": "간격이 좁아 더 많은 콘텐츠를 표시할 수 있습니다" },
+      "default": { "label": "기본값", "desc": "대부분의 사용 사례에 적합한 균형 잡힌 간격입니다" },
+      "relaxed": { "label": "여유롭게", "desc": "여유로운 간격으로 탭하기 쉽습니다" }
+    },
+    "shadow": {
+      "none": "없음",
+      "sm": "은은하게",
+      "md": "중간",
+      "lg": "강하게"
+    },
+    "save": {
+      "button": "간격 저장",
+      "saving": "저장 중…",
+      "savedConfirmation": "저장됨"
+    }
+  },
+  "typographyPage": {
+    "heading": "타이포그래피",
+    "subheading": "생성된 앱의 글꼴 및 크기 비율을 선택하세요. 글꼴은 Google Fonts에서 불러옵니다.",
+    "preview": {
+      "title": "실시간 미리보기",
+      "headingSuffix": "— 제목",
+      "bodySample": "다람쥐 헌 쳇바퀴에 타고파. 기본 크기의 본문 텍스트 예시입니다.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "글꼴 패밀리",
+        "description": "Google Fonts에서 선택하세요 — 코드 생성 시 자동으로 포함됩니다"
+      },
+      "weights": {
+        "title": "글꼴 굵기"
+      },
+      "scale": {
+        "title": "글꼴 크기 비율",
+        "description": "앱 전체의 텍스트 크기를 조절합니다"
+      }
+    },
+    "fonts": {
+      "headingFont": "제목 글꼴",
+      "bodyFont": "본문 글꼴",
+      "monoFont": "고정폭 글꼴"
+    },
+    "weights": {
+      "headingWeight": "제목 굵기",
+      "bodyWeight": "본문 굵기"
+    },
+    "scale": {
+      "compact": { "label": "컴팩트", "desc": "더 작은 텍스트, 더 좁은 간격" },
+      "default": { "label": "기본값", "desc": "대부분의 앱에 균형 잡힌 설정" },
+      "relaxed": { "label": "여유롭게", "desc": "더 큰 텍스트, 더 넓은 여백" }
+    },
+    "save": {
+      "button": "타이포그래피 저장",
+      "saving": "저장 중…",
+      "savedConfirmation": "저장됨"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "테마",
+    "nav": {
+      "colours": "색상",
+      "typography": "타이포그래피",
+      "spacing": "간격 및 모서리 반경",
+      "featureFlags": "기능 플래그",
+      "presets": "사전 설정"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "비활성 세션",
+      "description": "활동이 없었습니다. 다음 시간 후 로그아웃됩니다:",
+      "logoutButton": "로그아웃",
+      "keepAliveButton": "계속 로그인 유지"
+    },
+    "logs": {
+      "logoutFailed": "로그아웃에 실패했습니다:"
+    }
+  },
+  "loader": {
+    "label": "불러오는 중…"
+  },
+  "userStatus": {
+    "active": "활성",
+    "needsEmailVerification": "이메일 인증 필요",
+    "passwordResetRequested": "비밀번호 재설정 요청됨",
+    "blocked": "차단됨",
+    "disabled": "비활성화됨"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Flutter 프로젝트 생성에 실패했습니다"
+    },
+    "logs": {
+      "skipped": "Flutter 프로젝트 생성을 건너뛰었습니다: {output}",
+      "created": "Flutter 프로젝트가 생성되었습니다: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "NextJS 프로젝트 생성에 실패했습니다"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "데이터베이스 구성을 찾을 수 없습니다.",
+      "dbConfigMissing": "DB 구성이 없습니다",
+      "dbConfigMissingStore": "스토어에 DB 구성이 없습니다",
+      "adminEmailMissing": "관리자 사용자 이메일이 없습니다",
+      "adminEmailMissingStore": "스토어에 관리자 사용자 이메일이 없습니다",
+      "projectTypeMissing": "selectedProjectType이 없습니다",
+      "createTablesFailed": "테이블 생성에 실패했습니다: {message}",
+      "createAdminFailed": "관리자 사용자 생성에 실패했습니다: {message}",
+      "createModelsFailed": "모델 생성에 실패했습니다: {message}",
+      "writeConfigFailed": "구성 파일 작성에 실패했습니다: {message}",
+      "setupStorageFailed": "저장소 설정에 실패했습니다: {message}",
+      "installDemoFailed": "데모 콘텐츠 설치에 실패했습니다: {message}",
+      "stepFailed": "단계 실패: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "테이블이 생성되었습니다:",
+      "adminCreated": "관리자 사용자가 생성되었습니다:",
+      "modelsCreated": "모델 생성 응답:",
+      "modelsSkipped": "모델 생성을 건너뛰었습니다: {message}",
+      "configWritten": "구성 파일이 성공적으로 작성되었습니다:",
+      "storageCreated": "저장소 버킷이 생성되었습니다:",
+      "demoContentSkipped": "데모 콘텐츠를 건너뛰었습니다",
+      "demoContentInstalled": "데모 콘텐츠가 설치되었습니다:",
+      "creatingApiEndpoints": "API 엔드포인트를 생성하는 중입니다...",
+      "settingUpAuth": "인증을 설정하는 중입니다...",
+      "configuringSession": "세션 관리를 구성하는 중입니다...",
+      "runningTests": "테스트를 실행하는 중입니다...",
+      "finalizing": "설치 프로그램을 마무리하는 중입니다...",
+      "noImplementation": "단계에 대한 구현이 없습니다: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "heading": "관리자 사용자 설정",
+    "description": "Underpeaks 시스템을 보호하기 위해 관리자 사용자 정보를 입력하세요. 이 계정은 플랫폼 내에서 전체 관리자 권한을 갖게 됩니다.",
+    "disclaimer": "참고: 이는 Underpeaks 시스템에 관리자 계정을 생성하는 것이며, 데이터베이스 관리자 계정과 다를 수 있습니다.",
+    "fields": {
+      "fullName": {
+        "label": "이름",
+        "placeholder": "예: 홍길동"
+      },
+      "email": {
+        "label": "이메일 주소",
+        "placeholder": "admin@example.com"
+      },
+      "password": {
+        "label": "비밀번호",
+        "placeholder": "안전한 비밀번호를 만드세요"
+      }
+    },
+    "errors": {
+      "nameRequired": "이름은 필수입니다",
+      "emailRequired": "이메일은 필수입니다",
+      "passwordInvalid": "비밀번호는 필수입니다 | 비밀번호는 8자 이상이어야 합니다 | 대문자를 포함해야 합니다 | 특수문자를 포함해야 합니다 (예: !@#$%^&*)"
+    },
+    "continueButton": "계속"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "heading": "스택 선택",
+    "description": "프로젝트 요구사항에 가장 적합한 기술 스택을 선택하세요. 나중에 플랫폼을 추가하거나 방식을 바꾸고 싶다면 언제든지 변경할 수 있습니다.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "풀스택 조합! 웹에는 Next.js, 크로스 플랫폼 모바일 및 데스크톱 앱에는 Flutter를 사용합니다."
+      },
+      "next": {
+        "title": "Next.js만",
+        "description": "Next.js를 강력한 React SSR 프레임워크로 사용하고, <strong>콘텐츠와 API를 관리하는 헤드리스 CMS로도 사용할 수 있습니다.</strong>"
+      },
+      "flutter": {
+        "title": "Flutter만",
+        "description": "공유 코드베이스를 사용하여 Flutter로 크로스 플랫폼 모바일 및 데스크톱 앱을 구축하고, 원한다면 <strong>헤드리스 CMS 백엔드로도 사용할 수 있습니다.</strong>"
+      },
+      "cms": {
+        "title": "헤드리스 CMS",
+        "description": "헤드리스 CMS 백엔드로만 배포합니다. API를 통해 데이터를 노출하고 어떤 커스텀 프런트엔드, 모바일 앱, 서드파티 서비스와도 완전한 유연성을 가지고 연결할 수 있습니다."
+      }
+    },
+    "nextButton": "다음"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "heading": "데이터베이스 구성",
+    "selectPlaceholder": "데이터베이스 선택",
+    "fieldExample": "(예: {placeholder})",
+    "savingWarning": "⚠️ 잠시 시간이 걸릴 수 있으니 기다려 주세요...",
+    "infoBlock": {
+      "whereLabel": "확인 방법:"
+    },
+    "testSteps": {
+      "validating": "구성을 검증하는 중입니다...",
+      "sending": "서버에 구성을 전송하는 중입니다...",
+      "testing": "데이터베이스 연결을 테스트하는 중입니다...",
+      "finalizing": "연결 확인을 마무리하는 중입니다..."
+    },
+    "errors": {
+      "serverRejected": "서버가 연결을 거부했습니다",
+      "connectionFailed": "연결 실패: {message}"
+    },
+    "buttons": {
+      "testConnection": "연결 테스트",
+      "testing": "테스트 중...",
+      "saving": "저장 중...",
+      "continue": "계속"
+    },
+    "logs": {
+      "firebaseParseError": "Firebase 구성 분석에 실패했습니다"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "projectType": {
+      "title": "프로젝트 유형 선택",
+      "description": "템플릿을 선택하면 프로젝트에 기본 모델이 자동으로 설치됩니다."
+    },
+    "projects": {
+      "ecommerce":   { "label": "이커머스",         "description": "제품, 카테고리, 주문, 고객, 스토어프론트 페이지를 포함합니다." },
+      "marketplace": { "label": "마켓플레이스",         "description": "여러 판매자, 상품 등록, 수수료, 판매자 대시보드를 지원합니다." },
+      "listing":     { "label": "리스팅 플랫폼",    "description": "카테고리, 검색, 필터가 포함된 부동산, 채용, 서비스 리스팅용입니다." },
+      "blog":        { "label": "블로그 / 콘텐츠 사이트", "description": "게시물, 카테고리, 태그, 저자, 댓글을 갖춘 콘텐츠 중심 사이트입니다." },
+      "social":      { "label": "소셜 네트워크",      "description": "사용자 프로필, 게시물, 댓글, 좋아요, 팔로워, 메시지, 알림을 제공합니다." },
+      "saas":        { "label": "SaaS / 웹 앱",      "description": "사용자, 역할, 권한, 구독 요금제를 갖춘 웹 앱 구조입니다." },
+      "blank":       { "label": "빈 프로젝트",       "description": "데모 콘텐츠 없이 빈 프로젝트 골격에서 시작합니다." }
+    },
+    "demoContent": {
+      "title": "데모 콘텐츠 설정",
+      "description": "이미 로드된 샘플 데이터로 스토어를 미리 확인하세요.",
+      "checkboxLabel": "선택한 프로젝트에 데모 콘텐츠 포함",
+      "ecommerce": {
+        "item1": "카테고리와 태그가 있는 데모 제품",
+        "item2": "샘플 고객 및 주문",
+        "item3": "스토어프론트 페이지 (홈, 제품, 장바구니, 결제)",
+        "item4": "기본 CMS 콘텐츠",
+        "item5": "사전 구성된 메뉴 및 모듈"
+      }
+    },
+    "continueButtonIdle": "계속",
+    "continueButtonLoading": "계속하는 중...",
+    "logs": {
+      "navigatingToFinalise": "설치 프로그램 선택 사항을 저장하고 마무리 단계로 이동하는 중입니다..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "installComplete": "🎉 설치가 완료되었습니다!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "프로젝트 정보",
+      "subtitle": "프로젝트 설정에 대한 기본 정보입니다.",
+      "name": "이름:",
+      "stack": "스택:"
+    },
+    "database": {
+      "title": "데이터베이스",
+      "subtitle": "선택한 데이터베이스 및 구성입니다.",
+      "type": "유형:",
+      "noneSelected": "선택 안 함"
+    },
+    "adminUser": {
+      "title": "관리자 사용자",
+      "subtitle": "초기 관리자 자격 증명입니다.",
+      "name": "이름:",
+      "email": "이메일:",
+      "password": "비밀번호:"
+    },
+    "projectType": {
+      "title": "선택한 프로젝트 유형",
+      "subtitle": "설정 중에 선택한 프로젝트 템플릿입니다."
+    },
+    "demoContent": {
+      "title": "데모 콘텐츠",
+      "subtitle": "샘플 스토어 데이터를 미리 로드할지 여부입니다.",
+      "installed": "설치됨",
+      "notInstalled": "설치되지 않음"
+    },
+    "continueButton": "계속하여 → 로그인"
+  },
+  "ecommercePage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "card": {
+      "title": "이커머스 모듈 사용자 지정"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "이커머스 모듈 활성화",
+        "description": "제품 카탈로그, 장바구니, 결제, 주문 관리 기능을 추가합니다."
+      },
+      "physical": {
+        "label": "실물 제품 포함",
+        "description": "실물 상품의 재고, 배송, 반품, 추적을 지원합니다."
+      },
+      "digital": {
+        "label": "디지털 제품 포함",
+        "description": "PDF, 동영상, 소프트웨어 라이선스와 같은 다운로드 가능한 콘텐츠를 판매합니다."
+      }
+    },
+    "button": {
+      "next": "다음",
+      "continuing": "계속하는 중..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "card": {
+      "title": "설정 완료"
+    },
+    "summary": {
+      "project": "프로젝트:",
+      "defaultProject": "MyApp",
+      "stack": "스택:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "데이터베이스:",
+      "notSelected": "선택 안 함"
+    },
+    "steps": {
+      "heading": "설치 단계:",
+      "skipped": "건너뜀!"
+    },
+    "progress": {
+      "finishing": "마무리하는 중...",
+      "ready": "프로젝트 설치 준비가 완료되었습니다"
+    },
+    "errors": {
+      "label": "오류:",
+      "noDatabase": "데이터베이스가 선택되지 않아 구성을 저장할 수 없습니다.",
+      "saveFailed": "설치 프로그램 구성 저장에 실패했습니다",
+      "unknown": "알 수 없는 오류가 발생했습니다"
+    },
+    "button": {
+      "start": "설치 시작",
+      "installing": "설치 중..."
+    },
+    "logs": {
+      "sendingConfig": "설치 프로그램 구성을 서버로 전송하는 중입니다...",
+      "configSaved": "설치 프로그램 구성이 성공적으로 저장되었습니다",
+      "installError": "설치 오류:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "heading": "기본 모델 선택",
+    "subheading": "프로젝트에 포함할 기본 데이터 모델을 선택하세요. 나중에 모델을 생성하거나 편집할 수 있습니다.",
+    "required": "(필수)",
+    "toggleAll": {
+      "deselect": "전체 선택 해제",
+      "select": "전체 선택"
+    },
+    "models": {
+      "users":      { "label": "사용자",      "description": "애플리케이션 사용자 및 인증을 관리합니다" },
+      "products":   { "label": "제품",   "description": "제품 또는 서비스 카탈로그" },
+      "orders":     { "label": "주문",     "description": "고객 주문 및 구매를 추적합니다" },
+      "coupons":    { "label": "쿠폰",    "description": "할인 쿠폰 및 프로모션" },
+      "categories": { "label": "카테고리", "description": "제품 또는 콘텐츠를 정리합니다" },
+      "reviews":    { "label": "리뷰",    "description": "사용자 피드백 및 평점" }
+    },
+    "button": {
+      "continue": "계속",
+      "continuing": "계속하는 중..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "heading": "프로젝트 설정",
+    "subheading": "자체 호스팅 스튜디오의 프로젝트 이름, 서브도메인, 도메인을 입력하세요.",
+    "continueButton": "계속",
+    "fields": {
+      "name": {
+        "label": "프로젝트 이름",
+        "placeholder": "예: MyApp Studio"
+      },
+      "domain": {
+        "label": "도메인",
+        "placeholder": "예: http://localhost:3000",
+        "hint": "앱의 전체 도메인입니다. 기본값은"
+      },
+      "subdomain": {
+        "label": "서브도메인",
+        "placeholder": "예: console",
+        "hint": "다음 URL에 사용됩니다:"
+      }
+    },
+    "errors": {
+      "nameRequired": "프로젝트 이름은 필수입니다",
+      "subdomainRequired": "서브도메인은 필수입니다",
+      "domainRequired": "도메인은 필수입니다"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Underpeaks 로고",
+    "tagline": "올인원 SaaS 설치 프로그램 및 코드 생성기",
+    "continueButton": "계속 →",
+    "continueLoading": "불러오는 중...",
+    "benefits": {
+      "heading": "왜 Underpeaks인가요?",
+      "item1": "🔧 완전한 코드베이스 생성기 (Next.js + Flutter)",
+      "item2": "⚙️ 상용구 코드는 그만 – 프로덕션 준비가 완료된 코드만",
+      "item3": "🌍 다국어 및 멀티 테넌트 지원",
+      "item4": "📦 자체 호스팅 또는 클라우드 호스팅 – 원하는 대로 선택",
+      "item5": "🔐 내장된 인증, 역할, 권한, 설치 프로그램 UI",
+      "item6": "💼 스타트업, 에이전시, 엔터프라이즈 프로젝트에 적합"
+    },
+    "license": {
+      "heading": "라이선스 계약",
+      "loading": "라이선스를 불러오는 중입니다...",
+      "loadFailed": "라이선스 계약을 불러오지 못했습니다.",
+      "acceptLabel": "라이선스 조건에 동의합니다."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "현재 비밀번호와 새 비밀번호가 모두 필요합니다",
+      "passwordTooShort": "비밀번호는 최소 8자 이상이어야 합니다",
+      "unauthorized": "권한이 없습니다",
+      "invalidToken": "유효하지 않은 토큰입니다",
+      "userNotFound": "사용자를 찾을 수 없습니다",
+      "incorrectCurrentPassword": "현재 비밀번호가 올바르지 않습니다",
+      "internalError": "예상치 못한 오류가 발생했습니다"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Firebase Auth 비밀번호가 업데이트되었습니다",
+      "firebasePasswordUpdateFailed": "[change-password] Firebase Auth 비밀번호 업데이트에 실패했습니다"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "관리자 사용자가 성공적으로 생성되었습니다"
+    },
+    "errors": {
+      "missingConfig": "DB 구성이 없습니다",
+      "missingAdminUser": "관리자 사용자 데이터가 없습니다",
+      "genericFailure": "관리자 사용자 생성에 실패했습니다"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "DB 구성 또는 관리자 이메일이 없습니다",
+      "adapterNotSupported": "이 데이터베이스 어댑터는 데이터 모델 생성을 지원하지 않습니다",
+      "genericFailure": "데이터 모델 삽입에 실패했습니다"
+    },
+    "logs": {
+      "createModelsError": "create-data-models API 오류:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "DB 구성/유형이 없습니다",
+      "adapterNotSupported": "{type} 어댑터는 저장소 설정을 구현하지 않습니다"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "모든 시스템, 사용자, 프로젝트 테이블이 생성되었습니다"
+    },
+    "errors": {
+      "missingConfig": "DB 구성이 없습니다",
+      "genericFailure": "테이블 생성에 실패했습니다"
+    },
+    "logs": {
+      "createTablesError": "[테이블 생성 오류]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Firebase 환경 변수가 없습니다: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "projectName이 없습니다",
+      "flutterNotInstalled": "Flutter가 설치되어 있지 않거나 PATH에 없습니다.",
+      "stepFailed": "단계 실패: Flutter 프로젝트 생성 - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Flutter 프로젝트 \"{projectName}\"이(가) 이미 존재합니다. 생성을 건너뜁니다.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Flutter 생성에 실패했습니다:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "이메일은 필수입니다",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE이 설정되지 않았습니다",
+      "firebaseClientSide": "Firebase 비밀번호 재설정은 클라이언트 측에서 처리됩니다",
+      "supabaseMissingMethod": "Supabase 어댑터에 sendResetEmail 메서드가 없습니다",
+      "unsupportedDbType": "지원되지 않는 DB 유형입니다: {dbType}",
+      "adapterMissingMethods": "${dbType} 어댑터에 필요한 메서드가 없습니다",
+      "userNotFound": "사용자를 찾을 수 없습니다",
+      "genericFailure": "재설정 링크 전송에 실패했습니다"
+    },
+    "notices": {
+      "smtpDisabled": "이메일 전송이 비활성화되어 있습니다. 관리자에게 비밀번호 재설정을 요청하세요."
+    },
+    "email": {
+      "subject": "비밀번호 재설정 요청",
+      "body": "<p>{name}님, 안녕하세요.</p><p>아래 링크를 클릭하여 비밀번호를 재설정하세요:</p><a href=\"{resetLink}\">{resetLink}</a><p>이 요청을 하지 않으셨다면 이 이메일을 무시하세요.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Supabase 재설정 이메일이 발송되었습니다",
+      "resetEmailSent": "재설정 이메일이 발송되었습니다",
+      "smtpDisabled": "SMTP/forgot-password가 비활성화되었습니다 — 이메일을 건너뛰었습니다",
+      "forgotPasswordError": "비밀번호 찾기 오류:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Firebase 서비스 계정이 없습니다",
+      "unsupportedDbType": "지원되지 않는 DB 유형입니다: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[시스템 구성 오류]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "DB 구성이 없습니다",
+      "missingProjectType": "프로젝트 유형이 없습니다",
+      "adapterNotSupported": "이 어댑터에는 installDemoContent가 구현되어 있지 않습니다"
+    },
+    "logs": {
+      "installDemoContentError": "install-demo-content 오류:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "성공적으로 로그아웃되었습니다"
+    },
+    "errors": {
+      "tokenRequired": "토큰은 필수입니다",
+      "dbTypeNotSet": "NEXT_DB_TYPE이 설정되지 않았습니다",
+      "firebaseServiceAccountMissing": "Firebase 서비스 계정이 없습니다",
+      "mysqlEnvMissing": "MySQL 환경 변수가 없습니다",
+      "postgresEnvMissing": "Postgres 환경 변수가 없습니다",
+      "unsupportedDbType": "지원되지 않는 DB 유형입니다: {dbType}",
+      "tokenNotFound": "토큰을 찾을 수 없습니다"
+    },
+    "logs": {
+      "logoutError": "로그아웃 API 오류:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id는 필수입니다",
+      "unauthorized": "권한이 없습니다",
+      "invalidToken": "유효하지 않은 토큰입니다"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder는 필수입니다",
+      "internalError": "예상치 못한 오류가 발생했습니다"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] 폴더에 파일 수 정보를 성공적으로 추가했습니다"
+    },
+    "errors": {
+      "internalError": "예상치 못한 오류가 발생했습니다"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder, toFolder, fileName은 필수입니다",
+      "moveFileNotSupported": "moveFile은 지원되지 않습니다",
+      "internalError": "예상치 못한 오류가 발생했습니다"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder, oldName, newName은 필수입니다",
+      "renameFileNotSupported": "renameFile은 지원되지 않습니다",
+      "internalError": "예상치 못한 오류가 발생했습니다"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "파일과 폴더는 필수입니다",
+      "uploadFileNotSupported": "uploadFile은 지원되지 않습니다",
+      "internalError": "업로드에 실패했습니다"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] 모드:",
+      "projectIdLookupFailed": "[upload-file] project_id 조회에 실패했습니다",
+      "metadataSaved": "[upload-file] 메타데이터가 nxf_storage에 저장되었습니다",
+      "metadataSaveFailed": "[upload-file] 메타데이터 저장에 실패했습니다",
+      "localUploadSuccess": "[upload-file] 로컬 업로드가 저장되었습니다:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "데이터베이스 연결 테스트에 실패했습니다"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id는 필수입니다",
+      "firebaseServiceAccountMissing": "Firebase 서비스 계정이 없습니다",
+      "unsupportedDbType": "지원되지 않는 데이터베이스 유형입니다",
+      "systemConfigNotFound": "시스템 구성을 찾을 수 없습니다",
+      "internalError": "내부 서버 오류"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "이름은 필수입니다",
+      "unauthorized": "권한이 없습니다",
+      "invalidToken": "유효하지 않은 토큰입니다",
+      "internalError": "예상치 못한 오류가 발생했습니다"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id와 project_name은 필수입니다",
+      "firebaseServiceAccountMissing": "Firebase 서비스 계정이 없습니다",
+      "unsupportedDbType": "지원되지 않는 데이터베이스 유형입니다",
+      "systemConfigNotFound": "이 사용자에 대한 시스템 구성을 찾을 수 없습니다",
+      "internalError": "내부 서버 오류"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id는 필수입니다",
+      "firebaseServiceAccountMissing": "Firebase 서비스 계정이 없습니다",
+      "unsupportedDbType": "지원되지 않는 데이터베이스 유형입니다",
+      "systemConfigNotFound": "이 사용자에 대한 시스템 구성을 찾을 수 없습니다",
+      "internalError": "내부 서버 오류"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "구성 파일 작성에 실패했습니다"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "기존 인증 사용자를 찾았습니다:",
+      "newAuthUserCreated": "새 인증 사용자가 생성되었습니다:",
+      "creatingAdminInDb": "DB에 관리자 사용자를 생성하는 중입니다...",
+      "userAlreadyInDb": "사용자가 이미 DB에 존재합니다:",
+      "existingProjectFound": "기존 프로젝트를 찾았습니다:",
+      "newProjectCreated": "새 프로젝트가 생성되었습니다:",
+      "existingTenantFound": "기존 테넌트를 찾았습니다:",
+      "newTenantCreated": "새 테넌트가 생성되었습니다:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "중복된 CreateDataModels 실행을 건너뜁니다 — 이 프로젝트와 유형 조합은 이미 처리되었습니다.",
+      "creatingTable": "테이블을 생성하는 중입니다:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable이 구현되지 않아 테이블 생성을 건너뜁니다"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "업로드 폴더",
+      "customFolder": "커스텀 폴더…",
+      "enterFolderName": "폴더 이름 입력",
+      "placeholder": "예: banners/summer",
+      "uploadingTo": "업로드 위치:"
+    },
+    "preview": {
+      "alt": "미리보기",
+      "uploaded": "업로드됨",
+      "replace": "교체",
+      "clear": "파일 지우기"
+    },
+    "dropzone": {
+      "uploading": "업로드 중…",
+      "idle": "드래그 앤 드롭 또는",
+      "browse": "찾아보기",
+      "recommended": "권장:"
+    },
+    "errors": {
+      "noFolder": "업로드하기 전에 폴더를 선택하거나 입력하세요.",
+      "uploadFailed": "업로드에 실패했습니다",
+      "uploadFailedStatus": "업로드에 실패했습니다:",
+      "networkError": "네트워크 오류"
+    }
+  },
+  "modelView": {
+    "systemBadge": "시스템",
+    "subtitle": "읽기 전용 — 보호된 시스템 테이블입니다.",
+    "fieldsHeading": "필드",
+    "actions": {
+      "back": "모델로 돌아가기"
+    },
+    "stats": {
+      "fields": "필드",
+      "created": "생성일",
+      "updated": "마지막 업데이트"
+    },
+    "table": {
+      "name": "필드 이름",
+      "type": "유형",
+      "constraints": "제약조건",
+      "nullable": "필수",
+      "default": "기본값",
+      "uiType": "UI 유형"
+    },
+    "badges": {
+      "hidden": "숨김",
+      "required": "필수",
+      "optional": "선택"
+    },
+    "errors": {
+      "loadFailed": "모델을 불러오지 못했습니다.",
+      "notFound": "모델을 찾을 수 없습니다."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "모델",
+      "subtitle": "프로젝트의 데이터 구조를 정의하고 관리하세요.",
+      "createButton": "모델 생성"
+    },
+    "filter": {
+      "all": "전체",
+      "user": "사용자",
+      "system": "시스템"
+    },
+    "states": {
+      "empty": "모델을 찾을 수 없습니다.",
+      "emptyHint": "시작하려면 첫 모델을 생성하세요."
+    },
+    "badges": {
+      "system": "시스템",
+      "partialSystem": "편집 가능한 시스템"
+    },
+    "meta": {
+      "fields": "필드 {count}개",
+      "foreignKeys": "외래 키 {count}개"
+    },
+    "card": {
+      "editAriaLabel": "{name} 편집",
+      "deleteAriaLabel": "{name} 삭제"
+    },
+    "confirmDelete": {
+      "title": "모델을 삭제하시겠습니까?",
+      "description": "\"{name}\"을(를) 삭제하시겠습니까? 이 테이블의 모든 데이터가 영구적으로 삭제됩니다. 이 작업은 되돌릴 수 없습니다.",
+      "confirm": "삭제",
+      "deleting": "삭제 중…",
+      "cancel": "취소"
+    },
+    "errors": {
+      "loadFailed": "모델을 불러오지 못했습니다.",
+      "deleteFailed": "모델 삭제에 실패했습니다."
+    }
+  },
+  "createModel": {
+    "title": "모델 생성",
+    "subtitle": "새 데이터 모델과 필드를 정의하세요.",
+    "actions": {
+      "save": "모델 저장",
+      "saving": "저장 중…",
+      "back": "모델로 돌아가기"
+    },
+    "form": {
+      "modelNameLabel": "모델 이름",
+      "modelNamePlaceholder": "예: 제품",
+      "fieldNamePlaceholder": "필드 이름",
+      "required": "필수",
+      "unique": "고유",
+      "primaryKey": "기본 키",
+      "primaryKeyTaken": "이미 설정됨",
+      "hidden": "숨김",
+      "uiType": "UI 유형",
+      "foreignKeyTable": "외래 키 — 테이블",
+      "foreignKeyColumn": "외래 키 — 컬럼",
+      "noForeignKey": "— 외래 키 없음 —",
+      "selectColumn": "— 컬럼 선택 —",
+      "onDelete": "삭제 시",
+      "addField": "필드 추가",
+      "removeField": "필드 제거",
+      "expandField": "고급 옵션 표시",
+      "collapseField": "고급 옵션 숨기기",
+      "foreignKey": "외래 키"
+    },
+    "validation": {
+      "modelNameRequired": "모델 이름은 필수입니다.",
+      "fieldsInvalid": "모든 필드에는 이름이 있어야 합니다.",
+      "fieldNameUnique": "필드 이름은 고유해야 합니다.",
+      "singlePrimaryKey": "모델당 하나의 기본 키만 허용됩니다."
+    },
+    "confirmDelete": {
+      "title": "필드를 삭제하시겠습니까?",
+      "description": "이 필드를 제거하시겠습니까?",
+      "confirm": "삭제",
+      "cancel": "취소"
+    },
+    "errors": {
+      "createFailed": "모델 생성에 실패했습니다."
+    }
+  },
+  "editModel": {
+    "title": "모델 편집",
+    "subtitle": "모델 이름과 필드 정의를 업데이트하세요.",
+    "actions": {
+      "save": "변경사항 저장",
+      "saving": "저장 중…",
+      "back": "모델로 돌아가기"
+    },
+    "form": {
+      "modelNameLabel": "모델 이름",
+      "modelNamePlaceholder": "모델 이름",
+      "fieldNamePlaceholder": "필드 이름",
+      "required": "필수",
+      "unique": "고유",
+      "primaryKey": "기본 키",
+      "primaryKeyTaken": "이미 설정됨",
+      "hidden": "숨김",
+      "uiType": "UI 유형",
+      "foreignKeyTable": "외래 키 — 테이블",
+      "foreignKeyColumn": "외래 키 — 컬럼",
+      "noForeignKey": "— 외래 키 없음 —",
+      "selectColumn": "— 컬럼 선택 —",
+      "onDelete": "삭제 시",
+      "addField": "필드 추가",
+      "removeField": "필드 제거",
+      "expandField": "고급 옵션 표시",
+      "collapseField": "고급 옵션 숨기기",
+      "foreignKey": "외래 키"
+    },
+    "validation": {
+      "modelNameRequired": "모델 이름은 필수입니다.",
+      "fieldsInvalid": "모든 필드에는 이름이 있어야 합니다.",
+      "fieldNameUnique": "필드 이름은 고유해야 합니다.",
+      "singlePrimaryKey": "모델당 하나의 기본 키만 허용됩니다."
+    },
+    "confirmDelete": {
+      "title": "필드를 삭제하시겠습니까?",
+      "description": "이 필드를 제거하시겠습니까?",
+      "confirm": "삭제",
+      "cancel": "취소"
+    },
+    "warningDialog": {
+      "title": "심각한 경고",
+      "subtitle": "보호된 필드를 삭제하려고 합니다.",
+      "primaryKeyWarning": "이 필드는 이 테이블의 기본 키입니다. 삭제하면 이 테이블을 참조하는 모든 관계가 깨지고 프로젝트 전체의 기존 데이터가 영구적으로 손상될 수 있습니다.",
+      "foreignKeyWarning": "이 필드는 이 테이블을 다른 테이블에 연결하는 외래 키입니다. 삭제하면 관계가 깨지고 기존 레코드의 데이터 무결성 문제가 발생할 수 있습니다.",
+      "checkboxLabel": "이 작업이 데이터를 영구적으로 손상시킬 수 있으며 되돌릴 수 없다는 것을 이해합니다.",
+      "confirm": "그래도 삭제",
+      "cancel": "취소"
+    },
+    "errors": {
+      "loadModelFailed": "모델을 불러오지 못했습니다.",
+      "modelNotFound": "모델을 찾을 수 없습니다.",
+      "updateModelFailed": "모델 업데이트에 실패했습니다."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id는 필수입니다",
+      "invalidBody": "요청 본문이 유효하지 않거나 비어 있습니다",
+      "missingFields": "필수 필드가 누락되었습니다",
+      "projectNotFound": "이 사용자에 대한 프로젝트를 찾을 수 없습니다",
+      "nameAlreadyExists": "이 이름의 모델이 이미 존재합니다",
+      "fetchFailed": "모델을 가져오지 못했습니다",
+      "createFailed": "모델 생성에 실패했습니다",
+      "updateFailed": "모델 업데이트에 실패했습니다",
+      "deleteFailed": "모델 삭제에 실패했습니다",
+      "multiplePrimaryKeys": "모델당 하나의 기본 키만 허용됩니다",
+      "systemTableProtected": "시스템 테이블은 생성, 수정 또는 삭제할 수 없습니다"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— 필드 선택 —",
+    "clear": "외래 키 지우기",
+    "searchPlaceholder": "모델 검색…",
+    "noResults": "모델을 찾을 수 없습니다.",
+    "systemBadge": "시스템",
+    "fieldsLabel": "필드",
+    "onDelete": "삭제 시",
+    "filter": {
+      "all": "전체",
+      "user": "사용자",
+      "system": "시스템"
+    }
+  },
+  "users": {
+    "page_title": "사용자",
+    "page_description": "CMS 관리자 및 사용자 계정을 관리합니다",
+    "edit_kpis": "KPI 편집",
+    "editing_kpis": "KPI 편집 중",
+    "save_layout": "레이아웃 저장",
+    "saving": "저장 중…",
+    "search_placeholder": "이름 또는 이메일로 검색…",
+    "showing_count": "전체 {total}명 중 {filtered}명 표시",
+    "no_users_found": "사용자를 찾을 수 없습니다",
+    "filter": "필터",
+    "sort": "정렬",
+    "clear_all": "전체 지우기",
+    "filters": "필터",
+    "role": "역할",
+    "all_roles": "모든 역할",
+    "all_statuses": "모든 상태",
+    "status": "상태",
+    "joined_from": "가입일 시작",
+    "joined_to": "가입일 종료",
+    "sort_by": "정렬 기준",
+    "direction": "방향",
+    "asc": "오름차순 (A → Z)",
+    "desc": "내림차순 (Z → A)",
+    "col_name": "이름",
+    "col_email": "이메일",
+    "col_role": "역할",
+    "col_status": "상태",
+    "col_last_login": "마지막 로그인",
+    "col_joined": "가입일",
+    "role_admin": "관리자",
+    "role_user": "사용자",
+    "status_active": "활성",
+    "status_suspended": "정지됨",
+    "status_disabled": "비활성화됨",
+    "drawer_title": "사용자 세부정보",
+    "actions": "작업",
+    "change_role": "역할",
+    "change_status": "상태",
+    "send_reset": "비밀번호 재설정 이메일 보내기",
+    "sending_reset": "보내는 중…",
+    "delete_user": "사용자 삭제",
+    "delete_confirm": "이 사용자를 영구적으로 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+    "cancel": "취소",
+    "confirm_delete": "예, 삭제합니다",
+    "deleting": "삭제 중…",
+    "last_admin_warning": "강등할 수 없습니다 — 마지막 관리자입니다",
+    "login_history": "로그인 기록",
+    "no_history": "아직 로그인 기록이 없습니다",
+    "event_login": "로그인함",
+    "event_logout": "로그아웃함",
+    "event_online": "온라인",
+    "event_offline": "오프라인으로 전환됨",
+    "joined": "가입일",
+    "last_login": "마지막 로그인",
+    "toast_role_updated": "역할이 업데이트되었습니다",
+    "toast_status_updated": "상태가 업데이트되었습니다",
+    "toast_user_deleted": "사용자가 삭제되었습니다",
+    "toast_reset_sent": "{email}에 비밀번호 재설정이 발송되었습니다",
+    "toast_kpi_saved": "KPI 레이아웃이 저장되었습니다",
+    "toast_load_failed": "사용자를 불러오지 못했습니다",
+    "toast_save_failed": "저장에 실패했습니다",
+    "kpi_add": "KPI 추가",
+    "kpi_add_block": "블록",
+    "kpi_edit": "KPI 편집",
+    "kpi_label_required": "라벨은 필수입니다",
+    "kpi_select_field": "필드를 선택하세요",
+    "kpi_select_both_fields": "두 필드를 모두 선택하세요",
+    "kpi_select_field_and_value": "필드를 선택하고 비교할 값을 입력하세요",
+    "kpi_max_reached": "최대 5개의 KPI만 허용됩니다",
+    "kpi_label": "라벨",
+    "kpi_formula": "수식",
+    "kpi_format": "표시 형식",
+    "kpi_icon": "아이콘",
+    "kpi_accent_colour": "강조 색상",
+    "kpi_field": "필드",
+    "kpi_field_a": "필드 A",
+    "kpi_field_b": "필드 B",
+    "kpi_numerator": "분자 필드 (A)",
+    "kpi_denominator": "분모 필드 (B)",
+    "kpi_operator": "연산자",
+    "kpi_value_to_match": "비교할 값",
+    "kpi_make_wide": "넓게 만들기",
+    "kpi_make_compact": "좁게 만들기",
+    "kpi_add_to_block": "추가",
+    "kpi_save": "변경사항 저장",
+    "kpi_cancel": "취소"
+  },
+  "notFound": {
+    "title": "페이지를 찾을 수 없습니다",
+    "description": "찾으시는 페이지를 찾을 수 없습니다. 이동되었거나, 이름이 변경되었거나, 존재하지 않았을 수 있습니다.",
+    "goHome": "홈페이지로 이동",
+    "backToConsole": "콘솔로 돌아가기",
+    "helpfulLinks": "특정 항목을 찾고 계신가요?",
+    "pages": "페이지",
+    "models": "모델",
+    "users": "사용자",
+    "settings": "설정"
+  },
+  "noModelLinked": {
+    "title": "연결된 모델이 없습니다",
+    "description": "{pageName}은(는) {templateName} 템플릿을 사용하지만 아직 데이터 모델이 연결되지 않았습니다.",
+    "instruction": "페이지 설정을 편집하고 모델을 할당하여 데이터를 표시할 수 있도록 하세요.",
+    "openPages": "페이지 열기",
+    "manageModels": "모델 관리"
+  },
+  "lockedTemplate": {
+    "title": "호스팅형 요금제에서 사용 가능",
+    "description": "{templateName} 템플릿은 호스팅형 요금제의 일부입니다. 칸반, 캘린더, 결제 등을 잠금 해제하려면 업그레이드하세요.",
+    "upgradeButton": "호스팅형 요금제 보기",
+    "backButton": "페이지로 돌아가기"
+  },
+  "CookieBanner": {
+    "eyebrow": "개인정보 보호",
+    "title": "귀하의 개인정보를 소중히 여깁니다",
+    "description": "로그인 상태 유지, 언어 설정 기억, (동의하신 경우) 방문자가 사이트를 이용하는 방식을 파악하기 위해 쿠키를 사용합니다. 언제든지 선택을 변경할 수 있습니다.",
+    "necessaryTitle": "필수",
+    "necessaryDescription": "로그인, 언어 설정, 쿠키 선택 저장에 필요합니다. 비활성화할 수 없습니다.",
+    "analyticsTitle": "분석",
+    "analyticsDescription": "방문자가 어떤 페이지를 방문하고 사이트가 어떻게 작동하는지 이해하는 데 도움이 됩니다. 개인 데이터는 공유되지 않습니다.",
+    "marketingTitle": "마케팅",
+    "marketingDescription": "관련 광고를 표시하고 다른 사이트에서의 캠페인 효과를 측정하는 데 사용됩니다.",
+    "alwaysOn": "항상 켜짐",
+    "acceptAll": "모두 허용",
+    "rejectAll": "모두 거부",
+    "customise": "사용자 지정",
+    "savePreferences": "설정 저장",
+    "cookiePreferences": "쿠키 설정",
+    "policyLink": "개인정보 처리방침"
   }
 }

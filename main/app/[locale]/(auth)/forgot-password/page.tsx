@@ -1,16 +1,19 @@
+// ForgotPasswordPage.tsx  (app/[locale]/forgot-password/page.tsx)
 'use client'
 
-import { useState, useRef, useEffect }       from 'react'
-import { useRouter }                         from 'next/navigation'
-import { useTranslations }                   from 'next-intl'
-import { Input }                             from '@/components/ui/input'
-import { Button }                            from '@/components/ui/button'
-import { Label }                             from '@/components/ui/label'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { FiMail }                            from 'react-icons/fi'
-import { initializeApp, getApps }            from 'firebase/app'
-import { getAuth, sendPasswordResetEmail }   from 'firebase/auth'
-import { logActivity }                       from '@/app/lib/logActivity'
+import { useState, useRef, useEffect }           from 'react'
+import { useRouter }                             from 'next/navigation'
+import { useTranslations }                       from 'next-intl'
+import { Input }                                 from '@/components/ui/input'
+import { Button }                                from '@/components/ui/button'
+import { Label }                                 from '@/components/ui/label'
+import { Alert, AlertDescription, AlertTitle }   from '@/components/ui/alert'
+import { Mail, Loader2, CheckCircle2 }           from 'lucide-react'
+import { initializeApp, getApps }                from 'firebase/app'
+import { getAuth, sendPasswordResetEmail }       from 'firebase/auth'
+import { logActivity }                           from '@/app/lib/logActivity'
+import AuthShell                                 from '@/core/AuthShell'
+import { CARD, PRIMARY_BUTTON, INPUT_CLASS }     from '@/core/InstallerShell'
 
 export default function ForgotPasswordPage() {
   const router  = useRouter()
@@ -86,63 +89,92 @@ export default function ForgotPasswordPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white px-4">
-      <div className="w-full max-w-md bg-white border border-gray-200 rounded-lg shadow-sm p-8">
+    <AuthShell>
+      <div className={CARD}>
 
-        <h1 className="text-2xl font-bold text-black mb-4">{t('title')}</h1>
-        <p className="text-sm text-gray-500 mb-6">{t('description')}</p>
-
+        {/* Notice (server message) */}
         {notice && (
-          <Alert variant="default" className="mb-4 flex flex-col gap-4">
-            <div>
-              <AlertTitle>{t('notice.title')}</AlertTitle>
-              <AlertDescription>{notice}</AlertDescription>
-            </div>
-            <Button onClick={handleNoticeOk} className="w-full mt-2">{t('notice.button')}</Button>
-          </Alert>
+          <div className="flex flex-col items-center text-center">
+            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-black text-white">
+              <CheckCircle2 className="h-6 w-6" />
+            </span>
+            <h1 className="text-xl font-semibold tracking-tight">{t('notice.title')}</h1>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">{notice}</p>
+            <Button onClick={handleNoticeOk} className={`${PRIMARY_BUTTON} mt-6 w-full`}>
+              {t('notice.button')}
+            </Button>
+          </div>
         )}
 
+        {/* Success */}
         {success && !notice && (
-          <Alert variant="default" className="mb-4 flex flex-col gap-4">
-            <div>
-              <AlertTitle>{t('success.title')}</AlertTitle>
-              <AlertDescription>{t('success.description')}</AlertDescription>
-            </div>
-            <Button onClick={() => router.push('/signin')} className="w-full mt-2">
+          <div className="flex flex-col items-center text-center">
+            <span className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-black text-white">
+              <CheckCircle2 className="h-6 w-6" />
+            </span>
+            <h1 className="text-xl font-semibold tracking-tight">{t('success.title')}</h1>
+            <p className="mt-2 text-sm leading-relaxed text-neutral-600">{t('success.description')}</p>
+            <Button onClick={() => router.push('/signin')} className={`${PRIMARY_BUTTON} mt-6 w-full`}>
               {t('success.button')}
             </Button>
-          </Alert>
+          </div>
         )}
 
+        {/* Form */}
         {!success && !notice && (
-          <>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault()
+              if (!loading) handleSubmit()
+            }}
+          >
+            <h1 className="text-2xl font-semibold tracking-tight">{t('title')}</h1>
+            <p className="mt-1 text-sm text-neutral-500">{t('description')}</p>
+
             {error && (
-              <Alert variant="destructive" className="mb-4">
+              <Alert variant="destructive" className="mt-5">
                 <AlertTitle>{t('error.title')}</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription id="email-error">{error}</AlertDescription>
               </Alert>
             )}
-            <Label htmlFor="email" className="text-black mb-1">{t('form.emailLabel')}</Label>
-            <div className="relative mb-4">
-              <FiMail className="absolute left-3 top-3 text-gray-500" aria-hidden="true" />
-              <Input
-                id="email"
-                type="email"
-                placeholder={t('form.emailPlaceholder')}
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="pl-10"
-                ref={emailInputRef}
-                aria-describedby="email-error"
-              />
+
+            <div className="mt-6 space-y-1.5">
+              <Label htmlFor="email" className="text-sm font-medium text-neutral-800">
+                {t('form.emailLabel')}
+              </Label>
+              <div className="relative">
+                <Mail
+                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400"
+                  aria-hidden="true"
+                />
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder={t('form.emailPlaceholder')}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className={`${INPUT_CLASS} pl-9`}
+                  ref={emailInputRef}
+                  aria-describedby={error ? 'email-error' : undefined}
+                />
+              </div>
             </div>
-            <Button onClick={handleSubmit} disabled={loading} className="w-full">
-              {loading ? t('form.buttonSending') : t('form.buttonSend')}
+
+            <Button type="submit" disabled={loading} className={`${PRIMARY_BUTTON} mt-6 w-full`}>
+              {loading ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  {t('form.buttonSending')}
+                </span>
+              ) : (
+                t('form.buttonSend')
+              )}
             </Button>
-          </>
+          </form>
         )}
 
       </div>
-    </div>
+    </AuthShell>
   )
 }

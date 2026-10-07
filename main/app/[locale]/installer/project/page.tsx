@@ -1,102 +1,39 @@
+// ProjectInfoPage.tsx  (installer step 2: project name, domain, subdomain)
 'use client'
 
-/**
- * ProjectInfoPage Component
- *
- * This is the first step of the installer wizard. It collects basic project
- * configuration from the user before they proceed to set up their admin account.
- *
- * What this page does:
- * - Displays a logo and a short description of the platform.
- * - Provides a form where the user enters three pieces of information:
- *     1. Project Name  — a human-readable label for the project.
- *     2. Domain        — the full URL the app will be hosted at.
- *     3. Subdomain     — the subdomain prefix for the app's URL.
- * - Validates all fields before continuing (no empty values allowed).
- * - Saves the entered values into the global installer store.
- * - Navigates to the next installer step (/installer/admin) after a short delay.
- *
- * Component hierarchy:
- *   ProjectInfoPage       ← this file (owns all local state + validation)
- *   ├── LocaleSwitcher    ← language selector fixed to the top-right corner
- *   ├── <header>          ← logo + platform tagline
- *   └── Form Card         ← inputs for name, domain, subdomain + continue button
- */
-
-import { Button }               from '@/components/ui/button'
-import { Input }                from '@/components/ui/input'
-import { useRouter }            from 'next/navigation'
+import { Button }                from '@/components/ui/button'
+import { Input }                 from '@/components/ui/input'
+import { Label }                 from '@/components/ui/label'
+import { useRouter }             from 'next/navigation'
 import { useState, useCallback } from 'react'
-import { useInstallerStore }    from '../../../store/useInstallerStore'
-import { Loader2 }              from 'lucide-react'
-import LocaleSwitcher           from '@/core/LocaleSwitcher'
-import { useTranslations }      from 'next-intl'
+import { useInstallerStore }     from '../../../store/useInstallerStore'
+import { Loader2 }               from 'lucide-react'
+import { useTranslations }       from 'next-intl'
+import InstallerShell, { CARD, PRIMARY_BUTTON, INPUT_CLASS } from '@/core/InstallerShell'
 
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
-
-/**
- * ProjectInfoPage
- *
- * The first step of the multi-step installer wizard. Collects the project's
- * name, domain, and subdomain, validates them, stores them globally, and
- * then routes the user to the next step.
- */
 export default function ProjectInfoPage() {
   const router = useRouter()
   const { setInstallerValue } = useInstallerStore()
   const t = useTranslations('projectInfoPage')
 
-  // -------------------------------------------------------------------------
-  // Form field state
-  // -------------------------------------------------------------------------
-
-  const [name, setName]           = useState('')
+  const [name,      setName]      = useState('')
   const [subdomain, setSubdomain] = useState('console')
-  const [domain, setDomain]       = useState('http://localhost:3000')
-  const [loading, setLoading]     = useState(false)
+  const [domain,    setDomain]    = useState('http://localhost:3000')
+  const [loading,   setLoading]   = useState(false)
 
-  // -------------------------------------------------------------------------
-  // Validation error state
-  // -------------------------------------------------------------------------
-
-  const [nameError, setNameError]           = useState('')
+  const [nameError,      setNameError]      = useState('')
   const [subdomainError, setSubdomainError] = useState('')
-  const [domainError, setDomainError]       = useState('')
+  const [domainError,    setDomainError]    = useState('')
 
-  // -------------------------------------------------------------------------
-  // Handlers
-  // -------------------------------------------------------------------------
-
-  /**
-   * handleNameChange
-   *
-   * Strips any character that is not a lowercase letter as the user types.
-   * This means numbers, spaces, uppercase letters, hyphens, and all special
-   * characters are silently removed — the user simply cannot enter them.
-   */
+  /** Only lowercase letters are allowed in the project name. */
   const handleNameChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const sanitised = e.target.value.replace(/[^a-z]/g, '')
     setName(sanitised)
   }, [])
 
-  /**
-   * handleContinue
-   *
-   * Called when the user clicks the "Continue" button.
-   *
-   * Steps:
-   * 1. Validates all three fields — sets individual error messages if any
-   *    field is empty or invalid. If any field fails validation, stops early.
-   * 2. Enables the loading spinner on the button.
-   * 3. Saves all three values to the global installer store.
-   * 4. After a short 500ms delay, navigates to /installer/admin.
-   */
   const handleContinue = useCallback(() => {
     let hasError = false
 
-    // Validate: Project Name must not be blank and must be lowercase letters only
     if (!name.trim()) {
       setNameError(t('errors.nameRequired'))
       hasError = true
@@ -107,7 +44,6 @@ export default function ProjectInfoPage() {
       setNameError('')
     }
 
-    // Validate: Subdomain must not be blank
     if (!subdomain.trim()) {
       setSubdomainError(t('errors.subdomainRequired'))
       hasError = true
@@ -115,7 +51,6 @@ export default function ProjectInfoPage() {
       setSubdomainError('')
     }
 
-    // Validate: Domain must not be blank
     if (!domain.trim()) {
       setDomainError(t('errors.domainRequired'))
       hasError = true
@@ -135,117 +70,85 @@ export default function ProjectInfoPage() {
     }, 500)
   }, [name, subdomain, domain, setInstallerValue, router, t])
 
-  // -------------------------------------------------------------------------
-  // Render
-  // -------------------------------------------------------------------------
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-6 py-12">
+    <InstallerShell step={2} width="sm" logoAlt={t('logoAlt')} tagline={t('tagline')}>
+      <div className={CARD}>
 
-      <div className="fixed top-4 right-4 z-50">
-        <LocaleSwitcher />
-      </div>
+        <h1 className="text-2xl font-semibold tracking-tight">{t('heading')}</h1>
+        <p className="mt-1 text-sm text-neutral-500">{t('subheading')}</p>
 
-      <header className="mb-8 text-center flex flex-col items-center">
-        <img
-          src="/images/logo/underpeaks_logo.png"
-          alt={t('logoAlt')}
-          className="h-16 w-auto mb-4"
-        />
-        <p className="text-xl text-gray-700">{t('tagline')}</p>
-      </header>
+        <div className="mt-6 space-y-5">
 
-      <div className="w-full max-w-md space-y-6 p-6 sm:p-8 bg-gray-50 rounded-2xl shadow-xl border text-center">
-
-        <h2 className="text-3xl font-bold text-gray-900 text-center">
-          {t('heading')}
-        </h2>
-        <p className="text-sm text-gray-600">
-          {t('subheading')}
-        </p>
-
-        <div className="space-y-4 text-left">
-
-          {/* --------------------------------------------------------------
-            * Project Name Field
-            * Lowercase letters only — numbers, spaces, and special characters
-            * are stripped silently as the user types. A hint below the input
-            * makes the rule clear upfront so it doesn't surprise anyone.
-            * -------------------------------------------------------------- */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+          {/* Project name */}
+          <div className="space-y-1.5">
+            <Label htmlFor="projectName" className="text-sm font-medium text-neutral-800">
               {t('fields.name.label')}
-            </label>
+            </Label>
             <Input
+              id="projectName"
               placeholder={t('fields.name.placeholder')}
               value={name}
               onChange={handleNameChange}
-              className={nameError ? 'border-red-500' : ''}
+              className={`${INPUT_CLASS} ${nameError ? 'border-red-500' : ''}`}
             />
-            {nameError && (
-              <p className="text-xs text-red-500 mt-1">{nameError}</p>
-            )}
-            <p className="text-xs text-gray-500 mt-1">
-              {t('fields.name.hint')}
-            </p>
+            {nameError && <p className="text-xs text-red-600">{nameError}</p>}
+            <p className="text-xs text-neutral-500">{t('fields.name.hint')}</p>
           </div>
 
-          {/* Domain Field */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+          {/* Domain */}
+          <div className="space-y-1.5">
+            <Label htmlFor="domain" className="text-sm font-medium text-neutral-800">
               {t('fields.domain.label')}
-            </label>
+            </Label>
             <Input
+              id="domain"
               placeholder={t('fields.domain.placeholder')}
               value={domain}
               onChange={(e) => setDomain(e.target.value)}
-              className={domainError ? 'border-red-500' : ''}
+              className={`${INPUT_CLASS} ${domainError ? 'border-red-500' : ''}`}
             />
-            {domainError && (
-              <p className="text-xs text-red-500 mt-1">{domainError}</p>
-            )}
-            <p className="text-xs text-gray-500 mt-1">
+            {domainError && <p className="text-xs text-red-600">{domainError}</p>}
+            <p className="text-xs text-neutral-500">
               {t('fields.domain.hint')}{' '}
-              <code>localhost:3000</code>.
+              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono">localhost:3000</code>.
             </p>
           </div>
 
-          {/* Subdomain Field */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
+          {/* Subdomain */}
+          <div className="space-y-1.5">
+            <Label htmlFor="subdomain" className="text-sm font-medium text-neutral-800">
               {t('fields.subdomain.label')}
-            </label>
+            </Label>
             <Input
+              id="subdomain"
               placeholder={t('fields.subdomain.placeholder')}
               value={subdomain}
               onChange={(e) => setSubdomain(e.target.value)}
-              className={subdomainError ? 'border-red-500' : ''}
+              className={`${INPUT_CLASS} ${subdomainError ? 'border-red-500' : ''}`}
             />
-            {subdomainError && (
-              <p className="text-xs text-red-500 mt-1">{subdomainError}</p>
-            )}
-            <p className="text-xs text-gray-500 mt-1">
+            {subdomainError && <p className="text-xs text-red-600">{subdomainError}</p>}
+            <p className="text-xs text-neutral-500">
               {t('fields.subdomain.hint')}{' '}
-              <code>{subdomain || 'console'}.yourdomain.com</code>
+              <code className="rounded bg-neutral-100 px-1 py-0.5 font-mono">
+                {subdomain || 'console'}.yourdomain.com
+              </code>
             </p>
           </div>
 
         </div>
 
-        <div className="pt-2">
-          <Button
-            className="w-full"
-            onClick={handleContinue}
-            disabled={loading}
-          >
-            {loading
-              ? <Loader2 className="w-4 h-4 animate-spin mx-auto" />
-              : t('continueButton')
-            }
-          </Button>
-        </div>
+        <Button
+          className={`${PRIMARY_BUTTON} mt-8 w-full`}
+          onClick={handleContinue}
+          disabled={loading}
+        >
+          {loading
+            ? <Loader2 className="mx-auto h-4 w-4 animate-spin" />
+            : t('continueButton')
+          }
+        </Button>
 
       </div>
-    </div>
+    </InstallerShell>
   )
 }

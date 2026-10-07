@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
-    "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
+    "save": "Guardar",
+    "saving": "Guardando...",
+    "saveChanges": "Guardar Cambios",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "add": "Añadir",
+    "remove": "Quitar",
+    "close": "Cerrar",
+    "confirm": "Confirmar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "done": "Listo",
+    "loading": "Cargando...",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "refresh": "Actualizar",
+    "copy": "Copiar",
+    "copied": "¡Copiado!",
+    "upload": "Subir",
+    "rename": "Renombrar",
+    "move": "Mover",
+    "preview": "Vista previa",
+    "revoke": "Revocar",
+    "generate": "Generar",
+    "reveal": "Mostrar",
+    "hide": "Ocultar",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "status": "Estado",
+    "actions": "Acciones",
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "role": "Rol",
+    "createdAt": "Creado el",
+    "noResults": "No se encontraron resultados",
+    "error": "Se produjo un error",
+    "success": "Éxito",
+    "required": "Este campo es obligatorio",
+    "optional": "Opcional",
+    "yes": "Sí",
     "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "areYouSure": "¿Estás seguro?",
+    "thisActionCannotBeUndone": "Esta acción no se puede deshacer.",
+    "comingSoon": "Próximamente"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
-    "menu": "Menu",
-    "media": "Media",
+    "dashboard": "Panel de control",
+    "pages": "Páginas",
+    "menu": "Menú",
+    "media": "Medios",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "Integraciones",
+    "theming": "Tema",
+    "settings": "Configuración",
+    "account": "Cuenta",
+    "messages": "Mensajes",
+    "notifications": "Notificaciones",
+    "logout": "Cerrar sesión"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "Buscar...",
+    "notifications": "Notificaciones",
+    "messages": "Mensajes",
+    "viewAccount": "Ver cuenta",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
-      "enterprise": "Enterprise"
+      "self_hosted": "Autoalojado",
+      "hosted": "Alojado",
+      "enterprise": "Empresarial"
+    }
+  },
+  "nextModelGenerator": {
+    "nullJsonError": "No se puede crear {{modelName}}Model: se recibió JSON nulo o indefinido",
+    "missingRequiredField": "Falta el campo requerido: {{fieldName}} en {{modelName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "Generando código para {{count}} modelo(s)...",
+    "modelUndefined": "El modelo no está definido — asegúrate de que se haya pasado un ModelDefinition válido",
+    "modelMissingName": "Al modelo le falta la propiedad \"name\" — todo modelo debe tener un nombre",
+    "modelInvalidFields": "El modelo \"{{name}}\" tiene \"fields\" inválidos o faltantes — fields debe ser un objeto simple",
+    "generationSuccess": "Código generado correctamente para el modelo: {{name}}",
+    "generationFailed": "Falló la generación de código para el modelo: {{name}}"
+  },
+  "completeProfile": {
+    "title": "Completa tu perfil",
+    "welcome": "Bienvenido,",
+    "loading": {
+      "checkingProfile": "Comprobando tu perfil..."
+    },
+    "subdomain": {
+      "label": "Elige un subdominio",
+      "placeholder": "tuapp",
+      "hint": "Tu aplicación estará disponible en"
+    },
+    "button": {
+      "save": "Guardar y continuar",
+      "saving": "Guardando..."
+    },
+    "validation": {
+      "subdomainRequired": "Introduce un subdominio",
+      "adapterMissingCreateTenant": "Tu adaptador de base de datos no admite la creación de inquilinos"
+    },
+    "errors": {
+      "saveFailed": "Error al guardar el subdominio: {{message}}",
+      "unknownError": "Se produjo un error desconocido"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "El restablecimiento de contraseña no es compatible con el adaptador de base de datos actual",
+      "noAccountFound": "No se encontró ninguna cuenta con esa dirección de correo electrónico."
+    }
+  },
+  "forgotPassword": {
+    "title": "Contraseña olvidada",
+    "description": "Introduce tu dirección de correo electrónico y te enviaremos un enlace para restablecer tu contraseña.",
+    "form": {
+      "emailLabel": "Dirección de correo electrónico",
+      "emailPlaceholder": "tu@ejemplo.com",
+      "buttonSend": "Enviar enlace de restablecimiento",
+      "buttonSending": "Enviando..."
+    },
+    "validation": {
+      "emailRequired": "Introduce tu dirección de correo electrónico."
+    },
+    "errors": {
+      "firebaseConfigMissing": "Falta la configuración de Firebase. Comprueba tus variables de entorno.",
+      "sendFailed": "No se pudo enviar el enlace de restablecimiento. Inténtalo de nuevo."
+    },
+    "success": {
+      "title": "Revisa tu bandeja de entrada",
+      "description": "Se ha enviado un correo de restablecimiento de contraseña. Revisa tu bandeja de entrada y sigue el enlace para restablecer tu contraseña.",
+      "button": "Volver a iniciar sesión"
+    },
+    "notice": {
+      "title": "Solicitud enviada",
+      "button": "Aceptar"
+    },
+    "error": {
+      "title": "Algo salió mal"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "El restablecimiento de contraseña no es compatible con el adaptador de base de datos actual",
+      "invalidToken": "Enlace de restablecimiento inválido o caducado. Solicita uno nuevo.",
+      "tokenAlreadyUsed": "Este enlace de restablecimiento ya se ha utilizado. Solicita uno nuevo.",
+      "tokenExpired": "Este enlace de restablecimiento ha caducado. Solicita uno nuevo."
+    }
+  },
+  "resetPassword": {
+    "title": "Restablecer contraseña",
+    "form": {
+      "passwordLabel": "Nueva contraseña",
+      "buttonReset": "Restablecer contraseña",
+      "buttonResetting": "Restableciendo..."
+    },
+    "errors": {
+      "invalidLink": "Enlace de restablecimiento inválido o faltante. Solicita uno nuevo.",
+      "passwordRequired": "Introduce una nueva contraseña.",
+      "missingToken": "Falta el token de restablecimiento. Usa el enlace de tu correo electrónico.",
+      "resetFailed": "No se pudo restablecer la contraseña. Inténtalo de nuevo."
+    },
+    "error": {
+      "title": "Algo salió mal"
+    },
+    "expired": {
+      "title": "Enlace de restablecimiento caducado",
+      "description": "Tu enlace de restablecimiento de contraseña ha caducado. Redirigiéndote a la página de contraseña olvidada..."
+    },
+    "success": {
+      "title": "Contraseña restablecida correctamente",
+      "description": "Ahora puedes",
+      "signinLink": "iniciar sesión",
+      "descriptionSuffix": "con tu nueva contraseña."
+    }
+  },
+  "signIn": {
+    "heading": "Inicia sesión en tu cuenta de Underpeaks",
+    "fields": {
+      "email": "Correo electrónico",
+      "password": "Contraseña"
+    },
+    "button": {
+      "signIn": "Iniciar sesión",
+      "signingIn": "Iniciando sesión..."
+    },
+    "links": {
+      "forgotPassword": "¿Olvidaste tu contraseña?",
+      "noAccount": "¿No tienes una cuenta?",
+      "signUp": "Regístrate ahora"
+    },
+    "errors": {
+      "title": "Error",
+      "signinFailed": "Error al iniciar sesión. Comprueba tus credenciales e inténtalo de nuevo."
+    }
+  },
+  "signUp": {
+    "heading": "Crea tu cuenta de Underpeaks",
+    "fields": {
+      "fullName": "Nombre completo",
+      "fullNamePlaceholder": "Tu nombre completo",
+      "email": "Correo electrónico",
+      "emailPlaceholder": "tu@ejemplo.com",
+      "password": "Contraseña"
+    },
+    "button": {
+      "signUp": "Registrarse",
+      "creating": "Creando..."
+    },
+    "alerts": {
+      "errorTitle": "Error",
+      "successTitle": "Éxito"
+    },
+    "success": {
+      "accountCreated": "¡Cuenta creada correctamente!"
+    },
+    "links": {
+      "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+      "loginNow": "Inicia sesión"
+    },
+    "errors": {
+      "nameRequired": "El nombre completo es obligatorio.",
+      "emailRequired": "El correo electrónico es obligatorio.",
+      "passwordRequired": "La contraseña es obligatoria.",
+      "emailInUse": "Este correo electrónico ya está registrado. Intenta iniciar sesión en su lugar.",
+      "invalidEmail": "Introduce una dirección de correo electrónico válida.",
+      "weakPassword": "La contraseña es demasiado débil. Mínimo 6 caracteres.",
+      "signupFailed": "Error al registrarse. Inténtalo de nuevo.",
+      "supabaseSignupFailed": "Error al registrarse en Supabase. Inténtalo de nuevo."
+    },
+    "console": {
+      "firebaseVerificationSent": "Correo de verificación de Firebase enviado correctamente.",
+      "firebaseVerificationFailed": "No se pudo enviar el correo de verificación de Firebase.",
+      "supabaseVerificationSent": "Correo de verificación de Supabase enviado correctamente."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "Verificando correo electrónico",
+      "success": "Correo verificado ✅",
+      "error": "Verificación fallida"
+    },
+    "status": {
+      "verifying": "Verificando tu correo electrónico...",
+      "verified": "Tu correo electrónico ha sido verificado.",
+      "supabaseRedirecting": "Redirigiendo a la configuración de contraseña..."
+    },
+    "button": {
+      "goToSignIn": "Ir a iniciar sesión"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] Solicitud recibida",
+      "verificationNotSupported": "[verify-email] La verificación no es compatible con este adaptador"
+    },
+    "errors": {
+      "missingTokenOrEmail": "Falta el token o el correo electrónico",
+      "dbTypeNotSet": "El tipo de base de datos no está configurado",
+      "unsupportedDbType": "Tipo de base de datos no compatible",
+      "sqlAdapterMissingMethods": "Al adaptador SQL le faltan métodos requeridos",
+      "firebaseAdapterMissingMethods": "Al adaptador Firebase le faltan métodos requeridos",
+      "invalidToken": "Token inválido",
+      "tokenExpired": "El token ha caducado",
+      "userNotFound": "Usuario no encontrado",
+      "verificationNotSupported": "La verificación no es compatible con este adaptador",
+      "verificationFailed": "La verificación falló"
+    }
+  },
+  "schemaPreview": {
+    "title": "Vista previa del esquema",
+    "columns": {
+      "field": "Campo",
+      "type": "Tipo"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "Confirmar acción",
+      "description": "¿Estás seguro de que deseas continuar?"
+    },
+    "buttons": {
+      "confirm": "Confirmar",
+      "cancel": "Cancelar"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "Negocio",
+      "content": "Contenido",
+      "assets": "Recursos",
+      "configuration": "Configuración"
+    },
+    "items": {
+      "dashboard": "Panel de control",
+      "products": "Productos",
+      "categories": "Categorías",
+      "orders": "Pedidos",
+      "coupons": "Cupones",
+      "users": "Usuarios",
+      "shipping": "Envío",
+      "services": "Servicios",
+      "sharedModels": "Modelos compartidos",
+      "menu": "Menú",
+      "pages": "Páginas",
+      "theme": "Tema",
+      "storage": "Almacenamiento",
+      "integrations": "Integraciones",
+      "apisAndWebhooks": "APIs y webhooks"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "Mensajes",
+      "unreadCount": "{count} sin leer"
+    },
+    "empty": "Aún no hay mensajes",
+    "viewAll": "Ver todos los mensajes",
+    "unreadBadge": "{count} sin leer",
+    "systemInitials": "SY",
+    "fallbackUser": "Usuario"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "Notificaciones",
+      "unreadCount": "{count} sin leer",
+      "markAllRead": "Marcar todo como leído"
+    },
+    "empty": "Aún no hay notificaciones",
+    "viewAll": "Ver todas las notificaciones"
+  },
+  "previewSchema": {
+    "fieldsHeading": "Campos",
+    "fieldNamePlaceholder": "Nombre del campo",
+    "requiredLabel": "Obligatorio",
+    "removeButton": "Quitar",
+    "saveButton": "Guardar",
+    "previewButton": "Vista previa",
+    "hidePreviewButton": "Ocultar vista previa",
+    "addFieldButton": "Añadir campo",
+    "types": {
+      "string": "cadena",
+      "num": "número",
+      "boolean": "booleano",
+      "datetime": "fecha y hora",
+      "array": "matriz",
+      "map": "mapa",
+      "null": "nulo"
+    },
+    "aria": {
+      "fieldName": "Nombre del campo {{index}}",
+      "fieldType": "Tipo del campo {{index}}",
+      "elementType": "Tipo de elemento del campo {{index}}",
+      "required": "Campo {{index}} obligatorio",
+      "removeField": "Quitar campo {{index}}"
     }
   },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "Cerrando sesión…",
+    "footer": {
+      "settings": "Configuración",
+      "logout": "Cerrar sesión",
+      "collapse": "Contraer barra lateral",
+      "expand": "Expandir barra lateral",
+      "business": "Negocio",
+      "developer": "Desarrollador",
+      "design": "Diseño",
+      "system": "Sistema"
+    },
+    "aria": {
+      "sidebar": "Navegación de la consola",
+      "navigation": "Navegación principal",
+      "expandSidebar": "Expandir barra lateral",
+      "collapseSidebar": "Contraer barra lateral"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "Logotipo del proyecto",
+    "projectLabel": "Proyecto:",
+    "signIn": "Iniciar sesión",
+    "register": "Registrarse",
+    "aria": {
+      "navbar": "Barra de navegación superior",
+      "goToDashboard": "Ir al panel de control"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "Menú de usuario para {name}"
+    },
+    "menu": {
+      "account": "Cuenta",
+      "settings": "Configuración",
+      "helpAndDocs": "Ayuda y documentación",
+      "logout": "Cerrar sesión"
+    }
+  },
+  "accountPage": {
+    "title": "Cuenta",
+    "subtitle": "Gestiona tu perfil y tu seguridad.",
+    "profile": {
+      "title": "Perfil",
+      "description": "Actualiza tu nombre para mostrar.",
+      "fullNameLabel": "Nombre completo",
+      "fullNamePlaceholder": "Tu nombre completo",
+      "emailLabel": "Dirección de correo electrónico",
+      "emailReadOnlyNote": "El correo electrónico lo gestiona tu proveedor de autenticación y no se puede cambiar aquí.",
+      "saveButton": "Guardar cambios",
+      "savingButton": "Guardando…",
+      "savedButton": "Guardado"
+    },
+    "danger": {
+      "title": "Zona de peligro",
+      "description": "Acciones irreversibles. Procede con precaución.",
+      "cancelTitle": "Cancelar suscripción",
+      "cancelDescription": "Tu plan permanece activo hasta el final del período de facturación actual y luego vuelve a autoalojado.",
+      "cancelButton": "Cancelar plan",
+      "cancelModalBody": "Tu suscripción se cancelará, pero conservarás el acceso hasta el final de tu período de facturación actual. Esto no se puede deshacer.",
+      "resetTitle": "Restablecer proyecto",
+      "resetDescription": "Elimina permanentemente todo el contenido del proyecto y vuelve a comenzar la incorporación. Tu cuenta se conserva.",
+      "resetButton": "Restablecer proyecto",
+      "resetModalBody": "Esto elimina permanentemente todo el contenido de tu proyecto — modelos, páginas, datos y medios. Tu cuenta y facturación se conservan. Esto no se puede deshacer.",
+      "deleteTitle": "Eliminar cuenta",
+      "deleteDescription": "Elimina permanentemente tu cuenta y todos los datos asociados.",
+      "deleteButton": "Eliminar cuenta",
+      "deleteModalBody": "Esto elimina permanentemente tu cuenta y todo el contenido. Los registros de facturación se conservan cuando así lo exige la ley. Esto no se puede deshacer."
+    },
+    "password": {
+      "title": "Cambiar contraseña",
+      "description": "Usa una contraseña segura que no utilices en otro lugar.",
+      "currentLabel": "Contraseña actual",
+      "newLabel": "Nueva contraseña",
+      "confirmLabel": "Confirmar nueva contraseña",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "minLengthHint": "Mínimo 8 caracteres",
+      "mismatchHint": "Las contraseñas no coinciden",
+      "updateButton": "Actualizar contraseña",
+      "updatingButton": "Actualizando…",
+      "updatedButton": "Actualizada"
+    },
+    "billing": {
+      "title": "Facturación y plan",
+      "description": "Tu plan actual y opciones de actualización.",
+      "selfHostedDescription": "Funciones principales incluidas. Actualiza para obtener integraciones, autenticación avanzada y marca blanca.",
+      "paidDescription": "Todas las funciones desbloqueadas.",
+      "upgradeButton": "Actualizar",
+      "upgradeAriaLabel": "Actualizar a Underpeaks Pro",
+      "proFeaturesTitle": "Lo que obtienes con Pro",
+      "proFeature1": "Integraciones (Stripe, Mailchimp y más)",
+      "proFeature2": "Autenticación avanzada — 2FA, inicio de sesión social, enlace mágico, SSO",
+      "proFeature3": "Marca blanca del CMS con tu propia identidad de marca",
+      "proFeature4": "Dominio personalizado para tu consola",
+      "contactSalesButton": "Contactar con ventas"
+    },
+    "errors": {
+      "profileUpdateFailed": "Error al actualizar el perfil. Inténtalo de nuevo.",
+      "passwordUpdateFailed": "Error al actualizar la contraseña. Inténtalo de nuevo."
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "Puntos de conexión genéricos generados automáticamente a partir de tus modelos",
+    "customEndpointButton": "Punto de conexión personalizado",
+    "tabsLabel": "Pestañas de la página de API",
+    "copy": "Copiar al portapapeles",
+    "copied": "¡Copiado!",
+    "tabs": {
+      "endpoints": "Puntos de conexión",
+      "keys": "Claves de API",
+      "reference": "Referencia"
+    },
+    "endpoints": {
+      "searchPlaceholder": "Buscar puntos de conexión…",
+      "typeFilterLabel": "Filtrar por tipo de punto de conexión",
+      "modelFilterLabel": "Filtrar por modelo",
+      "type": {
+        "all": "todos",
+        "auto": "auto",
+        "custom": "personalizado"
+      },
+      "colMethod": "Método",
+      "colPath": "Ruta",
+      "colDescription": "Descripción",
+      "colActions": "Acciones",
+      "noResults": "Ningún punto de conexión coincide con tu filtro",
+      "customBadge": "Personalizado",
+      "requiresAuth": "Requiere autenticación",
+      "public": "Punto de conexión público",
+      "testButton": "Probar",
+      "exampleRequest": "Solicitud de ejemplo",
+      "requiredHeaders": "Encabezados requeridos",
+      "testLabel": "Prueba",
+      "sendRequest": "Enviar solicitud",
+      "running": "Ejecutando…"
+    },
+    "drawer": {
+      "title": "Nuevo punto de conexión personalizado",
+      "subtitle": "Escribe lógica de negocio que llame a la API genérica",
+      "close": "Cerrar panel",
+      "methodLabel": "Método",
+      "pathLabel": "Ruta",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "¿Qué hace este punto de conexión?",
+      "authLabel": "Autenticación",
+      "authRequired": "Requerida",
+      "authPublic": "Pública",
+      "codeLabel": "Código del controlador",
+      "cancelButton": "Cancelar",
+      "createButton": "Crear punto de conexión"
+    },
+    "keys": {
+      "title": "Claves de API",
+      "keepSecret": "Mantenlas en secreto",
+      "createTitle": "Crear nueva clave",
+      "nameLabel": "Nombre de la clave",
+      "namePlaceholder": "Nombre de la clave, p. ej. App móvil",
+      "generateButton": "Generar",
+      "active": "Activa",
+      "inactive": "Inactiva",
+      "never": "Nunca",
+      "created": "Creada",
+      "lastUsed": "Último uso",
+      "revealKey": "Mostrar clave de API",
+      "hideKey": "Ocultar clave de API",
+      "deleteKey": "Eliminar clave {{name}}",
+      "confirmDelete": "Confirmar eliminación",
+      "cancelDelete": "Cancelar eliminación"
+    },
+    "reference": {
+      "queryParamsTitle": "Parámetros de consulta",
+      "queryParamsSubtitle": "Disponible en todos los puntos de conexión GET",
+      "operatorsTitle": "Operadores de filtro",
+      "operatorsSubtitle": "Usar con el",
+      "operatorsFormat": "parámetro como",
+      "exampleTitle": "Ejemplo completo",
+      "exampleDescription": "Obtener productos activos por debajo de R500, ordenados por precio, devolviendo solo id/nombre/precio:",
+      "responseLabel": "Respuesta:"
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "Panel de control",
+    "welcome": "Bienvenido de nuevo, {name}",
+    "addWidget": "Añadir widget",
+    "editLayout": "Editar diseño",
+    "saveLayout": "Guardar diseño",
+    "resetLayout": "Restablecer diseño",
+    "toolbar": {
+      "title": "Panel de control",
+      "subtitle": "Arrastra los widgets para reordenarlos · pasa el cursor para editar",
+      "refresh": "Actualizar",
+      "last30Days": "Últimos 30 días",
+      "addWidget": "Añadir widget"
+    },
+    "grid": {
+      "addWidget": "Añadir widget"
+    },
+    "addPanel": {
+      "title": "Añadir widget",
+      "subtitle": "Haz clic para añadir al panel de control"
+    },
+    "widget": {
+      "dragToReorder": "Arrastrar para reordenar",
+      "vsLastPeriod": "vs. período anterior"
+    },
+    "chart": {
+      "day": "Día",
+      "daysAgo": "hace 30 días",
+      "today": "Hoy"
+    },
+    "formula": {
+      "placeholder": "p. ej. SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "Preajustes"
+    }
   },
   "media": {
-    "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "title": "Medios",
+    "uploadFiles": "Subir archivos",
+    "createFolder": "Crear carpeta",
+    "folderName": "Nombre de la carpeta",
+    "rootFolder": "Raíz",
+    "noFiles": "No hay archivos en esta carpeta",
+    "dropToUpload": "Suelta los archivos aquí para subirlos",
+    "orClickToUpload": "o haz clic para explorar",
+    "gridView": "Vista de cuadrícula",
+    "listView": "Vista de lista",
+    "fileSize": "Tamaño del archivo",
+    "fileType": "Tipo de archivo",
+    "uploadedAt": "Subido",
+    "deleteFileConfirm": "¿Estás seguro de que deseas eliminar \"{name}\"?",
+    "deleteFolderConfirm": "¿Estás seguro de que deseas eliminar la carpeta \"{name}\" y todo su contenido?",
+    "importFromUrl": "Importar desde URL",
+    "copyUrl": "Copiar URL",
+    "urlCopied": "URL copiada al portapapeles",
+    "details": "Detalles del archivo",
+    "selectFile": "Selecciona un archivo para ver los detalles"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Configuración",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "Resumen",
+      "projectName": "Nombre del proyecto",
+      "projectUrl": "URL del proyecto",
+      "projectId": "ID del proyecto",
+      "dbType": "Tipo de base de datos",
+      "environment": "Entorno",
+      "deploymentType": "Tipo de implementación",
+      "savedSuccess": "Configuración guardada correctamente"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "Claves de API",
+      "subheading": "Gestiona las claves usadas para autenticar las solicitudes de API de tus aplicaciones.",
+      "title": "Claves de API",
+      "description": "Gestiona las claves de API para el acceso programático a tu proyecto.",
+      "generateKey": "Generar nueva clave",
+      "keyName": "Nombre",
+      "keyPrefix": "Prefijo de la clave",
+      "lastUsed": "Último uso",
+      "neverUsed": "Nunca utilizada",
+      "revokeConfirm": "¿Estás seguro de que deseas revocar \"{name}\"? Esto no se puede deshacer.",
+      "revoked": "Revocada",
+      "keyCopied": "Clave copiada al portapapeles",
+      "newKeyGenerated": "Nueva clave de API generada. Cópiala ahora — no se volverá a mostrar.",
+      "noKeys": "Aún no hay claves de API. Genera una para empezar.",
+      "sectionTitle": "Claves activas",
+      "createdDate": "Creada el {{date}}",
+      "lastUsedDate": "Último uso el {{date}}",
+      "hideKey": "Ocultar clave",
+      "revealKey": "Mostrar clave",
+      "copyKey": "Copiar clave",
+      "revoke": "Revocar",
+      "emptyTitle": "Aún no hay claves de API",
+      "emptySubtitle": "Genera una clave a continuación para empezar."
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
-      "logo": "Logo",
+      "title": "Identidad de marca",
+      "description": "Personaliza el aspecto de tu consola de Underpeaks.",
+      "logo": "Logotipo",
       "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "primaryColor": "Color primario",
+      "uploadLogo": "Subir logotipo",
+      "uploadFavicon": "Subir favicon",
+      "logoHint": "Recomendado: 200×50px, PNG o SVG con fondo transparente.",
+      "faviconHint": "Recomendado: 32×32px ICO, PNG o SVG.",
+      "livePreview": "Vista previa en vivo",
+      "brandingSaved": "Identidad de marca actualizada correctamente"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
-      "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "host": "Host SMTP",
+      "port": "Puerto",
+      "username": "Nombre de usuario",
+      "fromEmail": "Correo del remitente",
+      "fromName": "Nombre del remitente",
+      "encryption": "Cifrado",
+      "testEmail": "Enviar correo de prueba",
+      "testEmailSuccess": "Correo de prueba enviado correctamente"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "Dominios",
+      "addDomain": "Añadir dominio",
+      "verified": "Verificado",
+      "unverified": "No verificado",
+      "primary": "Principal",
+      "setPrimary": "Establecer como principal"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "Cuenta",
+    "fullName": "Nombre completo",
+    "emailReadOnly": "Dirección de correo electrónico (solo lectura)",
+    "changePassword": "Cambiar contraseña",
+    "currentPassword": "Contraseña actual",
+    "newPassword": "Nueva contraseña",
+    "confirmPassword": "Confirmar nueva contraseña",
+    "passwordsDoNotMatch": "Las contraseñas no coinciden",
+    "profileUpdated": "Perfil actualizado correctamente",
+    "passwordChanged": "Contraseña cambiada correctamente",
+    "memberSince": "Miembro desde {date}"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
-    "system": "System"
+    "title": "Mensajes",
+    "newConversation": "Nueva conversación",
+    "noConversations": "Aún no hay conversaciones",
+    "noMessages": "No hay mensajes en esta conversación",
+    "typeMessage": "Escribe un mensaje...",
+    "send": "Enviar",
+    "markAllRead": "Marcar todo como leído",
+    "reply": "Responder",
+    "you": "Tú",
+    "system": "Sistema"
+  },
+  "apiKeys": {
+    "heading": "Claves de API",
+    "subheading": "Gestiona las claves usadas para autenticar las solicitudes de API de tus aplicaciones.",
+    "sectionTitle": "Claves activas",
+    "createdDate": "Creada el {date}",
+    "lastUsedDate": "Último uso el {date}",
+    "neverUsed": "Nunca utilizada",
+    "hideKey": "Ocultar clave",
+    "revealKey": "Mostrar clave",
+    "copyKey": "Copiar clave",
+    "revoke": "Revocar",
+    "emptyTitle": "Aún no hay claves de API",
+    "emptySubtitle": "Genera una clave a continuación para empezar.",
+    "errors": {
+      "loadFailed": "No se pudieron cargar las claves de API",
+      "generateFailed": "No se pudo generar la clave",
+      "revokeFailed": "No se pudo revocar la clave"
+    }
   },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "Notificaciones",
+    "noNotifications": "No hay notificaciones",
+    "noUnread": "¡Estás al día!",
+    "markAllRead": "Marcar todo como leído",
+    "viewAll": "Ver todas las notificaciones",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
-      "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "all": "Todas",
+      "unread": "Sin leer",
+      "comment": "Comentarios",
+      "system": "Sistema",
+      "payment": "Pagos",
+      "security": "Seguridad",
+      "message": "Mensajes"
     },
     "priority": {
-      "low": "Low",
+      "low": "Baja",
       "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "high": "Alta",
+      "urgent": "Urgente"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "Iniciar sesión",
+    "logout": "Cerrar sesión",
+    "email": "Dirección de correo electrónico",
+    "password": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "resetPassword": "Restablecer contraseña",
+    "sessionExpired": "Tu sesión ha caducado. Inicia sesión de nuevo.",
+    "idleWarning": "Has estado inactivo durante un tiempo.",
+    "idleLogoutIn": "Se cerrará tu sesión en {seconds} segundos.",
+    "stayLoggedIn": "Permanecer conectado"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "Página no encontrada",
+    "serverError": "Error del servidor",
+    "networkError": "Error de red — comprueba tu conexión",
+    "sessionError": "Error de sesión — inicia sesión de nuevo",
+    "unknown": "Se produjo un error inesperado"
+  },
+  "grid": {
+    "addWidget": "Añadir widget"
+  },
+  "addPanel": {
+    "title": "Añadir widget",
+    "subtitle": "Haz clic para añadir al panel de control"
+  },
+  "widget": {
+    "dragToReorder": "Arrastrar para reordenar",
+    "vsLastPeriod": "vs. período anterior"
+  },
+  "chart": {
+    "day": "Día",
+    "daysAgo": "hace 30 días",
+    "today": "Hoy"
+  },
+  "formula": {
+    "placeholder": "p. ej. SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "Preajustes"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Centro de ayuda",
+      "subtitle": "Encuentra respuestas, lee la documentación o contáctanos.",
+      "searchPlaceholder": "Buscar preguntas frecuentes…"
+    },
+    "resources": {
+      "title": "Recursos",
+      "links": {
+        "gettingStarted": {
+          "label": "Primeros pasos",
+          "description": "Configura tu primer proyecto en minutos."
+        },
+        "apiReference": {
+          "label": "Referencia de la API",
+          "description": "Referencia completa de todos los puntos de conexión y operadores de la API."
+        },
+        "community": {
+          "label": "Foro de la comunidad",
+          "description": "Haz preguntas y comparte proyectos con la comunidad."
+        }
+      }
+    },
+    "faq": {
+      "title": "Preguntas frecuentes",
+      "resultCount": "{count} resultado(s)",
+      "noResults": "No hay resultados para \"{query}\"",
+      "noResultsHint": "Prueba con otro término de búsqueda o contacta con soporte a continuación."
+    },
+    "api": {
+      "title": "Referencia rápida de la API",
+      "baseUrl": "URL base:",
+      "endpoints": {
+        "get": "Lista todos los registros de un modelo. Admite filtrado, ordenación y paginación.",
+        "post": "Crea un nuevo registro.",
+        "put": "Actualiza un registro existente por ID.",
+        "delete": "Elimina un registro por ID."
+      },
+      "operators": {
+        "title": "Operadores de consulta",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "Contactar con soporte",
+      "submit": "Enviar mensaje",
+      "success": {
+        "title": "¡Mensaje enviado!",
+        "subtitle": "Te responderemos lo antes posible."
+      },
+      "fields": {
+        "name": "Nombre",
+        "namePlaceholder": "Juan Pérez",
+        "email": "Correo electrónico",
+        "emailPlaceholder": "tu@ejemplo.com",
+        "message": "Mensaje",
+        "messagePlaceholder": "Describe tu problema o pregunta…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "Integraciones",
+      "connectedCount": "{count} conectada(s)",
+      "errorCount": "{count} error(es)",
+      "infoBanner": "Las integraciones conectadas están disponibles en puntos de conexión personalizados y en la generación de código"
+    },
+    "categories": {
+      "all": "Todas",
+      "payments": "Pagos",
+      "email": "Correo y SMS",
+      "storage": "Almacenamiento",
+      "ai": "IA",
+      "analytics": "Analítica",
+      "automation": "Automatización"
+    },
+    "status": {
+      "connected": "Conectada",
+      "disconnected": "Desconectada",
+      "error": "Error"
+    },
+    "card": {
+      "viewDocs": "Ver documentación",
+      "buttons": {
+        "saveAndConnect": "Guardar y conectar",
+        "saving": "Guardando…",
+        "saved": "¡Guardado!",
+        "disconnect": "Desconectar",
+        "retryConnection": "Reintentar conexión"
+      }
+    },
+    "empty": "No hay integraciones en esta categoría"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "Menú",
+      "subtitle": "{count} elemento(s) · arrastra para reordenar",
+      "addItem": "Añadir elemento"
+    },
+    "preview": {
+      "title": "Vista previa de navegación",
+      "subtitle": "Solo elementos visibles",
+      "empty": "Aún no hay elementos visibles."
+    },
+    "list": {
+      "title": "Todos los elementos",
+      "empty": "Aún no hay elementos de menú",
+      "emptyAction": "Añade tu primer elemento"
+    },
+    "row": {
+      "hidden": "oculto",
+      "external": "Externo",
+      "actions": {
+        "moveUp": "Subir",
+        "moveDown": "Bajar",
+        "toggleVisibility": "Alternar visibilidad",
+        "edit": "Editar",
+        "delete": "Eliminar",
+        "confirmDelete": "Confirmar eliminación",
+        "cancelDelete": "Cancelar"
+      }
+    },
+    "errors": {
+      "loadFailed": "No se pudieron cargar los elementos del menú",
+      "createFailed": "No se pudo crear el elemento del menú",
+      "updateFailed": "No se pudo actualizar el elemento del menú",
+      "deleteFailed": "No se pudo eliminar el elemento del menú"
+    },
+    "drawer": {
+      "titleAdd": "Añadir elemento de menú",
+      "titleEdit": "Editar elemento de menú",
+      "subtitle": "Configura la etiqueta, el enlace, el icono y la visibilidad",
+      "sections": {
+        "labelVisibility": "Etiqueta y visibilidad",
+        "link": "Enlace",
+        "icon": "Icono",
+        "nesting": "Anidación",
+        "preview": "Vista previa"
+      },
+      "fields": {
+        "pageRequired": "Se debe seleccionar una página antes de guardar un elemento de menú.",
+        "menuLabel": "Etiqueta del menú",
+        "menuLabelPlaceholder": "p. ej. Productos",
+        "menuLabelHint": "Este es el texto que se muestra en el menú de navegación.",
+        "visibility": "Visibilidad",
+        "visible": "Visible",
+        "hidden": "Oculto",
+        "linkTypePage": "Página",
+        "linkTypeExternal": "URL externa",
+        "selectPage": "Seleccionar página",
+        "selectPagePlaceholder": "— Selecciona una página —",
+        "noPagesHint": "No se encontraron páginas de administración. Crea primero una página con el tipo establecido en Admin.",
+        "externalUrl": "URL externa",
+        "openIn": "Abrir en",
+        "sameTab": "Misma pestaña",
+        "newTab": "Nueva pestaña",
+        "parentItem": "Elemento principal",
+        "parentItemPlaceholder": "— Nivel superior —",
+        "parentItemHint": "Los elementos anidados aparecen como elementos secundarios desplegables en la navegación."
+      },
+      "icons": {
+        "home": "Inicio",
+        "grid": "Cuadrícula",
+        "package": "Paquete",
+        "users": "Usuarios",
+        "settings": "Configuración",
+        "file": "Archivo",
+        "cart": "Carrito",
+        "mail": "Correo",
+        "star": "Estrella",
+        "info": "Información"
+      },
+      "preview": {
+        "hidden": "oculto"
+      },
+      "buttons": {
+        "cancel": "Cancelar",
+        "saveChanges": "Guardar cambios",
+        "addItem": "Añadir elemento",
+        "saving": "Guardando…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "URL del archivo",
+      "metadata": "Metadatos",
+      "rename": "Renombrar",
+      "moveToFolder": "Mover a carpeta"
+    },
+    "altText": {
+      "placeholder": "Describe esta imagen para accesibilidad…",
+      "empty": "No se ha establecido texto alternativo"
+    },
+    "metadata": {
+      "folder": "Carpeta",
+      "path": "Ruta",
+      "size": "Tamaño",
+      "type": "Tipo",
+      "uploaded": "Subido",
+      "dimensions": "Dimensiones"
+    },
+    "actions": {
+      "save": "Guardar",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "move": "Mover",
+      "moving": "Moviendo…",
+      "deleteFile": "Eliminar archivo"
+    },
+    "move": {
+      "currentlyIn": "Actualmente en"
+    },
+    "errors": {
+      "renameFailed": "Error al renombrar",
+      "moveFailed": "Error al mover"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "Falta el campo requerido: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "Carpetas",
+      "all": "Todas",
+      "newFolderTitle": "Nueva carpeta",
+      "collapse": "Contraer",
+      "expand": "Expandir"
+    },
+    "folder": {
+      "selectTitle": "Seleccionar carpeta"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "Eliminar carpeta",
+      "fileCount": "{count} archivos"
+    },
+    "empty": {
+      "message": "Esta carpeta está vacía"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "Esta carpeta está vacía"
+    },
+    "header": {
+      "name": "Nombre",
+      "size": "Tamaño",
+      "type": "Tipo",
+      "uploaded": "Subido"
+    },
+    "row": {
+      "deleteTitle": "Eliminar archivo"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "Medios"
+    },
+    "actions": {
+      "delete": "Eliminar ({count})",
+      "clear": "Limpiar",
+      "upload": "Subir"
+    },
+    "viewMode": {
+      "grid": "Vista de cuadrícula",
+      "list": "Vista de lista"
+    }
+  },
+  "newFolderPopup": {
+    "title": "Nueva carpeta",
+    "placeholder": "Nombre de la carpeta",
+    "buttons": {
+      "create": "Crear",
+      "cancel": "Cancelar"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "Sube archivos o importa medios mediante URL a la carpeta seleccionada.",
+    "title": "Añadir medios",
+    "tabs": {
+      "upload": "Subir archivo",
+      "url": "Añadir por URL"
+    },
+    "uploadZone": {
+      "hint": "Cualquier tipo de archivo — imágenes, vídeos, documentos"
+    },
+    "urlTab": {
+      "description": "Pega una URL pública para importar el archivo directamente al almacenamiento.",
+      "placeholder": "https://ejemplo.com/archivo.jpg",
+      "import": "Importar",
+      "importing": "Importando…",
+      "previewAlt": "Vista previa de URL"
+    },
+    "errors": {
+      "importFailed": "Error al importar"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "No se pudieron cargar las carpetas",
+      "loadFiles": "No se pudieron cargar los archivos",
+      "createFolder": "No se pudo crear la carpeta",
+      "deleteFailed": "Error al eliminar"
+    },
+    "confirmDelete": {
+      "titleFolder": "Eliminar carpeta",
+      "titleFile": "Eliminar archivo",
+      "message": "¿Estás seguro de que deseas eliminar",
+      "folderWarning": "Esto eliminará todos los archivos dentro de la carpeta.",
+      "undoWarning": "Esta acción no se puede deshacer.",
+      "selectionLabel": "{count} elementos",
+      "cancel": "Cancelar",
+      "confirm": "Eliminar",
+      "deleting": "Eliminando…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "No hay mensajes",
+      "subUnread": "¡Todo al día!",
+      "subAll": "Tu bandeja de entrada está vacía."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "justo ahora",
+      "minutesAgo": "hace {count}m",
+      "hoursAgo": "hace {count}h",
+      "daysAgo": "hace {count}d"
+    },
+    "unread": {
+      "badge": "{count} sin leer"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "Mensaje del sistema",
+    "from": "De: {name}",
+    "deleteButton": "Eliminar",
+    "deleteAriaLabel": "Eliminar conversación: {subject}",
+    "messagesAriaLabel": "Hilo de mensajes",
+    "loading": "Cargando mensajes...",
+    "emptyTitle": "Aún no hay mensajes",
+    "emptySub": "Envía el primer mensaje a continuación."
+  },
+  "messageBubble": {
+    "justNow": "Justo ahora",
+    "minutesAgo": "hace {count}m",
+    "hoursAgo": "hace {count}h",
+    "daysAgo": "hace {count}d"
+  },
+  "replyBar": {
+    "placeholder": "Escribe una respuesta… (Intro para enviar)",
+    "sendAriaLabel": "Enviar mensaje"
+  },
+  "messagesPage": {
+    "title": "Mensajes",
+    "unreadCount": "{count} mensaje(s) sin leer",
+    "filters": {
+      "all": "Todos",
+      "unread": "Sin leer"
+    },
+    "markAllRead": "Marcar todo como leído",
+    "closeError": "Cerrar mensaje de error",
+    "empty": {
+      "title": "Selecciona una conversación",
+      "sub": "Elige una conversación de la lista para leerla aquí."
+    },
+    "errors": {
+      "load": "No se pudieron cargar los mensajes",
+      "delete": "No se pudo eliminar la conversación",
+      "markAll": "No se pudo marcar todo como leído"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "Urgente",
+      "high": "Alta"
+    },
+    "actions": {
+      "markRead": "Marcar como leído",
+      "view": "Ver",
+      "delete": "Eliminar"
+    }
+  },
+  "notificationsHeader": {
+    "title": "Notificaciones",
+    "unreadCount": "{count} notificación(es) sin leer",
+    "filters": {
+      "all": "Todas",
+      "unread": "Sin leer"
+    },
+    "markAllRead": "Marcar todo como leído"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "No hay notificaciones",
+      "subUnread": "¡Todo al día!",
+      "subAll": "Aún no tienes notificaciones."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "No se pudieron cargar las notificaciones",
+      "markReadFailed": "No se pudo marcar como leído",
+      "markAllReadFailed": "No se pudo marcar todo como leído",
+      "deleteFailed": "No se pudo eliminar la notificación"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "Pública",
+      "admin": "Administración",
+      "draft": "Borrador",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "Páginas",
+      "pageCount": "{count} página(s) en total",
+      "searchPlaceholder": "Buscar páginas…",
+      "newPage": "Nueva página"
+    },
+    "filter": {
+      "all": "Todas"
+    },
+    "table": {
+      "page": "Página",
+      "model": "Modelo",
+      "template": "Plantilla",
+      "visibility": "Visibilidad",
+      "actions": "Acciones",
+      "seoPrefix": "SEO",
+      "systemBadge": "Sistema",
+      "hiddenBadge": "Oculta"
+    },
+    "emptyState": {
+      "message": "No se encontraron páginas",
+      "cta": "Crea tu primera página"
+    },
+    "actions": {
+      "edit": "Editar página",
+      "delete": "Eliminar página",
+      "view": "Ver página",
+      "confirmDelete": "Confirmar eliminación",
+      "cancel": "Cancelar",
+      "systemLocked": "Las páginas del sistema no se pueden editar ni eliminar"
+    },
+    "errors": {
+      "loadFailed": "No se pudieron cargar las páginas",
+      "createFailed": "No se pudo crear la página",
+      "updateFailed": "No se pudo actualizar la página",
+      "deleteFailed": "No se pudo eliminar la página"
+    },
+    "drawer": {
+      "title": "Crear página",
+      "editTitle": "Editar página",
+      "subtitle": "Define una nueva página y asocia un modelo",
+      "sections": {
+        "basicInfo": "Información básica",
+        "modelTemplate": "Modelo y plantilla",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "Ocultar página",
+          "hint": "Las páginas ocultas no se muestran en la navegación ni en los mapas del sitio"
+        },
+        "name": {
+          "label": "Nombre de la página",
+          "placeholder": "p. ej. Listado de productos"
+        },
+        "slug": {
+          "label": "Slug / URL",
+          "placeholder": "/tu-slug-de-pagina",
+          "hint": "Usa :id para rutas dinámicas, p. ej. /productos/:id"
+        },
+        "visibility": {
+          "label": "Visibilidad"
+        },
+        "model": {
+          "label": "Asociar modelo",
+          "noModel": "— Sin modelo (página personalizada) —",
+          "hint": "Un modelo puede alimentar varias páginas."
+        },
+        "template": {
+          "label": "Plantilla"
+        },
+        "seoTitle": {
+          "label": "Título SEO",
+          "placeholder": "Título de la página para los motores de búsqueda",
+          "charCount": "{count}/60 caracteres"
+        },
+        "seoDesc": {
+          "label": "Meta descripción",
+          "placeholder": "Breve descripción para los resultados de búsqueda…",
+          "charCount": "{count}/160 caracteres"
+        }
+      },
+      "seoPreview": {
+        "label": "Vista previa de búsqueda",
+        "titleFallback": "Título de la página",
+        "urlPrefix": "tusitio.com",
+        "descFallback": "No se proporcionó descripción."
+      },
+      "actions": {
+        "cancel": "Cancelar",
+        "create": "Crear página",
+        "update": "Actualizar página",
+        "saving": "Guardando…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "Generar nueva clave",
+    "keyNameLabel": "Nombre de la clave",
+    "keyNameHint": "Dale un nombre descriptivo para recordar para qué se usa.",
+    "keyNamePlaceholder": "p. ej. App Flutter — Producción",
+    "buttonGenerating": "Generando…",
+    "buttonIdle": "Generar clave"
+  },
+  "newKeyModal": {
+    "title": "Clave de API generada",
+    "instructions": "Tu clave ha sido creada y está lista para usarse. Haz clic en el <eyeIcon>icono del ojo</eyeIcon> junto a la clave en la lista para mostrarla y copiarla.",
+    "doneButton": "Listo"
+  },
+  "revokeModal": {
+    "title": "Revocar clave de API",
+    "message": "Cualquier aplicación que use esta clave perderá el acceso inmediatamente:",
+    "cancelButton": "Cancelar",
+    "revokeButtonIdle": "Revocar clave",
+    "revokeButtonRevoking": "Revocando…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "No se pudieron cargar las claves de API",
+      "generateFailed": "No se pudo generar la clave",
+      "revokeFailed": "No se pudo revocar la clave"
+    },
+    "logs": {
+      "loadingKeys": "Cargando claves de API...",
+      "keysLoaded": "Claves de API cargadas correctamente",
+      "generatingKey": "Generando nueva clave de API...",
+      "keyGenerated": "Clave de API generada correctamente",
+      "revokingKey": "Revocando clave de API...",
+      "keyRevoked": "Clave de API revocada correctamente"
+    }
+  },
+  "brandingPage": {
+    "heading": "Identidad de marca del CMS",
+    "subheading": "Personaliza el aspecto del CMS para tu equipo.",
+    "errors": {
+      "saveFailed": "No se pudo guardar la identidad de marca"
+    },
+    "logs": {
+      "savingBranding": "Guardando la configuración de identidad de marca...",
+      "brandingSaved": "Identidad de marca guardada correctamente"
+    },
+    "logoSection": {
+      "title": "Logotipo del CMS",
+      "uploadLabel": "Logotipo",
+      "uploadHint": "PNG o SVG con fondo transparente",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "Vista previa del logotipo"
+    },
+    "faviconSection": {
+      "title": "Favicon",
+      "uploadLabel": "Favicon",
+      "uploadHint": "ICO, PNG o SVG — se muestra en las pestañas del navegador",
+      "uploadRecommended": "32×32px o 64×64px",
+      "imageAlt": "Vista previa del favicon"
+    },
+    "preview": {
+      "label": "Vista previa de la barra superior",
+      "projectLabel": "Proyecto:"
+    },
+    "saveSuccess": "Identidad de marca guardada correctamente",
+    "saveButtonIdle": "Guardar identidad de marca",
+    "saveButtonSaving": "Guardando…"
+  },
+  "overviewPage": {
+    "heading": "Resumen del proyecto",
+    "subheading": "Una vista general de tu proyecto Underpeaks.",
+    "stats": {
+      "dbType": "Tipo de BD",
+      "environment": "Entorno",
+      "deployment": "Implementación",
+      "status": "Estado",
+      "statusActive": "Activo"
+    },
+    "userInfo": {
+      "sectionTitle": "Información del usuario",
+      "fullName": "Nombre completo",
+      "email": "Correo electrónico",
+      "role": "Rol",
+      "status": "Estado",
+      "verified": "Verificado",
+      "verifiedYes": "Sí",
+      "verifiedNo": "No",
+      "memberSince": "Miembro desde"
+    },
+    "licenseKey": {
+      "sectionTitle": "Clave de licencia de Underpeaks",
+      "description": "Tu clave de licencia autentica esta instancia y permite distinguir entre funciones alojadas y autoalojadas.",
+      "reveal": "Mostrar",
+      "hide": "Ocultar",
+      "copy": "Copiar",
+      "copied": "Copiado",
+      "loading": "Cargando…",
+      "notFound": "No se encontró ninguna clave de licencia"
+    }
+  },
+  "smtpPage": {
+    "heading": "Configuración de SMTP",
+    "subheading": "Configura el correo saliente para tu proyecto.",
+    "emailFeatures": {
+      "sectionTitle": "Funciones de correo electrónico",
+      "verifyEmailLabel": "Activar verificación de correo electrónico al registrarse",
+      "forgotPasswordLabel": "Activar correos de contraseña olvidada",
+      "builtInNotice": "{provider} gestiona de forma nativa la verificación de correo y el restablecimiento de contraseña — no se necesita SMTP para estas funciones.",
+      "smtpToggleLabel": "Usar servidor SMTP personalizado"
+    },
+    "smtpConfig": {
+      "sectionTitle": "Configuración de SMTP",
+      "hostLabel": "Host SMTP",
+      "hostPlaceholder": "smtp.ejemplo.com",
+      "portLabel": "Puerto",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "Dirección del remitente",
+      "fromAddressPlaceholder": "no-reply@ejemplo.com",
+      "usernameLabel": "Nombre de usuario",
+      "usernamePlaceholder": "Nombre de usuario SMTP",
+      "passwordLabel": "Contraseña",
+      "passwordPlaceholder": "Contraseña SMTP",
+      "showPassword": "Mostrar contraseña",
+      "hidePassword": "Ocultar contraseña",
+      "encryptionLabel": "Cifrado",
+      "encryptionNone": "Ninguno"
+    },
+    "logs": {
+      "savingSmtp": "Guardando la configuración de SMTP...",
+      "smtpSaved": "Configuración de SMTP guardada correctamente"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "Configuración",
+    "toggleAriaLabel": "Alternar navegación de configuración",
+    "nav": {
+      "overview": "Resumen",
+      "api-keys": "Claves de API",
+      "smtp": "Configuración de SMTP",
+      "branding": "Identidad de marca del CMS"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "Cargando configuración…"
+  },
+  "saveButton": {
+    "savedMessage": "Guardado correctamente",
+    "buttonSaving": "Guardando…",
+    "buttonIdle": "Guardar cambios"
+  },
+  "coloursPage": {
+    "heading": "Colores",
+    "subheading": "Define los tokens de color usados en tus aplicaciones Flutter y Next.js generadas.",
+    "preview": {
+      "title": "Vista previa en vivo",
+      "primaryButton": "Botón principal",
+      "secondaryButton": "Secundario",
+      "accentBadge": "Insignia de acento",
+      "success": "✓ Éxito",
+      "warning": "⚠ Advertencia",
+      "danger": "✕ Peligro"
+    },
+    "tokensSectionTitle": "Tokens de color",
+    "resetTokenTitle": "Restablecer al predeterminado",
+    "resetAllButton": "Restablecer todos a los valores predeterminados",
+    "savedMessage": "Guardado",
+    "saveButtonIdle": "Guardar colores",
+    "saveButtonSaving": "Guardando…",
+    "logs": {
+      "savingColours": "Guardando los tokens de color...",
+      "coloursSaved": "Tokens de color guardados correctamente"
+    },
+    "tokens": {
+      "primary":      { "label": "Primario",             "description": "Color principal de la marca — botones, enlaces, resaltados" },
+      "primary-fg":   { "label": "Primer plano primario",  "description": "Texto sobre fondos de color primario" },
+      "secondary":    { "label": "Secundario",           "description": "Color de marca de apoyo" },
+      "secondary-fg": { "label": "Primer plano secundario","description": "Texto sobre fondos de color secundario" },
+      "accent":       { "label": "Acento",              "description": "Color de resaltado para insignias y etiquetas" },
+      "background":   { "label": "Fondo",          "description": "Fondo principal de la aplicación" },
+      "surface":      { "label": "Superficie",             "description": "Fondo de tarjetas y paneles" },
+      "border":       { "label": "Borde",              "description": "Color de borde predeterminado" },
+      "success":      { "label": "Éxito",             "description": "Estados positivos y confirmaciones" },
+      "warning":      { "label": "Advertencia",             "description": "Advertencias y estados de precaución" },
+      "danger":       { "label": "Peligro",              "description": "Errores y acciones destructivas" },
+      "text":         { "label": "Texto principal",        "description": "Color principal del texto del cuerpo" },
+      "text-muted":   { "label": "Texto atenuado",          "description": "Texto secundario y texto de marcador de posición" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "Indicadores de funciones",
+    "comingSoonBadge": "PRÓXIMAMENTE",
+    "subheading": "Activa las funciones que se incluirán en tus aplicaciones Flutter y Next.js generadas.",
+    "paidBadge": "DE PAGO",
+    "savedMessage": "Guardado",
+    "saveButtonIdle": "Guardar indicadores",
+    "saveButtonSaving": "Guardando…",
+    "upgrade": {
+      "title": "Se requiere el plan alojado",
+      "description": "Estas funciones requieren la infraestructura alojada de Underpeaks. Actualiza para desbloquearlas.",
+      "button": "Actualizar"
+    },
+    "groups": {
+      "Appearance": "Apariencia",
+      "Localisation": "Localización",
+      "App Behaviour": "Comportamiento de la aplicación",
+      "Authentication — Paid": "Autenticación — De pago",
+      "Advanced — Paid": "Avanzado — De pago"
+    },
+    "flags": {
+      "dark-mode":          { "label": "Modo oscuro",                 "description": "Permite a los usuarios cambiar entre temas claro y oscuro en la aplicación" },
+      "system-theme":       { "label": "Seguir el tema del sistema",       "description": "Coincidir automáticamente con la configuración de modo claro/oscuro del dispositivo" },
+      "multi-language":     { "label": "Soporte multilingüe",    "description": "Activar el soporte de varios idiomas en la aplicación generada" },
+      "rtl-support":        { "label": "Soporte RTL",               "description": "Diseño de derecha a izquierda para árabe, hebreo e idiomas similares" },
+      "offline-mode":       { "label": "Modo sin conexión",              "description": "Almacenar datos localmente para que la aplicación funcione sin conexión a internet" },
+      "push-notifications": { "label": "Notificaciones push",        "description": "Activar el soporte de notificaciones push a través de FCM — tú proporcionas las claves" },
+      "splash-screen":      { "label": "Pantalla de inicio",             "description": "Mostrar una pantalla de inicio de marca cuando se abre la aplicación" },
+      "onboarding":         { "label": "Flujo de incorporación",           "description": "Mostrar un flujo de bienvenida/incorporación para nuevos usuarios" },
+      "2fa":                { "label": "Autenticación de dos factores", "description": "Requerir OTP o app de autenticación para iniciar sesión" },
+      "biometric":          { "label": "Inicio de sesión biométrico",           "description": "Inicio de sesión con huella dactilar y Face ID en móviles" },
+      "social-login":       { "label": "Inicio de sesión social",              "description": "OAuth de Google, GitHub, Apple y Facebook" },
+      "magic-link":         { "label": "Enlace mágico",                "description": "Inicio de sesión sin contraseña mediante enlace de correo" },
+      "sso":                { "label": "SSO / SAML",                "description": "Integración de inicio de sesión único empresarial" },
+      "analytics":          { "label": "Analítica dentro de la app",          "description": "Rastrear vistas de pantalla y eventos dentro de la aplicación generada" },
+      "ab-testing":         { "label": "Pruebas A/B",               "description": "Ejecutar experimentos de funciones en tu base de usuarios" },
+      "feature-gating":     { "label": "Control de acceso a funciones",            "description": "Mostrar u ocultar funciones según el plan o rol del usuario" }
+    },
+    "logs": {
+      "savingFlags": "Guardando los indicadores de funciones...",
+      "flagsSaved": "Indicadores de funciones guardados correctamente"
+    }
+  },
+  "spacingPage": {
+    "heading": "Espaciado y radio",
+    "subheading": "Controla la forma, densidad y elevación de los componentes en tus aplicaciones generadas.",
+    "preview": {
+      "title": "Vista previa en vivo",
+      "button": "Botón",
+      "card": "Componente de tarjeta",
+      "input": "Campo de entrada"
+    },
+    "sections": {
+      "radius": {
+        "title": "Radio del borde",
+        "description": "Aplicado a botones, tarjetas, campos de entrada y modales"
+      },
+      "density": {
+        "title": "Densidad de espaciado",
+        "description": "Controla el relleno interno de los componentes"
+      },
+      "shadow": {
+        "title": "Elevación / sombra",
+        "description": "Profundidad de sombra de tarjetas y componentes"
+      }
+    },
+    "radius": {
+      "none": "Ninguno",
+      "sm": "Pequeño",
+      "md": "Medio",
+      "lg": "Grande",
+      "xl": "Extra grande",
+      "full": "Píldora"
+    },
+    "density": {
+      "compact": { "label": "Compacto", "desc": "Relleno reducido, más contenido visible" },
+      "default": { "label": "Predeterminado", "desc": "Espaciado equilibrado para la mayoría de los casos de uso" },
+      "relaxed": { "label": "Relajado", "desc": "Relleno generoso, más fácil de tocar" }
+    },
+    "shadow": {
+      "none": "Ninguna",
+      "sm": "Sutil",
+      "md": "Media",
+      "lg": "Fuerte"
+    },
+    "save": {
+      "button": "Guardar espaciado",
+      "saving": "Guardando…",
+      "savedConfirmation": "Guardado"
+    }
+  },
+  "typographyPage": {
+    "heading": "Tipografía",
+    "subheading": "Elige fuentes y escala para tus aplicaciones generadas. Las fuentes se cargan desde Google Fonts.",
+    "preview": {
+      "title": "Vista previa en vivo",
+      "headingSuffix": "— Título",
+      "bodySample": "El veloz murciélago hindú comía feliz cardillo y kiwi. Ejemplo de texto de cuerpo en tamaño predeterminado.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "Familias de fuentes",
+        "description": "Selecciona de Google Fonts — incluido automáticamente en la generación de código"
+      },
+      "weights": {
+        "title": "Pesos de fuente"
+      },
+      "scale": {
+        "title": "Escala de tamaño de fuente",
+        "description": "Controla el tamaño general del texto en toda la aplicación"
+      }
+    },
+    "fonts": {
+      "headingFont": "Fuente de títulos",
+      "bodyFont": "Fuente del cuerpo",
+      "monoFont": "Fuente monoespaciada"
+    },
+    "weights": {
+      "headingWeight": "Peso del título",
+      "bodyWeight": "Peso del cuerpo"
+    },
+    "scale": {
+      "compact": { "label": "Compacto", "desc": "Texto más pequeño, espaciado más reducido" },
+      "default": { "label": "Predeterminado", "desc": "Equilibrado para la mayoría de las aplicaciones" },
+      "relaxed": { "label": "Relajado", "desc": "Texto más grande, más espacio" }
+    },
+    "save": {
+      "button": "Guardar tipografía",
+      "saving": "Guardando…",
+      "savedConfirmation": "Guardado"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "Tema",
+    "nav": {
+      "colours": "Colores",
+      "typography": "Tipografía",
+      "spacing": "Espaciado y radio",
+      "featureFlags": "Indicadores de funciones",
+      "presets": "Preajustes"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "Sesión inactiva",
+      "description": "Has estado inactivo. Cerrando sesión en:",
+      "logoutButton": "Cerrar sesión",
+      "keepAliveButton": "Mantener sesión activa"
+    },
+    "logs": {
+      "logoutFailed": "Error al cerrar sesión:"
+    }
+  },
+  "loader": {
+    "label": "Cargando…"
+  },
+  "userStatus": {
+    "active": "Activo",
+    "needsEmailVerification": "Requiere verificación de correo electrónico",
+    "passwordResetRequested": "Restablecimiento de contraseña solicitado",
+    "blocked": "Bloqueado",
+    "disabled": "Desactivado"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Error al crear el proyecto Flutter"
+    },
+    "logs": {
+      "skipped": "Creación del proyecto Flutter omitida: {output}",
+      "created": "Proyecto Flutter creado: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "Error al crear el proyecto NextJS"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "No se encontró la configuración de la base de datos.",
+      "dbConfigMissing": "Falta la configuración de la BD",
+      "dbConfigMissingStore": "Falta la configuración de la BD en el almacén",
+      "adminEmailMissing": "Falta el correo electrónico del usuario administrador",
+      "adminEmailMissingStore": "Falta el correo electrónico del usuario administrador en el almacén",
+      "projectTypeMissing": "Falta selectedProjectType",
+      "createTablesFailed": "No se pudieron crear las tablas: {message}",
+      "createAdminFailed": "No se pudo crear el usuario administrador: {message}",
+      "createModelsFailed": "No se pudieron crear los modelos: {message}",
+      "writeConfigFailed": "No se pudo escribir el archivo de configuración: {message}",
+      "setupStorageFailed": "No se pudo configurar el almacenamiento: {message}",
+      "installDemoFailed": "No se pudo instalar el contenido de demostración: {message}",
+      "stepFailed": "Error en el paso: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "Tablas creadas:",
+      "adminCreated": "Usuario administrador creado:",
+      "modelsCreated": "Respuesta de creación de modelos:",
+      "modelsSkipped": "Creación de modelos omitida: {message}",
+      "configWritten": "Archivo de configuración escrito correctamente:",
+      "storageCreated": "Buckets de almacenamiento creados:",
+      "demoContentSkipped": "Contenido de demostración omitido",
+      "demoContentInstalled": "Contenido de demostración instalado:",
+      "creatingApiEndpoints": "Creando puntos de conexión de API...",
+      "settingUpAuth": "Configurando la autenticación...",
+      "configuringSession": "Configurando la gestión de sesiones...",
+      "runningTests": "Ejecutando pruebas...",
+      "finalizing": "Finalizando el instalador...",
+      "noImplementation": "No hay implementación para el paso: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "heading": "Configuración del usuario administrador",
+    "description": "Proporciona los datos del usuario administrador para proteger tu sistema Underpeaks. Esta cuenta tendrá acceso administrativo completo a la plataforma.",
+    "disclaimer": "Ten en cuenta: esto crea una cuenta de administrador en el sistema Underpeaks y puede ser diferente de tu cuenta de administrador de base de datos.",
+    "fields": {
+      "fullName": {
+        "label": "Nombre completo",
+        "placeholder": "p. ej., Juan Pérez"
+      },
+      "email": {
+        "label": "Dirección de correo electrónico",
+        "placeholder": "admin@ejemplo.com"
+      },
+      "password": {
+        "label": "Contraseña",
+        "placeholder": "Crea una contraseña segura"
+      }
+    },
+    "errors": {
+      "nameRequired": "El nombre completo es obligatorio",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "passwordInvalid": "La contraseña es obligatoria | La contraseña debe tener 8 caracteres | Debe contener una letra mayúscula | Debe contener un carácter especial (p. ej. !@#$%^&*)"
+    },
+    "continueButton": "Continuar"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "heading": "Elige tu pila tecnológica",
+    "description": "Selecciona la pila tecnológica que mejor se adapte a las necesidades de tu proyecto. Puedes cambiarla más adelante si deseas añadir más plataformas o cambiar tu enfoque.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "¡Combo completo! Next.js para web y Flutter para aplicaciones móviles y de escritorio multiplataforma."
+      },
+      "next": {
+        "title": "Solo Next.js",
+        "description": "Usa Next.js como un potente framework SSR de React y <strong>como un CMS headless para gestionar contenido y APIs.</strong>"
+      },
+      "flutter": {
+        "title": "Solo Flutter",
+        "description": "Crea aplicaciones móviles y de escritorio multiplataforma con Flutter usando una base de código compartida, y <strong>úsalo como backend de CMS headless si lo deseas.</strong>"
+      },
+      "cms": {
+        "title": "CMS Headless",
+        "description": "Implementa solo como backend de CMS headless. Expón tus datos a través de APIs y conéctalos a cualquier frontend personalizado, aplicación móvil o servicio de terceros con total flexibilidad."
+      }
+    },
+    "nextButton": "Siguiente"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "heading": "Configuración de la base de datos",
+    "selectPlaceholder": "Selecciona una base de datos",
+    "fieldExample": "(p. ej. {placeholder})",
+    "savingWarning": "⚠️ Ten paciencia, esto puede tardar un momento...",
+    "infoBlock": {
+      "whereLabel": "Dónde encontrarlo:"
+    },
+    "testSteps": {
+      "validating": "Validando la configuración...",
+      "sending": "Enviando configuración al servidor...",
+      "testing": "Probando la conexión a la base de datos...",
+      "finalizing": "Finalizando la verificación de conexión..."
+    },
+    "errors": {
+      "serverRejected": "El servidor rechazó la conexión",
+      "connectionFailed": "Error de conexión: {message}"
+    },
+    "buttons": {
+      "testConnection": "Probar conexión",
+      "testing": "Probando...",
+      "saving": "Guardando...",
+      "continue": "Continuar"
+    },
+    "logs": {
+      "firebaseParseError": "Error al analizar la configuración de Firebase"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "projectType": {
+      "title": "Selecciona el tipo de proyecto",
+      "description": "Elige una plantilla para instalar automáticamente los modelos predeterminados de tu proyecto."
+    },
+    "projects": {
+      "ecommerce":   { "label": "Comercio electrónico",         "description": "Incluye productos, categorías, pedidos, clientes y páginas de tienda." },
+      "marketplace": { "label": "Mercado",         "description": "Admite múltiples vendedores, anuncios, comisiones y paneles de vendedores." },
+      "listing":     { "label": "Plataforma de anuncios",    "description": "Para anuncios de propiedades, empleo o servicios con categorías, búsqueda y filtros." },
+      "blog":        { "label": "Blog / Sitio de contenido", "description": "Sitio impulsado por contenido con publicaciones, categorías, etiquetas, autores y comentarios." },
+      "social":      { "label": "Red social",      "description": "Perfiles de usuario, publicaciones, comentarios, me gusta, seguidores, mensajes y notificaciones." },
+      "saas":        { "label": "SaaS / Aplicación web",      "description": "Estructura de aplicación web con usuarios, roles, permisos y planes de suscripción." },
+      "blank":       { "label": "Proyecto en blanco",       "description": "Sin contenido de demostración; comienza con un esqueleto de proyecto vacío." }
+    },
+    "demoContent": {
+      "title": "Configurar contenido de demostración",
+      "description": "Previsualiza tu tienda con datos de ejemplo ya cargados.",
+      "checkboxLabel": "Incluir contenido de demostración para el proyecto seleccionado",
+      "ecommerce": {
+        "item1": "Productos de demostración con categorías y etiquetas",
+        "item2": "Clientes y pedidos de ejemplo",
+        "item3": "Páginas de tienda (inicio, productos, carrito, pago)",
+        "item4": "Contenido básico del CMS",
+        "item5": "Menús y módulos preconfigurados"
+      }
+    },
+    "continueButtonIdle": "Continuar",
+    "continueButtonLoading": "Continuando...",
+    "logs": {
+      "navigatingToFinalise": "Guardando las selecciones del instalador y navegando al paso de finalización..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "installComplete": "🎉 ¡Instalación completa!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "Información del proyecto",
+      "subtitle": "Información básica sobre la configuración de tu proyecto.",
+      "name": "Nombre:",
+      "stack": "Pila:"
+    },
+    "database": {
+      "title": "Base de datos",
+      "subtitle": "Tu base de datos seleccionada y su configuración.",
+      "type": "Tipo:",
+      "noneSelected": "Ninguna seleccionada"
+    },
+    "adminUser": {
+      "title": "Usuario administrador",
+      "subtitle": "Tus credenciales de administrador iniciales.",
+      "name": "Nombre:",
+      "email": "Correo electrónico:",
+      "password": "Contraseña:"
+    },
+    "projectType": {
+      "title": "Tipo de proyecto seleccionado",
+      "subtitle": "Plantilla de proyecto elegida durante la configuración."
+    },
+    "demoContent": {
+      "title": "Contenido de demostración",
+      "subtitle": "Si precargar o no datos de ejemplo de la tienda.",
+      "installed": "Instalado",
+      "notInstalled": "No instalado"
+    },
+    "continueButton": "Continuar a → Iniciar sesión"
+  },
+  "ecommercePage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "card": {
+      "title": "Personaliza tus módulos de comercio electrónico"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "Activar módulo de comercio electrónico",
+        "description": "Añade catálogo de productos, carrito, pago y gestión de pedidos."
+      },
+      "physical": {
+        "label": "Incluir productos físicos",
+        "description": "Admite inventario, envío, devoluciones y seguimiento de bienes tangibles."
+      },
+      "digital": {
+        "label": "Incluir productos digitales",
+        "description": "Vende contenido descargable como PDFs, vídeos o licencias de software."
+      }
+    },
+    "button": {
+      "next": "Siguiente",
+      "continuing": "Continuando..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "card": {
+      "title": "Finalizar configuración"
+    },
+    "summary": {
+      "project": "Proyecto:",
+      "defaultProject": "MiApp",
+      "stack": "Pila:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "Base de datos:",
+      "notSelected": "No seleccionada"
+    },
+    "steps": {
+      "heading": "Pasos de instalación:",
+      "skipped": "¡omitido!"
+    },
+    "progress": {
+      "finishing": "Finalizando...",
+      "ready": "Listo para instalar tu proyecto"
+    },
+    "errors": {
+      "label": "Error:",
+      "noDatabase": "No se seleccionó ninguna base de datos, no se puede guardar la configuración.",
+      "saveFailed": "No se pudo guardar la configuración del instalador",
+      "unknown": "Se produjo un error desconocido"
+    },
+    "button": {
+      "start": "Iniciar instalación",
+      "installing": "Instalando..."
+    },
+    "logs": {
+      "sendingConfig": "Enviando configuración del instalador al servidor...",
+      "configSaved": "Configuración del instalador guardada correctamente",
+      "installError": "Error de instalación:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "heading": "Selecciona modelos predeterminados",
+    "subheading": "Elige los modelos de datos predeterminados que deseas incluir en tu proyecto. Puedes crear o editar modelos más adelante.",
+    "required": "(obligatorio)",
+    "toggleAll": {
+      "deselect": "Deseleccionar todo",
+      "select": "Seleccionar todo"
+    },
+    "models": {
+      "users":      { "label": "Usuarios",      "description": "Gestionar usuarios de la aplicación y autenticación" },
+      "products":   { "label": "Productos",   "description": "Catálogo de productos o servicios" },
+      "orders":     { "label": "Pedidos",     "description": "Seguimiento de pedidos y compras de clientes" },
+      "coupons":    { "label": "Cupones",    "description": "Cupones de descuento y promociones" },
+      "categories": { "label": "Categorías", "description": "Organizar productos o contenido" },
+      "reviews":    { "label": "Reseñas",    "description": "Comentarios y valoraciones de usuarios" }
+    },
+    "button": {
+      "continue": "Continuar",
+      "continuing": "Continuando..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "heading": "Configuración del proyecto",
+    "subheading": "Introduce el nombre del proyecto, el subdominio y el dominio para tu estudio autoalojado.",
+    "continueButton": "Continuar",
+    "fields": {
+      "name": {
+        "label": "Nombre del proyecto",
+        "placeholder": "p. ej., MiApp Studio"
+      },
+      "domain": {
+        "label": "Dominio",
+        "placeholder": "p. ej., http://localhost:3000",
+        "hint": "Dominio completo de tu aplicación. Predeterminado es"
+      },
+      "subdomain": {
+        "label": "Subdominio",
+        "placeholder": "p. ej., consola",
+        "hint": "Esto se usará para la URL:"
+      }
+    },
+    "errors": {
+      "nameRequired": "El nombre del proyecto es obligatorio",
+      "subdomainRequired": "El subdominio es obligatorio",
+      "domainRequired": "El dominio es obligatorio"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Logotipo de Underpeaks",
+    "tagline": "Tu instalador y generador de código SaaS todo en uno",
+    "continueButton": "Continuar →",
+    "continueLoading": "Cargando...",
+    "benefits": {
+      "heading": "¿Por qué Underpeaks?",
+      "item1": "🔧 Generador completo de base de código (Next.js + Flutter)",
+      "item2": "⚙️ Se acabó el código repetitivo — solo código listo para producción",
+      "item3": "🌍 Preparado para multilingüismo y multiinquilino",
+      "item4": "📦 Autoalojado o alojado en la nube — tú eliges",
+      "item5": "🔐 Autenticación, roles, permisos e interfaz de instalador integrados",
+      "item6": "💼 Ideal para startups, agencias y proyectos empresariales"
+    },
+    "license": {
+      "heading": "Acuerdo de licencia",
+      "loading": "Cargando la licencia...",
+      "loadFailed": "No se pudo cargar el acuerdo de licencia.",
+      "acceptLabel": "Aceptar los términos de la licencia."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "Se requieren la contraseña actual y la nueva",
+      "passwordTooShort": "La contraseña debe tener al menos 8 caracteres",
+      "unauthorized": "No autorizado",
+      "invalidToken": "Token inválido",
+      "userNotFound": "Usuario no encontrado",
+      "incorrectCurrentPassword": "La contraseña actual es incorrecta",
+      "internalError": "Se produjo un error inesperado"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Contraseña de Firebase Auth actualizada",
+      "firebasePasswordUpdateFailed": "[change-password] Error al actualizar la contraseña de Firebase Auth"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "Usuario administrador creado correctamente"
+    },
+    "errors": {
+      "missingConfig": "Falta la configuración de la BD",
+      "missingAdminUser": "Faltan los datos del usuario administrador",
+      "genericFailure": "No se pudo crear el usuario administrador"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "Falta la configuración de la BD o el correo del administrador",
+      "adapterNotSupported": "Este adaptador de base de datos no admite la creación de modelos de datos",
+      "genericFailure": "No se pudieron insertar los modelos de datos"
+    },
+    "logs": {
+      "createModelsError": "Error en la API create-data-models:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "Falta la configuración/tipo de BD",
+      "adapterNotSupported": "El adaptador {type} no implementa la configuración de almacenamiento"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "Se crearon todas las tablas de sistema, usuario y proyecto"
+    },
+    "errors": {
+      "missingConfig": "Falta la configuración de la BD",
+      "genericFailure": "No se pudieron crear las tablas"
+    },
+    "logs": {
+      "createTablesError": "[ERROR AL CREAR TABLAS]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Falta la variable de entorno de Firebase: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "Falta projectName",
+      "flutterNotInstalled": "Flutter no está instalado o no está en el PATH.",
+      "stepFailed": "Error en el paso: Creación del proyecto Flutter - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "El proyecto Flutter \"{projectName}\" ya existe. Creación omitida.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Error en la creación de Flutter:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "El correo electrónico es obligatorio",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE no está establecido",
+      "firebaseClientSide": "El restablecimiento de contraseña de Firebase se gestiona del lado del cliente",
+      "supabaseMissingMethod": "Al adaptador Supabase le falta el método sendResetEmail",
+      "unsupportedDbType": "Tipo de BD no compatible: {dbType}",
+      "adapterMissingMethods": "Al adaptador ${dbType} le faltan métodos requeridos",
+      "userNotFound": "Usuario no encontrado",
+      "genericFailure": "No se pudo enviar el enlace de restablecimiento"
+    },
+    "notices": {
+      "smtpDisabled": "El envío de correo electrónico está desactivado. Pide a tu administrador que restablezca tu contraseña."
+    },
+    "email": {
+      "subject": "Solicitud de restablecimiento de contraseña",
+      "body": "<p>Hola {name},</p><p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p><a href=\"{resetLink}\">{resetLink}</a><p>Si no solicitaste esto, ignora este correo electrónico.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Correo de restablecimiento de Supabase enviado",
+      "resetEmailSent": "Correo de restablecimiento enviado",
+      "smtpDisabled": "SMTP/forgot-password desactivado — correo omitido",
+      "forgotPasswordError": "Error de contraseña olvidada:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Falta la cuenta de servicio de Firebase",
+      "unsupportedDbType": "Tipo de BD no compatible: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[ERROR DE CONFIGURACIÓN DEL SISTEMA]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "Falta la configuración de la BD",
+      "missingProjectType": "Falta el tipo de proyecto",
+      "adapterNotSupported": "installDemoContent no está implementado para este adaptador"
+    },
+    "logs": {
+      "installDemoContentError": "Error de install-demo-content:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "Sesión cerrada correctamente"
+    },
+    "errors": {
+      "tokenRequired": "El token es obligatorio",
+      "dbTypeNotSet": "NEXT_DB_TYPE no está establecido",
+      "firebaseServiceAccountMissing": "Falta la cuenta de servicio de Firebase",
+      "mysqlEnvMissing": "Faltan las variables de entorno de MySQL",
+      "postgresEnvMissing": "Faltan las variables de entorno de Postgres",
+      "unsupportedDbType": "Tipo de BD no compatible: {dbType}",
+      "tokenNotFound": "Token no encontrado"
+    },
+    "logs": {
+      "logoutError": "ERROR DE LA API DE CIERRE DE SESIÓN:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id es obligatorio",
+      "unauthorized": "No autorizado",
+      "invalidToken": "Token inválido"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder es obligatorio",
+      "internalError": "Se produjo un error inesperado"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] Carpetas enriquecidas correctamente con recuentos de archivos"
+    },
+    "errors": {
+      "internalError": "Se produjo un error inesperado"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "Se requieren fromFolder, toFolder y fileName",
+      "moveFileNotSupported": "moveFile no compatible",
+      "internalError": "Se produjo un error inesperado"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "Se requieren folder, oldName y newName",
+      "renameFileNotSupported": "renameFile no compatible",
+      "internalError": "Se produjo un error inesperado"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "Se requieren archivo y carpeta",
+      "uploadFileNotSupported": "uploadFile no compatible",
+      "internalError": "Error al subir"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] modo:",
+      "projectIdLookupFailed": "[upload-file] error al buscar project_id",
+      "metadataSaved": "[upload-file] metadatos guardados en nxf_storage",
+      "metadataSaveFailed": "[upload-file] error al guardar metadatos",
+      "localUploadSuccess": "[upload-file] carga local guardada:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "No se pudo probar la conexión a la base de datos"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id es obligatorio",
+      "firebaseServiceAccountMissing": "Falta la cuenta de servicio de Firebase",
+      "unsupportedDbType": "Tipo de base de datos no compatible",
+      "systemConfigNotFound": "No se encontró la configuración del sistema",
+      "internalError": "Error interno del servidor"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "El nombre completo es obligatorio",
+      "unauthorized": "No autorizado",
+      "invalidToken": "Token inválido",
+      "internalError": "Se produjo un error inesperado"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "Se requieren user_id y project_name",
+      "firebaseServiceAccountMissing": "Falta la cuenta de servicio de Firebase",
+      "unsupportedDbType": "Tipo de base de datos no compatible",
+      "systemConfigNotFound": "No se encontró la configuración del sistema para este usuario",
+      "internalError": "Error interno del servidor"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id es obligatorio",
+      "firebaseServiceAccountMissing": "Falta la cuenta de servicio de Firebase",
+      "unsupportedDbType": "Tipo de base de datos no compatible",
+      "systemConfigNotFound": "No se encontró la configuración del sistema para este usuario",
+      "internalError": "Error interno del servidor"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "No se pudieron escribir los archivos de configuración"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "Se encontró un usuario de autenticación existente:",
+      "newAuthUserCreated": "Nuevo usuario de autenticación creado:",
+      "creatingAdminInDb": "Creando usuario administrador en la BD...",
+      "userAlreadyInDb": "El usuario ya existe en la BD:",
+      "existingProjectFound": "Se encontró un proyecto existente:",
+      "newProjectCreated": "Nuevo proyecto creado:",
+      "existingTenantFound": "Se encontró un inquilino existente:",
+      "newTenantCreated": "Nuevo inquilino creado:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "Ejecución duplicada de CreateDataModels omitida — este proyecto y combinación de tipo ya se procesaron.",
+      "creatingTable": "Creando tabla:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable no implementado, creación de tabla omitida"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "Carpeta de carga",
+      "customFolder": "Carpeta personalizada…",
+      "enterFolderName": "Introduce el nombre de la carpeta",
+      "placeholder": "p. ej. banners/verano",
+      "uploadingTo": "Subiendo a:"
+    },
+    "preview": {
+      "alt": "Vista previa",
+      "uploaded": "Subido",
+      "replace": "Reemplazar",
+      "clear": "Quitar archivo"
+    },
+    "dropzone": {
+      "uploading": "Subiendo…",
+      "idle": "Arrastra y suelta o",
+      "browse": "explorar",
+      "recommended": "Recomendado:"
+    },
+    "errors": {
+      "noFolder": "Selecciona o introduce una carpeta antes de subir.",
+      "uploadFailed": "Error al subir",
+      "uploadFailedStatus": "Error al subir:",
+      "networkError": "Error de red"
+    }
+  },
+  "modelView": {
+    "systemBadge": "Sistema",
+    "subtitle": "Solo lectura — esta es una tabla de sistema protegida.",
+    "fieldsHeading": "Campos",
+    "actions": {
+      "back": "Volver a modelos"
+    },
+    "stats": {
+      "fields": "Campos",
+      "created": "Creado",
+      "updated": "Última actualización"
+    },
+    "table": {
+      "name": "Nombre del campo",
+      "type": "Tipo",
+      "constraints": "Restricciones",
+      "nullable": "Obligatorio",
+      "default": "Predeterminado",
+      "uiType": "Tipo de UI"
+    },
+    "badges": {
+      "hidden": "Oculto",
+      "required": "Obligatorio",
+      "optional": "Opcional"
+    },
+    "errors": {
+      "loadFailed": "No se pudo cargar el modelo.",
+      "notFound": "Modelo no encontrado."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "Modelos",
+      "subtitle": "Define y gestiona la estructura de datos de tu proyecto.",
+      "createButton": "Crear modelo"
+    },
+    "filter": {
+      "all": "Todos",
+      "user": "Usuario",
+      "system": "Sistema"
+    },
+    "states": {
+      "empty": "No se encontraron modelos.",
+      "emptyHint": "Crea tu primer modelo para empezar."
+    },
+    "badges": {
+      "system": "Sistema",
+      "partialSystem": "Sistema editable"
+    },
+    "meta": {
+      "fields": "{count} campos",
+      "foreignKeys": "{count} FK"
+    },
+    "card": {
+      "editAriaLabel": "Editar {name}",
+      "deleteAriaLabel": "Eliminar {name}"
+    },
+    "confirmDelete": {
+      "title": "¿Eliminar modelo?",
+      "description": "¿Estás seguro de que deseas eliminar \"{name}\"? Todos los datos de esta tabla se eliminarán permanentemente. Esto no se puede deshacer.",
+      "confirm": "Eliminar",
+      "deleting": "Eliminando…",
+      "cancel": "Cancelar"
+    },
+    "errors": {
+      "loadFailed": "No se pudieron cargar los modelos.",
+      "deleteFailed": "No se pudo eliminar el modelo."
+    }
+  },
+  "createModel": {
+    "title": "Crear modelo",
+    "subtitle": "Define un nuevo modelo de datos y sus campos.",
+    "actions": {
+      "save": "Guardar modelo",
+      "saving": "Guardando…",
+      "back": "Volver a modelos"
+    },
+    "form": {
+      "modelNameLabel": "Nombre del modelo",
+      "modelNamePlaceholder": "p. ej. Producto",
+      "fieldNamePlaceholder": "Nombre del campo",
+      "required": "Obligatorio",
+      "unique": "Único",
+      "primaryKey": "Clave primaria",
+      "primaryKeyTaken": "ya establecida",
+      "hidden": "Oculto",
+      "uiType": "Tipo de UI",
+      "foreignKeyTable": "Clave foránea — Tabla",
+      "foreignKeyColumn": "Clave foránea — Columna",
+      "noForeignKey": "— Sin clave foránea —",
+      "selectColumn": "— Selecciona columna —",
+      "onDelete": "Al eliminar",
+      "addField": "Añadir campo",
+      "removeField": "Quitar campo",
+      "expandField": "Mostrar opciones avanzadas",
+      "collapseField": "Ocultar opciones avanzadas",
+      "foreignKey": "Clave foránea"
+    },
+    "validation": {
+      "modelNameRequired": "El nombre del modelo es obligatorio.",
+      "fieldsInvalid": "Todos los campos deben tener un nombre.",
+      "fieldNameUnique": "Los nombres de los campos deben ser únicos.",
+      "singlePrimaryKey": "Solo se permite una clave primaria por modelo."
+    },
+    "confirmDelete": {
+      "title": "¿Eliminar campo?",
+      "description": "¿Estás seguro de que deseas quitar este campo?",
+      "confirm": "Eliminar",
+      "cancel": "Cancelar"
+    },
+    "errors": {
+      "createFailed": "No se pudo crear el modelo."
+    }
+  },
+  "editModel": {
+    "title": "Editar modelo",
+    "subtitle": "Actualiza el nombre del modelo y las definiciones de sus campos.",
+    "actions": {
+      "save": "Guardar cambios",
+      "saving": "Guardando…",
+      "back": "Volver a modelos"
+    },
+    "form": {
+      "modelNameLabel": "Nombre del modelo",
+      "modelNamePlaceholder": "Nombre del modelo",
+      "fieldNamePlaceholder": "Nombre del campo",
+      "required": "Obligatorio",
+      "unique": "Único",
+      "primaryKey": "Clave primaria",
+      "primaryKeyTaken": "ya establecida",
+      "hidden": "Oculto",
+      "uiType": "Tipo de UI",
+      "foreignKeyTable": "Clave foránea — Tabla",
+      "foreignKeyColumn": "Clave foránea — Columna",
+      "noForeignKey": "— Sin clave foránea —",
+      "selectColumn": "— Selecciona columna —",
+      "onDelete": "Al eliminar",
+      "addField": "Añadir campo",
+      "removeField": "Quitar campo",
+      "expandField": "Mostrar opciones avanzadas",
+      "collapseField": "Ocultar opciones avanzadas",
+      "foreignKey": "Clave foránea"
+    },
+    "validation": {
+      "modelNameRequired": "El nombre del modelo es obligatorio.",
+      "fieldsInvalid": "Todos los campos deben tener un nombre.",
+      "fieldNameUnique": "Los nombres de los campos deben ser únicos.",
+      "singlePrimaryKey": "Solo se permite una clave primaria por modelo."
+    },
+    "confirmDelete": {
+      "title": "¿Eliminar campo?",
+      "description": "¿Estás seguro de que deseas quitar este campo?",
+      "confirm": "Eliminar",
+      "cancel": "Cancelar"
+    },
+    "warningDialog": {
+      "title": "Advertencia grave",
+      "subtitle": "Estás a punto de eliminar un campo protegido.",
+      "primaryKeyWarning": "Este campo es la clave primaria de esta tabla. Eliminarlo romperá todas las relaciones que hagan referencia a esta tabla y puede corromper permanentemente los datos existentes en todo tu proyecto.",
+      "foreignKeyWarning": "Este campo es una clave foránea que vincula esta tabla con otra. Eliminarlo romperá la relación y puede causar problemas de integridad de datos en los registros existentes.",
+      "checkboxLabel": "Entiendo que esto puede corromper permanentemente mis datos y no se puede deshacer.",
+      "confirm": "Eliminar de todos modos",
+      "cancel": "Cancelar"
+    },
+    "errors": {
+      "loadModelFailed": "No se pudo cargar el modelo.",
+      "modelNotFound": "Modelo no encontrado.",
+      "updateModelFailed": "No se pudo actualizar el modelo."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id es obligatorio",
+      "invalidBody": "Cuerpo de la solicitud inválido o vacío",
+      "missingFields": "Faltan campos obligatorios",
+      "projectNotFound": "No se encontró ningún proyecto para este usuario",
+      "nameAlreadyExists": "Ya existe un modelo con este nombre",
+      "fetchFailed": "No se pudieron obtener los modelos",
+      "createFailed": "No se pudo crear el modelo",
+      "updateFailed": "No se pudo actualizar el modelo",
+      "deleteFailed": "No se pudo eliminar el modelo",
+      "multiplePrimaryKeys": "Solo se permite una clave primaria por modelo",
+      "systemTableProtected": "Las tablas de sistema no se pueden crear, modificar ni eliminar"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— Selecciona un campo —",
+    "clear": "Borrar clave foránea",
+    "searchPlaceholder": "Buscar modelos…",
+    "noResults": "No se encontraron modelos.",
+    "systemBadge": "Sistema",
+    "fieldsLabel": "campos",
+    "onDelete": "Al eliminar",
+    "filter": {
+      "all": "Todos",
+      "user": "Usuario",
+      "system": "Sistema"
+    }
+  },
+  "users": {
+    "page_title": "Usuarios",
+    "page_description": "Gestiona las cuentas de administración y usuarios del CMS",
+    "edit_kpis": "Editar KPI",
+    "editing_kpis": "Editando KPI",
+    "save_layout": "Guardar diseño",
+    "saving": "Guardando…",
+    "search_placeholder": "Buscar por nombre o correo electrónico…",
+    "showing_count": "Mostrando {filtered} de {total} usuarios",
+    "no_users_found": "No se encontraron usuarios",
+    "filter": "Filtrar",
+    "sort": "Ordenar",
+    "clear_all": "Borrar todo",
+    "filters": "Filtros",
+    "role": "Rol",
+    "all_roles": "Todos los roles",
+    "all_statuses": "Todos los estados",
+    "status": "Estado",
+    "joined_from": "Registrado desde",
+    "joined_to": "Registrado hasta",
+    "sort_by": "Ordenar por",
+    "direction": "Dirección",
+    "asc": "Ascendente (A → Z)",
+    "desc": "Descendente (Z → A)",
+    "col_name": "Nombre",
+    "col_email": "Correo electrónico",
+    "col_role": "Rol",
+    "col_status": "Estado",
+    "col_last_login": "Último inicio de sesión",
+    "col_joined": "Registrado",
+    "role_admin": "Administrador",
+    "role_user": "Usuario",
+    "status_active": "Activo",
+    "status_suspended": "Suspendido",
+    "status_disabled": "Desactivado",
+    "drawer_title": "Detalles del usuario",
+    "actions": "Acciones",
+    "change_role": "Rol",
+    "change_status": "Estado",
+    "send_reset": "Enviar correo de restablecimiento de contraseña",
+    "sending_reset": "Enviando…",
+    "delete_user": "Eliminar usuario",
+    "delete_confirm": "¿Eliminar permanentemente este usuario? Esto no se puede deshacer.",
+    "cancel": "Cancelar",
+    "confirm_delete": "Sí, eliminar",
+    "deleting": "Eliminando…",
+    "last_admin_warning": "No se puede degradar — es el último administrador",
+    "login_history": "Historial de inicio de sesión",
+    "no_history": "Aún no se ha registrado historial de inicio de sesión",
+    "event_login": "Inició sesión",
+    "event_logout": "Cerró sesión",
+    "event_online": "En línea",
+    "event_offline": "Se desconectó",
+    "joined": "Registrado",
+    "last_login": "Último inicio de sesión",
+    "toast_role_updated": "Rol actualizado",
+    "toast_status_updated": "Estado actualizado",
+    "toast_user_deleted": "Usuario eliminado",
+    "toast_reset_sent": "Restablecimiento de contraseña enviado a {email}",
+    "toast_kpi_saved": "Diseño de KPI guardado",
+    "toast_load_failed": "No se pudieron cargar los usuarios",
+    "toast_save_failed": "Error al guardar",
+    "kpi_add": "Añadir KPI",
+    "kpi_add_block": "Bloque",
+    "kpi_edit": "Editar KPI",
+    "kpi_label_required": "La etiqueta es obligatoria",
+    "kpi_select_field": "Selecciona un campo",
+    "kpi_select_both_fields": "Selecciona ambos campos",
+    "kpi_select_field_and_value": "Selecciona un campo e introduce un valor para comparar",
+    "kpi_max_reached": "Se permite un máximo de 5 KPI",
+    "kpi_label": "Etiqueta",
+    "kpi_formula": "Fórmula",
+    "kpi_format": "Formato de visualización",
+    "kpi_icon": "Icono",
+    "kpi_accent_colour": "Color de acento",
+    "kpi_field": "Campo",
+    "kpi_field_a": "Campo A",
+    "kpi_field_b": "Campo B",
+    "kpi_numerator": "Campo numerador (A)",
+    "kpi_denominator": "Campo denominador (B)",
+    "kpi_operator": "Operador",
+    "kpi_value_to_match": "Valor a comparar",
+    "kpi_make_wide": "Hacer ancho",
+    "kpi_make_compact": "Hacer compacto",
+    "kpi_add_to_block": "Añadir",
+    "kpi_save": "Guardar cambios",
+    "kpi_cancel": "Cancelar"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "description": "No podemos encontrar la página que buscas. Puede que se haya movido, renombrado o nunca haya existido.",
+    "goHome": "Ir a la página de inicio",
+    "backToConsole": "Volver a la consola",
+    "helpfulLinks": "¿Buscas algo específico?",
+    "pages": "Páginas",
+    "models": "Modelos",
+    "users": "Usuarios",
+    "settings": "Configuración"
+  },
+  "noModelLinked": {
+    "title": "Ningún modelo asociado",
+    "description": "{pageName} usa una plantilla {templateName} pero aún no se le ha asociado ningún modelo de datos.",
+    "instruction": "Edita la configuración de la página y asigna un modelo para que pueda mostrar datos.",
+    "openPages": "Abrir páginas",
+    "manageModels": "Gestionar modelos"
+  },
+  "lockedTemplate": {
+    "title": "Disponible en el plan alojado",
+    "description": "La plantilla {templateName} forma parte del plan alojado. Actualiza para desbloquear kanban, calendario, pago y más.",
+    "upgradeButton": "Ver plan alojado",
+    "backButton": "Volver a páginas"
+  },
+  "CookieBanner": {
+    "eyebrow": "PRIVACIDAD",
+    "title": "Valoramos tu privacidad",
+    "description": "Usamos cookies para mantenerte conectado, recordar tu idioma y (con tu consentimiento) entender cómo los visitantes usan el sitio. Puedes cambiar tus preferencias en cualquier momento.",
+    "necessaryTitle": "Estrictamente necesarias",
+    "necessaryDescription": "Necesarias para el inicio de sesión, las preferencias de idioma y guardar tu elección de cookies. No se pueden desactivar.",
+    "analyticsTitle": "Analítica",
+    "analyticsDescription": "Nos ayudan a entender qué páginas visita la gente y cómo funciona el sitio. No se comparten datos personales.",
+    "marketingTitle": "Marketing",
+    "marketingDescription": "Se usan para mostrar anuncios relevantes y medir la eficacia de las campañas en otros sitios.",
+    "alwaysOn": "Siempre activas",
+    "acceptAll": "Aceptar todo",
+    "rejectAll": "Rechazar todo",
+    "customise": "Personalizar",
+    "savePreferences": "Guardar preferencias",
+    "cookiePreferences": "Preferencias de cookies",
+    "policyLink": "Política de privacidad"
   }
 }

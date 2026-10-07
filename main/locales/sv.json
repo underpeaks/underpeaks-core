@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
+    "save": "Spara",
+    "saving": "Sparar...",
+    "saveChanges": "Spara ändringar",
+    "cancel": "Avbryt",
+    "delete": "Ta bort",
+    "edit": "Redigera",
+    "create": "Skapa",
+    "add": "Lägg till",
+    "remove": "Ta bort",
+    "close": "Stäng",
+    "confirm": "Bekräfta",
+    "back": "Tillbaka",
+    "next": "Nästa",
+    "done": "Klar",
+    "loading": "Laddar...",
+    "search": "Sök",
+    "filter": "Filtrera",
+    "refresh": "Uppdatera",
+    "copy": "Kopiera",
+    "copied": "Kopierat!",
+    "upload": "Ladda upp",
+    "rename": "Byt namn",
+    "move": "Flytta",
+    "preview": "Förhandsgranskning",
+    "revoke": "Återkalla",
+    "generate": "Generera",
+    "reveal": "Visa",
+    "hide": "Dölj",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
     "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "actions": "Åtgärder",
+    "name": "Namn",
+    "email": "E-post",
+    "password": "Lösenord",
+    "role": "Roll",
+    "createdAt": "Skapad",
+    "noResults": "Inga resultat hittades",
+    "error": "Ett fel uppstod",
+    "success": "Klart",
+    "required": "Detta fält är obligatoriskt",
+    "optional": "Valfritt",
+    "yes": "Ja",
+    "no": "Nej",
+    "areYouSure": "Är du säker?",
+    "thisActionCannotBeUndone": "Denna åtgärd kan inte ångras.",
+    "comingSoon": "Kommer snart"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
-    "menu": "Menu",
+    "dashboard": "Instrumentpanel",
+    "pages": "Sidor",
+    "menu": "Meny",
     "media": "Media",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "Integrationer",
+    "theming": "Tema",
+    "settings": "Inställningar",
+    "account": "Konto",
+    "messages": "Meddelanden",
+    "notifications": "Aviseringar",
+    "logout": "Logga ut"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "Sök...",
+    "notifications": "Aviseringar",
+    "messages": "Meddelanden",
+    "viewAccount": "Visa konto",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
+      "self_hosted": "Självhostad",
+      "hosted": "Hostad",
       "enterprise": "Enterprise"
     }
   },
+  "nextModelGenerator": {
+    "nullJsonError": "Kan inte skapa {{modelName}}Model: fick null eller odefinierad JSON",
+    "missingRequiredField": "Obligatoriskt fält saknas: {{fieldName}} i {{modelName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "Genererar kod för {{count}} modell(er)...",
+    "modelUndefined": "Modellen är odefinierad — säkerställ att en giltig ModelDefinition har skickats",
+    "modelMissingName": "Modellen saknar egenskapen \"name\" — varje modell måste ha ett namn",
+    "modelInvalidFields": "Modellen \"{{name}}\" har ogiltiga eller saknade \"fields\" — fields måste vara ett enkelt objekt",
+    "generationSuccess": "Kod genererades framgångsrikt för modellen: {{name}}",
+    "generationFailed": "Kodgenerering misslyckades för modellen: {{name}}"
+  },
+  "completeProfile": {
+    "title": "Fyll i din profil",
+    "welcome": "Välkommen,",
+    "loading": {
+      "checkingProfile": "Kontrollerar din profil..."
+    },
+    "subdomain": {
+      "label": "Välj en underdomän",
+      "placeholder": "dinapp",
+      "hint": "Din app kommer att vara tillgänglig på"
+    },
+    "button": {
+      "save": "Spara och fortsätt",
+      "saving": "Sparar..."
+    },
+    "validation": {
+      "subdomainRequired": "Ange en underdomän",
+      "adapterMissingCreateTenant": "Din databasadapter stöder inte att skapa en klient"
+    },
+    "errors": {
+      "saveFailed": "Fel vid sparande av underdomän: {{message}}",
+      "unknownError": "Ett okänt fel uppstod"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Lösenordsåterställning stöds inte av den aktuella databasadaptern",
+      "noAccountFound": "Inget konto hittades med den e-postadressen."
+    }
+  },
+  "forgotPassword": {
+    "title": "Glömt lösenord",
+    "description": "Ange din e-postadress och vi skickar en länk för att återställa ditt lösenord.",
+    "form": {
+      "emailLabel": "E-postadress",
+      "emailPlaceholder": "du@exempel.com",
+      "buttonSend": "Skicka återställningslänk",
+      "buttonSending": "Skickar..."
+    },
+    "validation": {
+      "emailRequired": "Ange din e-postadress."
+    },
+    "errors": {
+      "firebaseConfigMissing": "Firebase-konfiguration saknas. Kontrollera dina miljövariabler.",
+      "sendFailed": "Det gick inte att skicka återställningslänken. Försök igen."
+    },
+    "success": {
+      "title": "Kolla din inkorg",
+      "description": "Ett e-postmeddelande för lösenordsåterställning har skickats. Kolla din inkorg och följ länken för att återställa lösenordet.",
+      "button": "Tillbaka till inloggning"
+    },
+    "notice": {
+      "title": "Begäran skickad",
+      "button": "OK"
+    },
+    "error": {
+      "title": "Något gick fel"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Lösenordsåterställning stöds inte av den aktuella databasadaptern",
+      "invalidToken": "Ogiltig eller utgången återställningslänk. Begär en ny.",
+      "tokenAlreadyUsed": "Denna återställningslänk har redan använts. Begär en ny.",
+      "tokenExpired": "Denna återställningslänk har gått ut. Begär en ny."
+    }
+  },
+  "resetPassword": {
+    "title": "Återställ lösenord",
+    "form": {
+      "passwordLabel": "Nytt lösenord",
+      "buttonReset": "Återställ lösenord",
+      "buttonResetting": "Återställer..."
+    },
+    "errors": {
+      "invalidLink": "Ogiltig eller saknad återställningslänk. Begär en ny.",
+      "passwordRequired": "Ange ett nytt lösenord.",
+      "missingToken": "Återställningstoken saknas. Använd länken från din e-post.",
+      "resetFailed": "Det gick inte att återställa lösenordet. Försök igen."
+    },
+    "error": {
+      "title": "Något gick fel"
+    },
+    "expired": {
+      "title": "Återställningslänken har gått ut",
+      "description": "Din länk för lösenordsåterställning har gått ut. Omdirigerar till sidan för glömt lösenord..."
+    },
+    "success": {
+      "title": "Lösenordet har återställts",
+      "description": "Du kan nu",
+      "signinLink": "logga in",
+      "descriptionSuffix": "med ditt nya lösenord."
+    }
+  },
+  "signIn": {
+    "heading": "Logga in på ditt Underpeaks-konto",
+    "fields": {
+      "email": "E-post",
+      "password": "Lösenord"
+    },
+    "button": {
+      "signIn": "Logga in",
+      "signingIn": "Loggar in..."
+    },
+    "links": {
+      "forgotPassword": "Glömt lösenordet?",
+      "noAccount": "Har du inget konto?",
+      "signUp": "Registrera dig nu"
+    },
+    "errors": {
+      "title": "Fel",
+      "signinFailed": "Inloggningen misslyckades. Kontrollera dina uppgifter och försök igen."
+    }
+  },
+  "signUp": {
+    "heading": "Skapa ditt Underpeaks-konto",
+    "fields": {
+      "fullName": "Fullständigt namn",
+      "fullNamePlaceholder": "Ditt fullständiga namn",
+      "email": "E-post",
+      "emailPlaceholder": "du@exempel.com",
+      "password": "Lösenord"
+    },
+    "button": {
+      "signUp": "Registrera dig",
+      "creating": "Skapar..."
+    },
+    "alerts": {
+      "errorTitle": "Fel",
+      "successTitle": "Klart"
+    },
+    "success": {
+      "accountCreated": "Kontot har skapats!"
+    },
+    "links": {
+      "alreadyHaveAccount": "Har du redan ett konto?",
+      "loginNow": "Logga in nu"
+    },
+    "errors": {
+      "nameRequired": "Fullständigt namn krävs.",
+      "emailRequired": "E-post krävs.",
+      "passwordRequired": "Lösenord krävs.",
+      "emailInUse": "Denna e-postadress är redan registrerad. Prova att logga in istället.",
+      "invalidEmail": "Ange en giltig e-postadress.",
+      "weakPassword": "Lösenordet är för svagt. Minst 6 tecken.",
+      "signupFailed": "Registreringen misslyckades. Försök igen.",
+      "supabaseSignupFailed": "Supabase-registreringen misslyckades. Försök igen."
+    },
+    "console": {
+      "firebaseVerificationSent": "Firebase-verifieringsmejl skickat.",
+      "firebaseVerificationFailed": "Det gick inte att skicka Firebase-verifieringsmejlet.",
+      "supabaseVerificationSent": "Supabase-verifieringsmejl skickat."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "Verifierar e-post",
+      "success": "E-post verifierad ✅",
+      "error": "Verifiering misslyckades"
+    },
+    "status": {
+      "verifying": "Verifierar din e-post...",
+      "verified": "Din e-post har verifierats.",
+      "supabaseRedirecting": "Omdirigerar till lösenordsinställning..."
+    },
+    "button": {
+      "goToSignIn": "Gå till inloggning"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] Begäran mottagen",
+      "verificationNotSupported": "[verify-email] Verifiering stöds inte för denna adapter"
+    },
+    "errors": {
+      "missingTokenOrEmail": "Token eller e-post saknas",
+      "dbTypeNotSet": "Databastypen är inte konfigurerad",
+      "unsupportedDbType": "Databastypen stöds inte",
+      "sqlAdapterMissingMethods": "SQL-adaptern saknar obligatoriska metoder",
+      "firebaseAdapterMissingMethods": "Firebase-adaptern saknar obligatoriska metoder",
+      "invalidToken": "Ogiltig token",
+      "tokenExpired": "Token har gått ut",
+      "userNotFound": "Användaren hittades inte",
+      "verificationNotSupported": "Verifiering stöds inte för denna adapter",
+      "verificationFailed": "Verifieringen misslyckades"
+    }
+  },
+  "schemaPreview": {
+    "title": "Förhandsgranskning av schema",
+    "columns": {
+      "field": "Fält",
+      "type": "Typ"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "Bekräfta åtgärd",
+      "description": "Är du säker på att du vill fortsätta?"
+    },
+    "buttons": {
+      "confirm": "Bekräfta",
+      "cancel": "Avbryt"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "Verksamhet",
+      "content": "Innehåll",
+      "assets": "Tillgångar",
+      "configuration": "Konfiguration"
+    },
+    "items": {
+      "dashboard": "Instrumentpanel",
+      "products": "Produkter",
+      "categories": "Kategorier",
+      "orders": "Beställningar",
+      "coupons": "Kuponger",
+      "users": "Användare",
+      "shipping": "Frakt",
+      "services": "Tjänster",
+      "sharedModels": "Delade modeller",
+      "menu": "Meny",
+      "pages": "Sidor",
+      "theme": "Tema",
+      "storage": "Lagring",
+      "integrations": "Integrationer",
+      "apisAndWebhooks": "API:er och webhooks"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "Meddelanden",
+      "unreadCount": "{count} olästa"
+    },
+    "empty": "Inga meddelanden ännu",
+    "viewAll": "Visa alla meddelanden",
+    "unreadBadge": "{count} olästa",
+    "systemInitials": "SY",
+    "fallbackUser": "Användare"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "Aviseringar",
+      "unreadCount": "{count} olästa",
+      "markAllRead": "Markera alla som lästa"
+    },
+    "empty": "Inga aviseringar ännu",
+    "viewAll": "Visa alla aviseringar"
+  },
+  "previewSchema": {
+    "fieldsHeading": "Fält",
+    "fieldNamePlaceholder": "Fältnamn",
+    "requiredLabel": "Obligatoriskt",
+    "removeButton": "Ta bort",
+    "saveButton": "Spara",
+    "previewButton": "Förhandsgranska",
+    "hidePreviewButton": "Dölj förhandsgranskning",
+    "addFieldButton": "Lägg till fält",
+    "types": {
+      "string": "sträng",
+      "num": "nummer",
+      "boolean": "boolean",
+      "datetime": "datum/tid",
+      "array": "array",
+      "map": "map",
+      "null": "null"
+    },
+    "aria": {
+      "fieldName": "Fält {{index}} namn",
+      "fieldType": "Fält {{index}} typ",
+      "elementType": "Fält {{index}} elementtyp",
+      "required": "Fält {{index}} obligatoriskt",
+      "removeField": "Ta bort fält {{index}}"
+    }
+  },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "Loggar ut…",
+    "footer": {
+      "settings": "Inställningar",
+      "logout": "Logga ut",
+      "collapse": "Fäll ihop sidopanel",
+      "expand": "Expandera sidopanel",
+      "business": "Verksamhet",
+      "developer": "Utvecklare",
+      "design": "Design",
+      "system": "System"
+    },
+    "aria": {
+      "sidebar": "Konsolnavigering",
+      "navigation": "Huvudnavigering",
+      "expandSidebar": "Expandera sidopanel",
+      "collapseSidebar": "Fäll ihop sidopanel"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "Projektlogotyp",
+    "projectLabel": "Projekt:",
+    "signIn": "Logga in",
+    "register": "Registrera",
+    "aria": {
+      "navbar": "Övre navigeringsfält",
+      "goToDashboard": "Gå till instrumentpanelen"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "Användarmeny för {name}"
+    },
+    "menu": {
+      "account": "Konto",
+      "settings": "Inställningar",
+      "helpAndDocs": "Hjälp och dokumentation",
+      "logout": "Logga ut"
+    }
+  },
+  "accountPage": {
+    "title": "Konto",
+    "subtitle": "Hantera din profil och säkerhet.",
+    "profile": {
+      "title": "Profil",
+      "description": "Uppdatera ditt visningsnamn.",
+      "fullNameLabel": "Fullständigt namn",
+      "fullNamePlaceholder": "Ditt fullständiga namn",
+      "emailLabel": "E-postadress",
+      "emailReadOnlyNote": "E-post hanteras av din autentiseringsleverantör och kan inte ändras här.",
+      "saveButton": "Spara ändringar",
+      "savingButton": "Sparar…",
+      "savedButton": "Sparat"
+    },
+    "danger": {
+      "title": "Farozon",
+      "description": "Oåterkalleliga åtgärder. Fortsätt med försiktighet.",
+      "cancelTitle": "Avbryt prenumeration",
+      "cancelDescription": "Din plan förblir aktiv till slutet av den aktuella fakturaperioden och övergår sedan till självhostad.",
+      "cancelButton": "Avbryt plan",
+      "cancelModalBody": "Din prenumeration kommer att avbrytas men du behåller åtkomsten till slutet av din aktuella fakturaperiod. Detta kan inte ångras.",
+      "resetTitle": "Återställ projekt",
+      "resetDescription": "Tar bort allt projektinnehåll permanent och startar introduktionen på nytt. Ditt konto behålls.",
+      "resetButton": "Återställ projekt",
+      "resetModalBody": "Detta tar bort allt innehåll i ditt projekt permanent — modeller, sidor, data och media. Ditt konto och din fakturering behålls. Detta kan inte ångras.",
+      "deleteTitle": "Ta bort konto",
+      "deleteDescription": "Tar bort ditt konto och all associerad data permanent.",
+      "deleteButton": "Ta bort konto",
+      "deleteModalBody": "Detta tar bort ditt konto och allt innehåll permanent. Fakturaregister behålls där det krävs enligt lag. Detta kan inte ångras."
+    },
+    "password": {
+      "title": "Byt lösenord",
+      "description": "Använd ett starkt lösenord som du inte använder någon annanstans.",
+      "currentLabel": "Nuvarande lösenord",
+      "newLabel": "Nytt lösenord",
+      "confirmLabel": "Bekräfta nytt lösenord",
+      "showPassword": "Visa lösenord",
+      "hidePassword": "Dölj lösenord",
+      "minLengthHint": "Minst 8 tecken",
+      "mismatchHint": "Lösenorden matchar inte",
+      "updateButton": "Uppdatera lösenord",
+      "updatingButton": "Uppdaterar…",
+      "updatedButton": "Uppdaterat"
+    },
+    "billing": {
+      "title": "Fakturering och plan",
+      "description": "Din nuvarande plan och uppgraderingsalternativ.",
+      "selfHostedDescription": "Kärnfunktioner ingår. Uppgradera för integrationer, avancerad autentisering och white-labeling.",
+      "paidDescription": "Alla funktioner upplåsta.",
+      "upgradeButton": "Uppgradera",
+      "upgradeAriaLabel": "Uppgradera till Underpeaks Pro",
+      "proFeaturesTitle": "Vad du får med Pro",
+      "proFeature1": "Integrationer (Stripe, Mailchimp och mer)",
+      "proFeature2": "Avancerad autentisering — 2FA, social inloggning, magisk länk, SSO",
+      "proFeature3": "White-labela CMS:et med ditt eget varumärke",
+      "proFeature4": "Anpassad domän för din konsol",
+      "contactSalesButton": "Kontakta försäljning"
+    },
+    "errors": {
+      "profileUpdateFailed": "Det gick inte att uppdatera profilen. Försök igen.",
+      "passwordUpdateFailed": "Det gick inte att uppdatera lösenordet. Försök igen."
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "Generiska slutpunkter genererade automatiskt från dina modeller",
+    "customEndpointButton": "Anpassad slutpunkt",
+    "tabsLabel": "Flikar på API-sidan",
+    "copy": "Kopiera till urklipp",
+    "copied": "Kopierat!",
+    "tabs": {
+      "endpoints": "Slutpunkter",
+      "keys": "API-nycklar",
+      "reference": "Referens"
+    },
+    "endpoints": {
+      "searchPlaceholder": "Sök slutpunkter…",
+      "typeFilterLabel": "Filtrera efter slutpunktstyp",
+      "modelFilterLabel": "Filtrera efter modell",
+      "type": {
+        "all": "alla",
+        "auto": "automatisk",
+        "custom": "anpassad"
+      },
+      "colMethod": "Metod",
+      "colPath": "Sökväg",
+      "colDescription": "Beskrivning",
+      "colActions": "Åtgärder",
+      "noResults": "Inga slutpunkter matchar ditt filter",
+      "customBadge": "Anpassad",
+      "requiresAuth": "Kräver autentisering",
+      "public": "Offentlig slutpunkt",
+      "testButton": "Testa",
+      "exampleRequest": "Exempelförfrågan",
+      "requiredHeaders": "Obligatoriska headers",
+      "testLabel": "Test",
+      "sendRequest": "Skicka förfrågan",
+      "running": "Körs…"
+    },
+    "drawer": {
+      "title": "Ny anpassad slutpunkt",
+      "subtitle": "Skriv affärslogik som anropar det generiska API:et",
+      "close": "Stäng panel",
+      "methodLabel": "Metod",
+      "pathLabel": "Sökväg",
+      "descriptionLabel": "Beskrivning",
+      "descriptionPlaceholder": "Vad gör denna slutpunkt?",
+      "authLabel": "Autentisering",
+      "authRequired": "Obligatorisk",
+      "authPublic": "Offentlig",
+      "codeLabel": "Handlerkod",
+      "cancelButton": "Avbryt",
+      "createButton": "Skapa slutpunkt"
+    },
+    "keys": {
+      "title": "API-nycklar",
+      "keepSecret": "Håll dessa hemliga",
+      "createTitle": "Skapa ny nyckel",
+      "nameLabel": "Nyckelnamn",
+      "namePlaceholder": "Nyckelnamn, t.ex. Mobilapp",
+      "generateButton": "Generera",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "never": "Aldrig",
+      "created": "Skapad",
+      "lastUsed": "Senast använd",
+      "revealKey": "Visa API-nyckel",
+      "hideKey": "Dölj API-nyckel",
+      "deleteKey": "Ta bort nyckel {{name}}",
+      "confirmDelete": "Bekräfta borttagning",
+      "cancelDelete": "Avbryt borttagning"
+    },
+    "reference": {
+      "queryParamsTitle": "Frågeparametrar",
+      "queryParamsSubtitle": "Tillgängligt på alla GET-slutpunkter",
+      "operatorsTitle": "Filteroperatorer",
+      "operatorsSubtitle": "Använd tillsammans med",
+      "operatorsFormat": "parameter som",
+      "exampleTitle": "Fullständigt exempel",
+      "exampleDescription": "Hämta aktiva produkter under 500 kr, sorterade efter pris, som endast returnerar id/namn/pris:",
+      "responseLabel": "Svar:"
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "Instrumentpanel",
+    "welcome": "Välkommen tillbaka, {name}",
+    "addWidget": "Lägg till widget",
+    "editLayout": "Redigera layout",
+    "saveLayout": "Spara layout",
+    "resetLayout": "Återställ layout",
+    "toolbar": {
+      "title": "Instrumentpanel",
+      "subtitle": "Dra widgetar för att ändra ordning · hovra för att redigera",
+      "refresh": "Uppdatera",
+      "last30Days": "Senaste 30 dagarna",
+      "addWidget": "Lägg till widget"
+    },
+    "grid": {
+      "addWidget": "Lägg till widget"
+    },
+    "addPanel": {
+      "title": "Lägg till widget",
+      "subtitle": "Klicka för att lägga till på instrumentpanelen"
+    },
+    "widget": {
+      "dragToReorder": "Dra för att ändra ordning",
+      "vsLastPeriod": "jämfört med föregående period"
+    },
+    "chart": {
+      "day": "Dag",
+      "daysAgo": "30 dagar sedan",
+      "today": "Idag"
+    },
+    "formula": {
+      "placeholder": "t.ex. SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "Förinställningar"
+    }
   },
   "media": {
     "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "uploadFiles": "Ladda upp filer",
+    "createFolder": "Skapa mapp",
+    "folderName": "Mappnamn",
+    "rootFolder": "Rot",
+    "noFiles": "Inga filer i denna mapp",
+    "dropToUpload": "Släpp filer här för att ladda upp",
+    "orClickToUpload": "eller klicka för att bläddra",
+    "gridView": "Rutnätsvy",
+    "listView": "Listvy",
+    "fileSize": "Filstorlek",
+    "fileType": "Filtyp",
+    "uploadedAt": "Uppladdad",
+    "deleteFileConfirm": "Är du säker på att du vill ta bort \"{name}\"?",
+    "deleteFolderConfirm": "Är du säker på att du vill ta bort mappen \"{name}\" och allt dess innehåll?",
+    "importFromUrl": "Importera från URL",
+    "copyUrl": "Kopiera URL",
+    "urlCopied": "URL kopierad till urklipp",
+    "details": "Filuppgifter",
+    "selectFile": "Välj en fil för att se detaljer"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Inställningar",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "Översikt",
+      "projectName": "Projektnamn",
+      "projectUrl": "Projekt-URL",
+      "projectId": "Projekt-ID",
+      "dbType": "Databastyp",
+      "environment": "Miljö",
+      "deploymentType": "Distributionstyp",
+      "savedSuccess": "Inställningarna har sparats"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "API-nycklar",
+      "subheading": "Hantera nycklar som används för att autentisera API-förfrågningar från dina appar.",
+      "title": "API-nycklar",
+      "description": "Hantera API-nycklar för programmatisk åtkomst till ditt projekt.",
+      "generateKey": "Generera ny nyckel",
+      "keyName": "Namn",
+      "keyPrefix": "Nyckelprefix",
+      "lastUsed": "Senast använd",
+      "neverUsed": "Aldrig använd",
+      "revokeConfirm": "Är du säker på att du vill återkalla \"{name}\"? Detta kan inte ångras.",
+      "revoked": "Återkallad",
+      "keyCopied": "Nyckel kopierad till urklipp",
+      "newKeyGenerated": "Ny API-nyckel genererad. Kopiera den nu — den kommer inte visas igen.",
+      "noKeys": "Inga API-nycklar ännu. Generera en för att komma igång.",
+      "sectionTitle": "Aktiva nycklar",
+      "createdDate": "Skapad {{date}}",
+      "lastUsedDate": "Senast använd {{date}}",
+      "hideKey": "Dölj nyckel",
+      "revealKey": "Visa nyckel",
+      "copyKey": "Kopiera nyckel",
+      "revoke": "Återkalla",
+      "emptyTitle": "Inga API-nycklar ännu",
+      "emptySubtitle": "Generera en nyckel nedan för att komma igång."
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
-      "logo": "Logo",
-      "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "title": "Varumärke",
+      "description": "Anpassa utseendet på din Underpeaks-konsol.",
+      "logo": "Logotyp",
+      "favicon": "Favikon",
+      "primaryColor": "Primärfärg",
+      "uploadLogo": "Ladda upp logotyp",
+      "uploadFavicon": "Ladda upp favikon",
+      "logoHint": "Rekommenderas: 200×50px, PNG eller SVG med transparent bakgrund.",
+      "faviconHint": "Rekommenderas: 32×32px ICO, PNG eller SVG.",
+      "livePreview": "Livegranskning",
+      "brandingSaved": "Varumärket har uppdaterats"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
+      "host": "SMTP-värd",
       "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "username": "Användarnamn",
+      "fromEmail": "Avsändaradress",
+      "fromName": "Avsändarnamn",
+      "encryption": "Kryptering",
+      "testEmail": "Skicka testmejl",
+      "testEmailSuccess": "Testmejl skickat"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "Domäner",
+      "addDomain": "Lägg till domän",
+      "verified": "Verifierad",
+      "unverified": "Overifierad",
+      "primary": "Primär",
+      "setPrimary": "Ange som primär"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "Konto",
+    "fullName": "Fullständigt namn",
+    "emailReadOnly": "E-postadress (skrivskyddad)",
+    "changePassword": "Byt lösenord",
+    "currentPassword": "Nuvarande lösenord",
+    "newPassword": "Nytt lösenord",
+    "confirmPassword": "Bekräfta nytt lösenord",
+    "passwordsDoNotMatch": "Lösenorden matchar inte",
+    "profileUpdated": "Profilen har uppdaterats",
+    "passwordChanged": "Lösenordet har ändrats",
+    "memberSince": "Medlem sedan {date}"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
+    "title": "Meddelanden",
+    "newConversation": "Ny konversation",
+    "noConversations": "Inga konversationer ännu",
+    "noMessages": "Inga meddelanden i denna konversation",
+    "typeMessage": "Skriv ett meddelande...",
+    "send": "Skicka",
+    "markAllRead": "Markera alla som lästa",
+    "reply": "Svara",
+    "you": "Du",
     "system": "System"
   },
+  "apiKeys": {
+    "heading": "API-nycklar",
+    "subheading": "Hantera nycklar som används för att autentisera API-förfrågningar från dina appar.",
+    "sectionTitle": "Aktiva nycklar",
+    "createdDate": "Skapad {date}",
+    "lastUsedDate": "Senast använd {date}",
+    "neverUsed": "Aldrig använd",
+    "hideKey": "Dölj nyckel",
+    "revealKey": "Visa nyckel",
+    "copyKey": "Kopiera nyckel",
+    "revoke": "Återkalla",
+    "emptyTitle": "Inga API-nycklar ännu",
+    "emptySubtitle": "Generera en nyckel nedan för att komma igång.",
+    "errors": {
+      "loadFailed": "Det gick inte att läsa in API-nycklar",
+      "generateFailed": "Det gick inte att generera nyckel",
+      "revokeFailed": "Det gick inte att återkalla nyckel"
+    }
+  },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "Aviseringar",
+    "noNotifications": "Inga aviseringar",
+    "noUnread": "Du är helt uppdaterad!",
+    "markAllRead": "Markera alla som lästa",
+    "viewAll": "Visa alla aviseringar",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
+      "all": "Alla",
+      "unread": "Olästa",
+      "comment": "Kommentarer",
       "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "payment": "Betalningar",
+      "security": "Säkerhet",
+      "message": "Meddelanden"
     },
     "priority": {
-      "low": "Low",
+      "low": "Låg",
       "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "high": "Hög",
+      "urgent": "Brådskande"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "Logga in",
+    "logout": "Logga ut",
+    "email": "E-postadress",
+    "password": "Lösenord",
+    "forgotPassword": "Glömt lösenordet?",
+    "resetPassword": "Återställ lösenord",
+    "sessionExpired": "Din session har gått ut. Logga in igen.",
+    "idleWarning": "Du har varit inaktiv en stund.",
+    "idleLogoutIn": "Du loggas ut om {seconds} sekunder.",
+    "stayLoggedIn": "Fortsätt vara inloggad"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "Sidan hittades inte",
+    "serverError": "Serverfel",
+    "networkError": "Nätverksfel — kontrollera din anslutning",
+    "sessionError": "Sessionsfel — logga in igen",
+    "unknown": "Ett oväntat fel uppstod"
+  },
+  "grid": {
+    "addWidget": "Lägg till widget"
+  },
+  "addPanel": {
+    "title": "Lägg till widget",
+    "subtitle": "Klicka för att lägga till på instrumentpanelen"
+  },
+  "widget": {
+    "dragToReorder": "Dra för att ändra ordning",
+    "vsLastPeriod": "jämfört med föregående period"
+  },
+  "chart": {
+    "day": "Dag",
+    "daysAgo": "30 dagar sedan",
+    "today": "Idag"
+  },
+  "formula": {
+    "placeholder": "t.ex. SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "Förinställningar"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Hjälpcenter",
+      "subtitle": "Hitta svar, läs dokumentationen eller kontakta oss.",
+      "searchPlaceholder": "Sök i vanliga frågor…"
+    },
+    "resources": {
+      "title": "Resurser",
+      "links": {
+        "gettingStarted": {
+          "label": "Komma igång",
+          "description": "Ställ in ditt första projekt på några minuter."
+        },
+        "apiReference": {
+          "label": "API-referens",
+          "description": "Fullständig referens för alla API-slutpunkter och operatorer."
+        },
+        "community": {
+          "label": "Communityforum",
+          "description": "Ställ frågor och dela projekt med communityn."
+        }
+      }
+    },
+    "faq": {
+      "title": "Vanliga frågor",
+      "resultCount": "{count} resultat",
+      "noResults": "Inga resultat för \"{query}\"",
+      "noResultsHint": "Prova en annan sökterm eller kontakta support nedan."
+    },
+    "api": {
+      "title": "Snabbreferens för API",
+      "baseUrl": "Bas-URL:",
+      "endpoints": {
+        "get": "Listar alla poster för en modell. Stöder filtrering, sortering, sidnumrering.",
+        "post": "Skapar en ny post.",
+        "put": "Uppdaterar en befintlig post via ID.",
+        "delete": "Tar bort en post via ID."
+      },
+      "operators": {
+        "title": "Frågeoperatorer",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "Kontakta support",
+      "submit": "Skicka meddelande",
+      "success": {
+        "title": "Meddelandet har skickats!",
+        "subtitle": "Vi återkommer till dig så snart som möjligt."
+      },
+      "fields": {
+        "name": "Namn",
+        "namePlaceholder": "Anna Andersson",
+        "email": "E-post",
+        "emailPlaceholder": "du@exempel.com",
+        "message": "Meddelande",
+        "messagePlaceholder": "Beskriv ditt problem eller din fråga…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "Integrationer",
+      "connectedCount": "{count} anslutna",
+      "errorCount": "{count} fel",
+      "infoBanner": "Anslutna integrationer är tillgängliga i anpassade slutpunkter och kodgenerering"
+    },
+    "categories": {
+      "all": "Alla",
+      "payments": "Betalningar",
+      "email": "E-post och SMS",
+      "storage": "Lagring",
+      "ai": "AI",
+      "analytics": "Analys",
+      "automation": "Automatisering"
+    },
+    "status": {
+      "connected": "Ansluten",
+      "disconnected": "Frånkopplad",
+      "error": "Fel"
+    },
+    "card": {
+      "viewDocs": "Visa dokumentation",
+      "buttons": {
+        "saveAndConnect": "Spara och anslut",
+        "saving": "Sparar…",
+        "saved": "Sparat!",
+        "disconnect": "Koppla från",
+        "retryConnection": "Försök ansluta igen"
+      }
+    },
+    "empty": "Inga integrationer i denna kategori"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "Meny",
+      "subtitle": "{count} objekt · dra för att ändra ordning",
+      "addItem": "Lägg till objekt"
+    },
+    "preview": {
+      "title": "Navigeringsförhandsgranskning",
+      "subtitle": "Endast synliga objekt",
+      "empty": "Inga synliga objekt ännu."
+    },
+    "list": {
+      "title": "Alla objekt",
+      "empty": "Inga menyobjekt ännu",
+      "emptyAction": "Lägg till ditt första objekt"
+    },
+    "row": {
+      "hidden": "dold",
+      "external": "Extern",
+      "actions": {
+        "moveUp": "Flytta upp",
+        "moveDown": "Flytta ner",
+        "toggleVisibility": "Växla synlighet",
+        "edit": "Redigera",
+        "delete": "Ta bort",
+        "confirmDelete": "Bekräfta borttagning",
+        "cancelDelete": "Avbryt"
+      }
+    },
+    "errors": {
+      "loadFailed": "Det gick inte att läsa in menyobjekt",
+      "createFailed": "Det gick inte att skapa menyobjekt",
+      "updateFailed": "Det gick inte att uppdatera menyobjekt",
+      "deleteFailed": "Det gick inte att ta bort menyobjekt"
+    },
+    "drawer": {
+      "titleAdd": "Lägg till menyobjekt",
+      "titleEdit": "Redigera menyobjekt",
+      "subtitle": "Konfigurera etikett, länk, ikon och synlighet",
+      "sections": {
+        "labelVisibility": "Etikett och synlighet",
+        "link": "Länk",
+        "icon": "Ikon",
+        "nesting": "Nästling",
+        "preview": "Förhandsgranskning"
+      },
+      "fields": {
+        "pageRequired": "En sida måste väljas innan ett menyobjekt kan sparas.",
+        "menuLabel": "Menyetikett",
+        "menuLabelPlaceholder": "t.ex. Produkter",
+        "menuLabelHint": "Detta är texten som visas i navigeringsmenyn.",
+        "visibility": "Synlighet",
+        "visible": "Synlig",
+        "hidden": "Dold",
+        "linkTypePage": "Sida",
+        "linkTypeExternal": "Extern URL",
+        "selectPage": "Välj sida",
+        "selectPagePlaceholder": "— Välj en sida —",
+        "noPagesHint": "Inga administratörssidor hittades. Skapa först en sida med sidtypen inställd på Admin.",
+        "externalUrl": "Extern URL",
+        "openIn": "Öppna i",
+        "sameTab": "Samma flik",
+        "newTab": "Ny flik",
+        "parentItem": "Överordnat objekt",
+        "parentItemPlaceholder": "— Toppnivå —",
+        "parentItemHint": "Nästlade objekt visas som rullgardinsundermenyer i navigeringen."
+      },
+      "icons": {
+        "home": "Hem",
+        "grid": "Rutnät",
+        "package": "Paket",
+        "users": "Användare",
+        "settings": "Inställningar",
+        "file": "Fil",
+        "cart": "Varukorg",
+        "mail": "E-post",
+        "star": "Stjärna",
+        "info": "Info"
+      },
+      "preview": {
+        "hidden": "dold"
+      },
+      "buttons": {
+        "cancel": "Avbryt",
+        "saveChanges": "Spara ändringar",
+        "addItem": "Lägg till objekt",
+        "saving": "Sparar…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "Fil-URL",
+      "metadata": "Metadata",
+      "rename": "Byt namn",
+      "moveToFolder": "Flytta till mapp"
+    },
+    "altText": {
+      "placeholder": "Beskriv denna bild för tillgänglighet…",
+      "empty": "Ingen alt-text angiven"
+    },
+    "metadata": {
+      "folder": "Mapp",
+      "path": "Sökväg",
+      "size": "Storlek",
+      "type": "Typ",
+      "uploaded": "Uppladdad",
+      "dimensions": "Mått"
+    },
+    "actions": {
+      "save": "Spara",
+      "saving": "Sparar…",
+      "cancel": "Avbryt",
+      "move": "Flytta",
+      "moving": "Flyttar…",
+      "deleteFile": "Ta bort fil"
+    },
+    "move": {
+      "currentlyIn": "Nuvarande plats"
+    },
+    "errors": {
+      "renameFailed": "Namnändringen misslyckades",
+      "moveFailed": "Flytten misslyckades"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "Obligatoriskt fält saknas: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "Mappar",
+      "all": "Alla",
+      "newFolderTitle": "Ny mapp",
+      "collapse": "Fäll ihop",
+      "expand": "Expandera"
+    },
+    "folder": {
+      "selectTitle": "Välj mapp"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "Ta bort mapp",
+      "fileCount": "{count} filer"
+    },
+    "empty": {
+      "message": "Denna mapp är tom"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "Denna mapp är tom"
+    },
+    "header": {
+      "name": "Namn",
+      "size": "Storlek",
+      "type": "Typ",
+      "uploaded": "Uppladdad"
+    },
+    "row": {
+      "deleteTitle": "Ta bort fil"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "Media"
+    },
+    "actions": {
+      "delete": "Ta bort ({count})",
+      "clear": "Rensa",
+      "upload": "Ladda upp"
+    },
+    "viewMode": {
+      "grid": "Rutnätsvy",
+      "list": "Listvy"
+    }
+  },
+  "newFolderPopup": {
+    "title": "Ny mapp",
+    "placeholder": "Mappnamn",
+    "buttons": {
+      "create": "Skapa",
+      "cancel": "Avbryt"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "Ladda upp filer eller importera media via URL till den valda mappen.",
+    "title": "Lägg till media",
+    "tabs": {
+      "upload": "Ladda upp fil",
+      "url": "Lägg till via URL"
+    },
+    "uploadZone": {
+      "hint": "Alla filtyper — bilder, videor, dokument"
+    },
+    "urlTab": {
+      "description": "Klistra in en offentlig URL för att importera filen direkt till lagringen.",
+      "placeholder": "https://exempel.com/fil.jpg",
+      "import": "Importera",
+      "importing": "Importerar…",
+      "previewAlt": "URL-förhandsgranskning"
+    },
+    "errors": {
+      "importFailed": "Importen misslyckades"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "Det gick inte att läsa in mappar",
+      "loadFiles": "Det gick inte att läsa in filer",
+      "createFolder": "Det gick inte att skapa mapp",
+      "deleteFailed": "Borttagningen misslyckades"
+    },
+    "confirmDelete": {
+      "titleFolder": "Ta bort mapp",
+      "titleFile": "Ta bort fil",
+      "message": "Är du säker på att du vill ta bort",
+      "folderWarning": "Detta kommer att ta bort alla filer i mappen.",
+      "undoWarning": "Denna åtgärd kan inte ångras.",
+      "selectionLabel": "{count} objekt",
+      "cancel": "Avbryt",
+      "confirm": "Ta bort",
+      "deleting": "Tar bort…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "Inga meddelanden",
+      "subUnread": "Helt uppdaterad!",
+      "subAll": "Din inkorg är tom."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "just nu",
+      "minutesAgo": "{count} min sedan",
+      "hoursAgo": "{count} tim sedan",
+      "daysAgo": "{count} d sedan"
+    },
+    "unread": {
+      "badge": "{count} olästa"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "Systemmeddelande",
+    "from": "Från: {name}",
+    "deleteButton": "Ta bort",
+    "deleteAriaLabel": "Ta bort konversation: {subject}",
+    "messagesAriaLabel": "Meddelandetråd",
+    "loading": "Läser in meddelanden...",
+    "emptyTitle": "Inga meddelanden ännu",
+    "emptySub": "Skicka det första meddelandet nedan."
+  },
+  "messageBubble": {
+    "justNow": "Just nu",
+    "minutesAgo": "{count} min sedan",
+    "hoursAgo": "{count} tim sedan",
+    "daysAgo": "{count} d sedan"
+  },
+  "replyBar": {
+    "placeholder": "Skriv ett svar… (Enter för att skicka)",
+    "sendAriaLabel": "Skicka meddelande"
+  },
+  "messagesPage": {
+    "title": "Meddelanden",
+    "unreadCount": "{count} olästa meddelanden",
+    "filters": {
+      "all": "Alla",
+      "unread": "Olästa"
+    },
+    "markAllRead": "Markera alla som lästa",
+    "closeError": "Stäng felmeddelande",
+    "empty": {
+      "title": "Välj en konversation",
+      "sub": "Välj en konversation från listan för att läsa den här."
+    },
+    "errors": {
+      "load": "Det gick inte att läsa in meddelanden",
+      "delete": "Det gick inte att ta bort konversationen",
+      "markAll": "Det gick inte att markera alla som lästa"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "Brådskande",
+      "high": "Hög"
+    },
+    "actions": {
+      "markRead": "Markera som läst",
+      "view": "Visa",
+      "delete": "Ta bort"
+    }
+  },
+  "notificationsHeader": {
+    "title": "Aviseringar",
+    "unreadCount": "{count} olästa aviseringar",
+    "filters": {
+      "all": "Alla",
+      "unread": "Olästa"
+    },
+    "markAllRead": "Markera alla som lästa"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "Inga aviseringar",
+      "subUnread": "Helt uppdaterad!",
+      "subAll": "Du har inga aviseringar ännu."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "Det gick inte att läsa in aviseringar",
+      "markReadFailed": "Det gick inte att markera som läst",
+      "markAllReadFailed": "Det gick inte att markera alla som lästa",
+      "deleteFailed": "Det gick inte att ta bort aviseringen"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "Offentlig",
+      "admin": "Admin",
+      "draft": "Utkast",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "Sidor",
+      "pageCount": "{count} sidor totalt",
+      "searchPlaceholder": "Sök sidor…",
+      "newPage": "Ny sida"
+    },
+    "filter": {
+      "all": "Alla"
+    },
+    "table": {
+      "page": "Sida",
+      "model": "Modell",
+      "template": "Mall",
+      "visibility": "Synlighet",
+      "actions": "Åtgärder",
+      "seoPrefix": "SEO",
+      "systemBadge": "System",
+      "hiddenBadge": "Dold"
+    },
+    "emptyState": {
+      "message": "Inga sidor hittades",
+      "cta": "Skapa din första sida"
+    },
+    "actions": {
+      "edit": "Redigera sida",
+      "delete": "Ta bort sida",
+      "view": "Visa sida",
+      "confirmDelete": "Bekräfta borttagning",
+      "cancel": "Avbryt",
+      "systemLocked": "Systemsidor kan inte redigeras eller tas bort"
+    },
+    "errors": {
+      "loadFailed": "Det gick inte att läsa in sidor",
+      "createFailed": "Det gick inte att skapa sida",
+      "updateFailed": "Det gick inte att uppdatera sida",
+      "deleteFailed": "Det gick inte att ta bort sida"
+    },
+    "drawer": {
+      "title": "Skapa sida",
+      "editTitle": "Redigera sida",
+      "subtitle": "Definiera en ny sida och koppla en modell",
+      "sections": {
+        "basicInfo": "Grundläggande info",
+        "modelTemplate": "Modell och mall",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "Dölj sida",
+          "hint": "Dolda sidor visas inte i navigering eller sitemaps"
+        },
+        "name": {
+          "label": "Sidnamn",
+          "placeholder": "t.ex. Produktlista"
+        },
+        "slug": {
+          "label": "Slug / URL",
+          "placeholder": "/din-sida-slug",
+          "hint": "Använd :id för dynamiska rutter, t.ex. /produkter/:id"
+        },
+        "visibility": {
+          "label": "Synlighet"
+        },
+        "model": {
+          "label": "Koppla modell",
+          "noModel": "— Ingen modell (anpassad sida) —",
+          "hint": "En modell kan driva flera sidor."
+        },
+        "template": {
+          "label": "Mall"
+        },
+        "seoTitle": {
+          "label": "SEO-titel",
+          "placeholder": "Sidtitel för sökmotorer",
+          "charCount": "{count}/60 tecken"
+        },
+        "seoDesc": {
+          "label": "Metabeskrivning",
+          "placeholder": "Kort beskrivning för sökresultat…",
+          "charCount": "{count}/160 tecken"
+        }
+      },
+      "seoPreview": {
+        "label": "Sökförhandsgranskning",
+        "titleFallback": "Sidtitel",
+        "urlPrefix": "dinsida.se",
+        "descFallback": "Ingen beskrivning angiven."
+      },
+      "actions": {
+        "cancel": "Avbryt",
+        "create": "Skapa sida",
+        "update": "Uppdatera sida",
+        "saving": "Sparar…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "Generera ny nyckel",
+    "keyNameLabel": "Nyckelnamn",
+    "keyNameHint": "Ge den ett beskrivande namn så att du kommer ihåg vad den används till.",
+    "keyNamePlaceholder": "t.ex. Flutter-app — Produktion",
+    "buttonGenerating": "Genererar…",
+    "buttonIdle": "Generera nyckel"
+  },
+  "newKeyModal": {
+    "title": "API-nyckel genererad",
+    "instructions": "Din nyckel har skapats och är redo att användas. Klicka på <eyeIcon>ögonikonen</eyeIcon> bredvid nyckeln i listan för att visa och kopiera den.",
+    "doneButton": "Klar"
+  },
+  "revokeModal": {
+    "title": "Återkalla API-nyckel",
+    "message": "Alla appar som använder denna nyckel förlorar omedelbart åtkomsten:",
+    "cancelButton": "Avbryt",
+    "revokeButtonIdle": "Återkalla nyckel",
+    "revokeButtonRevoking": "Återkallar…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "Det gick inte att läsa in API-nycklar",
+      "generateFailed": "Det gick inte att generera nyckel",
+      "revokeFailed": "Det gick inte att återkalla nyckel"
+    },
+    "logs": {
+      "loadingKeys": "Läser in API-nycklar...",
+      "keysLoaded": "API-nycklar har lästs in",
+      "generatingKey": "Genererar ny API-nyckel...",
+      "keyGenerated": "API-nyckel har genererats",
+      "revokingKey": "Återkallar API-nyckel...",
+      "keyRevoked": "API-nyckel har återkallats"
+    }
+  },
+  "brandingPage": {
+    "heading": "CMS-varumärke",
+    "subheading": "Anpassa hur CMS:et ser ut för ditt team.",
+    "errors": {
+      "saveFailed": "Det gick inte att spara varumärket"
+    },
+    "logs": {
+      "savingBranding": "Sparar varumärkesinställningar...",
+      "brandingSaved": "Varumärket har sparats"
+    },
+    "logoSection": {
+      "title": "CMS-logotyp",
+      "uploadLabel": "Logotyp",
+      "uploadHint": "PNG eller SVG med transparent bakgrund",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "Logotypförhandsgranskning"
+    },
+    "faviconSection": {
+      "title": "Favikon",
+      "uploadLabel": "Favikon",
+      "uploadHint": "ICO, PNG eller SVG — visas i webbläsarflikar",
+      "uploadRecommended": "32×32px eller 64×64px",
+      "imageAlt": "Favikonförhandsgranskning"
+    },
+    "preview": {
+      "label": "Förhandsgranskning av toppnavigering",
+      "projectLabel": "Projekt:"
+    },
+    "saveSuccess": "Varumärket har sparats",
+    "saveButtonIdle": "Spara varumärke",
+    "saveButtonSaving": "Sparar…"
+  },
+  "overviewPage": {
+    "heading": "Projektöversikt",
+    "subheading": "En översikt av ditt Underpeaks-projekt.",
+    "stats": {
+      "dbType": "DB-typ",
+      "environment": "Miljö",
+      "deployment": "Distribution",
+      "status": "Status",
+      "statusActive": "Aktiv"
+    },
+    "userInfo": {
+      "sectionTitle": "Användarinfo",
+      "fullName": "Fullständigt namn",
+      "email": "E-post",
+      "role": "Roll",
+      "status": "Status",
+      "verified": "Verifierad",
+      "verifiedYes": "Ja",
+      "verifiedNo": "Nej",
+      "memberSince": "Medlem sedan"
+    },
+    "licenseKey": {
+      "sectionTitle": "Underpeaks-licensnyckel",
+      "description": "Din licensnyckel autentiserar denna instans och möjliggör åtskillnad mellan hostade och självhostade funktioner.",
+      "reveal": "Visa",
+      "hide": "Dölj",
+      "copy": "Kopiera",
+      "copied": "Kopierat",
+      "loading": "Läser in…",
+      "notFound": "Ingen licensnyckel hittades"
+    }
+  },
+  "smtpPage": {
+    "heading": "SMTP-inställningar",
+    "subheading": "Konfigurera utgående e-post för ditt projekt.",
+    "emailFeatures": {
+      "sectionTitle": "E-postfunktioner",
+      "verifyEmailLabel": "Aktivera e-postverifiering vid registrering",
+      "forgotPasswordLabel": "Aktivera e-post för glömt lösenord",
+      "builtInNotice": "{provider} hanterar e-postverifiering och lösenordsåterställning inbyggt — inget SMTP behövs för dessa funktioner.",
+      "smtpToggleLabel": "Använd anpassad SMTP-server"
+    },
+    "smtpConfig": {
+      "sectionTitle": "SMTP-konfiguration",
+      "hostLabel": "SMTP-värd",
+      "hostPlaceholder": "smtp.exempel.com",
+      "portLabel": "Port",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "Avsändaradress",
+      "fromAddressPlaceholder": "no-reply@exempel.com",
+      "usernameLabel": "Användarnamn",
+      "usernamePlaceholder": "SMTP-användarnamn",
+      "passwordLabel": "Lösenord",
+      "passwordPlaceholder": "SMTP-lösenord",
+      "showPassword": "Visa lösenord",
+      "hidePassword": "Dölj lösenord",
+      "encryptionLabel": "Kryptering",
+      "encryptionNone": "Ingen"
+    },
+    "logs": {
+      "savingSmtp": "Sparar SMTP-inställningar...",
+      "smtpSaved": "SMTP-inställningar har sparats"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "Inställningar",
+    "toggleAriaLabel": "Växla inställningsnavigering",
+    "nav": {
+      "overview": "Översikt",
+      "api-keys": "API-nycklar",
+      "smtp": "SMTP-inställningar",
+      "branding": "CMS-varumärke"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "Läser in inställningar…"
+  },
+  "saveButton": {
+    "savedMessage": "Sparat",
+    "buttonSaving": "Sparar…",
+    "buttonIdle": "Spara ändringar"
+  },
+  "coloursPage": {
+    "heading": "Färger",
+    "subheading": "Definiera färgtokens som används i dina genererade Flutter- och Next.js-appar.",
+    "preview": {
+      "title": "Livegranskning",
+      "primaryButton": "Primär knapp",
+      "secondaryButton": "Sekundär",
+      "accentBadge": "Accentmärke",
+      "success": "✓ Klart",
+      "warning": "⚠ Varning",
+      "danger": "✕ Fara"
+    },
+    "tokensSectionTitle": "Färgtokens",
+    "resetTokenTitle": "Återställ till standard",
+    "resetAllButton": "Återställ allt till standard",
+    "savedMessage": "Sparat",
+    "saveButtonIdle": "Spara färger",
+    "saveButtonSaving": "Sparar…",
+    "logs": {
+      "savingColours": "Sparar färgtokens...",
+      "coloursSaved": "Färgtokens har sparats"
+    },
+    "tokens": {
+      "primary":      { "label": "Primär",             "description": "Huvudsakliga varumärkesfärgen — knappar, länkar, markeringar" },
+      "primary-fg":   { "label": "Primärt förgrund",  "description": "Text på primärfärgade bakgrunder" },
+      "secondary":    { "label": "Sekundär",           "description": "Stödjande varumärkesfärg" },
+      "secondary-fg": { "label": "Sekundärt förgrund","description": "Text på sekundärfärgade bakgrunder" },
+      "accent":       { "label": "Accent",              "description": "Markeringsfärg för märken och taggar" },
+      "background":   { "label": "Bakgrund",          "description": "Appens huvudbakgrund" },
+      "surface":      { "label": "Yta",             "description": "Bakgrund för kort och paneler" },
+      "border":       { "label": "Kant",              "description": "Standard kantfärg" },
+      "success":      { "label": "Klart",             "description": "Positiva tillstånd och bekräftelser" },
+      "warning":      { "label": "Varning",             "description": "Varningar och försiktighetstillstånd" },
+      "danger":       { "label": "Fara",              "description": "Fel och destruktiva åtgärder" },
+      "text":         { "label": "Primär text",        "description": "Huvudsaklig brödtextfärg" },
+      "text-muted":   { "label": "Dämpad text",          "description": "Sekundär text och platshållartext" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "Funktionsflaggor",
+    "comingSoonBadge": "KOMMER SNART",
+    "subheading": "Slå på funktioner som kommer att inkluderas i dina genererade Flutter- och Next.js-appar.",
+    "paidBadge": "BETALD",
+    "savedMessage": "Sparat",
+    "saveButtonIdle": "Spara flaggor",
+    "saveButtonSaving": "Sparar…",
+    "upgrade": {
+      "title": "Hostad plan krävs",
+      "description": "Dessa funktioner kräver Underpeaks hostade infrastruktur. Uppgradera för att låsa upp dem.",
+      "button": "Uppgradera"
+    },
+    "groups": {
+      "Appearance": "Utseende",
+      "Localisation": "Lokalisering",
+      "App Behaviour": "Appbeteende",
+      "Authentication — Paid": "Autentisering — Betald",
+      "Advanced — Paid": "Avancerat — Betald"
+    },
+    "flags": {
+      "dark-mode":          { "label": "Mörkt läge",                 "description": "Låter användare växla mellan ljust och mörkt tema i appen" },
+      "system-theme":       { "label": "Följ systemtema",       "description": "Matchar automatiskt enhetens ljus-/mörkläge-inställning" },
+      "multi-language":     { "label": "Flerspråksstöd",    "description": "Aktiverar stöd för flera språk i den genererade appen" },
+      "rtl-support":        { "label": "RTL-stöd",               "description": "Layout från höger till vänster för arabiska, hebreiska och liknande språk" },
+      "offline-mode":       { "label": "Offlineläge",              "description": "Cachar data lokalt så att appen fungerar utan internetanslutning" },
+      "push-notifications": { "label": "Push-aviseringar",        "description": "Aktiverar stöd för push-aviseringar via FCM — du tillhandahåller nycklarna" },
+      "splash-screen":      { "label": "Startskärm",             "description": "Visar en varumärkt startskärm när appen startar" },
+      "onboarding":         { "label": "Introduktionsflöde",           "description": "Visar ett välkomst-/introduktionsflöde för nya användare" },
+      "2fa":                { "label": "Tvåfaktorsautentisering", "description": "Kräver OTP eller autentiseringsapp för inloggning" },
+      "biometric":          { "label": "Biometrisk inloggning",           "description": "Fingeravtrycks- och Face ID-inloggning på mobil" },
+      "social-login":       { "label": "Social inloggning",              "description": "OAuth via Google, GitHub, Apple och Facebook" },
+      "magic-link":         { "label": "Magisk länk",                "description": "Lösenordsfri inloggning via e-postlänk" },
+      "sso":                { "label": "SSO / SAML",                "description": "Integration för enterprise single sign-on" },
+      "analytics":          { "label": "Analys i appen",          "description": "Spårar skärmvisningar och händelser i den genererade appen" },
+      "ab-testing":         { "label": "A/B-testning",               "description": "Kör funktionsexperiment i din användarbas" },
+      "feature-gating":     { "label": "Funktionsspärrning",            "description": "Visar eller döljer funktioner baserat på användarens plan eller roll" }
+    },
+    "logs": {
+      "savingFlags": "Sparar funktionsflaggor...",
+      "flagsSaved": "Funktionsflaggor har sparats"
+    }
+  },
+  "spacingPage": {
+    "heading": "Avstånd och radie",
+    "subheading": "Kontrollera formen, densiteten och höjningen av komponenter i dina genererade appar.",
+    "preview": {
+      "title": "Livegranskning",
+      "button": "Knapp",
+      "card": "Kortkomponent",
+      "input": "Inmatningsfält"
+    },
+    "sections": {
+      "radius": {
+        "title": "Kantradie",
+        "description": "Tillämpas på knappar, kort, inmatningsfält och modaler"
+      },
+      "density": {
+        "title": "Avståndsdensitet",
+        "description": "Kontrollerar padding inuti komponenter"
+      },
+      "shadow": {
+        "title": "Höjning / skugga",
+        "description": "Skuggdjup för kort och komponenter"
+      }
+    },
+    "radius": {
+      "none": "Ingen",
+      "sm": "Liten",
+      "md": "Medium",
+      "lg": "Stor",
+      "xl": "Extra stor",
+      "full": "Pill"
+    },
+    "density": {
+      "compact": { "label": "Kompakt", "desc": "Tät padding, mer innehåll synligt" },
+      "default": { "label": "Standard", "desc": "Balanserat avstånd för de flesta användningsfall" },
+      "relaxed": { "label": "Avslappnad", "desc": "Generös padding, lättare att trycka på" }
+    },
+    "shadow": {
+      "none": "Ingen",
+      "sm": "Subtil",
+      "md": "Medium",
+      "lg": "Stark"
+    },
+    "save": {
+      "button": "Spara avstånd",
+      "saving": "Sparar…",
+      "savedConfirmation": "Sparat"
+    }
+  },
+  "typographyPage": {
+    "heading": "Typografi",
+    "subheading": "Välj typsnitt och skala för dina genererade appar. Typsnitt laddas från Google Fonts.",
+    "preview": {
+      "title": "Livegranskning",
+      "headingSuffix": "— Rubrik",
+      "bodySample": "Flygande bäckasiner söka hwila på mjuka tuvor. Exempel på brödtext i standardstorlek.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "Typsnittsfamiljer",
+        "description": "Välj från Google Fonts — inkluderas automatiskt i kodgenerering"
+      },
+      "weights": {
+        "title": "Typsnittsvikter"
+      },
+      "scale": {
+        "title": "Textstorleksskala",
+        "description": "Kontrollerar den övergripande textstorleken i hela appen"
+      }
+    },
+    "fonts": {
+      "headingFont": "Rubriktypsnitt",
+      "bodyFont": "Brödtextstypsnitt",
+      "monoFont": "Monotypsnitt"
+    },
+    "weights": {
+      "headingWeight": "Rubrikvikt",
+      "bodyWeight": "Brödtextvikt"
+    },
+    "scale": {
+      "compact": { "label": "Kompakt", "desc": "Mindre text, tätare avstånd" },
+      "default": { "label": "Standard", "desc": "Balanserat för de flesta appar" },
+      "relaxed": { "label": "Avslappnad", "desc": "Större text, mer utrymme" }
+    },
+    "save": {
+      "button": "Spara typografi",
+      "saving": "Sparar…",
+      "savedConfirmation": "Sparat"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "Tema",
+    "nav": {
+      "colours": "Färger",
+      "typography": "Typografi",
+      "spacing": "Avstånd och radie",
+      "featureFlags": "Funktionsflaggor",
+      "presets": "Förinställningar"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "Inaktiv session",
+      "description": "Du har varit inaktiv. Loggas ut om:",
+      "logoutButton": "Logga ut",
+      "keepAliveButton": "Fortsätt vara inloggad"
+    },
+    "logs": {
+      "logoutFailed": "Utloggningen misslyckades:"
+    }
+  },
+  "loader": {
+    "label": "Läser in…"
+  },
+  "userStatus": {
+    "active": "Aktiv",
+    "needsEmailVerification": "Kräver e-postverifiering",
+    "passwordResetRequested": "Lösenordsåterställning begärd",
+    "blocked": "Blockerad",
+    "disabled": "Inaktiverad"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Det gick inte att skapa Flutter-projektet"
+    },
+    "logs": {
+      "skipped": "Skapande av Flutter-projekt hoppades över: {output}",
+      "created": "Flutter-projekt skapat: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "Det gick inte att skapa NextJS-projektet"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "Databaskonfiguration hittades inte.",
+      "dbConfigMissing": "Databaskonfiguration saknas",
+      "dbConfigMissingStore": "Databaskonfiguration saknas i lagringen",
+      "adminEmailMissing": "Administratörens e-post saknas",
+      "adminEmailMissingStore": "Administratörens e-post saknas i lagringen",
+      "projectTypeMissing": "selectedProjectType saknas",
+      "createTablesFailed": "Det gick inte att skapa tabeller: {message}",
+      "createAdminFailed": "Det gick inte att skapa administratör: {message}",
+      "createModelsFailed": "Det gick inte att skapa modeller: {message}",
+      "writeConfigFailed": "Det gick inte att skriva konfigurationsfilen: {message}",
+      "setupStorageFailed": "Det gick inte att konfigurera lagring: {message}",
+      "installDemoFailed": "Det gick inte att installera demoinnehåll: {message}",
+      "stepFailed": "Steget misslyckades: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "Tabeller skapade:",
+      "adminCreated": "Administratör skapad:",
+      "modelsCreated": "Svar från modellskapande:",
+      "modelsSkipped": "Skapande av modeller hoppades över: {message}",
+      "configWritten": "Konfigurationsfil skriven:",
+      "storageCreated": "Lagringshinkar skapade:",
+      "demoContentSkipped": "Demoinnehåll hoppades över",
+      "demoContentInstalled": "Demoinnehåll installerat:",
+      "creatingApiEndpoints": "Skapar API-slutpunkter...",
+      "settingUpAuth": "Konfigurerar autentisering...",
+      "configuringSession": "Konfigurerar sessionshantering...",
+      "runningTests": "Kör tester...",
+      "finalizing": "Slutför installationsprogrammet...",
+      "noImplementation": "Ingen implementering för steget: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "heading": "Konfiguration av administratörskonto",
+    "description": "Ange administratörsuppgifter för att skydda ditt Underpeaks-system. Detta konto kommer att ha full administrativ åtkomst inom plattformen.",
+    "disclaimer": "Observera: detta skapar ett administratörskonto i Underpeaks-systemet och kan skilja sig från ditt databas-administratörskonto.",
+    "fields": {
+      "fullName": {
+        "label": "Fullständigt namn",
+        "placeholder": "t.ex., Anna Andersson"
+      },
+      "email": {
+        "label": "E-postadress",
+        "placeholder": "admin@exempel.com"
+      },
+      "password": {
+        "label": "Lösenord",
+        "placeholder": "Skapa ett säkert lösenord"
+      }
+    },
+    "errors": {
+      "nameRequired": "Fullständigt namn krävs",
+      "emailRequired": "E-post krävs",
+      "passwordInvalid": "Lösenord krävs | Lösenordet måste vara 8 tecken långt | Måste innehålla en versal | Måste innehålla ett specialtecken (t.ex. !@#$%^&*)"
+    },
+    "continueButton": "Fortsätt"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "heading": "Välj din stack",
+    "description": "Välj den teknikstack som bäst passar dina projektbehov. Du kan ändra detta senare om du vill lägga till fler plattformar eller ändra ditt tillvägagångssätt.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "Fullständig kombination! Next.js för webb och Flutter för plattformsoberoende mobil- och skrivbordsappar."
+      },
+      "next": {
+        "title": "Endast Next.js",
+        "description": "Använd Next.js som ett kraftfullt React SSR-ramverk och <strong>som ett headless CMS för att hantera innehåll och API:er.</strong>"
+      },
+      "flutter": {
+        "title": "Endast Flutter",
+        "description": "Bygg plattformsoberoende mobil- och skrivbordsappar med Flutter med en delad kodbas, och <strong>använd det som headless CMS-backend om önskat.</strong>"
+      },
+      "cms": {
+        "title": "Headless CMS",
+        "description": "Distribuera endast som headless CMS-backend. Exponera din data via API:er och koppla dem till valfri anpassad frontend, mobilapp eller tredjepartstjänst med full flexibilitet."
+      }
+    },
+    "nextButton": "Nästa"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "heading": "Databaskonfiguration",
+    "selectPlaceholder": "Välj databas",
+    "fieldExample": "(t.ex. {placeholder})",
+    "savingWarning": "⚠️ Ha tålamod, detta kan ta en stund...",
+    "infoBlock": {
+      "whereLabel": "Var du hittar det:"
+    },
+    "testSteps": {
+      "validating": "Validerar konfiguration...",
+      "sending": "Skickar konfiguration till servern...",
+      "testing": "Testar databasanslutning...",
+      "finalizing": "Slutför anslutningskontroll..."
+    },
+    "errors": {
+      "serverRejected": "Servern avslog anslutningen",
+      "connectionFailed": "Anslutningen misslyckades: {message}"
+    },
+    "buttons": {
+      "testConnection": "Testa anslutning",
+      "testing": "Testar...",
+      "saving": "Sparar...",
+      "continue": "Fortsätt"
+    },
+    "logs": {
+      "firebaseParseError": "Det gick inte att tolka Firebase-konfigurationen"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "projectType": {
+      "title": "Välj projekttyp",
+      "description": "Välj en mall för att automatiskt installera standardmodeller för ditt projekt."
+    },
+    "projects": {
+      "ecommerce":   { "label": "E-handel",         "description": "Inkluderar produkter, kategorier, beställningar, kunder och butikssidor." },
+      "marketplace": { "label": "Marknadsplats",         "description": "Stöder flera säljare, annonser, provisioner och säljarpaneler." },
+      "listing":     { "label": "Annonsplattform",    "description": "För fastighets-, jobb- eller tjänsteannonser med kategorier, sökning och filter." },
+      "blog":        { "label": "Blogg / innehållswebbplats", "description": "Innehållsdriven webbplats med inlägg, kategorier, taggar, författare och kommentarer." },
+      "social":      { "label": "Socialt nätverk",      "description": "Användarprofiler, inlägg, kommentarer, gilla-markeringar, följare, meddelanden och aviseringar." },
+      "saas":        { "label": "SaaS / webbapp",      "description": "Webbappstruktur med användare, roller, behörigheter och prenumerationsplaner." },
+      "blank":       { "label": "Tomt projekt",       "description": "Inget demoinnehåll; börja med ett tomt projektskelett." }
+    },
+    "demoContent": {
+      "title": "Konfigurera demoinnehåll",
+      "description": "Förhandsgranska din butik med exempeldata som redan är inläst.",
+      "checkboxLabel": "Inkludera demoinnehåll för det valda projektet",
+      "ecommerce": {
+        "item1": "Demoprodukter med kategorier och taggar",
+        "item2": "Exempelkunder och beställningar",
+        "item3": "Butikssidor (hem, produkter, varukorg, kassa)",
+        "item4": "Grundläggande CMS-innehåll",
+        "item5": "Förkonfigurerade menyer och moduler"
+      }
+    },
+    "continueButtonIdle": "Fortsätt",
+    "continueButtonLoading": "Fortsätter...",
+    "logs": {
+      "navigatingToFinalise": "Sparar installationsval och navigerar till slutförandesteget..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "installComplete": "🎉 Installationen är klar!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "Projektinformation",
+      "subtitle": "Grundläggande information om din projektkonfiguration.",
+      "name": "Namn:",
+      "stack": "Stack:"
+    },
+    "database": {
+      "title": "Databas",
+      "subtitle": "Din valda databas och konfiguration.",
+      "type": "Typ:",
+      "noneSelected": "Ingen vald"
+    },
+    "adminUser": {
+      "title": "Administratörskonto",
+      "subtitle": "Dina inledande administratörsuppgifter.",
+      "name": "Namn:",
+      "email": "E-post:",
+      "password": "Lösenord:"
+    },
+    "projectType": {
+      "title": "Vald projekttyp",
+      "subtitle": "Projektmall vald under konfigurationen."
+    },
+    "demoContent": {
+      "title": "Demoinnehåll",
+      "subtitle": "Om exempeldata för butiken ska förladdas.",
+      "installed": "Installerat",
+      "notInstalled": "Inte installerat"
+    },
+    "continueButton": "Fortsätt till → Inloggning"
+  },
+  "ecommercePage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "card": {
+      "title": "Anpassa dina e-handelsmoduler"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "Aktivera e-handelsmodul",
+        "description": "Lägger till produktkatalog, varukorg, kassa och orderhantering."
+      },
+      "physical": {
+        "label": "Inkludera fysiska produkter",
+        "description": "Stöder lager, frakt, returer och spårning för materiella varor."
+      },
+      "digital": {
+        "label": "Inkludera digitala produkter",
+        "description": "Sälj nedladdningsbart innehåll som PDF-filer, videor eller programvarulicenser."
+      }
+    },
+    "button": {
+      "next": "Nästa",
+      "continuing": "Fortsätter..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "card": {
+      "title": "Slutför konfiguration"
+    },
+    "summary": {
+      "project": "Projekt:",
+      "defaultProject": "MinApp",
+      "stack": "Stack:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "Databas:",
+      "notSelected": "Inte vald"
+    },
+    "steps": {
+      "heading": "Installationssteg:",
+      "skipped": "hoppades över!"
+    },
+    "progress": {
+      "finishing": "Slutför...",
+      "ready": "Redo att installera ditt projekt"
+    },
+    "errors": {
+      "label": "Fel:",
+      "noDatabase": "Ingen databas vald, det går inte att spara konfigurationen.",
+      "saveFailed": "Det gick inte att spara installationskonfigurationen",
+      "unknown": "Ett okänt fel uppstod"
+    },
+    "button": {
+      "start": "Starta installation",
+      "installing": "Installerar..."
+    },
+    "logs": {
+      "sendingConfig": "Skickar installationskonfiguration till servern...",
+      "configSaved": "Installationskonfiguration sparad",
+      "installError": "Installationsfel:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "heading": "Välj standardmodeller",
+    "subheading": "Välj de standarddatamodeller du vill inkludera i ditt projekt. Du kan skapa eller redigera modeller senare.",
+    "required": "(obligatoriskt)",
+    "toggleAll": {
+      "deselect": "Avmarkera alla",
+      "select": "Markera alla"
+    },
+    "models": {
+      "users":      { "label": "Användare",      "description": "Hantera applikationsanvändare och autentisering" },
+      "products":   { "label": "Produkter",   "description": "Katalog över produkter eller tjänster" },
+      "orders":     { "label": "Beställningar",     "description": "Spåra kundbeställningar och köp" },
+      "coupons":    { "label": "Kuponger",    "description": "Rabattkuponger och kampanjer" },
+      "categories": { "label": "Kategorier", "description": "Organisera produkter eller innehåll" },
+      "reviews":    { "label": "Recensioner",    "description": "Användarfeedback och betyg" }
+    },
+    "button": {
+      "continue": "Fortsätt",
+      "continuing": "Fortsätter..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "heading": "Projektkonfiguration",
+    "subheading": "Ange projektnamn, underdomän och domän för din självhostade studio.",
+    "continueButton": "Fortsätt",
+    "fields": {
+      "name": {
+        "label": "Projektnamn",
+        "placeholder": "t.ex., MinApp Studio"
+      },
+      "domain": {
+        "label": "Domän",
+        "placeholder": "t.ex., http://localhost:3000",
+        "hint": "Fullständig domän för din app. Standard är"
+      },
+      "subdomain": {
+        "label": "Underdomän",
+        "placeholder": "t.ex., console",
+        "hint": "Detta kommer att användas för URL:en:"
+      }
+    },
+    "errors": {
+      "nameRequired": "Projektnamn krävs",
+      "subdomainRequired": "Underdomän krävs",
+      "domainRequired": "Domän krävs"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Underpeaks-logotyp",
+    "tagline": "Din allt-i-ett SaaS-installatör och kodgenerator",
+    "continueButton": "Fortsätt →",
+    "continueLoading": "Läser in...",
+    "benefits": {
+      "heading": "Varför Underpeaks?",
+      "item1": "🔧 Fullständig kodbasgenerator (Next.js + Flutter)",
+      "item2": "⚙️ Ingen mer standardkod – bara produktionsklar kod",
+      "item3": "🌍 Redo för flerspråkighet och multi-tenant",
+      "item4": "📦 Självhostad eller molnhostad – ditt val",
+      "item5": "🔐 Inbyggd autentisering, roller, behörigheter, installationsgränssnitt",
+      "item6": "💼 Idealisk för startups, byråer och företagsprojekt"
+    },
+    "license": {
+      "heading": "Licensavtal",
+      "loading": "Läser in licens...",
+      "loadFailed": "Det gick inte att läsa in licensavtalet.",
+      "acceptLabel": "Acceptera licensvillkoren."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "Nuvarande och nytt lösenord krävs",
+      "passwordTooShort": "Lösenordet måste vara minst 8 tecken",
+      "unauthorized": "Obehörig",
+      "invalidToken": "Ogiltig token",
+      "userNotFound": "Användaren hittades inte",
+      "incorrectCurrentPassword": "Nuvarande lösenord är felaktigt",
+      "internalError": "Ett oväntat fel uppstod"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Firebase Auth-lösenord uppdaterat",
+      "firebasePasswordUpdateFailed": "[change-password] Det gick inte att uppdatera Firebase Auth-lösenordet"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "Administratörskonto har skapats"
+    },
+    "errors": {
+      "missingConfig": "Databaskonfiguration saknas",
+      "missingAdminUser": "Administratörsdata saknas",
+      "genericFailure": "Det gick inte att skapa administratörskonto"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "Databaskonfiguration eller administratörens e-post saknas",
+      "adapterNotSupported": "Denna databasadapter stöder inte att skapa datamodeller",
+      "genericFailure": "Det gick inte att infoga datamodeller"
+    },
+    "logs": {
+      "createModelsError": "Fel i create-data-models API:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "Databaskonfiguration/typ saknas",
+      "adapterNotSupported": "{type}-adaptern implementerar inte lagringskonfiguration"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "Alla system-, användar- och projekttabeller har skapats"
+    },
+    "errors": {
+      "missingConfig": "Databaskonfiguration saknas",
+      "genericFailure": "Det gick inte att skapa tabeller"
+    },
+    "logs": {
+      "createTablesError": "[FEL VID SKAPANDE AV TABELLER]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Firebase-miljövariabel saknas: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "projectName saknas",
+      "flutterNotInstalled": "Flutter är inte installerat eller finns inte i PATH.",
+      "stepFailed": "Steget misslyckades: Skapande av Flutter-projekt - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Flutter-projektet \"{projectName}\" finns redan. Skapande hoppas över.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Det gick inte att skapa Flutter-projektet:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "E-post krävs",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE är inte inställt",
+      "firebaseClientSide": "Firebase-lösenordsåterställning hanteras klientsidan",
+      "supabaseMissingMethod": "Supabase-adaptern saknar metoden sendResetEmail",
+      "unsupportedDbType": "Databastypen stöds inte: {dbType}",
+      "adapterMissingMethods": "${dbType}-adaptern saknar obligatoriska metoder",
+      "userNotFound": "Användaren hittades inte",
+      "genericFailure": "Det gick inte att skicka återställningslänk"
+    },
+    "notices": {
+      "smtpDisabled": "E-postutskick är inaktiverat. Be din administratör att återställa ditt lösenord."
+    },
+    "email": {
+      "subject": "Begäran om lösenordsåterställning",
+      "body": "<p>Hej {name},</p><p>Klicka på länken nedan för att återställa ditt lösenord:</p><a href=\"{resetLink}\">{resetLink}</a><p>Om du inte begärde detta, ignorera detta e-postmeddelande.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Supabase-återställningsmejl skickat",
+      "resetEmailSent": "Återställningsmejl skickat",
+      "smtpDisabled": "SMTP/forgot-password inaktiverat — e-post hoppades över",
+      "forgotPasswordError": "Fel vid glömt lösenord:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Firebase-tjänstekonto saknas",
+      "unsupportedDbType": "Databastypen stöds inte: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[SYSTEMKONFIGURATIONSFEL]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "Databaskonfiguration saknas",
+      "missingProjectType": "Projekttyp saknas",
+      "adapterNotSupported": "installDemoContent är inte implementerat för denna adapter"
+    },
+    "logs": {
+      "installDemoContentError": "Fel vid install-demo-content:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "Utloggning lyckades"
+    },
+    "errors": {
+      "tokenRequired": "Token krävs",
+      "dbTypeNotSet": "NEXT_DB_TYPE är inte inställt",
+      "firebaseServiceAccountMissing": "Firebase-tjänstekonto saknas",
+      "mysqlEnvMissing": "MySQL-miljövariabler saknas",
+      "postgresEnvMissing": "Postgres-miljövariabler saknas",
+      "unsupportedDbType": "Databastypen stöds inte: {dbType}",
+      "tokenNotFound": "Token hittades inte"
+    },
+    "logs": {
+      "logoutError": "UTLOGGNINGS-API-FEL:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id krävs",
+      "unauthorized": "Obehörig",
+      "invalidToken": "Ogiltig token"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder krävs",
+      "internalError": "Ett oväntat fel uppstod"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] Mappar har berikats med filantal"
+    },
+    "errors": {
+      "internalError": "Ett oväntat fel uppstod"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder, toFolder och fileName krävs",
+      "moveFileNotSupported": "moveFile stöds inte",
+      "internalError": "Ett oväntat fel uppstod"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder, oldName och newName krävs",
+      "renameFileNotSupported": "renameFile stöds inte",
+      "internalError": "Ett oväntat fel uppstod"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "Fil och mapp krävs",
+      "uploadFileNotSupported": "uploadFile stöds inte",
+      "internalError": "Uppladdningen misslyckades"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] läge:",
+      "projectIdLookupFailed": "[upload-file] uppslagning av project_id misslyckades",
+      "metadataSaved": "[upload-file] metadata sparad i nxf_storage",
+      "metadataSaveFailed": "[upload-file] det gick inte att spara metadata",
+      "localUploadSuccess": "[upload-file] lokal uppladdning sparad:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "Det gick inte att testa databasanslutningen"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id krävs",
+      "firebaseServiceAccountMissing": "Firebase-tjänstekonto saknas",
+      "unsupportedDbType": "Databastypen stöds inte",
+      "systemConfigNotFound": "Systemkonfiguration hittades inte",
+      "internalError": "Internt serverfel"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "Fullständigt namn krävs",
+      "unauthorized": "Obehörig",
+      "invalidToken": "Ogiltig token",
+      "internalError": "Ett oväntat fel uppstod"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id och project_name krävs",
+      "firebaseServiceAccountMissing": "Firebase-tjänstekonto saknas",
+      "unsupportedDbType": "Databastypen stöds inte",
+      "systemConfigNotFound": "Systemkonfiguration hittades inte för denna användare",
+      "internalError": "Internt serverfel"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id krävs",
+      "firebaseServiceAccountMissing": "Firebase-tjänstekonto saknas",
+      "unsupportedDbType": "Databastypen stöds inte",
+      "systemConfigNotFound": "Systemkonfiguration hittades inte för denna användare",
+      "internalError": "Internt serverfel"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "Det gick inte att skriva konfigurationsfiler"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "Befintlig autentiseringsanvändare hittades:",
+      "newAuthUserCreated": "Ny autentiseringsanvändare skapad:",
+      "creatingAdminInDb": "Skapar administratörskonto i databasen...",
+      "userAlreadyInDb": "Användaren finns redan i databasen:",
+      "existingProjectFound": "Befintligt projekt hittades:",
+      "newProjectCreated": "Nytt projekt skapat:",
+      "existingTenantFound": "Befintlig klient hittades:",
+      "newTenantCreated": "Ny klient skapad:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "Hoppar över dubblerad CreateDataModels-körning — detta projekt och typkombination har redan behandlats.",
+      "creatingTable": "Skapar tabell:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable är inte implementerat, hoppar över tabellskapande"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "Uppladdningsmapp",
+      "customFolder": "Anpassad mapp…",
+      "enterFolderName": "Ange mappnamn",
+      "placeholder": "t.ex. banners/summer",
+      "uploadingTo": "Laddar upp till:"
+    },
+    "preview": {
+      "alt": "Förhandsgranskning",
+      "uploaded": "Uppladdad",
+      "replace": "Ersätt",
+      "clear": "Rensa fil"
+    },
+    "dropzone": {
+      "uploading": "Laddar upp…",
+      "idle": "Dra och släpp eller",
+      "browse": "bläddra",
+      "recommended": "Rekommenderas:"
+    },
+    "errors": {
+      "noFolder": "Välj eller ange en mapp innan du laddar upp.",
+      "uploadFailed": "Uppladdningen misslyckades",
+      "uploadFailedStatus": "Uppladdningen misslyckades:",
+      "networkError": "Nätverksfel"
+    }
+  },
+  "modelView": {
+    "systemBadge": "System",
+    "subtitle": "Skrivskyddad — detta är en skyddad systemtabell.",
+    "fieldsHeading": "Fält",
+    "actions": {
+      "back": "Tillbaka till modeller"
+    },
+    "stats": {
+      "fields": "Fält",
+      "created": "Skapad",
+      "updated": "Senast uppdaterad"
+    },
+    "table": {
+      "name": "Fältnamn",
+      "type": "Typ",
+      "constraints": "Begränsningar",
+      "nullable": "Obligatoriskt",
+      "default": "Standard",
+      "uiType": "UI-typ"
+    },
+    "badges": {
+      "hidden": "Dold",
+      "required": "Obligatoriskt",
+      "optional": "Valfritt"
+    },
+    "errors": {
+      "loadFailed": "Det gick inte att läsa in modellen.",
+      "notFound": "Modellen hittades inte."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "Modeller",
+      "subtitle": "Definiera och hantera ditt projekts datastruktur.",
+      "createButton": "Skapa modell"
+    },
+    "filter": {
+      "all": "Alla",
+      "user": "Användare",
+      "system": "System"
+    },
+    "states": {
+      "empty": "Inga modeller hittades.",
+      "emptyHint": "Skapa din första modell för att komma igång."
+    },
+    "badges": {
+      "system": "System",
+      "partialSystem": "Redigerbart system"
+    },
+    "meta": {
+      "fields": "{count} fält",
+      "foreignKeys": "{count} FK"
+    },
+    "card": {
+      "editAriaLabel": "Redigera {name}",
+      "deleteAriaLabel": "Ta bort {name}"
+    },
+    "confirmDelete": {
+      "title": "Ta bort modell?",
+      "description": "Är du säker på att du vill ta bort \"{name}\"? All data i denna tabell tas bort permanent. Detta kan inte ångras.",
+      "confirm": "Ta bort",
+      "deleting": "Tar bort…",
+      "cancel": "Avbryt"
+    },
+    "errors": {
+      "loadFailed": "Det gick inte att läsa in modeller.",
+      "deleteFailed": "Det gick inte att ta bort modellen."
+    }
+  },
+  "createModel": {
+    "title": "Skapa modell",
+    "subtitle": "Definiera en ny datamodell och dess fält.",
+    "actions": {
+      "save": "Spara modell",
+      "saving": "Sparar…",
+      "back": "Tillbaka till modeller"
+    },
+    "form": {
+      "modelNameLabel": "Modellnamn",
+      "modelNamePlaceholder": "t.ex. Produkt",
+      "fieldNamePlaceholder": "Fältnamn",
+      "required": "Obligatoriskt",
+      "unique": "Unikt",
+      "primaryKey": "Primärnyckel",
+      "primaryKeyTaken": "redan angiven",
+      "hidden": "Dold",
+      "uiType": "UI-typ",
+      "foreignKeyTable": "Främmande nyckel — tabell",
+      "foreignKeyColumn": "Främmande nyckel — kolumn",
+      "noForeignKey": "— Ingen främmande nyckel —",
+      "selectColumn": "— Välj kolumn —",
+      "onDelete": "Vid borttagning",
+      "addField": "Lägg till fält",
+      "removeField": "Ta bort fält",
+      "expandField": "Visa avancerade alternativ",
+      "collapseField": "Dölj avancerade alternativ",
+      "foreignKey": "Främmande nyckel"
+    },
+    "validation": {
+      "modelNameRequired": "Modellnamn krävs.",
+      "fieldsInvalid": "Alla fält måste ha ett namn.",
+      "fieldNameUnique": "Fältnamn måste vara unika.",
+      "singlePrimaryKey": "Endast en primärnyckel tillåts per modell."
+    },
+    "confirmDelete": {
+      "title": "Ta bort fält?",
+      "description": "Är du säker på att du vill ta bort detta fält?",
+      "confirm": "Ta bort",
+      "cancel": "Avbryt"
+    },
+    "errors": {
+      "createFailed": "Det gick inte att skapa modellen."
+    }
+  },
+  "editModel": {
+    "title": "Redigera modell",
+    "subtitle": "Uppdatera modellnamnet och dess fältdefinitioner.",
+    "actions": {
+      "save": "Spara ändringar",
+      "saving": "Sparar…",
+      "back": "Tillbaka till modeller"
+    },
+    "form": {
+      "modelNameLabel": "Modellnamn",
+      "modelNamePlaceholder": "Modellnamn",
+      "fieldNamePlaceholder": "Fältnamn",
+      "required": "Obligatoriskt",
+      "unique": "Unikt",
+      "primaryKey": "Primärnyckel",
+      "primaryKeyTaken": "redan angiven",
+      "hidden": "Dold",
+      "uiType": "UI-typ",
+      "foreignKeyTable": "Främmande nyckel — tabell",
+      "foreignKeyColumn": "Främmande nyckel — kolumn",
+      "noForeignKey": "— Ingen främmande nyckel —",
+      "selectColumn": "— Välj kolumn —",
+      "onDelete": "Vid borttagning",
+      "addField": "Lägg till fält",
+      "removeField": "Ta bort fält",
+      "expandField": "Visa avancerade alternativ",
+      "collapseField": "Dölj avancerade alternativ",
+      "foreignKey": "Främmande nyckel"
+    },
+    "validation": {
+      "modelNameRequired": "Modellnamn krävs.",
+      "fieldsInvalid": "Alla fält måste ha ett namn.",
+      "fieldNameUnique": "Fältnamn måste vara unika.",
+      "singlePrimaryKey": "Endast en primärnyckel tillåts per modell."
+    },
+    "confirmDelete": {
+      "title": "Ta bort fält?",
+      "description": "Är du säker på att du vill ta bort detta fält?",
+      "confirm": "Ta bort",
+      "cancel": "Avbryt"
+    },
+    "warningDialog": {
+      "title": "Allvarlig varning",
+      "subtitle": "Du är på väg att ta bort ett skyddat fält.",
+      "primaryKeyWarning": "Detta fält är primärnyckeln för denna tabell. Om du tar bort det kommer alla relationer som refererar till denna tabell att brytas och kan permanent skada befintlig data i hela ditt projekt.",
+      "foreignKeyWarning": "Detta fält är en främmande nyckel som kopplar denna tabell till en annan. Om du tar bort det kommer relationen att brytas och kan orsaka dataintegritetsproblem för befintliga poster.",
+      "checkboxLabel": "Jag förstår att detta kan permanent skada min data och inte kan ångras.",
+      "confirm": "Ta bort trots allt",
+      "cancel": "Avbryt"
+    },
+    "errors": {
+      "loadModelFailed": "Det gick inte att läsa in modellen.",
+      "modelNotFound": "Modellen hittades inte.",
+      "updateModelFailed": "Det gick inte att uppdatera modellen."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id krävs",
+      "invalidBody": "Ogiltig eller tom förfrågningskropp",
+      "missingFields": "Obligatoriska fält saknas",
+      "projectNotFound": "Inget projekt hittades för denna användare",
+      "nameAlreadyExists": "En modell med detta namn finns redan",
+      "fetchFailed": "Det gick inte att hämta modeller",
+      "createFailed": "Det gick inte att skapa modellen",
+      "updateFailed": "Det gick inte att uppdatera modellen",
+      "deleteFailed": "Det gick inte att ta bort modellen",
+      "multiplePrimaryKeys": "Endast en primärnyckel tillåts per modell",
+      "systemTableProtected": "Systemtabeller kan inte skapas, ändras eller tas bort"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— Välj ett fält —",
+    "clear": "Rensa främmande nyckel",
+    "searchPlaceholder": "Sök modeller…",
+    "noResults": "Inga modeller hittades.",
+    "systemBadge": "System",
+    "fieldsLabel": "fält",
+    "onDelete": "Vid borttagning",
+    "filter": {
+      "all": "Alla",
+      "user": "Användare",
+      "system": "System"
+    }
+  },
+  "users": {
+    "page_title": "Användare",
+    "page_description": "Hantera CMS-administratörs- och användarkonton",
+    "edit_kpis": "Redigera KPI:er",
+    "editing_kpis": "Redigerar KPI:er",
+    "save_layout": "Spara layout",
+    "saving": "Sparar…",
+    "search_placeholder": "Sök efter namn eller e-post…",
+    "showing_count": "Visar {filtered} av {total} användare",
+    "no_users_found": "Inga användare hittades",
+    "filter": "Filtrera",
+    "sort": "Sortera",
+    "clear_all": "Rensa allt",
+    "filters": "Filter",
+    "role": "Roll",
+    "all_roles": "Alla roller",
+    "all_statuses": "Alla statusar",
+    "status": "Status",
+    "joined_from": "Gick med från",
+    "joined_to": "Gick med till",
+    "sort_by": "Sortera efter",
+    "direction": "Riktning",
+    "asc": "Stigande (A → Ö)",
+    "desc": "Fallande (Ö → A)",
+    "col_name": "Namn",
+    "col_email": "E-post",
+    "col_role": "Roll",
+    "col_status": "Status",
+    "col_last_login": "Senaste inloggning",
+    "col_joined": "Gick med",
+    "role_admin": "Admin",
+    "role_user": "Användare",
+    "status_active": "Aktiv",
+    "status_suspended": "Avstängd",
+    "status_disabled": "Inaktiverad",
+    "drawer_title": "Användaruppgifter",
+    "actions": "Åtgärder",
+    "change_role": "Roll",
+    "change_status": "Status",
+    "send_reset": "Skicka e-post för lösenordsåterställning",
+    "sending_reset": "Skickar…",
+    "delete_user": "Ta bort användare",
+    "delete_confirm": "Ta bort denna användare permanent? Detta kan inte ångras.",
+    "cancel": "Avbryt",
+    "confirm_delete": "Ja, ta bort",
+    "deleting": "Tar bort…",
+    "last_admin_warning": "Kan inte nedgraderas — detta är den sista administratören",
+    "login_history": "Inloggningshistorik",
+    "no_history": "Ingen inloggningshistorik registrerad ännu",
+    "event_login": "Loggade in",
+    "event_logout": "Loggade ut",
+    "event_online": "Online",
+    "event_offline": "Gick offline",
+    "joined": "Gick med",
+    "last_login": "Senaste inloggning",
+    "toast_role_updated": "Rollen har uppdaterats",
+    "toast_status_updated": "Statusen har uppdaterats",
+    "toast_user_deleted": "Användaren har tagits bort",
+    "toast_reset_sent": "Lösenordsåterställning skickad till {email}",
+    "toast_kpi_saved": "KPI-layouten har sparats",
+    "toast_load_failed": "Det gick inte att läsa in användare",
+    "toast_save_failed": "Det gick inte att spara",
+    "kpi_add": "Lägg till KPI",
+    "kpi_add_block": "Block",
+    "kpi_edit": "Redigera KPI",
+    "kpi_label_required": "Etikett krävs",
+    "kpi_select_field": "Välj ett fält",
+    "kpi_select_both_fields": "Välj båda fälten",
+    "kpi_select_field_and_value": "Välj ett fält och ange ett värde att matcha",
+    "kpi_max_reached": "Maximalt 5 KPI:er tillåts",
+    "kpi_label": "Etikett",
+    "kpi_formula": "Formel",
+    "kpi_format": "Visningsformat",
+    "kpi_icon": "Ikon",
+    "kpi_accent_colour": "Accentfärg",
+    "kpi_field": "Fält",
+    "kpi_field_a": "Fält A",
+    "kpi_field_b": "Fält B",
+    "kpi_numerator": "Täljarfält (A)",
+    "kpi_denominator": "Nämnarfält (B)",
+    "kpi_operator": "Operator",
+    "kpi_value_to_match": "Värde att matcha",
+    "kpi_make_wide": "Gör bred",
+    "kpi_make_compact": "Gör kompakt",
+    "kpi_add_to_block": "Lägg till",
+    "kpi_save": "Spara ändringar",
+    "kpi_cancel": "Avbryt"
+  },
+  "notFound": {
+    "title": "Sidan hittades inte",
+    "description": "Vi kan inte hitta sidan du letar efter. Den kan ha flyttats, bytt namn eller aldrig existerat.",
+    "goHome": "Gå till startsidan",
+    "backToConsole": "Tillbaka till konsolen",
+    "helpfulLinks": "Letar du efter något specifikt?",
+    "pages": "Sidor",
+    "models": "Modeller",
+    "users": "Användare",
+    "settings": "Inställningar"
+  },
+  "noModelLinked": {
+    "title": "Ingen modell kopplad",
+    "description": "{pageName} använder en {templateName}-mall men ingen datamodell har ännu kopplats till den.",
+    "instruction": "Redigera sidinställningarna och tilldela en modell så att den kan visa data.",
+    "openPages": "Öppna sidor",
+    "manageModels": "Hantera modeller"
+  },
+  "lockedTemplate": {
+    "title": "Tillgänglig på den hostade planen",
+    "description": "Mallen {templateName} ingår i den hostade planen. Uppgradera för att låsa upp kanban, kalender, kassa och mer.",
+    "upgradeButton": "Visa hostad plan",
+    "backButton": "Tillbaka till sidor"
+  },
+  "CookieBanner": {
+    "eyebrow": "SEKRETESS",
+    "title": "Vi värdesätter din sekretess",
+    "description": "Vi använder cookies för att hålla dig inloggad, komma ihåg ditt språk och (med ditt samtycke) förstå hur besökare använder webbplatsen. Du kan ändra dina val när som helst.",
+    "necessaryTitle": "Strikt nödvändiga",
+    "necessaryDescription": "Krävs för inloggning, språkinställningar och att spara ditt cookieval. Kan inte inaktiveras.",
+    "analyticsTitle": "Analys",
+    "analyticsDescription": "Hjälper oss att förstå vilka sidor besökare besöker och hur webbplatsen presterar. Ingen personlig data delas.",
+    "marketingTitle": "Marknadsföring",
+    "marketingDescription": "Används för att visa relevanta annonser och mäta kampanjeffektivitet på andra webbplatser.",
+    "alwaysOn": "Alltid aktiverad",
+    "acceptAll": "Acceptera alla",
+    "rejectAll": "Avvisa alla",
+    "customise": "Anpassa",
+    "savePreferences": "Spara inställningar",
+    "cookiePreferences": "Cookie-inställningar",
+    "policyLink": "Sekretesspolicy"
   }
 }

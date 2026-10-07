@@ -1,3 +1,4 @@
+// DemoPage.tsx  (installer step 6: project type + demo content)
 'use client'
 
 import { useState }            from 'react'
@@ -8,7 +9,7 @@ import { Checkbox }            from '@/components/ui/checkbox'
 import { Label }               from '@/components/ui/label'
 import { Loader2 }             from 'lucide-react'
 import { useInstallerStore }   from '../../../store/useInstallerStore'
-import LocaleSwitcher          from '@/core/LocaleSwitcher'
+import InstallerShell, { CARD, PRIMARY_BUTTON } from '@/core/InstallerShell'
 import {
   FiShoppingCart,
   FiGrid,
@@ -39,8 +40,8 @@ const PROJECT_ICONS: Record<ProjectType, React.ReactNode> = {
 }
 
 export default function DemoPage() {
-  const t               = useTranslations('demoPage')
-  const router          = useRouter()
+  const t                 = useTranslations('demoPage')
+  const router            = useRouter()
   const setInstallerValue = useInstallerStore((s) => s.setInstallerValue)
 
   const [installDemo,     setInstallDemo]     = useState(false)
@@ -77,91 +78,69 @@ export default function DemoPage() {
   const showDemoCard = selectedProject !== 'blank'
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-6 py-12">
+    <InstallerShell step={6} width="sm" logoAlt={t('logoAlt')} tagline={t('tagline')}>
+      <div className={CARD}>
 
-      {/* Locale switcher */}
-      <div className="fixed top-4 right-4 z-50">
-        <LocaleSwitcher />
-      </div>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {t('projectType.title')}
+        </h1>
+        <p className="mt-1 text-sm text-neutral-500">
+          {t('projectType.description')}
+        </p>
 
-      {/* Header */}
-      <header className="mb-8 text-center flex flex-col items-center">
-        <img
-          src="/images/logo/underpeaks_logo.png"
-          alt={t('logoAlt')}
-          className="h-16 w-auto mb-4"
-        />
-        <p className="text-xl text-gray-700">{t('tagline')}</p>
-      </header>
-
-      {/* Main card */}
-      <div className="w-full max-w-md p-8 bg-gray-50 rounded-2xl shadow-xl border space-y-6">
-
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">
-            {t('projectType.title')}
-          </h2>
-          <p className="text-sm text-gray-500 mt-1">
-            {t('projectType.description')}
-          </p>
-        </div>
-
-        {/* Project type options — same pattern as RadioGroup in stack page */}
-        <div className="space-y-2">
+        {/* Project type options */}
+        <div role="radiogroup" className="mt-6 space-y-2">
           {projectOptions.map((option) => {
             const isActive = selectedProject === option.value
             return (
-              <div
+              <button
                 key={option.value}
+                type="button"
+                role="radio"
+                aria-checked={isActive}
                 onClick={() => setSelectedProject(option.value)}
-                className={`
-                  flex items-start gap-3 p-3 rounded-xl border cursor-pointer transition-all
-                  ${isActive
-                    ? 'border-gray-900 bg-white shadow-sm'
-                    : 'border-gray-200 hover:border-gray-400 bg-white'
-                  }
-                `}
+                className={`flex w-full items-start gap-3 rounded-xl border p-3 text-left transition-all ${
+                  isActive
+                    ? 'border-black bg-white shadow-sm ring-1 ring-black'
+                    : 'border-neutral-200 bg-white hover:border-neutral-400'
+                }`}
               >
-                {/* Radio dot — matches RadioGroupItem visual */}
-                <div className={`
-                  mt-0.5 flex-shrink-0 w-4 h-4 rounded-full border-2 flex items-center justify-center
-                  ${isActive ? 'border-gray-900' : 'border-gray-400'}
-                `}>
-                  {isActive && (
-                    <div className="w-2 h-2 rounded-full bg-gray-900" />
-                  )}
-                </div>
+                {/* Radio dot */}
+                <span
+                  className={`mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2 ${
+                    isActive ? 'border-black' : 'border-neutral-400'
+                  }`}
+                >
+                  {isActive && <span className="h-2 w-2 rounded-full bg-black" />}
+                </span>
 
-                {/* Greyscale icon */}
-                <div className={`
-                  mt-0.5 flex-shrink-0
-                  ${isActive ? 'text-gray-900' : 'text-gray-400'}
-                `}>
+                {/* Icon */}
+                <span className={`mt-0.5 shrink-0 ${isActive ? 'text-black' : 'text-neutral-400'}`}>
                   {PROJECT_ICONS[option.value]}
-                </div>
+                </span>
 
                 {/* Label + description */}
-                <div className="flex flex-col min-w-0">
-                  <span className={`text-sm font-semibold ${isActive ? 'text-gray-900' : 'text-gray-700'}`}>
+                <span className="flex min-w-0 flex-col">
+                  <span className={`text-sm font-semibold ${isActive ? 'text-black' : 'text-neutral-700'}`}>
                     {option.label}
                   </span>
-                  <span className="text-xs text-gray-500 mt-0.5 leading-relaxed">
+                  <span className="mt-0.5 text-xs leading-relaxed text-neutral-500">
                     {projectDescriptions[option.value]}
                   </span>
-                </div>
-              </div>
+                </span>
+              </button>
             )
           })}
         </div>
 
-        {/* Demo content opt-in — only shown for non-blank projects */}
+        {/* Demo content opt-in (non-blank projects only) */}
         {showDemoCard && (
-          <div className="border border-gray-200 rounded-xl p-4 bg-white space-y-3">
+          <div className="mt-6 space-y-3 rounded-xl border border-neutral-200 bg-neutral-50 p-4">
             <div>
-              <p className="text-sm font-semibold text-gray-900">
+              <p className="text-sm font-semibold text-neutral-900">
                 {t('demoContent.title')}
               </p>
-              <p className="text-xs text-gray-500 mt-0.5">
+              <p className="mt-0.5 text-xs text-neutral-500">
                 {t('demoContent.description')}
               </p>
             </div>
@@ -171,15 +150,15 @@ export default function DemoPage() {
                 id="demoData"
                 checked={installDemo}
                 onCheckedChange={(checked) => setInstallDemo(!!checked)}
+                className="h-5 w-5 rounded border-neutral-400 data-[state=checked]:border-black data-[state=checked]:bg-black data-[state=checked]:text-white"
               />
-              <Label htmlFor="demoData" className="text-sm font-medium text-gray-700 cursor-pointer">
+              <Label htmlFor="demoData" className="cursor-pointer text-sm font-medium text-neutral-800">
                 {t('demoContent.checkboxLabel')}
               </Label>
             </div>
 
-            {/* E-commerce detail list */}
             {installDemo && selectedProject === 'ecommerce' && (
-              <ul className="text-xs text-gray-500 list-disc pl-5 space-y-1">
+              <ul className="list-disc space-y-1 pl-5 text-xs text-neutral-600">
                 <li>{t('demoContent.ecommerce.item1')}</li>
                 <li>{t('demoContent.ecommerce.item2')}</li>
                 <li>{t('demoContent.ecommerce.item3')}</li>
@@ -190,17 +169,18 @@ export default function DemoPage() {
           </div>
         )}
 
-        {/* Continue button */}
-        <div className="pt-2">
-          <Button className="w-full" onClick={handleNext} disabled={loading}>
-            {loading
-              ? <Loader2 className="animate-spin h-5 w-5" />
-              : t('continueButtonIdle')
-            }
-          </Button>
-        </div>
+        <Button
+          className={`${PRIMARY_BUTTON} mt-8 w-full`}
+          onClick={handleNext}
+          disabled={loading}
+        >
+          {loading
+            ? <Loader2 className="mx-auto h-5 w-5 animate-spin" />
+            : t('continueButtonIdle')
+          }
+        </Button>
 
       </div>
-    </div>
+    </InstallerShell>
   )
 }
