@@ -82,6 +82,33 @@ const DEFAULT_BUCKETS = [
 ]
 
 // ---------------------------------------------------------------------------
+// ID filter helper
+// ---------------------------------------------------------------------------
+
+/**
+ * buildIdFilter
+ *
+ * FIX: update() and delete() always wrapped the id in `new ObjectId(id)` and
+ * ignored the idField argument the rest of the app passes (e.g.
+ * update(config, 'nxf_system_config', configId, data, 'config_id')). Our
+ * records use UUID business keys (config_id, user_id, project_id, …), which
+ * are not 24-character hex strings, so every such call threw:
+ *   "input must be a 24 character hex string, 12 byte Uint8Array, or an integer"
+ *
+ * Now:
+ *   - idField given and not '_id' → match on that field directly: { [idField]: id }
+ *   - otherwise, a valid ObjectId string → { _id: ObjectId(id) }
+ *   - otherwise → { _id: id } (string _id), so it never throws on a non-hex id
+ */
+function buildIdFilter(id: string, idField?: string): Record<string, any> {
+  if (idField && idField !== '_id') return { [idField]: id }
+  if (ObjectId.isValid(id) && String(new ObjectId(id)) === String(id).toLowerCase()) {
+    return { _id: new ObjectId(id) }
+  }
+  return { _id: id }
+}
+
+// ---------------------------------------------------------------------------
 // MongoDBAdapter class
 // ---------------------------------------------------------------------------
 
@@ -344,19 +371,29 @@ async testConnection() {
   /**
    * update
    *
-   * Updates a single document identified by its _id using $set (partial update).
-   * Only the fields present in `data` are changed — other fields are untouched.
+   * Partially updates a single document using $set — only the fields present
+   * in `data` change.
+   *
+   * FIX: now honours idField (e.g. 'config_id', 'user_id') instead of always
+   * converting the id to an ObjectId — see buildIdFilter().
    *
    * @param config     — DB config (unused directly).
    * @param collection — The name of the target collection.
-   * @param id         — The string representation of the document's ObjectId.
+   * @param id         — The id value to match.
    * @param data       — The fields to update.
+   * @param idField    — Optional field to match on. Omitted / '_id' → _id.
    * @returns A promise resolving to true when the update completes.
    */
-  async update(config: DBConfig, collection: string, id: string, data: any): Promise<boolean> {
+  async update(
+    config:     DBConfig,
+    collection: string,
+    id:         string,
+    data:       any,
+    idField?:   string,
+  ): Promise<boolean> {
     const db = await this.getDb()
     await db.collection(collection).updateOne(
-      { _id: new ObjectId(id) },
+      buildIdFilter(id, idField),
       { $set: data },
     )
     return true
@@ -365,16 +402,25 @@ async testConnection() {
   /**
    * delete
    *
-   * Deletes a single document identified by its _id from the specified collection.
+   * Deletes a single document from the specified collection.
+   *
+   * FIX: now honours idField instead of always converting the id to an
+   * ObjectId — see buildIdFilter().
    *
    * @param config     — DB config (unused directly).
    * @param collection — The name of the target collection.
-   * @param id         — The string representation of the document's ObjectId.
+   * @param id         — The id value to match.
+   * @param idField    — Optional field to match on. Omitted / '_id' → _id.
    * @returns A promise resolving to true when the deletion completes.
    */
-  async delete(config: DBConfig, collection: string, id: string): Promise<boolean> {
+  async delete(
+    config:     DBConfig,
+    collection: string,
+    id:         string,
+    idField?:   string,
+  ): Promise<boolean> {
     const db = await this.getDb()
-    await db.collection(collection).deleteOne({ _id: new ObjectId(id) })
+    await db.collection(collection).deleteOne(buildIdFilter(id, idField))
     return true
   }
 

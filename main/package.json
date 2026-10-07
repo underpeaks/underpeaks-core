@@ -19,7 +19,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "@headlessui/react": "^2.2.7",
     "@hello-pangea/dnd": "^18.0.1",
@@ -86,6 +86,7 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11",
     "@types/bcrypt": "^5.0.2",
+    "@types/express": "^5.0.0",
     "@types/fs-extra": "^11.0.4",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/mssql": "^9.1.7",
