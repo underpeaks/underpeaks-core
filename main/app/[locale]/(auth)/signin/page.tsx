@@ -140,7 +140,7 @@ function SignInPage() {
         }
 
         localStorage.setItem('authToken', data.accessToken)
-        console.log('[DEBUG] user_id being passed to recordLogin:', data.user.user_id)
+        
         await recordLogin(data.user.user_id)
       }
 

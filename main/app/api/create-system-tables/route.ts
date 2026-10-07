@@ -73,13 +73,7 @@ export async function POST(request: Request): Promise<NextResponse> {
   try {
     const { config, selectedProjectType } = await request.json()
 
-    // Temporary debug — remove after fix confirmed
-    console.log('[create-system-tables] config.type:', config?.type)
-    console.log('[create-system-tables] config.host:', config?.host)
-    console.log('[create-system-tables] config.user:', config?.user)
-    console.log('[create-system-tables] config.database:', config?.database)
-    console.log('[create-system-tables] password length:', config?.password?.length)
-    console.log('[create-system-tables] password value:', config?.password)
+  
     // -----------------------------------------------------------------------
     // Validation
     // -----------------------------------------------------------------------
