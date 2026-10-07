@@ -85,7 +85,7 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
       if (!text) return
       const data = JSON.parse(text)
 
-      console.log('[DEBUG] /api/menu response:', data)
+     
 
       if (data.success) {
         const pagesRes  = await fetch(`/api/menu/pages?user_id=${userId}`)
@@ -93,11 +93,11 @@ export default function Sidebar({ collapsed, setCollapsed }: SidebarProps) {
         const pagesData = pagesText ? JSON.parse(pagesText) : { pages: [] }
         const pages     = pagesData.pages ?? []
 
-        console.log('[DEBUG] /api/menu/pages response:', pages)
+       
 
         const itemsWithSlugs = (data.items ?? []).map((item: DynamicMenuItem) => {
           const page = pages.find((p: any) => p.page_id === item.page_id)
-          console.log('[DEBUG] menu item page_id:', item.page_id, '-> matched page:', page)
+         
           const rawSlug = page?.slug?.replace(/^\//, '') ?? null
           const href    = rawSlug ? `/console/${rawSlug}` : '#'
           return { ...item, slug: href }

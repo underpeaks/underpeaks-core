@@ -55,6 +55,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
   const [licenseInput,    setLicenseInput]    = useState('')
   const [licenseError,    setLicenseError]    = useState<string | null>(null)
   const [licenseSaving,   setLicenseSaving]   = useState(false)
+  const [licenseSuccess,  setLicenseSuccess]  = useState(false)
 
   const router       = useRouter()
   const pathname     = usePathname()
@@ -195,7 +196,13 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
         return
       }
 
-      setShowLicenseGate(false)
+      // Show a success message briefly, then close the gate
+      setLicenseSuccess(true)
+      setTimeout(() => {
+        setShowLicenseGate(false)
+        setLicenseSuccess(false)
+        setLicenseInput('')
+      }, 5000)
 
     } catch {
       setLicenseError('Could not reach Studio to validate your license key. Check your connection.')
@@ -333,12 +340,15 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
             {licenseError && (
               <p className="text-xs text-red-500">{licenseError}</p>
             )}
+            {licenseSuccess && (
+              <p className="text-xs text-green-600">License activated successfully.</p>
+            )}
           </div>
 
           <div className="mt-6 flex flex-col gap-2 w-full">
             <Button
               onClick={handleSaveLicenseKey}
-              disabled={!licenseInput.trim() || licenseSaving}
+              disabled={!licenseInput.trim() || licenseSaving || licenseSuccess}
               className="w-full"
             >
               {licenseSaving ? 'Validating…' : 'Activate'}
