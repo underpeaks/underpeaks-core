@@ -1,30 +1,5 @@
+// DatabaseConfigPage.tsx  (installer step 5: database connection)
 'use client';
-
-/**
- * DatabaseConfigPage Component
- *
- * This is the installer wizard step where the user configures their database
- * connection. It appears after the stack selection step and before the demo
- * content step (/installer/demo).
- *
- * What this page does:
- * ────────────────────
- * - Renders a database-type selector (Supabase, Firebase, PostgreSQL, MySQL,
- *   MongoDB). Switching the selector clears the form and resets test state.
- * - Dynamically renders the correct input fields for the selected database
- *   type. Each field optionally shows an InfoBlock explaining what the value
- *   is and where to find it.
- * - Firebase JSON fields use a <Textarea> instead of an <Input> because they
- *   accept multi-line JSON pastes.
- * - Provides a "Test Connection" button that sends the current config to
- *   /api/test-db-connection and shows a step-by-step progress list so the
- *   user can see exactly where a failure occurred.
- * - Provides a "Continue" button (only enabled after a successful connection
- *   test) that saves the config to /api/save-db-config and navigates to
- *   /installer/demo.
- * - Writes the final config to the Zustand installer store so subsequent
- *   install steps can read it.
- */
 
 import { useState, useRef }      from 'react';
 import { useRouter }             from 'next/navigation';
@@ -32,6 +7,7 @@ import { useTranslations }       from 'next-intl';
 import { Button }                from '@/components/ui/button';
 import { Input }                 from '@/components/ui/input';
 import { Textarea }              from '@/components/ui/textarea';
+import { Label }                 from '@/components/ui/label';
 import {
   Select,
   SelectContent,
@@ -46,10 +22,15 @@ import {
   SiMysql,
   SiMongodb,
 }                                from 'react-icons/si';
-import { Loader2, CheckCircle2, XCircle } from 'lucide-react';
+import { Loader2, CheckCircle2, XCircle, Info } from 'lucide-react';
 import { useInstallerStore }     from '../../../store/useInstallerStore';
 import { DBType }                from '@/app/db-adapter/types';
-import LocaleSwitcher            from '@/core/LocaleSwitcher';
+import InstallerShell, {
+  CARD,
+  PRIMARY_BUTTON,
+  OUTLINE_BUTTON,
+  INPUT_CLASS,
+}                                from '@/core/InstallerShell';
 
 // ---------------------------------------------------------------------------
 // InfoBlock
@@ -65,12 +46,15 @@ function InfoBlock({ title, description, where }: InfoBlockProps) {
   const t = useTranslations('databaseConfigPage');
 
   return (
-    <div className="mb-2 p-3 rounded-lg bg-blue-50 border border-blue-200 text-sm">
-      <p className="font-semibold text-blue-900">{title}</p>
-      <p className="text-gray-700">{description}</p>
-      <p className="text-xs text-gray-500 mt-1">
-        <span className="font-medium">{t('infoBlock.whereLabel')}</span> {where}
-      </p>
+    <div className="mb-2 flex gap-2 rounded-lg border border-neutral-200 bg-neutral-50 p-3 text-sm">
+      <Info className="mt-0.5 h-4 w-4 shrink-0 text-neutral-500" />
+      <div>
+        <p className="font-medium text-neutral-900">{title}</p>
+        <p className="text-neutral-600">{description}</p>
+        <p className="mt-1 text-xs text-neutral-500">
+          <span className="font-medium">{t('infoBlock.whereLabel')}</span> {where}
+        </p>
+      </div>
     </div>
   );
 }
@@ -128,7 +112,7 @@ const DATABASES: DatabaseDefinition[] = [
     value:       'supabase',
     name:        'Supabase',
     description: 'Postgres-based with built-in Auth, Storage, Realtime.',
-    icon:        <SiSupabase className="w-5 h-5 text-blue-600" />,
+    icon:        <SiSupabase className="h-5 w-5" />,
     fields: [
       {
         key:         'supabaseUrl',
@@ -186,7 +170,7 @@ const DATABASES: DatabaseDefinition[] = [
     value:       'firebase',
     name:        'Firebase',
     description: 'Mobile-first apps, real-time DB & auth.',
-    icon:        <SiFirebase className="w-5 h-5 text-yellow-600" />,
+    icon:        <SiFirebase className="h-5 w-5" />,
     fields: [
       {
         key:         'firebaseConfigJson',
@@ -216,7 +200,7 @@ const DATABASES: DatabaseDefinition[] = [
     value:       'postgres',
     name:        'PostgreSQL',
     description: 'Open source, full control.',
-    icon:        <SiPostgresql className="w-5 h-5 text-blue-700" />,
+    icon:        <SiPostgresql className="h-5 w-5" />,
     fields: [
       {
         key: 'host', label: 'Host', placeholder: 'localhost',
@@ -244,7 +228,7 @@ const DATABASES: DatabaseDefinition[] = [
     value:       'mysql',
     name:        'MySQL',
     description: 'Common, stable.',
-    icon:        <SiMysql className="w-5 h-5 text-purple-600" />,
+    icon:        <SiMysql className="h-5 w-5" />,
     fields: [
       { key: 'host',     label: 'Host',          placeholder: 'localhost'    },
       { key: 'port',     label: 'Port',          placeholder: '3306'         },
@@ -257,7 +241,7 @@ const DATABASES: DatabaseDefinition[] = [
     value:       'mongodb',
     name:        'MongoDB',
     description: 'NoSQL, great for unstructured data.',
-    icon:        <SiMongodb className="w-5 h-5 text-green-600" />,
+    icon:        <SiMongodb className="h-5 w-5" />,
     fields: [
       {
         key:         'connectionString',
@@ -451,39 +435,25 @@ export default function DatabaseConfigPage() {
   // -------------------------------------------------------------------------
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white px-6 py-12">
+    <InstallerShell step={5} width="md" logoAlt={t('logoAlt')} tagline={t('tagline')}>
+      <div className={CARD}>
 
-      <div className="fixed top-4 right-4 z-50">
-        <LocaleSwitcher />
-      </div>
-
-      <header className="mb-8 text-center flex flex-col items-center">
-        <img
-          src="/images/logo/underpeaks_logo.png"
-          alt={t('logoAlt')}
-          className="h-16 w-auto mb-4"
-        />
-        <p className="text-xl text-gray-700">{t('tagline')}</p>
-      </header>
-
-      <div className="w-full max-w-xl p-8 bg-gray-50 rounded-2xl shadow-xl border space-y-6">
-
-        <h2 className="text-2xl font-bold text-gray-900">{t('heading')}</h2>
+        <h1 className="text-2xl font-semibold tracking-tight">{t('heading')}</h1>
 
         {/* Database type selector */}
-        <div className="mb-6">
+        <div className="mt-6">
           <Select value={selectedDb} onValueChange={handleSelect}>
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="h-12 w-full rounded-lg">
               <SelectValue placeholder={t('selectPlaceholder')} />
             </SelectTrigger>
             <SelectContent>
               {DATABASES.map((db) => (
                 <SelectItem key={db.value} value={db.value}>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-3">
                     {db.icon}
                     <div>
-                      <div className="font-semibold">{db.name}</div>
-                      <div className="text-xs text-gray-400">{db.description}</div>
+                      <div className="font-medium">{db.name}</div>
+                      <div className="text-xs text-neutral-500">{db.description}</div>
                     </div>
                   </div>
                 </SelectItem>
@@ -493,49 +463,51 @@ export default function DatabaseConfigPage() {
         </div>
 
         {/* Dynamic field list */}
-        {selectedDbConfig?.fields.map((field: DatabaseField) => (
-          <div key={field.key}>
-            {field.info && <InfoBlock {...field.info} />}
+        <div className="mt-6 space-y-5">
+          {selectedDbConfig?.fields.map((field: DatabaseField) => (
+            <div key={field.key}>
+              {field.info && <InfoBlock {...field.info} />}
 
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {field.label}{' '}
-              <span className="text-gray-400 italic text-xs">
-                {t('fieldExample', { placeholder: field.placeholder })}
-              </span>
-            </label>
+              <Label className="mb-1.5 block text-sm font-medium text-neutral-800">
+                {field.label}{' '}
+                <span className="text-xs font-normal italic text-neutral-400">
+                  {t('fieldExample', { placeholder: field.placeholder })}
+                </span>
+              </Label>
 
-            {field.isJson ? (
-              <Textarea
-                rows={8}
-                placeholder={field.placeholder}
-                value={formData[field.key] || ''}
-                onChange={(e) => handleInputChange(field.key, e.target.value)}
-                className="w-full"
-              />
-            ) : (
-              <Input
-                placeholder={field.placeholder}
-                value={formData[field.key] || ''}
-                onChange={(e) => handleInputChange(field.key, e.target.value)}
-                className="w-full"
-              />
-            )}
-          </div>
-        ))}
+              {field.isJson ? (
+                <Textarea
+                  rows={8}
+                  placeholder={field.placeholder}
+                  value={formData[field.key] || ''}
+                  onChange={(e) => handleInputChange(field.key, e.target.value)}
+                  className="w-full rounded-lg font-mono text-xs"
+                />
+              ) : (
+                <Input
+                  placeholder={field.placeholder}
+                  value={formData[field.key] || ''}
+                  onChange={(e) => handleInputChange(field.key, e.target.value)}
+                  className={`${INPUT_CLASS} w-full`}
+                />
+              )}
+            </div>
+          ))}
+        </div>
 
         {/* Connection test progress list */}
         {testSteps.length > 0 && (
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-6 space-y-2 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
             {testSteps.map((step, idx) => (
-              <li key={idx} className="flex items-center gap-2 text-sm">
+              <li key={idx} className="flex items-center gap-2 text-sm text-neutral-800">
                 {step.status === 'pending' && (
-                  <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
+                  <Loader2 className="h-4 w-4 animate-spin text-neutral-500" />
                 )}
                 {step.status === 'success' && (
-                  <CheckCircle2 className="w-5 h-5 text-green-600" />
+                  <CheckCircle2 className="h-5 w-5 text-black" />
                 )}
                 {step.status === 'error' && (
-                  <XCircle className="w-5 h-5 text-red-600" />
+                  <XCircle className="h-5 w-5 text-red-600" />
                 )}
                 <span>{step.label}</span>
               </li>
@@ -544,30 +516,28 @@ export default function DatabaseConfigPage() {
         )}
 
         {errorMessage && (
-          <p className="text-red-600 text-sm font-medium">
+          <p className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm font-medium text-red-700">
             {t('errors.connectionFailed', { message: errorMessage })}
           </p>
         )}
 
-        <div className="flex flex-col space-y-2 pt-4">
-          {showSavingWarning && (
-            <div className="p-4 bg-yellow-100 text-yellow-800 rounded text-sm font-mono">
-              {t('savingWarning')}
-            </div>
-          )}
-        </div>
+        {showSavingWarning && (
+          <div className="mt-4 rounded-lg border border-neutral-300 bg-neutral-100 p-4 font-mono text-sm text-neutral-800">
+            {t('savingWarning')}
+          </div>
+        )}
 
         {/* Action buttons */}
-        <div className="flex space-x-4 pt-4">
+        <div className="mt-8 flex gap-3">
 
           <Button
             onClick={handleTestConnection}
-            className="bg-green-600 hover:bg-green-700 text-white"
+            className={OUTLINE_BUTTON}
             disabled={loading || loadingRef.current}
           >
-            {loading ? (
+            {loading && !connectionSucceeded && !showSavingWarning ? (
               <span className="flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 {t('buttons.testing')}
               </span>
             ) : (
@@ -577,12 +547,12 @@ export default function DatabaseConfigPage() {
 
           <Button
             onClick={handleContinue}
-            className="flex-1"
+            className={`${PRIMARY_BUTTON} flex-1`}
             disabled={!connectionSucceeded || loading || loadingRef.current}
           >
             {loading && connectionSucceeded ? (
               <span className="flex items-center gap-2">
-                <Loader2 className="w-4 h-4 animate-spin" />
+                <Loader2 className="h-4 w-4 animate-spin" />
                 {t('buttons.saving')}
               </span>
             ) : (
@@ -592,6 +562,6 @@ export default function DatabaseConfigPage() {
 
         </div>
       </div>
-    </div>
+    </InstallerShell>
   );
 }

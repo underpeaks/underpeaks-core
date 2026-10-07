@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
+    "save": "Zapisz",
+    "saving": "Zapisywanie...",
+    "saveChanges": "Zapisz Zmiany",
+    "cancel": "Anuluj",
+    "delete": "Usuń",
+    "edit": "Edytuj",
+    "create": "Utwórz",
+    "add": "Dodaj",
+    "remove": "Usuń",
+    "close": "Zamknij",
+    "confirm": "Potwierdź",
+    "back": "Wstecz",
+    "next": "Dalej",
+    "done": "Gotowe",
+    "loading": "Ładowanie...",
+    "search": "Szukaj",
+    "filter": "Filtruj",
+    "refresh": "Odśwież",
+    "copy": "Kopiuj",
+    "copied": "Skopiowano!",
+    "upload": "Prześlij",
+    "rename": "Zmień nazwę",
+    "move": "Przenieś",
+    "preview": "Podgląd",
+    "revoke": "Odwołaj",
+    "generate": "Generuj",
+    "reveal": "Pokaż",
+    "hide": "Ukryj",
+    "active": "Aktywny",
+    "inactive": "Nieaktywny",
     "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "actions": "Działania",
+    "name": "Nazwa",
+    "email": "E-mail",
+    "password": "Hasło",
+    "role": "Rola",
+    "createdAt": "Utworzono",
+    "noResults": "Nie znaleziono wyników",
+    "error": "Wystąpił błąd",
+    "success": "Sukces",
+    "required": "To pole jest wymagane",
+    "optional": "Opcjonalne",
+    "yes": "Tak",
+    "no": "Nie",
+    "areYouSure": "Czy na pewno?",
+    "thisActionCannotBeUndone": "Tej czynności nie można cofnąć.",
+    "comingSoon": "Wkrótce dostępne"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
+    "dashboard": "Panel",
+    "pages": "Strony",
     "menu": "Menu",
     "media": "Media",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "Integracje",
+    "theming": "Motyw",
+    "settings": "Ustawienia",
+    "account": "Konto",
+    "messages": "Wiadomości",
+    "notifications": "Powiadomienia",
+    "logout": "Wyloguj się"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "Szukaj...",
+    "notifications": "Powiadomienia",
+    "messages": "Wiadomości",
+    "viewAccount": "Zobacz konto",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
+      "self_hosted": "Samodzielny hosting",
+      "hosted": "Hostowany",
       "enterprise": "Enterprise"
     }
   },
+  "nextModelGenerator": {
+    "nullJsonError": "Nie można utworzyć {{modelName}}Model: otrzymano puste lub niezdefiniowane JSON",
+    "missingRequiredField": "Brak wymaganego pola: {{fieldName}} w {{modelName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "Generowanie kodu dla {{count}} modelu/modeli...",
+    "modelUndefined": "Model jest niezdefiniowany — upewnij się, że przekazano prawidłowy ModelDefinition",
+    "modelMissingName": "Modelowi brakuje właściwości \"name\" — każdy model musi mieć nazwę",
+    "modelInvalidFields": "Model \"{{name}}\" ma nieprawidłowe lub brakujące \"fields\" — fields musi być prostym obiektem",
+    "generationSuccess": "Kod pomyślnie wygenerowany dla modelu: {{name}}",
+    "generationFailed": "Generowanie kodu nie powiodło się dla modelu: {{name}}"
+  },
+  "completeProfile": {
+    "title": "Uzupełnij Swój Profil",
+    "welcome": "Witaj,",
+    "loading": {
+      "checkingProfile": "Sprawdzanie profilu..."
+    },
+    "subdomain": {
+      "label": "Wybierz subdomenę",
+      "placeholder": "twojaapp",
+      "hint": "Twoja aplikacja będzie dostępna pod adresem"
+    },
+    "button": {
+      "save": "Zapisz i Kontynuuj",
+      "saving": "Zapisywanie..."
+    },
+    "validation": {
+      "subdomainRequired": "Wprowadź subdomenę",
+      "adapterMissingCreateTenant": "Twój adapter bazy danych nie obsługuje tworzenia dzierżawcy"
+    },
+    "errors": {
+      "saveFailed": "Błąd podczas zapisywania subdomeny: {{message}}",
+      "unknownError": "Wystąpił nieznany błąd"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Resetowanie hasła nie jest obsługiwane przez bieżący adapter bazy danych",
+      "noAccountFound": "Nie znaleziono konta z tym adresem e-mail."
+    }
+  },
+  "forgotPassword": {
+    "title": "Nie Pamiętam Hasła",
+    "description": "Wprowadź swój adres e-mail, a wyślemy Ci link do zresetowania hasła.",
+    "form": {
+      "emailLabel": "Adres e-mail",
+      "emailPlaceholder": "ty@przyklad.com",
+      "buttonSend": "Wyślij Link Resetujący",
+      "buttonSending": "Wysyłanie..."
+    },
+    "validation": {
+      "emailRequired": "Wprowadź swój adres e-mail."
+    },
+    "errors": {
+      "firebaseConfigMissing": "Brak konfiguracji Firebase. Sprawdź swoje zmienne środowiskowe.",
+      "sendFailed": "Nie udało się wysłać linku resetującego. Spróbuj ponownie."
+    },
+    "success": {
+      "title": "Sprawdź swoją skrzynkę odbiorczą",
+      "description": "Wysłano e-mail z resetowaniem hasła. Sprawdź swoją skrzynkę odbiorczą i skorzystaj z linku, aby zresetować hasło.",
+      "button": "Powrót do Logowania"
+    },
+    "notice": {
+      "title": "Zgłoszenie Wysłane",
+      "button": "OK"
+    },
+    "error": {
+      "title": "Coś poszło nie tak"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Resetowanie hasła nie jest obsługiwane przez bieżący adapter bazy danych",
+      "invalidToken": "Nieprawidłowy lub wygasły link resetujący. Poproś o nowy.",
+      "tokenAlreadyUsed": "Ten link resetujący został już użyty. Poproś o nowy.",
+      "tokenExpired": "Ten link resetujący wygasł. Poproś o nowy."
+    }
+  },
+  "resetPassword": {
+    "title": "Zresetuj Hasło",
+    "form": {
+      "passwordLabel": "Nowe Hasło",
+      "buttonReset": "Zresetuj Hasło",
+      "buttonResetting": "Resetowanie..."
+    },
+    "errors": {
+      "invalidLink": "Nieprawidłowy lub brakujący link resetujący. Poproś o nowy.",
+      "passwordRequired": "Wprowadź nowe hasło.",
+      "missingToken": "Brak tokenu resetującego. Skorzystaj z linku z wiadomości e-mail.",
+      "resetFailed": "Nie udało się zresetować hasła. Spróbuj ponownie."
+    },
+    "error": {
+      "title": "Coś poszło nie tak"
+    },
+    "expired": {
+      "title": "Link Resetujący Wygasł",
+      "description": "Twój link do resetowania hasła wygasł. Przekierowywanie na stronę odzyskiwania hasła..."
+    },
+    "success": {
+      "title": "Hasło Pomyślnie Zresetowane",
+      "description": "Możesz teraz",
+      "signinLink": "zalogować się",
+      "descriptionSuffix": "przy użyciu nowego hasła."
+    }
+  },
+  "signIn": {
+    "heading": "Zaloguj się do swojego Konta Underpeaks",
+    "fields": {
+      "email": "E-mail",
+      "password": "Hasło"
+    },
+    "button": {
+      "signIn": "Zaloguj się",
+      "signingIn": "Logowanie..."
+    },
+    "links": {
+      "forgotPassword": "Nie pamiętasz hasła?",
+      "noAccount": "Nie masz konta?",
+      "signUp": "Zarejestruj się teraz"
+    },
+    "errors": {
+      "title": "Błąd",
+      "signinFailed": "Logowanie nie powiodło się. Sprawdź swoje dane i spróbuj ponownie."
+    }
+  },
+  "signUp": {
+    "heading": "Utwórz swoje Konto Underpeaks",
+    "fields": {
+      "fullName": "Imię i Nazwisko",
+      "fullNamePlaceholder": "Twoje imię i nazwisko",
+      "email": "E-mail",
+      "emailPlaceholder": "ty@przyklad.com",
+      "password": "Hasło"
+    },
+    "button": {
+      "signUp": "Zarejestruj się",
+      "creating": "Tworzenie..."
+    },
+    "alerts": {
+      "errorTitle": "Błąd",
+      "successTitle": "Sukces"
+    },
+    "success": {
+      "accountCreated": "Konto zostało pomyślnie utworzone!"
+    },
+    "links": {
+      "alreadyHaveAccount": "Masz już konto?",
+      "loginNow": "Zaloguj się teraz"
+    },
+    "errors": {
+      "nameRequired": "Imię i nazwisko jest wymagane.",
+      "emailRequired": "E-mail jest wymagany.",
+      "passwordRequired": "Hasło jest wymagane.",
+      "emailInUse": "Ten adres e-mail jest już zarejestrowany. Spróbuj się zalogować.",
+      "invalidEmail": "Wprowadź prawidłowy adres e-mail.",
+      "weakPassword": "Hasło jest zbyt słabe. Minimum 6 znaków.",
+      "signupFailed": "Rejestracja nie powiodła się. Spróbuj ponownie.",
+      "supabaseSignupFailed": "Rejestracja Supabase nie powiodła się. Spróbuj ponownie."
+    },
+    "console": {
+      "firebaseVerificationSent": "E-mail weryfikacyjny Firebase wysłany pomyślnie.",
+      "firebaseVerificationFailed": "Nie udało się wysłać e-maila weryfikacyjnego Firebase.",
+      "supabaseVerificationSent": "E-mail weryfikacyjny Supabase wysłany pomyślnie."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "Weryfikacja E-maila",
+      "success": "E-mail Zweryfikowany ✅",
+      "error": "Weryfikacja Nie Powiodła Się"
+    },
+    "status": {
+      "verifying": "Weryfikowanie Twojego e-maila...",
+      "verified": "Twój e-mail został zweryfikowany.",
+      "supabaseRedirecting": "Przekierowywanie do konfiguracji hasła..."
+    },
+    "button": {
+      "goToSignIn": "Przejdź do Logowania"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] Otrzymano żądanie",
+      "verificationNotSupported": "[verify-email] Weryfikacja nie jest obsługiwana dla tego adaptera"
+    },
+    "errors": {
+      "missingTokenOrEmail": "Brak tokenu lub e-maila",
+      "dbTypeNotSet": "Typ bazy danych nie jest skonfigurowany",
+      "unsupportedDbType": "Nieobsługiwany typ bazy danych",
+      "sqlAdapterMissingMethods": "Adapterowi SQL brakuje wymaganych metod",
+      "firebaseAdapterMissingMethods": "Adapterowi Firebase brakuje wymaganych metod",
+      "invalidToken": "Nieprawidłowy token",
+      "tokenExpired": "Token wygasł",
+      "userNotFound": "Nie znaleziono użytkownika",
+      "verificationNotSupported": "Weryfikacja nie jest obsługiwana dla tego adaptera",
+      "verificationFailed": "Weryfikacja nie powiodła się"
+    }
+  },
+  "schemaPreview": {
+    "title": "Podgląd Schematu",
+    "columns": {
+      "field": "Pole",
+      "type": "Typ"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "Potwierdź działanie",
+      "description": "Czy na pewno chcesz kontynuować?"
+    },
+    "buttons": {
+      "confirm": "Potwierdź",
+      "cancel": "Anuluj"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "Biznes",
+      "content": "Treść",
+      "assets": "Zasoby",
+      "configuration": "Konfiguracja"
+    },
+    "items": {
+      "dashboard": "Panel",
+      "products": "Produkty",
+      "categories": "Kategorie",
+      "orders": "Zamówienia",
+      "coupons": "Kupony",
+      "users": "Użytkownicy",
+      "shipping": "Wysyłka",
+      "services": "Usługi",
+      "sharedModels": "Modele Udostępnione",
+      "menu": "Menu",
+      "pages": "Strony",
+      "theme": "Motyw",
+      "storage": "Pamięć",
+      "integrations": "Integracje",
+      "apisAndWebhooks": "API i Webhooki"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "Wiadomości",
+      "unreadCount": "{count} nieprzeczytanych"
+    },
+    "empty": "Brak wiadomości",
+    "viewAll": "Zobacz wszystkie wiadomości",
+    "unreadBadge": "{count} nieprzeczytanych",
+    "systemInitials": "SY",
+    "fallbackUser": "Użytkownik"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "Powiadomienia",
+      "unreadCount": "{count} nieprzeczytanych",
+      "markAllRead": "Oznacz wszystkie jako przeczytane"
+    },
+    "empty": "Brak powiadomień",
+    "viewAll": "Zobacz wszystkie powiadomienia"
+  },
+  "previewSchema": {
+    "fieldsHeading": "Pola",
+    "fieldNamePlaceholder": "Nazwa pola",
+    "requiredLabel": "Wymagane",
+    "removeButton": "Usuń",
+    "saveButton": "Zapisz",
+    "previewButton": "Podgląd",
+    "hidePreviewButton": "Ukryj Podgląd",
+    "addFieldButton": "Dodaj Pole",
+    "types": {
+      "string": "ciąg znaków",
+      "num": "liczba",
+      "boolean": "wartość logiczna",
+      "datetime": "data/godzina",
+      "array": "tablica",
+      "map": "mapa",
+      "null": "null"
+    },
+    "aria": {
+      "fieldName": "Nazwa pola {{index}}",
+      "fieldType": "Typ pola {{index}}",
+      "elementType": "Typ elementu pola {{index}}",
+      "required": "Pole {{index}} wymagane",
+      "removeField": "Usuń pole {{index}}"
+    }
+  },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "Wylogowywanie…",
+    "footer": {
+      "settings": "Ustawienia",
+      "logout": "Wyloguj się",
+      "collapse": "Zwiń pasek boczny",
+      "expand": "Rozwiń pasek boczny",
+      "business": "Biznes",
+      "developer": "Deweloper",
+      "design": "Projekt",
+      "system": "System"
+    },
+    "aria": {
+      "sidebar": "Nawigacja konsoli",
+      "navigation": "Nawigacja główna",
+      "expandSidebar": "Rozwiń pasek boczny",
+      "collapseSidebar": "Zwiń pasek boczny"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "Logo projektu",
+    "projectLabel": "Projekt:",
+    "signIn": "Zaloguj się",
+    "register": "Zarejestruj się",
+    "aria": {
+      "navbar": "Górny pasek nawigacji",
+      "goToDashboard": "Przejdź do panelu"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "Menu użytkownika dla {name}"
+    },
+    "menu": {
+      "account": "Konto",
+      "settings": "Ustawienia",
+      "helpAndDocs": "Pomoc i Dokumentacja",
+      "logout": "Wyloguj się"
+    }
+  },
+  "accountPage": {
+    "title": "Konto",
+    "subtitle": "Zarządzaj swoim profilem i bezpieczeństwem.",
+    "profile": {
+      "title": "Profil",
+      "description": "Zaktualizuj swoją wyświetlaną nazwę.",
+      "fullNameLabel": "Imię i nazwisko",
+      "fullNamePlaceholder": "Twoje imię i nazwisko",
+      "emailLabel": "Adres e-mail",
+      "emailReadOnlyNote": "E-mail jest zarządzany przez Twojego dostawcę uwierzytelniania i nie można go tutaj zmienić.",
+      "saveButton": "Zapisz zmiany",
+      "savingButton": "Zapisywanie…",
+      "savedButton": "Zapisano"
+    },
+    "danger": {
+      "title": "Strefa Niebezpieczna",
+      "description": "Nieodwracalne działania. Zachowaj ostrożność.",
+      "cancelTitle": "Anuluj subskrypcję",
+      "cancelDescription": "Twój plan pozostaje aktywny do końca bieżącego okresu rozliczeniowego, a następnie przechodzi na hosting samodzielny.",
+      "cancelButton": "Anuluj plan",
+      "cancelModalBody": "Twoja subskrypcja zostanie anulowana, ale zachowasz dostęp do końca bieżącego okresu rozliczeniowego. Tej czynności nie można cofnąć.",
+      "resetTitle": "Zresetuj projekt",
+      "resetDescription": "Trwale usuwa całą zawartość projektu i rozpoczyna wdrażanie od nowa. Twoje konto zostaje zachowane.",
+      "resetButton": "Zresetuj projekt",
+      "resetModalBody": "To trwale usuwa całą zawartość Twojego projektu — modele, strony, dane i media. Twoje konto i rozliczenia zostają zachowane. Tej czynności nie można cofnąć.",
+      "deleteTitle": "Usuń konto",
+      "deleteDescription": "Trwale usuwa Twoje konto i wszystkie powiązane dane.",
+      "deleteButton": "Usuń konto",
+      "deleteModalBody": "To trwale usuwa Twoje konto i całą zawartość. Rejestry rozliczeniowe są przechowywane, jeśli wymaga tego prawo. Tej czynności nie można cofnąć."
+    },
+    "password": {
+      "title": "Zmień Hasło",
+      "description": "Użyj silnego hasła, którego nie używasz nigdzie indziej.",
+      "currentLabel": "Bieżące hasło",
+      "newLabel": "Nowe hasło",
+      "confirmLabel": "Potwierdź nowe hasło",
+      "showPassword": "Pokaż hasło",
+      "hidePassword": "Ukryj hasło",
+      "minLengthHint": "Minimum 8 znaków",
+      "mismatchHint": "Hasła się nie zgadzają",
+      "updateButton": "Zaktualizuj hasło",
+      "updatingButton": "Aktualizowanie…",
+      "updatedButton": "Zaktualizowano"
+    },
+    "billing": {
+      "title": "Rozliczenia i Plan",
+      "description": "Twój bieżący plan i opcje aktualizacji.",
+      "selfHostedDescription": "Podstawowe funkcje w zestawie. Ulepsz, aby uzyskać integracje, zaawansowane uwierzytelnianie i white-labelling.",
+      "paidDescription": "Wszystkie funkcje odblokowane.",
+      "upgradeButton": "Ulepsz",
+      "upgradeAriaLabel": "Ulepsz do Underpeaks Pro",
+      "proFeaturesTitle": "Co otrzymujesz w Pro",
+      "proFeature1": "Integracje (Stripe, Mailchimp i inne)",
+      "proFeature2": "Zaawansowane uwierzytelnianie — 2FA, logowanie społecznościowe, magic link, SSO",
+      "proFeature3": "White-label CMS z Twoją własną marką",
+      "proFeature4": "Niestandardowa domena dla Twojej konsoli",
+      "contactSalesButton": "Skontaktuj się z Działem Sprzedaży"
+    },
+    "errors": {
+      "profileUpdateFailed": "Aktualizacja profilu nie powiodła się. Spróbuj ponownie.",
+      "passwordUpdateFailed": "Aktualizacja hasła nie powiodła się. Spróbuj ponownie."
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "Ogólne punkty końcowe generowane automatycznie na podstawie Twoich modeli",
+    "customEndpointButton": "Niestandardowy Punkt Końcowy",
+    "tabsLabel": "Zakładki strony API",
+    "copy": "Kopiuj do schowka",
+    "copied": "Skopiowano!",
+    "tabs": {
+      "endpoints": "Punkty Końcowe",
+      "keys": "Klucze API",
+      "reference": "Dokumentacja"
+    },
+    "endpoints": {
+      "searchPlaceholder": "Szukaj punktów końcowych…",
+      "typeFilterLabel": "Filtruj według typu punktu końcowego",
+      "modelFilterLabel": "Filtruj według modelu",
+      "type": {
+        "all": "wszystkie",
+        "auto": "automatyczne",
+        "custom": "niestandardowe"
+      },
+      "colMethod": "Metoda",
+      "colPath": "Ścieżka",
+      "colDescription": "Opis",
+      "colActions": "Działania",
+      "noResults": "Żaden punkt końcowy nie pasuje do Twojego filtra",
+      "customBadge": "Niestandardowy",
+      "requiresAuth": "Wymaga uwierzytelnienia",
+      "public": "Publiczny punkt końcowy",
+      "testButton": "Testuj",
+      "exampleRequest": "Przykładowe Żądanie",
+      "requiredHeaders": "Wymagane Nagłówki",
+      "testLabel": "Test",
+      "sendRequest": "Wyślij Żądanie",
+      "running": "Uruchamianie…"
+    },
+    "drawer": {
+      "title": "Nowy Niestandardowy Punkt Końcowy",
+      "subtitle": "Napisz logikę biznesową wywołującą ogólne API",
+      "close": "Zamknij panel",
+      "methodLabel": "Metoda",
+      "pathLabel": "Ścieżka",
+      "descriptionLabel": "Opis",
+      "descriptionPlaceholder": "Co robi ten punkt końcowy?",
+      "authLabel": "Uwierzytelnianie",
+      "authRequired": "Wymagane",
+      "authPublic": "Publiczne",
+      "codeLabel": "Kod Obsługi",
+      "cancelButton": "Anuluj",
+      "createButton": "Utwórz Punkt Końcowy"
+    },
+    "keys": {
+      "title": "Klucze API",
+      "keepSecret": "Zachowaj je w tajemnicy",
+      "createTitle": "Utwórz Nowy Klucz",
+      "nameLabel": "Nazwa klucza",
+      "namePlaceholder": "Nazwa klucza, np. Aplikacja Mobilna",
+      "generateButton": "Generuj",
+      "active": "Aktywny",
+      "inactive": "Nieaktywny",
+      "never": "Nigdy",
+      "created": "Utworzono",
+      "lastUsed": "Ostatnio użyto",
+      "revealKey": "Pokaż klucz API",
+      "hideKey": "Ukryj klucz API",
+      "deleteKey": "Usuń klucz {{name}}",
+      "confirmDelete": "Potwierdź usunięcie",
+      "cancelDelete": "Anuluj usunięcie"
+    },
+    "reference": {
+      "queryParamsTitle": "Parametry Zapytania",
+      "queryParamsSubtitle": "Dostępne dla wszystkich punktów końcowych GET",
+      "operatorsTitle": "Operatory Filtrowania",
+      "operatorsSubtitle": "Do użycia z",
+      "operatorsFormat": "parametrem jako",
+      "exampleTitle": "Pełny Przykład",
+      "exampleDescription": "Pobierz aktywne produkty poniżej 500 zł, posortowane według ceny, zwracając tylko id/nazwę/cenę:",
+      "responseLabel": "Odpowiedź:"
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "Panel",
+    "welcome": "Witaj ponownie, {name}",
+    "addWidget": "Dodaj widżet",
+    "editLayout": "Edytuj układ",
+    "saveLayout": "Zapisz układ",
+    "resetLayout": "Zresetuj układ",
+    "toolbar": {
+      "title": "Panel",
+      "subtitle": "Przeciągnij widżety, aby zmienić ich kolejność · najedź, aby edytować",
+      "refresh": "Odśwież",
+      "last30Days": "Ostatnie 30 dni",
+      "addWidget": "Dodaj Widżet"
+    },
+    "grid": {
+      "addWidget": "Dodaj widżet"
+    },
+    "addPanel": {
+      "title": "Dodaj Widżet",
+      "subtitle": "Kliknij, aby dodać do panelu"
+    },
+    "widget": {
+      "dragToReorder": "Przeciągnij, aby zmienić kolejność",
+      "vsLastPeriod": "vs poprzedni okres"
+    },
+    "chart": {
+      "day": "Dzień",
+      "daysAgo": "30 dni temu",
+      "today": "Dziś"
+    },
+    "formula": {
+      "placeholder": "np. SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "Ustawienia Wstępne"
+    }
   },
   "media": {
     "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "uploadFiles": "Prześlij Pliki",
+    "createFolder": "Utwórz Folder",
+    "folderName": "Nazwa folderu",
+    "rootFolder": "Katalog Główny",
+    "noFiles": "Brak plików w tym folderze",
+    "dropToUpload": "Upuść pliki tutaj, aby je przesłać",
+    "orClickToUpload": "lub kliknij, aby przeglądać",
+    "gridView": "Widok siatki",
+    "listView": "Widok listy",
+    "fileSize": "Rozmiar pliku",
+    "fileType": "Typ pliku",
+    "uploadedAt": "Przesłano",
+    "deleteFileConfirm": "Czy na pewno chcesz usunąć \"{name}\"?",
+    "deleteFolderConfirm": "Czy na pewno chcesz usunąć folder \"{name}\" i całą jego zawartość?",
+    "importFromUrl": "Importuj z adresu URL",
+    "copyUrl": "Kopiuj adres URL",
+    "urlCopied": "Adres URL skopiowany do schowka",
+    "details": "Szczegóły Pliku",
+    "selectFile": "Wybierz plik, aby zobaczyć szczegóły"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Ustawienia",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "Przegląd",
+      "projectName": "Nazwa Projektu",
+      "projectUrl": "Adres URL Projektu",
+      "projectId": "ID Projektu",
+      "dbType": "Typ Bazy Danych",
+      "environment": "Środowisko",
+      "deploymentType": "Typ Wdrożenia",
+      "savedSuccess": "Ustawienia zostały pomyślnie zapisane"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "Klucze API",
+      "subheading": "Zarządzaj kluczami używanymi do uwierzytelniania żądań API z Twoich aplikacji.",
+      "title": "Klucze API",
+      "description": "Zarządzaj kluczami API do programowego dostępu do Twojego projektu.",
+      "generateKey": "Wygeneruj Nowy Klucz",
+      "keyName": "Nazwa",
+      "keyPrefix": "Prefiks klucza",
+      "lastUsed": "Ostatnio użyto",
+      "neverUsed": "Nigdy nie użyto",
+      "revokeConfirm": "Czy na pewno chcesz odwołać \"{name}\"? Tej czynności nie można cofnąć.",
+      "revoked": "Odwołano",
+      "keyCopied": "Klucz skopiowany do schowka",
+      "newKeyGenerated": "Wygenerowano nowy klucz API. Skopiuj go teraz — nie zostanie ponownie wyświetlony.",
+      "noKeys": "Brak kluczy API. Wygeneruj jeden, aby zacząć.",
+      "sectionTitle": "Aktywne Klucze",
+      "createdDate": "Utworzono {{date}}",
+      "lastUsedDate": "Ostatnio użyto {{date}}",
+      "hideKey": "Ukryj klucz",
+      "revealKey": "Pokaż klucz",
+      "copyKey": "Kopiuj klucz",
+      "revoke": "Odwołaj",
+      "emptyTitle": "Brak kluczy API",
+      "emptySubtitle": "Wygeneruj klucz poniżej, aby zacząć."
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
+      "title": "Marka",
+      "description": "Dostosuj wygląd swojej konsoli Underpeaks.",
       "logo": "Logo",
       "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "primaryColor": "Kolor Podstawowy",
+      "uploadLogo": "Prześlij logo",
+      "uploadFavicon": "Prześlij favicon",
+      "logoHint": "Zalecane: 200×50px, PNG lub SVG z przezroczystym tłem.",
+      "faviconHint": "Zalecane: 32×32px ICO, PNG lub SVG.",
+      "livePreview": "Podgląd na Żywo",
+      "brandingSaved": "Marka została pomyślnie zaktualizowana"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
+      "host": "Host SMTP",
       "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "username": "Nazwa użytkownika",
+      "fromEmail": "E-mail nadawcy",
+      "fromName": "Nazwa nadawcy",
+      "encryption": "Szyfrowanie",
+      "testEmail": "Wyślij e-mail testowy",
+      "testEmailSuccess": "E-mail testowy wysłany pomyślnie"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "Domeny",
+      "addDomain": "Dodaj domenę",
+      "verified": "Zweryfikowana",
+      "unverified": "Niezweryfikowana",
+      "primary": "Podstawowa",
+      "setPrimary": "Ustaw jako podstawową"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "Konto",
+    "fullName": "Imię i nazwisko",
+    "emailReadOnly": "Adres e-mail (tylko do odczytu)",
+    "changePassword": "Zmień Hasło",
+    "currentPassword": "Bieżące hasło",
+    "newPassword": "Nowe hasło",
+    "confirmPassword": "Potwierdź nowe hasło",
+    "passwordsDoNotMatch": "Hasła się nie zgadzają",
+    "profileUpdated": "Profil zaktualizowany pomyślnie",
+    "passwordChanged": "Hasło zmienione pomyślnie",
+    "memberSince": "Członek od {date}"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
+    "title": "Wiadomości",
+    "newConversation": "Nowa Rozmowa",
+    "noConversations": "Brak rozmów",
+    "noMessages": "Brak wiadomości w tej rozmowie",
+    "typeMessage": "Napisz wiadomość...",
+    "send": "Wyślij",
+    "markAllRead": "Oznacz wszystkie jako przeczytane",
+    "reply": "Odpowiedz",
+    "you": "Ty",
     "system": "System"
   },
+  "apiKeys": {
+    "heading": "Klucze API",
+    "subheading": "Zarządzaj kluczami używanymi do uwierzytelniania żądań API z Twoich aplikacji.",
+    "sectionTitle": "Aktywne Klucze",
+    "createdDate": "Utworzono {date}",
+    "lastUsedDate": "Ostatnio użyto {date}",
+    "neverUsed": "Nigdy nie użyto",
+    "hideKey": "Ukryj klucz",
+    "revealKey": "Pokaż klucz",
+    "copyKey": "Kopiuj klucz",
+    "revoke": "Odwołaj",
+    "emptyTitle": "Brak kluczy API",
+    "emptySubtitle": "Wygeneruj klucz poniżej, aby zacząć.",
+    "errors": {
+      "loadFailed": "Nie udało się załadować kluczy API",
+      "generateFailed": "Nie udało się wygenerować klucza",
+      "revokeFailed": "Nie udało się odwołać klucza"
+    }
+  },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "Powiadomienia",
+    "noNotifications": "Brak powiadomień",
+    "noUnread": "Wszystko na bieżąco!",
+    "markAllRead": "Oznacz wszystkie jako przeczytane",
+    "viewAll": "Zobacz wszystkie powiadomienia",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
+      "all": "Wszystkie",
+      "unread": "Nieprzeczytane",
+      "comment": "Komentarze",
       "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "payment": "Płatności",
+      "security": "Bezpieczeństwo",
+      "message": "Wiadomości"
     },
     "priority": {
-      "low": "Low",
-      "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "low": "Niski",
+      "normal": "Normalny",
+      "high": "Wysoki",
+      "urgent": "Pilny"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "Zaloguj się",
+    "logout": "Wyloguj się",
+    "email": "Adres e-mail",
+    "password": "Hasło",
+    "forgotPassword": "Nie pamiętasz hasła?",
+    "resetPassword": "Zresetuj hasło",
+    "sessionExpired": "Twoja sesja wygasła. Zaloguj się ponownie.",
+    "idleWarning": "Byłeś nieaktywny przez chwilę.",
+    "idleLogoutIn": "Zostaniesz wylogowany za {seconds} sekund.",
+    "stayLoggedIn": "Pozostań zalogowany"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "Nie znaleziono strony",
+    "serverError": "Błąd serwera",
+    "networkError": "Błąd sieci — sprawdź swoje połączenie",
+    "sessionError": "Błąd sesji — zaloguj się ponownie",
+    "unknown": "Wystąpił nieoczekiwany błąd"
+  },
+  "grid": {
+    "addWidget": "Dodaj widżet"
+  },
+  "addPanel": {
+    "title": "Dodaj Widżet",
+    "subtitle": "Kliknij, aby dodać do panelu"
+  },
+  "widget": {
+    "dragToReorder": "Przeciągnij, aby zmienić kolejność",
+    "vsLastPeriod": "vs poprzedni okres"
+  },
+  "chart": {
+    "day": "Dzień",
+    "daysAgo": "30 dni temu",
+    "today": "Dziś"
+  },
+  "formula": {
+    "placeholder": "np. SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "Ustawienia Wstępne"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Centrum Pomocy",
+      "subtitle": "Znajdź odpowiedzi, przeczytaj dokumentację lub skontaktuj się z nami.",
+      "searchPlaceholder": "Szukaj w FAQ…"
+    },
+    "resources": {
+      "title": "Zasoby",
+      "links": {
+        "gettingStarted": {
+          "label": "Pierwsze Kroki",
+          "description": "Skonfiguruj swój pierwszy projekt w kilka minut."
+        },
+        "apiReference": {
+          "label": "Dokumentacja API",
+          "description": "Pełna dokumentacja wszystkich punktów końcowych i operatorów API."
+        },
+        "community": {
+          "label": "Forum Społeczności",
+          "description": "Zadawaj pytania i dziel się projektami ze społecznością."
+        }
+      }
+    },
+    "faq": {
+      "title": "Najczęściej Zadawane Pytania",
+      "resultCount": "{count} wynik(ów)",
+      "noResults": "Brak wyników dla \"{query}\"",
+      "noResultsHint": "Spróbuj innego wyszukiwanego hasła lub skontaktuj się z pomocą techniczną poniżej."
+    },
+    "api": {
+      "title": "Szybka Dokumentacja API",
+      "baseUrl": "Podstawowy Adres URL:",
+      "endpoints": {
+        "get": "Wyświetla wszystkie rekordy modelu. Obsługuje filtrowanie, sortowanie, paginację.",
+        "post": "Tworzy nowy rekord.",
+        "put": "Aktualizuje istniejący rekord według ID.",
+        "delete": "Usuwa rekord według ID."
+      },
+      "operators": {
+        "title": "Operatory zapytań",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "Skontaktuj się z Pomocą Techniczną",
+      "submit": "Wyślij wiadomość",
+      "success": {
+        "title": "Wiadomość wysłana!",
+        "subtitle": "Odpowiemy tak szybko, jak to możliwe."
+      },
+      "fields": {
+        "name": "Imię",
+        "namePlaceholder": "Jan Kowalski",
+        "email": "E-mail",
+        "emailPlaceholder": "ty@przyklad.com",
+        "message": "Wiadomość",
+        "messagePlaceholder": "Opisz swój problem lub pytanie…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "Integracje",
+      "connectedCount": "{count} połączonych",
+      "errorCount": "{count} błąd(ów)",
+      "infoBanner": "Połączone integracje są dostępne w niestandardowych punktach końcowych i generowaniu kodu"
+    },
+    "categories": {
+      "all": "Wszystkie",
+      "payments": "Płatności",
+      "email": "E-mail i SMS",
+      "storage": "Pamięć",
+      "ai": "AI",
+      "analytics": "Analityka",
+      "automation": "Automatyzacja"
+    },
+    "status": {
+      "connected": "Połączono",
+      "disconnected": "Rozłączono",
+      "error": "Błąd"
+    },
+    "card": {
+      "viewDocs": "Zobacz dokumentację",
+      "buttons": {
+        "saveAndConnect": "Zapisz i Połącz",
+        "saving": "Zapisywanie…",
+        "saved": "Zapisano!",
+        "disconnect": "Rozłącz",
+        "retryConnection": "Ponów Połączenie"
+      }
+    },
+    "empty": "Brak integracji w tej kategorii"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "Menu",
+      "subtitle": "{count} element(ów) · przeciągnij, aby zmienić kolejność",
+      "addItem": "Dodaj Element"
+    },
+    "preview": {
+      "title": "Podgląd Nawigacji",
+      "subtitle": "Tylko widoczne elementy",
+      "empty": "Brak widocznych elementów."
+    },
+    "list": {
+      "title": "Wszystkie Elementy",
+      "empty": "Brak elementów menu",
+      "emptyAction": "Dodaj swój pierwszy element"
+    },
+    "row": {
+      "hidden": "ukryty",
+      "external": "Zewnętrzny",
+      "actions": {
+        "moveUp": "Przesuń w górę",
+        "moveDown": "Przesuń w dół",
+        "toggleVisibility": "Przełącz widoczność",
+        "edit": "Edytuj",
+        "delete": "Usuń",
+        "confirmDelete": "Potwierdź usunięcie",
+        "cancelDelete": "Anuluj"
+      }
+    },
+    "errors": {
+      "loadFailed": "Nie udało się załadować elementów menu",
+      "createFailed": "Nie udało się utworzyć elementu menu",
+      "updateFailed": "Nie udało się zaktualizować elementu menu",
+      "deleteFailed": "Nie udało się usunąć elementu menu"
+    },
+    "drawer": {
+      "titleAdd": "Dodaj Element Menu",
+      "titleEdit": "Edytuj Element Menu",
+      "subtitle": "Skonfiguruj etykietę, link, ikonę i widoczność",
+      "sections": {
+        "labelVisibility": "Etykieta i Widoczność",
+        "link": "Link",
+        "icon": "Ikona",
+        "nesting": "Zagnieżdżanie",
+        "preview": "Podgląd"
+      },
+      "fields": {
+        "pageRequired": "Przed zapisaniem elementu menu należy wybrać stronę.",
+        "menuLabel": "Etykieta Menu",
+        "menuLabelPlaceholder": "np. Produkty",
+        "menuLabelHint": "To jest tekst wyświetlany w menu nawigacyjnym.",
+        "visibility": "Widoczność",
+        "visible": "Widoczny",
+        "hidden": "Ukryty",
+        "linkTypePage": "Strona",
+        "linkTypeExternal": "Zewnętrzny URL",
+        "selectPage": "Wybierz Stronę",
+        "selectPagePlaceholder": "— Wybierz stronę —",
+        "noPagesHint": "Nie znaleziono stron administracyjnych. Najpierw utwórz stronę z typem strony ustawionym na Admin.",
+        "externalUrl": "Zewnętrzny URL",
+        "openIn": "Otwórz w",
+        "sameTab": "Ta Sama Karta",
+        "newTab": "Nowa Karta",
+        "parentItem": "Element Nadrzędny",
+        "parentItemPlaceholder": "— Poziom najwyższy —",
+        "parentItemHint": "Zagnieżdżone elementy pojawiają się jako elementy podrzędne rozwijane w nawigacji."
+      },
+      "icons": {
+        "home": "Strona Główna",
+        "grid": "Siatka",
+        "package": "Paczka",
+        "users": "Użytkownicy",
+        "settings": "Ustawienia",
+        "file": "Plik",
+        "cart": "Koszyk",
+        "mail": "Poczta",
+        "star": "Gwiazdka",
+        "info": "Informacja"
+      },
+      "preview": {
+        "hidden": "ukryty"
+      },
+      "buttons": {
+        "cancel": "Anuluj",
+        "saveChanges": "Zapisz Zmiany",
+        "addItem": "Dodaj Element",
+        "saving": "Zapisywanie…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "URL Pliku",
+      "metadata": "Metadane",
+      "rename": "Zmień nazwę",
+      "moveToFolder": "Przenieś do Folderu"
+    },
+    "altText": {
+      "placeholder": "Opisz ten obraz pod kątem dostępności…",
+      "empty": "Nie ustawiono tekstu alternatywnego"
+    },
+    "metadata": {
+      "folder": "Folder",
+      "path": "Ścieżka",
+      "size": "Rozmiar",
+      "type": "Typ",
+      "uploaded": "Przesłano",
+      "dimensions": "Wymiary"
+    },
+    "actions": {
+      "save": "Zapisz",
+      "saving": "Zapisywanie…",
+      "cancel": "Anuluj",
+      "move": "Przenieś",
+      "moving": "Przenoszenie…",
+      "deleteFile": "Usuń Plik"
+    },
+    "move": {
+      "currentlyIn": "Obecnie w"
+    },
+    "errors": {
+      "renameFailed": "Zmiana nazwy nie powiodła się",
+      "moveFailed": "Przenoszenie nie powiodło się"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "Brak wymaganego pola: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "Foldery",
+      "all": "Wszystkie",
+      "newFolderTitle": "Nowy folder",
+      "collapse": "Zwiń",
+      "expand": "Rozwiń"
+    },
+    "folder": {
+      "selectTitle": "Wybierz folder"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "Usuń folder",
+      "fileCount": "{count} plików"
+    },
+    "empty": {
+      "message": "Ten folder jest pusty"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "Ten folder jest pusty"
+    },
+    "header": {
+      "name": "Nazwa",
+      "size": "Rozmiar",
+      "type": "Typ",
+      "uploaded": "Przesłano"
+    },
+    "row": {
+      "deleteTitle": "Usuń plik"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "Media"
+    },
+    "actions": {
+      "delete": "Usuń ({count})",
+      "clear": "Wyczyść",
+      "upload": "Prześlij"
+    },
+    "viewMode": {
+      "grid": "Widok siatki",
+      "list": "Widok listy"
+    }
+  },
+  "newFolderPopup": {
+    "title": "Nowy Folder",
+    "placeholder": "Nazwa folderu",
+    "buttons": {
+      "create": "Utwórz",
+      "cancel": "Anuluj"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "Prześlij pliki lub importuj media za pomocą adresu URL do wybranego folderu.",
+    "title": "Dodaj Media",
+    "tabs": {
+      "upload": "Prześlij Plik",
+      "url": "Dodaj przez URL"
+    },
+    "uploadZone": {
+      "hint": "Dowolny typ pliku — obrazy, filmy, dokumenty"
+    },
+    "urlTab": {
+      "description": "Wklej publiczny adres URL, aby zaimportować plik bezpośrednio do pamięci.",
+      "placeholder": "https://przyklad.com/plik.jpg",
+      "import": "Importuj",
+      "importing": "Importowanie…",
+      "previewAlt": "Podgląd URL"
+    },
+    "errors": {
+      "importFailed": "Import nie powiódł się"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "Nie udało się załadować folderów",
+      "loadFiles": "Nie udało się załadować plików",
+      "createFolder": "Nie udało się utworzyć folderu",
+      "deleteFailed": "Usuwanie nie powiodło się"
+    },
+    "confirmDelete": {
+      "titleFolder": "Usuń Folder",
+      "titleFile": "Usuń Plik",
+      "message": "Czy na pewno chcesz usunąć",
+      "folderWarning": "Spowoduje to usunięcie wszystkich plików wewnątrz folderu.",
+      "undoWarning": "Tej czynności nie można cofnąć.",
+      "selectionLabel": "{count} elementów",
+      "cancel": "Anuluj",
+      "confirm": "Usuń",
+      "deleting": "Usuwanie…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "Brak wiadomości",
+      "subUnread": "Wszystko na bieżąco!",
+      "subAll": "Twoja skrzynka odbiorcza jest pusta."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "przed chwilą",
+      "minutesAgo": "{count}m temu",
+      "hoursAgo": "{count}g temu",
+      "daysAgo": "{count}d temu"
+    },
+    "unread": {
+      "badge": "{count} nieprzeczytanych"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "Wiadomość systemowa",
+    "from": "Od: {name}",
+    "deleteButton": "Usuń",
+    "deleteAriaLabel": "Usuń rozmowę: {subject}",
+    "messagesAriaLabel": "Wątek wiadomości",
+    "loading": "Ładowanie wiadomości...",
+    "emptyTitle": "Brak wiadomości",
+    "emptySub": "Wyślij pierwszą wiadomość poniżej."
+  },
+  "messageBubble": {
+    "justNow": "Przed chwilą",
+    "minutesAgo": "{count}m temu",
+    "hoursAgo": "{count}g temu",
+    "daysAgo": "{count}d temu"
+  },
+  "replyBar": {
+    "placeholder": "Napisz odpowiedź… (Enter, aby wysłać)",
+    "sendAriaLabel": "Wyślij wiadomość"
+  },
+  "messagesPage": {
+    "title": "Wiadomości",
+    "unreadCount": "{count} nieprzeczytanych wiadomości",
+    "filters": {
+      "all": "Wszystkie",
+      "unread": "Nieprzeczytane"
+    },
+    "markAllRead": "Oznacz wszystkie jako przeczytane",
+    "closeError": "Zamknij komunikat o błędzie",
+    "empty": {
+      "title": "Wybierz rozmowę",
+      "sub": "Wybierz rozmowę z listy, aby przeczytać ją tutaj."
+    },
+    "errors": {
+      "load": "Nie udało się załadować wiadomości",
+      "delete": "Nie udało się usunąć rozmowy",
+      "markAll": "Nie udało się oznaczyć wszystkich jako przeczytane"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "Pilne",
+      "high": "Wysokie"
+    },
+    "actions": {
+      "markRead": "Oznacz jako przeczytane",
+      "view": "Zobacz",
+      "delete": "Usuń"
+    }
+  },
+  "notificationsHeader": {
+    "title": "Powiadomienia",
+    "unreadCount": "{count} nieprzeczytanych powiadomień",
+    "filters": {
+      "all": "Wszystkie",
+      "unread": "Nieprzeczytane"
+    },
+    "markAllRead": "Oznacz wszystkie jako przeczytane"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "Brak powiadomień",
+      "subUnread": "Wszystko na bieżąco!",
+      "subAll": "Nie masz jeszcze żadnych powiadomień."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "Nie udało się załadować powiadomień",
+      "markReadFailed": "Nie udało się oznaczyć jako przeczytane",
+      "markAllReadFailed": "Nie udało się oznaczyć wszystkich jako przeczytane",
+      "deleteFailed": "Nie udało się usunąć powiadomienia"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "Publiczna",
+      "admin": "Admin",
+      "draft": "Szkic",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "Strony",
+      "pageCount": "{count} stron(a) łącznie",
+      "searchPlaceholder": "Szukaj stron…",
+      "newPage": "Nowa Strona"
+    },
+    "filter": {
+      "all": "Wszystkie"
+    },
+    "table": {
+      "page": "Strona",
+      "model": "Model",
+      "template": "Szablon",
+      "visibility": "Widoczność",
+      "actions": "Działania",
+      "seoPrefix": "SEO",
+      "systemBadge": "System",
+      "hiddenBadge": "Ukryta"
+    },
+    "emptyState": {
+      "message": "Nie znaleziono stron",
+      "cta": "Utwórz swoją pierwszą stronę"
+    },
+    "actions": {
+      "edit": "Edytuj stronę",
+      "delete": "Usuń stronę",
+      "view": "Zobacz stronę",
+      "confirmDelete": "Potwierdź usunięcie",
+      "cancel": "Anuluj",
+      "systemLocked": "Stron systemowych nie można edytować ani usuwać"
+    },
+    "errors": {
+      "loadFailed": "Nie udało się załadować stron",
+      "createFailed": "Nie udało się utworzyć strony",
+      "updateFailed": "Nie udało się zaktualizować strony",
+      "deleteFailed": "Nie udało się usunąć strony"
+    },
+    "drawer": {
+      "title": "Utwórz Stronę",
+      "editTitle": "Edytuj Stronę",
+      "subtitle": "Zdefiniuj nową stronę i przypisz model",
+      "sections": {
+        "basicInfo": "Podstawowe Informacje",
+        "modelTemplate": "Model i Szablon",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "Ukryj Stronę",
+          "hint": "Ukryte strony nie są wyświetlane w nawigacji ani mapach witryny"
+        },
+        "name": {
+          "label": "Nazwa Strony",
+          "placeholder": "np. Lista Produktów"
+        },
+        "slug": {
+          "label": "Slug / URL",
+          "placeholder": "/twoj-slug-strony",
+          "hint": "Użyj :id dla dynamicznych tras, np. /produkty/:id"
+        },
+        "visibility": {
+          "label": "Widoczność"
+        },
+        "model": {
+          "label": "Przypisz Model",
+          "noModel": "— Brak modelu (strona niestandardowa) —",
+          "hint": "Jeden model może zasilać wiele stron."
+        },
+        "template": {
+          "label": "Szablon"
+        },
+        "seoTitle": {
+          "label": "Tytuł SEO",
+          "placeholder": "Tytuł strony dla wyszukiwarek",
+          "charCount": "{count}/60 znaków"
+        },
+        "seoDesc": {
+          "label": "Meta Opis",
+          "placeholder": "Krótki opis dla wyników wyszukiwania…",
+          "charCount": "{count}/160 znaków"
+        }
+      },
+      "seoPreview": {
+        "label": "Podgląd Wyszukiwania",
+        "titleFallback": "Tytuł Strony",
+        "urlPrefix": "twojastrona.com",
+        "descFallback": "Nie podano opisu."
+      },
+      "actions": {
+        "cancel": "Anuluj",
+        "create": "Utwórz Stronę",
+        "update": "Zaktualizuj Stronę",
+        "saving": "Zapisywanie…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "Wygeneruj Nowy Klucz",
+    "keyNameLabel": "Nazwa Klucza",
+    "keyNameHint": "Nadaj mu opisową nazwę, aby zapamiętać, do czego jest używany.",
+    "keyNamePlaceholder": "np. Aplikacja Flutter — Produkcja",
+    "buttonGenerating": "Generowanie…",
+    "buttonIdle": "Wygeneruj Klucz"
+  },
+  "newKeyModal": {
+    "title": "Wygenerowano Klucz API",
+    "instructions": "Twój klucz został utworzony i jest gotowy do użycia. Kliknij <eyeIcon>ikonę oka</eyeIcon> obok klucza na liście, aby go pokazać i skopiować.",
+    "doneButton": "Gotowe"
+  },
+  "revokeModal": {
+    "title": "Odwołaj Klucz API",
+    "message": "Wszystkie aplikacje korzystające z tego klucza natychmiast stracą dostęp:",
+    "cancelButton": "Anuluj",
+    "revokeButtonIdle": "Odwołaj Klucz",
+    "revokeButtonRevoking": "Odwoływanie…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "Nie udało się załadować kluczy API",
+      "generateFailed": "Nie udało się wygenerować klucza",
+      "revokeFailed": "Nie udało się odwołać klucza"
+    },
+    "logs": {
+      "loadingKeys": "Ładowanie kluczy API...",
+      "keysLoaded": "Klucze API załadowane pomyślnie",
+      "generatingKey": "Generowanie nowego klucza API...",
+      "keyGenerated": "Klucz API wygenerowany pomyślnie",
+      "revokingKey": "Odwoływanie klucza API...",
+      "keyRevoked": "Klucz API odwołany pomyślnie"
+    }
+  },
+  "brandingPage": {
+    "heading": "Marka CMS",
+    "subheading": "Dostosuj wygląd CMS dla swojego zespołu.",
+    "errors": {
+      "saveFailed": "Nie udało się zapisać marki"
+    },
+    "logs": {
+      "savingBranding": "Zapisywanie ustawień marki...",
+      "brandingSaved": "Marka zapisana pomyślnie"
+    },
+    "logoSection": {
+      "title": "Logo CMS",
+      "uploadLabel": "Logo",
+      "uploadHint": "PNG lub SVG z przezroczystym tłem",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "Podgląd logo"
+    },
+    "faviconSection": {
+      "title": "Favicon",
+      "uploadLabel": "Favicon",
+      "uploadHint": "ICO, PNG lub SVG — wyświetlany na kartach przeglądarki",
+      "uploadRecommended": "32×32px lub 64×64px",
+      "imageAlt": "Podgląd favicon"
+    },
+    "preview": {
+      "label": "Podgląd Górnego Paska",
+      "projectLabel": "Projekt:"
+    },
+    "saveSuccess": "Marka zapisana pomyślnie",
+    "saveButtonIdle": "Zapisz Markę",
+    "saveButtonSaving": "Zapisywanie…"
+  },
+  "overviewPage": {
+    "heading": "Przegląd Projektu",
+    "subheading": "Przegląd Twojego projektu Underpeaks.",
+    "stats": {
+      "dbType": "Typ Bazy Danych",
+      "environment": "Środowisko",
+      "deployment": "Wdrożenie",
+      "status": "Status",
+      "statusActive": "Aktywny"
+    },
+    "userInfo": {
+      "sectionTitle": "Informacje o Użytkowniku",
+      "fullName": "Imię i Nazwisko",
+      "email": "E-mail",
+      "role": "Rola",
+      "status": "Status",
+      "verified": "Zweryfikowano",
+      "verifiedYes": "Tak",
+      "verifiedNo": "Nie",
+      "memberSince": "Członek Od"
+    },
+    "licenseKey": {
+      "sectionTitle": "Klucz Licencyjny Underpeaks",
+      "description": "Twój klucz licencyjny uwierzytelnia tę instancję i umożliwia rozróżnienie funkcji hostowanych i samodzielnie hostowanych.",
+      "reveal": "Pokaż",
+      "hide": "Ukryj",
+      "copy": "Kopiuj",
+      "copied": "Skopiowano",
+      "loading": "Ładowanie…",
+      "notFound": "Nie znaleziono klucza licencyjnego"
+    }
+  },
+  "smtpPage": {
+    "heading": "Ustawienia SMTP",
+    "subheading": "Skonfiguruj pocztę wychodzącą dla swojego projektu.",
+    "emailFeatures": {
+      "sectionTitle": "Funkcje E-mail",
+      "verifyEmailLabel": "Włącz weryfikację e-mail przy rejestracji",
+      "forgotPasswordLabel": "Włącz e-maile o zapomnianym haśle",
+      "builtInNotice": "{provider} obsługuje natywnie weryfikację e-mail i resetowanie hasła — SMTP nie jest potrzebny dla tych funkcji.",
+      "smtpToggleLabel": "Użyj niestandardowego serwera SMTP"
+    },
+    "smtpConfig": {
+      "sectionTitle": "Konfiguracja SMTP",
+      "hostLabel": "Host SMTP",
+      "hostPlaceholder": "smtp.przyklad.com",
+      "portLabel": "Port",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "Adres Nadawcy",
+      "fromAddressPlaceholder": "no-reply@przyklad.com",
+      "usernameLabel": "Nazwa użytkownika",
+      "usernamePlaceholder": "Nazwa użytkownika SMTP",
+      "passwordLabel": "Hasło",
+      "passwordPlaceholder": "Hasło SMTP",
+      "showPassword": "Pokaż hasło",
+      "hidePassword": "Ukryj hasło",
+      "encryptionLabel": "Szyfrowanie",
+      "encryptionNone": "Brak"
+    },
+    "logs": {
+      "savingSmtp": "Zapisywanie ustawień SMTP...",
+      "smtpSaved": "Ustawienia SMTP zapisane pomyślnie"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "Ustawienia",
+    "toggleAriaLabel": "Przełącz nawigację ustawień",
+    "nav": {
+      "overview": "Przegląd",
+      "api-keys": "Klucze API",
+      "smtp": "Ustawienia SMTP",
+      "branding": "Marka CMS"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "Ładowanie ustawień…"
+  },
+  "saveButton": {
+    "savedMessage": "Zapisano pomyślnie",
+    "buttonSaving": "Zapisywanie…",
+    "buttonIdle": "Zapisz Zmiany"
+  },
+  "coloursPage": {
+    "heading": "Kolory",
+    "subheading": "Zdefiniuj tokeny kolorów używane w wygenerowanych aplikacjach Flutter i Next.js.",
+    "preview": {
+      "title": "Podgląd na Żywo",
+      "primaryButton": "Przycisk Podstawowy",
+      "secondaryButton": "Drugorzędny",
+      "accentBadge": "Odznaka Akcentu",
+      "success": "✓ Sukces",
+      "warning": "⚠ Ostrzeżenie",
+      "danger": "✕ Niebezpieczeństwo"
+    },
+    "tokensSectionTitle": "Tokeny Kolorów",
+    "resetTokenTitle": "Zresetuj do domyślnych",
+    "resetAllButton": "Zresetuj wszystko do wartości domyślnych",
+    "savedMessage": "Zapisano",
+    "saveButtonIdle": "Zapisz Kolory",
+    "saveButtonSaving": "Zapisywanie…",
+    "logs": {
+      "savingColours": "Zapisywanie tokenów kolorów...",
+      "coloursSaved": "Tokeny kolorów zapisane pomyślnie"
+    },
+    "tokens": {
+      "primary":      { "label": "Podstawowy",             "description": "Główny kolor marki — przyciski, linki, wyróżnienia" },
+      "primary-fg":   { "label": "Pierwszy Plan Podstawowy",  "description": "Tekst na tle koloru podstawowego" },
+      "secondary":    { "label": "Drugorzędny",           "description": "Wspierający kolor marki" },
+      "secondary-fg": { "label": "Pierwszy Plan Drugorzędny","description": "Tekst na tle koloru drugorzędnego" },
+      "accent":       { "label": "Akcent",              "description": "Kolor wyróżnienia dla odznak i etykiet" },
+      "background":   { "label": "Tło",          "description": "Główne tło aplikacji" },
+      "surface":      { "label": "Powierzchnia",             "description": "Tło kart i paneli" },
+      "border":       { "label": "Obramowanie",              "description": "Domyślny kolor obramowania" },
+      "success":      { "label": "Sukces",             "description": "Pozytywne stany i potwierdzenia" },
+      "warning":      { "label": "Ostrzeżenie",             "description": "Ostrzeżenia i stany wymagające uwagi" },
+      "danger":       { "label": "Niebezpieczeństwo",              "description": "Błędy i działania destrukcyjne" },
+      "text":         { "label": "Tekst Podstawowy",        "description": "Główny kolor tekstu treści" },
+      "text-muted":   { "label": "Tekst Wyciszony",          "description": "Tekst drugorzędny i tekst zastępczy" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "Flagi Funkcji",
+    "comingSoonBadge": "WKRÓTCE DOSTĘPNE",
+    "subheading": "Włącz funkcje, które zostaną uwzględnione w wygenerowanych aplikacjach Flutter i Next.js.",
+    "paidBadge": "PŁATNE",
+    "savedMessage": "Zapisano",
+    "saveButtonIdle": "Zapisz Flagi",
+    "saveButtonSaving": "Zapisywanie…",
+    "upgrade": {
+      "title": "Wymagany plan hostowany",
+      "description": "Te funkcje wymagają hostowanej infrastruktury Underpeaks. Ulepsz, aby je odblokować.",
+      "button": "Ulepsz"
+    },
+    "groups": {
+      "Appearance": "Wygląd",
+      "Localisation": "Lokalizacja",
+      "App Behaviour": "Zachowanie Aplikacji",
+      "Authentication — Paid": "Uwierzytelnianie — Płatne",
+      "Advanced — Paid": "Zaawansowane — Płatne"
+    },
+    "flags": {
+      "dark-mode":          { "label": "Tryb Ciemny",                 "description": "Umożliwia użytkownikom przełączanie się między jasnym a ciemnym motywem w aplikacji" },
+      "system-theme":       { "label": "Podążaj za Motywem Systemu",       "description": "Automatyczne dopasowanie do ustawień jasnego/ciemnego trybu urządzenia" },
+      "multi-language":     { "label": "Obsługa Wielu Języków",    "description": "Włącz obsługę wielu języków w wygenerowanej aplikacji" },
+      "rtl-support":        { "label": "Obsługa RTL",               "description": "Układ od prawej do lewej dla języka arabskiego, hebrajskiego i podobnych" },
+      "offline-mode":       { "label": "Tryb Offline",              "description": "Buforuj dane lokalnie, aby aplikacja działała bez połączenia z internetem" },
+      "push-notifications": { "label": "Powiadomienia Push",        "description": "Włącz obsługę powiadomień push przez FCM — dostarczasz klucze" },
+      "splash-screen":      { "label": "Ekran Powitalny",             "description": "Pokaż markowy ekran powitalny podczas uruchamiania aplikacji" },
+      "onboarding":         { "label": "Proces Wdrażania",           "description": "Pokaż proces powitalny/wdrażania dla nowych użytkowników" },
+      "2fa":                { "label": "Uwierzytelnianie Dwuskładnikowe", "description": "Wymagaj OTP lub aplikacji uwierzytelniającej do logowania" },
+      "biometric":          { "label": "Logowanie Biometryczne",           "description": "Logowanie odciskiem palca i Face ID na urządzeniach mobilnych" },
+      "social-login":       { "label": "Logowanie Społecznościowe",              "description": "OAuth Google, GitHub, Apple i Facebook" },
+      "magic-link":         { "label": "Magic Link",                "description": "Logowanie bez hasła za pomocą linku e-mail" },
+      "sso":                { "label": "SSO / SAML",                "description": "Integracja jednokrotnego logowania dla przedsiębiorstw" },
+      "analytics":          { "label": "Analityka w Aplikacji",          "description": "Śledź wyświetlenia ekranów i zdarzenia w wygenerowanej aplikacji" },
+      "ab-testing":         { "label": "Testy A/B",               "description": "Uruchamiaj eksperymenty funkcji wśród bazy użytkowników" },
+      "feature-gating":     { "label": "Kontrola Dostępu do Funkcji",            "description": "Pokaż lub ukryj funkcje na podstawie planu lub roli użytkownika" }
+    },
+    "logs": {
+      "savingFlags": "Zapisywanie flag funkcji...",
+      "flagsSaved": "Flagi funkcji zapisane pomyślnie"
+    }
+  },
+  "spacingPage": {
+    "heading": "Odstępy i Zaokrąglenie",
+    "subheading": "Kontroluj kształt, gęstość i wzniesienie komponentów w wygenerowanych aplikacjach.",
+    "preview": {
+      "title": "Podgląd na Żywo",
+      "button": "Przycisk",
+      "card": "Komponent Karty",
+      "input": "Pole Wejściowe"
+    },
+    "sections": {
+      "radius": {
+        "title": "Promień Obramowania",
+        "description": "Stosowane do przycisków, kart, pól wejściowych i okien modalnych"
+      },
+      "density": {
+        "title": "Gęstość Odstępów",
+        "description": "Kontroluje wypełnienie wewnątrz komponentów"
+      },
+      "shadow": {
+        "title": "Wzniesienie / Cień",
+        "description": "Głębokość cienia kart i komponentów"
+      }
+    },
+    "radius": {
+      "none": "Brak",
+      "sm": "Mały",
+      "md": "Średni",
+      "lg": "Duży",
+      "xl": "Bardzo Duży",
+      "full": "Pigułka"
+    },
+    "density": {
+      "compact": { "label": "Kompaktowy", "desc": "Ciasne wypełnienie, więcej widocznej treści" },
+      "default": { "label": "Domyślny", "desc": "Zrównoważone odstępy dla większości przypadków użycia" },
+      "relaxed": { "label": "Luźny", "desc": "Duże wypełnienie, łatwiejsze dotykanie" }
+    },
+    "shadow": {
+      "none": "Brak",
+      "sm": "Subtelny",
+      "md": "Średni",
+      "lg": "Mocny"
+    },
+    "save": {
+      "button": "Zapisz Odstępy",
+      "saving": "Zapisywanie…",
+      "savedConfirmation": "Zapisano"
+    }
+  },
+  "typographyPage": {
+    "heading": "Typografia",
+    "subheading": "Wybierz czcionki i skalę dla wygenerowanych aplikacji. Czcionki są ładowane z Google Fonts.",
+    "preview": {
+      "title": "Podgląd na Żywo",
+      "headingSuffix": "— Nagłówek",
+      "bodySample": "Pchnąć w tę łódź jeża lub ośm skrzyń fig. Przykładowy tekst treści w domyślnym rozmiarze.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "Rodziny Czcionek",
+        "description": "Wybierz z Google Fonts — automatycznie uwzględnione w generowaniu kodu"
+      },
+      "weights": {
+        "title": "Grubości Czcionek"
+      },
+      "scale": {
+        "title": "Skala Rozmiaru Czcionki",
+        "description": "Kontroluje ogólny rozmiar tekstu w aplikacji"
+      }
+    },
+    "fonts": {
+      "headingFont": "Czcionka Nagłówka",
+      "bodyFont": "Czcionka Treści",
+      "monoFont": "Czcionka Mono"
+    },
+    "weights": {
+      "headingWeight": "Grubość Nagłówka",
+      "bodyWeight": "Grubość Treści"
+    },
+    "scale": {
+      "compact": { "label": "Kompaktowy", "desc": "Mniejszy tekst, ciaśniejsze odstępy" },
+      "default": { "label": "Domyślny", "desc": "Zrównoważony dla większości aplikacji" },
+      "relaxed": { "label": "Luźny", "desc": "Większy tekst, więcej przestrzeni" }
+    },
+    "save": {
+      "button": "Zapisz Typografię",
+      "saving": "Zapisywanie…",
+      "savedConfirmation": "Zapisano"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "Motyw",
+    "nav": {
+      "colours": "Kolory",
+      "typography": "Typografia",
+      "spacing": "Odstępy i Zaokrąglenie",
+      "featureFlags": "Flagi Funkcji",
+      "presets": "Ustawienia Wstępne"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "Nieaktywna Sesja",
+      "description": "Byłeś nieaktywny. Wylogowanie za:",
+      "logoutButton": "Wyloguj się",
+      "keepAliveButton": "Zachowaj Aktywność"
+    },
+    "logs": {
+      "logoutFailed": "Wylogowanie nie powiodło się:"
+    }
+  },
+  "loader": {
+    "label": "Ładowanie…"
+  },
+  "userStatus": {
+    "active": "Aktywny",
+    "needsEmailVerification": "Wymaga Weryfikacji E-mail",
+    "passwordResetRequested": "Zażądano Resetowania Hasła",
+    "blocked": "Zablokowany",
+    "disabled": "Wyłączony"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Tworzenie projektu Flutter nie powiodło się"
+    },
+    "logs": {
+      "skipped": "Pominięto tworzenie projektu Flutter: {output}",
+      "created": "Utworzono projekt Flutter: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "Tworzenie projektu NextJS nie powiodło się"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "Nie znaleziono konfiguracji bazy danych.",
+      "dbConfigMissing": "Brak konfiguracji bazy danych",
+      "dbConfigMissingStore": "Brak konfiguracji bazy danych w magazynie",
+      "adminEmailMissing": "Brak e-maila użytkownika admin",
+      "adminEmailMissingStore": "Brak e-maila użytkownika admin w magazynie",
+      "projectTypeMissing": "Brak selectedProjectType",
+      "createTablesFailed": "Nie udało się utworzyć tabel: {message}",
+      "createAdminFailed": "Nie udało się utworzyć użytkownika admin: {message}",
+      "createModelsFailed": "Nie udało się utworzyć modeli: {message}",
+      "writeConfigFailed": "Nie udało się zapisać pliku konfiguracyjnego: {message}",
+      "setupStorageFailed": "Nie udało się skonfigurować pamięci: {message}",
+      "installDemoFailed": "Nie udało się zainstalować treści demonstracyjnych: {message}",
+      "stepFailed": "Krok nie powiódł się: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "Utworzono tabele:",
+      "adminCreated": "Utworzono użytkownika admin:",
+      "modelsCreated": "Odpowiedź tworzenia modeli:",
+      "modelsSkipped": "Pominięto tworzenie modeli: {message}",
+      "configWritten": "Plik konfiguracyjny zapisany pomyślnie:",
+      "storageCreated": "Utworzono zasobniki pamięci:",
+      "demoContentSkipped": "Pominięto treść demonstracyjną",
+      "demoContentInstalled": "Zainstalowano treść demonstracyjną:",
+      "creatingApiEndpoints": "Tworzenie punktów końcowych API...",
+      "settingUpAuth": "Konfigurowanie uwierzytelniania...",
+      "configuringSession": "Konfigurowanie zarządzania sesją...",
+      "runningTests": "Uruchamianie testów...",
+      "finalizing": "Finalizowanie instalatora...",
+      "noImplementation": "Brak implementacji dla kroku: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "heading": "Konfiguracja Użytkownika Admin",
+    "description": "Podaj dane użytkownika admin, aby zabezpieczyć swój system Underpeaks. To konto będzie miało pełny dostęp administracyjny do platformy.",
+    "disclaimer": "Uwaga: powoduje to utworzenie konta admin w systemie Underpeaks, które może różnić się od konta admin bazy danych.",
+    "fields": {
+      "fullName": {
+        "label": "Imię i Nazwisko",
+        "placeholder": "np., Jan Kowalski"
+      },
+      "email": {
+        "label": "Adres E-mail",
+        "placeholder": "admin@przyklad.com"
+      },
+      "password": {
+        "label": "Hasło",
+        "placeholder": "Utwórz bezpieczne hasło"
+      }
+    },
+    "errors": {
+      "nameRequired": "Imię i nazwisko jest wymagane",
+      "emailRequired": "E-mail jest wymagany",
+      "passwordInvalid": "Hasło jest wymagane | Hasło musi mieć 8 znaków | Musi zawierać wielką literę | Musi zawierać znak specjalny (np. !@#$%^&*)"
+    },
+    "continueButton": "Kontynuuj"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "heading": "Wybierz Swój Stos Technologiczny",
+    "description": "Wybierz stos technologiczny najlepiej odpowiadający potrzebom Twojego projektu. Możesz to później zmienić, jeśli chcesz dodać więcej platform lub zmienić podejście.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "Pełne połączenie! Next.js dla sieci i Flutter dla wieloplatformowych aplikacji mobilnych i desktopowych."
+      },
+      "next": {
+        "title": "Tylko Next.js",
+        "description": "Użyj Next.js jako potężnego frameworka React SSR i <strong>jako headless CMS do zarządzania treścią i API.</strong>"
+      },
+      "flutter": {
+        "title": "Tylko Flutter",
+        "description": "Twórz wieloplatformowe aplikacje mobilne i desktopowe za pomocą Flutter, korzystając ze wspólnej bazy kodu, i <strong>używaj go jako backendu headless CMS, jeśli chcesz.</strong>"
+      },
+      "cms": {
+        "title": "Headless CMS",
+        "description": "Wdrażaj tylko jako backend headless CMS. Udostępnij swoje dane za pomocą API i połącz je z dowolnym niestandardowym frontendem, aplikacją mobilną lub usługą stron trzecich z pełną elastycznością."
+      }
+    },
+    "nextButton": "Dalej"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "heading": "Konfiguracja Bazy Danych",
+    "selectPlaceholder": "Wybierz bazę danych",
+    "fieldExample": "(np. {placeholder})",
+    "savingWarning": "⚠️ Bądź cierpliwy, to może chwilę potrwać...",
+    "infoBlock": {
+      "whereLabel": "Gdzie to znaleźć:"
+    },
+    "testSteps": {
+      "validating": "Sprawdzanie poprawności konfiguracji...",
+      "sending": "Wysyłanie konfiguracji do serwera...",
+      "testing": "Testowanie połączenia z bazą danych...",
+      "finalizing": "Finalizowanie sprawdzania połączenia..."
+    },
+    "errors": {
+      "serverRejected": "Serwer odrzucił połączenie",
+      "connectionFailed": "Połączenie Nie Powiodło Się: {message}"
+    },
+    "buttons": {
+      "testConnection": "Testuj Połączenie",
+      "testing": "Testowanie...",
+      "saving": "Zapisywanie...",
+      "continue": "Kontynuuj"
+    },
+    "logs": {
+      "firebaseParseError": "Analiza konfiguracji Firebase nie powiodła się"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "projectType": {
+      "title": "Wybierz Typ Projektu",
+      "description": "Wybierz szablon, aby automatycznie zainstalować domyślne modele dla swojego projektu."
+    },
+    "projects": {
+      "ecommerce":   { "label": "E-commerce",         "description": "Zawiera produkty, kategorie, zamówienia, klientów i strony sklepu." },
+      "marketplace": { "label": "Rynek",         "description": "Obsługuje wielu sprzedawców, ogłoszenia, prowizje i panele sprzedawców." },
+      "listing":     { "label": "Platforma Ogłoszeniowa",    "description": "Dla ogłoszeń nieruchomości, pracy lub usług z kategoriami, wyszukiwaniem i filtrami." },
+      "blog":        { "label": "Blog / Witryna Treściowa", "description": "Witryna oparta na treści z wpisami, kategoriami, tagami, autorami i komentarzami." },
+      "social":      { "label": "Sieć Społecznościowa",      "description": "Profile użytkowników, wpisy, komentarze, polubienia, obserwujący, wiadomości i powiadomienia." },
+      "saas":        { "label": "SaaS / Aplikacja Webowa",      "description": "Struktura aplikacji webowej z użytkownikami, rolami, uprawnieniami i planami subskrypcji." },
+      "blank":       { "label": "Pusty Projekt",       "description": "Bez treści demonstracyjnej; zacznij od pustego szkieletu projektu." }
+    },
+    "demoContent": {
+      "title": "Skonfiguruj Treść Demonstracyjną",
+      "description": "Podejrzyj swój sklep z już załadowanymi przykładowymi danymi.",
+      "checkboxLabel": "Uwzględnij treść demonstracyjną dla wybranego projektu",
+      "ecommerce": {
+        "item1": "Produkty demonstracyjne z kategoriami i tagami",
+        "item2": "Przykładowi klienci i zamówienia",
+        "item3": "Strony sklepu (strona główna, produkty, koszyk, kasa)",
+        "item4": "Podstawowa treść CMS",
+        "item5": "Wstępnie skonfigurowane menu i moduły"
+      }
+    },
+    "continueButtonIdle": "Kontynuuj",
+    "continueButtonLoading": "Kontynuowanie...",
+    "logs": {
+      "navigatingToFinalise": "Zapisywanie wyborów instalatora i przechodzenie do etapu finalizacji..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "installComplete": "🎉 Instalacja Zakończona!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "Informacje o Projekcie",
+      "subtitle": "Podstawowe informacje o konfiguracji Twojego projektu.",
+      "name": "Nazwa:",
+      "stack": "Stos:"
+    },
+    "database": {
+      "title": "Baza Danych",
+      "subtitle": "Wybrana baza danych i konfiguracja.",
+      "type": "Typ:",
+      "noneSelected": "Nie wybrano"
+    },
+    "adminUser": {
+      "title": "Użytkownik Admin",
+      "subtitle": "Twoje początkowe dane logowania administratora.",
+      "name": "Nazwa:",
+      "email": "E-mail:",
+      "password": "Hasło:"
+    },
+    "projectType": {
+      "title": "Wybrany Typ Projektu",
+      "subtitle": "Szablon projektu wybrany podczas konfiguracji."
+    },
+    "demoContent": {
+      "title": "Treść Demonstracyjna",
+      "subtitle": "Czy wstępnie załadować przykładowe dane sklepu.",
+      "installed": "Zainstalowano",
+      "notInstalled": "Nie Zainstalowano"
+    },
+    "continueButton": "Kontynuuj do → Logowania"
+  },
+  "ecommercePage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "card": {
+      "title": "Dostosuj swoje moduły e-commerce"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "Włącz Moduł E-commerce",
+        "description": "Dodaje katalog produktów, koszyk, kasę i zarządzanie zamówieniami."
+      },
+      "physical": {
+        "label": "Uwzględnij Produkty Fizyczne",
+        "description": "Obsługuje magazyn, wysyłkę, zwroty i śledzenie towarów materialnych."
+      },
+      "digital": {
+        "label": "Uwzględnij Produkty Cyfrowe",
+        "description": "Sprzedawaj treści do pobrania, takie jak pliki PDF, filmy lub licencje na oprogramowanie."
+      }
+    },
+    "button": {
+      "next": "Dalej",
+      "continuing": "Kontynuowanie..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "card": {
+      "title": "Sfinalizuj Konfigurację"
+    },
+    "summary": {
+      "project": "Projekt:",
+      "defaultProject": "MojaAplikacja",
+      "stack": "Stos:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "Baza Danych:",
+      "notSelected": "Nie wybrano"
+    },
+    "steps": {
+      "heading": "Kroki Instalacji:",
+      "skipped": "pominięto!"
+    },
+    "progress": {
+      "finishing": "Kończenie...",
+      "ready": "Gotowy do zainstalowania Twojego projektu"
+    },
+    "errors": {
+      "label": "Błąd:",
+      "noDatabase": "Nie wybrano bazy danych, nie można zapisać konfiguracji.",
+      "saveFailed": "Nie udało się zapisać konfiguracji instalatora",
+      "unknown": "Wystąpił nieznany błąd"
+    },
+    "button": {
+      "start": "Rozpocznij Instalację",
+      "installing": "Instalowanie..."
+    },
+    "logs": {
+      "sendingConfig": "Wysyłanie konfiguracji instalatora do serwera...",
+      "configSaved": "Konfiguracja instalatora zapisana pomyślnie",
+      "installError": "Błąd instalacji:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "heading": "Wybierz Domyślne Modele",
+    "subheading": "Wybierz domyślne modele danych, które chcesz uwzględnić w swoim projekcie. Możesz później tworzyć lub edytować modele.",
+    "required": "(wymagane)",
+    "toggleAll": {
+      "deselect": "Odznacz Wszystkie",
+      "select": "Zaznacz Wszystkie"
+    },
+    "models": {
+      "users":      { "label": "Użytkownicy",      "description": "Zarządzaj użytkownikami aplikacji i uwierzytelnianiem" },
+      "products":   { "label": "Produkty",   "description": "Katalog produktów lub usług" },
+      "orders":     { "label": "Zamówienia",     "description": "Śledź zamówienia i zakupy klientów" },
+      "coupons":    { "label": "Kupony",    "description": "Kupony rabatowe i promocje" },
+      "categories": { "label": "Kategorie", "description": "Organizuj produkty lub treści" },
+      "reviews":    { "label": "Recenzje",    "description": "Opinie i oceny użytkowników" }
+    },
+    "button": {
+      "continue": "Kontynuuj",
+      "continuing": "Kontynuowanie..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "heading": "Konfiguracja Projektu",
+    "subheading": "Wprowadź nazwę projektu, subdomenę i domenę dla swojego samodzielnie hostowanego studia.",
+    "continueButton": "Kontynuuj",
+    "fields": {
+      "name": {
+        "label": "Nazwa Projektu",
+        "placeholder": "np., MojaAplikacja Studio"
+      },
+      "domain": {
+        "label": "Domena",
+        "placeholder": "np., http://localhost:3000",
+        "hint": "Pełna domena dla Twojej aplikacji. Domyślnie jest to"
+      },
+      "subdomain": {
+        "label": "Subdomena",
+        "placeholder": "np., konsola",
+        "hint": "Zostanie to użyte dla adresu URL:"
+      }
+    },
+    "errors": {
+      "nameRequired": "Nazwa projektu jest wymagana",
+      "subdomainRequired": "Subdomena jest wymagana",
+      "domainRequired": "Domena jest wymagana"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Logo Underpeaks",
+    "tagline": "Twój Kompleksowy Instalator SaaS i Generator Kodu",
+    "continueButton": "Kontynuuj →",
+    "continueLoading": "Ładowanie...",
+    "benefits": {
+      "heading": "Dlaczego Underpeaks?",
+      "item1": "🔧 Kompletny generator bazy kodu (Next.js + Flutter)",
+      "item2": "⚙️ Koniec z kodem szablonowym – tylko kod gotowy do produkcji",
+      "item3": "🌍 Gotowy na wielojęzyczność i wielu dzierżawców",
+      "item4": "📦 Samodzielny hosting lub hosting w chmurze – Twój wybór",
+      "item5": "🔐 Wbudowane uwierzytelnianie, role, uprawnienia, interfejs instalatora",
+      "item6": "💼 Idealny dla startupów, agencji i projektów korporacyjnych"
+    },
+    "license": {
+      "heading": "Umowa Licencyjna",
+      "loading": "Ładowanie licencji...",
+      "loadFailed": "Nie udało się załadować umowy licencyjnej.",
+      "acceptLabel": "Zaakceptuj warunki licencji."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "Wymagane jest bieżące i nowe hasło",
+      "passwordTooShort": "Hasło musi mieć co najmniej 8 znaków",
+      "unauthorized": "Nieautoryzowany",
+      "invalidToken": "Nieprawidłowy token",
+      "userNotFound": "Nie znaleziono użytkownika",
+      "incorrectCurrentPassword": "Bieżące hasło jest nieprawidłowe",
+      "internalError": "Wystąpił nieoczekiwany błąd"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Zaktualizowano hasło Firebase Auth",
+      "firebasePasswordUpdateFailed": "[change-password] Aktualizacja hasła Firebase Auth nie powiodła się"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "Użytkownik admin utworzony pomyślnie"
+    },
+    "errors": {
+      "missingConfig": "Brak konfiguracji bazy danych",
+      "missingAdminUser": "Brak danych użytkownika admin",
+      "genericFailure": "Nie udało się utworzyć użytkownika admin"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "Brak konfiguracji bazy danych lub e-maila admin",
+      "adapterNotSupported": "Ten adapter bazy danych nie obsługuje tworzenia modeli danych",
+      "genericFailure": "Nie udało się wstawić modeli danych"
+    },
+    "logs": {
+      "createModelsError": "Błąd w API create-data-models:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "Brak konfiguracji/typu bazy danych",
+      "adapterNotSupported": "Adapter {type} nie implementuje konfiguracji pamięci"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "Utworzono wszystkie tabele systemowe, użytkownika i projektu"
+    },
+    "errors": {
+      "missingConfig": "Brak konfiguracji bazy danych",
+      "genericFailure": "Nie udało się utworzyć tabel"
+    },
+    "logs": {
+      "createTablesError": "[BŁĄD TWORZENIA TABEL]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Brak zmiennej środowiskowej Firebase: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "Brak projectName",
+      "flutterNotInstalled": "Flutter nie jest zainstalowany lub nie ma go w PATH.",
+      "stepFailed": "Krok nie powiódł się: Tworzenie projektu Flutter - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Projekt Flutter \"{projectName}\" już istnieje. Pominięto tworzenie.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Tworzenie Flutter nie powiodło się:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "E-mail jest wymagany",
+      "dbTypeNotSet": "Nie ustawiono NEXT_PUBLIC_DB_TYPE",
+      "firebaseClientSide": "Resetowanie hasła Firebase jest obsługiwane po stronie klienta",
+      "supabaseMissingMethod": "Adapterowi Supabase brakuje metody sendResetEmail",
+      "unsupportedDbType": "Nieobsługiwany typ bazy danych: {dbType}",
+      "adapterMissingMethods": "Adapterowi ${dbType} brakuje wymaganych metod",
+      "userNotFound": "Nie znaleziono użytkownika",
+      "genericFailure": "Nie udało się wysłać linku resetującego"
+    },
+    "notices": {
+      "smtpDisabled": "Wysyłanie e-maili jest wyłączone. Poproś administratora o zresetowanie hasła."
+    },
+    "email": {
+      "subject": "Prośba o Zresetowanie Hasła",
+      "body": "<p>Cześć {name},</p><p>Kliknij poniższy link, aby zresetować hasło:</p><a href=\"{resetLink}\">{resetLink}</a><p>Jeśli nie prosiłeś o to, zignoruj tę wiadomość e-mail.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Wysłano e-mail resetujący Supabase",
+      "resetEmailSent": "Wysłano e-mail resetujący",
+      "smtpDisabled": "SMTP/forgot-password wyłączone — pominięto e-mail",
+      "forgotPasswordError": "Błąd zapomnianego hasła:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Brak konta usługi Firebase",
+      "unsupportedDbType": "Nieobsługiwany typ bazy danych: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[BŁĄD KONFIGURACJI SYSTEMU]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "Brak konfiguracji bazy danych",
+      "missingProjectType": "Brak typu projektu",
+      "adapterNotSupported": "installDemoContent nie zostało zaimplementowane dla tego adaptera"
+    },
+    "logs": {
+      "installDemoContentError": "Błąd install-demo-content:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "Wylogowano pomyślnie"
+    },
+    "errors": {
+      "tokenRequired": "Token jest wymagany",
+      "dbTypeNotSet": "NEXT_DB_TYPE nie jest ustawiony",
+      "firebaseServiceAccountMissing": "Brak konta usługi Firebase",
+      "mysqlEnvMissing": "Brak zmiennych środowiskowych MySQL",
+      "postgresEnvMissing": "Brak zmiennych środowiskowych Postgres",
+      "unsupportedDbType": "Nieobsługiwany typ bazy danych: {dbType}",
+      "tokenNotFound": "Nie znaleziono tokenu"
+    },
+    "logs": {
+      "logoutError": "BŁĄD API WYLOGOWANIA:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id jest wymagane",
+      "unauthorized": "Nieautoryzowany",
+      "invalidToken": "Nieprawidłowy token"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder jest wymagany",
+      "internalError": "Wystąpił nieoczekiwany błąd"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] Foldery zostały pomyślnie wzbogacone o liczby plików"
+    },
+    "errors": {
+      "internalError": "Wystąpił nieoczekiwany błąd"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder, toFolder i fileName są wymagane",
+      "moveFileNotSupported": "moveFile nie jest obsługiwane",
+      "internalError": "Wystąpił nieoczekiwany błąd"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder, oldName i newName są wymagane",
+      "renameFileNotSupported": "renameFile nie jest obsługiwane",
+      "internalError": "Wystąpił nieoczekiwany błąd"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "Plik i folder są wymagane",
+      "uploadFileNotSupported": "uploadFile nie jest obsługiwane",
+      "internalError": "Przesyłanie nie powiodło się"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] tryb:",
+      "projectIdLookupFailed": "[upload-file] wyszukiwanie project_id nie powiodło się",
+      "metadataSaved": "[upload-file] metadane zapisane w nxf_storage",
+      "metadataSaveFailed": "[upload-file] zapisywanie metadanych nie powiodło się",
+      "localUploadSuccess": "[upload-file] zapisano lokalne przesyłanie:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "Nie udało się przetestować połączenia z bazą danych"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id jest wymagane",
+      "firebaseServiceAccountMissing": "Brak konta usługi Firebase",
+      "unsupportedDbType": "Nieobsługiwany typ bazy danych",
+      "systemConfigNotFound": "Nie znaleziono konfiguracji systemu",
+      "internalError": "Wewnętrzny Błąd Serwera"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "Imię i nazwisko jest wymagane",
+      "unauthorized": "Nieautoryzowany",
+      "invalidToken": "Nieprawidłowy token",
+      "internalError": "Wystąpił nieoczekiwany błąd"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id i project_name są wymagane",
+      "firebaseServiceAccountMissing": "Brak konta usługi Firebase",
+      "unsupportedDbType": "Nieobsługiwany typ bazy danych",
+      "systemConfigNotFound": "Nie znaleziono konfiguracji systemu dla tego użytkownika",
+      "internalError": "Wewnętrzny Błąd Serwera"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id jest wymagane",
+      "firebaseServiceAccountMissing": "Brak konta usługi Firebase",
+      "unsupportedDbType": "Nieobsługiwany typ bazy danych",
+      "systemConfigNotFound": "Nie znaleziono konfiguracji systemu dla tego użytkownika",
+      "internalError": "Wewnętrzny Błąd Serwera"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "Nie udało się zapisać plików konfiguracyjnych"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "Znaleziono istniejącego użytkownika uwierzytelniania:",
+      "newAuthUserCreated": "Utworzono nowego użytkownika uwierzytelniania:",
+      "creatingAdminInDb": "Tworzenie użytkownika admin w bazie danych...",
+      "userAlreadyInDb": "Użytkownik już istnieje w bazie danych:",
+      "existingProjectFound": "Znaleziono istniejący projekt:",
+      "newProjectCreated": "Utworzono nowy projekt:",
+      "existingTenantFound": "Znaleziono istniejącego dzierżawcę:",
+      "newTenantCreated": "Utworzono nowego dzierżawcę:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "Pominięto zduplikowane wykonanie CreateDataModels — ten projekt i kombinacja typu zostały już przetworzone.",
+      "creatingTable": "Tworzenie tabeli:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable nie zostało zaimplementowane, pominięto tworzenie tabeli"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "Folder Przesyłania",
+      "customFolder": "Niestandardowy folder…",
+      "enterFolderName": "Wprowadź nazwę folderu",
+      "placeholder": "np. banery/lato",
+      "uploadingTo": "Przesyłanie do:"
+    },
+    "preview": {
+      "alt": "Podgląd",
+      "uploaded": "Przesłano",
+      "replace": "Zastąp",
+      "clear": "Wyczyść plik"
+    },
+    "dropzone": {
+      "uploading": "Przesyłanie…",
+      "idle": "Przeciągnij i upuść lub",
+      "browse": "przeglądaj",
+      "recommended": "Zalecane:"
+    },
+    "errors": {
+      "noFolder": "Wybierz lub wprowadź folder przed przesłaniem.",
+      "uploadFailed": "Przesyłanie nie powiodło się",
+      "uploadFailedStatus": "Przesyłanie nie powiodło się:",
+      "networkError": "Błąd sieci"
+    }
+  },
+  "modelView": {
+    "systemBadge": "System",
+    "subtitle": "Tylko do odczytu — to jest chroniona tabela systemowa.",
+    "fieldsHeading": "Pola",
+    "actions": {
+      "back": "Powrót do modeli"
+    },
+    "stats": {
+      "fields": "Pola",
+      "created": "Utworzono",
+      "updated": "Ostatnio zaktualizowano"
+    },
+    "table": {
+      "name": "Nazwa Pola",
+      "type": "Typ",
+      "constraints": "Ograniczenia",
+      "nullable": "Wymagane",
+      "default": "Domyślne",
+      "uiType": "Typ UI"
+    },
+    "badges": {
+      "hidden": "Ukryte",
+      "required": "Wymagane",
+      "optional": "Opcjonalne"
+    },
+    "errors": {
+      "loadFailed": "Nie udało się załadować modelu.",
+      "notFound": "Nie znaleziono modelu."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "Modele",
+      "subtitle": "Zdefiniuj i zarządzaj strukturą danych swojego projektu.",
+      "createButton": "Utwórz Model"
+    },
+    "filter": {
+      "all": "Wszystkie",
+      "user": "Użytkownik",
+      "system": "System"
+    },
+    "states": {
+      "empty": "Nie znaleziono modeli.",
+      "emptyHint": "Utwórz swój pierwszy model, aby zacząć."
+    },
+    "badges": {
+      "system": "System",
+      "partialSystem": "System Edytowalny"
+    },
+    "meta": {
+      "fields": "{count} pól",
+      "foreignKeys": "{count} FK"
+    },
+    "card": {
+      "editAriaLabel": "Edytuj {name}",
+      "deleteAriaLabel": "Usuń {name}"
+    },
+    "confirmDelete": {
+      "title": "Usunąć Model?",
+      "description": "Czy na pewno chcesz usunąć \"{name}\"? Wszystkie dane w tej tabeli zostaną trwale usunięte. Tej czynności nie można cofnąć.",
+      "confirm": "Usuń",
+      "deleting": "Usuwanie…",
+      "cancel": "Anuluj"
+    },
+    "errors": {
+      "loadFailed": "Nie udało się załadować modeli.",
+      "deleteFailed": "Nie udało się usunąć modelu."
+    }
+  },
+  "createModel": {
+    "title": "Utwórz Model",
+    "subtitle": "Zdefiniuj nowy model danych i jego pola.",
+    "actions": {
+      "save": "Zapisz Model",
+      "saving": "Zapisywanie…",
+      "back": "Powrót do modeli"
+    },
+    "form": {
+      "modelNameLabel": "Nazwa Modelu",
+      "modelNamePlaceholder": "np. Produkt",
+      "fieldNamePlaceholder": "Nazwa pola",
+      "required": "Wymagane",
+      "unique": "Unikalne",
+      "primaryKey": "Klucz Główny",
+      "primaryKeyTaken": "już ustawiony",
+      "hidden": "Ukryte",
+      "uiType": "Typ UI",
+      "foreignKeyTable": "Klucz Obcy — Tabela",
+      "foreignKeyColumn": "Klucz Obcy — Kolumna",
+      "noForeignKey": "— Brak klucza obcego —",
+      "selectColumn": "— Wybierz kolumnę —",
+      "onDelete": "Przy Usuwaniu",
+      "addField": "Dodaj Pole",
+      "removeField": "Usuń pole",
+      "expandField": "Pokaż opcje zaawansowane",
+      "collapseField": "Ukryj opcje zaawansowane",
+      "foreignKey": "Klucz Obcy"
+    },
+    "validation": {
+      "modelNameRequired": "Nazwa modelu jest wymagana.",
+      "fieldsInvalid": "Wszystkie pola muszą mieć nazwę.",
+      "fieldNameUnique": "Nazwy pól muszą być unikalne.",
+      "singlePrimaryKey": "Dozwolony jest tylko jeden klucz główny na model."
+    },
+    "confirmDelete": {
+      "title": "Usunąć Pole?",
+      "description": "Czy na pewno chcesz usunąć to pole?",
+      "confirm": "Usuń",
+      "cancel": "Anuluj"
+    },
+    "errors": {
+      "createFailed": "Nie udało się utworzyć modelu."
+    }
+  },
+  "editModel": {
+    "title": "Edytuj Model",
+    "subtitle": "Zaktualizuj nazwę modelu i definicje jego pól.",
+    "actions": {
+      "save": "Zapisz Zmiany",
+      "saving": "Zapisywanie…",
+      "back": "Powrót do modeli"
+    },
+    "form": {
+      "modelNameLabel": "Nazwa Modelu",
+      "modelNamePlaceholder": "Nazwa modelu",
+      "fieldNamePlaceholder": "Nazwa pola",
+      "required": "Wymagane",
+      "unique": "Unikalne",
+      "primaryKey": "Klucz Główny",
+      "primaryKeyTaken": "już ustawiony",
+      "hidden": "Ukryte",
+      "uiType": "Typ UI",
+      "foreignKeyTable": "Klucz Obcy — Tabela",
+      "foreignKeyColumn": "Klucz Obcy — Kolumna",
+      "noForeignKey": "— Brak klucza obcego —",
+      "selectColumn": "— Wybierz kolumnę —",
+      "onDelete": "Przy Usuwaniu",
+      "addField": "Dodaj Pole",
+      "removeField": "Usuń pole",
+      "expandField": "Pokaż opcje zaawansowane",
+      "collapseField": "Ukryj opcje zaawansowane",
+      "foreignKey": "Klucz Obcy"
+    },
+    "validation": {
+      "modelNameRequired": "Nazwa modelu jest wymagana.",
+      "fieldsInvalid": "Wszystkie pola muszą mieć nazwę.",
+      "fieldNameUnique": "Nazwy pól muszą być unikalne.",
+      "singlePrimaryKey": "Dozwolony jest tylko jeden klucz główny na model."
+    },
+    "confirmDelete": {
+      "title": "Usunąć Pole?",
+      "description": "Czy na pewno chcesz usunąć to pole?",
+      "confirm": "Usuń",
+      "cancel": "Anuluj"
+    },
+    "warningDialog": {
+      "title": "Poważne Ostrzeżenie",
+      "subtitle": "Zamierzasz usunąć chronione pole.",
+      "primaryKeyWarning": "To pole jest kluczem głównym tej tabeli. Usunięcie go zerwie wszystkie relacje odwołujące się do tej tabeli i może trwale uszkodzić istniejące dane w całym Twoim projekcie.",
+      "foreignKeyWarning": "To pole jest kluczem obcym łączącym tę tabelę z inną. Usunięcie go zerwie relację i może spowodować problemy z integralnością danych dla wszelkich istniejących rekordów.",
+      "checkboxLabel": "Rozumiem, że może to trwale uszkodzić moje dane i nie można tego cofnąć.",
+      "confirm": "Usuń Mimo To",
+      "cancel": "Anuluj"
+    },
+    "errors": {
+      "loadModelFailed": "Nie udało się załadować modelu.",
+      "modelNotFound": "Nie znaleziono modelu.",
+      "updateModelFailed": "Nie udało się zaktualizować modelu."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id jest wymagane",
+      "invalidBody": "Nieprawidłowa lub pusta treść żądania",
+      "missingFields": "Brak wymaganych pól",
+      "projectNotFound": "Nie znaleziono projektu dla tego użytkownika",
+      "nameAlreadyExists": "Model o tej nazwie już istnieje",
+      "fetchFailed": "Nie udało się pobrać modeli",
+      "createFailed": "Nie udało się utworzyć modelu",
+      "updateFailed": "Nie udało się zaktualizować modelu",
+      "deleteFailed": "Nie udało się usunąć modelu",
+      "multiplePrimaryKeys": "Dozwolony jest tylko jeden klucz główny na model",
+      "systemTableProtected": "Tabel systemowych nie można tworzyć, modyfikować ani usuwać"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— Wybierz pole —",
+    "clear": "Wyczyść klucz obcy",
+    "searchPlaceholder": "Szukaj modeli…",
+    "noResults": "Nie znaleziono modeli.",
+    "systemBadge": "System",
+    "fieldsLabel": "pola",
+    "onDelete": "Przy Usuwaniu",
+    "filter": {
+      "all": "Wszystkie",
+      "user": "Użytkownik",
+      "system": "System"
+    }
+  },
+  "users": {
+    "page_title": "Użytkownicy",
+    "page_description": "Zarządzaj kontami admina i użytkowników CMS",
+    "edit_kpis": "Edytuj KPI",
+    "editing_kpis": "Edytowanie KPI",
+    "save_layout": "Zapisz układ",
+    "saving": "Zapisywanie…",
+    "search_placeholder": "Szukaj po nazwie lub e-mailu…",
+    "showing_count": "Wyświetlanie {filtered} z {total} użytkowników",
+    "no_users_found": "Nie znaleziono użytkowników",
+    "filter": "Filtruj",
+    "sort": "Sortuj",
+    "clear_all": "Wyczyść wszystko",
+    "filters": "Filtry",
+    "role": "Rola",
+    "all_roles": "Wszystkie role",
+    "all_statuses": "Wszystkie statusy",
+    "status": "Status",
+    "joined_from": "Dołączył od",
+    "joined_to": "Dołączył do",
+    "sort_by": "Sortuj według",
+    "direction": "Kierunek",
+    "asc": "Rosnąco (A → Z)",
+    "desc": "Malejąco (Z → A)",
+    "col_name": "Nazwa",
+    "col_email": "E-mail",
+    "col_role": "Rola",
+    "col_status": "Status",
+    "col_last_login": "Ostatnie logowanie",
+    "col_joined": "Dołączył",
+    "role_admin": "Admin",
+    "role_user": "Użytkownik",
+    "status_active": "Aktywny",
+    "status_suspended": "Zawieszony",
+    "status_disabled": "Wyłączony",
+    "drawer_title": "Szczegóły użytkownika",
+    "actions": "Działania",
+    "change_role": "Rola",
+    "change_status": "Status",
+    "send_reset": "Wyślij e-mail resetujący hasło",
+    "sending_reset": "Wysyłanie…",
+    "delete_user": "Usuń użytkownika",
+    "delete_confirm": "Trwale usunąć tego użytkownika? Tej czynności nie można cofnąć.",
+    "cancel": "Anuluj",
+    "confirm_delete": "Tak, usuń",
+    "deleting": "Usuwanie…",
+    "last_admin_warning": "Nie można obniżyć uprawnień — to ostatni admin",
+    "login_history": "Historia logowania",
+    "no_history": "Brak zarejestrowanej historii logowania",
+    "event_login": "Zalogowano",
+    "event_logout": "Wylogowano",
+    "event_online": "Online",
+    "event_offline": "Przeszedł offline",
+    "joined": "Dołączył",
+    "last_login": "Ostatnie logowanie",
+    "toast_role_updated": "Zaktualizowano rolę",
+    "toast_status_updated": "Zaktualizowano status",
+    "toast_user_deleted": "Usunięto użytkownika",
+    "toast_reset_sent": "Wysłano resetowanie hasła do {email}",
+    "toast_kpi_saved": "Zapisano układ KPI",
+    "toast_load_failed": "Nie udało się załadować użytkowników",
+    "toast_save_failed": "Zapisywanie nie powiodło się",
+    "kpi_add": "Dodaj KPI",
+    "kpi_add_block": "Blok",
+    "kpi_edit": "Edytuj KPI",
+    "kpi_label_required": "Etykieta jest wymagana",
+    "kpi_select_field": "Wybierz pole",
+    "kpi_select_both_fields": "Wybierz oba pola",
+    "kpi_select_field_and_value": "Wybierz pole i wprowadź wartość do porównania",
+    "kpi_max_reached": "Dozwolone maksymalnie 5 KPI",
+    "kpi_label": "Etykieta",
+    "kpi_formula": "Formuła",
+    "kpi_format": "Format wyświetlania",
+    "kpi_icon": "Ikona",
+    "kpi_accent_colour": "Kolor akcentu",
+    "kpi_field": "Pole",
+    "kpi_field_a": "Pole A",
+    "kpi_field_b": "Pole B",
+    "kpi_numerator": "Pole licznika (A)",
+    "kpi_denominator": "Pole mianownika (B)",
+    "kpi_operator": "Operator",
+    "kpi_value_to_match": "Wartość do porównania",
+    "kpi_make_wide": "Zrób szerokie",
+    "kpi_make_compact": "Zrób kompaktowe",
+    "kpi_add_to_block": "Dodaj",
+    "kpi_save": "Zapisz zmiany",
+    "kpi_cancel": "Anuluj"
+  },
+  "notFound": {
+    "title": "Nie znaleziono strony",
+    "description": "Nie możemy znaleźć strony, której szukasz. Mogła zostać przeniesiona, zmieniono jej nazwę lub nigdy nie istniała.",
+    "goHome": "Przejdź do strony głównej",
+    "backToConsole": "Powrót do konsoli",
+    "helpfulLinks": "Szukasz czegoś konkretnego?",
+    "pages": "Strony",
+    "models": "Modele",
+    "users": "Użytkownicy",
+    "settings": "Ustawienia"
+  },
+  "noModelLinked": {
+    "title": "Brak przypisanego modelu",
+    "description": "{pageName} używa szablonu {templateName}, ale nie przypisano jeszcze do niej żadnego modelu danych.",
+    "instruction": "Edytuj ustawienia strony i przypisz model, aby mogła wyświetlać dane.",
+    "openPages": "Otwórz strony",
+    "manageModels": "Zarządzaj modelami"
+  },
+  "lockedTemplate": {
+    "title": "Dostępne w planie hostowanym",
+    "description": "Szablon {templateName} jest częścią planu hostowanego. Ulepsz, aby odblokować kanban, kalendarz, kasę i inne.",
+    "upgradeButton": "Zobacz plan hostowany",
+    "backButton": "Powrót do stron"
+  },
+  "CookieBanner": {
+    "eyebrow": "PRYWATNOŚĆ",
+    "title": "Cenimy Twoją prywatność",
+    "description": "Używamy plików cookie, aby utrzymać Cię zalogowanym, zapamiętać Twój język i (za Twoją zgodą) zrozumieć, jak odwiedzający korzystają z witryny. Możesz zmienić swoje wybory w dowolnym momencie.",
+    "necessaryTitle": "Absolutnie niezbędne",
+    "necessaryDescription": "Wymagane do logowania, preferencji językowych i zapisywania Twojego wyboru dotyczącego plików cookie. Nie można ich wyłączyć.",
+    "analyticsTitle": "Analityka",
+    "analyticsDescription": "Pomagają nam zrozumieć, które strony odwiedzają ludzie i jak działa witryna. Żadne dane osobowe nie są udostępniane.",
+    "marketingTitle": "Marketing",
+    "marketingDescription": "Używane do wyświetlania odpowiednich reklam i mierzenia skuteczności kampanii w innych witrynach.",
+    "alwaysOn": "Zawsze włączone",
+    "acceptAll": "Zaakceptuj wszystkie",
+    "rejectAll": "Odrzuć wszystkie",
+    "customise": "Dostosuj",
+    "savePreferences": "Zapisz preferencje",
+    "cookiePreferences": "Preferencje plików cookie",
+    "policyLink": "Polityka prywatności"
   }
 }

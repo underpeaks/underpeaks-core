@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
-    "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "save": "Сохранить",
+    "saving": "Сохранение...",
+    "saveChanges": "Сохранить изменения",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Изменить",
+    "create": "Создать",
+    "add": "Добавить",
+    "remove": "Удалить",
+    "close": "Закрыть",
+    "confirm": "Подтвердить",
+    "back": "Назад",
+    "next": "Далее",
+    "done": "Готово",
+    "loading": "Загрузка...",
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "refresh": "Обновить",
+    "copy": "Копировать",
+    "copied": "Скопировано!",
+    "upload": "Загрузить",
+    "rename": "Переименовать",
+    "move": "Переместить",
+    "preview": "Предпросмотр",
+    "revoke": "Отозвать",
+    "generate": "Сгенерировать",
+    "reveal": "Показать",
+    "hide": "Скрыть",
+    "active": "Активен",
+    "inactive": "Неактивен",
+    "status": "Статус",
+    "actions": "Действия",
+    "name": "Имя",
+    "email": "Электронная почта",
+    "password": "Пароль",
+    "role": "Роль",
+    "createdAt": "Создано",
+    "noResults": "Результаты не найдены",
+    "error": "Произошла ошибка",
+    "success": "Успех",
+    "required": "Это поле обязательно",
+    "optional": "Необязательно",
+    "yes": "Да",
+    "no": "Нет",
+    "areYouSure": "Вы уверены?",
+    "thisActionCannotBeUndone": "Это действие невозможно отменить.",
+    "comingSoon": "Скоро появится"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
-    "menu": "Menu",
-    "media": "Media",
+    "dashboard": "Панель управления",
+    "pages": "Страницы",
+    "menu": "Меню",
+    "media": "Медиа",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "Интеграции",
+    "theming": "Тема",
+    "settings": "Настройки",
+    "account": "Аккаунт",
+    "messages": "Сообщения",
+    "notifications": "Уведомления",
+    "logout": "Выйти"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "Поиск...",
+    "notifications": "Уведомления",
+    "messages": "Сообщения",
+    "viewAccount": "Просмотреть аккаунт",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
+      "self_hosted": "Самостоятельный хостинг",
+      "hosted": "На хостинге",
       "enterprise": "Enterprise"
     }
   },
+  "nextModelGenerator": {
+    "nullJsonError": "Не удалось создать {{modelName}}Model: получен null или undefined JSON",
+    "missingRequiredField": "Отсутствует обязательное поле: {{fieldName}} в {{modelName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "Генерация кода для {{count}} модели(ей)...",
+    "modelUndefined": "Модель не определена — убедитесь, что передан корректный ModelDefinition",
+    "modelMissingName": "У модели отсутствует свойство \"name\" — у каждой модели должно быть имя",
+    "modelInvalidFields": "У модели \"{{name}}\" некорректные или отсутствующие \"fields\" — fields должен быть простым объектом",
+    "generationSuccess": "Код успешно сгенерирован для модели: {{name}}",
+    "generationFailed": "Не удалось сгенерировать код для модели: {{name}}"
+  },
+  "completeProfile": {
+    "title": "Заполните профиль",
+    "welcome": "Добро пожаловать,",
+    "loading": {
+      "checkingProfile": "Проверка вашего профиля..."
+    },
+    "subdomain": {
+      "label": "Выберите поддомен",
+      "placeholder": "yourapp",
+      "hint": "Ваше приложение будет доступно по адресу"
+    },
+    "button": {
+      "save": "Сохранить и продолжить",
+      "saving": "Сохранение..."
+    },
+    "validation": {
+      "subdomainRequired": "Введите поддомен",
+      "adapterMissingCreateTenant": "Ваш адаптер базы данных не поддерживает создание клиента"
+    },
+    "errors": {
+      "saveFailed": "Ошибка при сохранении поддомена: {{message}}",
+      "unknownError": "Произошла неизвестная ошибка"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Сброс пароля не поддерживается текущим адаптером базы данных",
+      "noAccountFound": "Учётная запись с таким адресом электронной почты не найдена."
+    }
+  },
+  "forgotPassword": {
+    "title": "Забыли пароль",
+    "description": "Введите свой адрес электронной почты, и мы отправим вам ссылку для сброса пароля.",
+    "form": {
+      "emailLabel": "Адрес электронной почты",
+      "emailPlaceholder": "you@example.com",
+      "buttonSend": "Отправить ссылку для сброса",
+      "buttonSending": "Отправка..."
+    },
+    "validation": {
+      "emailRequired": "Введите свой адрес электронной почты."
+    },
+    "errors": {
+      "firebaseConfigMissing": "Отсутствует конфигурация Firebase. Проверьте переменные окружения.",
+      "sendFailed": "Не удалось отправить ссылку для сброса. Попробуйте снова."
+    },
+    "success": {
+      "title": "Проверьте входящие сообщения",
+      "description": "Письмо для сброса пароля отправлено. Проверьте входящие и перейдите по ссылке, чтобы сбросить пароль.",
+      "button": "Вернуться ко входу"
+    },
+    "notice": {
+      "title": "Запрос отправлен",
+      "button": "ОК"
+    },
+    "error": {
+      "title": "Что-то пошло не так"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Сброс пароля не поддерживается текущим адаптером базы данных",
+      "invalidToken": "Ссылка для сброса недействительна или устарела. Запросите новую.",
+      "tokenAlreadyUsed": "Эта ссылка для сброса уже использована. Запросите новую.",
+      "tokenExpired": "Срок действия этой ссылки истёк. Запросите новую."
+    }
+  },
+  "resetPassword": {
+    "title": "Сброс пароля",
+    "form": {
+      "passwordLabel": "Новый пароль",
+      "buttonReset": "Сбросить пароль",
+      "buttonResetting": "Сброс..."
+    },
+    "errors": {
+      "invalidLink": "Ссылка для сброса недействительна или отсутствует. Запросите новую.",
+      "passwordRequired": "Введите новый пароль.",
+      "missingToken": "Отсутствует токен сброса. Используйте ссылку из письма.",
+      "resetFailed": "Не удалось сбросить пароль. Попробуйте снова."
+    },
+    "error": {
+      "title": "Что-то пошло не так"
+    },
+    "expired": {
+      "title": "Ссылка для сброса устарела",
+      "description": "Срок действия ссылки для сброса пароля истёк. Перенаправление на страницу восстановления пароля..."
+    },
+    "success": {
+      "title": "Пароль успешно сброшен",
+      "description": "Теперь вы можете",
+      "signinLink": "войти",
+      "descriptionSuffix": "с новым паролем."
+    }
+  },
+  "signIn": {
+    "heading": "Войдите в свой аккаунт Underpeaks",
+    "fields": {
+      "email": "Электронная почта",
+      "password": "Пароль"
+    },
+    "button": {
+      "signIn": "Войти",
+      "signingIn": "Вход..."
+    },
+    "links": {
+      "forgotPassword": "Забыли пароль?",
+      "noAccount": "Нет аккаунта?",
+      "signUp": "Зарегистрироваться"
+    },
+    "errors": {
+      "title": "Ошибка",
+      "signinFailed": "Не удалось войти. Проверьте свои данные и попробуйте снова."
+    }
+  },
+  "signUp": {
+    "heading": "Создайте аккаунт Underpeaks",
+    "fields": {
+      "fullName": "Полное имя",
+      "fullNamePlaceholder": "Ваше полное имя",
+      "email": "Электронная почта",
+      "emailPlaceholder": "you@example.com",
+      "password": "Пароль"
+    },
+    "button": {
+      "signUp": "Зарегистрироваться",
+      "creating": "Создание..."
+    },
+    "alerts": {
+      "errorTitle": "Ошибка",
+      "successTitle": "Успех"
+    },
+    "success": {
+      "accountCreated": "Аккаунт успешно создан!"
+    },
+    "links": {
+      "alreadyHaveAccount": "Уже есть аккаунт?",
+      "loginNow": "Войти"
+    },
+    "errors": {
+      "nameRequired": "Полное имя обязательно.",
+      "emailRequired": "Электронная почта обязательна.",
+      "passwordRequired": "Пароль обязателен.",
+      "emailInUse": "Этот адрес электронной почты уже зарегистрирован. Попробуйте войти.",
+      "invalidEmail": "Введите действительный адрес электронной почты.",
+      "weakPassword": "Пароль слишком слабый. Минимум 6 символов.",
+      "signupFailed": "Не удалось зарегистрироваться. Попробуйте снова.",
+      "supabaseSignupFailed": "Не удалось зарегистрироваться через Supabase. Попробуйте снова."
+    },
+    "console": {
+      "firebaseVerificationSent": "Письмо для подтверждения Firebase успешно отправлено.",
+      "firebaseVerificationFailed": "Не удалось отправить письмо для подтверждения Firebase.",
+      "supabaseVerificationSent": "Письмо для подтверждения Supabase успешно отправлено."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "Подтверждение электронной почты",
+      "success": "Электронная почта подтверждена ✅",
+      "error": "Не удалось подтвердить"
+    },
+    "status": {
+      "verifying": "Подтверждение вашей электронной почты...",
+      "verified": "Ваша электронная почта подтверждена.",
+      "supabaseRedirecting": "Перенаправление к настройке пароля..."
+    },
+    "button": {
+      "goToSignIn": "Перейти к входу"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] Запрос получен",
+      "verificationNotSupported": "[verify-email] Подтверждение не поддерживается для этого адаптера"
+    },
+    "errors": {
+      "missingTokenOrEmail": "Отсутствует токен или электронная почта",
+      "dbTypeNotSet": "Тип базы данных не настроен",
+      "unsupportedDbType": "Неподдерживаемый тип базы данных",
+      "sqlAdapterMissingMethods": "У SQL-адаптера отсутствуют необходимые методы",
+      "firebaseAdapterMissingMethods": "У адаптера Firebase отсутствуют необходимые методы",
+      "invalidToken": "Недействительный токен",
+      "tokenExpired": "Токен истёк",
+      "userNotFound": "Пользователь не найден",
+      "verificationNotSupported": "Подтверждение не поддерживается для этого адаптера",
+      "verificationFailed": "Не удалось подтвердить"
+    }
+  },
+  "schemaPreview": {
+    "title": "Предпросмотр схемы",
+    "columns": {
+      "field": "Поле",
+      "type": "Тип"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "Подтвердить действие",
+      "description": "Вы уверены, что хотите продолжить?"
+    },
+    "buttons": {
+      "confirm": "Подтвердить",
+      "cancel": "Отмена"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "Бизнес",
+      "content": "Контент",
+      "assets": "Ресурсы",
+      "configuration": "Конфигурация"
+    },
+    "items": {
+      "dashboard": "Панель управления",
+      "products": "Товары",
+      "categories": "Категории",
+      "orders": "Заказы",
+      "coupons": "Купоны",
+      "users": "Пользователи",
+      "shipping": "Доставка",
+      "services": "Услуги",
+      "sharedModels": "Общие модели",
+      "menu": "Меню",
+      "pages": "Страницы",
+      "theme": "Тема",
+      "storage": "Хранилище",
+      "integrations": "Интеграции",
+      "apisAndWebhooks": "API и вебхуки"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "Сообщения",
+      "unreadCount": "{count} непрочитанных"
+    },
+    "empty": "Пока нет сообщений",
+    "viewAll": "Показать все сообщения",
+    "unreadBadge": "{count} непрочитанных",
+    "systemInitials": "SY",
+    "fallbackUser": "Пользователь"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "Уведомления",
+      "unreadCount": "{count} непрочитанных",
+      "markAllRead": "Отметить все как прочитанные"
+    },
+    "empty": "Пока нет уведомлений",
+    "viewAll": "Показать все уведомления"
+  },
+  "previewSchema": {
+    "fieldsHeading": "Поля",
+    "fieldNamePlaceholder": "Имя поля",
+    "requiredLabel": "Обязательно",
+    "removeButton": "Удалить",
+    "saveButton": "Сохранить",
+    "previewButton": "Предпросмотр",
+    "hidePreviewButton": "Скрыть предпросмотр",
+    "addFieldButton": "Добавить поле",
+    "types": {
+      "string": "строка",
+      "num": "число",
+      "boolean": "логическое",
+      "datetime": "дата/время",
+      "array": "массив",
+      "map": "карта",
+      "null": "null"
+    },
+    "aria": {
+      "fieldName": "Имя поля {{index}}",
+      "fieldType": "Тип поля {{index}}",
+      "elementType": "Тип элемента поля {{index}}",
+      "required": "Поле {{index}} обязательно",
+      "removeField": "Удалить поле {{index}}"
+    }
+  },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "Выход…",
+    "footer": {
+      "settings": "Настройки",
+      "logout": "Выйти",
+      "collapse": "Свернуть боковую панель",
+      "expand": "Развернуть боковую панель",
+      "business": "Бизнес",
+      "developer": "Разработчик",
+      "design": "Дизайн",
+      "system": "Система"
+    },
+    "aria": {
+      "sidebar": "Навигация консоли",
+      "navigation": "Основная навигация",
+      "expandSidebar": "Развернуть боковую панель",
+      "collapseSidebar": "Свернуть боковую панель"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "Логотип проекта",
+    "projectLabel": "Проект:",
+    "signIn": "Войти",
+    "register": "Зарегистрироваться",
+    "aria": {
+      "navbar": "Верхняя панель навигации",
+      "goToDashboard": "Перейти к панели управления"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "Меню пользователя для {name}"
+    },
+    "menu": {
+      "account": "Аккаунт",
+      "settings": "Настройки",
+      "helpAndDocs": "Справка и документация",
+      "logout": "Выйти"
+    }
+  },
+  "accountPage": {
+    "title": "Аккаунт",
+    "subtitle": "Управляйте профилем и безопасностью.",
+    "profile": {
+      "title": "Профиль",
+      "description": "Обновите отображаемое имя.",
+      "fullNameLabel": "Полное имя",
+      "fullNamePlaceholder": "Ваше полное имя",
+      "emailLabel": "Адрес электронной почты",
+      "emailReadOnlyNote": "Электронная почта управляется вашим провайдером аутентификации и не может быть изменена здесь.",
+      "saveButton": "Сохранить изменения",
+      "savingButton": "Сохранение…",
+      "savedButton": "Сохранено"
+    },
+    "danger": {
+      "title": "Опасная зона",
+      "description": "Необратимые действия. Продолжайте с осторожностью.",
+      "cancelTitle": "Отменить подписку",
+      "cancelDescription": "Ваш план останется активным до конца текущего расчётного периода, после чего перейдёт на самостоятельный хостинг.",
+      "cancelButton": "Отменить план",
+      "cancelModalBody": "Ваша подписка будет отменена, но вы сохраните доступ до конца текущего расчётного периода. Это действие невозможно отменить.",
+      "resetTitle": "Сбросить проект",
+      "resetDescription": "Безвозвратно удаляет весь контент проекта и заново запускает процесс адаптации. Ваш аккаунт сохраняется.",
+      "resetButton": "Сбросить проект",
+      "resetModalBody": "Это безвозвратно удалит весь контент вашего проекта — модели, страницы, данные и медиа. Ваш аккаунт и данные биллинга сохраняются. Это действие невозможно отменить.",
+      "deleteTitle": "Удалить аккаунт",
+      "deleteDescription": "Безвозвратно удаляет ваш аккаунт и все связанные данные.",
+      "deleteButton": "Удалить аккаунт",
+      "deleteModalBody": "Это безвозвратно удалит ваш аккаунт и весь контент. Данные биллинга сохраняются, если это требуется по закону. Это действие невозможно отменить."
+    },
+    "password": {
+      "title": "Изменить пароль",
+      "description": "Используйте надёжный пароль, который вы не используете в других местах.",
+      "currentLabel": "Текущий пароль",
+      "newLabel": "Новый пароль",
+      "confirmLabel": "Подтвердите новый пароль",
+      "showPassword": "Показать пароль",
+      "hidePassword": "Скрыть пароль",
+      "minLengthHint": "Минимум 8 символов",
+      "mismatchHint": "Пароли не совпадают",
+      "updateButton": "Обновить пароль",
+      "updatingButton": "Обновление…",
+      "updatedButton": "Обновлено"
+    },
+    "billing": {
+      "title": "Биллинг и план",
+      "description": "Ваш текущий план и варианты обновления.",
+      "selfHostedDescription": "Основные функции включены. Обновите для получения интеграций, расширенной аутентификации и white-label.",
+      "paidDescription": "Все функции разблокированы.",
+      "upgradeButton": "Обновить",
+      "upgradeAriaLabel": "Обновить до Underpeaks Pro",
+      "proFeaturesTitle": "Что вы получаете с Pro",
+      "proFeature1": "Интеграции (Stripe, Mailchimp и другие)",
+      "proFeature2": "Расширенная аутентификация — 2FA, вход через соцсети, magic link, SSO",
+      "proFeature3": "White-label CMS с вашим собственным брендом",
+      "proFeature4": "Собственный домен для вашей консоли",
+      "contactSalesButton": "Связаться с отделом продаж"
+    },
+    "errors": {
+      "profileUpdateFailed": "Не удалось обновить профиль. Попробуйте снова.",
+      "passwordUpdateFailed": "Не удалось обновить пароль. Попробуйте снова."
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "Универсальные эндпоинты, автоматически сгенерированные из ваших моделей",
+    "customEndpointButton": "Пользовательский эндпоинт",
+    "tabsLabel": "Вкладки страницы API",
+    "copy": "Скопировать в буфер обмена",
+    "copied": "Скопировано!",
+    "tabs": {
+      "endpoints": "Эндпоинты",
+      "keys": "API-ключи",
+      "reference": "Справка"
+    },
+    "endpoints": {
+      "searchPlaceholder": "Поиск эндпоинтов…",
+      "typeFilterLabel": "Фильтр по типу эндпоинта",
+      "modelFilterLabel": "Фильтр по модели",
+      "type": {
+        "all": "все",
+        "auto": "авто",
+        "custom": "пользовательский"
+      },
+      "colMethod": "Метод",
+      "colPath": "Путь",
+      "colDescription": "Описание",
+      "colActions": "Действия",
+      "noResults": "Нет эндпоинтов, соответствующих вашему фильтру",
+      "customBadge": "Пользовательский",
+      "requiresAuth": "Требуется аутентификация",
+      "public": "Публичный эндпоинт",
+      "testButton": "Тест",
+      "exampleRequest": "Пример запроса",
+      "requiredHeaders": "Обязательные заголовки",
+      "testLabel": "Тест",
+      "sendRequest": "Отправить запрос",
+      "running": "Выполняется…"
+    },
+    "drawer": {
+      "title": "Новый пользовательский эндпоинт",
+      "subtitle": "Напишите бизнес-логику, вызывающую универсальный API",
+      "close": "Закрыть панель",
+      "methodLabel": "Метод",
+      "pathLabel": "Путь",
+      "descriptionLabel": "Описание",
+      "descriptionPlaceholder": "Что делает этот эндпоинт?",
+      "authLabel": "Аутентификация",
+      "authRequired": "Требуется",
+      "authPublic": "Публичный",
+      "codeLabel": "Код обработчика",
+      "cancelButton": "Отмена",
+      "createButton": "Создать эндпоинт"
+    },
+    "keys": {
+      "title": "API-ключи",
+      "keepSecret": "Держите их в секрете",
+      "createTitle": "Создать новый ключ",
+      "nameLabel": "Название ключа",
+      "namePlaceholder": "Название ключа, напр. Мобильное приложение",
+      "generateButton": "Сгенерировать",
+      "active": "Активен",
+      "inactive": "Неактивен",
+      "never": "Никогда",
+      "created": "Создан",
+      "lastUsed": "Последнее использование",
+      "revealKey": "Показать API-ключ",
+      "hideKey": "Скрыть API-ключ",
+      "deleteKey": "Удалить ключ {{name}}",
+      "confirmDelete": "Подтвердить удаление",
+      "cancelDelete": "Отменить удаление"
+    },
+    "reference": {
+      "queryParamsTitle": "Параметры запроса",
+      "queryParamsSubtitle": "Доступно для всех эндпоинтов GET",
+      "operatorsTitle": "Операторы фильтрации",
+      "operatorsSubtitle": "Использовать с",
+      "operatorsFormat": "параметром в формате",
+      "exampleTitle": "Полный пример",
+      "exampleDescription": "Получить активные товары дешевле 500 руб., отсортированные по цене, возвращая только id/name/price:",
+      "responseLabel": "Ответ:"
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "Панель управления",
+    "welcome": "С возвращением, {name}",
+    "addWidget": "Добавить виджет",
+    "editLayout": "Изменить макет",
+    "saveLayout": "Сохранить макет",
+    "resetLayout": "Сбросить макет",
+    "toolbar": {
+      "title": "Панель управления",
+      "subtitle": "Перетаскивайте виджеты для изменения порядка · наведите курсор для редактирования",
+      "refresh": "Обновить",
+      "last30Days": "Последние 30 дней",
+      "addWidget": "Добавить виджет"
+    },
+    "grid": {
+      "addWidget": "Добавить виджет"
+    },
+    "addPanel": {
+      "title": "Добавить виджет",
+      "subtitle": "Нажмите, чтобы добавить на панель управления"
+    },
+    "widget": {
+      "dragToReorder": "Перетащите для изменения порядка",
+      "vsLastPeriod": "по сравнению с прошлым периодом"
+    },
+    "chart": {
+      "day": "День",
+      "daysAgo": "30 дней назад",
+      "today": "Сегодня"
+    },
+    "formula": {
+      "placeholder": "напр. SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "Готовые шаблоны"
+    }
   },
   "media": {
-    "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "title": "Медиа",
+    "uploadFiles": "Загрузить файлы",
+    "createFolder": "Создать папку",
+    "folderName": "Название папки",
+    "rootFolder": "Корень",
+    "noFiles": "В этой папке нет файлов",
+    "dropToUpload": "Перетащите файлы сюда для загрузки",
+    "orClickToUpload": "или нажмите для просмотра",
+    "gridView": "Вид сетки",
+    "listView": "Вид списка",
+    "fileSize": "Размер файла",
+    "fileType": "Тип файла",
+    "uploadedAt": "Загружено",
+    "deleteFileConfirm": "Вы уверены, что хотите удалить «{name}»?",
+    "deleteFolderConfirm": "Вы уверены, что хотите удалить папку «{name}» и всё её содержимое?",
+    "importFromUrl": "Импорт по URL",
+    "copyUrl": "Копировать URL",
+    "urlCopied": "URL скопирован в буфер обмена",
+    "details": "Сведения о файле",
+    "selectFile": "Выберите файл, чтобы увидеть сведения"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Настройки",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "Обзор",
+      "projectName": "Название проекта",
+      "projectUrl": "URL проекта",
+      "projectId": "ID проекта",
+      "dbType": "Тип базы данных",
+      "environment": "Среда",
+      "deploymentType": "Тип развёртывания",
+      "savedSuccess": "Настройки успешно сохранены"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "API-ключи",
+      "subheading": "Управляйте ключами, используемыми для аутентификации API-запросов от ваших приложений.",
+      "title": "API-ключи",
+      "description": "Управляйте API-ключами для программного доступа к вашему проекту.",
+      "generateKey": "Сгенерировать новый ключ",
+      "keyName": "Название",
+      "keyPrefix": "Префикс ключа",
+      "lastUsed": "Последнее использование",
+      "neverUsed": "Не использовался",
+      "revokeConfirm": "Вы уверены, что хотите отозвать «{name}»? Это действие невозможно отменить.",
+      "revoked": "Отозван",
+      "keyCopied": "Ключ скопирован в буфер обмена",
+      "newKeyGenerated": "Сгенерирован новый API-ключ. Скопируйте его сейчас — он больше не будет показан.",
+      "noKeys": "Пока нет API-ключей. Сгенерируйте один, чтобы начать.",
+      "sectionTitle": "Активные ключи",
+      "createdDate": "Создан {{date}}",
+      "lastUsedDate": "Последнее использование {{date}}",
+      "hideKey": "Скрыть ключ",
+      "revealKey": "Показать ключ",
+      "copyKey": "Копировать ключ",
+      "revoke": "Отозвать",
+      "emptyTitle": "Пока нет API-ключей",
+      "emptySubtitle": "Сгенерируйте ключ ниже, чтобы начать."
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
-      "logo": "Logo",
-      "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "title": "Брендинг",
+      "description": "Настройте внешний вид вашей консоли Underpeaks.",
+      "logo": "Логотип",
+      "favicon": "Фавикон",
+      "primaryColor": "Основной цвет",
+      "uploadLogo": "Загрузить логотип",
+      "uploadFavicon": "Загрузить фавикон",
+      "logoHint": "Рекомендуется: 200×50px, PNG или SVG с прозрачным фоном.",
+      "faviconHint": "Рекомендуется: 32×32px ICO, PNG или SVG.",
+      "livePreview": "Предпросмотр в реальном времени",
+      "brandingSaved": "Брендинг успешно обновлён"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
-      "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "host": "SMTP-хост",
+      "port": "Порт",
+      "username": "Имя пользователя",
+      "fromEmail": "Электронная почта отправителя",
+      "fromName": "Имя отправителя",
+      "encryption": "Шифрование",
+      "testEmail": "Отправить тестовое письмо",
+      "testEmailSuccess": "Тестовое письмо успешно отправлено"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "Домены",
+      "addDomain": "Добавить домен",
+      "verified": "Подтверждён",
+      "unverified": "Не подтверждён",
+      "primary": "Основной",
+      "setPrimary": "Сделать основным"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "Аккаунт",
+    "fullName": "Полное имя",
+    "emailReadOnly": "Адрес электронной почты (только для чтения)",
+    "changePassword": "Изменить пароль",
+    "currentPassword": "Текущий пароль",
+    "newPassword": "Новый пароль",
+    "confirmPassword": "Подтвердите новый пароль",
+    "passwordsDoNotMatch": "Пароли не совпадают",
+    "profileUpdated": "Профиль успешно обновлён",
+    "passwordChanged": "Пароль успешно изменён",
+    "memberSince": "Участник с {date}"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
-    "system": "System"
+    "title": "Сообщения",
+    "newConversation": "Новый разговор",
+    "noConversations": "Пока нет разговоров",
+    "noMessages": "В этом разговоре нет сообщений",
+    "typeMessage": "Введите сообщение...",
+    "send": "Отправить",
+    "markAllRead": "Отметить все как прочитанные",
+    "reply": "Ответить",
+    "you": "Вы",
+    "system": "Система"
+  },
+  "apiKeys": {
+    "heading": "API-ключи",
+    "subheading": "Управляйте ключами, используемыми для аутентификации API-запросов от ваших приложений.",
+    "sectionTitle": "Активные ключи",
+    "createdDate": "Создан {date}",
+    "lastUsedDate": "Последнее использование {date}",
+    "neverUsed": "Не использовался",
+    "hideKey": "Скрыть ключ",
+    "revealKey": "Показать ключ",
+    "copyKey": "Копировать ключ",
+    "revoke": "Отозвать",
+    "emptyTitle": "Пока нет API-ключей",
+    "emptySubtitle": "Сгенерируйте ключ ниже, чтобы начать.",
+    "errors": {
+      "loadFailed": "Не удалось загрузить API-ключи",
+      "generateFailed": "Не удалось сгенерировать ключ",
+      "revokeFailed": "Не удалось отозвать ключ"
+    }
   },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "Уведомления",
+    "noNotifications": "Нет уведомлений",
+    "noUnread": "Вы всё просмотрели!",
+    "markAllRead": "Отметить все как прочитанные",
+    "viewAll": "Показать все уведомления",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
-      "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "all": "Все",
+      "unread": "Непрочитанные",
+      "comment": "Комментарии",
+      "system": "Система",
+      "payment": "Платежи",
+      "security": "Безопасность",
+      "message": "Сообщения"
     },
     "priority": {
-      "low": "Low",
-      "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "low": "Низкий",
+      "normal": "Обычный",
+      "high": "Высокий",
+      "urgent": "Срочный"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "Войти",
+    "logout": "Выйти",
+    "email": "Адрес электронной почты",
+    "password": "Пароль",
+    "forgotPassword": "Забыли пароль?",
+    "resetPassword": "Сбросить пароль",
+    "sessionExpired": "Ваша сессия истекла. Пожалуйста, войдите снова.",
+    "idleWarning": "Вы бездействовали некоторое время.",
+    "idleLogoutIn": "Вы будете выйдены через {seconds} секунд.",
+    "stayLoggedIn": "Оставаться в системе"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "Страница не найдена",
+    "serverError": "Ошибка сервера",
+    "networkError": "Ошибка сети — проверьте подключение",
+    "sessionError": "Ошибка сессии — войдите снова",
+    "unknown": "Произошла непредвиденная ошибка"
+  },
+  "grid": {
+    "addWidget": "Добавить виджет"
+  },
+  "addPanel": {
+    "title": "Добавить виджет",
+    "subtitle": "Нажмите, чтобы добавить на панель управления"
+  },
+  "widget": {
+    "dragToReorder": "Перетащите для изменения порядка",
+    "vsLastPeriod": "по сравнению с прошлым периодом"
+  },
+  "chart": {
+    "day": "День",
+    "daysAgo": "30 дней назад",
+    "today": "Сегодня"
+  },
+  "formula": {
+    "placeholder": "напр. SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "Готовые шаблоны"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Центр помощи",
+      "subtitle": "Найдите ответы, прочитайте документацию или свяжитесь с нами.",
+      "searchPlaceholder": "Поиск в частых вопросах…"
+    },
+    "resources": {
+      "title": "Ресурсы",
+      "links": {
+        "gettingStarted": {
+          "label": "Начало работы",
+          "description": "Настройте свой первый проект за считанные минуты."
+        },
+        "apiReference": {
+          "label": "Справочник по API",
+          "description": "Полный справочник по всем эндпоинтам и операторам API."
+        },
+        "community": {
+          "label": "Форум сообщества",
+          "description": "Задавайте вопросы и делитесь проектами с сообществом."
+        }
+      }
+    },
+    "faq": {
+      "title": "Часто задаваемые вопросы",
+      "resultCount": "{count} результат(ов)",
+      "noResults": "Нет результатов по запросу «{query}»",
+      "noResultsHint": "Попробуйте другой поисковый запрос или свяжитесь со службой поддержки ниже."
+    },
+    "api": {
+      "title": "Краткий справочник API",
+      "baseUrl": "Базовый URL:",
+      "endpoints": {
+        "get": "Выводит все записи модели. Поддерживает фильтрацию, сортировку, пагинацию.",
+        "post": "Создаёт новую запись.",
+        "put": "Обновляет существующую запись по ID.",
+        "delete": "Удаляет запись по ID."
+      },
+      "operators": {
+        "title": "Операторы запросов",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "Связаться со службой поддержки",
+      "submit": "Отправить сообщение",
+      "success": {
+        "title": "Сообщение отправлено!",
+        "subtitle": "Мы ответим вам как можно скорее."
+      },
+      "fields": {
+        "name": "Имя",
+        "namePlaceholder": "Иван Иванов",
+        "email": "Электронная почта",
+        "emailPlaceholder": "you@example.com",
+        "message": "Сообщение",
+        "messagePlaceholder": "Опишите вашу проблему или вопрос…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "Интеграции",
+      "connectedCount": "{count} подключено",
+      "errorCount": "{count} ошибка(ок)",
+      "infoBanner": "Подключённые интеграции доступны в пользовательских эндпоинтах и при генерации кода"
+    },
+    "categories": {
+      "all": "Все",
+      "payments": "Платежи",
+      "email": "Электронная почта и SMS",
+      "storage": "Хранилище",
+      "ai": "ИИ",
+      "analytics": "Аналитика",
+      "automation": "Автоматизация"
+    },
+    "status": {
+      "connected": "Подключено",
+      "disconnected": "Отключено",
+      "error": "Ошибка"
+    },
+    "card": {
+      "viewDocs": "Просмотреть документацию",
+      "buttons": {
+        "saveAndConnect": "Сохранить и подключить",
+        "saving": "Сохранение…",
+        "saved": "Сохранено!",
+        "disconnect": "Отключить",
+        "retryConnection": "Повторить подключение"
+      }
+    },
+    "empty": "В этой категории нет интеграций"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "Меню",
+      "subtitle": "{count} элемент(ов) · перетащите для изменения порядка",
+      "addItem": "Добавить элемент"
+    },
+    "preview": {
+      "title": "Предпросмотр навигации",
+      "subtitle": "Только видимые элементы",
+      "empty": "Пока нет видимых элементов."
+    },
+    "list": {
+      "title": "Все элементы",
+      "empty": "Пока нет элементов меню",
+      "emptyAction": "Добавьте свой первый элемент"
+    },
+    "row": {
+      "hidden": "скрыт",
+      "external": "Внешний",
+      "actions": {
+        "moveUp": "Переместить вверх",
+        "moveDown": "Переместить вниз",
+        "toggleVisibility": "Переключить видимость",
+        "edit": "Изменить",
+        "delete": "Удалить",
+        "confirmDelete": "Подтвердить удаление",
+        "cancelDelete": "Отмена"
+      }
+    },
+    "errors": {
+      "loadFailed": "Не удалось загрузить элементы меню",
+      "createFailed": "Не удалось создать элемент меню",
+      "updateFailed": "Не удалось обновить элемент меню",
+      "deleteFailed": "Не удалось удалить элемент меню"
+    },
+    "drawer": {
+      "titleAdd": "Добавить элемент меню",
+      "titleEdit": "Изменить элемент меню",
+      "subtitle": "Настройте название, ссылку, значок и видимость",
+      "sections": {
+        "labelVisibility": "Название и видимость",
+        "link": "Ссылка",
+        "icon": "Значок",
+        "nesting": "Вложенность",
+        "preview": "Предпросмотр"
+      },
+      "fields": {
+        "pageRequired": "Перед сохранением элемента меню необходимо выбрать страницу.",
+        "menuLabel": "Название меню",
+        "menuLabelPlaceholder": "напр. Товары",
+        "menuLabelHint": "Это текст, который отображается в меню навигации.",
+        "visibility": "Видимость",
+        "visible": "Видимый",
+        "hidden": "Скрытый",
+        "linkTypePage": "Страница",
+        "linkTypeExternal": "Внешний URL",
+        "selectPage": "Выбрать страницу",
+        "selectPagePlaceholder": "— Выберите страницу —",
+        "noPagesHint": "Административные страницы не найдены. Сначала создайте страницу с типом «Admin».",
+        "externalUrl": "Внешний URL",
+        "openIn": "Открыть в",
+        "sameTab": "Той же вкладке",
+        "newTab": "Новой вкладке",
+        "parentItem": "Родительский элемент",
+        "parentItemPlaceholder": "— Верхний уровень —",
+        "parentItemHint": "Вложенные элементы отображаются в навигации как выпадающие подпункты."
+      },
+      "icons": {
+        "home": "Главная",
+        "grid": "Сетка",
+        "package": "Пакет",
+        "users": "Пользователи",
+        "settings": "Настройки",
+        "file": "Файл",
+        "cart": "Корзина",
+        "mail": "Почта",
+        "star": "Звезда",
+        "info": "Информация"
+      },
+      "preview": {
+        "hidden": "скрыт"
+      },
+      "buttons": {
+        "cancel": "Отмена",
+        "saveChanges": "Сохранить изменения",
+        "addItem": "Добавить элемент",
+        "saving": "Сохранение…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "URL файла",
+      "metadata": "Метаданные",
+      "rename": "Переименовать",
+      "moveToFolder": "Переместить в папку"
+    },
+    "altText": {
+      "placeholder": "Опишите это изображение для доступности…",
+      "empty": "Альтернативный текст не задан"
+    },
+    "metadata": {
+      "folder": "Папка",
+      "path": "Путь",
+      "size": "Размер",
+      "type": "Тип",
+      "uploaded": "Загружено",
+      "dimensions": "Размеры"
+    },
+    "actions": {
+      "save": "Сохранить",
+      "saving": "Сохранение…",
+      "cancel": "Отмена",
+      "move": "Переместить",
+      "moving": "Перемещение…",
+      "deleteFile": "Удалить файл"
+    },
+    "move": {
+      "currentlyIn": "Текущее расположение:"
+    },
+    "errors": {
+      "renameFailed": "Не удалось переименовать",
+      "moveFailed": "Не удалось переместить"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "Отсутствует обязательное поле: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "Папки",
+      "all": "Все",
+      "newFolderTitle": "Новая папка",
+      "collapse": "Свернуть",
+      "expand": "Развернуть"
+    },
+    "folder": {
+      "selectTitle": "Выбрать папку"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "Удалить папку",
+      "fileCount": "{count} файлов"
+    },
+    "empty": {
+      "message": "Эта папка пуста"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "Эта папка пуста"
+    },
+    "header": {
+      "name": "Название",
+      "size": "Размер",
+      "type": "Тип",
+      "uploaded": "Загружено"
+    },
+    "row": {
+      "deleteTitle": "Удалить файл"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "Медиа"
+    },
+    "actions": {
+      "delete": "Удалить ({count})",
+      "clear": "Очистить",
+      "upload": "Загрузить"
+    },
+    "viewMode": {
+      "grid": "Вид сетки",
+      "list": "Вид списка"
+    }
+  },
+  "newFolderPopup": {
+    "title": "Новая папка",
+    "placeholder": "Название папки",
+    "buttons": {
+      "create": "Создать",
+      "cancel": "Отмена"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "Загрузите файлы или импортируйте медиа по URL в выбранную папку.",
+    "title": "Добавить медиа",
+    "tabs": {
+      "upload": "Загрузить файл",
+      "url": "Добавить по URL"
+    },
+    "uploadZone": {
+      "hint": "Любой тип файла — изображения, видео, документы"
+    },
+    "urlTab": {
+      "description": "Вставьте публичный URL, чтобы импортировать файл напрямую в хранилище.",
+      "placeholder": "https://example.com/file.jpg",
+      "import": "Импортировать",
+      "importing": "Импорт…",
+      "previewAlt": "Предпросмотр URL"
+    },
+    "errors": {
+      "importFailed": "Не удалось импортировать"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "Не удалось загрузить папки",
+      "loadFiles": "Не удалось загрузить файлы",
+      "createFolder": "Не удалось создать папку",
+      "deleteFailed": "Не удалось удалить"
+    },
+    "confirmDelete": {
+      "titleFolder": "Удалить папку",
+      "titleFile": "Удалить файл",
+      "message": "Вы уверены, что хотите удалить",
+      "folderWarning": "Это удалит все файлы внутри папки.",
+      "undoWarning": "Это действие невозможно отменить.",
+      "selectionLabel": "{count} элементов",
+      "cancel": "Отмена",
+      "confirm": "Удалить",
+      "deleting": "Удаление…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "Нет сообщений",
+      "subUnread": "Всё просмотрено!",
+      "subAll": "Ваши входящие пусты."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "только что",
+      "minutesAgo": "{count} мин назад",
+      "hoursAgo": "{count} ч назад",
+      "daysAgo": "{count} дн назад"
+    },
+    "unread": {
+      "badge": "{count} непрочитанных"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "Системное сообщение",
+    "from": "От: {name}",
+    "deleteButton": "Удалить",
+    "deleteAriaLabel": "Удалить разговор: {subject}",
+    "messagesAriaLabel": "Цепочка сообщений",
+    "loading": "Загрузка сообщений...",
+    "emptyTitle": "Пока нет сообщений",
+    "emptySub": "Отправьте первое сообщение ниже."
+  },
+  "messageBubble": {
+    "justNow": "Только что",
+    "minutesAgo": "{count} мин назад",
+    "hoursAgo": "{count} ч назад",
+    "daysAgo": "{count} дн назад"
+  },
+  "replyBar": {
+    "placeholder": "Введите ответ… (Enter для отправки)",
+    "sendAriaLabel": "Отправить сообщение"
+  },
+  "messagesPage": {
+    "title": "Сообщения",
+    "unreadCount": "{count} непрочитанных сообщений",
+    "filters": {
+      "all": "Все",
+      "unread": "Непрочитанные"
+    },
+    "markAllRead": "Отметить все как прочитанные",
+    "closeError": "Закрыть сообщение об ошибке",
+    "empty": {
+      "title": "Выберите разговор",
+      "sub": "Выберите разговор из списка, чтобы прочитать его здесь."
+    },
+    "errors": {
+      "load": "Не удалось загрузить сообщения",
+      "delete": "Не удалось удалить разговор",
+      "markAll": "Не удалось отметить все как прочитанные"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "Срочно",
+      "high": "Высокий"
+    },
+    "actions": {
+      "markRead": "Отметить как прочитанное",
+      "view": "Просмотреть",
+      "delete": "Удалить"
+    }
+  },
+  "notificationsHeader": {
+    "title": "Уведомления",
+    "unreadCount": "{count} непрочитанных уведомлений",
+    "filters": {
+      "all": "Все",
+      "unread": "Непрочитанные"
+    },
+    "markAllRead": "Отметить все как прочитанные"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "Нет уведомлений",
+      "subUnread": "Всё просмотрено!",
+      "subAll": "У вас пока нет уведомлений."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "Не удалось загрузить уведомления",
+      "markReadFailed": "Не удалось отметить как прочитанное",
+      "markAllReadFailed": "Не удалось отметить все как прочитанные",
+      "deleteFailed": "Не удалось удалить уведомление"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "Публичная",
+      "admin": "Администратор",
+      "draft": "Черновик",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "Страницы",
+      "pageCount": "Всего {count} страниц(ы)",
+      "searchPlaceholder": "Поиск страниц…",
+      "newPage": "Новая страница"
+    },
+    "filter": {
+      "all": "Все"
+    },
+    "table": {
+      "page": "Страница",
+      "model": "Модель",
+      "template": "Шаблон",
+      "visibility": "Видимость",
+      "actions": "Действия",
+      "seoPrefix": "SEO",
+      "systemBadge": "Система",
+      "hiddenBadge": "Скрыта"
+    },
+    "emptyState": {
+      "message": "Страницы не найдены",
+      "cta": "Создайте свою первую страницу"
+    },
+    "actions": {
+      "edit": "Изменить страницу",
+      "delete": "Удалить страницу",
+      "view": "Просмотреть страницу",
+      "confirmDelete": "Подтвердить удаление",
+      "cancel": "Отмена",
+      "systemLocked": "Системные страницы нельзя изменять или удалять"
+    },
+    "errors": {
+      "loadFailed": "Не удалось загрузить страницы",
+      "createFailed": "Не удалось создать страницу",
+      "updateFailed": "Не удалось обновить страницу",
+      "deleteFailed": "Не удалось удалить страницу"
+    },
+    "drawer": {
+      "title": "Создать страницу",
+      "editTitle": "Изменить страницу",
+      "subtitle": "Определите новую страницу и прикрепите модель",
+      "sections": {
+        "basicInfo": "Основная информация",
+        "modelTemplate": "Модель и шаблон",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "Скрыть страницу",
+          "hint": "Скрытые страницы не отображаются в навигации или карте сайта"
+        },
+        "name": {
+          "label": "Название страницы",
+          "placeholder": "напр. Список товаров"
+        },
+        "slug": {
+          "label": "Slug / URL",
+          "placeholder": "/ваш-slug-страницы",
+          "hint": "Используйте :id для динамических маршрутов, напр. /products/:id"
+        },
+        "visibility": {
+          "label": "Видимость"
+        },
+        "model": {
+          "label": "Прикрепить модель",
+          "noModel": "— Без модели (пользовательская страница) —",
+          "hint": "Одна модель может использоваться для нескольких страниц."
+        },
+        "template": {
+          "label": "Шаблон"
+        },
+        "seoTitle": {
+          "label": "SEO-заголовок",
+          "placeholder": "Заголовок страницы для поисковых систем",
+          "charCount": "{count}/60 символов"
+        },
+        "seoDesc": {
+          "label": "Метаописание",
+          "placeholder": "Краткое описание для результатов поиска…",
+          "charCount": "{count}/160 символов"
+        }
+      },
+      "seoPreview": {
+        "label": "Предпросмотр поиска",
+        "titleFallback": "Заголовок страницы",
+        "urlPrefix": "yoursite.com",
+        "descFallback": "Описание не предоставлено."
+      },
+      "actions": {
+        "cancel": "Отмена",
+        "create": "Создать страницу",
+        "update": "Обновить страницу",
+        "saving": "Сохранение…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "Сгенерировать новый ключ",
+    "keyNameLabel": "Название ключа",
+    "keyNameHint": "Дайте описательное название, чтобы запомнить, для чего он используется.",
+    "keyNamePlaceholder": "напр. Flutter-приложение — Продакшн",
+    "buttonGenerating": "Генерация…",
+    "buttonIdle": "Сгенерировать ключ"
+  },
+  "newKeyModal": {
+    "title": "API-ключ сгенерирован",
+    "instructions": "Ваш ключ создан и готов к использованию. Нажмите на значок <eyeIcon>глаза</eyeIcon> рядом с ключом в списке, чтобы показать и скопировать его.",
+    "doneButton": "Готово"
+  },
+  "revokeModal": {
+    "title": "Отозвать API-ключ",
+    "message": "Любые приложения, использующие этот ключ, немедленно потеряют доступ:",
+    "cancelButton": "Отмена",
+    "revokeButtonIdle": "Отозвать ключ",
+    "revokeButtonRevoking": "Отзыв…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "Не удалось загрузить API-ключи",
+      "generateFailed": "Не удалось сгенерировать ключ",
+      "revokeFailed": "Не удалось отозвать ключ"
+    },
+    "logs": {
+      "loadingKeys": "Загрузка API-ключей...",
+      "keysLoaded": "API-ключи успешно загружены",
+      "generatingKey": "Генерация нового API-ключа...",
+      "keyGenerated": "API-ключ успешно сгенерирован",
+      "revokingKey": "Отзыв API-ключа...",
+      "keyRevoked": "API-ключ успешно отозван"
+    }
+  },
+  "brandingPage": {
+    "heading": "Брендинг CMS",
+    "subheading": "Настройте внешний вид CMS для вашей команды.",
+    "errors": {
+      "saveFailed": "Не удалось сохранить брендинг"
+    },
+    "logs": {
+      "savingBranding": "Сохранение настроек брендинга...",
+      "brandingSaved": "Брендинг успешно сохранён"
+    },
+    "logoSection": {
+      "title": "Логотип CMS",
+      "uploadLabel": "Логотип",
+      "uploadHint": "PNG или SVG с прозрачным фоном",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "Предпросмотр логотипа"
+    },
+    "faviconSection": {
+      "title": "Фавикон",
+      "uploadLabel": "Фавикон",
+      "uploadHint": "ICO, PNG или SVG — отображается на вкладках браузера",
+      "uploadRecommended": "32×32px или 64×64px",
+      "imageAlt": "Предпросмотр фавикона"
+    },
+    "preview": {
+      "label": "Предпросмотр верхней панели",
+      "projectLabel": "Проект:"
+    },
+    "saveSuccess": "Брендинг успешно сохранён",
+    "saveButtonIdle": "Сохранить брендинг",
+    "saveButtonSaving": "Сохранение…"
+  },
+  "overviewPage": {
+    "heading": "Обзор проекта",
+    "subheading": "Обзор вашего проекта Underpeaks.",
+    "stats": {
+      "dbType": "Тип БД",
+      "environment": "Среда",
+      "deployment": "Развёртывание",
+      "status": "Статус",
+      "statusActive": "Активен"
+    },
+    "userInfo": {
+      "sectionTitle": "Информация о пользователе",
+      "fullName": "Полное имя",
+      "email": "Электронная почта",
+      "role": "Роль",
+      "status": "Статус",
+      "verified": "Подтверждено",
+      "verifiedYes": "Да",
+      "verifiedNo": "Нет",
+      "memberSince": "Участник с"
+    },
+    "licenseKey": {
+      "sectionTitle": "Лицензионный ключ Underpeaks",
+      "description": "Ваш лицензионный ключ аутентифицирует этот экземпляр и позволяет различать функции с хостингом и самостоятельным хостингом.",
+      "reveal": "Показать",
+      "hide": "Скрыть",
+      "copy": "Копировать",
+      "copied": "Скопировано",
+      "loading": "Загрузка…",
+      "notFound": "Лицензионный ключ не найден"
+    }
+  },
+  "smtpPage": {
+    "heading": "Настройки SMTP",
+    "subheading": "Настройте исходящую почту для вашего проекта.",
+    "emailFeatures": {
+      "sectionTitle": "Функции электронной почты",
+      "verifyEmailLabel": "Включить подтверждение электронной почты при регистрации",
+      "forgotPasswordLabel": "Включить письма для восстановления пароля",
+      "builtInNotice": "{provider} обрабатывает подтверждение электронной почты и сброс пароля нативно — SMTP для этих функций не требуется.",
+      "smtpToggleLabel": "Использовать собственный SMTP-сервер"
+    },
+    "smtpConfig": {
+      "sectionTitle": "Конфигурация SMTP",
+      "hostLabel": "SMTP-хост",
+      "hostPlaceholder": "smtp.example.com",
+      "portLabel": "Порт",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "Адрес отправителя",
+      "fromAddressPlaceholder": "no-reply@example.com",
+      "usernameLabel": "Имя пользователя",
+      "usernamePlaceholder": "Имя пользователя SMTP",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Пароль SMTP",
+      "showPassword": "Показать пароль",
+      "hidePassword": "Скрыть пароль",
+      "encryptionLabel": "Шифрование",
+      "encryptionNone": "Нет"
+    },
+    "logs": {
+      "savingSmtp": "Сохранение настроек SMTP...",
+      "smtpSaved": "Настройки SMTP успешно сохранены"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "Настройки",
+    "toggleAriaLabel": "Переключить навигацию настроек",
+    "nav": {
+      "overview": "Обзор",
+      "api-keys": "API-ключи",
+      "smtp": "Настройки SMTP",
+      "branding": "Брендинг CMS"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "Загрузка настроек…"
+  },
+  "saveButton": {
+    "savedMessage": "Успешно сохранено",
+    "buttonSaving": "Сохранение…",
+    "buttonIdle": "Сохранить изменения"
+  },
+  "coloursPage": {
+    "heading": "Цвета",
+    "subheading": "Определите цветовые токены, используемые в ваших сгенерированных приложениях Flutter и Next.js.",
+    "preview": {
+      "title": "Предпросмотр в реальном времени",
+      "primaryButton": "Основная кнопка",
+      "secondaryButton": "Дополнительная",
+      "accentBadge": "Акцентный значок",
+      "success": "✓ Успех",
+      "warning": "⚠ Предупреждение",
+      "danger": "✕ Опасность"
+    },
+    "tokensSectionTitle": "Цветовые токены",
+    "resetTokenTitle": "Сбросить к значению по умолчанию",
+    "resetAllButton": "Сбросить все к значениям по умолчанию",
+    "savedMessage": "Сохранено",
+    "saveButtonIdle": "Сохранить цвета",
+    "saveButtonSaving": "Сохранение…",
+    "logs": {
+      "savingColours": "Сохранение цветовых токенов...",
+      "coloursSaved": "Цветовые токены успешно сохранены"
+    },
+    "tokens": {
+      "primary":      { "label": "Основной",             "description": "Основной цвет бренда — кнопки, ссылки, выделения" },
+      "primary-fg":   { "label": "Основной передний план",  "description": "Текст на фоне основного цвета" },
+      "secondary":    { "label": "Дополнительный",           "description": "Вспомогательный цвет бренда" },
+      "secondary-fg": { "label": "Дополнительный передний план","description": "Текст на фоне дополнительного цвета" },
+      "accent":       { "label": "Акцент",              "description": "Цвет выделения для значков и тегов" },
+      "background":   { "label": "Фон",          "description": "Основной фон приложения" },
+      "surface":      { "label": "Поверхность",             "description": "Фон карточек и панелей" },
+      "border":       { "label": "Граница",              "description": "Цвет границы по умолчанию" },
+      "success":      { "label": "Успех",             "description": "Позитивные состояния и подтверждения" },
+      "warning":      { "label": "Предупреждение",             "description": "Предупреждения и состояния осторожности" },
+      "danger":       { "label": "Опасность",              "description": "Ошибки и деструктивные действия" },
+      "text":         { "label": "Основной текст",        "description": "Основной цвет текста в теле" },
+      "text-muted":   { "label": "Приглушённый текст",          "description": "Вторичный текст и текст-заполнитель" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "Флаги функций",
+    "comingSoonBadge": "СКОРО ПОЯВИТСЯ",
+    "subheading": "Включите функции, которые будут включены в ваши сгенерированные приложения Flutter и Next.js.",
+    "paidBadge": "ПЛАТНО",
+    "savedMessage": "Сохранено",
+    "saveButtonIdle": "Сохранить флаги",
+    "saveButtonSaving": "Сохранение…",
+    "upgrade": {
+      "title": "Требуется тарифный план с хостингом",
+      "description": "Эти функции требуют хостинговой инфраструктуры Underpeaks. Обновитесь, чтобы разблокировать их.",
+      "button": "Обновить"
+    },
+    "groups": {
+      "Appearance": "Внешний вид",
+      "Localisation": "Локализация",
+      "App Behaviour": "Поведение приложения",
+      "Authentication — Paid": "Аутентификация — Платно",
+      "Advanced — Paid": "Расширенные — Платно"
+    },
+    "flags": {
+      "dark-mode":          { "label": "Тёмный режим",                 "description": "Позволяет пользователям переключаться между светлой и тёмной темой в приложении" },
+      "system-theme":       { "label": "Следовать системной теме",       "description": "Автоматически подстраиваться под настройки светлого/тёмного режима устройства" },
+      "multi-language":     { "label": "Поддержка нескольких языков",    "description": "Включить поддержку нескольких языков в сгенерированном приложении" },
+      "rtl-support":        { "label": "Поддержка RTL",               "description": "Раскладка справа налево для арабского, иврита и подобных языков" },
+      "offline-mode":       { "label": "Оффлайн-режим",              "description": "Кэшировать данные локально, чтобы приложение работало без подключения к интернету" },
+      "push-notifications": { "label": "Push-уведомления",        "description": "Включить поддержку push-уведомлений через FCM — вы предоставляете ключи" },
+      "splash-screen":      { "label": "Заставочный экран",             "description": "Показывать фирменный заставочный экран при запуске приложения" },
+      "onboarding":         { "label": "Процесс адаптации",           "description": "Показывать приветственный/адаптационный процесс для новых пользователей" },
+      "2fa":                { "label": "Двухфакторная аутентификация", "description": "Требовать OTP или приложение-аутентификатор для входа" },
+      "biometric":          { "label": "Биометрический вход",           "description": "Вход по отпечатку пальца и Face ID на мобильных устройствах" },
+      "social-login":       { "label": "Вход через соцсети",              "description": "OAuth через Google, GitHub, Apple и Facebook" },
+      "magic-link":         { "label": "Magic Link",                "description": "Вход без пароля по ссылке в электронной почте" },
+      "sso":                { "label": "SSO / SAML",                "description": "Интеграция единого входа для предприятий" },
+      "analytics":          { "label": "Аналитика в приложении",          "description": "Отслеживать просмотры экранов и события внутри сгенерированного приложения" },
+      "ab-testing":         { "label": "A/B-тестирование",               "description": "Проводить эксперименты с функциями среди базы пользователей" },
+      "feature-gating":     { "label": "Управление доступом к функциям",            "description": "Показывать или скрывать функции в зависимости от плана или роли пользователя" }
+    },
+    "logs": {
+      "savingFlags": "Сохранение флагов функций...",
+      "flagsSaved": "Флаги функций успешно сохранены"
+    }
+  },
+  "spacingPage": {
+    "heading": "Отступы и радиус",
+    "subheading": "Управляйте формой, плотностью и уровнем компонентов в ваших сгенерированных приложениях.",
+    "preview": {
+      "title": "Предпросмотр в реальном времени",
+      "button": "Кнопка",
+      "card": "Компонент карточки",
+      "input": "Поле ввода"
+    },
+    "sections": {
+      "radius": {
+        "title": "Радиус границы",
+        "description": "Применяется к кнопкам, карточкам, полям ввода и модальным окнам"
+      },
+      "density": {
+        "title": "Плотность отступов",
+        "description": "Управляет внутренними отступами компонентов"
+      },
+      "shadow": {
+        "title": "Уровень / тень",
+        "description": "Глубина тени карточек и компонентов"
+      }
+    },
+    "radius": {
+      "none": "Нет",
+      "sm": "Маленький",
+      "md": "Средний",
+      "lg": "Большой",
+      "xl": "Очень большой",
+      "full": "Таблетка"
+    },
+    "density": {
+      "compact": { "label": "Компактный", "desc": "Плотные отступы, больше контента видно" },
+      "default": { "label": "По умолчанию", "desc": "Сбалансированные отступы для большинства случаев" },
+      "relaxed": { "label": "Свободный", "desc": "Просторные отступы, легче нажимать" }
+    },
+    "shadow": {
+      "none": "Нет",
+      "sm": "Едва заметная",
+      "md": "Средняя",
+      "lg": "Сильная"
+    },
+    "save": {
+      "button": "Сохранить отступы",
+      "saving": "Сохранение…",
+      "savedConfirmation": "Сохранено"
+    }
+  },
+  "typographyPage": {
+    "heading": "Типографика",
+    "subheading": "Выберите шрифты и масштаб для ваших сгенерированных приложений. Шрифты загружаются из Google Fonts.",
+    "preview": {
+      "title": "Предпросмотр в реальном времени",
+      "headingSuffix": "— Заголовок",
+      "bodySample": "Съешь же ещё этих мягких французских булок, да выпей чаю. Пример основного текста стандартного размера.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "Семейства шрифтов",
+        "description": "Выберите из Google Fonts — автоматически включается при генерации кода"
+      },
+      "weights": {
+        "title": "Начертания шрифтов"
+      },
+      "scale": {
+        "title": "Масштаб размера шрифта",
+        "description": "Управляет общим размером текста во всём приложении"
+      }
+    },
+    "fonts": {
+      "headingFont": "Шрифт заголовков",
+      "bodyFont": "Шрифт основного текста",
+      "monoFont": "Моноширинный шрифт"
+    },
+    "weights": {
+      "headingWeight": "Начертание заголовков",
+      "bodyWeight": "Начертание основного текста"
+    },
+    "scale": {
+      "compact": { "label": "Компактный", "desc": "Меньший текст, более плотные отступы" },
+      "default": { "label": "По умолчанию", "desc": "Сбалансированный вариант для большинства приложений" },
+      "relaxed": { "label": "Свободный", "desc": "Больший текст, больше свободного пространства" }
+    },
+    "save": {
+      "button": "Сохранить типографику",
+      "saving": "Сохранение…",
+      "savedConfirmation": "Сохранено"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "Тема",
+    "nav": {
+      "colours": "Цвета",
+      "typography": "Типографика",
+      "spacing": "Отступы и радиус",
+      "featureFlags": "Флаги функций",
+      "presets": "Готовые шаблоны"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "Неактивная сессия",
+      "description": "Вы были неактивны. Выход из системы через:",
+      "logoutButton": "Выйти",
+      "keepAliveButton": "Оставаться в системе"
+    },
+    "logs": {
+      "logoutFailed": "Не удалось выйти:"
+    }
+  },
+  "loader": {
+    "label": "Загрузка…"
+  },
+  "userStatus": {
+    "active": "Активен",
+    "needsEmailVerification": "Требуется подтверждение электронной почты",
+    "passwordResetRequested": "Запрошен сброс пароля",
+    "blocked": "Заблокирован",
+    "disabled": "Отключён"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Не удалось создать проект Flutter"
+    },
+    "logs": {
+      "skipped": "Создание проекта Flutter пропущено: {output}",
+      "created": "Проект Flutter создан: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "Не удалось создать проект NextJS"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "Конфигурация базы данных не найдена.",
+      "dbConfigMissing": "Отсутствует конфигурация БД",
+      "dbConfigMissingStore": "Отсутствует конфигурация БД в хранилище",
+      "adminEmailMissing": "Отсутствует электронная почта администратора",
+      "adminEmailMissingStore": "Отсутствует электронная почта администратора в хранилище",
+      "projectTypeMissing": "Отсутствует selectedProjectType",
+      "createTablesFailed": "Не удалось создать таблицы: {message}",
+      "createAdminFailed": "Не удалось создать пользователя-администратора: {message}",
+      "createModelsFailed": "Не удалось создать модели: {message}",
+      "writeConfigFailed": "Не удалось записать файл конфигурации: {message}",
+      "setupStorageFailed": "Не удалось настроить хранилище: {message}",
+      "installDemoFailed": "Не удалось установить демо-контент: {message}",
+      "stepFailed": "Шаг не выполнен: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "Таблицы созданы:",
+      "adminCreated": "Пользователь-администратор создан:",
+      "modelsCreated": "Ответ на создание моделей:",
+      "modelsSkipped": "Создание моделей пропущено: {message}",
+      "configWritten": "Файл конфигурации успешно записан:",
+      "storageCreated": "Хранилища созданы:",
+      "demoContentSkipped": "Демо-контент пропущен",
+      "demoContentInstalled": "Демо-контент установлен:",
+      "creatingApiEndpoints": "Создание эндпоинтов API...",
+      "settingUpAuth": "Настройка аутентификации...",
+      "configuringSession": "Настройка управления сессиями...",
+      "runningTests": "Выполнение тестов...",
+      "finalizing": "Завершение установки...",
+      "noImplementation": "Нет реализации для шага: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "heading": "Настройка пользователя-администратора",
+    "description": "Укажите данные пользователя-администратора для защиты вашей системы Underpeaks. У этой учётной записи будет полный административный доступ к платформе.",
+    "disclaimer": "Обратите внимание: это создаёт учётную запись администратора в системе Underpeaks и может отличаться от вашей учётной записи администратора базы данных.",
+    "fields": {
+      "fullName": {
+        "label": "Полное имя",
+        "placeholder": "напр., Иван Иванов"
+      },
+      "email": {
+        "label": "Адрес электронной почты",
+        "placeholder": "admin@example.com"
+      },
+      "password": {
+        "label": "Пароль",
+        "placeholder": "Создайте надёжный пароль"
+      }
+    },
+    "errors": {
+      "nameRequired": "Полное имя обязательно",
+      "emailRequired": "Электронная почта обязательна",
+      "passwordInvalid": "Пароль обязателен | Пароль должен содержать 8 символов | Должен содержать заглавную букву | Должен содержать специальный символ (напр. !@#$%^&*)"
+    },
+    "continueButton": "Продолжить"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "heading": "Выберите свой стек",
+    "description": "Выберите технологический стек, который лучше всего соответствует потребностям вашего проекта. Вы можете изменить это позже, если захотите добавить больше платформ или изменить подход.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "Полная комбинация! Next.js для веба и Flutter для кросс-платформенных мобильных и десктопных приложений."
+      },
+      "next": {
+        "title": "Только Next.js",
+        "description": "Используйте Next.js как мощный фреймворк React SSR и <strong>как headless CMS для управления контентом и API.</strong>"
+      },
+      "flutter": {
+        "title": "Только Flutter",
+        "description": "Создавайте кросс-платформенные мобильные и десктопные приложения с помощью Flutter, используя общую базу кода, и <strong>при желании используйте её как headless CMS-бэкенд.</strong>"
+      },
+      "cms": {
+        "title": "Headless CMS",
+        "description": "Развёртывание только в качестве headless CMS-бэкенда. Предоставляйте свои данные через API и подключайте их к любому пользовательскому фронтенду, мобильному приложению или сторонней службе с полной гибкостью."
+      }
+    },
+    "nextButton": "Далее"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "heading": "Конфигурация базы данных",
+    "selectPlaceholder": "Выберите базу данных",
+    "fieldExample": "(напр. {placeholder})",
+    "savingWarning": "⚠️ Пожалуйста, будьте терпеливы, это может занять некоторое время...",
+    "infoBlock": {
+      "whereLabel": "Где это найти:"
+    },
+    "testSteps": {
+      "validating": "Проверка конфигурации...",
+      "sending": "Отправка конфигурации на сервер...",
+      "testing": "Проверка подключения к базе данных...",
+      "finalizing": "Завершение проверки подключения..."
+    },
+    "errors": {
+      "serverRejected": "Сервер отклонил подключение",
+      "connectionFailed": "Ошибка подключения: {message}"
+    },
+    "buttons": {
+      "testConnection": "Проверить подключение",
+      "testing": "Проверка...",
+      "saving": "Сохранение...",
+      "continue": "Продолжить"
+    },
+    "logs": {
+      "firebaseParseError": "Не удалось разобрать конфигурацию Firebase"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "projectType": {
+      "title": "Выберите тип проекта",
+      "description": "Выберите шаблон, чтобы автоматически установить модели по умолчанию для вашего проекта."
+    },
+    "projects": {
+      "ecommerce":   { "label": "Электронная коммерция",         "description": "Включает товары, категории, заказы, клиентов и страницы магазина." },
+      "marketplace": { "label": "Маркетплейс",         "description": "Поддерживает нескольких продавцов, объявления, комиссии и панели продавцов." },
+      "listing":     { "label": "Платформа объявлений",    "description": "Для объявлений недвижимости, работы или услуг с категориями, поиском и фильтрами." },
+      "blog":        { "label": "Блог / контентный сайт", "description": "Контентно-ориентированный сайт с публикациями, категориями, тегами, авторами и комментариями." },
+      "social":      { "label": "Социальная сеть",      "description": "Профили пользователей, публикации, комментарии, лайки, подписчики, сообщения и уведомления." },
+      "saas":        { "label": "SaaS / веб-приложение",      "description": "Структура веб-приложения с пользователями, ролями, разрешениями и планами подписки." },
+      "blank":       { "label": "Пустой проект",       "description": "Без демо-контента; начните с пустого каркаса проекта." }
+    },
+    "demoContent": {
+      "title": "Настроить демо-контент",
+      "description": "Предпросмотр вашего магазина с уже загруженными демо-данными.",
+      "checkboxLabel": "Включить демо-контент для выбранного проекта",
+      "ecommerce": {
+        "item1": "Демо-товары с категориями и тегами",
+        "item2": "Примерные клиенты и заказы",
+        "item3": "Страницы магазина (главная, товары, корзина, оформление заказа)",
+        "item4": "Базовый CMS-контент",
+        "item5": "Предварительно настроенные меню и модули"
+      }
+    },
+    "continueButtonIdle": "Продолжить",
+    "continueButtonLoading": "Продолжение...",
+    "logs": {
+      "navigatingToFinalise": "Сохранение выбора установщика и переход к завершающему шагу..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "installComplete": "🎉 Установка завершена!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "Информация о проекте",
+      "subtitle": "Основная информация о настройке вашего проекта.",
+      "name": "Название:",
+      "stack": "Стек:"
+    },
+    "database": {
+      "title": "База данных",
+      "subtitle": "Выбранная база данных и её конфигурация.",
+      "type": "Тип:",
+      "noneSelected": "Не выбрано"
+    },
+    "adminUser": {
+      "title": "Пользователь-администратор",
+      "subtitle": "Ваши начальные учётные данные администратора.",
+      "name": "Имя:",
+      "email": "Электронная почта:",
+      "password": "Пароль:"
+    },
+    "projectType": {
+      "title": "Выбранный тип проекта",
+      "subtitle": "Шаблон проекта, выбранный во время настройки."
+    },
+    "demoContent": {
+      "title": "Демо-контент",
+      "subtitle": "Предзагружать ли демо-данные магазина.",
+      "installed": "Установлено",
+      "notInstalled": "Не установлено"
+    },
+    "continueButton": "Продолжить → Вход"
+  },
+  "ecommercePage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "card": {
+      "title": "Настройте свои модули электронной коммерции"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "Включить модуль электронной коммерции",
+        "description": "Добавляет каталог товаров, корзину, оформление заказа и управление заказами."
+      },
+      "physical": {
+        "label": "Включить физические товары",
+        "description": "Поддерживает учёт запасов, доставку, возвраты и отслеживание материальных товаров."
+      },
+      "digital": {
+        "label": "Включить цифровые товары",
+        "description": "Продавайте загружаемый контент, такой как PDF, видео или лицензии на программное обеспечение."
+      }
+    },
+    "button": {
+      "next": "Далее",
+      "continuing": "Продолжение..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "card": {
+      "title": "Завершить настройку"
+    },
+    "summary": {
+      "project": "Проект:",
+      "defaultProject": "MyApp",
+      "stack": "Стек:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "База данных:",
+      "notSelected": "Не выбрано"
+    },
+    "steps": {
+      "heading": "Шаги установки:",
+      "skipped": "пропущено!"
+    },
+    "progress": {
+      "finishing": "Завершение...",
+      "ready": "Готов к установке вашего проекта"
+    },
+    "errors": {
+      "label": "Ошибка:",
+      "noDatabase": "База данных не выбрана, невозможно сохранить конфигурацию.",
+      "saveFailed": "Не удалось сохранить конфигурацию установщика",
+      "unknown": "Произошла неизвестная ошибка"
+    },
+    "button": {
+      "start": "Начать установку",
+      "installing": "Установка..."
+    },
+    "logs": {
+      "sendingConfig": "Отправка конфигурации установщика на сервер...",
+      "configSaved": "Конфигурация установщика успешно сохранена",
+      "installError": "Ошибка установки:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "heading": "Выберите модели по умолчанию",
+    "subheading": "Выберите модели данных по умолчанию, которые вы хотите включить в свой проект. Вы можете создавать или редактировать модели позже.",
+    "required": "(обязательно)",
+    "toggleAll": {
+      "deselect": "Отменить выбор всех",
+      "select": "Выбрать все"
+    },
+    "models": {
+      "users":      { "label": "Пользователи",      "description": "Управление пользователями приложения и аутентификацией" },
+      "products":   { "label": "Товары",   "description": "Каталог товаров или услуг" },
+      "orders":     { "label": "Заказы",     "description": "Отслеживание заказов и покупок клиентов" },
+      "coupons":    { "label": "Купоны",    "description": "Купоны на скидку и акции" },
+      "categories": { "label": "Категории", "description": "Организация товаров или контента" },
+      "reviews":    { "label": "Отзывы",    "description": "Отзывы и оценки пользователей" }
+    },
+    "button": {
+      "continue": "Продолжить",
+      "continuing": "Продолжение..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "heading": "Настройка проекта",
+    "subheading": "Введите название проекта, поддомен и домен для вашей самостоятельно размещённой студии.",
+    "continueButton": "Продолжить",
+    "fields": {
+      "name": {
+        "label": "Название проекта",
+        "placeholder": "напр., MyApp Studio"
+      },
+      "domain": {
+        "label": "Домен",
+        "placeholder": "напр., http://localhost:3000",
+        "hint": "Полный домен для вашего приложения. По умолчанию"
+      },
+      "subdomain": {
+        "label": "Поддомен",
+        "placeholder": "напр., console",
+        "hint": "Это будет использоваться для URL:"
+      }
+    },
+    "errors": {
+      "nameRequired": "Название проекта обязательно",
+      "subdomainRequired": "Поддомен обязателен",
+      "domainRequired": "Домен обязателен"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Логотип Underpeaks",
+    "tagline": "Ваш универсальный установщик SaaS и генератор кода",
+    "continueButton": "Продолжить →",
+    "continueLoading": "Загрузка...",
+    "benefits": {
+      "heading": "Почему Underpeaks?",
+      "item1": "🔧 Полный генератор базы кода (Next.js + Flutter)",
+      "item2": "⚙️ Никакого шаблонного кода — только готовый к продакшену код",
+      "item3": "🌍 Готовность к многоязычности и мультитенантности",
+      "item4": "📦 Самостоятельный или облачный хостинг — на ваш выбор",
+      "item5": "🔐 Встроенная аутентификация, роли, разрешения, интерфейс установщика",
+      "item6": "💼 Идеально подходит для стартапов, агентств и корпоративных проектов"
+    },
+    "license": {
+      "heading": "Лицензионное соглашение",
+      "loading": "Загрузка лицензии...",
+      "loadFailed": "Не удалось загрузить лицензионное соглашение.",
+      "acceptLabel": "Принять условия лицензии."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "Требуются текущий и новый пароль",
+      "passwordTooShort": "Пароль должен содержать не менее 8 символов",
+      "unauthorized": "Не авторизован",
+      "invalidToken": "Недействительный токен",
+      "userNotFound": "Пользователь не найден",
+      "incorrectCurrentPassword": "Текущий пароль неверен",
+      "internalError": "Произошла непредвиденная ошибка"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Пароль Firebase Auth обновлён",
+      "firebasePasswordUpdateFailed": "[change-password] Не удалось обновить пароль Firebase Auth"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "Пользователь-администратор успешно создан"
+    },
+    "errors": {
+      "missingConfig": "Отсутствует конфигурация БД",
+      "missingAdminUser": "Отсутствуют данные пользователя-администратора",
+      "genericFailure": "Не удалось создать пользователя-администратора"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "Отсутствует конфигурация БД или электронная почта администратора",
+      "adapterNotSupported": "Этот адаптер базы данных не поддерживает создание моделей данных",
+      "genericFailure": "Не удалось вставить модели данных"
+    },
+    "logs": {
+      "createModelsError": "Ошибка API create-data-models:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "Отсутствует конфигурация/тип БД",
+      "adapterNotSupported": "Адаптер {type} не реализует настройку хранилища"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "Созданы все системные, пользовательские и проектные таблицы"
+    },
+    "errors": {
+      "missingConfig": "Отсутствует конфигурация БД",
+      "genericFailure": "Не удалось создать таблицы"
+    },
+    "logs": {
+      "createTablesError": "[ОШИБКА СОЗДАНИЯ ТАБЛИЦ]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Отсутствует переменная окружения Firebase: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "Отсутствует projectName",
+      "flutterNotInstalled": "Flutter не установлен или отсутствует в PATH.",
+      "stepFailed": "Шаг не выполнен: Создание проекта Flutter - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Проект Flutter «{projectName}» уже существует. Создание пропущено.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Не удалось создать Flutter:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "Электронная почта обязательна",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE не задан",
+      "firebaseClientSide": "Сброс пароля Firebase обрабатывается на стороне клиента",
+      "supabaseMissingMethod": "В адаптере Supabase отсутствует метод sendResetEmail",
+      "unsupportedDbType": "Неподдерживаемый тип БД: {dbType}",
+      "adapterMissingMethods": "В адаптере ${dbType} отсутствуют необходимые методы",
+      "userNotFound": "Пользователь не найден",
+      "genericFailure": "Не удалось отправить ссылку для сброса"
+    },
+    "notices": {
+      "smtpDisabled": "Отправка электронной почты отключена. Попросите администратора сбросить ваш пароль."
+    },
+    "email": {
+      "subject": "Запрос на сброс пароля",
+      "body": "<p>Здравствуйте, {name}!</p><p>Нажмите на ссылку ниже, чтобы сбросить пароль:</p><a href=\"{resetLink}\">{resetLink}</a><p>Если вы не запрашивали это, проигнорируйте это письмо.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Письмо для сброса Supabase отправлено",
+      "resetEmailSent": "Письмо для сброса отправлено",
+      "smtpDisabled": "SMTP/forgot-password отключён — письмо пропущено",
+      "forgotPasswordError": "Ошибка забытого пароля:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Отсутствует сервисный аккаунт Firebase",
+      "unsupportedDbType": "Неподдерживаемый тип БД: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[ОШИБКА КОНФИГУРАЦИИ СИСТЕМЫ]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "Отсутствует конфигурация БД",
+      "missingProjectType": "Отсутствует тип проекта",
+      "adapterNotSupported": "installDemoContent не реализован для этого адаптера"
+    },
+    "logs": {
+      "installDemoContentError": "Ошибка install-demo-content:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "Выход успешно выполнен"
+    },
+    "errors": {
+      "tokenRequired": "Токен обязателен",
+      "dbTypeNotSet": "NEXT_DB_TYPE не задан",
+      "firebaseServiceAccountMissing": "Отсутствует сервисный аккаунт Firebase",
+      "mysqlEnvMissing": "Отсутствуют переменные окружения MySQL",
+      "postgresEnvMissing": "Отсутствуют переменные окружения Postgres",
+      "unsupportedDbType": "Неподдерживаемый тип БД: {dbType}",
+      "tokenNotFound": "Токен не найден"
+    },
+    "logs": {
+      "logoutError": "ОШИБКА API ВЫХОДА:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id обязателен",
+      "unauthorized": "Не авторизован",
+      "invalidToken": "Недействительный токен"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder обязателен",
+      "internalError": "Произошла непредвиденная ошибка"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] Папки успешно дополнены количеством файлов"
+    },
+    "errors": {
+      "internalError": "Произошла непредвиденная ошибка"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder, toFolder и fileName обязательны",
+      "moveFileNotSupported": "moveFile не поддерживается",
+      "internalError": "Произошла непредвиденная ошибка"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder, oldName и newName обязательны",
+      "renameFileNotSupported": "renameFile не поддерживается",
+      "internalError": "Произошла непредвиденная ошибка"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "Файл и папка обязательны",
+      "uploadFileNotSupported": "uploadFile не поддерживается",
+      "internalError": "Не удалось загрузить"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] режим:",
+      "projectIdLookupFailed": "[upload-file] не удалось найти project_id",
+      "metadataSaved": "[upload-file] метаданные сохранены в nxf_storage",
+      "metadataSaveFailed": "[upload-file] не удалось сохранить метаданные",
+      "localUploadSuccess": "[upload-file] локальная загрузка сохранена:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "Не удалось проверить подключение к базе данных"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id обязателен",
+      "firebaseServiceAccountMissing": "Отсутствует сервисный аккаунт Firebase",
+      "unsupportedDbType": "Неподдерживаемый тип базы данных",
+      "systemConfigNotFound": "Конфигурация системы не найдена",
+      "internalError": "Внутренняя ошибка сервера"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "Полное имя обязательно",
+      "unauthorized": "Не авторизован",
+      "invalidToken": "Недействительный токен",
+      "internalError": "Произошла непредвиденная ошибка"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id и project_name обязательны",
+      "firebaseServiceAccountMissing": "Отсутствует сервисный аккаунт Firebase",
+      "unsupportedDbType": "Неподдерживаемый тип базы данных",
+      "systemConfigNotFound": "Конфигурация системы не найдена для этого пользователя",
+      "internalError": "Внутренняя ошибка сервера"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id обязателен",
+      "firebaseServiceAccountMissing": "Отсутствует сервисный аккаунт Firebase",
+      "unsupportedDbType": "Неподдерживаемый тип базы данных",
+      "systemConfigNotFound": "Конфигурация системы не найдена для этого пользователя",
+      "internalError": "Внутренняя ошибка сервера"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "Не удалось записать файлы конфигурации"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "Найден существующий пользователь аутентификации:",
+      "newAuthUserCreated": "Создан новый пользователь аутентификации:",
+      "creatingAdminInDb": "Создание пользователя-администратора в БД...",
+      "userAlreadyInDb": "Пользователь уже существует в БД:",
+      "existingProjectFound": "Найден существующий проект:",
+      "newProjectCreated": "Создан новый проект:",
+      "existingTenantFound": "Найден существующий клиент:",
+      "newTenantCreated": "Создан новый клиент:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "Пропуск дублирующего выполнения CreateDataModels — этот проект и комбинация типов уже обработаны.",
+      "creatingTable": "Создание таблицы:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable не реализован, создание таблицы пропущено"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "Папка загрузки",
+      "customFolder": "Пользовательская папка…",
+      "enterFolderName": "Введите название папки",
+      "placeholder": "напр. banners/summer",
+      "uploadingTo": "Загрузка в:"
+    },
+    "preview": {
+      "alt": "Предпросмотр",
+      "uploaded": "Загружено",
+      "replace": "Заменить",
+      "clear": "Очистить файл"
+    },
+    "dropzone": {
+      "uploading": "Загрузка…",
+      "idle": "Перетащите файлы или",
+      "browse": "выберите",
+      "recommended": "Рекомендуется:"
+    },
+    "errors": {
+      "noFolder": "Выберите или введите папку перед загрузкой.",
+      "uploadFailed": "Не удалось загрузить",
+      "uploadFailedStatus": "Не удалось загрузить:",
+      "networkError": "Ошибка сети"
+    }
+  },
+  "modelView": {
+    "systemBadge": "Система",
+    "subtitle": "Только для чтения — это защищённая системная таблица.",
+    "fieldsHeading": "Поля",
+    "actions": {
+      "back": "Назад к моделям"
+    },
+    "stats": {
+      "fields": "Поля",
+      "created": "Создано",
+      "updated": "Последнее обновление"
+    },
+    "table": {
+      "name": "Название поля",
+      "type": "Тип",
+      "constraints": "Ограничения",
+      "nullable": "Обязательно",
+      "default": "По умолчанию",
+      "uiType": "Тип интерфейса"
+    },
+    "badges": {
+      "hidden": "Скрыто",
+      "required": "Обязательно",
+      "optional": "Необязательно"
+    },
+    "errors": {
+      "loadFailed": "Не удалось загрузить модель.",
+      "notFound": "Модель не найдена."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "Модели",
+      "subtitle": "Определите и управляйте структурой данных вашего проекта.",
+      "createButton": "Создать модель"
+    },
+    "filter": {
+      "all": "Все",
+      "user": "Пользователь",
+      "system": "Система"
+    },
+    "states": {
+      "empty": "Модели не найдены.",
+      "emptyHint": "Создайте свою первую модель, чтобы начать."
+    },
+    "badges": {
+      "system": "Система",
+      "partialSystem": "Редактируемая системная"
+    },
+    "meta": {
+      "fields": "{count} полей",
+      "foreignKeys": "{count} внешних ключей"
+    },
+    "card": {
+      "editAriaLabel": "Изменить {name}",
+      "deleteAriaLabel": "Удалить {name}"
+    },
+    "confirmDelete": {
+      "title": "Удалить модель?",
+      "description": "Вы уверены, что хотите удалить «{name}»? Все данные в этой таблице будут безвозвратно удалены. Это действие невозможно отменить.",
+      "confirm": "Удалить",
+      "deleting": "Удаление…",
+      "cancel": "Отмена"
+    },
+    "errors": {
+      "loadFailed": "Не удалось загрузить модели.",
+      "deleteFailed": "Не удалось удалить модель."
+    }
+  },
+  "createModel": {
+    "title": "Создать модель",
+    "subtitle": "Определите новую модель данных и её поля.",
+    "actions": {
+      "save": "Сохранить модель",
+      "saving": "Сохранение…",
+      "back": "Назад к моделям"
+    },
+    "form": {
+      "modelNameLabel": "Название модели",
+      "modelNamePlaceholder": "напр. Товар",
+      "fieldNamePlaceholder": "Название поля",
+      "required": "Обязательно",
+      "unique": "Уникальное",
+      "primaryKey": "Первичный ключ",
+      "primaryKeyTaken": "уже задан",
+      "hidden": "Скрыто",
+      "uiType": "Тип интерфейса",
+      "foreignKeyTable": "Внешний ключ — таблица",
+      "foreignKeyColumn": "Внешний ключ — столбец",
+      "noForeignKey": "— Без внешнего ключа —",
+      "selectColumn": "— Выберите столбец —",
+      "onDelete": "При удалении",
+      "addField": "Добавить поле",
+      "removeField": "Удалить поле",
+      "expandField": "Показать дополнительные параметры",
+      "collapseField": "Скрыть дополнительные параметры",
+      "foreignKey": "Внешний ключ"
+    },
+    "validation": {
+      "modelNameRequired": "Название модели обязательно.",
+      "fieldsInvalid": "У всех полей должно быть название.",
+      "fieldNameUnique": "Названия полей должны быть уникальными.",
+      "singlePrimaryKey": "Разрешён только один первичный ключ на модель."
+    },
+    "confirmDelete": {
+      "title": "Удалить поле?",
+      "description": "Вы уверены, что хотите удалить это поле?",
+      "confirm": "Удалить",
+      "cancel": "Отмена"
+    },
+    "errors": {
+      "createFailed": "Не удалось создать модель."
+    }
+  },
+  "editModel": {
+    "title": "Изменить модель",
+    "subtitle": "Обновите название модели и определения её полей.",
+    "actions": {
+      "save": "Сохранить изменения",
+      "saving": "Сохранение…",
+      "back": "Назад к моделям"
+    },
+    "form": {
+      "modelNameLabel": "Название модели",
+      "modelNamePlaceholder": "Название модели",
+      "fieldNamePlaceholder": "Название поля",
+      "required": "Обязательно",
+      "unique": "Уникальное",
+      "primaryKey": "Первичный ключ",
+      "primaryKeyTaken": "уже задан",
+      "hidden": "Скрыто",
+      "uiType": "Тип интерфейса",
+      "foreignKeyTable": "Внешний ключ — таблица",
+      "foreignKeyColumn": "Внешний ключ — столбец",
+      "noForeignKey": "— Без внешнего ключа —",
+      "selectColumn": "— Выберите столбец —",
+      "onDelete": "При удалении",
+      "addField": "Добавить поле",
+      "removeField": "Удалить поле",
+      "expandField": "Показать дополнительные параметры",
+      "collapseField": "Скрыть дополнительные параметры",
+      "foreignKey": "Внешний ключ"
+    },
+    "validation": {
+      "modelNameRequired": "Название модели обязательно.",
+      "fieldsInvalid": "У всех полей должно быть название.",
+      "fieldNameUnique": "Названия полей должны быть уникальными.",
+      "singlePrimaryKey": "Разрешён только один первичный ключ на модель."
+    },
+    "confirmDelete": {
+      "title": "Удалить поле?",
+      "description": "Вы уверены, что хотите удалить это поле?",
+      "confirm": "Удалить",
+      "cancel": "Отмена"
+    },
+    "warningDialog": {
+      "title": "Серьёзное предупреждение",
+      "subtitle": "Вы собираетесь удалить защищённое поле.",
+      "primaryKeyWarning": "Это поле является первичным ключом данной таблицы. Его удаление нарушит все связи, ссылающиеся на эту таблицу, и может безвозвратно повредить существующие данные во всём вашем проекте.",
+      "foreignKeyWarning": "Это поле является внешним ключом, связывающим эту таблицу с другой. Его удаление нарушит связь и может вызвать проблемы с целостностью данных для существующих записей.",
+      "checkboxLabel": "Я понимаю, что это может безвозвратно повредить мои данные и не может быть отменено.",
+      "confirm": "Удалить всё равно",
+      "cancel": "Отмена"
+    },
+    "errors": {
+      "loadModelFailed": "Не удалось загрузить модель.",
+      "modelNotFound": "Модель не найдена.",
+      "updateModelFailed": "Не удалось обновить модель."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id обязателен",
+      "invalidBody": "Недействительное или пустое тело запроса",
+      "missingFields": "Отсутствуют обязательные поля",
+      "projectNotFound": "Проект для этого пользователя не найден",
+      "nameAlreadyExists": "Модель с таким названием уже существует",
+      "fetchFailed": "Не удалось получить модели",
+      "createFailed": "Не удалось создать модель",
+      "updateFailed": "Не удалось обновить модель",
+      "deleteFailed": "Не удалось удалить модель",
+      "multiplePrimaryKeys": "Разрешён только один первичный ключ на модель",
+      "systemTableProtected": "Системные таблицы нельзя создавать, изменять или удалять"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— Выберите поле —",
+    "clear": "Очистить внешний ключ",
+    "searchPlaceholder": "Поиск моделей…",
+    "noResults": "Модели не найдены.",
+    "systemBadge": "Система",
+    "fieldsLabel": "полей",
+    "onDelete": "При удалении",
+    "filter": {
+      "all": "Все",
+      "user": "Пользователь",
+      "system": "Система"
+    }
+  },
+  "users": {
+    "page_title": "Пользователи",
+    "page_description": "Управляйте учётными записями администратора и пользователей CMS",
+    "edit_kpis": "Изменить KPI",
+    "editing_kpis": "Изменение KPI",
+    "save_layout": "Сохранить макет",
+    "saving": "Сохранение…",
+    "search_placeholder": "Поиск по имени или электронной почте…",
+    "showing_count": "Показано {filtered} из {total} пользователей",
+    "no_users_found": "Пользователи не найдены",
+    "filter": "Фильтр",
+    "sort": "Сортировка",
+    "clear_all": "Очистить всё",
+    "filters": "Фильтры",
+    "role": "Роль",
+    "all_roles": "Все роли",
+    "all_statuses": "Все статусы",
+    "status": "Статус",
+    "joined_from": "Присоединился от",
+    "joined_to": "Присоединился до",
+    "sort_by": "Сортировать по",
+    "direction": "Направление",
+    "asc": "По возрастанию (А → Я)",
+    "desc": "По убыванию (Я → А)",
+    "col_name": "Имя",
+    "col_email": "Электронная почта",
+    "col_role": "Роль",
+    "col_status": "Статус",
+    "col_last_login": "Последний вход",
+    "col_joined": "Присоединился",
+    "role_admin": "Администратор",
+    "role_user": "Пользователь",
+    "status_active": "Активен",
+    "status_suspended": "Заблокирован",
+    "status_disabled": "Отключён",
+    "drawer_title": "Сведения о пользователе",
+    "actions": "Действия",
+    "change_role": "Роль",
+    "change_status": "Статус",
+    "send_reset": "Отправить письмо для сброса пароля",
+    "sending_reset": "Отправка…",
+    "delete_user": "Удалить пользователя",
+    "delete_confirm": "Безвозвратно удалить этого пользователя? Это действие невозможно отменить.",
+    "cancel": "Отмена",
+    "confirm_delete": "Да, удалить",
+    "deleting": "Удаление…",
+    "last_admin_warning": "Невозможно понизить в правах — это последний администратор",
+    "login_history": "История входов",
+    "no_history": "История входов пока не записана",
+    "event_login": "Вошёл",
+    "event_logout": "Вышел",
+    "event_online": "Онлайн",
+    "event_offline": "Ушёл в оффлайн",
+    "joined": "Присоединился",
+    "last_login": "Последний вход",
+    "toast_role_updated": "Роль обновлена",
+    "toast_status_updated": "Статус обновлён",
+    "toast_user_deleted": "Пользователь удалён",
+    "toast_reset_sent": "Сброс пароля отправлен на {email}",
+    "toast_kpi_saved": "Макет KPI сохранён",
+    "toast_load_failed": "Не удалось загрузить пользователей",
+    "toast_save_failed": "Не удалось сохранить",
+    "kpi_add": "Добавить KPI",
+    "kpi_add_block": "Блок",
+    "kpi_edit": "Изменить KPI",
+    "kpi_label_required": "Метка обязательна",
+    "kpi_select_field": "Выберите поле",
+    "kpi_select_both_fields": "Выберите оба поля",
+    "kpi_select_field_and_value": "Выберите поле и введите значение для сравнения",
+    "kpi_max_reached": "Разрешено максимум 5 KPI",
+    "kpi_label": "Метка",
+    "kpi_formula": "Формула",
+    "kpi_format": "Формат отображения",
+    "kpi_icon": "Значок",
+    "kpi_accent_colour": "Акцентный цвет",
+    "kpi_field": "Поле",
+    "kpi_field_a": "Поле A",
+    "kpi_field_b": "Поле B",
+    "kpi_numerator": "Поле числителя (A)",
+    "kpi_denominator": "Поле знаменателя (B)",
+    "kpi_operator": "Оператор",
+    "kpi_value_to_match": "Значение для сравнения",
+    "kpi_make_wide": "Сделать широким",
+    "kpi_make_compact": "Сделать компактным",
+    "kpi_add_to_block": "Добавить",
+    "kpi_save": "Сохранить изменения",
+    "kpi_cancel": "Отмена"
+  },
+  "notFound": {
+    "title": "Страница не найдена",
+    "description": "Мы не можем найти страницу, которую вы ищете. Возможно, она была перемещена, переименована или никогда не существовала.",
+    "goHome": "Перейти на главную страницу",
+    "backToConsole": "Назад в консоль",
+    "helpfulLinks": "Ищете что-то конкретное?",
+    "pages": "Страницы",
+    "models": "Модели",
+    "users": "Пользователи",
+    "settings": "Настройки"
+  },
+  "noModelLinked": {
+    "title": "Модель не привязана",
+    "description": "{pageName} использует шаблон {templateName}, но к ней пока не привязана модель данных.",
+    "instruction": "Измените настройки страницы и назначьте модель, чтобы она могла отображать данные.",
+    "openPages": "Открыть страницы",
+    "manageModels": "Управление моделями"
+  },
+  "lockedTemplate": {
+    "title": "Доступно в тарифном плане с хостингом",
+    "description": "Шаблон {templateName} входит в тарифный план с хостингом. Обновитесь, чтобы разблокировать канбан, календарь, оформление заказа и другие функции.",
+    "upgradeButton": "Посмотреть тарифный план с хостингом",
+    "backButton": "Назад к страницам"
+  },
+  "CookieBanner": {
+    "eyebrow": "КОНФИДЕНЦИАЛЬНОСТЬ",
+    "title": "Мы ценим вашу конфиденциальность",
+    "description": "Мы используем файлы cookie, чтобы поддерживать вашу сессию входа, запоминать ваш язык и (с вашего согласия) понимать, как посетители используют сайт. Вы можете изменить свои настройки в любое время.",
+    "necessaryTitle": "Строго необходимые",
+    "necessaryDescription": "Необходимы для входа, языковых настроек и сохранения вашего выбора файлов cookie. Их нельзя отключить.",
+    "analyticsTitle": "Аналитика",
+    "analyticsDescription": "Помогают нам понять, какие страницы посещают люди и как работает сайт. Персональные данные не передаются.",
+    "marketingTitle": "Маркетинг",
+    "marketingDescription": "Используются для показа релевантной рекламы и измерения эффективности кампаний на других сайтах.",
+    "alwaysOn": "Всегда включено",
+    "acceptAll": "Принять все",
+    "rejectAll": "Отклонить все",
+    "customise": "Настроить",
+    "savePreferences": "Сохранить настройки",
+    "cookiePreferences": "Настройки файлов cookie",
+    "policyLink": "Политика конфиденциальности"
   }
 }

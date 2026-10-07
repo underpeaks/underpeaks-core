@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
-    "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "save": "حفظ",
+    "saving": "جارٍ الحفظ...",
+    "saveChanges": "حفظ التغييرات",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "create": "إنشاء",
+    "add": "إضافة",
+    "remove": "إزالة",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "back": "رجوع",
+    "next": "التالي",
+    "done": "تم",
+    "loading": "جارٍ التحميل...",
+    "search": "بحث",
+    "filter": "تصفية",
+    "refresh": "تحديث",
+    "copy": "نسخ",
+    "copied": "تم النسخ!",
+    "upload": "رفع",
+    "rename": "إعادة تسمية",
+    "move": "نقل",
+    "preview": "معاينة",
+    "revoke": "إلغاء",
+    "generate": "إنشاء",
+    "reveal": "إظهار",
+    "hide": "إخفاء",
+    "active": "نشط",
+    "inactive": "غير نشط",
+    "status": "الحالة",
+    "actions": "الإجراءات",
+    "name": "الاسم",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "role": "الدور",
+    "createdAt": "تاريخ الإنشاء",
+    "noResults": "لم يتم العثور على نتائج",
+    "error": "حدث خطأ",
+    "success": "تم بنجاح",
+    "required": "هذا الحقل مطلوب",
+    "optional": "اختياري",
+    "yes": "نعم",
+    "no": "لا",
+    "areYouSure": "هل أنت متأكد؟",
+    "thisActionCannotBeUndone": "لا يمكن التراجع عن هذا الإجراء.",
+    "comingSoon": "قريباً"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
-    "menu": "Menu",
-    "media": "Media",
-    "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "dashboard": "لوحة التحكم",
+    "pages": "الصفحات",
+    "menu": "القائمة",
+    "media": "الوسائط",
+    "api": "واجهة برمجة التطبيقات",
+    "integrations": "التكاملات",
+    "theming": "التصميم",
+    "settings": "الإعدادات",
+    "account": "الحساب",
+    "messages": "الرسائل",
+    "notifications": "الإشعارات",
+    "logout": "تسجيل الخروج"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "بحث...",
+    "notifications": "الإشعارات",
+    "messages": "الرسائل",
+    "viewAccount": "عرض الحساب",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
-      "enterprise": "Enterprise"
+      "self_hosted": "استضافة ذاتية",
+      "hosted": "مستضاف",
+      "enterprise": "مؤسسي"
+    }
+  },
+  "nextModelGenerator": {
+    "nullJsonError": "تعذر إنشاء {{modelName}}Model: تم استلام JSON فارغ أو غير معرّف",
+    "missingRequiredField": "حقل مطلوب مفقود: {{fieldName}} في {{modelName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "جارٍ إنشاء الكود لـ {{count}} نموذج...",
+    "modelUndefined": "النموذج غير معرّف — تأكد من تمرير ModelDefinition صالح",
+    "modelMissingName": "النموذج يفتقد إلى خاصية \"name\" — يجب أن يكون لكل نموذج اسم",
+    "modelInvalidFields": "النموذج \"{{name}}\" يحتوي على \"fields\" غير صالحة أو مفقودة — يجب أن تكون fields كائنًا بسيطًا",
+    "generationSuccess": "تم إنشاء الكود بنجاح للنموذج: {{name}}",
+    "generationFailed": "فشل إنشاء الكود للنموذج: {{name}}"
+  },
+  "completeProfile": {
+    "title": "أكمل ملفك الشخصي",
+    "welcome": "مرحباً،",
+    "loading": {
+      "checkingProfile": "جارٍ التحقق من ملفك الشخصي..."
+    },
+    "subdomain": {
+      "label": "اختر نطاقاً فرعياً",
+      "placeholder": "yourapp",
+      "hint": "سيكون تطبيقك متاحاً على"
+    },
+    "button": {
+      "save": "حفظ والاستمرار",
+      "saving": "جارٍ الحفظ..."
+    },
+    "validation": {
+      "subdomainRequired": "أدخل نطاقاً فرعياً",
+      "adapterMissingCreateTenant": "لا يدعم محول قاعدة البيانات إنشاء مستأجر"
+    },
+    "errors": {
+      "saveFailed": "خطأ في حفظ النطاق الفرعي: {{message}}",
+      "unknownError": "حدث خطأ غير معروف"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "إعادة تعيين كلمة المرور غير مدعومة من محول قاعدة البيانات الحالي",
+      "noAccountFound": "لم يتم العثور على حساب بهذا البريد الإلكتروني."
+    }
+  },
+  "forgotPassword": {
+    "title": "نسيت كلمة المرور",
+    "description": "أدخل بريدك الإلكتروني وسنرسل لك رابطاً لإعادة تعيين كلمة المرور.",
+    "form": {
+      "emailLabel": "البريد الإلكتروني",
+      "emailPlaceholder": "you@example.com",
+      "buttonSend": "إرسال رابط إعادة التعيين",
+      "buttonSending": "جارٍ الإرسال..."
+    },
+    "validation": {
+      "emailRequired": "أدخل بريدك الإلكتروني."
+    },
+    "errors": {
+      "firebaseConfigMissing": "إعدادات Firebase مفقودة. يرجى التحقق من متغيرات البيئة.",
+      "sendFailed": "تعذر إرسال رابط إعادة التعيين. يرجى المحاولة مرة أخرى."
+    },
+    "success": {
+      "title": "تحقق من صندوق الوارد",
+      "description": "تم إرسال بريد إلكتروني لإعادة تعيين كلمة المرور. تحقق من صندوق الوارد واتبع الرابط لإعادة تعيين كلمة المرور.",
+      "button": "العودة إلى تسجيل الدخول"
+    },
+    "notice": {
+      "title": "تم إرسال الطلب",
+      "button": "حسناً"
+    },
+    "error": {
+      "title": "حدث خطأ ما"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "إعادة تعيين كلمة المرور غير مدعومة من محول قاعدة البيانات الحالي",
+      "invalidToken": "رابط إعادة التعيين غير صالح أو منتهي الصلاحية. اطلب رابطاً جديداً.",
+      "tokenAlreadyUsed": "تم استخدام رابط إعادة التعيين هذا مسبقاً. اطلب رابطاً جديداً.",
+      "tokenExpired": "انتهت صلاحية رابط إعادة التعيين هذا. اطلب رابطاً جديداً."
+    }
+  },
+  "resetPassword": {
+    "title": "إعادة تعيين كلمة المرور",
+    "form": {
+      "passwordLabel": "كلمة المرور الجديدة",
+      "buttonReset": "إعادة تعيين كلمة المرور",
+      "buttonResetting": "جارٍ إعادة التعيين..."
+    },
+    "errors": {
+      "invalidLink": "رابط إعادة التعيين غير صالح أو مفقود. اطلب رابطاً جديداً.",
+      "passwordRequired": "أدخل كلمة مرور جديدة.",
+      "missingToken": "رمز إعادة التعيين مفقود. يرجى استخدام الرابط الموجود في بريدك الإلكتروني.",
+      "resetFailed": "تعذر إعادة تعيين كلمة المرور. يرجى المحاولة مرة أخرى."
+    },
+    "error": {
+      "title": "حدث خطأ ما"
+    },
+    "expired": {
+      "title": "انتهت صلاحية رابط إعادة التعيين",
+      "description": "انتهت صلاحية رابط إعادة تعيين كلمة المرور. جارٍ إعادة التوجيه إلى صفحة نسيت كلمة المرور..."
+    },
+    "success": {
+      "title": "تمت إعادة تعيين كلمة المرور بنجاح",
+      "description": "يمكنك الآن",
+      "signinLink": "تسجيل الدخول",
+      "descriptionSuffix": "بكلمة المرور الجديدة."
+    }
+  },
+  "signIn": {
+    "heading": "تسجيل الدخول إلى حساب Underpeaks",
+    "fields": {
+      "email": "البريد الإلكتروني",
+      "password": "كلمة المرور"
+    },
+    "button": {
+      "signIn": "تسجيل الدخول",
+      "signingIn": "جارٍ تسجيل الدخول..."
+    },
+    "links": {
+      "forgotPassword": "نسيت كلمة المرور؟",
+      "noAccount": "ليس لديك حساب؟",
+      "signUp": "سجّل الآن"
+    },
+    "errors": {
+      "title": "خطأ",
+      "signinFailed": "فشل تسجيل الدخول. تحقق من بياناتك وحاول مرة أخرى."
+    }
+  },
+  "signUp": {
+    "heading": "إنشاء حساب Underpeaks",
+    "fields": {
+      "fullName": "الاسم الكامل",
+      "fullNamePlaceholder": "اسمك الكامل",
+      "email": "البريد الإلكتروني",
+      "emailPlaceholder": "you@example.com",
+      "password": "كلمة المرور"
+    },
+    "button": {
+      "signUp": "تسجيل",
+      "creating": "جارٍ الإنشاء..."
+    },
+    "alerts": {
+      "errorTitle": "خطأ",
+      "successTitle": "تم بنجاح"
+    },
+    "success": {
+      "accountCreated": "تم إنشاء الحساب بنجاح!"
+    },
+    "links": {
+      "alreadyHaveAccount": "لديك حساب بالفعل؟",
+      "loginNow": "سجّل الدخول الآن"
+    },
+    "errors": {
+      "nameRequired": "الاسم الكامل مطلوب.",
+      "emailRequired": "البريد الإلكتروني مطلوب.",
+      "passwordRequired": "كلمة المرور مطلوبة.",
+      "emailInUse": "هذا البريد الإلكتروني مسجل بالفعل. جرّب تسجيل الدخول بدلاً من ذلك.",
+      "invalidEmail": "أدخل بريداً إلكترونياً صالحاً.",
+      "weakPassword": "كلمة المرور ضعيفة جداً. الحد الأدنى 6 أحرف.",
+      "signupFailed": "فشل التسجيل. يرجى المحاولة مرة أخرى.",
+      "supabaseSignupFailed": "فشل تسجيل Supabase. يرجى المحاولة مرة أخرى."
+    },
+    "console": {
+      "firebaseVerificationSent": "تم إرسال بريد تحقق Firebase بنجاح.",
+      "firebaseVerificationFailed": "تعذر إرسال بريد تحقق Firebase.",
+      "supabaseVerificationSent": "تم إرسال بريد تحقق Supabase بنجاح."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "جارٍ التحقق من البريد الإلكتروني",
+      "success": "تم التحقق من البريد الإلكتروني ✅",
+      "error": "فشل التحقق"
+    },
+    "status": {
+      "verifying": "جارٍ التحقق من بريدك الإلكتروني...",
+      "verified": "تم التحقق من بريدك الإلكتروني.",
+      "supabaseRedirecting": "جارٍ إعادة التوجيه إلى إعداد كلمة المرور..."
+    },
+    "button": {
+      "goToSignIn": "الانتقال إلى تسجيل الدخول"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] تم استلام الطلب",
+      "verificationNotSupported": "[verify-email] التحقق غير مدعوم لهذا المحول"
+    },
+    "errors": {
+      "missingTokenOrEmail": "الرمز أو البريد الإلكتروني مفقود",
+      "dbTypeNotSet": "نوع قاعدة البيانات غير مهيأ",
+      "unsupportedDbType": "نوع قاعدة بيانات غير مدعوم",
+      "sqlAdapterMissingMethods": "محول SQL يفتقد إلى طرق مطلوبة",
+      "firebaseAdapterMissingMethods": "محول Firebase يفتقد إلى طرق مطلوبة",
+      "invalidToken": "رمز غير صالح",
+      "tokenExpired": "انتهت صلاحية الرمز",
+      "userNotFound": "المستخدم غير موجود",
+      "verificationNotSupported": "التحقق غير مدعوم لهذا المحول",
+      "verificationFailed": "فشل التحقق"
+    }
+  },
+  "schemaPreview": {
+    "title": "معاينة المخطط",
+    "columns": {
+      "field": "الحقل",
+      "type": "النوع"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "تأكيد الإجراء",
+      "description": "هل أنت متأكد من أنك تريد المتابعة؟"
+    },
+    "buttons": {
+      "confirm": "تأكيد",
+      "cancel": "إلغاء"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "الأعمال",
+      "content": "المحتوى",
+      "assets": "الأصول",
+      "configuration": "التكوين"
+    },
+    "items": {
+      "dashboard": "لوحة التحكم",
+      "products": "المنتجات",
+      "categories": "الفئات",
+      "orders": "الطلبات",
+      "coupons": "الكوبونات",
+      "users": "المستخدمون",
+      "shipping": "الشحن",
+      "services": "الخدمات",
+      "sharedModels": "النماذج المشتركة",
+      "menu": "القائمة",
+      "pages": "الصفحات",
+      "theme": "التصميم",
+      "storage": "التخزين",
+      "integrations": "التكاملات",
+      "apisAndWebhooks": "واجهات البرمجة و Webhooks"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "الرسائل",
+      "unreadCount": "{count} غير مقروءة"
+    },
+    "empty": "لا توجد رسائل حتى الآن",
+    "viewAll": "عرض جميع الرسائل",
+    "unreadBadge": "{count} غير مقروءة",
+    "systemInitials": "SY",
+    "fallbackUser": "مستخدم"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "الإشعارات",
+      "unreadCount": "{count} غير مقروءة",
+      "markAllRead": "تعليم الكل كمقروء"
+    },
+    "empty": "لا توجد إشعارات حتى الآن",
+    "viewAll": "عرض جميع الإشعارات"
+  },
+  "previewSchema": {
+    "fieldsHeading": "الحقول",
+    "fieldNamePlaceholder": "اسم الحقل",
+    "requiredLabel": "مطلوب",
+    "removeButton": "إزالة",
+    "saveButton": "حفظ",
+    "previewButton": "معاينة",
+    "hidePreviewButton": "إخفاء المعاينة",
+    "addFieldButton": "إضافة حقل",
+    "types": {
+      "string": "نص",
+      "num": "رقم",
+      "boolean": "منطقي",
+      "datetime": "تاريخ/وقت",
+      "array": "مصفوفة",
+      "map": "خريطة",
+      "null": "فارغ"
+    },
+    "aria": {
+      "fieldName": "اسم الحقل {{index}}",
+      "fieldType": "نوع الحقل {{index}}",
+      "elementType": "نوع عنصر الحقل {{index}}",
+      "required": "الحقل {{index}} مطلوب",
+      "removeField": "إزالة الحقل {{index}}"
     }
   },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "جارٍ تسجيل الخروج…",
+    "footer": {
+      "settings": "الإعدادات",
+      "logout": "تسجيل الخروج",
+      "collapse": "طيّ الشريط الجانبي",
+      "expand": "توسيع الشريط الجانبي",
+      "business": "الأعمال",
+      "developer": "المطوّر",
+      "design": "التصميم",
+      "system": "النظام"
+    },
+    "aria": {
+      "sidebar": "تنقل وحدة التحكم",
+      "navigation": "التنقل الرئيسي",
+      "expandSidebar": "توسيع الشريط الجانبي",
+      "collapseSidebar": "طيّ الشريط الجانبي"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "شعار المشروع",
+    "projectLabel": "المشروع:",
+    "signIn": "تسجيل الدخول",
+    "register": "تسجيل",
+    "aria": {
+      "navbar": "شريط التنقل العلوي",
+      "goToDashboard": "الانتقال إلى لوحة التحكم"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "قائمة المستخدم لـ {name}"
+    },
+    "menu": {
+      "account": "الحساب",
+      "settings": "الإعدادات",
+      "helpAndDocs": "المساعدة والوثائق",
+      "logout": "تسجيل الخروج"
+    }
+  },
+  "accountPage": {
+    "title": "الحساب",
+    "subtitle": "إدارة ملفك الشخصي وأمانك.",
+    "profile": {
+      "title": "الملف الشخصي",
+      "description": "قم بتحديث اسم العرض الخاص بك.",
+      "fullNameLabel": "الاسم الكامل",
+      "fullNamePlaceholder": "اسمك الكامل",
+      "emailLabel": "البريد الإلكتروني",
+      "emailReadOnlyNote": "يتم إدارة البريد الإلكتروني من قِبل مزوّد المصادقة الخاص بك ولا يمكن تغييره هنا.",
+      "saveButton": "حفظ التغييرات",
+      "savingButton": "جارٍ الحفظ…",
+      "savedButton": "تم الحفظ"
+    },
+    "danger": {
+      "title": "منطقة الخطر",
+      "description": "إجراءات لا يمكن التراجع عنها. تابع بحذر.",
+      "cancelTitle": "إلغاء الاشتراك",
+      "cancelDescription": "تظل خطتك نشطة حتى نهاية فترة الفوترة الحالية، ثم تعود إلى الاستضافة الذاتية.",
+      "cancelButton": "إلغاء الخطة",
+      "cancelModalBody": "سيتم إلغاء اشتراكك، ولكنك ستحتفظ بالوصول حتى نهاية فترة الفوترة الحالية. لا يمكن التراجع عن هذا.",
+      "resetTitle": "إعادة تعيين المشروع",
+      "resetDescription": "يحذف جميع محتويات المشروع بشكل نهائي ويعيد بدء الإعداد. يتم الاحتفاظ بحسابك.",
+      "resetButton": "إعادة تعيين المشروع",
+      "resetModalBody": "سيؤدي هذا إلى حذف جميع محتويات مشروعك بشكل نهائي — النماذج والصفحات والبيانات والوسائط. يتم الاحتفاظ بحسابك وفواتيرك. لا يمكن التراجع عن هذا.",
+      "deleteTitle": "حذف الحساب",
+      "deleteDescription": "يحذف حسابك وجميع البيانات المرتبطة به بشكل نهائي.",
+      "deleteButton": "حذف الحساب",
+      "deleteModalBody": "سيؤدي هذا إلى حذف حسابك وجميع محتوياته بشكل نهائي. يتم الاحتفاظ بسجلات الفوترة عند الحاجة القانونية. لا يمكن التراجع عن هذا."
+    },
+    "password": {
+      "title": "تغيير كلمة المرور",
+      "description": "استخدم كلمة مرور قوية لا تستخدمها في أماكن أخرى.",
+      "currentLabel": "كلمة المرور الحالية",
+      "newLabel": "كلمة المرور الجديدة",
+      "confirmLabel": "تأكيد كلمة المرور الجديدة",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور",
+      "minLengthHint": "8 أحرف على الأقل",
+      "mismatchHint": "كلمتا المرور غير متطابقتين",
+      "updateButton": "تحديث كلمة المرور",
+      "updatingButton": "جارٍ التحديث…",
+      "updatedButton": "تم التحديث"
+    },
+    "billing": {
+      "title": "الفوترة والخطة",
+      "description": "خطتك الحالية وخيارات الترقية.",
+      "selfHostedDescription": "الميزات الأساسية مشمولة. قم بالترقية للحصول على التكاملات والمصادقة المتقدمة والعلامة التجارية الخاصة.",
+      "paidDescription": "تم فتح جميع الميزات.",
+      "upgradeButton": "ترقية",
+      "upgradeAriaLabel": "الترقية إلى Underpeaks Pro",
+      "proFeaturesTitle": "ما ستحصل عليه مع Pro",
+      "proFeature1": "التكاملات (Stripe و Mailchimp وغيرها)",
+      "proFeature2": "مصادقة متقدمة — المصادقة الثنائية، تسجيل الدخول الاجتماعي، الرابط السحري، تسجيل الدخول الموحد",
+      "proFeature3": "تخصيص نظام إدارة المحتوى بعلامتك التجارية الخاصة",
+      "proFeature4": "نطاق مخصص لوحدة التحكم الخاصة بك",
+      "contactSalesButton": "تواصل مع المبيعات"
+    },
+    "errors": {
+      "profileUpdateFailed": "فشل تحديث الملف الشخصي. يرجى المحاولة مرة أخرى.",
+      "passwordUpdateFailed": "فشل تحديث كلمة المرور. يرجى المحاولة مرة أخرى."
+    }
+  },
+  "apiPage": {
+    "title": "واجهة برمجة التطبيقات",
+    "subtitle": "نقاط نهاية عامة يتم إنشاؤها تلقائياً من نماذجك",
+    "customEndpointButton": "نقطة نهاية مخصصة",
+    "tabsLabel": "علامات تبويب صفحة واجهة البرمجة",
+    "copy": "نسخ إلى الحافظة",
+    "copied": "تم النسخ!",
+    "tabs": {
+      "endpoints": "نقاط النهاية",
+      "keys": "مفاتيح واجهة البرمجة",
+      "reference": "المرجع"
+    },
+    "endpoints": {
+      "searchPlaceholder": "البحث في نقاط النهاية…",
+      "typeFilterLabel": "التصفية بحسب نوع نقطة النهاية",
+      "modelFilterLabel": "التصفية بحسب النموذج",
+      "type": {
+        "all": "الكل",
+        "auto": "تلقائي",
+        "custom": "مخصص"
+      },
+      "colMethod": "الطريقة",
+      "colPath": "المسار",
+      "colDescription": "الوصف",
+      "colActions": "الإجراءات",
+      "noResults": "لا توجد نقاط نهاية تطابق تصفيتك",
+      "customBadge": "مخصص",
+      "requiresAuth": "يتطلب مصادقة",
+      "public": "نقطة نهاية عامة",
+      "testButton": "اختبار",
+      "exampleRequest": "مثال على الطلب",
+      "requiredHeaders": "الرؤوس المطلوبة",
+      "testLabel": "اختبار",
+      "sendRequest": "إرسال الطلب",
+      "running": "قيد التشغيل…"
+    },
+    "drawer": {
+      "title": "نقطة نهاية مخصصة جديدة",
+      "subtitle": "اكتب منطق الأعمال الذي يستدعي واجهة البرمجة العامة",
+      "close": "إغلاق اللوحة",
+      "methodLabel": "الطريقة",
+      "pathLabel": "المسار",
+      "descriptionLabel": "الوصف",
+      "descriptionPlaceholder": "ماذا تفعل نقطة النهاية هذه؟",
+      "authLabel": "المصادقة",
+      "authRequired": "مطلوبة",
+      "authPublic": "عامة",
+      "codeLabel": "كود المعالج",
+      "cancelButton": "إلغاء",
+      "createButton": "إنشاء نقطة النهاية"
+    },
+    "keys": {
+      "title": "مفاتيح واجهة البرمجة",
+      "keepSecret": "احتفظ بها سرية",
+      "createTitle": "إنشاء مفتاح جديد",
+      "nameLabel": "اسم المفتاح",
+      "namePlaceholder": "اسم المفتاح، مثل: تطبيق الجوال",
+      "generateButton": "إنشاء",
+      "active": "نشط",
+      "inactive": "غير نشط",
+      "never": "لم يُستخدم أبداً",
+      "created": "تم الإنشاء",
+      "lastUsed": "آخر استخدام",
+      "revealKey": "إظهار مفتاح واجهة البرمجة",
+      "hideKey": "إخفاء مفتاح واجهة البرمجة",
+      "deleteKey": "حذف المفتاح {{name}}",
+      "confirmDelete": "تأكيد الحذف",
+      "cancelDelete": "إلغاء الحذف"
+    },
+    "reference": {
+      "queryParamsTitle": "معلمات الاستعلام",
+      "queryParamsSubtitle": "متوفرة في جميع نقاط نهاية GET",
+      "operatorsTitle": "عوامل التصفية",
+      "operatorsSubtitle": "استخدم مع",
+      "operatorsFormat": "المعلمة بصيغة",
+      "exampleTitle": "مثال كامل",
+      "exampleDescription": "جلب المنتجات النشطة الأقل من 500 ريال، مصنفة حسب السعر، مع إرجاع رقم المعرّف والاسم والسعر فقط:",
+      "responseLabel": "الاستجابة:"
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "لوحة التحكم",
+    "welcome": "مرحباً بعودتك، {name}",
+    "addWidget": "إضافة عنصر واجهة",
+    "editLayout": "تعديل التخطيط",
+    "saveLayout": "حفظ التخطيط",
+    "resetLayout": "إعادة تعيين التخطيط",
+    "toolbar": {
+      "title": "لوحة التحكم",
+      "subtitle": "اسحب عناصر الواجهة لإعادة ترتيبها · مرّر للتعديل",
+      "refresh": "تحديث",
+      "last30Days": "آخر 30 يوماً",
+      "addWidget": "إضافة عنصر واجهة"
+    },
+    "grid": {
+      "addWidget": "إضافة عنصر واجهة"
+    },
+    "addPanel": {
+      "title": "إضافة عنصر واجهة",
+      "subtitle": "انقر للإضافة إلى لوحة التحكم"
+    },
+    "widget": {
+      "dragToReorder": "اسحب لإعادة الترتيب",
+      "vsLastPeriod": "مقارنة بالفترة السابقة"
+    },
+    "chart": {
+      "day": "يوم",
+      "daysAgo": "قبل 30 يوماً",
+      "today": "اليوم"
+    },
+    "formula": {
+      "placeholder": "مثال: SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "الإعدادات المسبقة"
+    }
   },
   "media": {
-    "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "title": "الوسائط",
+    "uploadFiles": "رفع الملفات",
+    "createFolder": "إنشاء مجلد",
+    "folderName": "اسم المجلد",
+    "rootFolder": "الجذر",
+    "noFiles": "لا توجد ملفات في هذا المجلد",
+    "dropToUpload": "أسقط الملفات هنا للرفع",
+    "orClickToUpload": "أو انقر للتصفح",
+    "gridView": "عرض شبكي",
+    "listView": "عرض قائمة",
+    "fileSize": "حجم الملف",
+    "fileType": "نوع الملف",
+    "uploadedAt": "تم الرفع في",
+    "deleteFileConfirm": "هل أنت متأكد من أنك تريد حذف \"{name}\"؟",
+    "deleteFolderConfirm": "هل أنت متأكد من أنك تريد حذف المجلد \"{name}\" وكل محتوياته؟",
+    "importFromUrl": "استيراد من رابط",
+    "copyUrl": "نسخ الرابط",
+    "urlCopied": "تم نسخ الرابط إلى الحافظة",
+    "details": "تفاصيل الملف",
+    "selectFile": "اختر ملفاً لعرض التفاصيل"
   },
   "settings": {
-    "title": "Settings",
+    "title": "الإعدادات",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "نظرة عامة",
+      "projectName": "اسم المشروع",
+      "projectUrl": "رابط المشروع",
+      "projectId": "معرّف المشروع",
+      "dbType": "نوع قاعدة البيانات",
+      "environment": "البيئة",
+      "deploymentType": "نوع النشر",
+      "savedSuccess": "تم حفظ الإعدادات بنجاح"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "مفاتيح واجهة البرمجة",
+      "subheading": "أدر المفاتيح المستخدمة لمصادقة طلبات واجهة البرمجة من تطبيقاتك.",
+      "title": "مفاتيح واجهة البرمجة",
+      "description": "أدر مفاتيح واجهة البرمجة للوصول البرمجي إلى مشروعك.",
+      "generateKey": "إنشاء مفتاح جديد",
+      "keyName": "الاسم",
+      "keyPrefix": "بادئة المفتاح",
+      "lastUsed": "آخر استخدام",
+      "neverUsed": "لم يُستخدم أبداً",
+      "revokeConfirm": "هل أنت متأكد من أنك تريد إلغاء \"{name}\"؟ لا يمكن التراجع عن هذا.",
+      "revoked": "تم الإلغاء",
+      "keyCopied": "تم نسخ المفتاح إلى الحافظة",
+      "newKeyGenerated": "تم إنشاء مفتاح واجهة برمجة جديد. انسخه الآن — لن يظهر مرة أخرى.",
+      "noKeys": "لا توجد مفاتيح واجهة برمجة حتى الآن. أنشئ مفتاحاً للبدء.",
+      "sectionTitle": "المفاتيح النشطة",
+      "createdDate": "تم الإنشاء في {{date}}",
+      "lastUsedDate": "آخر استخدام في {{date}}",
+      "hideKey": "إخفاء المفتاح",
+      "revealKey": "إظهار المفتاح",
+      "copyKey": "نسخ المفتاح",
+      "revoke": "إلغاء",
+      "emptyTitle": "لا توجد مفاتيح واجهة برمجة حتى الآن",
+      "emptySubtitle": "أنشئ مفتاحاً أدناه للبدء."
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
-      "logo": "Logo",
-      "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "title": "العلامة التجارية",
+      "description": "خصّص مظهر وحدة تحكم Underpeaks الخاصة بك.",
+      "logo": "الشعار",
+      "favicon": "أيقونة الموقع",
+      "primaryColor": "اللون الأساسي",
+      "uploadLogo": "رفع الشعار",
+      "uploadFavicon": "رفع أيقونة الموقع",
+      "logoHint": "موصى به: 200×50 بكسل، PNG أو SVG بخلفية شفافة.",
+      "faviconHint": "موصى به: 32×32 بكسل ICO أو PNG أو SVG.",
+      "livePreview": "معاينة مباشرة",
+      "brandingSaved": "تم تحديث العلامة التجارية بنجاح"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
-      "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "host": "مضيف SMTP",
+      "port": "المنفذ",
+      "username": "اسم المستخدم",
+      "fromEmail": "بريد المُرسل",
+      "fromName": "اسم المُرسل",
+      "encryption": "التشفير",
+      "testEmail": "إرسال بريد تجريبي",
+      "testEmailSuccess": "تم إرسال البريد التجريبي بنجاح"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "النطاقات",
+      "addDomain": "إضافة نطاق",
+      "verified": "مُتحقَّق منه",
+      "unverified": "غير مُتحقَّق منه",
+      "primary": "أساسي",
+      "setPrimary": "تعيين كأساسي"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "الحساب",
+    "fullName": "الاسم الكامل",
+    "emailReadOnly": "البريد الإلكتروني (للقراءة فقط)",
+    "changePassword": "تغيير كلمة المرور",
+    "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmPassword": "تأكيد كلمة المرور الجديدة",
+    "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح",
+    "passwordChanged": "تم تغيير كلمة المرور بنجاح",
+    "memberSince": "عضو منذ {date}"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
-    "system": "System"
+    "title": "الرسائل",
+    "newConversation": "محادثة جديدة",
+    "noConversations": "لا توجد محادثات حتى الآن",
+    "noMessages": "لا توجد رسائل في هذه المحادثة",
+    "typeMessage": "اكتب رسالة...",
+    "send": "إرسال",
+    "markAllRead": "تعليم الكل كمقروء",
+    "reply": "رد",
+    "you": "أنت",
+    "system": "النظام"
+  },
+  "apiKeys": {
+    "heading": "مفاتيح واجهة البرمجة",
+    "subheading": "أدر المفاتيح المستخدمة لمصادقة طلبات واجهة البرمجة من تطبيقاتك.",
+    "sectionTitle": "المفاتيح النشطة",
+    "createdDate": "تم الإنشاء في {date}",
+    "lastUsedDate": "آخر استخدام في {date}",
+    "neverUsed": "لم يُستخدم أبداً",
+    "hideKey": "إخفاء المفتاح",
+    "revealKey": "إظهار المفتاح",
+    "copyKey": "نسخ المفتاح",
+    "revoke": "إلغاء",
+    "emptyTitle": "لا توجد مفاتيح واجهة برمجة حتى الآن",
+    "emptySubtitle": "أنشئ مفتاحاً أدناه للبدء.",
+    "errors": {
+      "loadFailed": "تعذر تحميل مفاتيح واجهة البرمجة",
+      "generateFailed": "تعذر إنشاء المفتاح",
+      "revokeFailed": "تعذر إلغاء المفتاح"
+    }
   },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "الإشعارات",
+    "noNotifications": "لا توجد إشعارات",
+    "noUnread": "أنت على اطلاع بكل شيء!",
+    "markAllRead": "تعليم الكل كمقروء",
+    "viewAll": "عرض جميع الإشعارات",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
-      "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "all": "الكل",
+      "unread": "غير مقروءة",
+      "comment": "التعليقات",
+      "system": "النظام",
+      "payment": "المدفوعات",
+      "security": "الأمان",
+      "message": "الرسائل"
     },
     "priority": {
-      "low": "Low",
-      "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "low": "منخفضة",
+      "normal": "عادية",
+      "high": "عالية",
+      "urgent": "عاجلة"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "تسجيل الدخول",
+    "logout": "تسجيل الخروج",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "sessionExpired": "انتهت صلاحية جلستك. يرجى تسجيل الدخول مرة أخرى.",
+    "idleWarning": "لقد كنت غير نشط لفترة من الوقت.",
+    "idleLogoutIn": "سيتم تسجيل خروجك بعد {seconds} ثانية.",
+    "stayLoggedIn": "البقاء مسجلاً"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "الصفحة غير موجودة",
+    "serverError": "خطأ في الخادم",
+    "networkError": "خطأ في الشبكة — يرجى التحقق من اتصالك",
+    "sessionError": "خطأ في الجلسة — يرجى تسجيل الدخول مرة أخرى",
+    "unknown": "حدث خطأ غير متوقع"
+  },
+  "grid": {
+    "addWidget": "إضافة عنصر واجهة"
+  },
+  "addPanel": {
+    "title": "إضافة عنصر واجهة",
+    "subtitle": "انقر للإضافة إلى لوحة التحكم"
+  },
+  "widget": {
+    "dragToReorder": "اسحب لإعادة الترتيب",
+    "vsLastPeriod": "مقارنة بالفترة السابقة"
+  },
+  "chart": {
+    "day": "يوم",
+    "daysAgo": "قبل 30 يوماً",
+    "today": "اليوم"
+  },
+  "formula": {
+    "placeholder": "مثال: SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "الإعدادات المسبقة"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "مركز المساعدة",
+      "subtitle": "اعثر على الإجابات، اقرأ الوثائق، أو تواصل معنا.",
+      "searchPlaceholder": "البحث في الأسئلة الشائعة…"
+    },
+    "resources": {
+      "title": "الموارد",
+      "links": {
+        "gettingStarted": {
+          "label": "البدء",
+          "description": "أعدّ مشروعك الأول في دقائق."
+        },
+        "apiReference": {
+          "label": "مرجع واجهة البرمجة",
+          "description": "مرجع كامل لجميع نقاط النهاية والعوامل في واجهة البرمجة."
+        },
+        "community": {
+          "label": "منتدى المجتمع",
+          "description": "اطرح الأسئلة وشارك المشاريع مع المجتمع."
+        }
+      }
+    },
+    "faq": {
+      "title": "الأسئلة الشائعة",
+      "resultCount": "{count} نتيجة",
+      "noResults": "لا توجد نتائج لـ \"{query}\"",
+      "noResultsHint": "جرّب مصطلح بحث مختلفاً أو تواصل مع الدعم أدناه."
+    },
+    "api": {
+      "title": "مرجع سريع لواجهة البرمجة",
+      "baseUrl": "الرابط الأساسي:",
+      "endpoints": {
+        "get": "يعرض جميع سجلات النموذج. يدعم التصفية والترتيب وتقسيم الصفحات.",
+        "post": "ينشئ سجلاً جديداً.",
+        "put": "يحدّث سجلاً موجوداً بواسطة المعرّف.",
+        "delete": "يحذف سجلاً بواسطة المعرّف."
+      },
+      "operators": {
+        "title": "عوامل الاستعلام",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "تواصل مع الدعم",
+      "submit": "إرسال الرسالة",
+      "success": {
+        "title": "تم إرسال الرسالة!",
+        "subtitle": "سنعود إليك في أقرب وقت ممكن."
+      },
+      "fields": {
+        "name": "الاسم",
+        "namePlaceholder": "أحمد محمد",
+        "email": "البريد الإلكتروني",
+        "emailPlaceholder": "you@example.com",
+        "message": "الرسالة",
+        "messagePlaceholder": "صف مشكلتك أو سؤالك…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "التكاملات",
+      "connectedCount": "{count} متصلة",
+      "errorCount": "{count} خطأ",
+      "infoBanner": "التكاملات المتصلة متوفرة في نقاط النهاية المخصصة وإنشاء الكود"
+    },
+    "categories": {
+      "all": "الكل",
+      "payments": "المدفوعات",
+      "email": "البريد الإلكتروني والرسائل النصية",
+      "storage": "التخزين",
+      "ai": "الذكاء الاصطناعي",
+      "analytics": "التحليلات",
+      "automation": "الأتمتة"
+    },
+    "status": {
+      "connected": "متصل",
+      "disconnected": "غير متصل",
+      "error": "خطأ"
+    },
+    "card": {
+      "viewDocs": "عرض الوثائق",
+      "buttons": {
+        "saveAndConnect": "حفظ واتصال",
+        "saving": "جارٍ الحفظ…",
+        "saved": "تم الحفظ!",
+        "disconnect": "قطع الاتصال",
+        "retryConnection": "إعادة محاولة الاتصال"
+      }
+    },
+    "empty": "لا توجد تكاملات في هذه الفئة"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "القائمة",
+      "subtitle": "{count} عنصر · اسحب لإعادة الترتيب",
+      "addItem": "إضافة عنصر"
+    },
+    "preview": {
+      "title": "معاينة التنقل",
+      "subtitle": "العناصر المرئية فقط",
+      "empty": "لا توجد عناصر مرئية حتى الآن."
+    },
+    "list": {
+      "title": "جميع العناصر",
+      "empty": "لا توجد عناصر قائمة حتى الآن",
+      "emptyAction": "أضف عنصرك الأول"
+    },
+    "row": {
+      "hidden": "مخفي",
+      "external": "خارجي",
+      "actions": {
+        "moveUp": "تحريك للأعلى",
+        "moveDown": "تحريك للأسفل",
+        "toggleVisibility": "تبديل الرؤية",
+        "edit": "تعديل",
+        "delete": "حذف",
+        "confirmDelete": "تأكيد الحذف",
+        "cancelDelete": "إلغاء"
+      }
+    },
+    "errors": {
+      "loadFailed": "تعذر تحميل عناصر القائمة",
+      "createFailed": "تعذر إنشاء عنصر القائمة",
+      "updateFailed": "تعذر تحديث عنصر القائمة",
+      "deleteFailed": "تعذر حذف عنصر القائمة"
+    },
+    "drawer": {
+      "titleAdd": "إضافة عنصر قائمة",
+      "titleEdit": "تعديل عنصر القائمة",
+      "subtitle": "قم بتكوين التسمية والرابط والأيقونة والرؤية",
+      "sections": {
+        "labelVisibility": "التسمية والرؤية",
+        "link": "الرابط",
+        "icon": "الأيقونة",
+        "nesting": "التداخل",
+        "preview": "معاينة"
+      },
+      "fields": {
+        "pageRequired": "يجب اختيار صفحة قبل حفظ عنصر القائمة.",
+        "menuLabel": "تسمية القائمة",
+        "menuLabelPlaceholder": "مثال: المنتجات",
+        "menuLabelHint": "هذا هو النص الذي يظهر في قائمة التنقل.",
+        "visibility": "الرؤية",
+        "visible": "مرئي",
+        "hidden": "مخفي",
+        "linkTypePage": "صفحة",
+        "linkTypeExternal": "رابط خارجي",
+        "selectPage": "اختر صفحة",
+        "selectPagePlaceholder": "— اختر صفحة —",
+        "noPagesHint": "لم يتم العثور على صفحات إدارية. أنشئ أولاً صفحة بنوع الصفحة مضبوط على إدارة.",
+        "externalUrl": "رابط خارجي",
+        "openIn": "فتح في",
+        "sameTab": "نفس التبويب",
+        "newTab": "تبويب جديد",
+        "parentItem": "العنصر الأصلي",
+        "parentItemPlaceholder": "— المستوى الأعلى —",
+        "parentItemHint": "تظهر العناصر المتداخلة كعناصر فرعية منسدلة في التنقل."
+      },
+      "icons": {
+        "home": "الرئيسية",
+        "grid": "شبكة",
+        "package": "حزمة",
+        "users": "المستخدمون",
+        "settings": "الإعدادات",
+        "file": "ملف",
+        "cart": "عربة التسوق",
+        "mail": "البريد",
+        "star": "نجمة",
+        "info": "معلومات"
+      },
+      "preview": {
+        "hidden": "مخفي"
+      },
+      "buttons": {
+        "cancel": "إلغاء",
+        "saveChanges": "حفظ التغييرات",
+        "addItem": "إضافة عنصر",
+        "saving": "جارٍ الحفظ…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "رابط الملف",
+      "metadata": "البيانات الوصفية",
+      "rename": "إعادة تسمية",
+      "moveToFolder": "نقل إلى مجلد"
+    },
+    "altText": {
+      "placeholder": "صف هذه الصورة لإمكانية الوصول…",
+      "empty": "لم يتم تعيين نص بديل"
+    },
+    "metadata": {
+      "folder": "المجلد",
+      "path": "المسار",
+      "size": "الحجم",
+      "type": "النوع",
+      "uploaded": "تم الرفع",
+      "dimensions": "الأبعاد"
+    },
+    "actions": {
+      "save": "حفظ",
+      "saving": "جارٍ الحفظ…",
+      "cancel": "إلغاء",
+      "move": "نقل",
+      "moving": "جارٍ النقل…",
+      "deleteFile": "حذف الملف"
+    },
+    "move": {
+      "currentlyIn": "الموقع الحالي:"
+    },
+    "errors": {
+      "renameFailed": "فشلت إعادة التسمية",
+      "moveFailed": "فشل النقل"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "حقل مطلوب مفقود: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "المجلدات",
+      "all": "الكل",
+      "newFolderTitle": "مجلد جديد",
+      "collapse": "طيّ",
+      "expand": "توسيع"
+    },
+    "folder": {
+      "selectTitle": "اختر مجلداً"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "حذف المجلد",
+      "fileCount": "{count} ملفات"
+    },
+    "empty": {
+      "message": "هذا المجلد فارغ"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "هذا المجلد فارغ"
+    },
+    "header": {
+      "name": "الاسم",
+      "size": "الحجم",
+      "type": "النوع",
+      "uploaded": "تم الرفع"
+    },
+    "row": {
+      "deleteTitle": "حذف الملف"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "الوسائط"
+    },
+    "actions": {
+      "delete": "حذف ({count})",
+      "clear": "مسح",
+      "upload": "رفع"
+    },
+    "viewMode": {
+      "grid": "عرض شبكي",
+      "list": "عرض قائمة"
+    }
+  },
+  "newFolderPopup": {
+    "title": "مجلد جديد",
+    "placeholder": "اسم المجلد",
+    "buttons": {
+      "create": "إنشاء",
+      "cancel": "إلغاء"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "قم برفع الملفات أو استيراد الوسائط عبر رابط إلى المجلد المحدد.",
+    "title": "إضافة وسائط",
+    "tabs": {
+      "upload": "رفع ملف",
+      "url": "إضافة عبر رابط"
+    },
+    "uploadZone": {
+      "hint": "أي نوع ملف — صور، فيديوهات، مستندات"
+    },
+    "urlTab": {
+      "description": "الصق رابطاً عاماً لاستيراد الملف مباشرة إلى التخزين.",
+      "placeholder": "https://example.com/file.jpg",
+      "import": "استيراد",
+      "importing": "جارٍ الاستيراد…",
+      "previewAlt": "معاينة الرابط"
+    },
+    "errors": {
+      "importFailed": "فشل الاستيراد"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "تعذر تحميل المجلدات",
+      "loadFiles": "تعذر تحميل الملفات",
+      "createFolder": "تعذر إنشاء المجلد",
+      "deleteFailed": "فشل الحذف"
+    },
+    "confirmDelete": {
+      "titleFolder": "حذف المجلد",
+      "titleFile": "حذف الملف",
+      "message": "هل أنت متأكد من أنك تريد حذف",
+      "folderWarning": "سيؤدي هذا إلى حذف جميع الملفات داخل المجلد.",
+      "undoWarning": "لا يمكن التراجع عن هذا الإجراء.",
+      "selectionLabel": "{count} عناصر",
+      "cancel": "إلغاء",
+      "confirm": "حذف",
+      "deleting": "جارٍ الحذف…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "لا توجد رسائل",
+      "subUnread": "أنت على اطلاع بكل شيء!",
+      "subAll": "صندوق الوارد الخاص بك فارغ."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "الآن",
+      "minutesAgo": "قبل {count} دقيقة",
+      "hoursAgo": "قبل {count} ساعة",
+      "daysAgo": "قبل {count} يوم"
+    },
+    "unread": {
+      "badge": "{count} غير مقروءة"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "رسالة النظام",
+    "from": "من: {name}",
+    "deleteButton": "حذف",
+    "deleteAriaLabel": "حذف المحادثة: {subject}",
+    "messagesAriaLabel": "سلسلة الرسائل",
+    "loading": "جارٍ تحميل الرسائل...",
+    "emptyTitle": "لا توجد رسائل حتى الآن",
+    "emptySub": "أرسل الرسالة الأولى أدناه."
+  },
+  "messageBubble": {
+    "justNow": "الآن",
+    "minutesAgo": "قبل {count} دقيقة",
+    "hoursAgo": "قبل {count} ساعة",
+    "daysAgo": "قبل {count} يوم"
+  },
+  "replyBar": {
+    "placeholder": "اكتب رداً… (اضغط Enter للإرسال)",
+    "sendAriaLabel": "إرسال الرسالة"
+  },
+  "messagesPage": {
+    "title": "الرسائل",
+    "unreadCount": "{count} رسالة غير مقروءة",
+    "filters": {
+      "all": "الكل",
+      "unread": "غير مقروءة"
+    },
+    "markAllRead": "تعليم الكل كمقروء",
+    "closeError": "إغلاق رسالة الخطأ",
+    "empty": {
+      "title": "اختر محادثة",
+      "sub": "اختر محادثة من القائمة لقراءتها هنا."
+    },
+    "errors": {
+      "load": "تعذر تحميل الرسائل",
+      "delete": "تعذر حذف المحادثة",
+      "markAll": "تعذر تعليم الكل كمقروء"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "عاجل",
+      "high": "عالية"
+    },
+    "actions": {
+      "markRead": "تعليم كمقروء",
+      "view": "عرض",
+      "delete": "حذف"
+    }
+  },
+  "notificationsHeader": {
+    "title": "الإشعارات",
+    "unreadCount": "{count} إشعار غير مقروء",
+    "filters": {
+      "all": "الكل",
+      "unread": "غير مقروءة"
+    },
+    "markAllRead": "تعليم الكل كمقروء"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "لا توجد إشعارات",
+      "subUnread": "أنت على اطلاع بكل شيء!",
+      "subAll": "ليس لديك أي إشعارات حتى الآن."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "تعذر تحميل الإشعارات",
+      "markReadFailed": "تعذر التعليم كمقروء",
+      "markAllReadFailed": "تعذر تعليم الكل كمقروء",
+      "deleteFailed": "تعذر حذف الإشعار"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "عامة",
+      "admin": "إدارية",
+      "draft": "مسودة",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "الصفحات",
+      "pageCount": "{count} صفحة إجمالاً",
+      "searchPlaceholder": "البحث في الصفحات…",
+      "newPage": "صفحة جديدة"
+    },
+    "filter": {
+      "all": "الكل"
+    },
+    "table": {
+      "page": "الصفحة",
+      "model": "النموذج",
+      "template": "القالب",
+      "visibility": "الرؤية",
+      "actions": "الإجراءات",
+      "seoPrefix": "تحسين محركات البحث",
+      "systemBadge": "نظام",
+      "hiddenBadge": "مخفية"
+    },
+    "emptyState": {
+      "message": "لم يتم العثور على صفحات",
+      "cta": "أنشئ صفحتك الأولى"
+    },
+    "actions": {
+      "edit": "تعديل الصفحة",
+      "delete": "حذف الصفحة",
+      "view": "عرض الصفحة",
+      "confirmDelete": "تأكيد الحذف",
+      "cancel": "إلغاء",
+      "systemLocked": "لا يمكن تعديل صفحات النظام أو حذفها"
+    },
+    "errors": {
+      "loadFailed": "تعذر تحميل الصفحات",
+      "createFailed": "تعذر إنشاء الصفحة",
+      "updateFailed": "تعذر تحديث الصفحة",
+      "deleteFailed": "تعذر حذف الصفحة"
+    },
+    "drawer": {
+      "title": "إنشاء صفحة",
+      "editTitle": "تعديل الصفحة",
+      "subtitle": "حدّد صفحة جديدة وأضف نموذجاً",
+      "sections": {
+        "basicInfo": "المعلومات الأساسية",
+        "modelTemplate": "النموذج والقالب",
+        "seo": "تحسين محركات البحث"
+      },
+      "fields": {
+        "hidden": {
+          "label": "إخفاء الصفحة",
+          "hint": "لا تظهر الصفحات المخفية في التنقل أو خرائط الموقع"
+        },
+        "name": {
+          "label": "اسم الصفحة",
+          "placeholder": "مثال: قائمة المنتجات"
+        },
+        "slug": {
+          "label": "المعرّف / الرابط",
+          "placeholder": "/معرف-صفحتك",
+          "hint": "استخدم :id للمسارات الديناميكية، مثال: /products/:id"
+        },
+        "visibility": {
+          "label": "الرؤية"
+        },
+        "model": {
+          "label": "إضافة نموذج",
+          "noModel": "— بدون نموذج (صفحة مخصصة) —",
+          "hint": "يمكن لنموذج واحد تغذية عدة صفحات."
+        },
+        "template": {
+          "label": "القالب"
+        },
+        "seoTitle": {
+          "label": "عنوان تحسين محركات البحث",
+          "placeholder": "عنوان الصفحة لمحركات البحث",
+          "charCount": "{count}/60 حرفاً"
+        },
+        "seoDesc": {
+          "label": "الوصف التعريفي",
+          "placeholder": "وصف قصير لنتائج البحث…",
+          "charCount": "{count}/160 حرفاً"
+        }
+      },
+      "seoPreview": {
+        "label": "معاينة البحث",
+        "titleFallback": "عنوان الصفحة",
+        "urlPrefix": "yoursite.com",
+        "descFallback": "لم يتم تقديم وصف."
+      },
+      "actions": {
+        "cancel": "إلغاء",
+        "create": "إنشاء الصفحة",
+        "update": "تحديث الصفحة",
+        "saving": "جارٍ الحفظ…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "إنشاء مفتاح جديد",
+    "keyNameLabel": "اسم المفتاح",
+    "keyNameHint": "أعطه اسماً وصفياً لتتذكر ما يُستخدم من أجله.",
+    "keyNamePlaceholder": "مثال: تطبيق Flutter — الإنتاج",
+    "buttonGenerating": "جارٍ الإنشاء…",
+    "buttonIdle": "إنشاء المفتاح"
+  },
+  "newKeyModal": {
+    "title": "تم إنشاء مفتاح واجهة البرمجة",
+    "instructions": "تم إنشاء مفتاحك وهو جاهز للاستخدام. انقر على <eyeIcon>أيقونة العين</eyeIcon> بجانب المفتاح في القائمة لإظهاره ونسخه.",
+    "doneButton": "تم"
+  },
+  "revokeModal": {
+    "title": "إلغاء مفتاح واجهة البرمجة",
+    "message": "ستفقد أي تطبيقات تستخدم هذا المفتاح الوصول على الفور:",
+    "cancelButton": "إلغاء",
+    "revokeButtonIdle": "إلغاء المفتاح",
+    "revokeButtonRevoking": "جارٍ الإلغاء…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "تعذر تحميل مفاتيح واجهة البرمجة",
+      "generateFailed": "تعذر إنشاء المفتاح",
+      "revokeFailed": "تعذر إلغاء المفتاح"
+    },
+    "logs": {
+      "loadingKeys": "جارٍ تحميل مفاتيح واجهة البرمجة...",
+      "keysLoaded": "تم تحميل مفاتيح واجهة البرمجة بنجاح",
+      "generatingKey": "جارٍ إنشاء مفتاح واجهة برمجة جديد...",
+      "keyGenerated": "تم إنشاء مفتاح واجهة البرمجة بنجاح",
+      "revokingKey": "جارٍ إلغاء مفتاح واجهة البرمجة...",
+      "keyRevoked": "تم إلغاء مفتاح واجهة البرمجة بنجاح"
+    }
+  },
+  "brandingPage": {
+    "heading": "العلامة التجارية لنظام إدارة المحتوى",
+    "subheading": "خصّص مظهر نظام إدارة المحتوى لفريقك.",
+    "errors": {
+      "saveFailed": "تعذر حفظ العلامة التجارية"
+    },
+    "logs": {
+      "savingBranding": "جارٍ حفظ إعدادات العلامة التجارية...",
+      "brandingSaved": "تم حفظ العلامة التجارية بنجاح"
+    },
+    "logoSection": {
+      "title": "شعار نظام إدارة المحتوى",
+      "uploadLabel": "الشعار",
+      "uploadHint": "PNG أو SVG بخلفية شفافة",
+      "uploadRecommended": "200×60 بكسل",
+      "imageAlt": "معاينة الشعار"
+    },
+    "faviconSection": {
+      "title": "أيقونة الموقع",
+      "uploadLabel": "أيقونة الموقع",
+      "uploadHint": "ICO أو PNG أو SVG — تظهر في تبويبات المتصفح",
+      "uploadRecommended": "32×32 بكسل أو 64×64 بكسل",
+      "imageAlt": "معاينة أيقونة الموقع"
+    },
+    "preview": {
+      "label": "معاينة شريط التنقل العلوي",
+      "projectLabel": "المشروع:"
+    },
+    "saveSuccess": "تم حفظ العلامة التجارية بنجاح",
+    "saveButtonIdle": "حفظ العلامة التجارية",
+    "saveButtonSaving": "جارٍ الحفظ…"
+  },
+  "overviewPage": {
+    "heading": "نظرة عامة على المشروع",
+    "subheading": "لقطة سريعة عن مشروع Underpeaks الخاص بك.",
+    "stats": {
+      "dbType": "نوع قاعدة البيانات",
+      "environment": "البيئة",
+      "deployment": "النشر",
+      "status": "الحالة",
+      "statusActive": "نشط"
+    },
+    "userInfo": {
+      "sectionTitle": "معلومات المستخدم",
+      "fullName": "الاسم الكامل",
+      "email": "البريد الإلكتروني",
+      "role": "الدور",
+      "status": "الحالة",
+      "verified": "تم التحقق",
+      "verifiedYes": "نعم",
+      "verifiedNo": "لا",
+      "memberSince": "عضو منذ"
+    },
+    "licenseKey": {
+      "sectionTitle": "مفتاح ترخيص Underpeaks",
+      "description": "يصادق مفتاح الترخيص هذه المثيلة ويتيح التمييز بين الميزات المستضافة والمستضافة ذاتياً.",
+      "reveal": "إظهار",
+      "hide": "إخفاء",
+      "copy": "نسخ",
+      "copied": "تم النسخ",
+      "loading": "جارٍ التحميل…",
+      "notFound": "لم يتم العثور على مفتاح ترخيص"
+    }
+  },
+  "smtpPage": {
+    "heading": "إعدادات SMTP",
+    "subheading": "قم بتكوين البريد الصادر لمشروعك.",
+    "emailFeatures": {
+      "sectionTitle": "ميزات البريد الإلكتروني",
+      "verifyEmailLabel": "تمكين التحقق من البريد الإلكتروني عند التسجيل",
+      "forgotPasswordLabel": "تمكين رسائل نسيت كلمة المرور",
+      "builtInNotice": "يتعامل {provider} مع التحقق من البريد الإلكتروني وإعادة تعيين كلمة المرور بشكل مدمج — لا حاجة إلى SMTP لهذه الميزات.",
+      "smtpToggleLabel": "استخدام خادم SMTP مخصص"
+    },
+    "smtpConfig": {
+      "sectionTitle": "تكوين SMTP",
+      "hostLabel": "مضيف SMTP",
+      "hostPlaceholder": "smtp.example.com",
+      "portLabel": "المنفذ",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "عنوان المُرسل",
+      "fromAddressPlaceholder": "no-reply@example.com",
+      "usernameLabel": "اسم المستخدم",
+      "usernamePlaceholder": "اسم مستخدم SMTP",
+      "passwordLabel": "كلمة المرور",
+      "passwordPlaceholder": "كلمة مرور SMTP",
+      "showPassword": "إظهار كلمة المرور",
+      "hidePassword": "إخفاء كلمة المرور",
+      "encryptionLabel": "التشفير",
+      "encryptionNone": "بدون"
+    },
+    "logs": {
+      "savingSmtp": "جارٍ حفظ إعدادات SMTP...",
+      "smtpSaved": "تم حفظ إعدادات SMTP بنجاح"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "الإعدادات",
+    "toggleAriaLabel": "تبديل تنقل الإعدادات",
+    "nav": {
+      "overview": "نظرة عامة",
+      "api-keys": "مفاتيح واجهة البرمجة",
+      "smtp": "إعدادات SMTP",
+      "branding": "العلامة التجارية لنظام إدارة المحتوى"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "جارٍ تحميل الإعدادات…"
+  },
+  "saveButton": {
+    "savedMessage": "تم الحفظ بنجاح",
+    "buttonSaving": "جارٍ الحفظ…",
+    "buttonIdle": "حفظ التغييرات"
+  },
+  "coloursPage": {
+    "heading": "الألوان",
+    "subheading": "حدّد رموز الألوان المستخدمة في تطبيقات Flutter و Next.js التي أنشأتها.",
+    "preview": {
+      "title": "معاينة مباشرة",
+      "primaryButton": "الزر الأساسي",
+      "secondaryButton": "ثانوي",
+      "accentBadge": "شارة التمييز",
+      "success": "✓ نجاح",
+      "warning": "⚠ تحذير",
+      "danger": "✕ خطر"
+    },
+    "tokensSectionTitle": "رموز الألوان",
+    "resetTokenTitle": "إعادة تعيين إلى الافتراضي",
+    "resetAllButton": "إعادة تعيين الكل إلى الافتراضي",
+    "savedMessage": "تم الحفظ",
+    "saveButtonIdle": "حفظ الألوان",
+    "saveButtonSaving": "جارٍ الحفظ…",
+    "logs": {
+      "savingColours": "جارٍ حفظ رموز الألوان...",
+      "coloursSaved": "تم حفظ رموز الألوان بنجاح"
+    },
+    "tokens": {
+      "primary":      { "label": "أساسي",             "description": "لون العلامة التجارية الرئيسي — الأزرار والروابط والتمييزات" },
+      "primary-fg":   { "label": "المقدمة الأساسية",  "description": "النص على خلفيات اللون الأساسي" },
+      "secondary":    { "label": "ثانوي",           "description": "لون علامة تجارية مساعد" },
+      "secondary-fg": { "label": "المقدمة الثانوية","description": "النص على خلفيات اللون الثانوي" },
+      "accent":       { "label": "لون التمييز",              "description": "لون التمييز للشارات والعلامات" },
+      "background":   { "label": "الخلفية",          "description": "خلفية التطبيق الرئيسية" },
+      "surface":      { "label": "السطح",             "description": "خلفية البطاقات واللوحات" },
+      "border":       { "label": "الحد",              "description": "لون الحد الافتراضي" },
+      "success":      { "label": "نجاح",             "description": "الحالات الإيجابية والتأكيدات" },
+      "warning":      { "label": "تحذير",             "description": "التحذيرات وحالات الحذر" },
+      "danger":       { "label": "خطر",              "description": "الأخطاء والإجراءات المدمرة" },
+      "text":         { "label": "النص الأساسي",        "description": "لون نص المحتوى الرئيسي" },
+      "text-muted":   { "label": "النص الخافت",          "description": "النص الثانوي والنص الوهمي" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "أعلام الميزات",
+    "comingSoonBadge": "قريباً",
+    "subheading": "قم بتفعيل الميزات التي سيتم تضمينها في تطبيقات Flutter و Next.js التي أنشأتها.",
+    "paidBadge": "مدفوع",
+    "savedMessage": "تم الحفظ",
+    "saveButtonIdle": "حفظ الأعلام",
+    "saveButtonSaving": "جارٍ الحفظ…",
+    "upgrade": {
+      "title": "الخطة المستضافة مطلوبة",
+      "description": "تتطلب هذه الميزات بنية Underpeaks المستضافة. قم بالترقية لفتحها.",
+      "button": "ترقية"
+    },
+    "groups": {
+      "Appearance": "المظهر",
+      "Localisation": "التعريب",
+      "App Behaviour": "سلوك التطبيق",
+      "Authentication — Paid": "المصادقة — مدفوعة",
+      "Advanced — Paid": "متقدم — مدفوع"
+    },
+    "flags": {
+      "dark-mode":          { "label": "الوضع الداكن",                 "description": "يسمح للمستخدمين بالتبديل بين السمة الفاتحة والداكنة في التطبيق" },
+      "system-theme":       { "label": "متابعة سمة النظام",       "description": "التطابق التلقائي مع إعداد الوضع الفاتح/الداكن في الجهاز" },
+      "multi-language":     { "label": "دعم متعدد اللغات",    "description": "تمكين دعم لغات متعددة في التطبيق المُنشأ" },
+      "rtl-support":        { "label": "دعم الاتجاه من اليمين إلى اليسار",               "description": "تخطيط من اليمين إلى اليسار للعربية والعبرية واللغات المشابهة" },
+      "offline-mode":       { "label": "الوضع غير المتصل",              "description": "تخزين البيانات محلياً بحيث يعمل التطبيق بدون اتصال بالإنترنت" },
+      "push-notifications": { "label": "الإشعارات الفورية",        "description": "تمكين دعم الإشعارات الفورية عبر FCM — أنت توفر المفاتيح" },
+      "splash-screen":      { "label": "شاشة البداية",             "description": "عرض شاشة بداية بالعلامة التجارية عند تشغيل التطبيق" },
+      "onboarding":         { "label": "تدفق التعريف بالتطبيق",           "description": "عرض تدفق ترحيب/تعريف للمستخدمين الجدد" },
+      "2fa":                { "label": "المصادقة الثنائية", "description": "طلب رمز مرور لمرة واحدة أو تطبيق مصادقة لتسجيل الدخول" },
+      "biometric":          { "label": "تسجيل الدخول البيومتري",           "description": "تسجيل الدخول بالبصمة و Face ID على الأجهزة المحمولة" },
+      "social-login":       { "label": "تسجيل الدخول الاجتماعي",              "description": "المصادقة عبر Google و GitHub و Apple و Facebook" },
+      "magic-link":         { "label": "الرابط السحري",                "description": "تسجيل الدخول بدون كلمة مرور عبر رابط البريد الإلكتروني" },
+      "sso":                { "label": "تسجيل الدخول الموحد / SAML",                "description": "تكامل تسجيل الدخول الموحد للمؤسسات" },
+      "analytics":          { "label": "التحليلات داخل التطبيق",          "description": "تتبع مشاهدات الشاشة والأحداث داخل التطبيق المُنشأ" },
+      "ab-testing":         { "label": "اختبار A/B",               "description": "تشغيل تجارب الميزات على قاعدة مستخدميك" },
+      "feature-gating":     { "label": "التحكم بالميزات",            "description": "إظهار أو إخفاء الميزات حسب خطة المستخدم أو دوره" }
+    },
+    "logs": {
+      "savingFlags": "جارٍ حفظ أعلام الميزات...",
+      "flagsSaved": "تم حفظ أعلام الميزات بنجاح"
+    }
+  },
+  "spacingPage": {
+    "heading": "التباعد والانحناء",
+    "subheading": "تحكّم في الشكل والكثافة وارتفاع المكونات في تطبيقاتك المُنشأة.",
+    "preview": {
+      "title": "معاينة مباشرة",
+      "button": "زر",
+      "card": "مكوّن بطاقة",
+      "input": "حقل إدخال"
+    },
+    "sections": {
+      "radius": {
+        "title": "انحناء الحد",
+        "description": "يُطبَّق على الأزرار والبطاقات وحقول الإدخال والنوافذ المنبثقة"
+      },
+      "density": {
+        "title": "كثافة التباعد",
+        "description": "يتحكم في الحشو داخل المكونات"
+      },
+      "shadow": {
+        "title": "الارتفاع / الظل",
+        "description": "عمق ظل البطاقات والمكونات"
+      }
+    },
+    "radius": {
+      "none": "بدون",
+      "sm": "صغير",
+      "md": "متوسط",
+      "lg": "كبير",
+      "xl": "كبير جداً",
+      "full": "حبة"
+    },
+    "density": {
+      "compact": { "label": "مضغوط", "desc": "حشو ضيق، محتوى أكثر مرئياً" },
+      "default": { "label": "افتراضي", "desc": "تباعد متوازن لمعظم حالات الاستخدام" },
+      "relaxed": { "label": "مريح", "desc": "حشو واسع، أسهل للنقر" }
+    },
+    "shadow": {
+      "none": "بدون",
+      "sm": "خفيف",
+      "md": "متوسط",
+      "lg": "قوي"
+    },
+    "save": {
+      "button": "حفظ التباعد",
+      "saving": "جارٍ الحفظ…",
+      "savedConfirmation": "تم الحفظ"
+    }
+  },
+  "typographyPage": {
+    "heading": "الطباعة",
+    "subheading": "اختر الخطوط والمقياس لتطبيقاتك المُنشأة. يتم تحميل الخطوط من Google Fonts.",
+    "preview": {
+      "title": "معاينة مباشرة",
+      "headingSuffix": "— عنوان",
+      "bodySample": "نص تجريبي بالحجم الافتراضي لجسم النص. يستخدم لعرض شكل الخط.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "عائلات الخطوط",
+        "description": "اختر من Google Fonts — يتم تضمينه تلقائياً في إنشاء الكود"
+      },
+      "weights": {
+        "title": "أوزان الخط"
+      },
+      "scale": {
+        "title": "مقياس حجم الخط",
+        "description": "يتحكم في حجم النص العام في التطبيق بالكامل"
+      }
+    },
+    "fonts": {
+      "headingFont": "خط العنوان",
+      "bodyFont": "خط النص",
+      "monoFont": "خط أحادي التباعد"
+    },
+    "weights": {
+      "headingWeight": "وزن العنوان",
+      "bodyWeight": "وزن النص"
+    },
+    "scale": {
+      "compact": { "label": "مضغوط", "desc": "نص أصغر، تباعد أضيق" },
+      "default": { "label": "افتراضي", "desc": "متوازن لمعظم التطبيقات" },
+      "relaxed": { "label": "مريح", "desc": "نص أكبر، مساحة أكبر" }
+    },
+    "save": {
+      "button": "حفظ الطباعة",
+      "saving": "جارٍ الحفظ…",
+      "savedConfirmation": "تم الحفظ"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "التصميم",
+    "nav": {
+      "colours": "الألوان",
+      "typography": "الطباعة",
+      "spacing": "التباعد والانحناء",
+      "featureFlags": "أعلام الميزات",
+      "presets": "الإعدادات المسبقة"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "جلسة غير نشطة",
+      "description": "لقد كنت غير نشط. سيتم تسجيل الخروج بعد:",
+      "logoutButton": "تسجيل الخروج",
+      "keepAliveButton": "البقاء نشطاً"
+    },
+    "logs": {
+      "logoutFailed": "فشل تسجيل الخروج:"
+    }
+  },
+  "loader": {
+    "label": "جارٍ التحميل…"
+  },
+  "userStatus": {
+    "active": "نشط",
+    "needsEmailVerification": "يحتاج إلى تحقق من البريد الإلكتروني",
+    "passwordResetRequested": "تم طلب إعادة تعيين كلمة المرور",
+    "blocked": "محظور",
+    "disabled": "معطّل"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "فشل إنشاء مشروع Flutter"
+    },
+    "logs": {
+      "skipped": "تم تجاوز إنشاء مشروع Flutter: {output}",
+      "created": "تم إنشاء مشروع Flutter: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "فشل إنشاء مشروع NextJS"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "لم يتم العثور على تكوين قاعدة البيانات.",
+      "dbConfigMissing": "تكوين قاعدة البيانات مفقود",
+      "dbConfigMissingStore": "تكوين قاعدة البيانات مفقود في المخزن",
+      "adminEmailMissing": "بريد المستخدم الإداري مفقود",
+      "adminEmailMissingStore": "بريد المستخدم الإداري مفقود في المخزن",
+      "projectTypeMissing": "selectedProjectType مفقود",
+      "createTablesFailed": "تعذر إنشاء الجداول: {message}",
+      "createAdminFailed": "تعذر إنشاء المستخدم الإداري: {message}",
+      "createModelsFailed": "تعذر إنشاء النماذج: {message}",
+      "writeConfigFailed": "تعذر كتابة ملف التكوين: {message}",
+      "setupStorageFailed": "تعذر إعداد التخزين: {message}",
+      "installDemoFailed": "تعذر تثبيت المحتوى التجريبي: {message}",
+      "stepFailed": "فشلت الخطوة: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "تم إنشاء الجداول:",
+      "adminCreated": "تم إنشاء المستخدم الإداري:",
+      "modelsCreated": "استجابة إنشاء النماذج:",
+      "modelsSkipped": "تم تجاوز إنشاء النماذج: {message}",
+      "configWritten": "تم كتابة ملف التكوين بنجاح:",
+      "storageCreated": "تم إنشاء حاويات التخزين:",
+      "demoContentSkipped": "تم تجاوز المحتوى التجريبي",
+      "demoContentInstalled": "تم تثبيت المحتوى التجريبي:",
+      "creatingApiEndpoints": "جارٍ إنشاء نقاط نهاية واجهة البرمجة...",
+      "settingUpAuth": "جارٍ إعداد المصادقة...",
+      "configuringSession": "جارٍ تكوين إدارة الجلسة...",
+      "runningTests": "جارٍ تشغيل الاختبارات...",
+      "finalizing": "جارٍ إنهاء المُثبِّت...",
+      "noImplementation": "لا يوجد تنفيذ للخطوة: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "heading": "إعداد المستخدم الإداري",
+    "description": "يرجى تقديم بيانات المستخدم الإداري لتأمين نظام Underpeaks الخاص بك. سيحصل هذا الحساب على وصول إداري كامل داخل المنصة.",
+    "disclaimer": "يرجى ملاحظة: هذا ينشئ حساباً إدارياً في نظام Underpeaks وقد يختلف عن حساب مسؤول قاعدة البيانات الخاص بك.",
+    "fields": {
+      "fullName": {
+        "label": "الاسم الكامل",
+        "placeholder": "مثال: أحمد محمد"
+      },
+      "email": {
+        "label": "البريد الإلكتروني",
+        "placeholder": "admin@example.com"
+      },
+      "password": {
+        "label": "كلمة المرور",
+        "placeholder": "أنشئ كلمة مرور قوية"
+      }
+    },
+    "errors": {
+      "nameRequired": "الاسم الكامل مطلوب",
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "passwordInvalid": "كلمة المرور مطلوبة | يجب أن تكون كلمة المرور 8 أحرف | يجب أن تحتوي على حرف كبير | يجب أن تحتوي على رمز خاص (مثال: !@#$%^&*)"
+    },
+    "continueButton": "استمرار"
+  },
+  "stackConfigPage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "heading": "اختر مجموعتك التقنية",
+    "description": "اختر المجموعة التقنية الأنسب لاحتياجات مشروعك. يمكنك تغيير هذا لاحقاً إذا أردت إضافة منصات أخرى أو تغيير نهجك.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "الجمع الكامل! Next.js للويب و Flutter لتطبيقات الجوال وسطح المكتب متعددة الأنظمة."
+      },
+      "next": {
+        "title": "Next.js فقط",
+        "description": "استخدم Next.js كإطار عمل React SSR قوي و<strong>كنظام إدارة محتوى بدون واجهة لإدارة المحتوى وواجهات البرمجة.</strong>"
+      },
+      "flutter": {
+        "title": "Flutter فقط",
+        "description": "أنشئ تطبيقات جوال وسطح مكتب متعددة الأنظمة باستخدام Flutter مع قاعدة كود مشتركة، و<strong>استخدمه كنظام إدارة محتوى بدون واجهة إذا رغبت.</strong>"
+      },
+      "cms": {
+        "title": "نظام إدارة محتوى بدون واجهة",
+        "description": "النشر فقط كنظام إدارة محتوى بدون واجهة. اعرض بياناتك عبر واجهات البرمجة وقم بربطها بأي واجهة أمامية مخصصة أو تطبيق جوال أو خدمة طرف ثالث بمرونة كاملة."
+      }
+    },
+    "nextButton": "التالي"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "heading": "تكوين قاعدة البيانات",
+    "selectPlaceholder": "اختر قاعدة البيانات",
+    "fieldExample": "(مثال: {placeholder})",
+    "savingWarning": "⚠️ يرجى التحمل، قد يستغرق هذا بعض الوقت...",
+    "infoBlock": {
+      "whereLabel": "أين تجدها:"
+    },
+    "testSteps": {
+      "validating": "جارٍ التحقق من التكوين...",
+      "sending": "جارٍ إرسال التكوين إلى الخادم...",
+      "testing": "جارٍ اختبار اتصال قاعدة البيانات...",
+      "finalizing": "جارٍ إنهاء فحص الاتصال..."
+    },
+    "errors": {
+      "serverRejected": "رفض الخادم الاتصال",
+      "connectionFailed": "فشل الاتصال: {message}"
+    },
+    "buttons": {
+      "testConnection": "اختبار الاتصال",
+      "testing": "جارٍ الاختبار...",
+      "saving": "جارٍ الحفظ...",
+      "continue": "استمرار"
+    },
+    "logs": {
+      "firebaseParseError": "تعذر تحليل تكوين Firebase"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "projectType": {
+      "title": "اختر نوع المشروع",
+      "description": "اختر قالباً لتثبيت النماذج الافتراضية لمشروعك تلقائياً."
+    },
+    "projects": {
+      "ecommerce":   { "label": "التجارة الإلكترونية",         "description": "يشمل المنتجات والفئات والطلبات والعملاء وصفحات المتجر." },
+      "marketplace": { "label": "السوق",         "description": "يدعم عدة بائعين، والقوائم، والعمولات، ولوحات تحكم البائعين." },
+      "listing":     { "label": "منصة القوائم",    "description": "لقوائم العقارات أو الوظائف أو الخدمات مع فئات وبحث وفلاتر." },
+      "blog":        { "label": "مدونة / موقع محتوى", "description": "موقع مدفوع بالمحتوى مع المنشورات والفئات والعلامات والمؤلفين والتعليقات." },
+      "social":      { "label": "شبكة اجتماعية",      "description": "ملفات تعريف المستخدمين والمنشورات والتعليقات والإعجابات والمتابعين والرسائل والإشعارات." },
+      "saas":        { "label": "SaaS / تطبيق ويب",      "description": "بنية تطبيق ويب مع المستخدمين والأدوار والصلاحيات وخطط الاشتراك." },
+      "blank":       { "label": "مشروع فارغ",       "description": "بدون محتوى تجريبي؛ ابدأ بهيكل مشروع فارغ." }
+    },
+    "demoContent": {
+      "title": "إعداد المحتوى التجريبي",
+      "description": "عاين متجرك ببيانات تجريبية مُحمَّلة مسبقاً.",
+      "checkboxLabel": "تضمين المحتوى التجريبي للمشروع المحدد",
+      "ecommerce": {
+        "item1": "منتجات تجريبية مع فئات وعلامات",
+        "item2": "عملاء وطلبات نموذجية",
+        "item3": "صفحات المتجر (الرئيسية، المنتجات، السلة، الدفع)",
+        "item4": "محتوى نظام إدارة محتوى أساسي",
+        "item5": "قوائم ووحدات مُهيّأة مسبقاً"
+      }
+    },
+    "continueButtonIdle": "استمرار",
+    "continueButtonLoading": "جارٍ الاستمرار...",
+    "logs": {
+      "navigatingToFinalise": "جارٍ حفظ اختيارات المُثبِّت والانتقال إلى خطوة الإنهاء..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "installComplete": "🎉 اكتمل التثبيت!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "معلومات المشروع",
+      "subtitle": "معلومات أساسية حول إعداد مشروعك.",
+      "name": "الاسم:",
+      "stack": "المجموعة التقنية:"
+    },
+    "database": {
+      "title": "قاعدة البيانات",
+      "subtitle": "قاعدة البيانات التي اخترتها وتكوينها.",
+      "type": "النوع:",
+      "noneSelected": "لم يتم اختيار أي شيء"
+    },
+    "adminUser": {
+      "title": "المستخدم الإداري",
+      "subtitle": "بيانات اعتماد المسؤول الأولية الخاصة بك.",
+      "name": "الاسم:",
+      "email": "البريد الإلكتروني:",
+      "password": "كلمة المرور:"
+    },
+    "projectType": {
+      "title": "نوع المشروع المحدد",
+      "subtitle": "قالب المشروع الذي تم اختياره خلال الإعداد."
+    },
+    "demoContent": {
+      "title": "المحتوى التجريبي",
+      "subtitle": "ما إذا كان سيتم تحميل بيانات المتجر التجريبية مسبقاً.",
+      "installed": "مُثبَّت",
+      "notInstalled": "غير مُثبَّت"
+    },
+    "continueButton": "الاستمرار إلى ← تسجيل الدخول"
+  },
+  "ecommercePage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "card": {
+      "title": "خصّص وحدات التجارة الإلكترونية الخاصة بك"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "تمكين وحدة التجارة الإلكترونية",
+        "description": "يضيف كتالوج المنتجات وسلة التسوق والدفع وإدارة الطلبات."
+      },
+      "physical": {
+        "label": "تضمين المنتجات المادية",
+        "description": "يدعم المخزون والشحن والمرتجعات والتتبع للسلع الملموسة."
+      },
+      "digital": {
+        "label": "تضمين المنتجات الرقمية",
+        "description": "بيع المحتوى القابل للتنزيل مثل ملفات PDF أو الفيديوهات أو ترخيصات البرمجيات."
+      }
+    },
+    "button": {
+      "next": "التالي",
+      "continuing": "جارٍ الاستمرار..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "card": {
+      "title": "إنهاء الإعداد"
+    },
+    "summary": {
+      "project": "المشروع:",
+      "defaultProject": "تطبيقي",
+      "stack": "المجموعة التقنية:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "قاعدة البيانات:",
+      "notSelected": "لم يتم الاختيار"
+    },
+    "steps": {
+      "heading": "خطوات التثبيت:",
+      "skipped": "تم التجاوز!"
+    },
+    "progress": {
+      "finishing": "جارٍ الإنهاء...",
+      "ready": "جاهز لتثبيت مشروعك"
+    },
+    "errors": {
+      "label": "خطأ:",
+      "noDatabase": "لم يتم اختيار قاعدة بيانات، لا يمكن حفظ التكوين.",
+      "saveFailed": "تعذر حفظ تكوين المُثبِّت",
+      "unknown": "حدث خطأ غير معروف"
+    },
+    "button": {
+      "start": "بدء التثبيت",
+      "installing": "جارٍ التثبيت..."
+    },
+    "logs": {
+      "sendingConfig": "جارٍ إرسال تكوين المُثبِّت إلى الخادم...",
+      "configSaved": "تم حفظ تكوين المُثبِّت بنجاح",
+      "installError": "خطأ في التثبيت:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "heading": "اختر النماذج الافتراضية",
+    "subheading": "اختر نماذج البيانات الافتراضية التي تريد تضمينها في مشروعك. يمكنك إنشاء أو تعديل النماذج لاحقاً.",
+    "required": "(مطلوب)",
+    "toggleAll": {
+      "deselect": "إلغاء تحديد الكل",
+      "select": "تحديد الكل"
+    },
+    "models": {
+      "users":      { "label": "المستخدمون",      "description": "إدارة مستخدمي التطبيق والمصادقة" },
+      "products":   { "label": "المنتجات",   "description": "كتالوج المنتجات أو الخدمات" },
+      "orders":     { "label": "الطلبات",     "description": "تتبع طلبات وشراء العملاء" },
+      "coupons":    { "label": "الكوبونات",    "description": "كوبونات الخصم والعروض الترويجية" },
+      "categories": { "label": "الفئات", "description": "تنظيم المنتجات أو المحتوى" },
+      "reviews":    { "label": "التقييمات",    "description": "ملاحظات وتقييمات المستخدمين" }
+    },
+    "button": {
+      "continue": "استمرار",
+      "continuing": "جارٍ الاستمرار..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "heading": "إعداد المشروع",
+    "subheading": "أدخل اسم المشروع والنطاق الفرعي والنطاق لاستضافتك الذاتية.",
+    "continueButton": "استمرار",
+    "fields": {
+      "name": {
+        "label": "اسم المشروع",
+        "placeholder": "مثال: استوديو تطبيقي"
+      },
+      "domain": {
+        "label": "النطاق",
+        "placeholder": "مثال: http://localhost:3000",
+        "hint": "النطاق الكامل لتطبيقك. الافتراضي هو"
+      },
+      "subdomain": {
+        "label": "النطاق الفرعي",
+        "placeholder": "مثال: console",
+        "hint": "سيتم استخدام هذا للرابط:"
+      }
+    },
+    "errors": {
+      "nameRequired": "اسم المشروع مطلوب",
+      "subdomainRequired": "النطاق الفرعي مطلوب",
+      "domainRequired": "النطاق مطلوب"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "شعار Underpeaks",
+    "tagline": "مُثبِّت SaaS الشامل ومولّد الأكواد الخاص بك",
+    "continueButton": "استمرار ←",
+    "continueLoading": "جارٍ التحميل...",
+    "benefits": {
+      "heading": "لماذا Underpeaks؟",
+      "item1": "🔧 مولّد قاعدة أكواد كامل (Next.js + Flutter)",
+      "item2": "⚙️ لا مزيد من الأكواد النموذجية – فقط كود جاهز للإنتاج",
+      "item3": "🌍 جاهز لتعدد اللغات وتعدد المستأجرين",
+      "item4": "📦 استضافة ذاتية أو استضافة سحابية – اختيارك",
+      "item5": "🔐 مصادقة مدمجة، أدوار، صلاحيات، واجهة تثبيت",
+      "item6": "💼 مثالي للشركات الناشئة والوكالات ومشاريع المؤسسات"
+    },
+    "license": {
+      "heading": "اتفاقية الترخيص",
+      "loading": "جارٍ تحميل الترخيص...",
+      "loadFailed": "تعذر تحميل اتفاقية الترخيص.",
+      "acceptLabel": "قبول شروط الترخيص."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "كلمة المرور الحالية والجديدة مطلوبتان",
+      "passwordTooShort": "يجب أن تتكون كلمة المرور من 8 أحرف على الأقل",
+      "unauthorized": "غير مصرح",
+      "invalidToken": "رمز غير صالح",
+      "userNotFound": "المستخدم غير موجود",
+      "incorrectCurrentPassword": "كلمة المرور الحالية غير صحيحة",
+      "internalError": "حدث خطأ غير متوقع"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] تم تحديث كلمة مرور Firebase Auth",
+      "firebasePasswordUpdateFailed": "[change-password] تعذر تحديث كلمة مرور Firebase Auth"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "تم إنشاء المستخدم الإداري بنجاح"
+    },
+    "errors": {
+      "missingConfig": "تكوين قاعدة البيانات مفقود",
+      "missingAdminUser": "بيانات المستخدم الإداري مفقودة",
+      "genericFailure": "تعذر إنشاء المستخدم الإداري"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "تكوين قاعدة البيانات أو بريد المسؤول مفقود",
+      "adapterNotSupported": "لا يدعم محول قاعدة البيانات هذا إنشاء نماذج البيانات",
+      "genericFailure": "تعذر إدراج نماذج البيانات"
+    },
+    "logs": {
+      "createModelsError": "خطأ في واجهة برمجة create-data-models:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "تكوين/نوع قاعدة البيانات مفقود",
+      "adapterNotSupported": "محول {type} لا ينفّذ إعداد التخزين"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "تم إنشاء جميع جداول النظام والمستخدمين والمشاريع"
+    },
+    "errors": {
+      "missingConfig": "تكوين قاعدة البيانات مفقود",
+      "genericFailure": "تعذر إنشاء الجداول"
+    },
+    "logs": {
+      "createTablesError": "[خطأ في إنشاء الجداول]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "متغير بيئة Firebase مفقود: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "projectName مفقود",
+      "flutterNotInstalled": "Flutter غير مُثبَّت أو غير موجود في PATH.",
+      "stepFailed": "فشلت الخطوة: إنشاء مشروع Flutter - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "مشروع Flutter \"{projectName}\" موجود بالفعل. تم تجاوز الإنشاء.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "فشل إنشاء Flutter:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "البريد الإلكتروني مطلوب",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE غير مضبوط",
+      "firebaseClientSide": "تتم معالجة إعادة تعيين كلمة مرور Firebase من جانب العميل",
+      "supabaseMissingMethod": "محول Supabase يفتقد إلى طريقة sendResetEmail",
+      "unsupportedDbType": "نوع قاعدة بيانات غير مدعوم: {dbType}",
+      "adapterMissingMethods": "محول ${dbType} يفتقد إلى طرق مطلوبة",
+      "userNotFound": "المستخدم غير موجود",
+      "genericFailure": "تعذر إرسال رابط إعادة التعيين"
+    },
+    "notices": {
+      "smtpDisabled": "إرسال البريد الإلكتروني معطّل. اطلب من مسؤولك إعادة تعيين كلمة مرورك."
+    },
+    "email": {
+      "subject": "طلب إعادة تعيين كلمة المرور",
+      "body": "<p>مرحباً {name}،</p><p>انقر على الرابط أدناه لإعادة تعيين كلمة المرور الخاصة بك:</p><a href=\"{resetLink}\">{resetLink}</a><p>إذا لم تطلب هذا، فيرجى تجاهل هذا البريد الإلكتروني.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "تم إرسال بريد إعادة تعيين Supabase",
+      "resetEmailSent": "تم إرسال بريد إعادة التعيين",
+      "smtpDisabled": "تم تعطيل SMTP/forgot-password — تم تجاوز البريد الإلكتروني",
+      "forgotPasswordError": "خطأ نسيت كلمة المرور:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "حساب خدمة Firebase مفقود",
+      "unsupportedDbType": "نوع قاعدة بيانات غير مدعوم: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[خطأ في تكوين النظام]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "تكوين قاعدة البيانات مفقود",
+      "missingProjectType": "نوع المشروع مفقود",
+      "adapterNotSupported": "installDemoContent غير منفَّذ لهذا المحول"
+    },
+    "logs": {
+      "installDemoContentError": "خطأ install-demo-content:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "تم تسجيل الخروج بنجاح"
+    },
+    "errors": {
+      "tokenRequired": "الرمز مطلوب",
+      "dbTypeNotSet": "NEXT_DB_TYPE غير مضبوط",
+      "firebaseServiceAccountMissing": "حساب خدمة Firebase مفقود",
+      "mysqlEnvMissing": "متغيرات بيئة MySQL مفقودة",
+      "postgresEnvMissing": "متغيرات بيئة Postgres مفقودة",
+      "unsupportedDbType": "نوع قاعدة بيانات غير مدعوم: {dbType}",
+      "tokenNotFound": "لم يتم العثور على الرمز"
+    },
+    "logs": {
+      "logoutError": "خطأ واجهة برمجة تسجيل الخروج:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id مطلوب",
+      "unauthorized": "غير مصرح",
+      "invalidToken": "رمز غير صالح"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder مطلوب",
+      "internalError": "حدث خطأ غير متوقع"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] تم إثراء المجلدات بنجاح بعدد الملفات"
+    },
+    "errors": {
+      "internalError": "حدث خطأ غير متوقع"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder و toFolder و fileName مطلوبة",
+      "moveFileNotSupported": "moveFile غير مدعوم",
+      "internalError": "حدث خطأ غير متوقع"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder و oldName و newName مطلوبة",
+      "renameFileNotSupported": "renameFile غير مدعوم",
+      "internalError": "حدث خطأ غير متوقع"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "الملف والمجلد مطلوبان",
+      "uploadFileNotSupported": "uploadFile غير مدعوم",
+      "internalError": "فشل الرفع"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] الوضع:",
+      "projectIdLookupFailed": "[upload-file] فشل البحث عن project_id",
+      "metadataSaved": "[upload-file] تم حفظ البيانات الوصفية في nxf_storage",
+      "metadataSaveFailed": "[upload-file] فشل حفظ البيانات الوصفية",
+      "localUploadSuccess": "[upload-file] تم حفظ الرفع المحلي:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "تعذر اختبار اتصال قاعدة البيانات"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id مطلوب",
+      "firebaseServiceAccountMissing": "حساب خدمة Firebase مفقود",
+      "unsupportedDbType": "نوع قاعدة بيانات غير مدعوم",
+      "systemConfigNotFound": "لم يتم العثور على تكوين النظام",
+      "internalError": "خطأ داخلي في الخادم"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "الاسم الكامل مطلوب",
+      "unauthorized": "غير مصرح",
+      "invalidToken": "رمز غير صالح",
+      "internalError": "حدث خطأ غير متوقع"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id و project_name مطلوبان",
+      "firebaseServiceAccountMissing": "حساب خدمة Firebase مفقود",
+      "unsupportedDbType": "نوع قاعدة بيانات غير مدعوم",
+      "systemConfigNotFound": "لم يتم العثور على تكوين النظام لهذا المستخدم",
+      "internalError": "خطأ داخلي في الخادم"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id مطلوب",
+      "firebaseServiceAccountMissing": "حساب خدمة Firebase مفقود",
+      "unsupportedDbType": "نوع قاعدة بيانات غير مدعوم",
+      "systemConfigNotFound": "لم يتم العثور على تكوين النظام لهذا المستخدم",
+      "internalError": "خطأ داخلي في الخادم"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "تعذر كتابة ملفات التكوين"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "تم العثور على مستخدم مصادقة موجود:",
+      "newAuthUserCreated": "تم إنشاء مستخدم مصادقة جديد:",
+      "creatingAdminInDb": "جارٍ إنشاء المستخدم الإداري في قاعدة البيانات...",
+      "userAlreadyInDb": "المستخدم موجود بالفعل في قاعدة البيانات:",
+      "existingProjectFound": "تم العثور على مشروع موجود:",
+      "newProjectCreated": "تم إنشاء مشروع جديد:",
+      "existingTenantFound": "تم العثور على مستأجر موجود:",
+      "newTenantCreated": "تم إنشاء مستأجر جديد:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "تم تجاوز تنفيذ CreateDataModels المكرر — تمت معالجة هذا المشروع وتركيبة النوع مسبقاً.",
+      "creatingTable": "جارٍ إنشاء الجدول:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable غير منفَّذ، تم تجاوز إنشاء الجدول"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "مجلد الرفع",
+      "customFolder": "مجلد مخصص…",
+      "enterFolderName": "أدخل اسم المجلد",
+      "placeholder": "مثال: banners/summer",
+      "uploadingTo": "جارٍ الرفع إلى:"
+    },
+    "preview": {
+      "alt": "معاينة",
+      "uploaded": "تم الرفع",
+      "replace": "استبدال",
+      "clear": "مسح الملف"
+    },
+    "dropzone": {
+      "uploading": "جارٍ الرفع…",
+      "idle": "اسحب وأسقط أو",
+      "browse": "تصفّح",
+      "recommended": "موصى به:"
+    },
+    "errors": {
+      "noFolder": "يرجى اختيار أو إدخال مجلد قبل الرفع.",
+      "uploadFailed": "فشل الرفع",
+      "uploadFailedStatus": "فشل الرفع:",
+      "networkError": "خطأ في الشبكة"
+    }
+  },
+  "modelView": {
+    "systemBadge": "نظام",
+    "subtitle": "للقراءة فقط — هذا جدول نظام محمي.",
+    "fieldsHeading": "الحقول",
+    "actions": {
+      "back": "العودة إلى النماذج"
+    },
+    "stats": {
+      "fields": "الحقول",
+      "created": "تم الإنشاء",
+      "updated": "آخر تحديث"
+    },
+    "table": {
+      "name": "اسم الحقل",
+      "type": "النوع",
+      "constraints": "القيود",
+      "nullable": "مطلوب",
+      "default": "الافتراضي",
+      "uiType": "نوع الواجهة"
+    },
+    "badges": {
+      "hidden": "مخفي",
+      "required": "مطلوب",
+      "optional": "اختياري"
+    },
+    "errors": {
+      "loadFailed": "تعذر تحميل النموذج.",
+      "notFound": "النموذج غير موجود."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "النماذج",
+      "subtitle": "حدّد وأدر بنية بيانات مشروعك.",
+      "createButton": "إنشاء نموذج"
+    },
+    "filter": {
+      "all": "الكل",
+      "user": "مستخدم",
+      "system": "نظام"
+    },
+    "states": {
+      "empty": "لم يتم العثور على نماذج.",
+      "emptyHint": "أنشئ نموذجك الأول للبدء."
+    },
+    "badges": {
+      "system": "نظام",
+      "partialSystem": "نظام قابل للتعديل"
+    },
+    "meta": {
+      "fields": "{count} حقل",
+      "foreignKeys": "{count} مفتاح خارجي"
+    },
+    "card": {
+      "editAriaLabel": "تعديل {name}",
+      "deleteAriaLabel": "حذف {name}"
+    },
+    "confirmDelete": {
+      "title": "حذف النموذج؟",
+      "description": "هل أنت متأكد من أنك تريد حذف \"{name}\"؟ سيتم حذف جميع البيانات في هذا الجدول بشكل نهائي. لا يمكن التراجع عن هذا.",
+      "confirm": "حذف",
+      "deleting": "جارٍ الحذف…",
+      "cancel": "إلغاء"
+    },
+    "errors": {
+      "loadFailed": "تعذر تحميل النماذج.",
+      "deleteFailed": "تعذر حذف النموذج."
+    }
+  },
+  "createModel": {
+    "title": "إنشاء نموذج",
+    "subtitle": "حدّد نموذج بيانات جديد وحقوله.",
+    "actions": {
+      "save": "حفظ النموذج",
+      "saving": "جارٍ الحفظ…",
+      "back": "العودة إلى النماذج"
+    },
+    "form": {
+      "modelNameLabel": "اسم النموذج",
+      "modelNamePlaceholder": "مثال: منتج",
+      "fieldNamePlaceholder": "اسم الحقل",
+      "required": "مطلوب",
+      "unique": "فريد",
+      "primaryKey": "المفتاح الأساسي",
+      "primaryKeyTaken": "تم تعيينه بالفعل",
+      "hidden": "مخفي",
+      "uiType": "نوع الواجهة",
+      "foreignKeyTable": "المفتاح الخارجي — الجدول",
+      "foreignKeyColumn": "المفتاح الخارجي — العمود",
+      "noForeignKey": "— بدون مفتاح خارجي —",
+      "selectColumn": "— اختر عموداً —",
+      "onDelete": "عند الحذف",
+      "addField": "إضافة حقل",
+      "removeField": "إزالة الحقل",
+      "expandField": "إظهار الخيارات المتقدمة",
+      "collapseField": "إخفاء الخيارات المتقدمة",
+      "foreignKey": "المفتاح الخارجي"
+    },
+    "validation": {
+      "modelNameRequired": "اسم النموذج مطلوب.",
+      "fieldsInvalid": "يجب أن يكون لجميع الحقول اسم.",
+      "fieldNameUnique": "يجب أن تكون أسماء الحقول فريدة.",
+      "singlePrimaryKey": "يُسمح بمفتاح أساسي واحد فقط لكل نموذج."
+    },
+    "confirmDelete": {
+      "title": "حذف الحقل؟",
+      "description": "هل أنت متأكد من أنك تريد إزالة هذا الحقل؟",
+      "confirm": "حذف",
+      "cancel": "إلغاء"
+    },
+    "errors": {
+      "createFailed": "تعذر إنشاء النموذج."
+    }
+  },
+  "editModel": {
+    "title": "تعديل النموذج",
+    "subtitle": "قم بتحديث اسم النموذج وتعريفات حقوله.",
+    "actions": {
+      "save": "حفظ التغييرات",
+      "saving": "جارٍ الحفظ…",
+      "back": "العودة إلى النماذج"
+    },
+    "form": {
+      "modelNameLabel": "اسم النموذج",
+      "modelNamePlaceholder": "اسم النموذج",
+      "fieldNamePlaceholder": "اسم الحقل",
+      "required": "مطلوب",
+      "unique": "فريد",
+      "primaryKey": "المفتاح الأساسي",
+      "primaryKeyTaken": "تم تعيينه بالفعل",
+      "hidden": "مخفي",
+      "uiType": "نوع الواجهة",
+      "foreignKeyTable": "المفتاح الخارجي — الجدول",
+      "foreignKeyColumn": "المفتاح الخارجي — العمود",
+      "noForeignKey": "— بدون مفتاح خارجي —",
+      "selectColumn": "— اختر عموداً —",
+      "onDelete": "عند الحذف",
+      "addField": "إضافة حقل",
+      "removeField": "إزالة الحقل",
+      "expandField": "إظهار الخيارات المتقدمة",
+      "collapseField": "إخفاء الخيارات المتقدمة",
+      "foreignKey": "المفتاح الخارجي"
+    },
+    "validation": {
+      "modelNameRequired": "اسم النموذج مطلوب.",
+      "fieldsInvalid": "يجب أن يكون لجميع الحقول اسم.",
+      "fieldNameUnique": "يجب أن تكون أسماء الحقول فريدة.",
+      "singlePrimaryKey": "يُسمح بمفتاح أساسي واحد فقط لكل نموذج."
+    },
+    "confirmDelete": {
+      "title": "حذف الحقل؟",
+      "description": "هل أنت متأكد من أنك تريد إزالة هذا الحقل؟",
+      "confirm": "حذف",
+      "cancel": "إلغاء"
+    },
+    "warningDialog": {
+      "title": "تحذير خطير",
+      "subtitle": "أنت على وشك حذف حقل محمي.",
+      "primaryKeyWarning": "هذا الحقل هو المفتاح الأساسي لهذا الجدول. سيؤدي حذفه إلى كسر جميع العلاقات التي تشير إلى هذا الجدول وقد يتسبب في إتلاف البيانات الموجودة بشكل نهائي في جميع أنحاء مشروعك.",
+      "foreignKeyWarning": "هذا الحقل هو مفتاح خارجي يربط هذا الجدول بجدول آخر. سيؤدي حذفه إلى كسر العلاقة وقد يتسبب في مشاكل سلامة البيانات للسجلات الموجودة.",
+      "checkboxLabel": "أفهم أن هذا قد يتلف بياناتي بشكل نهائي ولا يمكن التراجع عنه.",
+      "confirm": "احذف على أي حال",
+      "cancel": "إلغاء"
+    },
+    "errors": {
+      "loadModelFailed": "تعذر تحميل النموذج.",
+      "modelNotFound": "النموذج غير موجود.",
+      "updateModelFailed": "تعذر تحديث النموذج."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id مطلوب",
+      "invalidBody": "محتوى الطلب غير صالح أو فارغ",
+      "missingFields": "حقول مطلوبة مفقودة",
+      "projectNotFound": "لم يتم العثور على مشروع لهذا المستخدم",
+      "nameAlreadyExists": "يوجد نموذج بهذا الاسم بالفعل",
+      "fetchFailed": "تعذر جلب النماذج",
+      "createFailed": "تعذر إنشاء النموذج",
+      "updateFailed": "تعذر تحديث النموذج",
+      "deleteFailed": "تعذر حذف النموذج",
+      "multiplePrimaryKeys": "يُسمح بمفتاح أساسي واحد فقط لكل نموذج",
+      "systemTableProtected": "لا يمكن إنشاء جداول النظام أو تعديلها أو حذفها"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— اختر حقلاً —",
+    "clear": "مسح المفتاح الخارجي",
+    "searchPlaceholder": "البحث في النماذج…",
+    "noResults": "لم يتم العثور على نماذج.",
+    "systemBadge": "نظام",
+    "fieldsLabel": "حقول",
+    "onDelete": "عند الحذف",
+    "filter": {
+      "all": "الكل",
+      "user": "مستخدم",
+      "system": "نظام"
+    }
+  },
+  "users": {
+    "page_title": "المستخدمون",
+    "page_description": "إدارة حسابات المسؤولين والمستخدمين في نظام إدارة المحتوى",
+    "edit_kpis": "تعديل مؤشرات الأداء",
+    "editing_kpis": "جارٍ تعديل مؤشرات الأداء",
+    "save_layout": "حفظ التخطيط",
+    "saving": "جارٍ الحفظ…",
+    "search_placeholder": "البحث بالاسم أو البريد الإلكتروني…",
+    "showing_count": "عرض {filtered} من أصل {total} مستخدماً",
+    "no_users_found": "لم يتم العثور على مستخدمين",
+    "filter": "تصفية",
+    "sort": "ترتيب",
+    "clear_all": "مسح الكل",
+    "filters": "المرشحات",
+    "role": "الدور",
+    "all_roles": "جميع الأدوار",
+    "all_statuses": "جميع الحالات",
+    "status": "الحالة",
+    "joined_from": "الانضمام من",
+    "joined_to": "الانضمام إلى",
+    "sort_by": "الترتيب حسب",
+    "direction": "الاتجاه",
+    "asc": "تصاعدي (أ ← ي)",
+    "desc": "تنازلي (ي ← أ)",
+    "col_name": "الاسم",
+    "col_email": "البريد الإلكتروني",
+    "col_role": "الدور",
+    "col_status": "الحالة",
+    "col_last_login": "آخر تسجيل دخول",
+    "col_joined": "الانضمام",
+    "role_admin": "مسؤول",
+    "role_user": "مستخدم",
+    "status_active": "نشط",
+    "status_suspended": "موقوف",
+    "status_disabled": "معطّل",
+    "drawer_title": "تفاصيل المستخدم",
+    "actions": "الإجراءات",
+    "change_role": "الدور",
+    "change_status": "الحالة",
+    "send_reset": "إرسال بريد إعادة تعيين كلمة المرور",
+    "sending_reset": "جارٍ الإرسال…",
+    "delete_user": "حذف المستخدم",
+    "delete_confirm": "هل تريد حذف هذا المستخدم بشكل نهائي؟ لا يمكن التراجع عن هذا.",
+    "cancel": "إلغاء",
+    "confirm_delete": "نعم، احذف",
+    "deleting": "جارٍ الحذف…",
+    "last_admin_warning": "لا يمكن التخفيض — هذا آخر مسؤول",
+    "login_history": "سجل تسجيل الدخول",
+    "no_history": "لم يتم تسجيل سجل تسجيل دخول حتى الآن",
+    "event_login": "سجّل الدخول",
+    "event_logout": "سجّل الخروج",
+    "event_online": "متصل",
+    "event_offline": "أصبح غير متصل",
+    "joined": "الانضمام",
+    "last_login": "آخر تسجيل دخول",
+    "toast_role_updated": "تم تحديث الدور",
+    "toast_status_updated": "تم تحديث الحالة",
+    "toast_user_deleted": "تم حذف المستخدم",
+    "toast_reset_sent": "تم إرسال إعادة تعيين كلمة المرور إلى {email}",
+    "toast_kpi_saved": "تم حفظ تخطيط مؤشرات الأداء",
+    "toast_load_failed": "تعذر تحميل المستخدمين",
+    "toast_save_failed": "فشل الحفظ",
+    "kpi_add": "إضافة مؤشر أداء",
+    "kpi_add_block": "كتلة",
+    "kpi_edit": "تعديل مؤشر الأداء",
+    "kpi_label_required": "التسمية مطلوبة",
+    "kpi_select_field": "اختر حقلاً",
+    "kpi_select_both_fields": "اختر كلا الحقلين",
+    "kpi_select_field_and_value": "اختر حقلاً وأدخل قيمة للمطابقة",
+    "kpi_max_reached": "يُسمح بحد أقصى 5 مؤشرات أداء",
+    "kpi_label": "التسمية",
+    "kpi_formula": "المعادلة",
+    "kpi_format": "تنسيق العرض",
+    "kpi_icon": "الأيقونة",
+    "kpi_accent_colour": "لون التمييز",
+    "kpi_field": "الحقل",
+    "kpi_field_a": "الحقل أ",
+    "kpi_field_b": "الحقل ب",
+    "kpi_numerator": "حقل البسط (أ)",
+    "kpi_denominator": "حقل المقام (ب)",
+    "kpi_operator": "العامل",
+    "kpi_value_to_match": "القيمة المطلوب مطابقتها",
+    "kpi_make_wide": "توسيع",
+    "kpi_make_compact": "تضييق",
+    "kpi_add_to_block": "إضافة",
+    "kpi_save": "حفظ التغييرات",
+    "kpi_cancel": "إلغاء"
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "description": "لا يمكننا العثور على الصفحة التي تبحث عنها. ربما تم نقلها أو إعادة تسميتها أو لم تكن موجودة من الأساس.",
+    "goHome": "الانتقال إلى الصفحة الرئيسية",
+    "backToConsole": "العودة إلى وحدة التحكم",
+    "helpfulLinks": "هل تبحث عن شيء محدد؟",
+    "pages": "الصفحات",
+    "models": "النماذج",
+    "users": "المستخدمون",
+    "settings": "الإعدادات"
+  },
+  "noModelLinked": {
+    "title": "لا يوجد نموذج مرتبط",
+    "description": "تستخدم {pageName} قالب {templateName} ولكن لم يتم ربط أي نموذج بيانات بها بعد.",
+    "instruction": "قم بتعديل إعدادات الصفحة وقم بتعيين نموذج حتى تتمكن من عرض البيانات.",
+    "openPages": "فتح الصفحات",
+    "manageModels": "إدارة النماذج"
+  },
+  "lockedTemplate": {
+    "title": "متوفر في الخطة المستضافة",
+    "description": "قالب {templateName} جزء من الخطة المستضافة. قم بالترقية لفتح لوحة كانبان والتقويم والدفع والمزيد.",
+    "upgradeButton": "عرض الخطة المستضافة",
+    "backButton": "العودة إلى الصفحات"
+  },
+  "CookieBanner": {
+    "eyebrow": "الخصوصية",
+    "title": "نحن نقدّر خصوصيتك",
+    "description": "نستخدم ملفات تعريف الارتباط لإبقائك مسجلاً للدخول، وتذكر لغتك، و(بموافقتك) فهم كيفية استخدام الزوار للموقع. يمكنك تغيير اختياراتك في أي وقت.",
+    "necessaryTitle": "ضرورية بشكل صارم",
+    "necessaryDescription": "مطلوبة لتسجيل الدخول، وتفضيلات اللغة، وحفظ اختيارك لملفات تعريف الارتباط. لا يمكن تعطيلها.",
+    "analyticsTitle": "التحليلات",
+    "analyticsDescription": "تساعدنا على فهم الصفحات التي يزورها الأشخاص وكيفية أداء الموقع. لا تتم مشاركة أي بيانات شخصية.",
+    "marketingTitle": "التسويق",
+    "marketingDescription": "تُستخدم لعرض إعلانات ذات صلة وقياس فعالية الحملات عبر مواقع أخرى.",
+    "alwaysOn": "مفعّلة دائماً",
+    "acceptAll": "قبول الكل",
+    "rejectAll": "رفض الكل",
+    "customise": "تخصيص",
+    "savePreferences": "حفظ التفضيلات",
+    "cookiePreferences": "تفضيلات ملفات تعريف الارتباط",
+    "policyLink": "سياسة الخصوصية"
   }
 }

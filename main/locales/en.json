@@ -395,8 +395,7 @@
       "account": "Account",
       "settings": "Settings",
       "helpAndDocs": "Help & Docs",
-      "logout": "Logout",
-      "loggingOut": "Logging out…"
+      "logout": "Logout"
     }
   },
   "accountPage": {
@@ -1191,7 +1190,8 @@
     "visibility": {
       "public": "Public",
       "admin": "Admin",
-      "draft": "Draft"
+      "draft": "Draft",
+      "authenticated":"Authenticated"
     },
     "toolbar": {
       "title": "Pages",
@@ -1313,8 +1313,7 @@
   "revokeButtonRevoking": "Revoking…"
   },
   "apiKeysPage": {
-    "heading": "API Keys",
-    "subheading": "Manage keys used to authenticate API requests from your apps.",
+    
     "errors": {
       "loadFailed": "Failed to load API keys",
       "generateFailed": "Failed to generate key",
@@ -1385,26 +1384,12 @@
     "licenseKey": {
       "sectionTitle": "Underpeaks License Key",
       "description": "Your license key authenticates this instance and enables hosted vs self-hosted feature distinction.",
-      "inputLabel": "License Key",
-      "inputPlaceholder": "Enter your license key",
-      "buttonSave": "Save",
-      "buttonUpdate": "Update",
-      "buttonSaving": "Saving…",
-      "buttonSaved": "Saved",
       "reveal": "Reveal",
       "hide": "Hide",
       "copy": "Copy",
       "copied": "Copied",
       "loading": "Loading…",
       "notFound": "No license key found"
-    },
-    "projectInfo": {
-      "sectionTitle": "Project Info",
-      "nameLabel": "Project Name",
-      "namePlaceholder": "e.g. My Project",
-      "urlLabel": "Project URL",
-      "urlHint": "The public URL for this project",
-      "urlPlaceholder": "https://example.com"
     }
   },
   "smtpPage": {
@@ -1497,6 +1482,7 @@
   },
   "featureFlagsPage": {
     "heading": "Feature Flags",
+    "comingSoonBadge":"COMING SOON",
     "subheading": "Toggle features that will be included in your generated Flutter and Next.js apps.",
     "paidBadge": "PAID",
     "savedMessage": "Saved",
@@ -1504,7 +1490,7 @@
     "saveButtonSaving": "Saving…",
     "upgrade": {
       "title": "Hosted plan required",
-      "description": "These features require Underpeaks's hosted infrastructure. Upgrade to unlock them.",
+      "description": "These features require NXTFlutter's hosted infrastructure. Upgrade to unlock them.",
       "button": "Upgrade"
     },
     "groups": {
@@ -1956,8 +1942,7 @@
     "fields": {
       "name": {
         "label": "Project Name",
-        "placeholder": "e.g., MyApp Studio",
-        "hint":"e.g., myappstudio - ALL LOWERCASE"
+        "placeholder": "e.g., MyApp Studio"
       },
       "domain": {
         "label": "Domain",

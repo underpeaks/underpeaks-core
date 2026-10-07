@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
-    "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "save": "保存",
+    "saving": "保存中...",
+    "saveChanges": "変更を保存",
+    "cancel": "キャンセル",
+    "delete": "削除",
+    "edit": "編集",
+    "create": "作成",
+    "add": "追加",
+    "remove": "削除",
+    "close": "閉じる",
+    "confirm": "確認",
+    "back": "戻る",
+    "next": "次へ",
+    "done": "完了",
+    "loading": "読み込み中...",
+    "search": "検索",
+    "filter": "フィルター",
+    "refresh": "更新",
+    "copy": "コピー",
+    "copied": "コピーしました！",
+    "upload": "アップロード",
+    "rename": "名前を変更",
+    "move": "移動",
+    "preview": "プレビュー",
+    "revoke": "取り消す",
+    "generate": "生成",
+    "reveal": "表示",
+    "hide": "非表示",
+    "active": "有効",
+    "inactive": "無効",
+    "status": "ステータス",
+    "actions": "操作",
+    "name": "名前",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "role": "ロール",
+    "createdAt": "作成日",
+    "noResults": "結果が見つかりません",
+    "error": "エラーが発生しました",
+    "success": "成功",
+    "required": "この項目は必須です",
+    "optional": "任意",
+    "yes": "はい",
+    "no": "いいえ",
+    "areYouSure": "よろしいですか？",
+    "thisActionCannotBeUndone": "この操作は元に戻せません。",
+    "comingSoon": "近日公開"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
-    "menu": "Menu",
-    "media": "Media",
+    "dashboard": "ダッシュボード",
+    "pages": "ページ",
+    "menu": "メニュー",
+    "media": "メディア",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "連携",
+    "theming": "テーマ",
+    "settings": "設定",
+    "account": "アカウント",
+    "messages": "メッセージ",
+    "notifications": "通知",
+    "logout": "ログアウト"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "検索...",
+    "notifications": "通知",
+    "messages": "メッセージ",
+    "viewAccount": "アカウントを表示",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
-      "enterprise": "Enterprise"
+      "self_hosted": "セルフホスト",
+      "hosted": "ホスト型",
+      "enterprise": "エンタープライズ"
+    }
+  },
+  "nextModelGenerator": {
+    "nullJsonError": "{{modelName}}Model を作成できません：null または undefined の JSON を受信しました",
+    "missingRequiredField": "必須フィールドがありません：{{modelName}} の {{fieldName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "{{count}} 件のモデルのコードを生成中...",
+    "modelUndefined": "モデルが未定義です — 有効な ModelDefinition が渡されているか確認してください",
+    "modelMissingName": "モデルに \"name\" プロパティがありません — すべてのモデルには名前が必要です",
+    "modelInvalidFields": "モデル「{{name}}」の \"fields\" が無効または欠落しています — fields は単純なオブジェクトである必要があります",
+    "generationSuccess": "モデル「{{name}}」のコードを正常に生成しました",
+    "generationFailed": "モデル「{{name}}」のコード生成に失敗しました"
+  },
+  "completeProfile": {
+    "title": "プロフィールを完成させる",
+    "welcome": "ようこそ、",
+    "loading": {
+      "checkingProfile": "プロフィールを確認しています..."
+    },
+    "subdomain": {
+      "label": "サブドメインを選択",
+      "placeholder": "yourapp",
+      "hint": "アプリは次のアドレスでアクセスできます："
+    },
+    "button": {
+      "save": "保存して続行",
+      "saving": "保存中..."
+    },
+    "validation": {
+      "subdomainRequired": "サブドメインを入力してください",
+      "adapterMissingCreateTenant": "使用中のデータベースアダプターはテナントの作成をサポートしていません"
+    },
+    "errors": {
+      "saveFailed": "サブドメインの保存中にエラーが発生しました：{{message}}",
+      "unknownError": "不明なエラーが発生しました"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "パスワードのリセットは現在のデータベースアダプターではサポートされていません",
+      "noAccountFound": "そのメールアドレスのアカウントは見つかりませんでした。"
+    }
+  },
+  "forgotPassword": {
+    "title": "パスワードをお忘れの方",
+    "description": "メールアドレスを入力すると、パスワードをリセットするためのリンクをお送りします。",
+    "form": {
+      "emailLabel": "メールアドレス",
+      "emailPlaceholder": "you@example.com",
+      "buttonSend": "リセットリンクを送信",
+      "buttonSending": "送信中..."
+    },
+    "validation": {
+      "emailRequired": "メールアドレスを入力してください。"
+    },
+    "errors": {
+      "firebaseConfigMissing": "Firebase の設定が見つかりません。環境変数を確認してください。",
+      "sendFailed": "リセットリンクの送信に失敗しました。もう一度お試しください。"
+    },
+    "success": {
+      "title": "受信トレイをご確認ください",
+      "description": "パスワードリセット用のメールを送信しました。受信トレイを確認し、リンクからパスワードをリセットしてください。",
+      "button": "ログイン画面に戻る"
+    },
+    "notice": {
+      "title": "リクエストを送信しました",
+      "button": "OK"
+    },
+    "error": {
+      "title": "問題が発生しました"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "パスワードのリセットは現在のデータベースアダプターではサポートされていません",
+      "invalidToken": "リセットリンクが無効か期限切れです。新しいリンクをリクエストしてください。",
+      "tokenAlreadyUsed": "このリセットリンクはすでに使用されています。新しいリンクをリクエストしてください。",
+      "tokenExpired": "このリセットリンクは期限切れです。新しいリンクをリクエストしてください。"
+    }
+  },
+  "resetPassword": {
+    "title": "パスワードをリセット",
+    "form": {
+      "passwordLabel": "新しいパスワード",
+      "buttonReset": "パスワードをリセット",
+      "buttonResetting": "リセット中..."
+    },
+    "errors": {
+      "invalidLink": "リセットリンクが無効か見つかりません。新しいリンクをリクエストしてください。",
+      "passwordRequired": "新しいパスワードを入力してください。",
+      "missingToken": "リセットトークンがありません。メール内のリンクをご利用ください。",
+      "resetFailed": "パスワードのリセットに失敗しました。もう一度お試しください。"
+    },
+    "error": {
+      "title": "問題が発生しました"
+    },
+    "expired": {
+      "title": "リセットリンクの期限切れ",
+      "description": "パスワードリセットリンクの有効期限が切れました。パスワードをお忘れの方ページにリダイレクトしています..."
+    },
+    "success": {
+      "title": "パスワードのリセットが完了しました",
+      "description": "新しいパスワードで",
+      "signinLink": "ログイン",
+      "descriptionSuffix": "できます。"
+    }
+  },
+  "signIn": {
+    "heading": "Underpeaks アカウントにサインイン",
+    "fields": {
+      "email": "メールアドレス",
+      "password": "パスワード"
+    },
+    "button": {
+      "signIn": "サインイン",
+      "signingIn": "サインイン中..."
+    },
+    "links": {
+      "forgotPassword": "パスワードをお忘れですか？",
+      "noAccount": "アカウントをお持ちでないですか？",
+      "signUp": "今すぐ登録"
+    },
+    "errors": {
+      "title": "エラー",
+      "signinFailed": "サインインに失敗しました。認証情報を確認して、もう一度お試しください。"
+    }
+  },
+  "signUp": {
+    "heading": "Underpeaks アカウントを作成",
+    "fields": {
+      "fullName": "氏名",
+      "fullNamePlaceholder": "氏名を入力",
+      "email": "メールアドレス",
+      "emailPlaceholder": "you@example.com",
+      "password": "パスワード"
+    },
+    "button": {
+      "signUp": "登録",
+      "creating": "作成中..."
+    },
+    "alerts": {
+      "errorTitle": "エラー",
+      "successTitle": "成功"
+    },
+    "success": {
+      "accountCreated": "アカウントが正常に作成されました！"
+    },
+    "links": {
+      "alreadyHaveAccount": "すでにアカウントをお持ちですか？",
+      "loginNow": "今すぐログイン"
+    },
+    "errors": {
+      "nameRequired": "氏名は必須です。",
+      "emailRequired": "メールアドレスは必須です。",
+      "passwordRequired": "パスワードは必須です。",
+      "emailInUse": "このメールアドレスはすでに登録されています。ログインをお試しください。",
+      "invalidEmail": "有効なメールアドレスを入力してください。",
+      "weakPassword": "パスワードが弱すぎます。最低6文字必要です。",
+      "signupFailed": "登録に失敗しました。もう一度お試しください。",
+      "supabaseSignupFailed": "Supabase での登録に失敗しました。もう一度お試しください。"
+    },
+    "console": {
+      "firebaseVerificationSent": "Firebase の確認メールを送信しました。",
+      "firebaseVerificationFailed": "Firebase の確認メールを送信できませんでした。",
+      "supabaseVerificationSent": "Supabase の確認メールを送信しました。"
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "メールを確認しています",
+      "success": "メールが確認されました ✅",
+      "error": "確認に失敗しました"
+    },
+    "status": {
+      "verifying": "メールを確認しています...",
+      "verified": "メールアドレスが確認されました。",
+      "supabaseRedirecting": "パスワード設定にリダイレクトしています..."
+    },
+    "button": {
+      "goToSignIn": "サインインへ進む"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] リクエストを受信しました",
+      "verificationNotSupported": "[verify-email] このアダプターでは確認機能がサポートされていません"
+    },
+    "errors": {
+      "missingTokenOrEmail": "トークンまたはメールアドレスがありません",
+      "dbTypeNotSet": "データベースタイプが設定されていません",
+      "unsupportedDbType": "サポートされていないデータベースタイプです",
+      "sqlAdapterMissingMethods": "SQL アダプターに必要なメソッドがありません",
+      "firebaseAdapterMissingMethods": "Firebase アダプターに必要なメソッドがありません",
+      "invalidToken": "無効なトークンです",
+      "tokenExpired": "トークンの有効期限が切れています",
+      "userNotFound": "ユーザーが見つかりません",
+      "verificationNotSupported": "このアダプターでは確認機能がサポートされていません",
+      "verificationFailed": "確認に失敗しました"
+    }
+  },
+  "schemaPreview": {
+    "title": "スキーマプレビュー",
+    "columns": {
+      "field": "フィールド",
+      "type": "タイプ"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "操作の確認",
+      "description": "続行してもよろしいですか？"
+    },
+    "buttons": {
+      "confirm": "確認",
+      "cancel": "キャンセル"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "ビジネス",
+      "content": "コンテンツ",
+      "assets": "アセット",
+      "configuration": "設定"
+    },
+    "items": {
+      "dashboard": "ダッシュボード",
+      "products": "商品",
+      "categories": "カテゴリー",
+      "orders": "注文",
+      "coupons": "クーポン",
+      "users": "ユーザー",
+      "shipping": "配送",
+      "services": "サービス",
+      "sharedModels": "共有モデル",
+      "menu": "メニュー",
+      "pages": "ページ",
+      "theme": "テーマ",
+      "storage": "ストレージ",
+      "integrations": "連携",
+      "apisAndWebhooks": "API とWebhook"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "メッセージ",
+      "unreadCount": "未読 {count} 件"
+    },
+    "empty": "まだメッセージはありません",
+    "viewAll": "すべてのメッセージを表示",
+    "unreadBadge": "未読 {count} 件",
+    "systemInitials": "SY",
+    "fallbackUser": "ユーザー"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "通知",
+      "unreadCount": "未読 {count} 件",
+      "markAllRead": "すべて既読にする"
+    },
+    "empty": "まだ通知はありません",
+    "viewAll": "すべての通知を表示"
+  },
+  "previewSchema": {
+    "fieldsHeading": "フィールド",
+    "fieldNamePlaceholder": "フィールド名",
+    "requiredLabel": "必須",
+    "removeButton": "削除",
+    "saveButton": "保存",
+    "previewButton": "プレビュー",
+    "hidePreviewButton": "プレビューを非表示",
+    "addFieldButton": "フィールドを追加",
+    "types": {
+      "string": "文字列",
+      "num": "数値",
+      "boolean": "真偽値",
+      "datetime": "日時",
+      "array": "配列",
+      "map": "マップ",
+      "null": "null"
+    },
+    "aria": {
+      "fieldName": "フィールド {{index}} の名前",
+      "fieldType": "フィールド {{index}} のタイプ",
+      "elementType": "フィールド {{index}} の要素タイプ",
+      "required": "フィールド {{index}} は必須",
+      "removeField": "フィールド {{index}} を削除"
     }
   },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "ログアウト中…",
+    "footer": {
+      "settings": "設定",
+      "logout": "ログアウト",
+      "collapse": "サイドバーを折りたたむ",
+      "expand": "サイドバーを展開",
+      "business": "ビジネス",
+      "developer": "開発者",
+      "design": "デザイン",
+      "system": "システム"
+    },
+    "aria": {
+      "sidebar": "コンソールナビゲーション",
+      "navigation": "メインナビゲーション",
+      "expandSidebar": "サイドバーを展開",
+      "collapseSidebar": "サイドバーを折りたたむ"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "プロジェクトロゴ",
+    "projectLabel": "プロジェクト：",
+    "signIn": "サインイン",
+    "register": "登録",
+    "aria": {
+      "navbar": "上部ナビゲーションバー",
+      "goToDashboard": "ダッシュボードへ移動"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "{name} のユーザーメニュー"
+    },
+    "menu": {
+      "account": "アカウント",
+      "settings": "設定",
+      "helpAndDocs": "ヘルプとドキュメント",
+      "logout": "ログアウト"
+    }
+  },
+  "accountPage": {
+    "title": "アカウント",
+    "subtitle": "プロフィールとセキュリティを管理します。",
+    "profile": {
+      "title": "プロフィール",
+      "description": "表示名を更新します。",
+      "fullNameLabel": "氏名",
+      "fullNamePlaceholder": "氏名を入力",
+      "emailLabel": "メールアドレス",
+      "emailReadOnlyNote": "メールアドレスは認証プロバイダーによって管理されており、ここでは変更できません。",
+      "saveButton": "変更を保存",
+      "savingButton": "保存中…",
+      "savedButton": "保存済み"
+    },
+    "danger": {
+      "title": "危険な操作",
+      "description": "元に戻せない操作です。慎重に進めてください。",
+      "cancelTitle": "サブスクリプションを解約",
+      "cancelDescription": "プランは現在の請求期間の終了まで有効で、その後セルフホストに戻ります。",
+      "cancelButton": "プランを解約",
+      "cancelModalBody": "サブスクリプションは解約されますが、現在の請求期間終了まではアクセスを維持できます。この操作は元に戻せません。",
+      "resetTitle": "プロジェクトをリセット",
+      "resetDescription": "プロジェクトのすべてのコンテンツを完全に削除し、オンボーディングを再度実行します。アカウントは保持されます。",
+      "resetButton": "プロジェクトをリセット",
+      "resetModalBody": "モデル、ページ、データ、メディアを含むプロジェクトのすべてのコンテンツが完全に削除されます。アカウントと請求情報は保持されます。この操作は元に戻せません。",
+      "deleteTitle": "アカウントを削除",
+      "deleteDescription": "アカウントと関連するすべてのデータを完全に削除します。",
+      "deleteButton": "アカウントを削除",
+      "deleteModalBody": "アカウントとすべてのコンテンツが完全に削除されます。法的に必要な場合は請求記録が保持されます。この操作は元に戻せません。"
+    },
+    "password": {
+      "title": "パスワードを変更",
+      "description": "他では使用していない強力なパスワードを設定してください。",
+      "currentLabel": "現在のパスワード",
+      "newLabel": "新しいパスワード",
+      "confirmLabel": "新しいパスワードを確認",
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを非表示",
+      "minLengthHint": "最低8文字",
+      "mismatchHint": "パスワードが一致しません",
+      "updateButton": "パスワードを更新",
+      "updatingButton": "更新中…",
+      "updatedButton": "更新済み"
+    },
+    "billing": {
+      "title": "請求とプラン",
+      "description": "現在のプランとアップグレードオプション。",
+      "selfHostedDescription": "コア機能が含まれています。連携機能、高度な認証、ホワイトラベル化にはアップグレードが必要です。",
+      "paidDescription": "すべての機能がご利用いただけます。",
+      "upgradeButton": "アップグレード",
+      "upgradeAriaLabel": "Underpeaks Pro にアップグレード",
+      "proFeaturesTitle": "Pro で利用できる機能",
+      "proFeature1": "連携機能（Stripe、Mailchimp など）",
+      "proFeature2": "高度な認証 — 2FA、ソーシャルログイン、マジックリンク、SSO",
+      "proFeature3": "独自ブランドで CMS をホワイトラベル化",
+      "proFeature4": "コンソール用のカスタムドメイン",
+      "contactSalesButton": "営業に問い合わせる"
+    },
+    "errors": {
+      "profileUpdateFailed": "プロフィールの更新に失敗しました。もう一度お試しください。",
+      "passwordUpdateFailed": "パスワードの更新に失敗しました。もう一度お試しください。"
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "モデルから自動生成された汎用エンドポイント",
+    "customEndpointButton": "カスタムエンドポイント",
+    "tabsLabel": "API ページのタブ",
+    "copy": "クリップボードにコピー",
+    "copied": "コピーしました！",
+    "tabs": {
+      "endpoints": "エンドポイント",
+      "keys": "API キー",
+      "reference": "リファレンス"
+    },
+    "endpoints": {
+      "searchPlaceholder": "エンドポイントを検索…",
+      "typeFilterLabel": "エンドポイントタイプでフィルター",
+      "modelFilterLabel": "モデルでフィルター",
+      "type": {
+        "all": "すべて",
+        "auto": "自動",
+        "custom": "カスタム"
+      },
+      "colMethod": "メソッド",
+      "colPath": "パス",
+      "colDescription": "説明",
+      "colActions": "操作",
+      "noResults": "フィルターに一致するエンドポイントはありません",
+      "customBadge": "カスタム",
+      "requiresAuth": "認証が必要",
+      "public": "公開エンドポイント",
+      "testButton": "テスト",
+      "exampleRequest": "リクエスト例",
+      "requiredHeaders": "必須ヘッダー",
+      "testLabel": "テスト",
+      "sendRequest": "リクエストを送信",
+      "running": "実行中…"
+    },
+    "drawer": {
+      "title": "新しいカスタムエンドポイント",
+      "subtitle": "汎用 API を呼び出すビジネスロジックを記述します",
+      "close": "パネルを閉じる",
+      "methodLabel": "メソッド",
+      "pathLabel": "パス",
+      "descriptionLabel": "説明",
+      "descriptionPlaceholder": "このエンドポイントは何をしますか？",
+      "authLabel": "認証",
+      "authRequired": "必要",
+      "authPublic": "公開",
+      "codeLabel": "ハンドラーコード",
+      "cancelButton": "キャンセル",
+      "createButton": "エンドポイントを作成"
+    },
+    "keys": {
+      "title": "API キー",
+      "keepSecret": "これらは秘密にしてください",
+      "createTitle": "新しいキーを作成",
+      "nameLabel": "キー名",
+      "namePlaceholder": "キー名（例：モバイルアプリ）",
+      "generateButton": "生成",
+      "active": "有効",
+      "inactive": "無効",
+      "never": "未使用",
+      "created": "作成日",
+      "lastUsed": "最終使用日",
+      "revealKey": "API キーを表示",
+      "hideKey": "API キーを非表示",
+      "deleteKey": "キー {{name}} を削除",
+      "confirmDelete": "削除の確認",
+      "cancelDelete": "削除をキャンセル"
+    },
+    "reference": {
+      "queryParamsTitle": "クエリパラメーター",
+      "queryParamsSubtitle": "すべての GET エンドポイントで利用可能",
+      "operatorsTitle": "フィルター演算子",
+      "operatorsSubtitle": "次と一緒に使用：",
+      "operatorsFormat": "パラメーターとして",
+      "exampleTitle": "完全な例",
+      "exampleDescription": "500円未満の有効な商品を価格順に取得し、id/name/price のみを返す：",
+      "responseLabel": "レスポンス："
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "ダッシュボード",
+    "welcome": "おかえりなさい、{name} さん",
+    "addWidget": "ウィジェットを追加",
+    "editLayout": "レイアウトを編集",
+    "saveLayout": "レイアウトを保存",
+    "resetLayout": "レイアウトをリセット",
+    "toolbar": {
+      "title": "ダッシュボード",
+      "subtitle": "ウィジェットをドラッグして並べ替え・ホバーで編集",
+      "refresh": "更新",
+      "last30Days": "過去30日間",
+      "addWidget": "ウィジェットを追加"
+    },
+    "grid": {
+      "addWidget": "ウィジェットを追加"
+    },
+    "addPanel": {
+      "title": "ウィジェットを追加",
+      "subtitle": "クリックしてダッシュボードに追加"
+    },
+    "widget": {
+      "dragToReorder": "ドラッグして並べ替え",
+      "vsLastPeriod": "前期間比"
+    },
+    "chart": {
+      "day": "日",
+      "daysAgo": "30日前",
+      "today": "今日"
+    },
+    "formula": {
+      "placeholder": "例：SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "プリセット"
+    }
   },
   "media": {
-    "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "title": "メディア",
+    "uploadFiles": "ファイルをアップロード",
+    "createFolder": "フォルダーを作成",
+    "folderName": "フォルダー名",
+    "rootFolder": "ルート",
+    "noFiles": "このフォルダーにファイルはありません",
+    "dropToUpload": "ここにファイルをドロップしてアップロード",
+    "orClickToUpload": "またはクリックして参照",
+    "gridView": "グリッド表示",
+    "listView": "リスト表示",
+    "fileSize": "ファイルサイズ",
+    "fileType": "ファイルタイプ",
+    "uploadedAt": "アップロード日時",
+    "deleteFileConfirm": "「{name}」を削除してもよろしいですか？",
+    "deleteFolderConfirm": "フォルダー「{name}」とその中のすべてのコンテンツを削除してもよろしいですか？",
+    "importFromUrl": "URL からインポート",
+    "copyUrl": "URL をコピー",
+    "urlCopied": "URL をクリップボードにコピーしました",
+    "details": "ファイルの詳細",
+    "selectFile": "詳細を表示するファイルを選択してください"
   },
   "settings": {
-    "title": "Settings",
+    "title": "設定",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "概要",
+      "projectName": "プロジェクト名",
+      "projectUrl": "プロジェクト URL",
+      "projectId": "プロジェクト ID",
+      "dbType": "データベースタイプ",
+      "environment": "環境",
+      "deploymentType": "デプロイタイプ",
+      "savedSuccess": "設定を保存しました"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "API キー",
+      "subheading": "アプリからの API リクエストを認証するために使用するキーを管理します。",
+      "title": "API キー",
+      "description": "プロジェクトへのプログラムによるアクセス用に API キーを管理します。",
+      "generateKey": "新しいキーを生成",
+      "keyName": "名前",
+      "keyPrefix": "キーのプレフィックス",
+      "lastUsed": "最終使用日",
+      "neverUsed": "未使用",
+      "revokeConfirm": "「{name}」を取り消してもよろしいですか？この操作は元に戻せません。",
+      "revoked": "取り消し済み",
+      "keyCopied": "キーをクリップボードにコピーしました",
+      "newKeyGenerated": "新しい API キーを生成しました。今すぐコピーしてください — 再度表示されません。",
+      "noKeys": "まだ API キーがありません。開始するには生成してください。",
+      "sectionTitle": "有効なキー",
+      "createdDate": "作成日 {{date}}",
+      "lastUsedDate": "最終使用日 {{date}}",
+      "hideKey": "キーを非表示",
+      "revealKey": "キーを表示",
+      "copyKey": "キーをコピー",
+      "revoke": "取り消す",
+      "emptyTitle": "まだ API キーがありません",
+      "emptySubtitle": "開始するには、以下でキーを生成してください。"
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
-      "logo": "Logo",
-      "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "title": "ブランディング",
+      "description": "Underpeaks コンソールの外観をカスタマイズします。",
+      "logo": "ロゴ",
+      "favicon": "ファビコン",
+      "primaryColor": "プライマリカラー",
+      "uploadLogo": "ロゴをアップロード",
+      "uploadFavicon": "ファビコンをアップロード",
+      "logoHint": "推奨：200×50px、PNG または SVG、背景透過。",
+      "faviconHint": "推奨：32×32px の ICO、PNG、または SVG。",
+      "livePreview": "ライブプレビュー",
+      "brandingSaved": "ブランディングを更新しました"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
-      "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "host": "SMTP ホスト",
+      "port": "ポート",
+      "username": "ユーザー名",
+      "fromEmail": "送信元メールアドレス",
+      "fromName": "送信者名",
+      "encryption": "暗号化",
+      "testEmail": "テストメールを送信",
+      "testEmailSuccess": "テストメールを送信しました"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "ドメイン",
+      "addDomain": "ドメインを追加",
+      "verified": "確認済み",
+      "unverified": "未確認",
+      "primary": "プライマリ",
+      "setPrimary": "プライマリに設定"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "アカウント",
+    "fullName": "氏名",
+    "emailReadOnly": "メールアドレス（読み取り専用）",
+    "changePassword": "パスワードを変更",
+    "currentPassword": "現在のパスワード",
+    "newPassword": "新しいパスワード",
+    "confirmPassword": "新しいパスワードを確認",
+    "passwordsDoNotMatch": "パスワードが一致しません",
+    "profileUpdated": "プロフィールを更新しました",
+    "passwordChanged": "パスワードを変更しました",
+    "memberSince": "{date} から利用中"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
-    "system": "System"
+    "title": "メッセージ",
+    "newConversation": "新しい会話",
+    "noConversations": "まだ会話はありません",
+    "noMessages": "この会話にメッセージはありません",
+    "typeMessage": "メッセージを入力...",
+    "send": "送信",
+    "markAllRead": "すべて既読にする",
+    "reply": "返信",
+    "you": "あなた",
+    "system": "システム"
+  },
+  "apiKeys": {
+    "heading": "API キー",
+    "subheading": "アプリからの API リクエストを認証するために使用するキーを管理します。",
+    "sectionTitle": "有効なキー",
+    "createdDate": "作成日 {date}",
+    "lastUsedDate": "最終使用日 {date}",
+    "neverUsed": "未使用",
+    "hideKey": "キーを非表示",
+    "revealKey": "キーを表示",
+    "copyKey": "キーをコピー",
+    "revoke": "取り消す",
+    "emptyTitle": "まだ API キーがありません",
+    "emptySubtitle": "開始するには、以下でキーを生成してください。",
+    "errors": {
+      "loadFailed": "API キーの読み込みに失敗しました",
+      "generateFailed": "キーの生成に失敗しました",
+      "revokeFailed": "キーの取り消しに失敗しました"
+    }
   },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "通知",
+    "noNotifications": "通知はありません",
+    "noUnread": "すべて確認済みです！",
+    "markAllRead": "すべて既読にする",
+    "viewAll": "すべての通知を表示",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
-      "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "all": "すべて",
+      "unread": "未読",
+      "comment": "コメント",
+      "system": "システム",
+      "payment": "支払い",
+      "security": "セキュリティ",
+      "message": "メッセージ"
     },
     "priority": {
-      "low": "Low",
-      "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "low": "低",
+      "normal": "通常",
+      "high": "高",
+      "urgent": "緊急"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "forgotPassword": "パスワードをお忘れですか？",
+    "resetPassword": "パスワードをリセット",
+    "sessionExpired": "セッションの有効期限が切れました。再度ログインしてください。",
+    "idleWarning": "しばらく操作がありませんでした。",
+    "idleLogoutIn": "{seconds} 秒後にログアウトされます。",
+    "stayLoggedIn": "ログイン状態を維持"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "ページが見つかりません",
+    "serverError": "サーバーエラー",
+    "networkError": "ネットワークエラー — 接続を確認してください",
+    "sessionError": "セッションエラー — 再度ログインしてください",
+    "unknown": "予期しないエラーが発生しました"
+  },
+  "grid": {
+    "addWidget": "ウィジェットを追加"
+  },
+  "addPanel": {
+    "title": "ウィジェットを追加",
+    "subtitle": "クリックしてダッシュボードに追加"
+  },
+  "widget": {
+    "dragToReorder": "ドラッグして並べ替え",
+    "vsLastPeriod": "前期間比"
+  },
+  "chart": {
+    "day": "日",
+    "daysAgo": "30日前",
+    "today": "今日"
+  },
+  "formula": {
+    "placeholder": "例：SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "プリセット"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "ヘルプセンター",
+      "subtitle": "回答を探したり、ドキュメントを読んだり、お問い合わせください。",
+      "searchPlaceholder": "よくある質問を検索…"
+    },
+    "resources": {
+      "title": "リソース",
+      "links": {
+        "gettingStarted": {
+          "label": "はじめに",
+          "description": "数分で最初のプロジェクトをセットアップできます。"
+        },
+        "apiReference": {
+          "label": "API リファレンス",
+          "description": "すべての API エンドポイントと演算子の完全なリファレンス。"
+        },
+        "community": {
+          "label": "コミュニティフォーラム",
+          "description": "質問したり、コミュニティとプロジェクトを共有したりできます。"
+        }
+      }
+    },
+    "faq": {
+      "title": "よくある質問",
+      "resultCount": "{count} 件の結果",
+      "noResults": "「{query}」に一致する結果はありません",
+      "noResultsHint": "別の検索語を試すか、下記のサポートにお問い合わせください。"
+    },
+    "api": {
+      "title": "API クイックリファレンス",
+      "baseUrl": "ベース URL：",
+      "endpoints": {
+        "get": "モデルのすべてのレコードを一覧表示します。フィルタリング、ソート、ページネーションに対応。",
+        "post": "新しいレコードを作成します。",
+        "put": "既存のレコードを ID で更新します。",
+        "delete": "レコードを ID で削除します。"
+      },
+      "operators": {
+        "title": "クエリ演算子",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "サポートに問い合わせる",
+      "submit": "メッセージを送信",
+      "success": {
+        "title": "メッセージを送信しました！",
+        "subtitle": "できるだけ早くご返信いたします。"
+      },
+      "fields": {
+        "name": "名前",
+        "namePlaceholder": "山田 太郎",
+        "email": "メールアドレス",
+        "emailPlaceholder": "you@example.com",
+        "message": "メッセージ",
+        "messagePlaceholder": "問題や質問を記入してください…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "連携",
+      "connectedCount": "{count} 件接続済み",
+      "errorCount": "{count} 件のエラー",
+      "infoBanner": "接続済みの連携は、カスタムエンドポイントとコード生成で利用できます"
+    },
+    "categories": {
+      "all": "すべて",
+      "payments": "決済",
+      "email": "メールと SMS",
+      "storage": "ストレージ",
+      "ai": "AI",
+      "analytics": "分析",
+      "automation": "自動化"
+    },
+    "status": {
+      "connected": "接続済み",
+      "disconnected": "未接続",
+      "error": "エラー"
+    },
+    "card": {
+      "viewDocs": "ドキュメントを見る",
+      "buttons": {
+        "saveAndConnect": "保存して接続",
+        "saving": "保存中…",
+        "saved": "保存しました！",
+        "disconnect": "切断",
+        "retryConnection": "接続を再試行"
+      }
+    },
+    "empty": "このカテゴリーには連携がありません"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "メニュー",
+      "subtitle": "{count} 件の項目・ドラッグで並べ替え",
+      "addItem": "項目を追加"
+    },
+    "preview": {
+      "title": "ナビゲーションプレビュー",
+      "subtitle": "表示中の項目のみ",
+      "empty": "表示中の項目はまだありません。"
+    },
+    "list": {
+      "title": "すべての項目",
+      "empty": "まだメニュー項目はありません",
+      "emptyAction": "最初の項目を追加"
+    },
+    "row": {
+      "hidden": "非表示",
+      "external": "外部",
+      "actions": {
+        "moveUp": "上に移動",
+        "moveDown": "下に移動",
+        "toggleVisibility": "表示/非表示を切り替え",
+        "edit": "編集",
+        "delete": "削除",
+        "confirmDelete": "削除の確認",
+        "cancelDelete": "キャンセル"
+      }
+    },
+    "errors": {
+      "loadFailed": "メニュー項目の読み込みに失敗しました",
+      "createFailed": "メニュー項目の作成に失敗しました",
+      "updateFailed": "メニュー項目の更新に失敗しました",
+      "deleteFailed": "メニュー項目の削除に失敗しました"
+    },
+    "drawer": {
+      "titleAdd": "メニュー項目を追加",
+      "titleEdit": "メニュー項目を編集",
+      "subtitle": "ラベル、リンク、アイコン、表示設定を構成します",
+      "sections": {
+        "labelVisibility": "ラベルと表示設定",
+        "link": "リンク",
+        "icon": "アイコン",
+        "nesting": "ネスト",
+        "preview": "プレビュー"
+      },
+      "fields": {
+        "pageRequired": "メニュー項目を保存する前にページを選択する必要があります。",
+        "menuLabel": "メニューラベル",
+        "menuLabelPlaceholder": "例：商品",
+        "menuLabelHint": "これはナビゲーションメニューに表示されるテキストです。",
+        "visibility": "表示設定",
+        "visible": "表示",
+        "hidden": "非表示",
+        "linkTypePage": "ページ",
+        "linkTypeExternal": "外部 URL",
+        "selectPage": "ページを選択",
+        "selectPagePlaceholder": "— ページを選択 —",
+        "noPagesHint": "管理者ページが見つかりません。まずページタイプを Admin に設定してページを作成してください。",
+        "externalUrl": "外部 URL",
+        "openIn": "開く場所",
+        "sameTab": "同じタブ",
+        "newTab": "新しいタブ",
+        "parentItem": "親項目",
+        "parentItemPlaceholder": "— 最上位 —",
+        "parentItemHint": "ネストされた項目は、ナビゲーションでドロップダウンの子項目として表示されます。"
+      },
+      "icons": {
+        "home": "ホーム",
+        "grid": "グリッド",
+        "package": "パッケージ",
+        "users": "ユーザー",
+        "settings": "設定",
+        "file": "ファイル",
+        "cart": "カート",
+        "mail": "メール",
+        "star": "スター",
+        "info": "情報"
+      },
+      "preview": {
+        "hidden": "非表示"
+      },
+      "buttons": {
+        "cancel": "キャンセル",
+        "saveChanges": "変更を保存",
+        "addItem": "項目を追加",
+        "saving": "保存中…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "ファイル URL",
+      "metadata": "メタデータ",
+      "rename": "名前を変更",
+      "moveToFolder": "フォルダーに移動"
+    },
+    "altText": {
+      "placeholder": "アクセシビリティのためにこの画像を説明してください…",
+      "empty": "代替テキストが設定されていません"
+    },
+    "metadata": {
+      "folder": "フォルダー",
+      "path": "パス",
+      "size": "サイズ",
+      "type": "タイプ",
+      "uploaded": "アップロード日時",
+      "dimensions": "寸法"
+    },
+    "actions": {
+      "save": "保存",
+      "saving": "保存中…",
+      "cancel": "キャンセル",
+      "move": "移動",
+      "moving": "移動中…",
+      "deleteFile": "ファイルを削除"
+    },
+    "move": {
+      "currentlyIn": "現在の場所："
+    },
+    "errors": {
+      "renameFailed": "名前の変更に失敗しました",
+      "moveFailed": "移動に失敗しました"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "必須フィールドがありません：{{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "フォルダー",
+      "all": "すべて",
+      "newFolderTitle": "新しいフォルダー",
+      "collapse": "折りたたむ",
+      "expand": "展開"
+    },
+    "folder": {
+      "selectTitle": "フォルダーを選択"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "フォルダーを削除",
+      "fileCount": "{count} 件のファイル"
+    },
+    "empty": {
+      "message": "このフォルダーは空です"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "このフォルダーは空です"
+    },
+    "header": {
+      "name": "名前",
+      "size": "サイズ",
+      "type": "タイプ",
+      "uploaded": "アップロード日時"
+    },
+    "row": {
+      "deleteTitle": "ファイルを削除"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "メディア"
+    },
+    "actions": {
+      "delete": "削除（{count}）",
+      "clear": "クリア",
+      "upload": "アップロード"
+    },
+    "viewMode": {
+      "grid": "グリッド表示",
+      "list": "リスト表示"
+    }
+  },
+  "newFolderPopup": {
+    "title": "新しいフォルダー",
+    "placeholder": "フォルダー名",
+    "buttons": {
+      "create": "作成",
+      "cancel": "キャンセル"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "選択したフォルダーにファイルをアップロードするか、URL からメディアをインポートします。",
+    "title": "メディアを追加",
+    "tabs": {
+      "upload": "ファイルをアップロード",
+      "url": "URL から追加"
+    },
+    "uploadZone": {
+      "hint": "任意のファイルタイプ — 画像、動画、ドキュメント"
+    },
+    "urlTab": {
+      "description": "公開 URL を貼り付けて、ファイルを直接ストレージにインポートします。",
+      "placeholder": "https://example.com/file.jpg",
+      "import": "インポート",
+      "importing": "インポート中…",
+      "previewAlt": "URL プレビュー"
+    },
+    "errors": {
+      "importFailed": "インポートに失敗しました"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "フォルダーの読み込みに失敗しました",
+      "loadFiles": "ファイルの読み込みに失敗しました",
+      "createFolder": "フォルダーの作成に失敗しました",
+      "deleteFailed": "削除に失敗しました"
+    },
+    "confirmDelete": {
+      "titleFolder": "フォルダーを削除",
+      "titleFile": "ファイルを削除",
+      "message": "削除してもよろしいですか：",
+      "folderWarning": "これにより、フォルダー内のすべてのファイルが削除されます。",
+      "undoWarning": "この操作は元に戻せません。",
+      "selectionLabel": "{count} 件の項目",
+      "cancel": "キャンセル",
+      "confirm": "削除",
+      "deleting": "削除中…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "メッセージはありません",
+      "subUnread": "すべて確認済みです！",
+      "subAll": "受信トレイは空です。"
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "たった今",
+      "minutesAgo": "{count}分前",
+      "hoursAgo": "{count}時間前",
+      "daysAgo": "{count}日前"
+    },
+    "unread": {
+      "badge": "未読 {count} 件"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "システムメッセージ",
+    "from": "差出人：{name}",
+    "deleteButton": "削除",
+    "deleteAriaLabel": "会話を削除：{subject}",
+    "messagesAriaLabel": "メッセージスレッド",
+    "loading": "メッセージを読み込んでいます...",
+    "emptyTitle": "まだメッセージはありません",
+    "emptySub": "以下から最初のメッセージを送信してください。"
+  },
+  "messageBubble": {
+    "justNow": "たった今",
+    "minutesAgo": "{count}分前",
+    "hoursAgo": "{count}時間前",
+    "daysAgo": "{count}日前"
+  },
+  "replyBar": {
+    "placeholder": "返信を入力…（Enter で送信）",
+    "sendAriaLabel": "メッセージを送信"
+  },
+  "messagesPage": {
+    "title": "メッセージ",
+    "unreadCount": "未読メッセージ {count} 件",
+    "filters": {
+      "all": "すべて",
+      "unread": "未読"
+    },
+    "markAllRead": "すべて既読にする",
+    "closeError": "エラーメッセージを閉じる",
+    "empty": {
+      "title": "会話を選択してください",
+      "sub": "リストから会話を選択すると、ここに表示されます。"
+    },
+    "errors": {
+      "load": "メッセージの読み込みに失敗しました",
+      "delete": "会話の削除に失敗しました",
+      "markAll": "すべて既読にできませんでした"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "緊急",
+      "high": "高"
+    },
+    "actions": {
+      "markRead": "既読にする",
+      "view": "表示",
+      "delete": "削除"
+    }
+  },
+  "notificationsHeader": {
+    "title": "通知",
+    "unreadCount": "未読通知 {count} 件",
+    "filters": {
+      "all": "すべて",
+      "unread": "未読"
+    },
+    "markAllRead": "すべて既読にする"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "通知はありません",
+      "subUnread": "すべて確認済みです！",
+      "subAll": "まだ通知はありません。"
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "通知の読み込みに失敗しました",
+      "markReadFailed": "既読にできませんでした",
+      "markAllReadFailed": "すべて既読にできませんでした",
+      "deleteFailed": "通知の削除に失敗しました"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "公開",
+      "admin": "管理者",
+      "draft": "下書き",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "ページ",
+      "pageCount": "合計 {count} ページ",
+      "searchPlaceholder": "ページを検索…",
+      "newPage": "新しいページ"
+    },
+    "filter": {
+      "all": "すべて"
+    },
+    "table": {
+      "page": "ページ",
+      "model": "モデル",
+      "template": "テンプレート",
+      "visibility": "表示設定",
+      "actions": "操作",
+      "seoPrefix": "SEO",
+      "systemBadge": "システム",
+      "hiddenBadge": "非表示"
+    },
+    "emptyState": {
+      "message": "ページが見つかりません",
+      "cta": "最初のページを作成"
+    },
+    "actions": {
+      "edit": "ページを編集",
+      "delete": "ページを削除",
+      "view": "ページを表示",
+      "confirmDelete": "削除の確認",
+      "cancel": "キャンセル",
+      "systemLocked": "システムページは編集または削除できません"
+    },
+    "errors": {
+      "loadFailed": "ページの読み込みに失敗しました",
+      "createFailed": "ページの作成に失敗しました",
+      "updateFailed": "ページの更新に失敗しました",
+      "deleteFailed": "ページの削除に失敗しました"
+    },
+    "drawer": {
+      "title": "ページを作成",
+      "editTitle": "ページを編集",
+      "subtitle": "新しいページを定義し、モデルを割り当てます",
+      "sections": {
+        "basicInfo": "基本情報",
+        "modelTemplate": "モデルとテンプレート",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "ページを非表示",
+          "hint": "非表示のページは、ナビゲーションやサイトマップに表示されません"
+        },
+        "name": {
+          "label": "ページ名",
+          "placeholder": "例：商品一覧"
+        },
+        "slug": {
+          "label": "スラッグ / URL",
+          "placeholder": "/your-page-slug",
+          "hint": "動的ルートには :id を使用します（例：/products/:id）"
+        },
+        "visibility": {
+          "label": "表示設定"
+        },
+        "model": {
+          "label": "モデルを割り当てる",
+          "noModel": "— モデルなし（カスタムページ） —",
+          "hint": "1つのモデルを複数のページに使用できます。"
+        },
+        "template": {
+          "label": "テンプレート"
+        },
+        "seoTitle": {
+          "label": "SEO タイトル",
+          "placeholder": "検索エンジン向けのページタイトル",
+          "charCount": "{count}/60 文字"
+        },
+        "seoDesc": {
+          "label": "メタディスクリプション",
+          "placeholder": "検索結果用の簡単な説明…",
+          "charCount": "{count}/160 文字"
+        }
+      },
+      "seoPreview": {
+        "label": "検索プレビュー",
+        "titleFallback": "ページタイトル",
+        "urlPrefix": "yoursite.com",
+        "descFallback": "説明はありません。"
+      },
+      "actions": {
+        "cancel": "キャンセル",
+        "create": "ページを作成",
+        "update": "ページを更新",
+        "saving": "保存中…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "新しいキーを生成",
+    "keyNameLabel": "キー名",
+    "keyNameHint": "用途がわかるように分かりやすい名前を付けてください。",
+    "keyNamePlaceholder": "例：Flutter アプリ — 本番環境",
+    "buttonGenerating": "生成中…",
+    "buttonIdle": "キーを生成"
+  },
+  "newKeyModal": {
+    "title": "API キーを生成しました",
+    "instructions": "キーが作成され、使用可能な状態になりました。リスト内のキーの横にある<eyeIcon>目のアイコン</eyeIcon>をクリックすると、表示してコピーできます。",
+    "doneButton": "完了"
+  },
+  "revokeModal": {
+    "title": "API キーを取り消す",
+    "message": "このキーを使用しているすべてのアプリは、即座にアクセスできなくなります：",
+    "cancelButton": "キャンセル",
+    "revokeButtonIdle": "キーを取り消す",
+    "revokeButtonRevoking": "取り消し中…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "API キーの読み込みに失敗しました",
+      "generateFailed": "キーの生成に失敗しました",
+      "revokeFailed": "キーの取り消しに失敗しました"
+    },
+    "logs": {
+      "loadingKeys": "API キーを読み込んでいます...",
+      "keysLoaded": "API キーを正常に読み込みました",
+      "generatingKey": "新しい API キーを生成しています...",
+      "keyGenerated": "API キーを正常に生成しました",
+      "revokingKey": "API キーを取り消しています...",
+      "keyRevoked": "API キーを正常に取り消しました"
+    }
+  },
+  "brandingPage": {
+    "heading": "CMS ブランディング",
+    "subheading": "チーム向けの CMS の外観をカスタマイズします。",
+    "errors": {
+      "saveFailed": "ブランディングの保存に失敗しました"
+    },
+    "logs": {
+      "savingBranding": "ブランディング設定を保存しています...",
+      "brandingSaved": "ブランディングを正常に保存しました"
+    },
+    "logoSection": {
+      "title": "CMS ロゴ",
+      "uploadLabel": "ロゴ",
+      "uploadHint": "背景透過の PNG または SVG",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "ロゴのプレビュー"
+    },
+    "faviconSection": {
+      "title": "ファビコン",
+      "uploadLabel": "ファビコン",
+      "uploadHint": "ICO、PNG、SVG — ブラウザタブに表示されます",
+      "uploadRecommended": "32×32px または 64×64px",
+      "imageAlt": "ファビコンのプレビュー"
+    },
+    "preview": {
+      "label": "上部ナビゲーションのプレビュー",
+      "projectLabel": "プロジェクト："
+    },
+    "saveSuccess": "ブランディングを正常に保存しました",
+    "saveButtonIdle": "ブランディングを保存",
+    "saveButtonSaving": "保存中…"
+  },
+  "overviewPage": {
+    "heading": "プロジェクト概要",
+    "subheading": "Underpeaks プロジェクトのスナップショットです。",
+    "stats": {
+      "dbType": "DB タイプ",
+      "environment": "環境",
+      "deployment": "デプロイ",
+      "status": "ステータス",
+      "statusActive": "有効"
+    },
+    "userInfo": {
+      "sectionTitle": "ユーザー情報",
+      "fullName": "氏名",
+      "email": "メールアドレス",
+      "role": "ロール",
+      "status": "ステータス",
+      "verified": "確認済み",
+      "verifiedYes": "はい",
+      "verifiedNo": "いいえ",
+      "memberSince": "利用開始日"
+    },
+    "licenseKey": {
+      "sectionTitle": "Underpeaks ライセンスキー",
+      "description": "ライセンスキーはこのインスタンスを認証し、ホスト型とセルフホスト型の機能を区別できるようにします。",
+      "reveal": "表示",
+      "hide": "非表示",
+      "copy": "コピー",
+      "copied": "コピーしました",
+      "loading": "読み込み中…",
+      "notFound": "ライセンスキーが見つかりません"
+    }
+  },
+  "smtpPage": {
+    "heading": "SMTP 設定",
+    "subheading": "プロジェクトの送信メールを設定します。",
+    "emailFeatures": {
+      "sectionTitle": "メール機能",
+      "verifyEmailLabel": "登録時のメール確認を有効にする",
+      "forgotPasswordLabel": "パスワードをお忘れの方のメールを有効にする",
+      "builtInNotice": "{provider} はメール確認とパスワードリセットをネイティブに処理します — これらの機能には SMTP は不要です。",
+      "smtpToggleLabel": "カスタム SMTP サーバーを使用"
+    },
+    "smtpConfig": {
+      "sectionTitle": "SMTP 設定",
+      "hostLabel": "SMTP ホスト",
+      "hostPlaceholder": "smtp.example.com",
+      "portLabel": "ポート",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "送信元アドレス",
+      "fromAddressPlaceholder": "no-reply@example.com",
+      "usernameLabel": "ユーザー名",
+      "usernamePlaceholder": "SMTP ユーザー名",
+      "passwordLabel": "パスワード",
+      "passwordPlaceholder": "SMTP パスワード",
+      "showPassword": "パスワードを表示",
+      "hidePassword": "パスワードを非表示",
+      "encryptionLabel": "暗号化",
+      "encryptionNone": "なし"
+    },
+    "logs": {
+      "savingSmtp": "SMTP 設定を保存しています...",
+      "smtpSaved": "SMTP 設定を正常に保存しました"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "設定",
+    "toggleAriaLabel": "設定ナビゲーションの切り替え",
+    "nav": {
+      "overview": "概要",
+      "api-keys": "API キー",
+      "smtp": "SMTP 設定",
+      "branding": "CMS ブランディング"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "設定を読み込んでいます…"
+  },
+  "saveButton": {
+    "savedMessage": "正常に保存しました",
+    "buttonSaving": "保存中…",
+    "buttonIdle": "変更を保存"
+  },
+  "coloursPage": {
+    "heading": "カラー",
+    "subheading": "生成された Flutter および Next.js アプリで使用されるカラートークンを定義します。",
+    "preview": {
+      "title": "ライブプレビュー",
+      "primaryButton": "プライマリボタン",
+      "secondaryButton": "セカンダリ",
+      "accentBadge": "アクセントバッジ",
+      "success": "✓ 成功",
+      "warning": "⚠ 警告",
+      "danger": "✕ 危険"
+    },
+    "tokensSectionTitle": "カラートークン",
+    "resetTokenTitle": "デフォルトにリセット",
+    "resetAllButton": "すべてデフォルトにリセット",
+    "savedMessage": "保存しました",
+    "saveButtonIdle": "カラーを保存",
+    "saveButtonSaving": "保存中…",
+    "logs": {
+      "savingColours": "カラートークンを保存しています...",
+      "coloursSaved": "カラートークンを正常に保存しました"
+    },
+    "tokens": {
+      "primary":      { "label": "プライマリ",             "description": "メインブランドカラー — ボタン、リンク、ハイライト" },
+      "primary-fg":   { "label": "プライマリ前景色",  "description": "プライマリカラーの背景上のテキスト" },
+      "secondary":    { "label": "セカンダリ",           "description": "補助ブランドカラー" },
+      "secondary-fg": { "label": "セカンダリ前景色","description": "セカンダリカラーの背景上のテキスト" },
+      "accent":       { "label": "アクセント",              "description": "バッジやタグのハイライトカラー" },
+      "background":   { "label": "背景",          "description": "メインのアプリ背景" },
+      "surface":      { "label": "サーフェス",             "description": "カードやパネルの背景" },
+      "border":       { "label": "ボーダー",              "description": "デフォルトのボーダーカラー" },
+      "success":      { "label": "成功",             "description": "肯定的な状態や確認" },
+      "warning":      { "label": "警告",             "description": "警告や注意状態" },
+      "danger":       { "label": "危険",              "description": "エラーや破壊的な操作" },
+      "text":         { "label": "プライマリテキスト",        "description": "メインの本文テキストカラー" },
+      "text-muted":   { "label": "ミュートテキスト",          "description": "セカンダリテキストとプレースホルダーテキスト" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "機能フラグ",
+    "comingSoonBadge": "近日公開",
+    "subheading": "生成される Flutter および Next.js アプリに含める機能を切り替えます。",
+    "paidBadge": "有料",
+    "savedMessage": "保存しました",
+    "saveButtonIdle": "フラグを保存",
+    "saveButtonSaving": "保存中…",
+    "upgrade": {
+      "title": "ホスト型プランが必要です",
+      "description": "これらの機能には Underpeaks のホスト型インフラストラクチャが必要です。アップグレードして解除してください。",
+      "button": "アップグレード"
+    },
+    "groups": {
+      "Appearance": "外観",
+      "Localisation": "ローカライズ",
+      "App Behaviour": "アプリの動作",
+      "Authentication — Paid": "認証 — 有料",
+      "Advanced — Paid": "高度な設定 — 有料"
+    },
+    "flags": {
+      "dark-mode":          { "label": "ダークモード",                 "description": "アプリ内でライトテーマとダークテーマを切り替え可能にします" },
+      "system-theme":       { "label": "システムテーマに従う",       "description": "デバイスのライト/ダークモード設定に自動的に合わせます" },
+      "multi-language":     { "label": "多言語サポート",    "description": "生成されるアプリで複数言語のサポートを有効にします" },
+      "rtl-support":        { "label": "RTL サポート",               "description": "アラビア語、ヘブライ語などの言語向けの右から左へのレイアウト" },
+      "offline-mode":       { "label": "オフラインモード",              "description": "インターネット接続なしでアプリが動作するようにデータをローカルにキャッシュします" },
+      "push-notifications": { "label": "プッシュ通知",        "description": "FCM 経由のプッシュ通知サポートを有効にします — キーはご自身で提供します" },
+      "splash-screen":      { "label": "スプラッシュ画面",             "description": "アプリ起動時にブランド化されたスプラッシュ画面を表示します" },
+      "onboarding":         { "label": "オンボーディングフロー",           "description": "新規ユーザー向けにウェルカム/オンボーディングフローを表示します" },
+      "2fa":                { "label": "二要素認証", "description": "ログイン時に OTP または認証アプリを必須にします" },
+      "biometric":          { "label": "生体認証ログイン",           "description": "モバイルでの指紋認証や Face ID ログイン" },
+      "social-login":       { "label": "ソーシャルログイン",              "description": "Google、GitHub、Apple、Facebook の OAuth" },
+      "magic-link":         { "label": "マジックリンク",                "description": "メールリンクによるパスワードレスログイン" },
+      "sso":                { "label": "SSO / SAML",                "description": "エンタープライズシングルサインオン連携" },
+      "analytics":          { "label": "アプリ内分析",          "description": "生成されたアプリ内での画面表示やイベントを追跡します" },
+      "ab-testing":         { "label": "A/B テスト",               "description": "ユーザーベースで機能実験を実施します" },
+      "feature-gating":     { "label": "機能ゲーティング",            "description": "ユーザーのプランやロールに基づいて機能を表示または非表示にします" }
+    },
+    "logs": {
+      "savingFlags": "機能フラグを保存しています...",
+      "flagsSaved": "機能フラグを正常に保存しました"
+    }
+  },
+  "spacingPage": {
+    "heading": "余白と角丸",
+    "subheading": "生成されるアプリのコンポーネントの形状、密度、標高を制御します。",
+    "preview": {
+      "title": "ライブプレビュー",
+      "button": "ボタン",
+      "card": "カードコンポーネント",
+      "input": "入力フィールド"
+    },
+    "sections": {
+      "radius": {
+        "title": "角丸の半径",
+        "description": "ボタン、カード、入力欄、モーダルに適用されます"
+      },
+      "density": {
+        "title": "余白の密度",
+        "description": "コンポーネント内のパディングを制御します"
+      },
+      "shadow": {
+        "title": "標高 / 影",
+        "description": "カードとコンポーネントの影の深さ"
+      }
+    },
+    "radius": {
+      "none": "なし",
+      "sm": "小",
+      "md": "中",
+      "lg": "大",
+      "xl": "特大",
+      "full": "ピル型"
+    },
+    "density": {
+      "compact": { "label": "コンパクト", "desc": "余白を狭くして、より多くのコンテンツを表示" },
+      "default": { "label": "デフォルト", "desc": "ほとんどの用途に適したバランスの取れた余白" },
+      "relaxed": { "label": "ゆったり", "desc": "ゆとりのある余白で、タップしやすい" }
+    },
+    "shadow": {
+      "none": "なし",
+      "sm": "控えめ",
+      "md": "中",
+      "lg": "強め"
+    },
+    "save": {
+      "button": "余白を保存",
+      "saving": "保存中…",
+      "savedConfirmation": "保存しました"
+    }
+  },
+  "typographyPage": {
+    "heading": "タイポグラフィ",
+    "subheading": "生成されるアプリのフォントとスケールを選択します。フォントは Google Fonts から読み込まれます。",
+    "preview": {
+      "title": "ライブプレビュー",
+      "headingSuffix": "— 見出し",
+      "bodySample": "いろはにほへと ちりぬるを。デフォルトサイズの本文テキストの例です。",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "フォントファミリー",
+        "description": "Google Fonts から選択 — コード生成に自動的に含まれます"
+      },
+      "weights": {
+        "title": "フォントウェイト"
+      },
+      "scale": {
+        "title": "フォントサイズスケール",
+        "description": "アプリ全体のテキストサイズを制御します"
+      }
+    },
+    "fonts": {
+      "headingFont": "見出しフォント",
+      "bodyFont": "本文フォント",
+      "monoFont": "等幅フォント"
+    },
+    "weights": {
+      "headingWeight": "見出しの太さ",
+      "bodyWeight": "本文の太さ"
+    },
+    "scale": {
+      "compact": { "label": "コンパクト", "desc": "小さいテキスト、狭い間隔" },
+      "default": { "label": "デフォルト", "desc": "ほとんどのアプリに適したバランス" },
+      "relaxed": { "label": "ゆったり", "desc": "大きいテキスト、より広いゆとり" }
+    },
+    "save": {
+      "button": "タイポグラフィを保存",
+      "saving": "保存中…",
+      "savedConfirmation": "保存しました"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "テーマ",
+    "nav": {
+      "colours": "カラー",
+      "typography": "タイポグラフィ",
+      "spacing": "余白と角丸",
+      "featureFlags": "機能フラグ",
+      "presets": "プリセット"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "非アクティブなセッション",
+      "description": "操作がありませんでした。次の時間でログアウトします：",
+      "logoutButton": "ログアウト",
+      "keepAliveButton": "接続を維持"
+    },
+    "logs": {
+      "logoutFailed": "ログアウトに失敗しました："
+    }
+  },
+  "loader": {
+    "label": "読み込み中…"
+  },
+  "userStatus": {
+    "active": "有効",
+    "needsEmailVerification": "メール確認が必要",
+    "passwordResetRequested": "パスワードリセットをリクエスト済み",
+    "blocked": "ブロック済み",
+    "disabled": "無効"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Flutter プロジェクトの作成に失敗しました"
+    },
+    "logs": {
+      "skipped": "Flutter プロジェクトの作成をスキップしました：{output}",
+      "created": "Flutter プロジェクトを作成しました：{output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "NextJS プロジェクトの作成に失敗しました"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "データベース設定が見つかりません。",
+      "dbConfigMissing": "DB 設定がありません",
+      "dbConfigMissingStore": "ストア内に DB 設定がありません",
+      "adminEmailMissing": "管理者ユーザーのメールアドレスがありません",
+      "adminEmailMissingStore": "ストア内に管理者ユーザーのメールアドレスがありません",
+      "projectTypeMissing": "selectedProjectType がありません",
+      "createTablesFailed": "テーブルの作成に失敗しました：{message}",
+      "createAdminFailed": "管理者ユーザーの作成に失敗しました：{message}",
+      "createModelsFailed": "モデルの作成に失敗しました：{message}",
+      "writeConfigFailed": "設定ファイルの書き込みに失敗しました：{message}",
+      "setupStorageFailed": "ストレージの設定に失敗しました：{message}",
+      "installDemoFailed": "デモコンテンツのインストールに失敗しました：{message}",
+      "stepFailed": "ステップが失敗しました：{step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "テーブルを作成しました：",
+      "adminCreated": "管理者ユーザーを作成しました：",
+      "modelsCreated": "モデル作成のレスポンス：",
+      "modelsSkipped": "モデルの作成をスキップしました：{message}",
+      "configWritten": "設定ファイルを正常に書き込みました：",
+      "storageCreated": "ストレージバケットを作成しました：",
+      "demoContentSkipped": "デモコンテンツをスキップしました",
+      "demoContentInstalled": "デモコンテンツをインストールしました：",
+      "creatingApiEndpoints": "API エンドポイントを作成しています...",
+      "settingUpAuth": "認証を設定しています...",
+      "configuringSession": "セッション管理を設定しています...",
+      "runningTests": "テストを実行しています...",
+      "finalizing": "インストーラーを完了しています...",
+      "noImplementation": "ステップの実装がありません：{step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "heading": "管理者ユーザーの設定",
+    "description": "Underpeaks システムを保護するために管理者ユーザーの詳細を入力してください。このアカウントは、プラットフォーム内で完全な管理者アクセス権を持ちます。",
+    "disclaimer": "注：これは Underpeaks システム上に管理者アカウントを作成するもので、データベースの管理者アカウントとは異なる場合があります。",
+    "fields": {
+      "fullName": {
+        "label": "氏名",
+        "placeholder": "例：山田 太郎"
+      },
+      "email": {
+        "label": "メールアドレス",
+        "placeholder": "admin@example.com"
+      },
+      "password": {
+        "label": "パスワード",
+        "placeholder": "安全なパスワードを作成してください"
+      }
+    },
+    "errors": {
+      "nameRequired": "氏名は必須です",
+      "emailRequired": "メールアドレスは必須です",
+      "passwordInvalid": "パスワードは必須です | パスワードは8文字以上である必要があります | 大文字を含める必要があります | 特殊文字を含める必要があります（例：!@#$%^&*）"
+    },
+    "continueButton": "続行"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "heading": "スタックを選択",
+    "description": "プロジェクトのニーズに最適な技術スタックを選択してください。後でプラットフォームを追加したり、アプローチを変更したりすることもできます。",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "フルスタックの組み合わせ！ウェブには Next.js、クロスプラットフォームのモバイル/デスクトップアプリには Flutter を使用します。"
+      },
+      "next": {
+        "title": "Next.js のみ",
+        "description": "Next.js を強力な React SSR フレームワークとして使用し、<strong>コンテンツと API を管理するヘッドレス CMS としても使用できます。</strong>"
+      },
+      "flutter": {
+        "title": "Flutter のみ",
+        "description": "共有コードベースを使用して Flutter でクロスプラットフォームのモバイル/デスクトップアプリを構築し、<strong>必要に応じてヘッドレス CMS バックエンドとしても使用できます。</strong>"
+      },
+      "cms": {
+        "title": "ヘッドレス CMS",
+        "description": "ヘッドレス CMS バックエンドとしてのみデプロイします。API を通じてデータを公開し、あらゆるカスタムフロントエンド、モバイルアプリ、サードパーティサービスと柔軟に接続できます。"
+      }
+    },
+    "nextButton": "次へ"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "heading": "データベース設定",
+    "selectPlaceholder": "データベースを選択",
+    "fieldExample": "（例：{placeholder}）",
+    "savingWarning": "⚠️ 少々お待ちください、時間がかかる場合があります...",
+    "infoBlock": {
+      "whereLabel": "確認方法："
+    },
+    "testSteps": {
+      "validating": "設定を検証しています...",
+      "sending": "サーバーに設定を送信しています...",
+      "testing": "データベース接続をテストしています...",
+      "finalizing": "接続確認を完了しています..."
+    },
+    "errors": {
+      "serverRejected": "サーバーが接続を拒否しました",
+      "connectionFailed": "接続に失敗しました：{message}"
+    },
+    "buttons": {
+      "testConnection": "接続をテスト",
+      "testing": "テスト中...",
+      "saving": "保存中...",
+      "continue": "続行"
+    },
+    "logs": {
+      "firebaseParseError": "Firebase の設定解析に失敗しました"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "projectType": {
+      "title": "プロジェクトタイプを選択",
+      "description": "テンプレートを選択すると、プロジェクトのデフォルトモデルが自動的にインストールされます。"
+    },
+    "projects": {
+      "ecommerce":   { "label": "E コマース",         "description": "商品、カテゴリー、注文、顧客、ストアフロントページを含みます。" },
+      "marketplace": { "label": "マーケットプレイス",         "description": "複数の販売者、出品、手数料、販売者ダッシュボードに対応します。" },
+      "listing":     { "label": "掲載プラットフォーム",    "description": "不動産、求人、サービスの掲載向けに、カテゴリー、検索、フィルターを提供します。" },
+      "blog":        { "label": "ブログ / コンテンツサイト", "description": "投稿、カテゴリー、タグ、著者、コメントを備えたコンテンツ主導型サイトです。" },
+      "social":      { "label": "ソーシャルネットワーク",      "description": "ユーザープロフィール、投稿、コメント、いいね、フォロワー、メッセージ、通知を提供します。" },
+      "saas":        { "label": "SaaS / ウェブアプリ",      "description": "ユーザー、ロール、権限、サブスクリプションプランを備えたウェブアプリ構造です。" },
+      "blank":       { "label": "空のプロジェクト",       "description": "デモコンテンツなし。空のプロジェクトの骨組みから開始します。" }
+    },
+    "demoContent": {
+      "title": "デモコンテンツの設定",
+      "description": "すでに読み込まれたサンプルデータでストアをプレビューします。",
+      "checkboxLabel": "選択したプロジェクトのデモコンテンツを含める",
+      "ecommerce": {
+        "item1": "カテゴリーとタグ付きのデモ商品",
+        "item2": "サンプルの顧客と注文",
+        "item3": "ストアフロントページ（ホーム、商品、カート、チェックアウト）",
+        "item4": "基本的な CMS コンテンツ",
+        "item5": "事前設定されたメニューとモジュール"
+      }
+    },
+    "continueButtonIdle": "続行",
+    "continueButtonLoading": "続行しています...",
+    "logs": {
+      "navigatingToFinalise": "インストーラーの選択を保存し、最終ステップに移動しています..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "installComplete": "🎉 インストールが完了しました！",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "プロジェクト情報",
+      "subtitle": "プロジェクト設定に関する基本情報。",
+      "name": "名前：",
+      "stack": "スタック："
+    },
+    "database": {
+      "title": "データベース",
+      "subtitle": "選択したデータベースとその設定。",
+      "type": "タイプ：",
+      "noneSelected": "未選択"
+    },
+    "adminUser": {
+      "title": "管理者ユーザー",
+      "subtitle": "初期の管理者認証情報。",
+      "name": "名前：",
+      "email": "メールアドレス：",
+      "password": "パスワード："
+    },
+    "projectType": {
+      "title": "選択したプロジェクトタイプ",
+      "subtitle": "セットアップ中に選択したプロジェクトテンプレート。"
+    },
+    "demoContent": {
+      "title": "デモコンテンツ",
+      "subtitle": "サンプルのストアデータを事前に読み込むかどうか。",
+      "installed": "インストール済み",
+      "notInstalled": "未インストール"
+    },
+    "continueButton": "続行して → サインイン"
+  },
+  "ecommercePage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "card": {
+      "title": "E コマースモジュールをカスタマイズ"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "E コマースモジュールを有効化",
+        "description": "商品カタログ、カート、チェックアウト、注文管理機能を追加します。"
+      },
+      "physical": {
+        "label": "物理商品を含める",
+        "description": "有形商品の在庫、配送、返品、追跡をサポートします。"
+      },
+      "digital": {
+        "label": "デジタル商品を含める",
+        "description": "PDF、動画、ソフトウェアライセンスなどのダウンロード可能なコンテンツを販売します。"
+      }
+    },
+    "button": {
+      "next": "次へ",
+      "continuing": "続行しています..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "card": {
+      "title": "セットアップを完了"
+    },
+    "summary": {
+      "project": "プロジェクト：",
+      "defaultProject": "MyApp",
+      "stack": "スタック：",
+      "stackBoth": "Flutter + Next.js",
+      "database": "データベース：",
+      "notSelected": "未選択"
+    },
+    "steps": {
+      "heading": "インストール手順：",
+      "skipped": "スキップされました！"
+    },
+    "progress": {
+      "finishing": "完了しています...",
+      "ready": "プロジェクトをインストールする準備ができました"
+    },
+    "errors": {
+      "label": "エラー：",
+      "noDatabase": "データベースが選択されていないため、設定を保存できません。",
+      "saveFailed": "インストーラー設定の保存に失敗しました",
+      "unknown": "不明なエラーが発生しました"
+    },
+    "button": {
+      "start": "インストールを開始",
+      "installing": "インストール中..."
+    },
+    "logs": {
+      "sendingConfig": "インストーラー設定をサーバーに送信しています...",
+      "configSaved": "インストーラー設定を正常に保存しました",
+      "installError": "インストールエラー："
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "heading": "デフォルトモデルを選択",
+    "subheading": "プロジェクトに含めるデフォルトのデータモデルを選択してください。モデルは後から作成または編集できます。",
+    "required": "（必須）",
+    "toggleAll": {
+      "deselect": "すべて選択解除",
+      "select": "すべて選択"
+    },
+    "models": {
+      "users":      { "label": "ユーザー",      "description": "アプリケーションのユーザーと認証を管理します" },
+      "products":   { "label": "商品",   "description": "商品またはサービスのカタログ" },
+      "orders":     { "label": "注文",     "description": "顧客の注文と購入を追跡します" },
+      "coupons":    { "label": "クーポン",    "description": "割引クーポンとプロモーション" },
+      "categories": { "label": "カテゴリー", "description": "商品やコンテンツを整理します" },
+      "reviews":    { "label": "レビュー",    "description": "ユーザーのフィードバックと評価" }
+    },
+    "button": {
+      "continue": "続行",
+      "continuing": "続行しています..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "heading": "プロジェクト設定",
+    "subheading": "セルフホストスタジオのプロジェクト名、サブドメイン、ドメインを入力してください。",
+    "continueButton": "続行",
+    "fields": {
+      "name": {
+        "label": "プロジェクト名",
+        "placeholder": "例：MyApp Studio"
+      },
+      "domain": {
+        "label": "ドメイン",
+        "placeholder": "例：http://localhost:3000",
+        "hint": "アプリの完全なドメイン。デフォルトは"
+      },
+      "subdomain": {
+        "label": "サブドメイン",
+        "placeholder": "例：console",
+        "hint": "これは次の URL に使用されます："
+      }
+    },
+    "errors": {
+      "nameRequired": "プロジェクト名は必須です",
+      "subdomainRequired": "サブドメインは必須です",
+      "domainRequired": "ドメインは必須です"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Underpeaks ロゴ",
+    "tagline": "オールインワンの SaaS インストーラー & コードジェネレーター",
+    "continueButton": "続行 →",
+    "continueLoading": "読み込み中...",
+    "benefits": {
+      "heading": "Underpeaks を選ぶ理由",
+      "item1": "🔧 フルスタックのコードベースジェネレーター（Next.js + Flutter）",
+      "item2": "⚙️ ボイラープレート不要 — 本番環境対応のコードのみ",
+      "item3": "🌍 多言語およびマルチテナント対応",
+      "item4": "📦 セルフホストまたはクラウドホスト — お好みで選択可能",
+      "item5": "🔐 認証、ロール、権限、インストーラー UI を標準搭載",
+      "item6": "💼 スタートアップ、代理店、エンタープライズプロジェクトに最適"
+    },
+    "license": {
+      "heading": "ライセンス契約",
+      "loading": "ライセンスを読み込んでいます...",
+      "loadFailed": "ライセンス契約の読み込みに失敗しました。",
+      "acceptLabel": "ライセンス条項に同意します。"
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "現在のパスワードと新しいパスワードの両方が必要です",
+      "passwordTooShort": "パスワードは8文字以上である必要があります",
+      "unauthorized": "権限がありません",
+      "invalidToken": "無効なトークンです",
+      "userNotFound": "ユーザーが見つかりません",
+      "incorrectCurrentPassword": "現在のパスワードが正しくありません",
+      "internalError": "予期しないエラーが発生しました"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Firebase Auth のパスワードを更新しました",
+      "firebasePasswordUpdateFailed": "[change-password] Firebase Auth のパスワード更新に失敗しました"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "管理者ユーザーを正常に作成しました"
+    },
+    "errors": {
+      "missingConfig": "DB 設定がありません",
+      "missingAdminUser": "管理者ユーザーのデータがありません",
+      "genericFailure": "管理者ユーザーの作成に失敗しました"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "DB 設定または管理者メールアドレスがありません",
+      "adapterNotSupported": "このデータベースアダプターはデータモデルの作成をサポートしていません",
+      "genericFailure": "データモデルの挿入に失敗しました"
+    },
+    "logs": {
+      "createModelsError": "create-data-models API でエラーが発生しました："
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "DB 設定/タイプがありません",
+      "adapterNotSupported": "{type} アダプターはストレージ設定を実装していません"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "すべてのシステム、ユーザー、プロジェクトテーブルを作成しました"
+    },
+    "errors": {
+      "missingConfig": "DB 設定がありません",
+      "genericFailure": "テーブルの作成に失敗しました"
+    },
+    "logs": {
+      "createTablesError": "[テーブル作成エラー]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Firebase の環境変数がありません：{key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "projectName がありません",
+      "flutterNotInstalled": "Flutter がインストールされていないか、PATH に含まれていません。",
+      "stepFailed": "ステップが失敗しました：Flutter プロジェクトの作成 - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Flutter プロジェクト「{projectName}」はすでに存在します。作成をスキップします。",
+      "flutterStderr": "Flutter stderr：",
+      "flutterCreateFailed": "Flutter の作成に失敗しました："
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "メールアドレスは必須です",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE が設定されていません",
+      "firebaseClientSide": "Firebase のパスワードリセットはクライアント側で処理されます",
+      "supabaseMissingMethod": "Supabase アダプターに sendResetEmail メソッドがありません",
+      "unsupportedDbType": "サポートされていない DB タイプです：{dbType}",
+      "adapterMissingMethods": "${dbType} アダプターに必要なメソッドがありません",
+      "userNotFound": "ユーザーが見つかりません",
+      "genericFailure": "リセットリンクの送信に失敗しました"
+    },
+    "notices": {
+      "smtpDisabled": "メール送信が無効になっています。管理者にパスワードのリセットを依頼してください。"
+    },
+    "email": {
+      "subject": "パスワードリセットのリクエスト",
+      "body": "<p>{name} 様</p><p>以下のリンクをクリックしてパスワードをリセットしてください：</p><a href=\"{resetLink}\">{resetLink}</a><p>心当たりがない場合は、このメールを無視してください。</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Supabase のリセットメールを送信しました",
+      "resetEmailSent": "リセットメールを送信しました",
+      "smtpDisabled": "SMTP/forgot-password が無効です — メールをスキップしました",
+      "forgotPasswordError": "パスワードをお忘れの方のエラー："
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Firebase のサービスアカウントがありません",
+      "unsupportedDbType": "サポートされていない DB タイプです：{dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[システム設定エラー]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "DB 設定がありません",
+      "missingProjectType": "プロジェクトタイプがありません",
+      "adapterNotSupported": "このアダプターでは installDemoContent が実装されていません"
+    },
+    "logs": {
+      "installDemoContentError": "install-demo-content エラー："
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "正常にログアウトしました"
+    },
+    "errors": {
+      "tokenRequired": "トークンは必須です",
+      "dbTypeNotSet": "NEXT_DB_TYPE が設定されていません",
+      "firebaseServiceAccountMissing": "Firebase のサービスアカウントがありません",
+      "mysqlEnvMissing": "MySQL の環境変数がありません",
+      "postgresEnvMissing": "Postgres の環境変数がありません",
+      "unsupportedDbType": "サポートされていない DB タイプです：{dbType}",
+      "tokenNotFound": "トークンが見つかりません"
+    },
+    "logs": {
+      "logoutError": "ログアウト API エラー："
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id は必須です",
+      "unauthorized": "権限がありません",
+      "invalidToken": "無効なトークンです"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder は必須です",
+      "internalError": "予期しないエラーが発生しました"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] フォルダーにファイル数情報を正常に追加しました"
+    },
+    "errors": {
+      "internalError": "予期しないエラーが発生しました"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder、toFolder、fileName は必須です",
+      "moveFileNotSupported": "moveFile はサポートされていません",
+      "internalError": "予期しないエラーが発生しました"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder、oldName、newName は必須です",
+      "renameFileNotSupported": "renameFile はサポートされていません",
+      "internalError": "予期しないエラーが発生しました"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "ファイルとフォルダーは必須です",
+      "uploadFileNotSupported": "uploadFile はサポートされていません",
+      "internalError": "アップロードに失敗しました"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] モード：",
+      "projectIdLookupFailed": "[upload-file] project_id の検索に失敗しました",
+      "metadataSaved": "[upload-file] メタデータを nxf_storage に保存しました",
+      "metadataSaveFailed": "[upload-file] メタデータの保存に失敗しました",
+      "localUploadSuccess": "[upload-file] ローカルアップロードを保存しました："
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "データベース接続のテストに失敗しました"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id は必須です",
+      "firebaseServiceAccountMissing": "Firebase のサービスアカウントがありません",
+      "unsupportedDbType": "サポートされていないデータベースタイプです",
+      "systemConfigNotFound": "システム設定が見つかりません",
+      "internalError": "内部サーバーエラー"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "氏名は必須です",
+      "unauthorized": "権限がありません",
+      "invalidToken": "無効なトークンです",
+      "internalError": "予期しないエラーが発生しました"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id と project_name は必須です",
+      "firebaseServiceAccountMissing": "Firebase のサービスアカウントがありません",
+      "unsupportedDbType": "サポートされていないデータベースタイプです",
+      "systemConfigNotFound": "このユーザーのシステム設定が見つかりません",
+      "internalError": "内部サーバーエラー"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id は必須です",
+      "firebaseServiceAccountMissing": "Firebase のサービスアカウントがありません",
+      "unsupportedDbType": "サポートされていないデータベースタイプです",
+      "systemConfigNotFound": "このユーザーのシステム設定が見つかりません",
+      "internalError": "内部サーバーエラー"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "設定ファイルの書き込みに失敗しました"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "既存の認証ユーザーが見つかりました：",
+      "newAuthUserCreated": "新しい認証ユーザーを作成しました：",
+      "creatingAdminInDb": "DB に管理者ユーザーを作成しています...",
+      "userAlreadyInDb": "ユーザーはすでに DB に存在します：",
+      "existingProjectFound": "既存のプロジェクトが見つかりました：",
+      "newProjectCreated": "新しいプロジェクトを作成しました：",
+      "existingTenantFound": "既存のテナントが見つかりました：",
+      "newTenantCreated": "新しいテナントを作成しました："
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "重複した CreateDataModels の実行をスキップしました — このプロジェクトとタイプの組み合わせはすでに処理済みです。",
+      "creatingTable": "テーブルを作成しています："
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable が実装されていないため、テーブル作成をスキップしました"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "アップロード先フォルダー",
+      "customFolder": "カスタムフォルダー…",
+      "enterFolderName": "フォルダー名を入力",
+      "placeholder": "例：banners/summer",
+      "uploadingTo": "アップロード先："
+    },
+    "preview": {
+      "alt": "プレビュー",
+      "uploaded": "アップロード済み",
+      "replace": "置き換え",
+      "clear": "ファイルをクリア"
+    },
+    "dropzone": {
+      "uploading": "アップロード中…",
+      "idle": "ドラッグ＆ドロップ、または",
+      "browse": "参照",
+      "recommended": "推奨："
+    },
+    "errors": {
+      "noFolder": "アップロード前にフォルダーを選択または入力してください。",
+      "uploadFailed": "アップロードに失敗しました",
+      "uploadFailedStatus": "アップロードに失敗しました：",
+      "networkError": "ネットワークエラー"
+    }
+  },
+  "modelView": {
+    "systemBadge": "システム",
+    "subtitle": "読み取り専用 — これは保護されたシステムテーブルです。",
+    "fieldsHeading": "フィールド",
+    "actions": {
+      "back": "モデル一覧に戻る"
+    },
+    "stats": {
+      "fields": "フィールド",
+      "created": "作成日",
+      "updated": "最終更新日"
+    },
+    "table": {
+      "name": "フィールド名",
+      "type": "タイプ",
+      "constraints": "制約",
+      "nullable": "必須",
+      "default": "デフォルト",
+      "uiType": "UI タイプ"
+    },
+    "badges": {
+      "hidden": "非表示",
+      "required": "必須",
+      "optional": "任意"
+    },
+    "errors": {
+      "loadFailed": "モデルの読み込みに失敗しました。",
+      "notFound": "モデルが見つかりません。"
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "モデル",
+      "subtitle": "プロジェクトのデータ構造を定義・管理します。",
+      "createButton": "モデルを作成"
+    },
+    "filter": {
+      "all": "すべて",
+      "user": "ユーザー",
+      "system": "システム"
+    },
+    "states": {
+      "empty": "モデルが見つかりません。",
+      "emptyHint": "最初のモデルを作成して始めましょう。"
+    },
+    "badges": {
+      "system": "システム",
+      "partialSystem": "編集可能なシステム"
+    },
+    "meta": {
+      "fields": "{count} フィールド",
+      "foreignKeys": "{count} 個の外部キー"
+    },
+    "card": {
+      "editAriaLabel": "{name} を編集",
+      "deleteAriaLabel": "{name} を削除"
+    },
+    "confirmDelete": {
+      "title": "モデルを削除しますか？",
+      "description": "「{name}」を削除してもよろしいですか？このテーブル内のすべてのデータが完全に削除されます。この操作は元に戻せません。",
+      "confirm": "削除",
+      "deleting": "削除中…",
+      "cancel": "キャンセル"
+    },
+    "errors": {
+      "loadFailed": "モデルの読み込みに失敗しました。",
+      "deleteFailed": "モデルの削除に失敗しました。"
+    }
+  },
+  "createModel": {
+    "title": "モデルを作成",
+    "subtitle": "新しいデータモデルとそのフィールドを定義します。",
+    "actions": {
+      "save": "モデルを保存",
+      "saving": "保存中…",
+      "back": "モデル一覧に戻る"
+    },
+    "form": {
+      "modelNameLabel": "モデル名",
+      "modelNamePlaceholder": "例：商品",
+      "fieldNamePlaceholder": "フィールド名",
+      "required": "必須",
+      "unique": "一意",
+      "primaryKey": "主キー",
+      "primaryKeyTaken": "設定済み",
+      "hidden": "非表示",
+      "uiType": "UI タイプ",
+      "foreignKeyTable": "外部キー — テーブル",
+      "foreignKeyColumn": "外部キー — カラム",
+      "noForeignKey": "— 外部キーなし —",
+      "selectColumn": "— カラムを選択 —",
+      "onDelete": "削除時の動作",
+      "addField": "フィールドを追加",
+      "removeField": "フィールドを削除",
+      "expandField": "詳細オプションを表示",
+      "collapseField": "詳細オプションを非表示",
+      "foreignKey": "外部キー"
+    },
+    "validation": {
+      "modelNameRequired": "モデル名は必須です。",
+      "fieldsInvalid": "すべてのフィールドに名前が必要です。",
+      "fieldNameUnique": "フィールド名は一意である必要があります。",
+      "singlePrimaryKey": "1つのモデルにつき主キーは1つのみ許可されます。"
+    },
+    "confirmDelete": {
+      "title": "フィールドを削除しますか？",
+      "description": "このフィールドを削除してもよろしいですか？",
+      "confirm": "削除",
+      "cancel": "キャンセル"
+    },
+    "errors": {
+      "createFailed": "モデルの作成に失敗しました。"
+    }
+  },
+  "editModel": {
+    "title": "モデルを編集",
+    "subtitle": "モデル名とフィールド定義を更新します。",
+    "actions": {
+      "save": "変更を保存",
+      "saving": "保存中…",
+      "back": "モデル一覧に戻る"
+    },
+    "form": {
+      "modelNameLabel": "モデル名",
+      "modelNamePlaceholder": "モデル名",
+      "fieldNamePlaceholder": "フィールド名",
+      "required": "必須",
+      "unique": "一意",
+      "primaryKey": "主キー",
+      "primaryKeyTaken": "設定済み",
+      "hidden": "非表示",
+      "uiType": "UI タイプ",
+      "foreignKeyTable": "外部キー — テーブル",
+      "foreignKeyColumn": "外部キー — カラム",
+      "noForeignKey": "— 外部キーなし —",
+      "selectColumn": "— カラムを選択 —",
+      "onDelete": "削除時の動作",
+      "addField": "フィールドを追加",
+      "removeField": "フィールドを削除",
+      "expandField": "詳細オプションを表示",
+      "collapseField": "詳細オプションを非表示",
+      "foreignKey": "外部キー"
+    },
+    "validation": {
+      "modelNameRequired": "モデル名は必須です。",
+      "fieldsInvalid": "すべてのフィールドに名前が必要です。",
+      "fieldNameUnique": "フィールド名は一意である必要があります。",
+      "singlePrimaryKey": "1つのモデルにつき主キーは1つのみ許可されます。"
+    },
+    "confirmDelete": {
+      "title": "フィールドを削除しますか？",
+      "description": "このフィールドを削除してもよろしいですか？",
+      "confirm": "削除",
+      "cancel": "キャンセル"
+    },
+    "warningDialog": {
+      "title": "重大な警告",
+      "subtitle": "保護されたフィールドを削除しようとしています。",
+      "primaryKeyWarning": "このフィールドはこのテーブルの主キーです。削除すると、このテーブルを参照するすべての関係が壊れ、プロジェクト全体の既存データが永久に破損する可能性があります。",
+      "foreignKeyWarning": "このフィールドは、このテーブルを別のテーブルにリンクする外部キーです。削除すると関係が壊れ、既存レコードのデータ整合性の問題が発生する可能性があります。",
+      "checkboxLabel": "これによりデータが永久に破損し、元に戻せなくなる可能性があることを理解しています。",
+      "confirm": "それでも削除する",
+      "cancel": "キャンセル"
+    },
+    "errors": {
+      "loadModelFailed": "モデルの読み込みに失敗しました。",
+      "modelNotFound": "モデルが見つかりません。",
+      "updateModelFailed": "モデルの更新に失敗しました。"
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id は必須です",
+      "invalidBody": "リクエストボディが無効または空です",
+      "missingFields": "必須フィールドがありません",
+      "projectNotFound": "このユーザーのプロジェクトが見つかりません",
+      "nameAlreadyExists": "この名前のモデルはすでに存在します",
+      "fetchFailed": "モデルの取得に失敗しました",
+      "createFailed": "モデルの作成に失敗しました",
+      "updateFailed": "モデルの更新に失敗しました",
+      "deleteFailed": "モデルの削除に失敗しました",
+      "multiplePrimaryKeys": "1つのモデルにつき主キーは1つのみ許可されます",
+      "systemTableProtected": "システムテーブルは作成、変更、削除できません"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— フィールドを選択 —",
+    "clear": "外部キーをクリア",
+    "searchPlaceholder": "モデルを検索…",
+    "noResults": "モデルが見つかりません。",
+    "systemBadge": "システム",
+    "fieldsLabel": "フィールド",
+    "onDelete": "削除時の動作",
+    "filter": {
+      "all": "すべて",
+      "user": "ユーザー",
+      "system": "システム"
+    }
+  },
+  "users": {
+    "page_title": "ユーザー",
+    "page_description": "CMS の管理者ユーザーとユーザーアカウントを管理します",
+    "edit_kpis": "KPI を編集",
+    "editing_kpis": "KPI を編集中",
+    "save_layout": "レイアウトを保存",
+    "saving": "保存中…",
+    "search_placeholder": "名前またはメールアドレスで検索…",
+    "showing_count": "{total} 件中 {filtered} 件を表示",
+    "no_users_found": "ユーザーが見つかりません",
+    "filter": "フィルター",
+    "sort": "並べ替え",
+    "clear_all": "すべてクリア",
+    "filters": "フィルター",
+    "role": "ロール",
+    "all_roles": "すべてのロール",
+    "all_statuses": "すべてのステータス",
+    "status": "ステータス",
+    "joined_from": "登録日（開始）",
+    "joined_to": "登録日（終了）",
+    "sort_by": "並べ替え基準",
+    "direction": "並び順",
+    "asc": "昇順（A → Z）",
+    "desc": "降順（Z → A）",
+    "col_name": "名前",
+    "col_email": "メールアドレス",
+    "col_role": "ロール",
+    "col_status": "ステータス",
+    "col_last_login": "最終ログイン",
+    "col_joined": "登録日",
+    "role_admin": "管理者",
+    "role_user": "ユーザー",
+    "status_active": "有効",
+    "status_suspended": "停止中",
+    "status_disabled": "無効",
+    "drawer_title": "ユーザー詳細",
+    "actions": "操作",
+    "change_role": "ロール",
+    "change_status": "ステータス",
+    "send_reset": "パスワードリセットメールを送信",
+    "sending_reset": "送信中…",
+    "delete_user": "ユーザーを削除",
+    "delete_confirm": "このユーザーを完全に削除しますか？この操作は元に戻せません。",
+    "cancel": "キャンセル",
+    "confirm_delete": "はい、削除します",
+    "deleting": "削除中…",
+    "last_admin_warning": "降格できません — これは最後の管理者です",
+    "login_history": "ログイン履歴",
+    "no_history": "まだログイン履歴が記録されていません",
+    "event_login": "ログインしました",
+    "event_logout": "ログアウトしました",
+    "event_online": "オンライン",
+    "event_offline": "オフラインになりました",
+    "joined": "登録日",
+    "last_login": "最終ログイン",
+    "toast_role_updated": "ロールを更新しました",
+    "toast_status_updated": "ステータスを更新しました",
+    "toast_user_deleted": "ユーザーを削除しました",
+    "toast_reset_sent": "{email} にパスワードリセットを送信しました",
+    "toast_kpi_saved": "KPI レイアウトを保存しました",
+    "toast_load_failed": "ユーザーの読み込みに失敗しました",
+    "toast_save_failed": "保存に失敗しました",
+    "kpi_add": "KPI を追加",
+    "kpi_add_block": "ブロック",
+    "kpi_edit": "KPI を編集",
+    "kpi_label_required": "ラベルは必須です",
+    "kpi_select_field": "フィールドを選択してください",
+    "kpi_select_both_fields": "両方のフィールドを選択してください",
+    "kpi_select_field_and_value": "フィールドを選択し、比較する値を入力してください",
+    "kpi_max_reached": "KPI は最大5個まで設定できます",
+    "kpi_label": "ラベル",
+    "kpi_formula": "数式",
+    "kpi_format": "表示形式",
+    "kpi_icon": "アイコン",
+    "kpi_accent_colour": "アクセントカラー",
+    "kpi_field": "フィールド",
+    "kpi_field_a": "フィールド A",
+    "kpi_field_b": "フィールド B",
+    "kpi_numerator": "分子フィールド（A）",
+    "kpi_denominator": "分母フィールド（B）",
+    "kpi_operator": "演算子",
+    "kpi_value_to_match": "比較する値",
+    "kpi_make_wide": "幅を広げる",
+    "kpi_make_compact": "コンパクトにする",
+    "kpi_add_to_block": "追加",
+    "kpi_save": "変更を保存",
+    "kpi_cancel": "キャンセル"
+  },
+  "notFound": {
+    "title": "ページが見つかりません",
+    "description": "お探しのページが見つかりません。移動または削除されたか、名前が変更された可能性があります。",
+    "goHome": "ホームページへ",
+    "backToConsole": "コンソールに戻る",
+    "helpfulLinks": "何かお探しですか？",
+    "pages": "ページ",
+    "models": "モデル",
+    "users": "ユーザー",
+    "settings": "設定"
+  },
+  "noModelLinked": {
+    "title": "モデルが割り当てられていません",
+    "description": "{pageName} は {templateName} テンプレートを使用していますが、まだデータモデルが割り当てられていません。",
+    "instruction": "ページ設定を編集し、モデルを割り当ててデータを表示できるようにしてください。",
+    "openPages": "ページを開く",
+    "manageModels": "モデルを管理"
+  },
+  "lockedTemplate": {
+    "title": "ホスト型プランで利用可能",
+    "description": "{templateName} テンプレートはホスト型プランの一部です。アップグレードすると、かんばん、カレンダー、チェックアウトなどが利用できます。",
+    "upgradeButton": "ホスト型プランを見る",
+    "backButton": "ページ一覧に戻る"
+  },
+  "CookieBanner": {
+    "eyebrow": "プライバシー",
+    "title": "プライバシーを尊重します",
+    "description": "サインイン状態の維持、言語設定の記憶、（同意いただいた場合）サイトの利用状況の把握のために Cookie を使用しています。設定はいつでも変更できます。",
+    "necessaryTitle": "厳密に必要な Cookie",
+    "necessaryDescription": "サインイン、言語設定、Cookie 選択の保存に必要です。無効にすることはできません。",
+    "analyticsTitle": "分析",
+    "analyticsDescription": "訪問者がどのページを閲覧しているか、サイトのパフォーマンスを把握するのに役立ちます。個人データは共有されません。",
+    "marketingTitle": "マーケティング",
+    "marketingDescription": "関連性の高い広告の表示や、他サイトでのキャンペーン効果測定に使用されます。",
+    "alwaysOn": "常に有効",
+    "acceptAll": "すべて受け入れる",
+    "rejectAll": "すべて拒否する",
+    "customise": "カスタマイズ",
+    "savePreferences": "設定を保存",
+    "cookiePreferences": "Cookie 設定",
+    "policyLink": "プライバシーポリシー"
   }
 }

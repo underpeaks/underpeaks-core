@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
-    "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "save": "保存",
+    "saving": "正在保存...",
+    "saveChanges": "保存更改",
+    "cancel": "取消",
+    "delete": "删除",
+    "edit": "编辑",
+    "create": "创建",
+    "add": "添加",
+    "remove": "移除",
+    "close": "关闭",
+    "confirm": "确认",
+    "back": "返回",
+    "next": "下一步",
+    "done": "完成",
+    "loading": "加载中...",
+    "search": "搜索",
+    "filter": "筛选",
+    "refresh": "刷新",
+    "copy": "复制",
+    "copied": "已复制！",
+    "upload": "上传",
+    "rename": "重命名",
+    "move": "移动",
+    "preview": "预览",
+    "revoke": "撤销",
+    "generate": "生成",
+    "reveal": "显示",
+    "hide": "隐藏",
+    "active": "启用",
+    "inactive": "停用",
+    "status": "状态",
+    "actions": "操作",
+    "name": "名称",
+    "email": "电子邮箱",
+    "password": "密码",
+    "role": "角色",
+    "createdAt": "创建于",
+    "noResults": "未找到结果",
+    "error": "发生错误",
+    "success": "成功",
+    "required": "此字段为必填项",
+    "optional": "可选",
+    "yes": "是",
+    "no": "否",
+    "areYouSure": "确定要执行此操作吗？",
+    "thisActionCannotBeUndone": "此操作无法撤销。",
+    "comingSoon": "即将推出"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
-    "menu": "Menu",
-    "media": "Media",
+    "dashboard": "仪表盘",
+    "pages": "页面",
+    "menu": "菜单",
+    "media": "媒体",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "集成",
+    "theming": "主题",
+    "settings": "设置",
+    "account": "账户",
+    "messages": "消息",
+    "notifications": "通知",
+    "logout": "退出登录"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "搜索...",
+    "notifications": "通知",
+    "messages": "消息",
+    "viewAccount": "查看账户",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
-      "enterprise": "Enterprise"
+      "self_hosted": "自托管",
+      "hosted": "托管",
+      "enterprise": "企业版"
+    }
+  },
+  "nextModelGenerator": {
+    "nullJsonError": "无法创建 {{modelName}}Model：收到了空的或未定义的 JSON",
+    "missingRequiredField": "缺少必填字段：{{modelName}} 中的 {{fieldName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "正在为 {{count}} 个模型生成代码...",
+    "modelUndefined": "模型未定义 — 请确保传入了有效的 ModelDefinition",
+    "modelMissingName": "模型缺少 \"name\" 属性 — 每个模型都必须有名称",
+    "modelInvalidFields": "模型「{{name}}」的 \"fields\" 无效或缺失 — fields 必须是一个简单对象",
+    "generationSuccess": "已成功为模型生成代码：{{name}}",
+    "generationFailed": "模型代码生成失败：{{name}}"
+  },
+  "completeProfile": {
+    "title": "完善你的个人资料",
+    "welcome": "欢迎，",
+    "loading": {
+      "checkingProfile": "正在检查你的个人资料..."
+    },
+    "subdomain": {
+      "label": "选择一个子域名",
+      "placeholder": "yourapp",
+      "hint": "你的应用将可以通过以下地址访问："
+    },
+    "button": {
+      "save": "保存并继续",
+      "saving": "正在保存..."
+    },
+    "validation": {
+      "subdomainRequired": "请输入子域名",
+      "adapterMissingCreateTenant": "你的数据库适配器不支持创建租户"
+    },
+    "errors": {
+      "saveFailed": "保存子域名时出错：{{message}}",
+      "unknownError": "发生未知错误"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "当前数据库适配器不支持重置密码",
+      "noAccountFound": "未找到使用该电子邮箱的账户。"
+    }
+  },
+  "forgotPassword": {
+    "title": "忘记密码",
+    "description": "请输入你的电子邮箱地址，我们会向你发送重置密码的链接。",
+    "form": {
+      "emailLabel": "电子邮箱地址",
+      "emailPlaceholder": "you@example.com",
+      "buttonSend": "发送重置链接",
+      "buttonSending": "正在发送..."
+    },
+    "validation": {
+      "emailRequired": "请输入你的电子邮箱地址。"
+    },
+    "errors": {
+      "firebaseConfigMissing": "缺少 Firebase 配置。请检查你的环境变量。",
+      "sendFailed": "发送重置链接失败，请重试。"
+    },
+    "success": {
+      "title": "请查看你的收件箱",
+      "description": "重置密码的邮件已发送。请查看你的收件箱并通过链接重置密码。",
+      "button": "返回登录"
+    },
+    "notice": {
+      "title": "请求已提交",
+      "button": "确定"
+    },
+    "error": {
+      "title": "出现了问题"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "当前数据库适配器不支持重置密码",
+      "invalidToken": "重置链接无效或已过期，请重新申请。",
+      "tokenAlreadyUsed": "此重置链接已被使用，请重新申请。",
+      "tokenExpired": "此重置链接已过期，请重新申请。"
+    }
+  },
+  "resetPassword": {
+    "title": "重置密码",
+    "form": {
+      "passwordLabel": "新密码",
+      "buttonReset": "重置密码",
+      "buttonResetting": "正在重置..."
+    },
+    "errors": {
+      "invalidLink": "重置链接无效或缺失，请重新申请。",
+      "passwordRequired": "请输入新密码。",
+      "missingToken": "缺少重置令牌，请使用邮件中的链接。",
+      "resetFailed": "重置密码失败，请重试。"
+    },
+    "error": {
+      "title": "出现了问题"
+    },
+    "expired": {
+      "title": "重置链接已过期",
+      "description": "你的密码重置链接已过期，正在跳转到忘记密码页面..."
+    },
+    "success": {
+      "title": "密码重置成功",
+      "description": "你现在可以使用新密码",
+      "signinLink": "登录",
+      "descriptionSuffix": "了。"
+    }
+  },
+  "signIn": {
+    "heading": "登录你的 Underpeaks 账户",
+    "fields": {
+      "email": "电子邮箱",
+      "password": "密码"
+    },
+    "button": {
+      "signIn": "登录",
+      "signingIn": "正在登录..."
+    },
+    "links": {
+      "forgotPassword": "忘记密码？",
+      "noAccount": "还没有账户？",
+      "signUp": "立即注册"
+    },
+    "errors": {
+      "title": "错误",
+      "signinFailed": "登录失败，请检查你的账户信息后重试。"
+    }
+  },
+  "signUp": {
+    "heading": "创建你的 Underpeaks 账户",
+    "fields": {
+      "fullName": "姓名",
+      "fullNamePlaceholder": "请输入你的姓名",
+      "email": "电子邮箱",
+      "emailPlaceholder": "you@example.com",
+      "password": "密码"
+    },
+    "button": {
+      "signUp": "注册",
+      "creating": "正在创建..."
+    },
+    "alerts": {
+      "errorTitle": "错误",
+      "successTitle": "成功"
+    },
+    "success": {
+      "accountCreated": "账户创建成功！"
+    },
+    "links": {
+      "alreadyHaveAccount": "已有账户？",
+      "loginNow": "立即登录"
+    },
+    "errors": {
+      "nameRequired": "姓名为必填项。",
+      "emailRequired": "电子邮箱为必填项。",
+      "passwordRequired": "密码为必填项。",
+      "emailInUse": "该电子邮箱已被注册，请尝试登录。",
+      "invalidEmail": "请输入有效的电子邮箱地址。",
+      "weakPassword": "密码强度太弱，至少需要 6 个字符。",
+      "signupFailed": "注册失败，请重试。",
+      "supabaseSignupFailed": "Supabase 注册失败，请重试。"
+    },
+    "console": {
+      "firebaseVerificationSent": "Firebase 验证邮件发送成功。",
+      "firebaseVerificationFailed": "Firebase 验证邮件发送失败。",
+      "supabaseVerificationSent": "Supabase 验证邮件发送成功。"
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "正在验证邮箱",
+      "success": "邮箱验证成功 ✅",
+      "error": "验证失败"
+    },
+    "status": {
+      "verifying": "正在验证你的邮箱...",
+      "verified": "你的邮箱已通过验证。",
+      "supabaseRedirecting": "正在跳转至密码设置..."
+    },
+    "button": {
+      "goToSignIn": "前往登录"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] 已收到请求",
+      "verificationNotSupported": "[verify-email] 此适配器不支持验证功能"
+    },
+    "errors": {
+      "missingTokenOrEmail": "缺少令牌或邮箱",
+      "dbTypeNotSet": "未配置数据库类型",
+      "unsupportedDbType": "不支持的数据库类型",
+      "sqlAdapterMissingMethods": "SQL 适配器缺少必需的方法",
+      "firebaseAdapterMissingMethods": "Firebase 适配器缺少必需的方法",
+      "invalidToken": "无效的令牌",
+      "tokenExpired": "令牌已过期",
+      "userNotFound": "未找到用户",
+      "verificationNotSupported": "此适配器不支持验证功能",
+      "verificationFailed": "验证失败"
+    }
+  },
+  "schemaPreview": {
+    "title": "结构预览",
+    "columns": {
+      "field": "字段",
+      "type": "类型"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "确认操作",
+      "description": "确定要继续吗？"
+    },
+    "buttons": {
+      "confirm": "确认",
+      "cancel": "取消"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "业务",
+      "content": "内容",
+      "assets": "资源",
+      "configuration": "配置"
+    },
+    "items": {
+      "dashboard": "仪表盘",
+      "products": "产品",
+      "categories": "分类",
+      "orders": "订单",
+      "coupons": "优惠券",
+      "users": "用户",
+      "shipping": "配送",
+      "services": "服务",
+      "sharedModels": "共享模型",
+      "menu": "菜单",
+      "pages": "页面",
+      "theme": "主题",
+      "storage": "存储",
+      "integrations": "集成",
+      "apisAndWebhooks": "API 与 Webhook"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "消息",
+      "unreadCount": "{count} 条未读"
+    },
+    "empty": "暂无消息",
+    "viewAll": "查看全部消息",
+    "unreadBadge": "{count} 条未读",
+    "systemInitials": "SY",
+    "fallbackUser": "用户"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "通知",
+      "unreadCount": "{count} 条未读",
+      "markAllRead": "全部标为已读"
+    },
+    "empty": "暂无通知",
+    "viewAll": "查看全部通知"
+  },
+  "previewSchema": {
+    "fieldsHeading": "字段",
+    "fieldNamePlaceholder": "字段名称",
+    "requiredLabel": "必填",
+    "removeButton": "移除",
+    "saveButton": "保存",
+    "previewButton": "预览",
+    "hidePreviewButton": "隐藏预览",
+    "addFieldButton": "添加字段",
+    "types": {
+      "string": "字符串",
+      "num": "数字",
+      "boolean": "布尔值",
+      "datetime": "日期时间",
+      "array": "数组",
+      "map": "映射",
+      "null": "空值"
+    },
+    "aria": {
+      "fieldName": "字段 {{index}} 名称",
+      "fieldType": "字段 {{index}} 类型",
+      "elementType": "字段 {{index}} 元素类型",
+      "required": "字段 {{index}} 为必填",
+      "removeField": "移除字段 {{index}}"
     }
   },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "正在退出登录…",
+    "footer": {
+      "settings": "设置",
+      "logout": "退出登录",
+      "collapse": "收起侧边栏",
+      "expand": "展开侧边栏",
+      "business": "业务",
+      "developer": "开发者",
+      "design": "设计",
+      "system": "系统"
+    },
+    "aria": {
+      "sidebar": "控制台导航",
+      "navigation": "主导航",
+      "expandSidebar": "展开侧边栏",
+      "collapseSidebar": "收起侧边栏"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "项目标志",
+    "projectLabel": "项目：",
+    "signIn": "登录",
+    "register": "注册",
+    "aria": {
+      "navbar": "顶部导航栏",
+      "goToDashboard": "前往仪表盘"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "{name} 的用户菜单"
+    },
+    "menu": {
+      "account": "账户",
+      "settings": "设置",
+      "helpAndDocs": "帮助与文档",
+      "logout": "退出登录"
+    }
+  },
+  "accountPage": {
+    "title": "账户",
+    "subtitle": "管理你的个人资料和安全设置。",
+    "profile": {
+      "title": "个人资料",
+      "description": "更新你的显示名称。",
+      "fullNameLabel": "姓名",
+      "fullNamePlaceholder": "请输入你的姓名",
+      "emailLabel": "电子邮箱地址",
+      "emailReadOnlyNote": "电子邮箱由你的身份验证提供商管理，无法在此处更改。",
+      "saveButton": "保存更改",
+      "savingButton": "正在保存…",
+      "savedButton": "已保存"
+    },
+    "danger": {
+      "title": "危险操作区",
+      "description": "以下操作不可逆，请谨慎操作。",
+      "cancelTitle": "取消订阅",
+      "cancelDescription": "你的套餐将在当前计费周期结束前保持有效，之后将转为自托管。",
+      "cancelButton": "取消套餐",
+      "cancelModalBody": "你的订阅将被取消，但你可以继续使用直到当前计费周期结束。此操作无法撤销。",
+      "resetTitle": "重置项目",
+      "resetDescription": "永久删除所有项目内容并重新开始新手引导。你的账户将被保留。",
+      "resetButton": "重置项目",
+      "resetModalBody": "此操作将永久删除你项目中的所有内容——包括模型、页面、数据和媒体。你的账户和账单信息将被保留。此操作无法撤销。",
+      "deleteTitle": "删除账户",
+      "deleteDescription": "永久删除你的账户及所有相关数据。",
+      "deleteButton": "删除账户",
+      "deleteModalBody": "此操作将永久删除你的账户及所有内容。在法律要求的情况下，账单记录将被保留。此操作无法撤销。"
+    },
+    "password": {
+      "title": "修改密码",
+      "description": "请使用一个未在其他地方使用过的强密码。",
+      "currentLabel": "当前密码",
+      "newLabel": "新密码",
+      "confirmLabel": "确认新密码",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
+      "minLengthHint": "至少 8 个字符",
+      "mismatchHint": "两次输入的密码不一致",
+      "updateButton": "更新密码",
+      "updatingButton": "正在更新…",
+      "updatedButton": "已更新"
+    },
+    "billing": {
+      "title": "账单与套餐",
+      "description": "你当前的套餐及升级选项。",
+      "selfHostedDescription": "已包含核心功能。升级以获取集成、高级身份验证和白标功能。",
+      "paidDescription": "已解锁全部功能。",
+      "upgradeButton": "升级",
+      "upgradeAriaLabel": "升级至 Underpeaks Pro",
+      "proFeaturesTitle": "Pro 版功能",
+      "proFeature1": "集成（Stripe、Mailchimp 等）",
+      "proFeature2": "高级身份验证——双重验证、社交登录、魔法链接、单点登录",
+      "proFeature3": "使用你自己的品牌为 CMS 进行白标处理",
+      "proFeature4": "为你的控制台设置自定义域名",
+      "contactSalesButton": "联系销售"
+    },
+    "errors": {
+      "profileUpdateFailed": "更新个人资料失败，请重试。",
+      "passwordUpdateFailed": "更新密码失败，请重试。"
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "根据你的模型自动生成的通用接口",
+    "customEndpointButton": "自定义接口",
+    "tabsLabel": "API 页面标签",
+    "copy": "复制到剪贴板",
+    "copied": "已复制！",
+    "tabs": {
+      "endpoints": "接口",
+      "keys": "API 密钥",
+      "reference": "参考文档"
+    },
+    "endpoints": {
+      "searchPlaceholder": "搜索接口…",
+      "typeFilterLabel": "按接口类型筛选",
+      "modelFilterLabel": "按模型筛选",
+      "type": {
+        "all": "全部",
+        "auto": "自动",
+        "custom": "自定义"
+      },
+      "colMethod": "方法",
+      "colPath": "路径",
+      "colDescription": "描述",
+      "colActions": "操作",
+      "noResults": "没有符合筛选条件的接口",
+      "customBadge": "自定义",
+      "requiresAuth": "需要身份验证",
+      "public": "公开接口",
+      "testButton": "测试",
+      "exampleRequest": "请求示例",
+      "requiredHeaders": "必需的请求头",
+      "testLabel": "测试",
+      "sendRequest": "发送请求",
+      "running": "正在运行…"
+    },
+    "drawer": {
+      "title": "新建自定义接口",
+      "subtitle": "编写调用通用 API 的业务逻辑",
+      "close": "关闭面板",
+      "methodLabel": "方法",
+      "pathLabel": "路径",
+      "descriptionLabel": "描述",
+      "descriptionPlaceholder": "此接口的作用是什么？",
+      "authLabel": "身份验证",
+      "authRequired": "需要",
+      "authPublic": "公开",
+      "codeLabel": "处理程序代码",
+      "cancelButton": "取消",
+      "createButton": "创建接口"
+    },
+    "keys": {
+      "title": "API 密钥",
+      "keepSecret": "请妥善保管这些密钥",
+      "createTitle": "创建新密钥",
+      "nameLabel": "密钥名称",
+      "namePlaceholder": "密钥名称，例如：移动应用",
+      "generateButton": "生成",
+      "active": "启用",
+      "inactive": "停用",
+      "never": "从未使用",
+      "created": "创建于",
+      "lastUsed": "最后使用",
+      "revealKey": "显示 API 密钥",
+      "hideKey": "隐藏 API 密钥",
+      "deleteKey": "删除密钥 {{name}}",
+      "confirmDelete": "确认删除",
+      "cancelDelete": "取消删除"
+    },
+    "reference": {
+      "queryParamsTitle": "查询参数",
+      "queryParamsSubtitle": "适用于所有 GET 接口",
+      "operatorsTitle": "筛选运算符",
+      "operatorsSubtitle": "与以下参数配合使用：",
+      "operatorsFormat": "参数格式为",
+      "exampleTitle": "完整示例",
+      "exampleDescription": "获取价格低于 R500 的启用产品，按价格排序，仅返回 id/name/price：",
+      "responseLabel": "响应："
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "仪表盘",
+    "welcome": "欢迎回来，{name}",
+    "addWidget": "添加小组件",
+    "editLayout": "编辑布局",
+    "saveLayout": "保存布局",
+    "resetLayout": "重置布局",
+    "toolbar": {
+      "title": "仪表盘",
+      "subtitle": "拖动小组件以重新排序 · 悬停以编辑",
+      "refresh": "刷新",
+      "last30Days": "最近 30 天",
+      "addWidget": "添加小组件"
+    },
+    "grid": {
+      "addWidget": "添加小组件"
+    },
+    "addPanel": {
+      "title": "添加小组件",
+      "subtitle": "点击添加到仪表盘"
+    },
+    "widget": {
+      "dragToReorder": "拖动以重新排序",
+      "vsLastPeriod": "较上期"
+    },
+    "chart": {
+      "day": "日",
+      "daysAgo": "30 天前",
+      "today": "今天"
+    },
+    "formula": {
+      "placeholder": "例如：SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "预设"
+    }
   },
   "media": {
-    "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "title": "媒体",
+    "uploadFiles": "上传文件",
+    "createFolder": "创建文件夹",
+    "folderName": "文件夹名称",
+    "rootFolder": "根目录",
+    "noFiles": "此文件夹中没有文件",
+    "dropToUpload": "将文件拖到此处上传",
+    "orClickToUpload": "或点击浏览",
+    "gridView": "网格视图",
+    "listView": "列表视图",
+    "fileSize": "文件大小",
+    "fileType": "文件类型",
+    "uploadedAt": "上传时间",
+    "deleteFileConfirm": "确定要删除“{name}”吗？",
+    "deleteFolderConfirm": "确定要删除文件夹“{name}”及其全部内容吗？",
+    "importFromUrl": "从 URL 导入",
+    "copyUrl": "复制 URL",
+    "urlCopied": "URL 已复制到剪贴板",
+    "details": "文件详情",
+    "selectFile": "选择一个文件以查看详情"
   },
   "settings": {
-    "title": "Settings",
+    "title": "设置",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "概览",
+      "projectName": "项目名称",
+      "projectUrl": "项目 URL",
+      "projectId": "项目 ID",
+      "dbType": "数据库类型",
+      "environment": "环境",
+      "deploymentType": "部署类型",
+      "savedSuccess": "设置保存成功"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "API 密钥",
+      "subheading": "管理用于验证你的应用发出的 API 请求的密钥。",
+      "title": "API 密钥",
+      "description": "管理用于以编程方式访问你项目的 API 密钥。",
+      "generateKey": "生成新密钥",
+      "keyName": "名称",
+      "keyPrefix": "密钥前缀",
+      "lastUsed": "最后使用",
+      "neverUsed": "从未使用",
+      "revokeConfirm": "确定要撤销“{name}”吗？此操作无法撤销。",
+      "revoked": "已撤销",
+      "keyCopied": "密钥已复制到剪贴板",
+      "newKeyGenerated": "新 API 密钥已生成。请立即复制——之后将不会再次显示。",
+      "noKeys": "暂无 API 密钥。生成一个以开始使用。",
+      "sectionTitle": "有效密钥",
+      "createdDate": "创建于 {{date}}",
+      "lastUsedDate": "最后使用于 {{date}}",
+      "hideKey": "隐藏密钥",
+      "revealKey": "显示密钥",
+      "copyKey": "复制密钥",
+      "revoke": "撤销",
+      "emptyTitle": "暂无 API 密钥",
+      "emptySubtitle": "在下方生成一个密钥以开始使用。"
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
-      "logo": "Logo",
-      "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "title": "品牌",
+      "description": "自定义你的 Underpeaks 控制台外观。",
+      "logo": "标志",
+      "favicon": "网站图标",
+      "primaryColor": "主色",
+      "uploadLogo": "上传标志",
+      "uploadFavicon": "上传网站图标",
+      "logoHint": "推荐：200×50px，PNG 或 SVG，背景透明。",
+      "faviconHint": "推荐：32×32px 的 ICO、PNG 或 SVG。",
+      "livePreview": "实时预览",
+      "brandingSaved": "品牌设置更新成功"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
-      "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "host": "SMTP 主机",
+      "port": "端口",
+      "username": "用户名",
+      "fromEmail": "发件人邮箱",
+      "fromName": "发件人名称",
+      "encryption": "加密方式",
+      "testEmail": "发送测试邮件",
+      "testEmailSuccess": "测试邮件发送成功"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "域名",
+      "addDomain": "添加域名",
+      "verified": "已验证",
+      "unverified": "未验证",
+      "primary": "主域名",
+      "setPrimary": "设为主域名"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "账户",
+    "fullName": "姓名",
+    "emailReadOnly": "电子邮箱地址（只读）",
+    "changePassword": "修改密码",
+    "currentPassword": "当前密码",
+    "newPassword": "新密码",
+    "confirmPassword": "确认新密码",
+    "passwordsDoNotMatch": "两次输入的密码不一致",
+    "profileUpdated": "个人资料更新成功",
+    "passwordChanged": "密码修改成功",
+    "memberSince": "加入时间：{date}"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
-    "system": "System"
+    "title": "消息",
+    "newConversation": "新建对话",
+    "noConversations": "暂无对话",
+    "noMessages": "此对话中暂无消息",
+    "typeMessage": "输入消息...",
+    "send": "发送",
+    "markAllRead": "全部标为已读",
+    "reply": "回复",
+    "you": "你",
+    "system": "系统"
+  },
+  "apiKeys": {
+    "heading": "API 密钥",
+    "subheading": "管理用于验证你的应用发出的 API 请求的密钥。",
+    "sectionTitle": "有效密钥",
+    "createdDate": "创建于 {date}",
+    "lastUsedDate": "最后使用于 {date}",
+    "neverUsed": "从未使用",
+    "hideKey": "隐藏密钥",
+    "revealKey": "显示密钥",
+    "copyKey": "复制密钥",
+    "revoke": "撤销",
+    "emptyTitle": "暂无 API 密钥",
+    "emptySubtitle": "在下方生成一个密钥以开始使用。",
+    "errors": {
+      "loadFailed": "加载 API 密钥失败",
+      "generateFailed": "生成密钥失败",
+      "revokeFailed": "撤销密钥失败"
+    }
   },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "通知",
+    "noNotifications": "暂无通知",
+    "noUnread": "全部已读！",
+    "markAllRead": "全部标为已读",
+    "viewAll": "查看全部通知",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
-      "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "all": "全部",
+      "unread": "未读",
+      "comment": "评论",
+      "system": "系统",
+      "payment": "付款",
+      "security": "安全",
+      "message": "消息"
     },
     "priority": {
-      "low": "Low",
-      "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "low": "低",
+      "normal": "普通",
+      "high": "高",
+      "urgent": "紧急"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "登录",
+    "logout": "退出登录",
+    "email": "电子邮箱地址",
+    "password": "密码",
+    "forgotPassword": "忘记密码？",
+    "resetPassword": "重置密码",
+    "sessionExpired": "你的会话已过期，请重新登录。",
+    "idleWarning": "你已经有一段时间没有操作了。",
+    "idleLogoutIn": "你将在 {seconds} 秒后被自动登出。",
+    "stayLoggedIn": "保持登录状态"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "找不到页面",
+    "serverError": "服务器错误",
+    "networkError": "网络错误——请检查你的连接",
+    "sessionError": "会话错误——请重新登录",
+    "unknown": "发生意外错误"
+  },
+  "grid": {
+    "addWidget": "添加小组件"
+  },
+  "addPanel": {
+    "title": "添加小组件",
+    "subtitle": "点击添加到仪表盘"
+  },
+  "widget": {
+    "dragToReorder": "拖动以重新排序",
+    "vsLastPeriod": "较上期"
+  },
+  "chart": {
+    "day": "日",
+    "daysAgo": "30 天前",
+    "today": "今天"
+  },
+  "formula": {
+    "placeholder": "例如：SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "预设"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "帮助中心",
+      "subtitle": "查找答案、阅读文档，或联系我们。",
+      "searchPlaceholder": "搜索常见问题…"
+    },
+    "resources": {
+      "title": "资源",
+      "links": {
+        "gettingStarted": {
+          "label": "快速入门",
+          "description": "几分钟内设置你的第一个项目。"
+        },
+        "apiReference": {
+          "label": "API 参考文档",
+          "description": "所有 API 接口和运算符的完整参考。"
+        },
+        "community": {
+          "label": "社区论坛",
+          "description": "提出问题，与社区分享你的项目。"
+        }
+      }
+    },
+    "faq": {
+      "title": "常见问题",
+      "resultCount": "找到 {count} 个结果",
+      "noResults": "没有找到与“{query}”相关的结果",
+      "noResultsHint": "请尝试其他搜索词，或在下方联系客服。"
+    },
+    "api": {
+      "title": "API 快速参考",
+      "baseUrl": "基础 URL：",
+      "endpoints": {
+        "get": "列出某个模型的所有记录，支持筛选、排序和分页。",
+        "post": "创建一条新记录。",
+        "put": "根据 ID 更新现有记录。",
+        "delete": "根据 ID 删除记录。"
+      },
+      "operators": {
+        "title": "查询运算符",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "联系客服",
+      "submit": "发送消息",
+      "success": {
+        "title": "消息已发送！",
+        "subtitle": "我们会尽快回复你。"
+      },
+      "fields": {
+        "name": "姓名",
+        "namePlaceholder": "张三",
+        "email": "电子邮箱",
+        "emailPlaceholder": "you@example.com",
+        "message": "消息",
+        "messagePlaceholder": "请描述你的问题或疑问…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "集成",
+      "connectedCount": "{count} 个已连接",
+      "errorCount": "{count} 个错误",
+      "infoBanner": "已连接的集成可在自定义接口和代码生成中使用"
+    },
+    "categories": {
+      "all": "全部",
+      "payments": "支付",
+      "email": "电子邮件与短信",
+      "storage": "存储",
+      "ai": "人工智能",
+      "analytics": "分析",
+      "automation": "自动化"
+    },
+    "status": {
+      "connected": "已连接",
+      "disconnected": "已断开",
+      "error": "错误"
+    },
+    "card": {
+      "viewDocs": "查看文档",
+      "buttons": {
+        "saveAndConnect": "保存并连接",
+        "saving": "正在保存…",
+        "saved": "已保存！",
+        "disconnect": "断开连接",
+        "retryConnection": "重试连接"
+      }
+    },
+    "empty": "此分类下暂无集成"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "菜单",
+      "subtitle": "共 {count} 个项目 · 拖动以重新排序",
+      "addItem": "添加项目"
+    },
+    "preview": {
+      "title": "导航预览",
+      "subtitle": "仅显示可见项目",
+      "empty": "暂无可见项目。"
+    },
+    "list": {
+      "title": "全部项目",
+      "empty": "暂无菜单项目",
+      "emptyAction": "添加你的第一个项目"
+    },
+    "row": {
+      "hidden": "已隐藏",
+      "external": "外部",
+      "actions": {
+        "moveUp": "上移",
+        "moveDown": "下移",
+        "toggleVisibility": "切换可见性",
+        "edit": "编辑",
+        "delete": "删除",
+        "confirmDelete": "确认删除",
+        "cancelDelete": "取消"
+      }
+    },
+    "errors": {
+      "loadFailed": "加载菜单项目失败",
+      "createFailed": "创建菜单项目失败",
+      "updateFailed": "更新菜单项目失败",
+      "deleteFailed": "删除菜单项目失败"
+    },
+    "drawer": {
+      "titleAdd": "添加菜单项目",
+      "titleEdit": "编辑菜单项目",
+      "subtitle": "配置标签、链接、图标和可见性",
+      "sections": {
+        "labelVisibility": "标签与可见性",
+        "link": "链接",
+        "icon": "图标",
+        "nesting": "嵌套",
+        "preview": "预览"
+      },
+      "fields": {
+        "pageRequired": "保存菜单项目前必须选择一个页面。",
+        "menuLabel": "菜单标签",
+        "menuLabelPlaceholder": "例如：产品",
+        "menuLabelHint": "这是在导航菜单中显示的文本。",
+        "visibility": "可见性",
+        "visible": "可见",
+        "hidden": "隐藏",
+        "linkTypePage": "页面",
+        "linkTypeExternal": "外部 URL",
+        "selectPage": "选择页面",
+        "selectPagePlaceholder": "— 选择一个页面 —",
+        "noPagesHint": "未找到管理页面。请先创建一个页面类型设置为“管理”的页面。",
+        "externalUrl": "外部 URL",
+        "openIn": "打开方式",
+        "sameTab": "当前标签页",
+        "newTab": "新标签页",
+        "parentItem": "父级项目",
+        "parentItemPlaceholder": "— 顶级 —",
+        "parentItemHint": "嵌套项目将在导航中显示为下拉子项。"
+      },
+      "icons": {
+        "home": "首页",
+        "grid": "网格",
+        "package": "包裹",
+        "users": "用户",
+        "settings": "设置",
+        "file": "文件",
+        "cart": "购物车",
+        "mail": "邮件",
+        "star": "星标",
+        "info": "信息"
+      },
+      "preview": {
+        "hidden": "已隐藏"
+      },
+      "buttons": {
+        "cancel": "取消",
+        "saveChanges": "保存更改",
+        "addItem": "添加项目",
+        "saving": "正在保存…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "文件 URL",
+      "metadata": "元数据",
+      "rename": "重命名",
+      "moveToFolder": "移动到文件夹"
+    },
+    "altText": {
+      "placeholder": "为无障碍访问描述此图片…",
+      "empty": "未设置替代文本"
+    },
+    "metadata": {
+      "folder": "文件夹",
+      "path": "路径",
+      "size": "大小",
+      "type": "类型",
+      "uploaded": "上传时间",
+      "dimensions": "尺寸"
+    },
+    "actions": {
+      "save": "保存",
+      "saving": "正在保存…",
+      "cancel": "取消",
+      "move": "移动",
+      "moving": "正在移动…",
+      "deleteFile": "删除文件"
+    },
+    "move": {
+      "currentlyIn": "当前位置："
+    },
+    "errors": {
+      "renameFailed": "重命名失败",
+      "moveFailed": "移动失败"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "缺少必填字段：{{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "文件夹",
+      "all": "全部",
+      "newFolderTitle": "新建文件夹",
+      "collapse": "收起",
+      "expand": "展开"
+    },
+    "folder": {
+      "selectTitle": "选择文件夹"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "删除文件夹",
+      "fileCount": "{count} 个文件"
+    },
+    "empty": {
+      "message": "此文件夹为空"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "此文件夹为空"
+    },
+    "header": {
+      "name": "名称",
+      "size": "大小",
+      "type": "类型",
+      "uploaded": "上传时间"
+    },
+    "row": {
+      "deleteTitle": "删除文件"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "媒体"
+    },
+    "actions": {
+      "delete": "删除（{count}）",
+      "clear": "清除",
+      "upload": "上传"
+    },
+    "viewMode": {
+      "grid": "网格视图",
+      "list": "列表视图"
+    }
+  },
+  "newFolderPopup": {
+    "title": "新建文件夹",
+    "placeholder": "文件夹名称",
+    "buttons": {
+      "create": "创建",
+      "cancel": "取消"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "上传文件或通过 URL 将媒体导入所选文件夹。",
+    "title": "添加媒体",
+    "tabs": {
+      "upload": "上传文件",
+      "url": "通过 URL 添加"
+    },
+    "uploadZone": {
+      "hint": "支持任意文件类型——图片、视频、文档"
+    },
+    "urlTab": {
+      "description": "粘贴公开 URL 以直接将文件导入存储。",
+      "placeholder": "https://example.com/file.jpg",
+      "import": "导入",
+      "importing": "正在导入…",
+      "previewAlt": "URL 预览"
+    },
+    "errors": {
+      "importFailed": "导入失败"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "加载文件夹失败",
+      "loadFiles": "加载文件失败",
+      "createFolder": "创建文件夹失败",
+      "deleteFailed": "删除失败"
+    },
+    "confirmDelete": {
+      "titleFolder": "删除文件夹",
+      "titleFile": "删除文件",
+      "message": "确定要删除",
+      "folderWarning": "此操作将删除该文件夹内的所有文件。",
+      "undoWarning": "此操作无法撤销。",
+      "selectionLabel": "{count} 个项目",
+      "cancel": "取消",
+      "confirm": "删除",
+      "deleting": "正在删除…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "暂无消息",
+      "subUnread": "全部已读！",
+      "subAll": "你的收件箱是空的。"
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "刚刚",
+      "minutesAgo": "{count} 分钟前",
+      "hoursAgo": "{count} 小时前",
+      "daysAgo": "{count} 天前"
+    },
+    "unread": {
+      "badge": "{count} 条未读"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "系统消息",
+    "from": "发件人：{name}",
+    "deleteButton": "删除",
+    "deleteAriaLabel": "删除对话：{subject}",
+    "messagesAriaLabel": "消息线程",
+    "loading": "正在加载消息...",
+    "emptyTitle": "暂无消息",
+    "emptySub": "在下方发送第一条消息。"
+  },
+  "messageBubble": {
+    "justNow": "刚刚",
+    "minutesAgo": "{count} 分钟前",
+    "hoursAgo": "{count} 小时前",
+    "daysAgo": "{count} 天前"
+  },
+  "replyBar": {
+    "placeholder": "输入回复内容…（按 Enter 发送）",
+    "sendAriaLabel": "发送消息"
+  },
+  "messagesPage": {
+    "title": "消息",
+    "unreadCount": "{count} 条未读消息",
+    "filters": {
+      "all": "全部",
+      "unread": "未读"
+    },
+    "markAllRead": "全部标为已读",
+    "closeError": "关闭错误消息",
+    "empty": {
+      "title": "请选择一个对话",
+      "sub": "从列表中选择一个对话以在此处阅读。"
+    },
+    "errors": {
+      "load": "加载消息失败",
+      "delete": "删除对话失败",
+      "markAll": "无法将全部标记为已读"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "紧急",
+      "high": "高"
+    },
+    "actions": {
+      "markRead": "标为已读",
+      "view": "查看",
+      "delete": "删除"
+    }
+  },
+  "notificationsHeader": {
+    "title": "通知",
+    "unreadCount": "{count} 条未读通知",
+    "filters": {
+      "all": "全部",
+      "unread": "未读"
+    },
+    "markAllRead": "全部标为已读"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "暂无通知",
+      "subUnread": "全部已读！",
+      "subAll": "你还没有任何通知。"
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "加载通知失败",
+      "markReadFailed": "标记为已读失败",
+      "markAllReadFailed": "无法将全部标记为已读",
+      "deleteFailed": "删除通知失败"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "公开",
+      "admin": "管理员",
+      "draft": "草稿",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "页面",
+      "pageCount": "共 {count} 个页面",
+      "searchPlaceholder": "搜索页面…",
+      "newPage": "新建页面"
+    },
+    "filter": {
+      "all": "全部"
+    },
+    "table": {
+      "page": "页面",
+      "model": "模型",
+      "template": "模板",
+      "visibility": "可见性",
+      "actions": "操作",
+      "seoPrefix": "SEO",
+      "systemBadge": "系统",
+      "hiddenBadge": "已隐藏"
+    },
+    "emptyState": {
+      "message": "未找到页面",
+      "cta": "创建你的第一个页面"
+    },
+    "actions": {
+      "edit": "编辑页面",
+      "delete": "删除页面",
+      "view": "查看页面",
+      "confirmDelete": "确认删除",
+      "cancel": "取消",
+      "systemLocked": "系统页面无法编辑或删除"
+    },
+    "errors": {
+      "loadFailed": "加载页面失败",
+      "createFailed": "创建页面失败",
+      "updateFailed": "更新页面失败",
+      "deleteFailed": "删除页面失败"
+    },
+    "drawer": {
+      "title": "创建页面",
+      "editTitle": "编辑页面",
+      "subtitle": "定义一个新页面并关联模型",
+      "sections": {
+        "basicInfo": "基本信息",
+        "modelTemplate": "模型与模板",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "隐藏页面",
+          "hint": "隐藏的页面不会显示在导航或站点地图中"
+        },
+        "name": {
+          "label": "页面名称",
+          "placeholder": "例如：产品列表"
+        },
+        "slug": {
+          "label": "标识符 / URL",
+          "placeholder": "/your-page-slug",
+          "hint": "动态路由使用 :id，例如 /products/:id"
+        },
+        "visibility": {
+          "label": "可见性"
+        },
+        "model": {
+          "label": "关联模型",
+          "noModel": "— 无模型（自定义页面） —",
+          "hint": "一个模型可用于多个页面。"
+        },
+        "template": {
+          "label": "模板"
+        },
+        "seoTitle": {
+          "label": "SEO 标题",
+          "placeholder": "用于搜索引擎的页面标题",
+          "charCount": "{count}/60 字符"
+        },
+        "seoDesc": {
+          "label": "元描述",
+          "placeholder": "用于搜索结果的简短描述…",
+          "charCount": "{count}/160 字符"
+        }
+      },
+      "seoPreview": {
+        "label": "搜索预览",
+        "titleFallback": "页面标题",
+        "urlPrefix": "yoursite.com",
+        "descFallback": "未提供描述。"
+      },
+      "actions": {
+        "cancel": "取消",
+        "create": "创建页面",
+        "update": "更新页面",
+        "saving": "正在保存…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "生成新密钥",
+    "keyNameLabel": "密钥名称",
+    "keyNameHint": "为其取一个描述性名称，方便记住用途。",
+    "keyNamePlaceholder": "例如：Flutter 应用——生产环境",
+    "buttonGenerating": "正在生成…",
+    "buttonIdle": "生成密钥"
+  },
+  "newKeyModal": {
+    "title": "API 密钥已生成",
+    "instructions": "你的密钥已创建，可以使用了。点击列表中密钥旁的<eyeIcon>眼睛图标</eyeIcon>以显示并复制它。",
+    "doneButton": "完成"
+  },
+  "revokeModal": {
+    "title": "撤销 API 密钥",
+    "message": "使用该密钥的所有应用将立即失去访问权限：",
+    "cancelButton": "取消",
+    "revokeButtonIdle": "撤销密钥",
+    "revokeButtonRevoking": "正在撤销…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "加载 API 密钥失败",
+      "generateFailed": "生成密钥失败",
+      "revokeFailed": "撤销密钥失败"
+    },
+    "logs": {
+      "loadingKeys": "正在加载 API 密钥...",
+      "keysLoaded": "API 密钥加载成功",
+      "generatingKey": "正在生成新的 API 密钥...",
+      "keyGenerated": "API 密钥生成成功",
+      "revokingKey": "正在撤销 API 密钥...",
+      "keyRevoked": "API 密钥撤销成功"
+    }
+  },
+  "brandingPage": {
+    "heading": "CMS 品牌设置",
+    "subheading": "为你的团队自定义 CMS 的外观。",
+    "errors": {
+      "saveFailed": "保存品牌设置失败"
+    },
+    "logs": {
+      "savingBranding": "正在保存品牌设置...",
+      "brandingSaved": "品牌设置保存成功"
+    },
+    "logoSection": {
+      "title": "CMS 标志",
+      "uploadLabel": "标志",
+      "uploadHint": "PNG 或 SVG，背景透明",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "标志预览"
+    },
+    "faviconSection": {
+      "title": "网站图标",
+      "uploadLabel": "网站图标",
+      "uploadHint": "ICO、PNG 或 SVG——显示于浏览器标签页",
+      "uploadRecommended": "32×32px 或 64×64px",
+      "imageAlt": "网站图标预览"
+    },
+    "preview": {
+      "label": "顶部导航栏预览",
+      "projectLabel": "项目："
+    },
+    "saveSuccess": "品牌设置保存成功",
+    "saveButtonIdle": "保存品牌设置",
+    "saveButtonSaving": "正在保存…"
+  },
+  "overviewPage": {
+    "heading": "项目概览",
+    "subheading": "你的 Underpeaks 项目的快照信息。",
+    "stats": {
+      "dbType": "数据库类型",
+      "environment": "环境",
+      "deployment": "部署",
+      "status": "状态",
+      "statusActive": "启用"
+    },
+    "userInfo": {
+      "sectionTitle": "用户信息",
+      "fullName": "姓名",
+      "email": "电子邮箱",
+      "role": "角色",
+      "status": "状态",
+      "verified": "已验证",
+      "verifiedYes": "是",
+      "verifiedNo": "否",
+      "memberSince": "加入时间"
+    },
+    "licenseKey": {
+      "sectionTitle": "Underpeaks 许可证密钥",
+      "description": "你的许可证密钥用于验证此实例的身份，并区分托管功能与自托管功能。",
+      "reveal": "显示",
+      "hide": "隐藏",
+      "copy": "复制",
+      "copied": "已复制",
+      "loading": "加载中…",
+      "notFound": "未找到许可证密钥"
+    }
+  },
+  "smtpPage": {
+    "heading": "SMTP 设置",
+    "subheading": "为你的项目配置出站邮件。",
+    "emailFeatures": {
+      "sectionTitle": "邮件功能",
+      "verifyEmailLabel": "启用注册时的邮箱验证",
+      "forgotPasswordLabel": "启用忘记密码邮件",
+      "builtInNotice": "{provider} 原生支持邮箱验证和密码重置——这些功能无需 SMTP。",
+      "smtpToggleLabel": "使用自定义 SMTP 服务器"
+    },
+    "smtpConfig": {
+      "sectionTitle": "SMTP 配置",
+      "hostLabel": "SMTP 主机",
+      "hostPlaceholder": "smtp.example.com",
+      "portLabel": "端口",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "发件人地址",
+      "fromAddressPlaceholder": "no-reply@example.com",
+      "usernameLabel": "用户名",
+      "usernamePlaceholder": "SMTP 用户名",
+      "passwordLabel": "密码",
+      "passwordPlaceholder": "SMTP 密码",
+      "showPassword": "显示密码",
+      "hidePassword": "隐藏密码",
+      "encryptionLabel": "加密方式",
+      "encryptionNone": "无"
+    },
+    "logs": {
+      "savingSmtp": "正在保存 SMTP 设置...",
+      "smtpSaved": "SMTP 设置保存成功"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "设置",
+    "toggleAriaLabel": "切换设置导航",
+    "nav": {
+      "overview": "概览",
+      "api-keys": "API 密钥",
+      "smtp": "SMTP 设置",
+      "branding": "CMS 品牌设置"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "正在加载设置…"
+  },
+  "saveButton": {
+    "savedMessage": "保存成功",
+    "buttonSaving": "正在保存…",
+    "buttonIdle": "保存更改"
+  },
+  "coloursPage": {
+    "heading": "颜色",
+    "subheading": "定义生成的 Flutter 和 Next.js 应用中使用的颜色令牌。",
+    "preview": {
+      "title": "实时预览",
+      "primaryButton": "主要按钮",
+      "secondaryButton": "次要",
+      "accentBadge": "强调徽章",
+      "success": "✓ 成功",
+      "warning": "⚠ 警告",
+      "danger": "✕ 危险"
+    },
+    "tokensSectionTitle": "颜色令牌",
+    "resetTokenTitle": "重置为默认值",
+    "resetAllButton": "全部重置为默认值",
+    "savedMessage": "已保存",
+    "saveButtonIdle": "保存颜色",
+    "saveButtonSaving": "正在保存…",
+    "logs": {
+      "savingColours": "正在保存颜色令牌...",
+      "coloursSaved": "颜色令牌保存成功"
+    },
+    "tokens": {
+      "primary":      { "label": "主色",             "description": "主要品牌颜色——按钮、链接、高亮" },
+      "primary-fg":   { "label": "主前景色",  "description": "主色背景上的文字颜色" },
+      "secondary":    { "label": "次要色",           "description": "辅助品牌颜色" },
+      "secondary-fg": { "label": "次要前景色","description": "次要色背景上的文字颜色" },
+      "accent":       { "label": "强调色",              "description": "徽章和标签的高亮颜色" },
+      "background":   { "label": "背景",          "description": "应用的主背景" },
+      "surface":      { "label": "表面",             "description": "卡片与面板的背景" },
+      "border":       { "label": "边框",              "description": "默认边框颜色" },
+      "success":      { "label": "成功",             "description": "积极状态与确认信息" },
+      "warning":      { "label": "警告",             "description": "警告与注意状态" },
+      "danger":       { "label": "危险",              "description": "错误与破坏性操作" },
+      "text":         { "label": "主要文字",        "description": "正文文字的主色" },
+      "text-muted":   { "label": "弱化文字",          "description": "次要文字与占位符文字" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "功能开关",
+    "comingSoonBadge": "即将推出",
+    "subheading": "启用将包含在生成的 Flutter 和 Next.js 应用中的功能。",
+    "paidBadge": "付费",
+    "savedMessage": "已保存",
+    "saveButtonIdle": "保存开关设置",
+    "saveButtonSaving": "正在保存…",
+    "upgrade": {
+      "title": "需要托管套餐",
+      "description": "这些功能需要 Underpeaks 的托管基础设施，升级以解锁。",
+      "button": "升级"
+    },
+    "groups": {
+      "Appearance": "外观",
+      "Localisation": "本地化",
+      "App Behaviour": "应用行为",
+      "Authentication — Paid": "身份验证——付费",
+      "Advanced — Paid": "高级功能——付费"
+    },
+    "flags": {
+      "dark-mode":          { "label": "深色模式",                 "description": "允许用户在应用中切换浅色与深色主题" },
+      "system-theme":       { "label": "跟随系统主题",       "description": "自动匹配设备的浅色/深色模式设置" },
+      "multi-language":     { "label": "多语言支持",    "description": "在生成的应用中启用多语言支持" },
+      "rtl-support":        { "label": "从右到左支持",               "description": "适用于阿拉伯语、希伯来语等语言的从右到左布局" },
+      "offline-mode":       { "label": "离线模式",              "description": "本地缓存数据，使应用无需联网即可使用" },
+      "push-notifications": { "label": "推送通知",        "description": "通过 FCM 启用推送通知支持——你需要提供密钥" },
+      "splash-screen":      { "label": "启动屏幕",             "description": "应用启动时显示带品牌标识的启动屏幕" },
+      "onboarding":         { "label": "新手引导流程",           "description": "为新用户显示欢迎/新手引导流程" },
+      "2fa":                { "label": "双重身份验证", "description": "登录时要求 OTP 或身份验证器应用" },
+      "biometric":          { "label": "生物识别登录",           "description": "移动端的指纹与 Face ID 登录" },
+      "social-login":       { "label": "社交登录",              "description": "Google、GitHub、Apple 和 Facebook 的 OAuth 登录" },
+      "magic-link":         { "label": "魔法链接",                "description": "通过邮件链接实现无密码登录" },
+      "sso":                { "label": "SSO / SAML",                "description": "企业级单点登录集成" },
+      "analytics":          { "label": "应用内分析",          "description": "在生成的应用内追踪屏幕浏览和事件" },
+      "ab-testing":         { "label": "A/B 测试",               "description": "在用户群中开展功能实验" },
+      "feature-gating":     { "label": "功能门控",            "description": "根据用户套餐或角色显示或隐藏功能" }
+    },
+    "logs": {
+      "savingFlags": "正在保存功能开关...",
+      "flagsSaved": "功能开关保存成功"
+    }
+  },
+  "spacingPage": {
+    "heading": "间距与圆角",
+    "subheading": "控制生成应用中组件的形状、密度和层级。",
+    "preview": {
+      "title": "实时预览",
+      "button": "按钮",
+      "card": "卡片组件",
+      "input": "输入框"
+    },
+    "sections": {
+      "radius": {
+        "title": "边框圆角",
+        "description": "应用于按钮、卡片、输入框和弹窗"
+      },
+      "density": {
+        "title": "间距密度",
+        "description": "控制组件内的内边距"
+      },
+      "shadow": {
+        "title": "层级 / 阴影",
+        "description": "卡片和组件的阴影深度"
+      }
+    },
+    "radius": {
+      "none": "无",
+      "sm": "小",
+      "md": "中",
+      "lg": "大",
+      "xl": "超大",
+      "full": "圆角胶囊"
+    },
+    "density": {
+      "compact": { "label": "紧凑", "desc": "内边距较小，可显示更多内容" },
+      "default": { "label": "默认", "desc": "适合大多数使用场景的平衡间距" },
+      "relaxed": { "label": "宽松", "desc": "内边距较大，更易于点触" }
+    },
+    "shadow": {
+      "none": "无",
+      "sm": "微弱",
+      "md": "中等",
+      "lg": "强烈"
+    },
+    "save": {
+      "button": "保存间距设置",
+      "saving": "正在保存…",
+      "savedConfirmation": "已保存"
+    }
+  },
+  "typographyPage": {
+    "heading": "排版",
+    "subheading": "为生成的应用选择字体和字号比例。字体从 Google Fonts 加载。",
+    "preview": {
+      "title": "实时预览",
+      "headingSuffix": "——标题",
+      "bodySample": "敏捷的棕色狐狸跳过了懒惰的狗。这是默认字号的正文文字示例。",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "字体系列",
+        "description": "从 Google Fonts 中选择——自动包含在代码生成中"
+      },
+      "weights": {
+        "title": "字重"
+      },
+      "scale": {
+        "title": "字号比例",
+        "description": "控制应用中整体文字大小"
+      }
+    },
+    "fonts": {
+      "headingFont": "标题字体",
+      "bodyFont": "正文字体",
+      "monoFont": "等宽字体"
+    },
+    "weights": {
+      "headingWeight": "标题字重",
+      "bodyWeight": "正文字重"
+    },
+    "scale": {
+      "compact": { "label": "紧凑", "desc": "文字较小，间距较紧" },
+      "default": { "label": "默认", "desc": "适合大多数应用的平衡设置" },
+      "relaxed": { "label": "宽松", "desc": "文字较大，间距更宽" }
+    },
+    "save": {
+      "button": "保存排版设置",
+      "saving": "正在保存…",
+      "savedConfirmation": "已保存"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "主题",
+    "nav": {
+      "colours": "颜色",
+      "typography": "排版",
+      "spacing": "间距与圆角",
+      "featureFlags": "功能开关",
+      "presets": "预设"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "会话不活跃",
+      "description": "你已经处于不活跃状态，即将在以下时间后登出：",
+      "logoutButton": "退出登录",
+      "keepAliveButton": "保持登录"
+    },
+    "logs": {
+      "logoutFailed": "退出登录失败："
+    }
+  },
+  "loader": {
+    "label": "加载中…"
+  },
+  "userStatus": {
+    "active": "启用",
+    "needsEmailVerification": "需要邮箱验证",
+    "passwordResetRequested": "已请求重置密码",
+    "blocked": "已封禁",
+    "disabled": "已停用"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "创建 Flutter 项目失败"
+    },
+    "logs": {
+      "skipped": "已跳过创建 Flutter 项目：{output}",
+      "created": "Flutter 项目创建成功：{output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "创建 NextJS 项目失败"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "未找到数据库配置。",
+      "dbConfigMissing": "缺少数据库配置",
+      "dbConfigMissingStore": "存储中缺少数据库配置",
+      "adminEmailMissing": "缺少管理员用户邮箱",
+      "adminEmailMissingStore": "存储中缺少管理员用户邮箱",
+      "projectTypeMissing": "缺少 selectedProjectType",
+      "createTablesFailed": "创建数据表失败：{message}",
+      "createAdminFailed": "创建管理员用户失败：{message}",
+      "createModelsFailed": "创建模型失败：{message}",
+      "writeConfigFailed": "写入配置文件失败：{message}",
+      "setupStorageFailed": "设置存储失败：{message}",
+      "installDemoFailed": "安装演示内容失败：{message}",
+      "stepFailed": "步骤失败：{step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "数据表已创建：",
+      "adminCreated": "管理员用户已创建：",
+      "modelsCreated": "创建模型响应：",
+      "modelsSkipped": "已跳过创建模型：{message}",
+      "configWritten": "配置文件写入成功：",
+      "storageCreated": "存储桶已创建：",
+      "demoContentSkipped": "已跳过演示内容",
+      "demoContentInstalled": "演示内容已安装：",
+      "creatingApiEndpoints": "正在创建 API 接口...",
+      "settingUpAuth": "正在配置身份验证...",
+      "configuringSession": "正在配置会话管理...",
+      "runningTests": "正在运行测试...",
+      "finalizing": "正在完成安装...",
+      "noImplementation": "步骤没有对应的实现：{step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "heading": "管理员用户设置",
+    "description": "请提供管理员用户信息以保护你的 Underpeaks 系统。此账户将拥有平台内的完整管理权限。",
+    "disclaimer": "请注意：这会在 Underpeaks 系统中创建一个管理员账户，可能与你的数据库管理员账户不同。",
+    "fields": {
+      "fullName": {
+        "label": "姓名",
+        "placeholder": "例如：张三"
+      },
+      "email": {
+        "label": "电子邮箱地址",
+        "placeholder": "admin@example.com"
+      },
+      "password": {
+        "label": "密码",
+        "placeholder": "创建一个安全密码"
+      }
+    },
+    "errors": {
+      "nameRequired": "姓名为必填项",
+      "emailRequired": "电子邮箱为必填项",
+      "passwordInvalid": "密码为必填项 | 密码长度必须为 8 位 | 必须包含大写字母 | 必须包含特殊字符（例如 !@#$%^&*）"
+    },
+    "continueButton": "继续"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "heading": "选择你的技术栈",
+    "description": "选择最适合你项目需求的技术栈。以后如果想添加更多平台或改变方式，可以随时修改。",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "全能组合！Next.js 用于 Web，Flutter 用于跨平台移动端和桌面端应用。"
+      },
+      "next": {
+        "title": "仅 Next.js",
+        "description": "将 Next.js 用作强大的 React SSR 框架，<strong>并作为无头 CMS 来管理内容和 API。</strong>"
+      },
+      "flutter": {
+        "title": "仅 Flutter",
+        "description": "使用共享代码库通过 Flutter 构建跨平台移动端和桌面端应用，并在需要时<strong>将其用作无头 CMS 后端。</strong>"
+      },
+      "cms": {
+        "title": "无头 CMS",
+        "description": "仅部署为无头 CMS 后端。通过 API 暴露你的数据，并灵活连接到任意自定义前端、移动应用或第三方服务。"
+      }
+    },
+    "nextButton": "下一步"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "heading": "数据库配置",
+    "selectPlaceholder": "选择数据库",
+    "fieldExample": "（例如 {placeholder}）",
+    "savingWarning": "⚠️ 请耐心等待，这可能需要一些时间...",
+    "infoBlock": {
+      "whereLabel": "在哪里找到："
+    },
+    "testSteps": {
+      "validating": "正在验证配置...",
+      "sending": "正在将配置发送到服务器...",
+      "testing": "正在测试数据库连接...",
+      "finalizing": "正在完成连接检查..."
+    },
+    "errors": {
+      "serverRejected": "服务器拒绝了连接",
+      "connectionFailed": "连接失败：{message}"
+    },
+    "buttons": {
+      "testConnection": "测试连接",
+      "testing": "正在测试...",
+      "saving": "正在保存...",
+      "continue": "继续"
+    },
+    "logs": {
+      "firebaseParseError": "解析 Firebase 配置失败"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "projectType": {
+      "title": "选择项目类型",
+      "description": "选择一个模板，自动为你的项目安装默认模型。"
+    },
+    "projects": {
+      "ecommerce":   { "label": "电子商务",         "description": "包含产品、分类、订单、客户和店面页面。" },
+      "marketplace": { "label": "多方市场",         "description": "支持多商家、商品列表、佣金和商家仪表盘。" },
+      "listing":     { "label": "信息发布平台",    "description": "适用于房产、招聘或服务信息发布，含分类、搜索和筛选功能。" },
+      "blog":        { "label": "博客 / 内容网站", "description": "以内容为主导的网站，含文章、分类、标签、作者和评论。" },
+      "social":      { "label": "社交网络",      "description": "用户资料、帖子、评论、点赞、关注者、私信和通知。" },
+      "saas":        { "label": "SaaS / Web 应用",      "description": "包含用户、角色、权限和订阅套餐的 Web 应用结构。" },
+      "blank":       { "label": "空白项目",       "description": "无演示内容；从空的项目骨架开始。" }
+    },
+    "demoContent": {
+      "title": "设置演示内容",
+      "description": "使用已加载的示例数据预览你的店铺。",
+      "checkboxLabel": "为所选项目包含演示内容",
+      "ecommerce": {
+        "item1": "带分类和标签的演示产品",
+        "item2": "示例客户和订单",
+        "item3": "店面页面（首页、产品、购物车、结算）",
+        "item4": "基础 CMS 内容",
+        "item5": "预配置的菜单和模块"
+      }
+    },
+    "continueButtonIdle": "继续",
+    "continueButtonLoading": "正在继续...",
+    "logs": {
+      "navigatingToFinalise": "正在保存安装选项并跳转至最终确认步骤..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "installComplete": "🎉 安装完成！",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "项目信息",
+      "subtitle": "关于项目设置的基本信息。",
+      "name": "名称：",
+      "stack": "技术栈："
+    },
+    "database": {
+      "title": "数据库",
+      "subtitle": "你选择的数据库及其配置。",
+      "type": "类型：",
+      "noneSelected": "未选择"
+    },
+    "adminUser": {
+      "title": "管理员用户",
+      "subtitle": "你的初始管理员凭据。",
+      "name": "姓名：",
+      "email": "电子邮箱：",
+      "password": "密码："
+    },
+    "projectType": {
+      "title": "已选择的项目类型",
+      "subtitle": "设置过程中选择的项目模板。"
+    },
+    "demoContent": {
+      "title": "演示内容",
+      "subtitle": "是否预加载示例店铺数据。",
+      "installed": "已安装",
+      "notInstalled": "未安装"
+    },
+    "continueButton": "继续前往 → 登录"
+  },
+  "ecommercePage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "card": {
+      "title": "自定义你的电子商务模块"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "启用电子商务模块",
+        "description": "添加产品目录、购物车、结算和订单管理功能。"
+      },
+      "physical": {
+        "label": "包含实体产品",
+        "description": "支持库存、配送、退货和实物商品的追踪。"
+      },
+      "digital": {
+        "label": "包含数字产品",
+        "description": "销售可下载内容，例如 PDF、视频或软件许可证。"
+      }
+    },
+    "button": {
+      "next": "下一步",
+      "continuing": "正在继续..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "card": {
+      "title": "完成设置"
+    },
+    "summary": {
+      "project": "项目：",
+      "defaultProject": "我的应用",
+      "stack": "技术栈：",
+      "stackBoth": "Flutter + Next.js",
+      "database": "数据库：",
+      "notSelected": "未选择"
+    },
+    "steps": {
+      "heading": "安装步骤：",
+      "skipped": "已跳过！"
+    },
+    "progress": {
+      "finishing": "正在完成...",
+      "ready": "已准备好安装你的项目"
+    },
+    "errors": {
+      "label": "错误：",
+      "noDatabase": "未选择数据库，无法保存配置。",
+      "saveFailed": "保存安装程序配置失败",
+      "unknown": "发生未知错误"
+    },
+    "button": {
+      "start": "开始安装",
+      "installing": "正在安装..."
+    },
+    "logs": {
+      "sendingConfig": "正在将安装程序配置发送到服务器...",
+      "configSaved": "安装程序配置保存成功",
+      "installError": "安装错误："
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "heading": "选择默认模型",
+    "subheading": "选择你想在项目中包含的默认数据模型。你可以稍后创建或编辑模型。",
+    "required": "（必填）",
+    "toggleAll": {
+      "deselect": "取消全选",
+      "select": "全选"
+    },
+    "models": {
+      "users":      { "label": "用户",      "description": "管理应用用户和身份验证" },
+      "products":   { "label": "产品",   "description": "产品或服务目录" },
+      "orders":     { "label": "订单",     "description": "追踪客户订单和购买记录" },
+      "coupons":    { "label": "优惠券",    "description": "折扣优惠券和促销活动" },
+      "categories": { "label": "分类", "description": "整理产品或内容" },
+      "reviews":    { "label": "评价",    "description": "用户反馈和评分" }
+    },
+    "button": {
+      "continue": "继续",
+      "continuing": "正在继续..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "heading": "项目设置",
+    "subheading": "为你的自托管工作室输入项目名称、子域名和域名。",
+    "continueButton": "继续",
+    "fields": {
+      "name": {
+        "label": "项目名称",
+        "placeholder": "例如：我的应用工作室"
+      },
+      "domain": {
+        "label": "域名",
+        "placeholder": "例如：http://localhost:3000",
+        "hint": "你的应用的完整域名，默认为"
+      },
+      "subdomain": {
+        "label": "子域名",
+        "placeholder": "例如：console",
+        "hint": "这将用于以下 URL："
+      }
+    },
+    "errors": {
+      "nameRequired": "项目名称为必填项",
+      "subdomainRequired": "子域名为必填项",
+      "domainRequired": "域名为必填项"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Underpeaks 标志",
+    "tagline": "你的一体化 SaaS 安装程序与代码生成器",
+    "continueButton": "继续 →",
+    "continueLoading": "加载中...",
+    "benefits": {
+      "heading": "为什么选择 Underpeaks？",
+      "item1": "🔧 完整的代码库生成器（Next.js + Flutter）",
+      "item2": "⚙️ 无需样板代码——只生成可用于生产的代码",
+      "item3": "🌍 支持多语言和多租户",
+      "item4": "📦 自托管或云端托管——由你选择",
+      "item5": "🔐 内置身份验证、角色、权限和安装界面",
+      "item6": "💼 非常适合初创公司、代理机构和企业项目"
+    },
+    "license": {
+      "heading": "许可协议",
+      "loading": "正在加载许可证...",
+      "loadFailed": "加载许可协议失败。",
+      "acceptLabel": "接受许可条款。"
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "当前密码和新密码均为必填项",
+      "passwordTooShort": "密码长度至少为 8 个字符",
+      "unauthorized": "未授权",
+      "invalidToken": "无效的令牌",
+      "userNotFound": "未找到用户",
+      "incorrectCurrentPassword": "当前密码不正确",
+      "internalError": "发生意外错误"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Firebase Auth 密码已更新",
+      "firebasePasswordUpdateFailed": "[change-password] 更新 Firebase Auth 密码失败"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "管理员用户创建成功"
+    },
+    "errors": {
+      "missingConfig": "缺少数据库配置",
+      "missingAdminUser": "缺少管理员用户数据",
+      "genericFailure": "创建管理员用户失败"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "缺少数据库配置或管理员邮箱",
+      "adapterNotSupported": "此数据库适配器不支持创建数据模型",
+      "genericFailure": "插入数据模型失败"
+    },
+    "logs": {
+      "createModelsError": "create-data-models API 出错："
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "缺少数据库配置/类型",
+      "adapterNotSupported": "{type} 适配器未实现存储设置"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "所有系统、用户和项目数据表均已创建"
+    },
+    "errors": {
+      "missingConfig": "缺少数据库配置",
+      "genericFailure": "创建数据表失败"
+    },
+    "logs": {
+      "createTablesError": "[创建数据表错误]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "缺少 Firebase 环境变量：{key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "缺少 projectName",
+      "flutterNotInstalled": "未安装 Flutter 或未添加到 PATH 中。",
+      "stepFailed": "步骤失败：创建 Flutter 项目 - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Flutter 项目「{projectName}」已存在，跳过创建。",
+      "flutterStderr": "Flutter 标准错误：",
+      "flutterCreateFailed": "Flutter 创建失败："
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "电子邮箱为必填项",
+      "dbTypeNotSet": "未设置 NEXT_PUBLIC_DB_TYPE",
+      "firebaseClientSide": "Firebase 密码重置在客户端处理",
+      "supabaseMissingMethod": "Supabase 适配器缺少 sendResetEmail 方法",
+      "unsupportedDbType": "不支持的数据库类型：{dbType}",
+      "adapterMissingMethods": "${dbType} 适配器缺少必需的方法",
+      "userNotFound": "未找到用户",
+      "genericFailure": "发送重置链接失败"
+    },
+    "notices": {
+      "smtpDisabled": "邮件发送功能已禁用，请让管理员为你重置密码。"
+    },
+    "email": {
+      "subject": "密码重置请求",
+      "body": "<p>你好 {name}，</p><p>请点击以下链接重置你的密码：</p><a href=\"{resetLink}\">{resetLink}</a><p>如果这不是你本人的请求，请忽略此邮件。</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Supabase 重置邮件已发送",
+      "resetEmailSent": "重置邮件已发送",
+      "smtpDisabled": "SMTP/忘记密码功能已禁用——已跳过邮件发送",
+      "forgotPasswordError": "忘记密码错误："
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "缺少 Firebase 服务账户",
+      "unsupportedDbType": "不支持的数据库类型：{dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[系统配置错误]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "缺少数据库配置",
+      "missingProjectType": "缺少项目类型",
+      "adapterNotSupported": "此适配器未实现 installDemoContent"
+    },
+    "logs": {
+      "installDemoContentError": "install-demo-content 错误："
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "退出登录成功"
+    },
+    "errors": {
+      "tokenRequired": "令牌为必填项",
+      "dbTypeNotSet": "未设置 NEXT_DB_TYPE",
+      "firebaseServiceAccountMissing": "缺少 Firebase 服务账户",
+      "mysqlEnvMissing": "缺少 MySQL 环境变量",
+      "postgresEnvMissing": "缺少 Postgres 环境变量",
+      "unsupportedDbType": "不支持的数据库类型：{dbType}",
+      "tokenNotFound": "未找到令牌"
+    },
+    "logs": {
+      "logoutError": "退出登录 API 错误："
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id 为必填项",
+      "unauthorized": "未授权",
+      "invalidToken": "无效的令牌"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder 为必填项",
+      "internalError": "发生意外错误"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] 已成功为文件夹补充文件数量信息"
+    },
+    "errors": {
+      "internalError": "发生意外错误"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder、toFolder 和 fileName 均为必填项",
+      "moveFileNotSupported": "不支持 moveFile",
+      "internalError": "发生意外错误"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder、oldName 和 newName 均为必填项",
+      "renameFileNotSupported": "不支持 renameFile",
+      "internalError": "发生意外错误"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "文件和文件夹均为必填项",
+      "uploadFileNotSupported": "不支持 uploadFile",
+      "internalError": "上传失败"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] 模式：",
+      "projectIdLookupFailed": "[upload-file] 查找 project_id 失败",
+      "metadataSaved": "[upload-file] 元数据已保存到 nxf_storage",
+      "metadataSaveFailed": "[upload-file] 保存元数据失败",
+      "localUploadSuccess": "[upload-file] 本地上传已保存："
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "测试数据库连接失败"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id 为必填项",
+      "firebaseServiceAccountMissing": "缺少 Firebase 服务账户",
+      "unsupportedDbType": "不支持的数据库类型",
+      "systemConfigNotFound": "未找到系统配置",
+      "internalError": "内部服务器错误"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "姓名为必填项",
+      "unauthorized": "未授权",
+      "invalidToken": "无效的令牌",
+      "internalError": "发生意外错误"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id 和 project_name 均为必填项",
+      "firebaseServiceAccountMissing": "缺少 Firebase 服务账户",
+      "unsupportedDbType": "不支持的数据库类型",
+      "systemConfigNotFound": "未找到该用户的系统配置",
+      "internalError": "内部服务器错误"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id 为必填项",
+      "firebaseServiceAccountMissing": "缺少 Firebase 服务账户",
+      "unsupportedDbType": "不支持的数据库类型",
+      "systemConfigNotFound": "未找到该用户的系统配置",
+      "internalError": "内部服务器错误"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "写入配置文件失败"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "找到已有的身份验证用户：",
+      "newAuthUserCreated": "已创建新的身份验证用户：",
+      "creatingAdminInDb": "正在数据库中创建管理员用户...",
+      "userAlreadyInDb": "用户已存在于数据库中：",
+      "existingProjectFound": "找到已有项目：",
+      "newProjectCreated": "已创建新项目：",
+      "existingTenantFound": "找到已有租户：",
+      "newTenantCreated": "已创建新租户："
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "已跳过重复的 CreateDataModels 执行——该项目与类型组合已处理过。",
+      "creatingTable": "正在创建数据表："
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "未实现 createTable，已跳过创建数据表"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "上传文件夹",
+      "customFolder": "自定义文件夹…",
+      "enterFolderName": "输入文件夹名称",
+      "placeholder": "例如：banners/summer",
+      "uploadingTo": "正在上传至："
+    },
+    "preview": {
+      "alt": "预览",
+      "uploaded": "已上传",
+      "replace": "替换",
+      "clear": "清除文件"
+    },
+    "dropzone": {
+      "uploading": "正在上传…",
+      "idle": "拖放文件，或",
+      "browse": "浏览",
+      "recommended": "推荐："
+    },
+    "errors": {
+      "noFolder": "上传前请选择或输入一个文件夹。",
+      "uploadFailed": "上传失败",
+      "uploadFailedStatus": "上传失败：",
+      "networkError": "网络错误"
+    }
+  },
+  "modelView": {
+    "systemBadge": "系统",
+    "subtitle": "只读——这是受保护的系统数据表。",
+    "fieldsHeading": "字段",
+    "actions": {
+      "back": "返回模型列表"
+    },
+    "stats": {
+      "fields": "字段数",
+      "created": "创建时间",
+      "updated": "最后更新时间"
+    },
+    "table": {
+      "name": "字段名称",
+      "type": "类型",
+      "constraints": "约束",
+      "nullable": "必填",
+      "default": "默认值",
+      "uiType": "界面类型"
+    },
+    "badges": {
+      "hidden": "已隐藏",
+      "required": "必填",
+      "optional": "可选"
+    },
+    "errors": {
+      "loadFailed": "加载模型失败。",
+      "notFound": "未找到模型。"
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "模型",
+      "subtitle": "定义并管理你项目的数据结构。",
+      "createButton": "创建模型"
+    },
+    "filter": {
+      "all": "全部",
+      "user": "用户",
+      "system": "系统"
+    },
+    "states": {
+      "empty": "未找到模型。",
+      "emptyHint": "创建你的第一个模型以开始使用。"
+    },
+    "badges": {
+      "system": "系统",
+      "partialSystem": "可编辑系统"
+    },
+    "meta": {
+      "fields": "{count} 个字段",
+      "foreignKeys": "{count} 个外键"
+    },
+    "card": {
+      "editAriaLabel": "编辑 {name}",
+      "deleteAriaLabel": "删除 {name}"
+    },
+    "confirmDelete": {
+      "title": "删除模型？",
+      "description": "确定要删除“{name}”吗？此数据表中的所有数据将被永久删除。此操作无法撤销。",
+      "confirm": "删除",
+      "deleting": "正在删除…",
+      "cancel": "取消"
+    },
+    "errors": {
+      "loadFailed": "加载模型失败。",
+      "deleteFailed": "删除模型失败。"
+    }
+  },
+  "createModel": {
+    "title": "创建模型",
+    "subtitle": "定义一个新的数据模型及其字段。",
+    "actions": {
+      "save": "保存模型",
+      "saving": "正在保存…",
+      "back": "返回模型列表"
+    },
+    "form": {
+      "modelNameLabel": "模型名称",
+      "modelNamePlaceholder": "例如：产品",
+      "fieldNamePlaceholder": "字段名称",
+      "required": "必填",
+      "unique": "唯一",
+      "primaryKey": "主键",
+      "primaryKeyTaken": "已设置",
+      "hidden": "隐藏",
+      "uiType": "界面类型",
+      "foreignKeyTable": "外键——数据表",
+      "foreignKeyColumn": "外键——列",
+      "noForeignKey": "— 无外键 —",
+      "selectColumn": "— 选择列 —",
+      "onDelete": "删除时",
+      "addField": "添加字段",
+      "removeField": "移除字段",
+      "expandField": "显示高级选项",
+      "collapseField": "隐藏高级选项",
+      "foreignKey": "外键"
+    },
+    "validation": {
+      "modelNameRequired": "模型名称为必填项。",
+      "fieldsInvalid": "所有字段都必须有名称。",
+      "fieldNameUnique": "字段名称必须唯一。",
+      "singlePrimaryKey": "每个模型只允许有一个主键。"
+    },
+    "confirmDelete": {
+      "title": "删除字段？",
+      "description": "确定要移除此字段吗？",
+      "confirm": "删除",
+      "cancel": "取消"
+    },
+    "errors": {
+      "createFailed": "创建模型失败。"
+    }
+  },
+  "editModel": {
+    "title": "编辑模型",
+    "subtitle": "更新模型名称及其字段定义。",
+    "actions": {
+      "save": "保存更改",
+      "saving": "正在保存…",
+      "back": "返回模型列表"
+    },
+    "form": {
+      "modelNameLabel": "模型名称",
+      "modelNamePlaceholder": "模型名称",
+      "fieldNamePlaceholder": "字段名称",
+      "required": "必填",
+      "unique": "唯一",
+      "primaryKey": "主键",
+      "primaryKeyTaken": "已设置",
+      "hidden": "隐藏",
+      "uiType": "界面类型",
+      "foreignKeyTable": "外键——数据表",
+      "foreignKeyColumn": "外键——列",
+      "noForeignKey": "— 无外键 —",
+      "selectColumn": "— 选择列 —",
+      "onDelete": "删除时",
+      "addField": "添加字段",
+      "removeField": "移除字段",
+      "expandField": "显示高级选项",
+      "collapseField": "隐藏高级选项",
+      "foreignKey": "外键"
+    },
+    "validation": {
+      "modelNameRequired": "模型名称为必填项。",
+      "fieldsInvalid": "所有字段都必须有名称。",
+      "fieldNameUnique": "字段名称必须唯一。",
+      "singlePrimaryKey": "每个模型只允许有一个主键。"
+    },
+    "confirmDelete": {
+      "title": "删除字段？",
+      "description": "确定要移除此字段吗？",
+      "confirm": "删除",
+      "cancel": "取消"
+    },
+    "warningDialog": {
+      "title": "严重警告",
+      "subtitle": "你即将删除一个受保护的字段。",
+      "primaryKeyWarning": "此字段是该数据表的主键。删除它将破坏所有引用此数据表的关联关系，并可能永久损坏你整个项目中的现有数据。",
+      "foreignKeyWarning": "此字段是将该数据表关联至另一数据表的外键。删除它将破坏该关联关系，并可能导致现有记录出现数据完整性问题。",
+      "checkboxLabel": "我理解这可能会永久损坏我的数据且无法撤销。",
+      "confirm": "仍要删除",
+      "cancel": "取消"
+    },
+    "errors": {
+      "loadModelFailed": "加载模型失败。",
+      "modelNotFound": "未找到模型。",
+      "updateModelFailed": "更新模型失败。"
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id 为必填项",
+      "invalidBody": "请求正文无效或为空",
+      "missingFields": "缺少必填字段",
+      "projectNotFound": "未找到该用户的项目",
+      "nameAlreadyExists": "此名称的模型已存在",
+      "fetchFailed": "获取模型失败",
+      "createFailed": "创建模型失败",
+      "updateFailed": "更新模型失败",
+      "deleteFailed": "删除模型失败",
+      "multiplePrimaryKeys": "每个模型只允许有一个主键",
+      "systemTableProtected": "系统数据表无法创建、修改或删除"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— 选择一个字段 —",
+    "clear": "清除外键",
+    "searchPlaceholder": "搜索模型…",
+    "noResults": "未找到模型。",
+    "systemBadge": "系统",
+    "fieldsLabel": "个字段",
+    "onDelete": "删除时",
+    "filter": {
+      "all": "全部",
+      "user": "用户",
+      "system": "系统"
+    }
+  },
+  "users": {
+    "page_title": "用户",
+    "page_description": "管理 CMS 管理员和用户账户",
+    "edit_kpis": "编辑 KPI",
+    "editing_kpis": "正在编辑 KPI",
+    "save_layout": "保存布局",
+    "saving": "正在保存…",
+    "search_placeholder": "按姓名或邮箱搜索…",
+    "showing_count": "显示 {total} 名用户中的 {filtered} 名",
+    "no_users_found": "未找到用户",
+    "filter": "筛选",
+    "sort": "排序",
+    "clear_all": "全部清除",
+    "filters": "筛选条件",
+    "role": "角色",
+    "all_roles": "所有角色",
+    "all_statuses": "所有状态",
+    "status": "状态",
+    "joined_from": "加入日期起",
+    "joined_to": "加入日期止",
+    "sort_by": "排序方式",
+    "direction": "排序方向",
+    "asc": "升序（A → Z）",
+    "desc": "降序（Z → A）",
+    "col_name": "姓名",
+    "col_email": "电子邮箱",
+    "col_role": "角色",
+    "col_status": "状态",
+    "col_last_login": "最后登录",
+    "col_joined": "加入日期",
+    "role_admin": "管理员",
+    "role_user": "用户",
+    "status_active": "启用",
+    "status_suspended": "已暂停",
+    "status_disabled": "已停用",
+    "drawer_title": "用户详情",
+    "actions": "操作",
+    "change_role": "角色",
+    "change_status": "状态",
+    "send_reset": "发送密码重置邮件",
+    "sending_reset": "正在发送…",
+    "delete_user": "删除用户",
+    "delete_confirm": "确定要永久删除此用户吗？此操作无法撤销。",
+    "cancel": "取消",
+    "confirm_delete": "是，删除",
+    "deleting": "正在删除…",
+    "last_admin_warning": "无法降级——这是最后一位管理员",
+    "login_history": "登录历史",
+    "no_history": "尚未记录任何登录历史",
+    "event_login": "已登录",
+    "event_logout": "已登出",
+    "event_online": "在线",
+    "event_offline": "已离线",
+    "joined": "加入日期",
+    "last_login": "最后登录",
+    "toast_role_updated": "角色已更新",
+    "toast_status_updated": "状态已更新",
+    "toast_user_deleted": "用户已删除",
+    "toast_reset_sent": "密码重置邮件已发送至 {email}",
+    "toast_kpi_saved": "KPI 布局已保存",
+    "toast_load_failed": "加载用户失败",
+    "toast_save_failed": "保存失败",
+    "kpi_add": "添加 KPI",
+    "kpi_add_block": "区块",
+    "kpi_edit": "编辑 KPI",
+    "kpi_label_required": "标签为必填项",
+    "kpi_select_field": "请选择一个字段",
+    "kpi_select_both_fields": "请选择两个字段",
+    "kpi_select_field_and_value": "请选择一个字段并输入要比较的值",
+    "kpi_max_reached": "最多允许 5 个 KPI",
+    "kpi_label": "标签",
+    "kpi_formula": "公式",
+    "kpi_format": "显示格式",
+    "kpi_icon": "图标",
+    "kpi_accent_colour": "强调色",
+    "kpi_field": "字段",
+    "kpi_field_a": "字段 A",
+    "kpi_field_b": "字段 B",
+    "kpi_numerator": "分子字段（A）",
+    "kpi_denominator": "分母字段（B）",
+    "kpi_operator": "运算符",
+    "kpi_value_to_match": "要比较的值",
+    "kpi_make_wide": "加宽",
+    "kpi_make_compact": "缩小",
+    "kpi_add_to_block": "添加",
+    "kpi_save": "保存更改",
+    "kpi_cancel": "取消"
+  },
+  "notFound": {
+    "title": "未找到页面",
+    "description": "我们找不到你要访问的页面。它可能已被移动、重命名，或从未存在过。",
+    "goHome": "返回首页",
+    "backToConsole": "返回控制台",
+    "helpfulLinks": "正在寻找特定内容？",
+    "pages": "页面",
+    "models": "模型",
+    "users": "用户",
+    "settings": "设置"
+  },
+  "noModelLinked": {
+    "title": "未关联模型",
+    "description": "{pageName} 使用了 {templateName} 模板，但尚未关联任何数据模型。",
+    "instruction": "编辑页面设置并指定一个模型，以便它可以显示数据。",
+    "openPages": "打开页面",
+    "manageModels": "管理模型"
+  },
+  "lockedTemplate": {
+    "title": "托管套餐可用",
+    "description": "{templateName} 模板属于托管套餐的一部分。升级以解锁看板、日历、结算等功能。",
+    "upgradeButton": "查看托管套餐",
+    "backButton": "返回页面列表"
+  },
+  "CookieBanner": {
+    "eyebrow": "隐私",
+    "title": "我们重视你的隐私",
+    "description": "我们使用 Cookie 来保持你的登录状态、记住你的语言偏好，并（在你同意的情况下）了解访客如何使用本网站。你可以随时更改你的选择。",
+    "necessaryTitle": "严格必要",
+    "necessaryDescription": "用于登录、语言偏好设置以及保存你的 Cookie 选择，无法关闭。",
+    "analyticsTitle": "分析",
+    "analyticsDescription": "帮助我们了解访客访问了哪些页面以及网站的运行情况，不会共享任何个人数据。",
+    "marketingTitle": "营销",
+    "marketingDescription": "用于展示相关广告，并衡量其他网站上的营销活动效果。",
+    "alwaysOn": "始终启用",
+    "acceptAll": "全部接受",
+    "rejectAll": "全部拒绝",
+    "customise": "自定义",
+    "savePreferences": "保存偏好设置",
+    "cookiePreferences": "Cookie 偏好设置",
+    "policyLink": "隐私政策"
   }
 }

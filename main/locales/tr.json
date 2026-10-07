@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
-    "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
-    "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "save": "Kaydet",
+    "saving": "Kaydediliyor...",
+    "saveChanges": "Değişiklikleri Kaydet",
+    "cancel": "İptal",
+    "delete": "Sil",
+    "edit": "Düzenle",
+    "create": "Oluştur",
+    "add": "Ekle",
+    "remove": "Kaldır",
+    "close": "Kapat",
+    "confirm": "Onayla",
+    "back": "Geri",
+    "next": "İleri",
+    "done": "Tamamlandı",
+    "loading": "Yükleniyor...",
+    "search": "Ara",
+    "filter": "Filtrele",
+    "refresh": "Yenile",
+    "copy": "Kopyala",
+    "copied": "Kopyalandı!",
+    "upload": "Yükle",
+    "rename": "Yeniden Adlandır",
+    "move": "Taşı",
+    "preview": "Önizleme",
+    "revoke": "İptal Et",
+    "generate": "Oluştur",
+    "reveal": "Göster",
+    "hide": "Gizle",
+    "active": "Aktif",
+    "inactive": "Pasif",
+    "status": "Durum",
+    "actions": "İşlemler",
+    "name": "Ad",
+    "email": "E-posta",
+    "password": "Şifre",
+    "role": "Rol",
+    "createdAt": "Oluşturulma Tarihi",
+    "noResults": "Sonuç bulunamadı",
+    "error": "Bir hata oluştu",
+    "success": "Başarılı",
+    "required": "Bu alan zorunludur",
+    "optional": "İsteğe bağlı",
+    "yes": "Evet",
+    "no": "Hayır",
+    "areYouSure": "Emin misiniz?",
+    "thisActionCannotBeUndone": "Bu işlem geri alınamaz.",
+    "comingSoon": "Yakında"
   },
   "nav": {
-    "dashboard": "Dashboard",
-    "pages": "Pages",
-    "menu": "Menu",
-    "media": "Media",
+    "dashboard": "Kontrol Paneli",
+    "pages": "Sayfalar",
+    "menu": "Menü",
+    "media": "Medya",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "Entegrasyonlar",
+    "theming": "Tema",
+    "settings": "Ayarlar",
+    "account": "Hesap",
+    "messages": "Mesajlar",
+    "notifications": "Bildirimler",
+    "logout": "Çıkış Yap"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "Ara...",
+    "notifications": "Bildirimler",
+    "messages": "Mesajlar",
+    "viewAccount": "Hesabı Görüntüle",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
-      "enterprise": "Enterprise"
+      "self_hosted": "Kendi Sunucunda",
+      "hosted": "Barındırılan",
+      "enterprise": "Kurumsal"
+    }
+  },
+  "nextModelGenerator": {
+    "nullJsonError": "{{modelName}}Model oluşturulamıyor: boş veya tanımsız JSON alındı",
+    "missingRequiredField": "Zorunlu alan eksik: {{modelName}} içindeki {{fieldName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "{{count}} model için kod oluşturuluyor...",
+    "modelUndefined": "Model tanımsız — geçerli bir ModelDefinition gönderildiğinden emin olun",
+    "modelMissingName": "Modelde \"name\" özelliği eksik — her modelin bir adı olmalıdır",
+    "modelInvalidFields": "\"{{name}}\" modelinin \"fields\" değeri geçersiz veya eksik — fields basit bir nesne olmalıdır",
+    "generationSuccess": "\"{{name}}\" modeli için kod başarıyla oluşturuldu",
+    "generationFailed": "\"{{name}}\" modeli için kod oluşturma başarısız oldu"
+  },
+  "completeProfile": {
+    "title": "Profilinizi Tamamlayın",
+    "welcome": "Hoş geldiniz,",
+    "loading": {
+      "checkingProfile": "Profiliniz kontrol ediliyor..."
+    },
+    "subdomain": {
+      "label": "Bir alt alan adı seçin",
+      "placeholder": "uygulamaniz",
+      "hint": "Uygulamanıza şu adresten erişilebilecek:"
+    },
+    "button": {
+      "save": "Kaydet ve Devam Et",
+      "saving": "Kaydediliyor..."
+    },
+    "validation": {
+      "subdomainRequired": "Bir alt alan adı girin",
+      "adapterMissingCreateTenant": "Veritabanı bağdaştırıcınız kiracı oluşturmayı desteklemiyor"
+    },
+    "errors": {
+      "saveFailed": "Alt alan adı kaydedilirken hata oluştu: {{message}}",
+      "unknownError": "Bilinmeyen bir hata oluştu"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Şifre sıfırlama, geçerli veritabanı bağdaştırıcısı tarafından desteklenmiyor",
+      "noAccountFound": "Bu e-posta adresiyle bir hesap bulunamadı."
+    }
+  },
+  "forgotPassword": {
+    "title": "Şifremi Unuttum",
+    "description": "E-posta adresinizi girin, şifrenizi sıfırlamanız için bir bağlantı gönderelim.",
+    "form": {
+      "emailLabel": "E-posta Adresi",
+      "emailPlaceholder": "siz@ornek.com",
+      "buttonSend": "Sıfırlama Bağlantısı Gönder",
+      "buttonSending": "Gönderiliyor..."
+    },
+    "validation": {
+      "emailRequired": "E-posta adresinizi girin."
+    },
+    "errors": {
+      "firebaseConfigMissing": "Firebase yapılandırması eksik. Lütfen ortam değişkenlerinizi kontrol edin.",
+      "sendFailed": "Sıfırlama bağlantısı gönderilemedi. Lütfen tekrar deneyin."
+    },
+    "success": {
+      "title": "Gelen kutunuzu kontrol edin",
+      "description": "Şifre sıfırlama e-postası gönderildi. Gelen kutunuzu kontrol edin ve şifrenizi sıfırlamak için bağlantıyı takip edin.",
+      "button": "Girişe Geri Dön"
+    },
+    "notice": {
+      "title": "Talep Gönderildi",
+      "button": "Tamam"
+    },
+    "error": {
+      "title": "Bir şeyler ters gitti"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Şifre sıfırlama, geçerli veritabanı bağdaştırıcısı tarafından desteklenmiyor",
+      "invalidToken": "Geçersiz veya süresi dolmuş sıfırlama bağlantısı. Yeni bir bağlantı isteyin.",
+      "tokenAlreadyUsed": "Bu sıfırlama bağlantısı zaten kullanılmış. Yeni bir bağlantı isteyin.",
+      "tokenExpired": "Bu sıfırlama bağlantısının süresi dolmuş. Yeni bir bağlantı isteyin."
+    }
+  },
+  "resetPassword": {
+    "title": "Şifreyi Sıfırla",
+    "form": {
+      "passwordLabel": "Yeni Şifre",
+      "buttonReset": "Şifreyi Sıfırla",
+      "buttonResetting": "Sıfırlanıyor..."
+    },
+    "errors": {
+      "invalidLink": "Geçersiz veya eksik sıfırlama bağlantısı. Yeni bir bağlantı isteyin.",
+      "passwordRequired": "Yeni bir şifre girin.",
+      "missingToken": "Sıfırlama jetonu eksik. Lütfen e-postanızdaki bağlantıyı kullanın.",
+      "resetFailed": "Şifre sıfırlanamadı. Lütfen tekrar deneyin."
+    },
+    "error": {
+      "title": "Bir şeyler ters gitti"
+    },
+    "expired": {
+      "title": "Sıfırlama Bağlantısının Süresi Doldu",
+      "description": "Şifre sıfırlama bağlantınızın süresi doldu. Şifremi unuttum sayfasına yönlendiriliyorsunuz..."
+    },
+    "success": {
+      "title": "Şifre Başarıyla Sıfırlandı",
+      "description": "Artık yeni şifrenizle",
+      "signinLink": "giriş yapabilirsiniz",
+      "descriptionSuffix": "."
+    }
+  },
+  "signIn": {
+    "heading": "Underpeaks Hesabınıza Giriş Yapın",
+    "fields": {
+      "email": "E-posta",
+      "password": "Şifre"
+    },
+    "button": {
+      "signIn": "Giriş Yap",
+      "signingIn": "Giriş yapılıyor..."
+    },
+    "links": {
+      "forgotPassword": "Şifrenizi mi unuttunuz?",
+      "noAccount": "Hesabınız yok mu?",
+      "signUp": "Şimdi kaydolun"
+    },
+    "errors": {
+      "title": "Hata",
+      "signinFailed": "Giriş başarısız oldu. Bilgilerinizi kontrol edin ve tekrar deneyin."
+    }
+  },
+  "signUp": {
+    "heading": "Underpeaks Hesabınızı Oluşturun",
+    "fields": {
+      "fullName": "Ad Soyad",
+      "fullNamePlaceholder": "Ad soyadınız",
+      "email": "E-posta",
+      "emailPlaceholder": "siz@ornek.com",
+      "password": "Şifre"
+    },
+    "button": {
+      "signUp": "Kaydol",
+      "creating": "Oluşturuluyor..."
+    },
+    "alerts": {
+      "errorTitle": "Hata",
+      "successTitle": "Başarılı"
+    },
+    "success": {
+      "accountCreated": "Hesap başarıyla oluşturuldu!"
+    },
+    "links": {
+      "alreadyHaveAccount": "Zaten bir hesabınız var mı?",
+      "loginNow": "Şimdi giriş yapın"
+    },
+    "errors": {
+      "nameRequired": "Ad soyad gereklidir.",
+      "emailRequired": "E-posta gereklidir.",
+      "passwordRequired": "Şifre gereklidir.",
+      "emailInUse": "Bu e-posta zaten kayıtlı. Bunun yerine giriş yapmayı deneyin.",
+      "invalidEmail": "Geçerli bir e-posta adresi girin.",
+      "weakPassword": "Şifre çok zayıf. En az 6 karakter gerekli.",
+      "signupFailed": "Kayıt başarısız oldu. Lütfen tekrar deneyin.",
+      "supabaseSignupFailed": "Supabase kaydı başarısız oldu. Lütfen tekrar deneyin."
+    },
+    "console": {
+      "firebaseVerificationSent": "Firebase doğrulama e-postası başarıyla gönderildi.",
+      "firebaseVerificationFailed": "Firebase doğrulama e-postası gönderilemedi.",
+      "supabaseVerificationSent": "Supabase doğrulama e-postası başarıyla gönderildi."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "E-posta Doğrulanıyor",
+      "success": "E-posta Doğrulandı ✅",
+      "error": "Doğrulama Başarısız Oldu"
+    },
+    "status": {
+      "verifying": "E-postanız doğrulanıyor...",
+      "verified": "E-postanız doğrulandı.",
+      "supabaseRedirecting": "Şifre ayarlamaya yönlendiriliyor..."
+    },
+    "button": {
+      "goToSignIn": "Girişe Git"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] Talep alındı",
+      "verificationNotSupported": "[verify-email] Doğrulama bu bağdaştırıcı için desteklenmiyor"
+    },
+    "errors": {
+      "missingTokenOrEmail": "Jeton veya e-posta eksik",
+      "dbTypeNotSet": "Veritabanı türü yapılandırılmamış",
+      "unsupportedDbType": "Desteklenmeyen veritabanı türü",
+      "sqlAdapterMissingMethods": "SQL bağdaştırıcısında gerekli yöntemler eksik",
+      "firebaseAdapterMissingMethods": "Firebase bağdaştırıcısında gerekli yöntemler eksik",
+      "invalidToken": "Geçersiz jeton",
+      "tokenExpired": "Jetonun süresi dolmuş",
+      "userNotFound": "Kullanıcı bulunamadı",
+      "verificationNotSupported": "Doğrulama bu bağdaştırıcı için desteklenmiyor",
+      "verificationFailed": "Doğrulama başarısız oldu"
+    }
+  },
+  "schemaPreview": {
+    "title": "Şema Önizlemesi",
+    "columns": {
+      "field": "Alan",
+      "type": "Tür"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "İşlemi Onayla",
+      "description": "Devam etmek istediğinizden emin misiniz?"
+    },
+    "buttons": {
+      "confirm": "Onayla",
+      "cancel": "İptal"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "İşletme",
+      "content": "İçerik",
+      "assets": "Varlıklar",
+      "configuration": "Yapılandırma"
+    },
+    "items": {
+      "dashboard": "Kontrol Paneli",
+      "products": "Ürünler",
+      "categories": "Kategoriler",
+      "orders": "Siparişler",
+      "coupons": "Kuponlar",
+      "users": "Kullanıcılar",
+      "shipping": "Kargo",
+      "services": "Hizmetler",
+      "sharedModels": "Paylaşılan Modeller",
+      "menu": "Menü",
+      "pages": "Sayfalar",
+      "theme": "Tema",
+      "storage": "Depolama",
+      "integrations": "Entegrasyonlar",
+      "apisAndWebhooks": "API'ler ve Webhook'lar"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "Mesajlar",
+      "unreadCount": "{count} okunmamış"
+    },
+    "empty": "Henüz mesaj yok",
+    "viewAll": "Tüm mesajları görüntüle",
+    "unreadBadge": "{count} okunmamış",
+    "systemInitials": "SY",
+    "fallbackUser": "Kullanıcı"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "Bildirimler",
+      "unreadCount": "{count} okunmamış",
+      "markAllRead": "Tümünü okundu olarak işaretle"
+    },
+    "empty": "Henüz bildirim yok",
+    "viewAll": "Tüm bildirimleri görüntüle"
+  },
+  "previewSchema": {
+    "fieldsHeading": "Alanlar",
+    "fieldNamePlaceholder": "Alan adı",
+    "requiredLabel": "Zorunlu",
+    "removeButton": "Kaldır",
+    "saveButton": "Kaydet",
+    "previewButton": "Önizleme",
+    "hidePreviewButton": "Önizlemeyi Gizle",
+    "addFieldButton": "Alan Ekle",
+    "types": {
+      "string": "metin",
+      "num": "sayı",
+      "boolean": "boolean",
+      "datetime": "tarih/saat",
+      "array": "dizi",
+      "map": "harita",
+      "null": "boş"
+    },
+    "aria": {
+      "fieldName": "Alan {{index}} adı",
+      "fieldType": "Alan {{index}} türü",
+      "elementType": "Alan {{index}} öğe türü",
+      "required": "Alan {{index}} zorunlu",
+      "removeField": "Alan {{index}} kaldır"
     }
   },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "Çıkış yapılıyor…",
+    "footer": {
+      "settings": "Ayarlar",
+      "logout": "Çıkış Yap",
+      "collapse": "Kenar çubuğunu kapat",
+      "expand": "Kenar çubuğunu genişlet",
+      "business": "İşletme",
+      "developer": "Geliştirici",
+      "design": "Tasarım",
+      "system": "Sistem"
+    },
+    "aria": {
+      "sidebar": "Konsol gezinmesi",
+      "navigation": "Ana gezinme",
+      "expandSidebar": "Kenar çubuğunu genişlet",
+      "collapseSidebar": "Kenar çubuğunu kapat"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "Proje logosu",
+    "projectLabel": "Proje:",
+    "signIn": "Giriş Yap",
+    "register": "Kaydol",
+    "aria": {
+      "navbar": "Üst gezinme çubuğu",
+      "goToDashboard": "Kontrol paneline git"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "{name} için kullanıcı menüsü"
+    },
+    "menu": {
+      "account": "Hesap",
+      "settings": "Ayarlar",
+      "helpAndDocs": "Yardım ve Dokümantasyon",
+      "logout": "Çıkış Yap"
+    }
+  },
+  "accountPage": {
+    "title": "Hesap",
+    "subtitle": "Profilinizi ve güvenliğinizi yönetin.",
+    "profile": {
+      "title": "Profil",
+      "description": "Görünen adınızı güncelleyin.",
+      "fullNameLabel": "Ad soyad",
+      "fullNamePlaceholder": "Ad soyadınız",
+      "emailLabel": "E-posta adresi",
+      "emailReadOnlyNote": "E-posta, kimlik doğrulama sağlayıcınız tarafından yönetilir ve burada değiştirilemez.",
+      "saveButton": "Değişiklikleri kaydet",
+      "savingButton": "Kaydediliyor…",
+      "savedButton": "Kaydedildi"
+    },
+    "danger": {
+      "title": "Tehlikeli Bölge",
+      "description": "Geri alınamaz işlemler. Dikkatli devam edin.",
+      "cancelTitle": "Aboneliği iptal et",
+      "cancelDescription": "Planınız mevcut fatura döneminin sonuna kadar etkin kalır, ardından kendi sunucunuza döner.",
+      "cancelButton": "Planı iptal et",
+      "cancelModalBody": "Aboneliğiniz iptal edilecek, ancak mevcut fatura döneminizin sonuna kadar erişimi koruyacaksınız. Bu geri alınamaz.",
+      "resetTitle": "Projeyi sıfırla",
+      "resetDescription": "Tüm proje içeriğini kalıcı olarak siler ve yeniden başlatma işlemine başlar. Hesabınız korunur.",
+      "resetButton": "Projeyi sıfırla",
+      "resetModalBody": "Bu, modeller, sayfalar, veriler ve medya dahil olmak üzere projenizin tüm içeriğini kalıcı olarak siler. Hesabınız ve faturalandırmanız korunur. Bu geri alınamaz.",
+      "deleteTitle": "Hesabı sil",
+      "deleteDescription": "Hesabınızı ve ilişkili tüm verileri kalıcı olarak siler.",
+      "deleteButton": "Hesabı sil",
+      "deleteModalBody": "Bu, hesabınızı ve tüm içeriğinizi kalıcı olarak siler. Yasal olarak gerekli olduğunda faturalandırma kayıtları saklanır. Bu geri alınamaz."
+    },
+    "password": {
+      "title": "Şifreyi Değiştir",
+      "description": "Başka bir yerde kullanmadığınız güçlü bir şifre kullanın.",
+      "currentLabel": "Mevcut şifre",
+      "newLabel": "Yeni şifre",
+      "confirmLabel": "Yeni şifreyi onayla",
+      "showPassword": "Şifreyi göster",
+      "hidePassword": "Şifreyi gizle",
+      "minLengthHint": "En az 8 karakter",
+      "mismatchHint": "Şifreler eşleşmiyor",
+      "updateButton": "Şifreyi güncelle",
+      "updatingButton": "Güncelleniyor…",
+      "updatedButton": "Güncellendi"
+    },
+    "billing": {
+      "title": "Faturalandırma ve Plan",
+      "description": "Mevcut planınız ve yükseltme seçenekleri.",
+      "selfHostedDescription": "Temel özellikler dahildir. Entegrasyonlar, gelişmiş kimlik doğrulama ve beyaz etiketleme için yükseltin.",
+      "paidDescription": "Tüm özelliklerin kilidi açıldı.",
+      "upgradeButton": "Yükselt",
+      "upgradeAriaLabel": "Underpeaks Pro'ya yükselt",
+      "proFeaturesTitle": "Pro ile alacaklarınız",
+      "proFeature1": "Entegrasyonlar (Stripe, Mailchimp ve daha fazlası)",
+      "proFeature2": "Gelişmiş kimlik doğrulama — 2FA, sosyal giriş, sihirli bağlantı, SSO",
+      "proFeature3": "CMS'i kendi markanızla beyaz etiketleyin",
+      "proFeature4": "Konsolunuz için özel alan adı",
+      "contactSalesButton": "Satışla İletişime Geçin"
+    },
+    "errors": {
+      "profileUpdateFailed": "Profil güncellenemedi. Lütfen tekrar deneyin.",
+      "passwordUpdateFailed": "Şifre güncellenemedi. Lütfen tekrar deneyin."
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "Modellerinizden otomatik olarak oluşturulan genel uç noktalar",
+    "customEndpointButton": "Özel Uç Nokta",
+    "tabsLabel": "API sayfası sekmeleri",
+    "copy": "Panoya kopyala",
+    "copied": "Kopyalandı!",
+    "tabs": {
+      "endpoints": "Uç Noktalar",
+      "keys": "API Anahtarları",
+      "reference": "Referans"
+    },
+    "endpoints": {
+      "searchPlaceholder": "Uç noktalarda ara…",
+      "typeFilterLabel": "Uç nokta türüne göre filtrele",
+      "modelFilterLabel": "Modele göre filtrele",
+      "type": {
+        "all": "tümü",
+        "auto": "otomatik",
+        "custom": "özel"
+      },
+      "colMethod": "Yöntem",
+      "colPath": "Yol",
+      "colDescription": "Açıklama",
+      "colActions": "İşlemler",
+      "noResults": "Filtrenizle eşleşen uç nokta yok",
+      "customBadge": "Özel",
+      "requiresAuth": "Kimlik doğrulama gerektirir",
+      "public": "Genel uç nokta",
+      "testButton": "Test Et",
+      "exampleRequest": "Örnek İstek",
+      "requiredHeaders": "Gerekli Başlıklar",
+      "testLabel": "Test",
+      "sendRequest": "İstek Gönder",
+      "running": "Çalışıyor…"
+    },
+    "drawer": {
+      "title": "Yeni Özel Uç Nokta",
+      "subtitle": "Genel API'yi çağıran iş mantığı yazın",
+      "close": "Paneli kapat",
+      "methodLabel": "Yöntem",
+      "pathLabel": "Yol",
+      "descriptionLabel": "Açıklama",
+      "descriptionPlaceholder": "Bu uç nokta ne yapıyor?",
+      "authLabel": "Kimlik Doğrulama",
+      "authRequired": "Gerekli",
+      "authPublic": "Genel",
+      "codeLabel": "İşleyici Kodu",
+      "cancelButton": "İptal",
+      "createButton": "Uç Nokta Oluştur"
+    },
+    "keys": {
+      "title": "API Anahtarları",
+      "keepSecret": "Bunları gizli tutun",
+      "createTitle": "Yeni Anahtar Oluştur",
+      "nameLabel": "Anahtar adı",
+      "namePlaceholder": "Anahtar adı, örn. Mobil Uygulama",
+      "generateButton": "Oluştur",
+      "active": "Aktif",
+      "inactive": "Pasif",
+      "never": "Hiç",
+      "created": "Oluşturuldu",
+      "lastUsed": "Son kullanım",
+      "revealKey": "API anahtarını göster",
+      "hideKey": "API anahtarını gizle",
+      "deleteKey": "{{name}} anahtarını sil",
+      "confirmDelete": "Silmeyi onayla",
+      "cancelDelete": "Silmeyi iptal et"
+    },
+    "reference": {
+      "queryParamsTitle": "Sorgu Parametreleri",
+      "queryParamsSubtitle": "Tüm GET uç noktalarında kullanılabilir",
+      "operatorsTitle": "Filtre Operatörleri",
+      "operatorsSubtitle": "Şununla birlikte kullanın:",
+      "operatorsFormat": "parametre olarak",
+      "exampleTitle": "Tam Örnek",
+      "exampleDescription": "500 TL'nin altındaki aktif ürünleri fiyata göre sıralanmış olarak getir, sadece id/ad/fiyat döndür:",
+      "responseLabel": "Yanıt:"
+    }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "title": "Kontrol Paneli",
+    "welcome": "Tekrar hoş geldiniz, {name}",
+    "addWidget": "Widget ekle",
+    "editLayout": "Düzeni düzenle",
+    "saveLayout": "Düzeni kaydet",
+    "resetLayout": "Düzeni sıfırla",
+    "toolbar": {
+      "title": "Kontrol Paneli",
+      "subtitle": "Yeniden sıralamak için widget'ları sürükleyin · düzenlemek için üzerine gelin",
+      "refresh": "Yenile",
+      "last30Days": "Son 30 gün",
+      "addWidget": "Widget Ekle"
+    },
+    "grid": {
+      "addWidget": "Widget ekle"
+    },
+    "addPanel": {
+      "title": "Widget Ekle",
+      "subtitle": "Kontrol paneline eklemek için tıklayın"
+    },
+    "widget": {
+      "dragToReorder": "Yeniden sıralamak için sürükleyin",
+      "vsLastPeriod": "önceki döneme göre"
+    },
+    "chart": {
+      "day": "Gün",
+      "daysAgo": "30 gün önce",
+      "today": "Bugün"
+    },
+    "formula": {
+      "placeholder": "örn. SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "Ön Ayarlar"
+    }
   },
   "media": {
-    "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "title": "Medya",
+    "uploadFiles": "Dosya Yükle",
+    "createFolder": "Klasör Oluştur",
+    "folderName": "Klasör adı",
+    "rootFolder": "Kök",
+    "noFiles": "Bu klasörde dosya yok",
+    "dropToUpload": "Yüklemek için dosyaları buraya bırakın",
+    "orClickToUpload": "veya göz atmak için tıklayın",
+    "gridView": "Izgara görünümü",
+    "listView": "Liste görünümü",
+    "fileSize": "Dosya boyutu",
+    "fileType": "Dosya türü",
+    "uploadedAt": "Yüklenme tarihi",
+    "deleteFileConfirm": "\"{name}\" dosyasını silmek istediğinizden emin misiniz?",
+    "deleteFolderConfirm": "\"{name}\" klasörünü ve tüm içeriğini silmek istediğinizden emin misiniz?",
+    "importFromUrl": "URL'den içe aktar",
+    "copyUrl": "URL'yi kopyala",
+    "urlCopied": "URL panoya kopyalandı",
+    "details": "Dosya Ayrıntıları",
+    "selectFile": "Ayrıntıları görmek için bir dosya seçin"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Ayarlar",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "Genel Bakış",
+      "projectName": "Proje Adı",
+      "projectUrl": "Proje URL'si",
+      "projectId": "Proje Kimliği",
+      "dbType": "Veritabanı Türü",
+      "environment": "Ortam",
+      "deploymentType": "Dağıtım Türü",
+      "savedSuccess": "Ayarlar başarıyla kaydedildi"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "API Anahtarları",
+      "subheading": "Uygulamalarınızdan gelen API isteklerini doğrulamak için kullanılan anahtarları yönetin.",
+      "title": "API Anahtarları",
+      "description": "Projenize programlı erişim için API anahtarlarını yönetin.",
+      "generateKey": "Yeni Anahtar Oluştur",
+      "keyName": "Ad",
+      "keyPrefix": "Anahtar öneki",
+      "lastUsed": "Son kullanım",
+      "neverUsed": "Hiç kullanılmadı",
+      "revokeConfirm": "\"{name}\" anahtarını iptal etmek istediğinizden emin misiniz? Bu geri alınamaz.",
+      "revoked": "İptal Edildi",
+      "keyCopied": "Anahtar panoya kopyalandı",
+      "newKeyGenerated": "Yeni API anahtarı oluşturuldu. Şimdi kopyalayın — tekrar gösterilmeyecek.",
+      "noKeys": "Henüz API anahtarı yok. Başlamak için bir anahtar oluşturun.",
+      "sectionTitle": "Aktif Anahtarlar",
+      "createdDate": "{{date}} tarihinde oluşturuldu",
+      "lastUsedDate": "{{date}} tarihinde kullanıldı",
+      "hideKey": "Anahtarı gizle",
+      "revealKey": "Anahtarı göster",
+      "copyKey": "Anahtarı kopyala",
+      "revoke": "İptal Et",
+      "emptyTitle": "Henüz API anahtarı yok",
+      "emptySubtitle": "Başlamak için aşağıda bir anahtar oluşturun."
     },
     "branding": {
-      "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
+      "title": "Marka",
+      "description": "Underpeaks konsolunuzun görünümünü özelleştirin.",
       "logo": "Logo",
       "favicon": "Favicon",
-      "primaryColor": "Primary Color",
-      "uploadLogo": "Upload logo",
-      "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "primaryColor": "Birincil Renk",
+      "uploadLogo": "Logo yükle",
+      "uploadFavicon": "Favicon yükle",
+      "logoHint": "Önerilen: 200×50px, şeffaf arka planlı PNG veya SVG.",
+      "faviconHint": "Önerilen: 32×32px ICO, PNG veya SVG.",
+      "livePreview": "Canlı Önizleme",
+      "brandingSaved": "Marka başarıyla güncellendi"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
-      "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "host": "SMTP Sunucusu",
+      "port": "Bağlantı Noktası",
+      "username": "Kullanıcı Adı",
+      "fromEmail": "Gönderen E-posta",
+      "fromName": "Gönderen Adı",
+      "encryption": "Şifreleme",
+      "testEmail": "Test e-postası gönder",
+      "testEmailSuccess": "Test e-postası başarıyla gönderildi"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "Alan Adları",
+      "addDomain": "Alan adı ekle",
+      "verified": "Doğrulandı",
+      "unverified": "Doğrulanmadı",
+      "primary": "Birincil",
+      "setPrimary": "Birincil olarak ayarla"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "Hesap",
+    "fullName": "Ad soyad",
+    "emailReadOnly": "E-posta adresi (salt okunur)",
+    "changePassword": "Şifreyi Değiştir",
+    "currentPassword": "Mevcut şifre",
+    "newPassword": "Yeni şifre",
+    "confirmPassword": "Yeni şifreyi onayla",
+    "passwordsDoNotMatch": "Şifreler eşleşmiyor",
+    "profileUpdated": "Profil başarıyla güncellendi",
+    "passwordChanged": "Şifre başarıyla değiştirildi",
+    "memberSince": "{date} tarihinden itibaren üye"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
-    "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
-    "system": "System"
+    "title": "Mesajlar",
+    "newConversation": "Yeni Konuşma",
+    "noConversations": "Henüz konuşma yok",
+    "noMessages": "Bu konuşmada mesaj yok",
+    "typeMessage": "Bir mesaj yazın...",
+    "send": "Gönder",
+    "markAllRead": "Tümünü okundu olarak işaretle",
+    "reply": "Yanıtla",
+    "you": "Siz",
+    "system": "Sistem"
+  },
+  "apiKeys": {
+    "heading": "API Anahtarları",
+    "subheading": "Uygulamalarınızdan gelen API isteklerini doğrulamak için kullanılan anahtarları yönetin.",
+    "sectionTitle": "Aktif Anahtarlar",
+    "createdDate": "{date} tarihinde oluşturuldu",
+    "lastUsedDate": "{date} tarihinde kullanıldı",
+    "neverUsed": "Hiç kullanılmadı",
+    "hideKey": "Anahtarı gizle",
+    "revealKey": "Anahtarı göster",
+    "copyKey": "Anahtarı kopyala",
+    "revoke": "İptal Et",
+    "emptyTitle": "Henüz API anahtarı yok",
+    "emptySubtitle": "Başlamak için aşağıda bir anahtar oluşturun.",
+    "errors": {
+      "loadFailed": "API anahtarları yüklenemedi",
+      "generateFailed": "Anahtar oluşturulamadı",
+      "revokeFailed": "Anahtar iptal edilemedi"
+    }
   },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "Bildirimler",
+    "noNotifications": "Bildirim yok",
+    "noUnread": "Her şey güncel!",
+    "markAllRead": "Tümünü okundu olarak işaretle",
+    "viewAll": "Tüm bildirimleri görüntüle",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
-      "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "all": "Tümü",
+      "unread": "Okunmamış",
+      "comment": "Yorumlar",
+      "system": "Sistem",
+      "payment": "Ödemeler",
+      "security": "Güvenlik",
+      "message": "Mesajlar"
     },
     "priority": {
-      "low": "Low",
+      "low": "Düşük",
       "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "high": "Yüksek",
+      "urgent": "Acil"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "Giriş yap",
+    "logout": "Çıkış yap",
+    "email": "E-posta adresi",
+    "password": "Şifre",
+    "forgotPassword": "Şifrenizi mi unuttunuz?",
+    "resetPassword": "Şifreyi sıfırla",
+    "sessionExpired": "Oturumunuzun süresi doldu. Lütfen tekrar giriş yapın.",
+    "idleWarning": "Bir süredir işlem yapmadınız.",
+    "idleLogoutIn": "{seconds} saniye içinde oturumunuz kapatılacak.",
+    "stayLoggedIn": "Oturumda kal"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "Sayfa bulunamadı",
+    "serverError": "Sunucu hatası",
+    "networkError": "Ağ hatası — lütfen bağlantınızı kontrol edin",
+    "sessionError": "Oturum hatası — lütfen tekrar giriş yapın",
+    "unknown": "Beklenmeyen bir hata oluştu"
+  },
+  "grid": {
+    "addWidget": "Widget ekle"
+  },
+  "addPanel": {
+    "title": "Widget Ekle",
+    "subtitle": "Kontrol paneline eklemek için tıklayın"
+  },
+  "widget": {
+    "dragToReorder": "Yeniden sıralamak için sürükleyin",
+    "vsLastPeriod": "önceki döneme göre"
+  },
+  "chart": {
+    "day": "Gün",
+    "daysAgo": "30 gün önce",
+    "today": "Bugün"
+  },
+  "formula": {
+    "placeholder": "örn. SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "Ön Ayarlar"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Yardım Merkezi",
+      "subtitle": "Cevap bulun, dokümantasyonu okuyun veya bizimle iletişime geçin.",
+      "searchPlaceholder": "Sık sorulan sorularda ara…"
+    },
+    "resources": {
+      "title": "Kaynaklar",
+      "links": {
+        "gettingStarted": {
+          "label": "Başlarken",
+          "description": "İlk projenizi dakikalar içinde kurun."
+        },
+        "apiReference": {
+          "label": "API Referansı",
+          "description": "Tüm API uç noktaları ve operatörleri için tam referans."
+        },
+        "community": {
+          "label": "Topluluk Forumu",
+          "description": "Sorular sorun ve projeleri toplulukla paylaşın."
+        }
+      }
+    },
+    "faq": {
+      "title": "Sık Sorulan Sorular",
+      "resultCount": "{count} sonuç",
+      "noResults": "\"{query}\" için sonuç bulunamadı",
+      "noResultsHint": "Farklı bir arama terimi deneyin veya aşağıdaki destek ile iletişime geçin."
+    },
+    "api": {
+      "title": "API Hızlı Referansı",
+      "baseUrl": "Temel URL:",
+      "endpoints": {
+        "get": "Bir modelin tüm kayıtlarını listeler. Filtreleme, sıralama, sayfalamayı destekler.",
+        "post": "Yeni bir kayıt oluşturur.",
+        "put": "Kimliğe göre mevcut bir kaydı günceller.",
+        "delete": "Kimliğe göre bir kaydı siler."
+      },
+      "operators": {
+        "title": "Sorgu operatörleri",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "Destek ile İletişime Geçin",
+      "submit": "Mesaj gönder",
+      "success": {
+        "title": "Mesaj gönderildi!",
+        "subtitle": "En kısa sürede size geri döneceğiz."
+      },
+      "fields": {
+        "name": "Ad",
+        "namePlaceholder": "Ahmet Yılmaz",
+        "email": "E-posta",
+        "emailPlaceholder": "siz@ornek.com",
+        "message": "Mesaj",
+        "messagePlaceholder": "Sorununuzu veya sorunuzu açıklayın…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "Entegrasyonlar",
+      "connectedCount": "{count} bağlı",
+      "errorCount": "{count} hata",
+      "infoBanner": "Bağlı entegrasyonlar özel uç noktalarda ve kod oluşturmada kullanılabilir"
+    },
+    "categories": {
+      "all": "Tümü",
+      "payments": "Ödemeler",
+      "email": "E-posta ve SMS",
+      "storage": "Depolama",
+      "ai": "Yapay Zeka",
+      "analytics": "Analitik",
+      "automation": "Otomasyon"
+    },
+    "status": {
+      "connected": "Bağlı",
+      "disconnected": "Bağlantı Kesildi",
+      "error": "Hata"
+    },
+    "card": {
+      "viewDocs": "Dokümantasyonu görüntüle",
+      "buttons": {
+        "saveAndConnect": "Kaydet ve Bağlan",
+        "saving": "Kaydediliyor…",
+        "saved": "Kaydedildi!",
+        "disconnect": "Bağlantıyı kes",
+        "retryConnection": "Bağlantıyı yeniden dene"
+      }
+    },
+    "empty": "Bu kategoride entegrasyon yok"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "Menü",
+      "subtitle": "{count} öğe · yeniden sıralamak için sürükleyin",
+      "addItem": "Öğe Ekle"
+    },
+    "preview": {
+      "title": "Gezinme Önizlemesi",
+      "subtitle": "Yalnızca görünür öğeler",
+      "empty": "Henüz görünür öğe yok."
+    },
+    "list": {
+      "title": "Tüm Öğeler",
+      "empty": "Henüz menü öğesi yok",
+      "emptyAction": "İlk öğenizi ekleyin"
+    },
+    "row": {
+      "hidden": "gizli",
+      "external": "Harici",
+      "actions": {
+        "moveUp": "Yukarı taşı",
+        "moveDown": "Aşağı taşı",
+        "toggleVisibility": "Görünürlüğü değiştir",
+        "edit": "Düzenle",
+        "delete": "Sil",
+        "confirmDelete": "Silmeyi onayla",
+        "cancelDelete": "İptal"
+      }
+    },
+    "errors": {
+      "loadFailed": "Menü öğeleri yüklenemedi",
+      "createFailed": "Menü öğesi oluşturulamadı",
+      "updateFailed": "Menü öğesi güncellenemedi",
+      "deleteFailed": "Menü öğesi silinemedi"
+    },
+    "drawer": {
+      "titleAdd": "Menü Öğesi Ekle",
+      "titleEdit": "Menü Öğesini Düzenle",
+      "subtitle": "Etiketi, bağlantıyı, simgeyi ve görünürlüğü yapılandırın",
+      "sections": {
+        "labelVisibility": "Etiket ve Görünürlük",
+        "link": "Bağlantı",
+        "icon": "Simge",
+        "nesting": "İç İçe Geçirme",
+        "preview": "Önizleme"
+      },
+      "fields": {
+        "pageRequired": "Menü öğesi kaydedilmeden önce bir sayfa seçilmelidir.",
+        "menuLabel": "Menü Etiketi",
+        "menuLabelPlaceholder": "örn. Ürünler",
+        "menuLabelHint": "Bu, gezinme menüsünde görünen metindir.",
+        "visibility": "Görünürlük",
+        "visible": "Görünür",
+        "hidden": "Gizli",
+        "linkTypePage": "Sayfa",
+        "linkTypeExternal": "Harici URL",
+        "selectPage": "Sayfa Seç",
+        "selectPagePlaceholder": "— Bir sayfa seçin —",
+        "noPagesHint": "Yönetici sayfası bulunamadı. Önce sayfa türü Yönetici olarak ayarlanmış bir sayfa oluşturun.",
+        "externalUrl": "Harici URL",
+        "openIn": "Şurada aç",
+        "sameTab": "Aynı Sekme",
+        "newTab": "Yeni Sekme",
+        "parentItem": "Üst Öğe",
+        "parentItemPlaceholder": "— Üst düzey —",
+        "parentItemHint": "İç içe geçmiş öğeler, gezinmede açılır alt öğeler olarak görünür."
+      },
+      "icons": {
+        "home": "Ana Sayfa",
+        "grid": "Izgara",
+        "package": "Paket",
+        "users": "Kullanıcılar",
+        "settings": "Ayarlar",
+        "file": "Dosya",
+        "cart": "Sepet",
+        "mail": "Posta",
+        "star": "Yıldız",
+        "info": "Bilgi"
+      },
+      "preview": {
+        "hidden": "gizli"
+      },
+      "buttons": {
+        "cancel": "İptal",
+        "saveChanges": "Değişiklikleri Kaydet",
+        "addItem": "Öğe Ekle",
+        "saving": "Kaydediliyor…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "Dosya URL'si",
+      "metadata": "Meta Veriler",
+      "rename": "Yeniden Adlandır",
+      "moveToFolder": "Klasöre Taşı"
+    },
+    "altText": {
+      "placeholder": "Erişilebilirlik için bu görseli açıklayın…",
+      "empty": "Alternatif metin ayarlanmadı"
+    },
+    "metadata": {
+      "folder": "Klasör",
+      "path": "Yol",
+      "size": "Boyut",
+      "type": "Tür",
+      "uploaded": "Yüklenme tarihi",
+      "dimensions": "Boyutlar"
+    },
+    "actions": {
+      "save": "Kaydet",
+      "saving": "Kaydediliyor…",
+      "cancel": "İptal",
+      "move": "Taşı",
+      "moving": "Taşınıyor…",
+      "deleteFile": "Dosyayı Sil"
+    },
+    "move": {
+      "currentlyIn": "Şu anda şurada:"
+    },
+    "errors": {
+      "renameFailed": "Yeniden adlandırma başarısız oldu",
+      "moveFailed": "Taşıma başarısız oldu"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "Zorunlu alan eksik: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "Klasörler",
+      "all": "Tümü",
+      "newFolderTitle": "Yeni klasör",
+      "collapse": "Kapat",
+      "expand": "Genişlet"
+    },
+    "folder": {
+      "selectTitle": "Klasör seç"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "Klasörü sil",
+      "fileCount": "{count} dosya"
+    },
+    "empty": {
+      "message": "Bu klasör boş"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "Bu klasör boş"
+    },
+    "header": {
+      "name": "Ad",
+      "size": "Boyut",
+      "type": "Tür",
+      "uploaded": "Yüklenme tarihi"
+    },
+    "row": {
+      "deleteTitle": "Dosyayı sil"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "Medya"
+    },
+    "actions": {
+      "delete": "Sil ({count})",
+      "clear": "Temizle",
+      "upload": "Yükle"
+    },
+    "viewMode": {
+      "grid": "Izgara görünümü",
+      "list": "Liste görünümü"
+    }
+  },
+  "newFolderPopup": {
+    "title": "Yeni Klasör",
+    "placeholder": "Klasör adı",
+    "buttons": {
+      "create": "Oluştur",
+      "cancel": "İptal"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "Dosyaları yükleyin veya URL üzerinden medyayı seçilen klasöre aktarın.",
+    "title": "Medya Ekle",
+    "tabs": {
+      "upload": "Dosya Yükle",
+      "url": "URL ile Ekle"
+    },
+    "uploadZone": {
+      "hint": "Herhangi bir dosya türü — görseller, videolar, belgeler"
+    },
+    "urlTab": {
+      "description": "Dosyayı doğrudan depolamaya aktarmak için genel bir URL yapıştırın.",
+      "placeholder": "https://ornek.com/dosya.jpg",
+      "import": "İçe Aktar",
+      "importing": "İçe aktarılıyor…",
+      "previewAlt": "URL önizlemesi"
+    },
+    "errors": {
+      "importFailed": "İçe aktarma başarısız oldu"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "Klasörler yüklenemedi",
+      "loadFiles": "Dosyalar yüklenemedi",
+      "createFolder": "Klasör oluşturulamadı",
+      "deleteFailed": "Silme başarısız oldu"
+    },
+    "confirmDelete": {
+      "titleFolder": "Klasörü Sil",
+      "titleFile": "Dosyayı Sil",
+      "message": "Silmek istediğinizden emin misiniz:",
+      "folderWarning": "Bu, klasördeki tüm dosyaları silecektir.",
+      "undoWarning": "Bu işlem geri alınamaz.",
+      "selectionLabel": "{count} öğe",
+      "cancel": "İptal",
+      "confirm": "Sil",
+      "deleting": "Siliniyor…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "Mesaj yok",
+      "subUnread": "Her şey güncel!",
+      "subAll": "Gelen kutunuz boş."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "az önce",
+      "minutesAgo": "{count} dk önce",
+      "hoursAgo": "{count} sa önce",
+      "daysAgo": "{count} gün önce"
+    },
+    "unread": {
+      "badge": "{count} okunmamış"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "Sistem mesajı",
+    "from": "Gönderen: {name}",
+    "deleteButton": "Sil",
+    "deleteAriaLabel": "Konuşmayı sil: {subject}",
+    "messagesAriaLabel": "Mesaj dizisi",
+    "loading": "Mesajlar yükleniyor...",
+    "emptyTitle": "Henüz mesaj yok",
+    "emptySub": "Aşağıya ilk mesajı gönderin."
+  },
+  "messageBubble": {
+    "justNow": "Az önce",
+    "minutesAgo": "{count} dk önce",
+    "hoursAgo": "{count} sa önce",
+    "daysAgo": "{count} gün önce"
+  },
+  "replyBar": {
+    "placeholder": "Bir yanıt yazın… (Göndermek için Enter'a basın)",
+    "sendAriaLabel": "Mesaj gönder"
+  },
+  "messagesPage": {
+    "title": "Mesajlar",
+    "unreadCount": "{count} okunmamış mesaj",
+    "filters": {
+      "all": "Tümü",
+      "unread": "Okunmamış"
+    },
+    "markAllRead": "Tümünü okundu olarak işaretle",
+    "closeError": "Hata mesajını kapat",
+    "empty": {
+      "title": "Bir konuşma seçin",
+      "sub": "Burada okumak için listeden bir konuşma seçin."
+    },
+    "errors": {
+      "load": "Mesajlar yüklenemedi",
+      "delete": "Konuşma silinemedi",
+      "markAll": "Tümü okundu olarak işaretlenemedi"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "Acil",
+      "high": "Yüksek"
+    },
+    "actions": {
+      "markRead": "Okundu olarak işaretle",
+      "view": "Görüntüle",
+      "delete": "Sil"
+    }
+  },
+  "notificationsHeader": {
+    "title": "Bildirimler",
+    "unreadCount": "{count} okunmamış bildirim",
+    "filters": {
+      "all": "Tümü",
+      "unread": "Okunmamış"
+    },
+    "markAllRead": "Tümünü okundu olarak işaretle"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "Bildirim yok",
+      "subUnread": "Her şey güncel!",
+      "subAll": "Henüz bildiriminiz yok."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "Bildirimler yüklenemedi",
+      "markReadFailed": "Okundu olarak işaretlenemedi",
+      "markAllReadFailed": "Tümü okundu olarak işaretlenemedi",
+      "deleteFailed": "Bildirim silinemedi"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "Genel",
+      "admin": "Yönetici",
+      "draft": "Taslak",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "Sayfalar",
+      "pageCount": "Toplam {count} sayfa",
+      "searchPlaceholder": "Sayfalarda ara…",
+      "newPage": "Yeni Sayfa"
+    },
+    "filter": {
+      "all": "Tümü"
+    },
+    "table": {
+      "page": "Sayfa",
+      "model": "Model",
+      "template": "Şablon",
+      "visibility": "Görünürlük",
+      "actions": "İşlemler",
+      "seoPrefix": "SEO",
+      "systemBadge": "Sistem",
+      "hiddenBadge": "Gizli"
+    },
+    "emptyState": {
+      "message": "Sayfa bulunamadı",
+      "cta": "İlk sayfanızı oluşturun"
+    },
+    "actions": {
+      "edit": "Sayfayı düzenle",
+      "delete": "Sayfayı sil",
+      "view": "Sayfayı görüntüle",
+      "confirmDelete": "Silmeyi onayla",
+      "cancel": "İptal",
+      "systemLocked": "Sistem sayfaları düzenlenemez veya silinemez"
+    },
+    "errors": {
+      "loadFailed": "Sayfalar yüklenemedi",
+      "createFailed": "Sayfa oluşturulamadı",
+      "updateFailed": "Sayfa güncellenemedi",
+      "deleteFailed": "Sayfa silinemedi"
+    },
+    "drawer": {
+      "title": "Sayfa Oluştur",
+      "editTitle": "Sayfayı Düzenle",
+      "subtitle": "Yeni bir sayfa tanımlayın ve bir model ekleyin",
+      "sections": {
+        "basicInfo": "Temel Bilgiler",
+        "modelTemplate": "Model ve Şablon",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "Sayfayı Gizle",
+          "hint": "Gizli sayfalar gezinme veya site haritalarında gösterilmez"
+        },
+        "name": {
+          "label": "Sayfa Adı",
+          "placeholder": "örn. Ürün Listesi"
+        },
+        "slug": {
+          "label": "Slug / URL",
+          "placeholder": "/sayfa-sluginiz",
+          "hint": "Dinamik rotalar için :id kullanın, örn. /urunler/:id"
+        },
+        "visibility": {
+          "label": "Görünürlük"
+        },
+        "model": {
+          "label": "Model Ekle",
+          "noModel": "— Model yok (özel sayfa) —",
+          "hint": "Bir model birden fazla sayfayı besleyebilir."
+        },
+        "template": {
+          "label": "Şablon"
+        },
+        "seoTitle": {
+          "label": "SEO Başlığı",
+          "placeholder": "Arama motorları için sayfa başlığı",
+          "charCount": "{count}/60 karakter"
+        },
+        "seoDesc": {
+          "label": "Meta Açıklama",
+          "placeholder": "Arama sonuçları için kısa açıklama…",
+          "charCount": "{count}/160 karakter"
+        }
+      },
+      "seoPreview": {
+        "label": "Arama Önizlemesi",
+        "titleFallback": "Sayfa Başlığı",
+        "urlPrefix": "sitenizsite.com",
+        "descFallback": "Açıklama sağlanmadı."
+      },
+      "actions": {
+        "cancel": "İptal",
+        "create": "Sayfa Oluştur",
+        "update": "Sayfayı Güncelle",
+        "saving": "Kaydediliyor…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "Yeni Anahtar Oluştur",
+    "keyNameLabel": "Anahtar Adı",
+    "keyNameHint": "Ne için kullanıldığını hatırlamak için açıklayıcı bir ad verin.",
+    "keyNamePlaceholder": "örn. Flutter Uygulaması — Üretim",
+    "buttonGenerating": "Oluşturuluyor…",
+    "buttonIdle": "Anahtar Oluştur"
+  },
+  "newKeyModal": {
+    "title": "API Anahtarı Oluşturuldu",
+    "instructions": "Anahtarınız oluşturuldu ve kullanıma hazır. Göstermek ve kopyalamak için listedeki anahtarın yanındaki <eyeIcon>göz simgesine</eyeIcon> tıklayın.",
+    "doneButton": "Tamam"
+  },
+  "revokeModal": {
+    "title": "API Anahtarını İptal Et",
+    "message": "Bu anahtarı kullanan tüm uygulamalar erişimlerini hemen kaybedecek:",
+    "cancelButton": "İptal",
+    "revokeButtonIdle": "Anahtarı İptal Et",
+    "revokeButtonRevoking": "İptal ediliyor…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "API anahtarları yüklenemedi",
+      "generateFailed": "Anahtar oluşturulamadı",
+      "revokeFailed": "Anahtar iptal edilemedi"
+    },
+    "logs": {
+      "loadingKeys": "API anahtarları yükleniyor...",
+      "keysLoaded": "API anahtarları başarıyla yüklendi",
+      "generatingKey": "Yeni API anahtarı oluşturuluyor...",
+      "keyGenerated": "API anahtarı başarıyla oluşturuldu",
+      "revokingKey": "API anahtarı iptal ediliyor...",
+      "keyRevoked": "API anahtarı başarıyla iptal edildi"
+    }
+  },
+  "brandingPage": {
+    "heading": "CMS Markası",
+    "subheading": "CMS'in ekibiniz için görünümünü özelleştirin.",
+    "errors": {
+      "saveFailed": "Marka kaydedilemedi"
+    },
+    "logs": {
+      "savingBranding": "Marka ayarları kaydediliyor...",
+      "brandingSaved": "Marka başarıyla kaydedildi"
+    },
+    "logoSection": {
+      "title": "CMS Logosu",
+      "uploadLabel": "Logo",
+      "uploadHint": "Şeffaf arka planlı PNG veya SVG",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "Logo önizlemesi"
+    },
+    "faviconSection": {
+      "title": "Favicon",
+      "uploadLabel": "Favicon",
+      "uploadHint": "ICO, PNG veya SVG — tarayıcı sekmelerinde gösterilir",
+      "uploadRecommended": "32×32px veya 64×64px",
+      "imageAlt": "Favicon önizlemesi"
+    },
+    "preview": {
+      "label": "Üst Gezinme Önizlemesi",
+      "projectLabel": "Proje:"
+    },
+    "saveSuccess": "Marka başarıyla kaydedildi",
+    "saveButtonIdle": "Markayı Kaydet",
+    "saveButtonSaving": "Kaydediliyor…"
+  },
+  "overviewPage": {
+    "heading": "Proje Genel Bakışı",
+    "subheading": "Underpeaks projenizin bir görünümü.",
+    "stats": {
+      "dbType": "DB Türü",
+      "environment": "Ortam",
+      "deployment": "Dağıtım",
+      "status": "Durum",
+      "statusActive": "Aktif"
+    },
+    "userInfo": {
+      "sectionTitle": "Kullanıcı Bilgisi",
+      "fullName": "Ad Soyad",
+      "email": "E-posta",
+      "role": "Rol",
+      "status": "Durum",
+      "verified": "Doğrulandı",
+      "verifiedYes": "Evet",
+      "verifiedNo": "Hayır",
+      "memberSince": "Üyelik Tarihi"
+    },
+    "licenseKey": {
+      "sectionTitle": "Underpeaks Lisans Anahtarı",
+      "description": "Lisans anahtarınız bu örneği doğrular ve barındırılan ile kendi sunucunuzda barındırılan özellikler arasında ayrım yapılmasını sağlar.",
+      "reveal": "Göster",
+      "hide": "Gizle",
+      "copy": "Kopyala",
+      "copied": "Kopyalandı",
+      "loading": "Yükleniyor…",
+      "notFound": "Lisans anahtarı bulunamadı"
+    }
+  },
+  "smtpPage": {
+    "heading": "SMTP Ayarları",
+    "subheading": "Projeniz için giden e-postayı yapılandırın.",
+    "emailFeatures": {
+      "sectionTitle": "E-posta Özellikleri",
+      "verifyEmailLabel": "Kayıt sırasında e-posta doğrulamasını etkinleştir",
+      "forgotPasswordLabel": "Şifremi unuttum e-postalarını etkinleştir",
+      "builtInNotice": "{provider} e-posta doğrulamasını ve şifre sıfırlamayı yerel olarak yönetir — bu özellikler için SMTP gerekmez.",
+      "smtpToggleLabel": "Özel SMTP sunucusu kullan"
+    },
+    "smtpConfig": {
+      "sectionTitle": "SMTP Yapılandırması",
+      "hostLabel": "SMTP Sunucusu",
+      "hostPlaceholder": "smtp.ornek.com",
+      "portLabel": "Bağlantı Noktası",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "Gönderen Adresi",
+      "fromAddressPlaceholder": "no-reply@ornek.com",
+      "usernameLabel": "Kullanıcı Adı",
+      "usernamePlaceholder": "SMTP kullanıcı adı",
+      "passwordLabel": "Şifre",
+      "passwordPlaceholder": "SMTP şifresi",
+      "showPassword": "Şifreyi göster",
+      "hidePassword": "Şifreyi gizle",
+      "encryptionLabel": "Şifreleme",
+      "encryptionNone": "Yok"
+    },
+    "logs": {
+      "savingSmtp": "SMTP ayarları kaydediliyor...",
+      "smtpSaved": "SMTP ayarları başarıyla kaydedildi"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "Ayarlar",
+    "toggleAriaLabel": "Ayarlar gezinmesini değiştir",
+    "nav": {
+      "overview": "Genel Bakış",
+      "api-keys": "API Anahtarları",
+      "smtp": "SMTP Ayarları",
+      "branding": "CMS Markası"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "Ayarlar yükleniyor…"
+  },
+  "saveButton": {
+    "savedMessage": "Başarıyla kaydedildi",
+    "buttonSaving": "Kaydediliyor…",
+    "buttonIdle": "Değişiklikleri Kaydet"
+  },
+  "coloursPage": {
+    "heading": "Renkler",
+    "subheading": "Oluşturduğunuz Flutter ve Next.js uygulamalarında kullanılan renk belirteçlerini tanımlayın.",
+    "preview": {
+      "title": "Canlı Önizleme",
+      "primaryButton": "Birincil Düğme",
+      "secondaryButton": "İkincil",
+      "accentBadge": "Vurgu Rozeti",
+      "success": "✓ Başarılı",
+      "warning": "⚠ Uyarı",
+      "danger": "✕ Tehlike"
+    },
+    "tokensSectionTitle": "Renk Belirteçleri",
+    "resetTokenTitle": "Varsayılana sıfırla",
+    "resetAllButton": "Tümünü varsayılana sıfırla",
+    "savedMessage": "Kaydedildi",
+    "saveButtonIdle": "Renkleri Kaydet",
+    "saveButtonSaving": "Kaydediliyor…",
+    "logs": {
+      "savingColours": "Renk belirteçleri kaydediliyor...",
+      "coloursSaved": "Renk belirteçleri başarıyla kaydedildi"
+    },
+    "tokens": {
+      "primary":      { "label": "Birincil",             "description": "Ana marka rengi — düğmeler, bağlantılar, vurgular" },
+      "primary-fg":   { "label": "Birincil Ön Plan",  "description": "Birincil renk arka planları üzerindeki metin" },
+      "secondary":    { "label": "İkincil",           "description": "Destekleyici marka rengi" },
+      "secondary-fg": { "label": "İkincil Ön Plan","description": "İkincil renk arka planları üzerindeki metin" },
+      "accent":       { "label": "Vurgu",              "description": "Rozetler ve etiketler için vurgu rengi" },
+      "background":   { "label": "Arka Plan",          "description": "Ana uygulama arka planı" },
+      "surface":      { "label": "Yüzey",             "description": "Kart ve panel arka planı" },
+      "border":       { "label": "Kenarlık",              "description": "Varsayılan kenarlık rengi" },
+      "success":      { "label": "Başarılı",             "description": "Olumlu durumlar ve onaylar" },
+      "warning":      { "label": "Uyarı",             "description": "Uyarılar ve dikkat gerektiren durumlar" },
+      "danger":       { "label": "Tehlike",              "description": "Hatalar ve yıkıcı eylemler" },
+      "text":         { "label": "Birincil Metin",        "description": "Ana gövde metin rengi" },
+      "text-muted":   { "label": "Soluk Metin",          "description": "İkincil metin ve yer tutucu metin" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "Özellik Bayrakları",
+    "comingSoonBadge": "YAKINDA",
+    "subheading": "Oluşturduğunuz Flutter ve Next.js uygulamalarına dahil edilecek özellikleri açın.",
+    "paidBadge": "ÜCRETLİ",
+    "savedMessage": "Kaydedildi",
+    "saveButtonIdle": "Bayrakları Kaydet",
+    "saveButtonSaving": "Kaydediliyor…",
+    "upgrade": {
+      "title": "Barındırılan plan gerekli",
+      "description": "Bu özellikler Underpeaks'in barındırılan altyapısını gerektirir. Kilidini açmak için yükseltin.",
+      "button": "Yükselt"
+    },
+    "groups": {
+      "Appearance": "Görünüm",
+      "Localisation": "Yerelleştirme",
+      "App Behaviour": "Uygulama Davranışı",
+      "Authentication — Paid": "Kimlik Doğrulama — Ücretli",
+      "Advanced — Paid": "Gelişmiş — Ücretli"
+    },
+    "flags": {
+      "dark-mode":          { "label": "Koyu Mod",                 "description": "Kullanıcıların uygulamada açık ve koyu tema arasında geçiş yapmasına izin verir" },
+      "system-theme":       { "label": "Sistem Temasını Takip Et",       "description": "Cihazın açık/koyu mod ayarına otomatik olarak uyum sağlar" },
+      "multi-language":     { "label": "Çok Dilli Destek",    "description": "Oluşturulan uygulamada birden fazla dil desteğini etkinleştirir" },
+      "rtl-support":        { "label": "RTL Desteği",               "description": "Arapça, İbranice ve benzer diller için sağdan sola düzen" },
+      "offline-mode":       { "label": "Çevrimdışı Mod",              "description": "İnternet bağlantısı olmadan uygulamanın çalışması için verileri yerel olarak önbelleğe alır" },
+      "push-notifications": { "label": "Anlık Bildirimler",        "description": "FCM üzerinden anlık bildirim desteğini etkinleştirir — anahtarları siz sağlarsınız" },
+      "splash-screen":      { "label": "Açılış Ekranı",             "description": "Uygulama başlatıldığında markalı bir açılış ekranı gösterir" },
+      "onboarding":         { "label": "Katılım Akışı",           "description": "Yeni kullanıcılar için hoş geldin/katılım akışı gösterir" },
+      "2fa":                { "label": "İki Faktörlü Kimlik Doğrulama", "description": "Giriş için OTP veya kimlik doğrulama uygulaması gerektirir" },
+      "biometric":          { "label": "Biyometrik Giriş",           "description": "Mobilde parmak izi ve Face ID ile giriş" },
+      "social-login":       { "label": "Sosyal Giriş",              "description": "Google, GitHub, Apple ve Facebook OAuth" },
+      "magic-link":         { "label": "Sihirli Bağlantı",                "description": "E-posta bağlantısı üzerinden şifresiz giriş" },
+      "sso":                { "label": "SSO / SAML",                "description": "Kurumsal tek oturum açma entegrasyonu" },
+      "analytics":          { "label": "Uygulama İçi Analitik",          "description": "Oluşturulan uygulama içinde ekran görüntülemelerini ve olayları takip eder" },
+      "ab-testing":         { "label": "A/B Testi",               "description": "Kullanıcı tabanınızda özellik deneyleri yapın" },
+      "feature-gating":     { "label": "Özellik Kısıtlama",            "description": "Kullanıcı planına veya rolüne göre özellikleri gösterir veya gizler" }
+    },
+    "logs": {
+      "savingFlags": "Özellik bayrakları kaydediliyor...",
+      "flagsSaved": "Özellik bayrakları başarıyla kaydedildi"
+    }
+  },
+  "spacingPage": {
+    "heading": "Boşluk ve Yarıçap",
+    "subheading": "Oluşturduğunuz uygulamalardaki bileşenlerin şeklini, yoğunluğunu ve yükseltisini kontrol edin.",
+    "preview": {
+      "title": "Canlı Önizleme",
+      "button": "Düğme",
+      "card": "Kart Bileşeni",
+      "input": "Giriş Alanı"
+    },
+    "sections": {
+      "radius": {
+        "title": "Kenar Yarıçapı",
+        "description": "Düğmelere, kartlara, giriş alanlarına ve modallara uygulanır"
+      },
+      "density": {
+        "title": "Boşluk Yoğunluğu",
+        "description": "Bileşenlerin içindeki dolguyu kontrol eder"
+      },
+      "shadow": {
+        "title": "Yükselti / Gölge",
+        "description": "Kart ve bileşen gölge derinliği"
+      }
+    },
+    "radius": {
+      "none": "Yok",
+      "sm": "Küçük",
+      "md": "Orta",
+      "lg": "Büyük",
+      "xl": "Çok Büyük",
+      "full": "Hap"
+    },
+    "density": {
+      "compact": { "label": "Kompakt", "desc": "Sıkı dolgu, daha fazla içerik görünür" },
+      "default": { "label": "Varsayılan", "desc": "Çoğu kullanım durumu için dengeli boşluk" },
+      "relaxed": { "label": "Rahat", "desc": "Bol dolgu, dokunması daha kolay" }
+    },
+    "shadow": {
+      "none": "Yok",
+      "sm": "Hafif",
+      "md": "Orta",
+      "lg": "Güçlü"
+    },
+    "save": {
+      "button": "Boşluğu Kaydet",
+      "saving": "Kaydediliyor…",
+      "savedConfirmation": "Kaydedildi"
+    }
+  },
+  "typographyPage": {
+    "heading": "Tipografi",
+    "subheading": "Oluşturduğunuz uygulamalar için yazı tiplerini ve ölçeği seçin. Yazı tipleri Google Fonts'tan yüklenir.",
+    "preview": {
+      "title": "Canlı Önizleme",
+      "headingSuffix": "— Başlık",
+      "bodySample": "Pijamalı hasta yağız şoföre çabucak güvendi. Varsayılan boyutta gövde metni örneği.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "Yazı Tipi Aileleri",
+        "description": "Google Fonts'tan seçin — kod oluşturmaya otomatik olarak dahil edilir"
+      },
+      "weights": {
+        "title": "Yazı Tipi Ağırlıkları"
+      },
+      "scale": {
+        "title": "Yazı Tipi Boyutu Ölçeği",
+        "description": "Uygulama genelindeki genel metin boyutunu kontrol eder"
+      }
+    },
+    "fonts": {
+      "headingFont": "Başlık Yazı Tipi",
+      "bodyFont": "Gövde Yazı Tipi",
+      "monoFont": "Mono Yazı Tipi"
+    },
+    "weights": {
+      "headingWeight": "Başlık Ağırlığı",
+      "bodyWeight": "Gövde Ağırlığı"
+    },
+    "scale": {
+      "compact": { "label": "Kompakt", "desc": "Daha küçük metin, daha sıkı boşluk" },
+      "default": { "label": "Varsayılan", "desc": "Çoğu uygulama için dengeli" },
+      "relaxed": { "label": "Rahat", "desc": "Daha büyük metin, daha fazla boşluk" }
+    },
+    "save": {
+      "button": "Tipografiyi Kaydet",
+      "saving": "Kaydediliyor…",
+      "savedConfirmation": "Kaydedildi"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "Tema",
+    "nav": {
+      "colours": "Renkler",
+      "typography": "Tipografi",
+      "spacing": "Boşluk ve Yarıçap",
+      "featureFlags": "Özellik Bayrakları",
+      "presets": "Ön Ayarlar"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "Etkin Olmayan Oturum",
+      "description": "Bir süredir işlem yapmadınız. Şu süre içinde oturum kapatılacak:",
+      "logoutButton": "Çıkış Yap",
+      "keepAliveButton": "Oturumu Sürdür"
+    },
+    "logs": {
+      "logoutFailed": "Çıkış başarısız oldu:"
+    }
+  },
+  "loader": {
+    "label": "Yükleniyor…"
+  },
+  "userStatus": {
+    "active": "Aktif",
+    "needsEmailVerification": "E-posta Doğrulaması Gerekiyor",
+    "passwordResetRequested": "Şifre Sıfırlama Talep Edildi",
+    "blocked": "Engellendi",
+    "disabled": "Devre Dışı"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Flutter projesi oluşturma başarısız oldu"
+    },
+    "logs": {
+      "skipped": "Flutter projesi oluşturma atlandı: {output}",
+      "created": "Flutter projesi oluşturuldu: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "NextJS projesi oluşturma başarısız oldu"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "Veritabanı yapılandırması bulunamadı.",
+      "dbConfigMissing": "DB yapılandırması eksik",
+      "dbConfigMissingStore": "Depoda DB yapılandırması eksik",
+      "adminEmailMissing": "Yönetici kullanıcı e-postası eksik",
+      "adminEmailMissingStore": "Depoda yönetici kullanıcı e-postası eksik",
+      "projectTypeMissing": "selectedProjectType eksik",
+      "createTablesFailed": "Tablolar oluşturulamadı: {message}",
+      "createAdminFailed": "Yönetici kullanıcı oluşturulamadı: {message}",
+      "createModelsFailed": "Modeller oluşturulamadı: {message}",
+      "writeConfigFailed": "Yapılandırma dosyası yazılamadı: {message}",
+      "setupStorageFailed": "Depolama kurulamadı: {message}",
+      "installDemoFailed": "Demo içerik kurulamadı: {message}",
+      "stepFailed": "Adım başarısız oldu: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "Tablolar oluşturuldu:",
+      "adminCreated": "Yönetici kullanıcı oluşturuldu:",
+      "modelsCreated": "Model oluşturma yanıtı:",
+      "modelsSkipped": "Model oluşturma atlandı: {message}",
+      "configWritten": "Yapılandırma dosyası başarıyla yazıldı:",
+      "storageCreated": "Depolama kovaları oluşturuldu:",
+      "demoContentSkipped": "Demo içerik atlandı",
+      "demoContentInstalled": "Demo içerik kuruldu:",
+      "creatingApiEndpoints": "API uç noktaları oluşturuluyor...",
+      "settingUpAuth": "Kimlik doğrulama ayarlanıyor...",
+      "configuringSession": "Oturum yönetimi yapılandırılıyor...",
+      "runningTests": "Testler çalıştırılıyor...",
+      "finalizing": "Kurulum tamamlanıyor...",
+      "noImplementation": "Adım için uygulama yok: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "heading": "Yönetici Kullanıcı Kurulumu",
+    "description": "Underpeaks sisteminizi güvence altına almak için lütfen yönetici kullanıcı bilgilerini sağlayın. Bu hesap, platform içinde tam yönetici erişimine sahip olacaktır.",
+    "disclaimer": "Lütfen unutmayın: bu, Underpeaks sisteminde bir yönetici hesabı oluşturur ve veritabanı yönetici hesabınızdan farklı olabilir.",
+    "fields": {
+      "fullName": {
+        "label": "Ad Soyad",
+        "placeholder": "örn., Ahmet Yılmaz"
+      },
+      "email": {
+        "label": "E-posta Adresi",
+        "placeholder": "admin@ornek.com"
+      },
+      "password": {
+        "label": "Şifre",
+        "placeholder": "Güvenli bir şifre oluşturun"
+      }
+    },
+    "errors": {
+      "nameRequired": "Ad soyad gereklidir",
+      "emailRequired": "E-posta gereklidir",
+      "passwordInvalid": "Şifre gereklidir | Şifre 8 karakter olmalıdır | Büyük harf içermelidir | Özel karakter içermelidir (örn. !@#$%^&*)"
+    },
+    "continueButton": "Devam Et"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "heading": "Yığınınızı Seçin",
+    "description": "Proje ihtiyaçlarınıza en uygun teknoloji yığınını seçin. Daha fazla platform eklemek veya yaklaşımınızı değiştirmek isterseniz bunu daha sonra değiştirebilirsiniz.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "Tam kombinasyon! Web için Next.js ve çapraz platform mobil ve masaüstü uygulamaları için Flutter."
+      },
+      "next": {
+        "title": "Yalnızca Next.js",
+        "description": "Next.js'i güçlü bir React SSR çerçevesi olarak ve <strong>içeriği ve API'leri yönetmek için başsız bir CMS olarak kullanın.</strong>"
+      },
+      "flutter": {
+        "title": "Yalnızca Flutter",
+        "description": "Paylaşılan bir kod tabanı kullanarak Flutter ile çapraz platform mobil ve masaüstü uygulamaları oluşturun ve isterseniz <strong>başsız CMS arka ucu olarak kullanın.</strong>"
+      },
+      "cms": {
+        "title": "Başsız CMS",
+        "description": "Yalnızca başsız CMS arka ucu olarak dağıtın. Verilerinizi API'ler aracılığıyla açığa çıkarın ve tam esneklikle herhangi bir özel ön uç, mobil uygulama veya üçüncü taraf hizmete bağlayın."
+      }
+    },
+    "nextButton": "İleri"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "heading": "Veritabanı Yapılandırması",
+    "selectPlaceholder": "Veritabanı seçin",
+    "fieldExample": "(örn. {placeholder})",
+    "savingWarning": "⚠️ Lütfen sabırlı olun, bu biraz zaman alabilir...",
+    "infoBlock": {
+      "whereLabel": "Nerede bulunur:"
+    },
+    "testSteps": {
+      "validating": "Yapılandırma doğrulanıyor...",
+      "sending": "Yapılandırma sunucuya gönderiliyor...",
+      "testing": "Veritabanı bağlantısı test ediliyor...",
+      "finalizing": "Bağlantı kontrolü tamamlanıyor..."
+    },
+    "errors": {
+      "serverRejected": "Sunucu bağlantıyı reddetti",
+      "connectionFailed": "Bağlantı Başarısız Oldu: {message}"
+    },
+    "buttons": {
+      "testConnection": "Bağlantıyı Test Et",
+      "testing": "Test ediliyor...",
+      "saving": "Kaydediliyor...",
+      "continue": "Devam Et"
+    },
+    "logs": {
+      "firebaseParseError": "Firebase yapılandırması ayrıştırılamadı"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "projectType": {
+      "title": "Proje Türü Seçin",
+      "description": "Projeniz için varsayılan modelleri otomatik olarak kurmak için bir şablon seçin."
+    },
+    "projects": {
+      "ecommerce":   { "label": "E-ticaret",         "description": "Ürünleri, kategorileri, siparişleri, müşterileri ve mağaza ön sayfalarını içerir." },
+      "marketplace": { "label": "Pazar Yeri",         "description": "Birden fazla satıcıyı, ilanları, komisyonları ve satıcı panolarını destekler." },
+      "listing":     { "label": "İlan Platformu",    "description": "Kategoriler, arama ve filtrelerle emlak, iş veya hizmet ilanları için." },
+      "blog":        { "label": "Blog / İçerik Sitesi", "description": "Gönderiler, kategoriler, etiketler, yazarlar ve yorumlarla içerik odaklı site." },
+      "social":      { "label": "Sosyal Ağ",      "description": "Kullanıcı profilleri, gönderiler, yorumlar, beğeniler, takipçiler, mesajlar ve bildirimler." },
+      "saas":        { "label": "SaaS / Web Uygulaması",      "description": "Kullanıcılar, roller, izinler ve abonelik planlarıyla web uygulaması yapısı." },
+      "blank":       { "label": "Boş Proje",       "description": "Demo içeriği yok; boş bir proje iskeletiyle başlayın." }
+    },
+    "demoContent": {
+      "title": "Demo İçeriği Kur",
+      "description": "Zaten yüklenmiş örnek verilerle mağazanızı önizleyin.",
+      "checkboxLabel": "Seçilen proje için demo içeriği dahil et",
+      "ecommerce": {
+        "item1": "Kategorili ve etiketli demo ürünler",
+        "item2": "Örnek müşteriler ve siparişler",
+        "item3": "Mağaza ön sayfaları (ana sayfa, ürünler, sepet, ödeme)",
+        "item4": "Temel CMS içeriği",
+        "item5": "Önceden yapılandırılmış menüler ve modüller"
+      }
+    },
+    "continueButtonIdle": "Devam Et",
+    "continueButtonLoading": "Devam ediliyor...",
+    "logs": {
+      "navigatingToFinalise": "Kurulum seçimleri kaydediliyor ve son adıma geçiliyor..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "installComplete": "🎉 Kurulum Tamamlandı!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "Proje Bilgileri",
+      "subtitle": "Proje kurulumunuz hakkında temel bilgiler.",
+      "name": "Ad:",
+      "stack": "Yığın:"
+    },
+    "database": {
+      "title": "Veritabanı",
+      "subtitle": "Seçtiğiniz veritabanı ve yapılandırması.",
+      "type": "Tür:",
+      "noneSelected": "Hiçbiri seçilmedi"
+    },
+    "adminUser": {
+      "title": "Yönetici Kullanıcı",
+      "subtitle": "İlk yönetici kimlik bilgileriniz.",
+      "name": "Ad:",
+      "email": "E-posta:",
+      "password": "Şifre:"
+    },
+    "projectType": {
+      "title": "Seçilen Proje Türü",
+      "subtitle": "Kurulum sırasında seçilen proje şablonu."
+    },
+    "demoContent": {
+      "title": "Demo İçerik",
+      "subtitle": "Örnek mağaza verilerinin önceden yüklenip yüklenmeyeceği.",
+      "installed": "Kuruldu",
+      "notInstalled": "Kurulmadı"
+    },
+    "continueButton": "Devam Et → Giriş"
+  },
+  "ecommercePage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "card": {
+      "title": "E-ticaret modüllerinizi özelleştirin"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "E-ticaret Modülünü Etkinleştir",
+        "description": "Ürün kataloğu, sepet, ödeme ve sipariş yönetimi ekler."
+      },
+      "physical": {
+        "label": "Fiziksel Ürünleri Dahil Et",
+        "description": "Somut ürünler için envanter, kargo, iade ve takibi destekler."
+      },
+      "digital": {
+        "label": "Dijital Ürünleri Dahil Et",
+        "description": "PDF'ler, videolar veya yazılım lisansları gibi indirilebilir içerikler satın."
+      }
+    },
+    "button": {
+      "next": "İleri",
+      "continuing": "Devam ediliyor..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "card": {
+      "title": "Kurulumu Tamamla"
+    },
+    "summary": {
+      "project": "Proje:",
+      "defaultProject": "UygulamamApp",
+      "stack": "Yığın:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "Veritabanı:",
+      "notSelected": "Seçilmedi"
+    },
+    "steps": {
+      "heading": "Kurulum Adımları:",
+      "skipped": "atlandı!"
+    },
+    "progress": {
+      "finishing": "Tamamlanıyor...",
+      "ready": "Projenizi kurmak için hazır"
+    },
+    "errors": {
+      "label": "Hata:",
+      "noDatabase": "Veritabanı seçilmedi, yapılandırma kaydedilemiyor.",
+      "saveFailed": "Kurulum yapılandırması kaydedilemedi",
+      "unknown": "Bilinmeyen bir hata oluştu"
+    },
+    "button": {
+      "start": "Kurulumu Başlat",
+      "installing": "Kuruluyor..."
+    },
+    "logs": {
+      "sendingConfig": "Kurulum yapılandırması sunucuya gönderiliyor...",
+      "configSaved": "Kurulum yapılandırması başarıyla kaydedildi",
+      "installError": "Kurulum hatası:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "heading": "Varsayılan Modelleri Seçin",
+    "subheading": "Projenize dahil etmek istediğiniz varsayılan veri modellerini seçin. Daha sonra modeller oluşturabilir veya düzenleyebilirsiniz.",
+    "required": "(zorunlu)",
+    "toggleAll": {
+      "deselect": "Tümünün Seçimini Kaldır",
+      "select": "Tümünü Seç"
+    },
+    "models": {
+      "users":      { "label": "Kullanıcılar",      "description": "Uygulama kullanıcılarını ve kimlik doğrulamayı yönetin" },
+      "products":   { "label": "Ürünler",   "description": "Ürün veya hizmet kataloğu" },
+      "orders":     { "label": "Siparişler",     "description": "Müşteri siparişlerini ve satın alımları takip edin" },
+      "coupons":    { "label": "Kuponlar",    "description": "İndirim kuponları ve promosyonlar" },
+      "categories": { "label": "Kategoriler", "description": "Ürünleri veya içeriği organize edin" },
+      "reviews":    { "label": "Yorumlar",    "description": "Kullanıcı geri bildirimi ve değerlendirmeler" }
+    },
+    "button": {
+      "continue": "Devam Et",
+      "continuing": "Devam ediliyor..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "heading": "Proje Kurulumu",
+    "subheading": "Kendi sunucunuzda barındırılan stüdyonuz için proje adını, alt alan adını ve alan adını girin.",
+    "continueButton": "Devam Et",
+    "fields": {
+      "name": {
+        "label": "Proje Adı",
+        "placeholder": "örn., UygulamamApp Studio"
+      },
+      "domain": {
+        "label": "Alan Adı",
+        "placeholder": "örn., http://localhost:3000",
+        "hint": "Uygulamanız için tam alan adı. Varsayılan"
+      },
+      "subdomain": {
+        "label": "Alt Alan Adı",
+        "placeholder": "örn., console",
+        "hint": "Bu, şu URL için kullanılacaktır:"
+      }
+    },
+    "errors": {
+      "nameRequired": "Proje adı gereklidir",
+      "subdomainRequired": "Alt alan adı gereklidir",
+      "domainRequired": "Alan adı gereklidir"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Underpeaks Logosu",
+    "tagline": "Hepsi Bir Arada SaaS Kurulum Aracınız ve Kod Oluşturucunuz",
+    "continueButton": "Devam Et →",
+    "continueLoading": "Yükleniyor...",
+    "benefits": {
+      "heading": "Neden Underpeaks?",
+      "item1": "🔧 Tam kod tabanı oluşturucu (Next.js + Flutter)",
+      "item2": "⚙️ Artık şablon kod yok – sadece üretime hazır kod",
+      "item3": "🌍 Çok dilliliğe ve çok kiracılığa hazır",
+      "item4": "📦 Kendi sunucunuzda veya bulutta barındırma – seçim sizin",
+      "item5": "🔐 Yerleşik kimlik doğrulama, roller, izinler, kurulum arayüzü",
+      "item6": "💼 Startuplar, ajanslar ve kurumsal projeler için ideal"
+    },
+    "license": {
+      "heading": "Lisans Sözleşmesi",
+      "loading": "Lisans yükleniyor...",
+      "loadFailed": "Lisans sözleşmesi yüklenemedi.",
+      "acceptLabel": "Lisans şartlarını kabul edin."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "Mevcut ve yeni şifre gereklidir",
+      "passwordTooShort": "Şifre en az 8 karakter olmalıdır",
+      "unauthorized": "Yetkisiz",
+      "invalidToken": "Geçersiz jeton",
+      "userNotFound": "Kullanıcı bulunamadı",
+      "incorrectCurrentPassword": "Mevcut şifre yanlış",
+      "internalError": "Beklenmeyen bir hata oluştu"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Firebase Auth şifresi güncellendi",
+      "firebasePasswordUpdateFailed": "[change-password] Firebase Auth şifresi güncellenemedi"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "Yönetici kullanıcı başarıyla oluşturuldu"
+    },
+    "errors": {
+      "missingConfig": "DB yapılandırması eksik",
+      "missingAdminUser": "Yönetici kullanıcı verileri eksik",
+      "genericFailure": "Yönetici kullanıcı oluşturulamadı"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "DB yapılandırması veya yönetici e-postası eksik",
+      "adapterNotSupported": "Bu veritabanı bağdaştırıcısı veri modeli oluşturmayı desteklemiyor",
+      "genericFailure": "Veri modelleri eklenemedi"
+    },
+    "logs": {
+      "createModelsError": "create-data-models API hatası:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "DB yapılandırması/türü eksik",
+      "adapterNotSupported": "{type} bağdaştırıcısı depolama kurulumunu uygulamıyor"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "Tüm sistem, kullanıcı ve proje tabloları oluşturuldu"
+    },
+    "errors": {
+      "missingConfig": "DB yapılandırması eksik",
+      "genericFailure": "Tablolar oluşturulamadı"
+    },
+    "logs": {
+      "createTablesError": "[TABLO OLUŞTURMA HATASI]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Firebase ortam değişkeni eksik: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "projectName eksik",
+      "flutterNotInstalled": "Flutter kurulu değil veya PATH'te değil.",
+      "stepFailed": "Adım başarısız oldu: Flutter projesi oluşturuluyor - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Flutter projesi \"{projectName}\" zaten mevcut. Oluşturma atlanıyor.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Flutter oluşturma başarısız oldu:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "E-posta gereklidir",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE ayarlanmadı",
+      "firebaseClientSide": "Firebase şifre sıfırlama istemci tarafında işlenir",
+      "supabaseMissingMethod": "Supabase bağdaştırıcısında sendResetEmail yöntemi eksik",
+      "unsupportedDbType": "Desteklenmeyen DB türü: {dbType}",
+      "adapterMissingMethods": "${dbType} bağdaştırıcısında gerekli yöntemler eksik",
+      "userNotFound": "Kullanıcı bulunamadı",
+      "genericFailure": "Sıfırlama bağlantısı gönderilemedi"
+    },
+    "notices": {
+      "smtpDisabled": "E-posta gönderimi devre dışı. Şifrenizi sıfırlaması için yöneticinizden isteyin."
+    },
+    "email": {
+      "subject": "Şifre Sıfırlama Talebi",
+      "body": "<p>Merhaba {name},</p><p>Şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın:</p><a href=\"{resetLink}\">{resetLink}</a><p>Bunu siz talep etmediyseniz, bu e-postayı göz ardı edin.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Supabase sıfırlama e-postası gönderildi",
+      "resetEmailSent": "Sıfırlama e-postası gönderildi",
+      "smtpDisabled": "SMTP/forgot-password devre dışı — e-posta atlandı",
+      "forgotPasswordError": "Şifremi unuttum hatası:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Firebase hizmet hesabı eksik",
+      "unsupportedDbType": "Desteklenmeyen DB türü: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[SİSTEM YAPILANDIRMA HATASI]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "DB yapılandırması eksik",
+      "missingProjectType": "Proje türü eksik",
+      "adapterNotSupported": "installDemoContent bu bağdaştırıcı için uygulanmadı"
+    },
+    "logs": {
+      "installDemoContentError": "install-demo-content hatası:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "Çıkış başarıyla yapıldı"
+    },
+    "errors": {
+      "tokenRequired": "Jeton gereklidir",
+      "dbTypeNotSet": "NEXT_DB_TYPE ayarlanmadı",
+      "firebaseServiceAccountMissing": "Firebase hizmet hesabı eksik",
+      "mysqlEnvMissing": "MySQL ortam değişkenleri eksik",
+      "postgresEnvMissing": "Postgres ortam değişkenleri eksik",
+      "unsupportedDbType": "Desteklenmeyen DB türü: {dbType}",
+      "tokenNotFound": "Jeton bulunamadı"
+    },
+    "logs": {
+      "logoutError": "ÇIKIŞ API HATASI:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id gereklidir",
+      "unauthorized": "Yetkisiz",
+      "invalidToken": "Geçersiz jeton"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder gereklidir",
+      "internalError": "Beklenmeyen bir hata oluştu"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] Klasörler dosya sayılarıyla başarıyla zenginleştirildi"
+    },
+    "errors": {
+      "internalError": "Beklenmeyen bir hata oluştu"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder, toFolder ve fileName gereklidir",
+      "moveFileNotSupported": "moveFile desteklenmiyor",
+      "internalError": "Beklenmeyen bir hata oluştu"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder, oldName ve newName gereklidir",
+      "renameFileNotSupported": "renameFile desteklenmiyor",
+      "internalError": "Beklenmeyen bir hata oluştu"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "Dosya ve klasör gereklidir",
+      "uploadFileNotSupported": "uploadFile desteklenmiyor",
+      "internalError": "Yükleme başarısız oldu"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] mod:",
+      "projectIdLookupFailed": "[upload-file] project_id araması başarısız oldu",
+      "metadataSaved": "[upload-file] meta veriler nxf_storage'a kaydedildi",
+      "metadataSaveFailed": "[upload-file] meta veri kaydedilemedi",
+      "localUploadSuccess": "[upload-file] yerel yükleme kaydedildi:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "Veritabanı bağlantısı test edilemedi"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id gereklidir",
+      "firebaseServiceAccountMissing": "Firebase hizmet hesabı eksik",
+      "unsupportedDbType": "Desteklenmeyen veritabanı türü",
+      "systemConfigNotFound": "Sistem yapılandırması bulunamadı",
+      "internalError": "İç Sunucu Hatası"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "Ad soyad gereklidir",
+      "unauthorized": "Yetkisiz",
+      "invalidToken": "Geçersiz jeton",
+      "internalError": "Beklenmeyen bir hata oluştu"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id ve project_name gereklidir",
+      "firebaseServiceAccountMissing": "Firebase hizmet hesabı eksik",
+      "unsupportedDbType": "Desteklenmeyen veritabanı türü",
+      "systemConfigNotFound": "Bu kullanıcı için sistem yapılandırması bulunamadı",
+      "internalError": "İç Sunucu Hatası"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id gereklidir",
+      "firebaseServiceAccountMissing": "Firebase hizmet hesabı eksik",
+      "unsupportedDbType": "Desteklenmeyen veritabanı türü",
+      "systemConfigNotFound": "Bu kullanıcı için sistem yapılandırması bulunamadı",
+      "internalError": "İç Sunucu Hatası"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "Yapılandırma dosyaları yazılamadı"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "Mevcut kimlik doğrulama kullanıcısı bulundu:",
+      "newAuthUserCreated": "Yeni kimlik doğrulama kullanıcısı oluşturuldu:",
+      "creatingAdminInDb": "DB'de yönetici kullanıcı oluşturuluyor...",
+      "userAlreadyInDb": "Kullanıcı zaten DB'de mevcut:",
+      "existingProjectFound": "Mevcut proje bulundu:",
+      "newProjectCreated": "Yeni proje oluşturuldu:",
+      "existingTenantFound": "Mevcut kiracı bulundu:",
+      "newTenantCreated": "Yeni kiracı oluşturuldu:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "Yinelenen CreateDataModels çalıştırması atlanıyor — bu proje ve tür kombinasyonu zaten işlendi.",
+      "creatingTable": "Tablo oluşturuluyor:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable uygulanmadı, tablo oluşturma atlanıyor"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "Yükleme Klasörü",
+      "customFolder": "Özel klasör…",
+      "enterFolderName": "Klasör adını girin",
+      "placeholder": "örn. banners/summer",
+      "uploadingTo": "Şuraya yükleniyor:"
+    },
+    "preview": {
+      "alt": "Önizleme",
+      "uploaded": "Yüklendi",
+      "replace": "Değiştir",
+      "clear": "Dosyayı temizle"
+    },
+    "dropzone": {
+      "uploading": "Yükleniyor…",
+      "idle": "Sürükleyip bırakın veya",
+      "browse": "göz atın",
+      "recommended": "Önerilen:"
+    },
+    "errors": {
+      "noFolder": "Yüklemeden önce bir klasör seçin veya girin.",
+      "uploadFailed": "Yükleme başarısız oldu",
+      "uploadFailedStatus": "Yükleme başarısız oldu:",
+      "networkError": "Ağ hatası"
+    }
+  },
+  "modelView": {
+    "systemBadge": "Sistem",
+    "subtitle": "Salt okunur — bu korumalı bir sistem tablosudur.",
+    "fieldsHeading": "Alanlar",
+    "actions": {
+      "back": "Modellere geri dön"
+    },
+    "stats": {
+      "fields": "Alanlar",
+      "created": "Oluşturuldu",
+      "updated": "Son güncelleme"
+    },
+    "table": {
+      "name": "Alan Adı",
+      "type": "Tür",
+      "constraints": "Kısıtlamalar",
+      "nullable": "Zorunlu",
+      "default": "Varsayılan",
+      "uiType": "Arayüz Türü"
+    },
+    "badges": {
+      "hidden": "Gizli",
+      "required": "Zorunlu",
+      "optional": "İsteğe Bağlı"
+    },
+    "errors": {
+      "loadFailed": "Model yüklenemedi.",
+      "notFound": "Model bulunamadı."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "Modeller",
+      "subtitle": "Projenizin veri yapısını tanımlayın ve yönetin.",
+      "createButton": "Model Oluştur"
+    },
+    "filter": {
+      "all": "Tümü",
+      "user": "Kullanıcı",
+      "system": "Sistem"
+    },
+    "states": {
+      "empty": "Model bulunamadı.",
+      "emptyHint": "Başlamak için ilk modelinizi oluşturun."
+    },
+    "badges": {
+      "system": "Sistem",
+      "partialSystem": "Düzenlenebilir Sistem"
+    },
+    "meta": {
+      "fields": "{count} alan",
+      "foreignKeys": "{count} yabancı anahtar"
+    },
+    "card": {
+      "editAriaLabel": "{name} düzenle",
+      "deleteAriaLabel": "{name} sil"
+    },
+    "confirmDelete": {
+      "title": "Model Silinsin mi?",
+      "description": "\"{name}\" adlı modeli silmek istediğinizden emin misiniz? Bu tablodaki tüm veriler kalıcı olarak silinecektir. Bu geri alınamaz.",
+      "confirm": "Sil",
+      "deleting": "Siliniyor…",
+      "cancel": "İptal"
+    },
+    "errors": {
+      "loadFailed": "Modeller yüklenemedi.",
+      "deleteFailed": "Model silinemedi."
+    }
+  },
+  "createModel": {
+    "title": "Model Oluştur",
+    "subtitle": "Yeni bir veri modeli ve alanlarını tanımlayın.",
+    "actions": {
+      "save": "Modeli Kaydet",
+      "saving": "Kaydediliyor…",
+      "back": "Modellere geri dön"
+    },
+    "form": {
+      "modelNameLabel": "Model Adı",
+      "modelNamePlaceholder": "örn. Ürün",
+      "fieldNamePlaceholder": "Alan adı",
+      "required": "Zorunlu",
+      "unique": "Benzersiz",
+      "primaryKey": "Birincil Anahtar",
+      "primaryKeyTaken": "zaten ayarlandı",
+      "hidden": "Gizli",
+      "uiType": "Arayüz Türü",
+      "foreignKeyTable": "Yabancı Anahtar — Tablo",
+      "foreignKeyColumn": "Yabancı Anahtar — Sütun",
+      "noForeignKey": "— Yabancı anahtar yok —",
+      "selectColumn": "— Sütun seçin —",
+      "onDelete": "Silindiğinde",
+      "addField": "Alan Ekle",
+      "removeField": "Alanı kaldır",
+      "expandField": "Gelişmiş seçenekleri göster",
+      "collapseField": "Gelişmiş seçenekleri gizle",
+      "foreignKey": "Yabancı Anahtar"
+    },
+    "validation": {
+      "modelNameRequired": "Model adı gereklidir.",
+      "fieldsInvalid": "Tüm alanların bir adı olmalıdır.",
+      "fieldNameUnique": "Alan adları benzersiz olmalıdır.",
+      "singlePrimaryKey": "Model başına yalnızca bir birincil anahtara izin verilir."
+    },
+    "confirmDelete": {
+      "title": "Alan Silinsin mi?",
+      "description": "Bu alanı kaldırmak istediğinizden emin misiniz?",
+      "confirm": "Sil",
+      "cancel": "İptal"
+    },
+    "errors": {
+      "createFailed": "Model oluşturulamadı."
+    }
+  },
+  "editModel": {
+    "title": "Modeli Düzenle",
+    "subtitle": "Model adını ve alan tanımlarını güncelleyin.",
+    "actions": {
+      "save": "Değişiklikleri Kaydet",
+      "saving": "Kaydediliyor…",
+      "back": "Modellere geri dön"
+    },
+    "form": {
+      "modelNameLabel": "Model Adı",
+      "modelNamePlaceholder": "Model adı",
+      "fieldNamePlaceholder": "Alan adı",
+      "required": "Zorunlu",
+      "unique": "Benzersiz",
+      "primaryKey": "Birincil Anahtar",
+      "primaryKeyTaken": "zaten ayarlandı",
+      "hidden": "Gizli",
+      "uiType": "Arayüz Türü",
+      "foreignKeyTable": "Yabancı Anahtar — Tablo",
+      "foreignKeyColumn": "Yabancı Anahtar — Sütun",
+      "noForeignKey": "— Yabancı anahtar yok —",
+      "selectColumn": "— Sütun seçin —",
+      "onDelete": "Silindiğinde",
+      "addField": "Alan Ekle",
+      "removeField": "Alanı kaldır",
+      "expandField": "Gelişmiş seçenekleri göster",
+      "collapseField": "Gelişmiş seçenekleri gizle",
+      "foreignKey": "Yabancı Anahtar"
+    },
+    "validation": {
+      "modelNameRequired": "Model adı gereklidir.",
+      "fieldsInvalid": "Tüm alanların bir adı olmalıdır.",
+      "fieldNameUnique": "Alan adları benzersiz olmalıdır.",
+      "singlePrimaryKey": "Model başına yalnızca bir birincil anahtara izin verilir."
+    },
+    "confirmDelete": {
+      "title": "Alan Silinsin mi?",
+      "description": "Bu alanı kaldırmak istediğinizden emin misiniz?",
+      "confirm": "Sil",
+      "cancel": "İptal"
+    },
+    "warningDialog": {
+      "title": "Ciddi Uyarı",
+      "subtitle": "Korumalı bir alanı silmek üzeresiniz.",
+      "primaryKeyWarning": "Bu alan bu tablonun birincil anahtarıdır. Silinmesi, bu tabloya referans veren tüm ilişkileri kıracak ve tüm projenizdeki mevcut verileri kalıcı olarak bozabilir.",
+      "foreignKeyWarning": "Bu alan, bu tabloyu bir diğerine bağlayan bir yabancı anahtardır. Silinmesi ilişkiyi kıracak ve mevcut kayıtlar için veri bütünlüğü sorunlarına neden olabilir.",
+      "checkboxLabel": "Bunun verilerimi kalıcı olarak bozabileceğini ve geri alınamayacağını anlıyorum.",
+      "confirm": "Yine de Sil",
+      "cancel": "İptal"
+    },
+    "errors": {
+      "loadModelFailed": "Model yüklenemedi.",
+      "modelNotFound": "Model bulunamadı.",
+      "updateModelFailed": "Model güncellenemedi."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id gereklidir",
+      "invalidBody": "Geçersiz veya boş istek gövdesi",
+      "missingFields": "Zorunlu alanlar eksik",
+      "projectNotFound": "Bu kullanıcı için proje bulunamadı",
+      "nameAlreadyExists": "Bu ada sahip bir model zaten mevcut",
+      "fetchFailed": "Modeller getirilemedi",
+      "createFailed": "Model oluşturulamadı",
+      "updateFailed": "Model güncellenemedi",
+      "deleteFailed": "Model silinemedi",
+      "multiplePrimaryKeys": "Model başına yalnızca bir birincil anahtara izin verilir",
+      "systemTableProtected": "Sistem tabloları oluşturulamaz, değiştirilemez veya silinemez"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— Bir alan seçin —",
+    "clear": "Yabancı anahtarı temizle",
+    "searchPlaceholder": "Modellerde ara…",
+    "noResults": "Model bulunamadı.",
+    "systemBadge": "Sistem",
+    "fieldsLabel": "alan",
+    "onDelete": "Silindiğinde",
+    "filter": {
+      "all": "Tümü",
+      "user": "Kullanıcı",
+      "system": "Sistem"
+    }
+  },
+  "users": {
+    "page_title": "Kullanıcılar",
+    "page_description": "CMS yönetici ve kullanıcı hesaplarını yönetin",
+    "edit_kpis": "KPI'ları Düzenle",
+    "editing_kpis": "KPI'lar düzenleniyor",
+    "save_layout": "Düzeni kaydet",
+    "saving": "Kaydediliyor…",
+    "search_placeholder": "Ad veya e-postaya göre ara…",
+    "showing_count": "{total} kullanıcıdan {filtered} gösteriliyor",
+    "no_users_found": "Kullanıcı bulunamadı",
+    "filter": "Filtrele",
+    "sort": "Sırala",
+    "clear_all": "Tümünü temizle",
+    "filters": "Filtreler",
+    "role": "Rol",
+    "all_roles": "Tüm roller",
+    "all_statuses": "Tüm durumlar",
+    "status": "Durum",
+    "joined_from": "Katılım tarihi (başlangıç)",
+    "joined_to": "Katılım tarihi (bitiş)",
+    "sort_by": "Şuna göre sırala",
+    "direction": "Yön",
+    "asc": "Artan (A → Z)",
+    "desc": "Azalan (Z → A)",
+    "col_name": "Ad",
+    "col_email": "E-posta",
+    "col_role": "Rol",
+    "col_status": "Durum",
+    "col_last_login": "Son giriş",
+    "col_joined": "Katılım",
+    "role_admin": "Yönetici",
+    "role_user": "Kullanıcı",
+    "status_active": "Aktif",
+    "status_suspended": "Askıya Alındı",
+    "status_disabled": "Devre Dışı",
+    "drawer_title": "Kullanıcı ayrıntıları",
+    "actions": "İşlemler",
+    "change_role": "Rol",
+    "change_status": "Durum",
+    "send_reset": "Şifre sıfırlama e-postası gönder",
+    "sending_reset": "Gönderiliyor…",
+    "delete_user": "Kullanıcıyı sil",
+    "delete_confirm": "Bu kullanıcı kalıcı olarak silinsin mi? Bu geri alınamaz.",
+    "cancel": "İptal",
+    "confirm_delete": "Evet, sil",
+    "deleting": "Siliniyor…",
+    "last_admin_warning": "Rütbe düşürülemez — bu son yöneticidir",
+    "login_history": "Giriş geçmişi",
+    "no_history": "Henüz giriş geçmişi kaydedilmedi",
+    "event_login": "Giriş yaptı",
+    "event_logout": "Çıkış yaptı",
+    "event_online": "Çevrimiçi",
+    "event_offline": "Çevrimdışı oldu",
+    "joined": "Katılım",
+    "last_login": "Son giriş",
+    "toast_role_updated": "Rol güncellendi",
+    "toast_status_updated": "Durum güncellendi",
+    "toast_user_deleted": "Kullanıcı silindi",
+    "toast_reset_sent": "Şifre sıfırlama {email} adresine gönderildi",
+    "toast_kpi_saved": "KPI düzeni kaydedildi",
+    "toast_load_failed": "Kullanıcılar yüklenemedi",
+    "toast_save_failed": "Kaydetme başarısız oldu",
+    "kpi_add": "KPI Ekle",
+    "kpi_add_block": "Blok",
+    "kpi_edit": "KPI'yı Düzenle",
+    "kpi_label_required": "Etiket gereklidir",
+    "kpi_select_field": "Bir alan seçin",
+    "kpi_select_both_fields": "Her iki alanı da seçin",
+    "kpi_select_field_and_value": "Bir alan seçin ve eşleştirilecek bir değer girin",
+    "kpi_max_reached": "En fazla 5 KPI'ya izin verilir",
+    "kpi_label": "Etiket",
+    "kpi_formula": "Formül",
+    "kpi_format": "Görüntüleme formatı",
+    "kpi_icon": "Simge",
+    "kpi_accent_colour": "Vurgu rengi",
+    "kpi_field": "Alan",
+    "kpi_field_a": "Alan A",
+    "kpi_field_b": "Alan B",
+    "kpi_numerator": "Pay alanı (A)",
+    "kpi_denominator": "Payda alanı (B)",
+    "kpi_operator": "Operatör",
+    "kpi_value_to_match": "Eşleştirilecek değer",
+    "kpi_make_wide": "Genişlet",
+    "kpi_make_compact": "Kompaktlaştır",
+    "kpi_add_to_block": "Ekle",
+    "kpi_save": "Değişiklikleri kaydet",
+    "kpi_cancel": "İptal"
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "description": "Aradığınız sayfayı bulamıyoruz. Taşınmış, yeniden adlandırılmış veya hiç var olmamış olabilir.",
+    "goHome": "Ana sayfaya git",
+    "backToConsole": "Konsola geri dön",
+    "helpfulLinks": "Belirli bir şey mi arıyorsunuz?",
+    "pages": "Sayfalar",
+    "models": "Modeller",
+    "users": "Kullanıcılar",
+    "settings": "Ayarlar"
+  },
+  "noModelLinked": {
+    "title": "Bağlı model yok",
+    "description": "{pageName}, bir {templateName} şablonu kullanıyor ancak henüz bir veri modeli bağlanmadı.",
+    "instruction": "Sayfa ayarlarını düzenleyin ve veri gösterebilmesi için bir model atayın.",
+    "openPages": "Sayfaları aç",
+    "manageModels": "Modelleri yönet"
+  },
+  "lockedTemplate": {
+    "title": "Barındırılan planda mevcut",
+    "description": "{templateName} şablonu barındırılan planın bir parçasıdır. Kanban, takvim, ödeme ve daha fazlasının kilidini açmak için yükseltin.",
+    "upgradeButton": "Barındırılan planı görüntüle",
+    "backButton": "Sayfalara geri dön"
+  },
+  "CookieBanner": {
+    "eyebrow": "GİZLİLİK",
+    "title": "Gizliliğinize değer veriyoruz",
+    "description": "Oturumunuzu açık tutmak, dilinizi hatırlamak ve (izninizle) ziyaretçilerin siteyi nasıl kullandığını anlamak için çerezler kullanıyoruz. Seçimlerinizi istediğiniz zaman değiştirebilirsiniz.",
+    "necessaryTitle": "Kesinlikle gerekli",
+    "necessaryDescription": "Giriş, dil tercihleri ve çerez seçiminizi kaydetmek için gereklidir. Devre dışı bırakılamaz.",
+    "analyticsTitle": "Analitik",
+    "analyticsDescription": "Ziyaretçilerin hangi sayfaları ziyaret ettiğini ve sitenin nasıl performans gösterdiğini anlamamıza yardımcı olur. Kişisel veri paylaşılmaz.",
+    "marketingTitle": "Pazarlama",
+    "marketingDescription": "İlgili reklamları göstermek ve diğer sitelerdeki kampanya etkinliğini ölçmek için kullanılır.",
+    "alwaysOn": "Her zaman açık",
+    "acceptAll": "Tümünü kabul et",
+    "rejectAll": "Tümünü reddet",
+    "customise": "Özelleştir",
+    "savePreferences": "Tercihleri kaydet",
+    "cookiePreferences": "Çerez tercihleri",
+    "policyLink": "Gizlilik politikası"
   }
 }

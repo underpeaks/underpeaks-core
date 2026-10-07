@@ -1,239 +1,2588 @@
 {
   "common": {
-    "save": "Save",
-    "saving": "Saving...",
-    "saveChanges": "Save Changes",
-    "cancel": "Cancel",
-    "delete": "Delete",
-    "edit": "Edit",
-    "create": "Create",
-    "add": "Add",
-    "remove": "Remove",
-    "close": "Close",
-    "confirm": "Confirm",
-    "back": "Back",
-    "next": "Next",
-    "done": "Done",
-    "loading": "Loading...",
-    "search": "Search",
-    "filter": "Filter",
-    "refresh": "Refresh",
-    "copy": "Copy",
-    "copied": "Copied!",
+    "save": "Gem",
+    "saving": "Gemmer...",
+    "saveChanges": "Gem ændringer",
+    "cancel": "Annuller",
+    "delete": "Slet",
+    "edit": "Rediger",
+    "create": "Opret",
+    "add": "Tilføj",
+    "remove": "Fjern",
+    "close": "Luk",
+    "confirm": "Bekræft",
+    "back": "Tilbage",
+    "next": "Næste",
+    "done": "Færdig",
+    "loading": "Indlæser...",
+    "search": "Søg",
+    "filter": "Filtrer",
+    "refresh": "Opdater",
+    "copy": "Kopiér",
+    "copied": "Kopieret!",
     "upload": "Upload",
-    "rename": "Rename",
-    "move": "Move",
-    "preview": "Preview",
-    "revoke": "Revoke",
-    "generate": "Generate",
-    "reveal": "Reveal",
-    "hide": "Hide",
-    "active": "Active",
-    "inactive": "Inactive",
+    "rename": "Omdøb",
+    "move": "Flyt",
+    "preview": "Forhåndsvisning",
+    "revoke": "Tilbagekald",
+    "generate": "Generer",
+    "reveal": "Vis",
+    "hide": "Skjul",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
     "status": "Status",
-    "actions": "Actions",
-    "name": "Name",
-    "email": "Email",
-    "password": "Password",
-    "role": "Role",
-    "createdAt": "Created At",
-    "noResults": "No results found",
-    "error": "An error occurred",
-    "success": "Success",
-    "required": "This field is required",
-    "optional": "Optional",
-    "yes": "Yes",
-    "no": "No",
-    "areYouSure": "Are you sure?",
-    "thisActionCannotBeUndone": "This action cannot be undone.",
-    "comingSoon": "Coming soon"
+    "actions": "Handlinger",
+    "name": "Navn",
+    "email": "E-mail",
+    "password": "Adgangskode",
+    "role": "Rolle",
+    "createdAt": "Oprettet",
+    "noResults": "Ingen resultater fundet",
+    "error": "Der opstod en fejl",
+    "success": "Succes",
+    "required": "Dette felt er påkrævet",
+    "optional": "Valgfrit",
+    "yes": "Ja",
+    "no": "Nej",
+    "areYouSure": "Er du sikker?",
+    "thisActionCannotBeUndone": "Denne handling kan ikke fortrydes.",
+    "comingSoon": "Kommer snart"
   },
   "nav": {
     "dashboard": "Dashboard",
-    "pages": "Pages",
+    "pages": "Sider",
     "menu": "Menu",
-    "media": "Media",
+    "media": "Medier",
     "api": "API",
-    "integrations": "Integrations",
-    "theming": "Theming",
-    "settings": "Settings",
-    "account": "Account",
-    "messages": "Messages",
-    "notifications": "Notifications",
-    "logout": "Log out"
+    "integrations": "Integrationer",
+    "theming": "Tema",
+    "settings": "Indstillinger",
+    "account": "Konto",
+    "messages": "Beskeder",
+    "notifications": "Notifikationer",
+    "logout": "Log ud"
   },
   "topnav": {
-    "searchPlaceholder": "Search...",
-    "notifications": "Notifications",
-    "messages": "Messages",
-    "viewAccount": "View account",
+    "searchPlaceholder": "Søg...",
+    "notifications": "Notifikationer",
+    "messages": "Beskeder",
+    "viewAccount": "Se konto",
     "deploymentType": {
-      "self_hosted": "Self-hosted",
-      "hosted": "Hosted",
+      "self_hosted": "Selv-hostet",
+      "hosted": "Hostet",
       "enterprise": "Enterprise"
     }
   },
+  "nextModelGenerator": {
+    "nullJsonError": "Kan ikke oprette {{modelName}}Model: modtog null eller udefineret JSON",
+    "missingRequiredField": "Manglende påkrævet felt: {{fieldName}} i {{modelName}}"
+  },
+  "modelGeneratorOrchestrator": {
+    "generatingAll": "Genererer kode til {{count}} model(ler)...",
+    "modelUndefined": "Model er udefineret — sørg for, at en gyldig ModelDefinition er blevet sendt",
+    "modelMissingName": "Model mangler egenskaben \"name\" — hver model skal have et navn",
+    "modelInvalidFields": "Model \"{{name}}\" har ugyldige eller manglende \"fields\" — fields skal være et simpelt objekt",
+    "generationSuccess": "Kode genereret med succes for model: {{name}}",
+    "generationFailed": "Kodegenerering mislykkedes for model: {{name}}"
+  },
+  "completeProfile": {
+    "title": "Fuldfør din profil",
+    "welcome": "Velkommen,",
+    "loading": {
+      "checkingProfile": "Kontrollerer din profil..."
+    },
+    "subdomain": {
+      "label": "Vælg et underdomæne",
+      "placeholder": "dinapp",
+      "hint": "Din app vil være tilgængelig på"
+    },
+    "button": {
+      "save": "Gem & fortsæt",
+      "saving": "Gemmer..."
+    },
+    "validation": {
+      "subdomainRequired": "Indtast et underdomæne",
+      "adapterMissingCreateTenant": "Din databaseadapter understøtter ikke oprettelse af en lejer"
+    },
+    "errors": {
+      "saveFailed": "Fejl ved gemning af underdomæne: {{message}}",
+      "unknownError": "Der opstod en ukendt fejl"
+    }
+  },
+  "forgotPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Nulstilling af adgangskode understøttes ikke af den nuværende databaseadapter",
+      "noAccountFound": "Ingen konto fundet med den e-mailadresse."
+    }
+  },
+  "forgotPassword": {
+    "title": "Glemt adgangskode",
+    "description": "Indtast din e-mailadresse, så sender vi dig et link til at nulstille din adgangskode.",
+    "form": {
+      "emailLabel": "E-mailadresse",
+      "emailPlaceholder": "dig@eksempel.com",
+      "buttonSend": "Send nulstillingslink",
+      "buttonSending": "Sender..."
+    },
+    "validation": {
+      "emailRequired": "Indtast din e-mailadresse."
+    },
+    "errors": {
+      "firebaseConfigMissing": "Firebase-konfiguration mangler. Kontrollér venligst dine miljøvariabler.",
+      "sendFailed": "Kunne ikke sende nulstillingslinket. Prøv venligst igen."
+    },
+    "success": {
+      "title": "Tjek din indbakke",
+      "description": "En e-mail til nulstilling af adgangskode er blevet sendt. Tjek din indbakke, og følg linket for at nulstille din adgangskode.",
+      "button": "Tilbage til login"
+    },
+    "notice": {
+      "title": "Anmodning sendt",
+      "button": "OK"
+    },
+    "error": {
+      "title": "Noget gik galt"
+    }
+  },
+  "resetPasswordAction": {
+    "errors": {
+      "adapterMissingFunctions": "Nulstilling af adgangskode understøttes ikke af den nuværende databaseadapter",
+      "invalidToken": "Ugyldigt eller udløbet nulstillingslink. Anmod om et nyt.",
+      "tokenAlreadyUsed": "Dette nulstillingslink er allerede blevet brugt. Anmod om et nyt.",
+      "tokenExpired": "Dette nulstillingslink er udløbet. Anmod om et nyt."
+    }
+  },
+  "resetPassword": {
+    "title": "Nulstil adgangskode",
+    "form": {
+      "passwordLabel": "Ny adgangskode",
+      "buttonReset": "Nulstil adgangskode",
+      "buttonResetting": "Nulstiller..."
+    },
+    "errors": {
+      "invalidLink": "Ugyldigt eller manglende nulstillingslink. Anmod om et nyt.",
+      "passwordRequired": "Indtast en ny adgangskode.",
+      "missingToken": "Nulstillingstoken mangler. Brug venligst linket fra din e-mail.",
+      "resetFailed": "Kunne ikke nulstille adgangskoden. Prøv venligst igen."
+    },
+    "error": {
+      "title": "Noget gik galt"
+    },
+    "expired": {
+      "title": "Nulstillingslink udløbet",
+      "description": "Dit link til nulstilling af adgangskode er udløbet. Omdirigerer til siden Glemt adgangskode..."
+    },
+    "success": {
+      "title": "Adgangskode nulstillet",
+      "description": "Du kan nu",
+      "signinLink": "logge ind",
+      "descriptionSuffix": "med din nye adgangskode."
+    }
+  },
+  "signIn": {
+    "heading": "Log ind på din Underpeaks-konto",
+    "fields": {
+      "email": "E-mail",
+      "password": "Adgangskode"
+    },
+    "button": {
+      "signIn": "Log ind",
+      "signingIn": "Logger ind..."
+    },
+    "links": {
+      "forgotPassword": "Glemt adgangskode?",
+      "noAccount": "Har du ikke en konto?",
+      "signUp": "Opret dig nu"
+    },
+    "errors": {
+      "title": "Fejl",
+      "signinFailed": "Login mislykkedes. Kontrollér dine oplysninger, og prøv igen."
+    }
+  },
+  "signUp": {
+    "heading": "Opret din Underpeaks-konto",
+    "fields": {
+      "fullName": "Fulde navn",
+      "fullNamePlaceholder": "Dit fulde navn",
+      "email": "E-mail",
+      "emailPlaceholder": "dig@eksempel.com",
+      "password": "Adgangskode"
+    },
+    "button": {
+      "signUp": "Opret dig",
+      "creating": "Opretter..."
+    },
+    "alerts": {
+      "errorTitle": "Fejl",
+      "successTitle": "Succes"
+    },
+    "success": {
+      "accountCreated": "Konto oprettet!"
+    },
+    "links": {
+      "alreadyHaveAccount": "Har du allerede en konto?",
+      "loginNow": "Log ind nu"
+    },
+    "errors": {
+      "nameRequired": "Fulde navn er påkrævet.",
+      "emailRequired": "E-mail er påkrævet.",
+      "passwordRequired": "Adgangskode er påkrævet.",
+      "emailInUse": "Denne e-mail er allerede registreret. Prøv at logge ind i stedet.",
+      "invalidEmail": "Indtast en gyldig e-mailadresse.",
+      "weakPassword": "Adgangskoden er for svag. Minimum 6 tegn.",
+      "signupFailed": "Registrering mislykkedes. Prøv venligst igen.",
+      "supabaseSignupFailed": "Supabase-registrering mislykkedes. Prøv venligst igen."
+    },
+    "console": {
+      "firebaseVerificationSent": "Firebase-bekræftelsesmail sendt.",
+      "firebaseVerificationFailed": "Firebase-bekræftelsesmail kunne ikke sendes.",
+      "supabaseVerificationSent": "Supabase-bekræftelsesmail sendt."
+    }
+  },
+  "verifyEmail": {
+    "titles": {
+      "loading": "Bekræfter e-mail",
+      "success": "E-mail bekræftet ✅",
+      "error": "Bekræftelse mislykkedes"
+    },
+    "status": {
+      "verifying": "Bekræfter din e-mail...",
+      "verified": "Din e-mail er blevet bekræftet.",
+      "supabaseRedirecting": "Omdirigerer til adgangskodeopsætning..."
+    },
+    "button": {
+      "goToSignIn": "Gå til login"
+    },
+    "logs": {
+      "requestReceived": "[verify-email] Anmodning modtaget",
+      "verificationNotSupported": "[verify-email] Bekræftelse understøttes ikke for denne adapter"
+    },
+    "errors": {
+      "missingTokenOrEmail": "Token eller e-mail mangler",
+      "dbTypeNotSet": "Databasetype er ikke konfigureret",
+      "unsupportedDbType": "Ikke-understøttet databasetype",
+      "sqlAdapterMissingMethods": "SQL-adapter mangler påkrævede metoder",
+      "firebaseAdapterMissingMethods": "Firebase-adapter mangler påkrævede metoder",
+      "invalidToken": "Ugyldigt token",
+      "tokenExpired": "Token udløbet",
+      "userNotFound": "Bruger ikke fundet",
+      "verificationNotSupported": "Bekræftelse understøttes ikke for denne adapter",
+      "verificationFailed": "Bekræftelse mislykkedes"
+    }
+  },
+  "schemaPreview": {
+    "title": "Skemaforhåndsvisning",
+    "columns": {
+      "field": "Felt",
+      "type": "Type"
+    }
+  },
+  "confirmDialog": {
+    "defaults": {
+      "title": "Bekræft handling",
+      "description": "Er du sikker på, at du vil fortsætte?"
+    },
+    "buttons": {
+      "confirm": "Bekræft",
+      "cancel": "Annuller"
+    }
+  },
+  "menu": {
+    "sections": {
+      "business": "Forretning",
+      "content": "Indhold",
+      "assets": "Aktiver",
+      "configuration": "Konfiguration"
+    },
+    "items": {
+      "dashboard": "Dashboard",
+      "products": "Produkter",
+      "categories": "Kategorier",
+      "orders": "Ordrer",
+      "coupons": "Kuponer",
+      "users": "Brugere",
+      "shipping": "Forsendelse",
+      "services": "Tjenester",
+      "sharedModels": "Delte modeller",
+      "menu": "Menu",
+      "pages": "Sider",
+      "theme": "Tema",
+      "storage": "Lagring",
+      "integrations": "Integrationer",
+      "apisAndWebhooks": "API'er og webhooks"
+    }
+  },
+  "messagesDropdown": {
+    "header": {
+      "title": "Beskeder",
+      "unreadCount": "{count} ulæste"
+    },
+    "empty": "Ingen beskeder endnu",
+    "viewAll": "Se alle beskeder",
+    "unreadBadge": "{count} ulæste",
+    "systemInitials": "SY",
+    "fallbackUser": "Bruger"
+  },
+  "notificationsDropdown": {
+    "header": {
+      "title": "Notifikationer",
+      "unreadCount": "{count} ulæste",
+      "markAllRead": "Markér alle som læst"
+    },
+    "empty": "Ingen notifikationer endnu",
+    "viewAll": "Se alle notifikationer"
+  },
+  "previewSchema": {
+    "fieldsHeading": "Felter",
+    "fieldNamePlaceholder": "Feltnavn",
+    "requiredLabel": "Påkrævet",
+    "removeButton": "Fjern",
+    "saveButton": "Gem",
+    "previewButton": "Forhåndsvisning",
+    "hidePreviewButton": "Skjul forhåndsvisning",
+    "addFieldButton": "Tilføj felt",
+    "types": {
+      "string": "streng",
+      "num": "tal",
+      "boolean": "boolsk",
+      "datetime": "dato/tid",
+      "array": "array",
+      "map": "map",
+      "null": "null"
+    },
+    "aria": {
+      "fieldName": "Felt {{index}} navn",
+      "fieldType": "Felt {{index}} type",
+      "elementType": "Felt {{index}} elementtype",
+      "required": "Felt {{index}} påkrævet",
+      "removeField": "Fjern felt {{index}}"
+    }
+  },
   "sidebar": {
-    "collapse": "Collapse sidebar",
-    "expand": "Expand sidebar",
-    "content": "Content",
-    "developer": "Developer",
-    "design": "Design",
-    "system": "System"
+    "loggingOut": "Logger ud…",
+    "footer": {
+      "settings": "Indstillinger",
+      "logout": "Log ud",
+      "collapse": "Skjul sidepanel",
+      "expand": "Udvid sidepanel",
+      "business": "Forretning",
+      "developer": "Udvikler",
+      "design": "Design",
+      "system": "System"
+    },
+    "aria": {
+      "sidebar": "Konsolnavigation",
+      "navigation": "Hovednavigation",
+      "expandSidebar": "Udvid sidepanel",
+      "collapseSidebar": "Skjul sidepanel"
+    }
+  },
+  "topNavbar": {
+    "logoAlt": "Projektlogo",
+    "projectLabel": "Projekt:",
+    "signIn": "Log ind",
+    "register": "Registrer",
+    "aria": {
+      "navbar": "Øverste navigationslinje",
+      "goToDashboard": "Gå til dashboard"
+    }
+  },
+  "userDropdown": {
+    "aria": {
+      "userMenu": "Brugermenu for {name}"
+    },
+    "menu": {
+      "account": "Konto",
+      "settings": "Indstillinger",
+      "helpAndDocs": "Hjælp & dokumentation",
+      "logout": "Log ud"
+    }
+  },
+  "accountPage": {
+    "title": "Konto",
+    "subtitle": "Administrer din profil og sikkerhed.",
+    "profile": {
+      "title": "Profil",
+      "description": "Opdater dit visningsnavn.",
+      "fullNameLabel": "Fulde navn",
+      "fullNamePlaceholder": "Dit fulde navn",
+      "emailLabel": "E-mailadresse",
+      "emailReadOnlyNote": "E-mail administreres af din autentificeringsudbyder og kan ikke ændres her.",
+      "saveButton": "Gem ændringer",
+      "savingButton": "Gemmer…",
+      "savedButton": "Gemt"
+    },
+    "danger": {
+      "title": "Faresone",
+      "description": "Uigenkaldelige handlinger. Fortsæt med forsigtighed.",
+      "cancelTitle": "Annuller abonnement",
+      "cancelDescription": "Din plan forbliver aktiv indtil slutningen af den nuværende faktureringsperiode og skifter derefter til selv-hostet.",
+      "cancelButton": "Annuller plan",
+      "cancelModalBody": "Dit abonnement vil blive annulleret, men du beholder adgangen indtil slutningen af din nuværende faktureringsperiode. Dette kan ikke fortrydes.",
+      "resetTitle": "Nulstil projekt",
+      "resetDescription": "Sletter permanent alt projektindhold og starter onboarding forfra. Din konto beholdes.",
+      "resetButton": "Nulstil projekt",
+      "resetModalBody": "Dette sletter permanent alt indhold i dit projekt — modeller, sider, data og medier. Din konto og fakturering beholdes. Dette kan ikke fortrydes.",
+      "deleteTitle": "Slet konto",
+      "deleteDescription": "Sletter permanent din konto og alle tilknyttede data.",
+      "deleteButton": "Slet konto",
+      "deleteModalBody": "Dette sletter permanent din konto og alt indhold. Faktureringsregistre bevares, hvor det er lovpligtigt. Dette kan ikke fortrydes."
+    },
+    "password": {
+      "title": "Skift adgangskode",
+      "description": "Brug en stærk adgangskode, du ikke bruger andre steder.",
+      "currentLabel": "Nuværende adgangskode",
+      "newLabel": "Ny adgangskode",
+      "confirmLabel": "Bekræft ny adgangskode",
+      "showPassword": "Vis adgangskode",
+      "hidePassword": "Skjul adgangskode",
+      "minLengthHint": "Minimum 8 tegn",
+      "mismatchHint": "Adgangskoderne matcher ikke",
+      "updateButton": "Opdater adgangskode",
+      "updatingButton": "Opdaterer…",
+      "updatedButton": "Opdateret"
+    },
+    "billing": {
+      "title": "Fakturering & plan",
+      "description": "Din nuværende plan og opgraderingsmuligheder.",
+      "selfHostedDescription": "Kernefunktioner inkluderet. Opgrader for integrationer, avanceret autentificering og white-labelling.",
+      "paidDescription": "Alle funktioner låst op.",
+      "upgradeButton": "Opgrader",
+      "upgradeAriaLabel": "Opgrader til Underpeaks Pro",
+      "proFeaturesTitle": "Hvad du får med Pro",
+      "proFeature1": "Integrationer (Stripe, Mailchimp og mere)",
+      "proFeature2": "Avanceret autentificering — 2FA, social login, magic link, SSO",
+      "proFeature3": "White-label CMS'et med dit eget brand",
+      "proFeature4": "Brugerdefineret domæne til din konsol",
+      "contactSalesButton": "Kontakt salg"
+    },
+    "errors": {
+      "profileUpdateFailed": "Opdatering af profil mislykkedes. Prøv venligst igen.",
+      "passwordUpdateFailed": "Opdatering af adgangskode mislykkedes. Prøv venligst igen."
+    }
+  },
+  "apiPage": {
+    "title": "API",
+    "subtitle": "Generiske endpoints genereret automatisk fra dine modeller",
+    "customEndpointButton": "Brugerdefineret endpoint",
+    "tabsLabel": "API-sidefaner",
+    "copy": "Kopiér til udklipsholder",
+    "copied": "Kopieret!",
+    "tabs": {
+      "endpoints": "Endpoints",
+      "keys": "API-nøgler",
+      "reference": "Reference"
+    },
+    "endpoints": {
+      "searchPlaceholder": "Søg efter endpoints…",
+      "typeFilterLabel": "Filtrer efter endpoint-type",
+      "modelFilterLabel": "Filtrer efter model",
+      "type": {
+        "all": "alle",
+        "auto": "automatisk",
+        "custom": "brugerdefineret"
+      },
+      "colMethod": "Metode",
+      "colPath": "Sti",
+      "colDescription": "Beskrivelse",
+      "colActions": "Handlinger",
+      "noResults": "Ingen endpoints matcher dit filter",
+      "customBadge": "Brugerdefineret",
+      "requiresAuth": "Kræver autentificering",
+      "public": "Offentligt endpoint",
+      "testButton": "Test",
+      "exampleRequest": "Eksempel på forespørgsel",
+      "requiredHeaders": "Påkrævede headers",
+      "testLabel": "Test",
+      "sendRequest": "Send forespørgsel",
+      "running": "Kører…"
+    },
+    "drawer": {
+      "title": "Nyt brugerdefineret endpoint",
+      "subtitle": "Skriv forretningslogik, der kalder det generiske API",
+      "close": "Luk panel",
+      "methodLabel": "Metode",
+      "pathLabel": "Sti",
+      "descriptionLabel": "Beskrivelse",
+      "descriptionPlaceholder": "Hvad gør dette endpoint?",
+      "authLabel": "Autentificering",
+      "authRequired": "Påkrævet",
+      "authPublic": "Offentlig",
+      "codeLabel": "Handler-kode",
+      "cancelButton": "Annuller",
+      "createButton": "Opret endpoint"
+    },
+    "keys": {
+      "title": "API-nøgler",
+      "keepSecret": "Hold disse hemmelige",
+      "createTitle": "Opret ny nøgle",
+      "nameLabel": "Nøglenavn",
+      "namePlaceholder": "Nøglenavn, f.eks. Mobilapp",
+      "generateButton": "Generer",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "never": "Aldrig",
+      "created": "Oprettet",
+      "lastUsed": "Sidst brugt",
+      "revealKey": "Vis API-nøgle",
+      "hideKey": "Skjul API-nøgle",
+      "deleteKey": "Slet nøgle {{name}}",
+      "confirmDelete": "Bekræft sletning",
+      "cancelDelete": "Annuller sletning"
+    },
+    "reference": {
+      "queryParamsTitle": "Forespørgselsparametre",
+      "queryParamsSubtitle": "Tilgængelig på alle GET-endpoints",
+      "operatorsTitle": "Filteroperatorer",
+      "operatorsSubtitle": "Brug sammen med",
+      "operatorsFormat": "parameter som",
+      "exampleTitle": "Fuldstændigt eksempel",
+      "exampleDescription": "Hent aktive produkter under 500 kr., sorteret efter pris, kun med id/navn/pris:",
+      "responseLabel": "Svar:"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
-    "welcome": "Welcome back, {name}",
-    "addWidget": "Add widget",
-    "editLayout": "Edit layout",
-    "saveLayout": "Save layout",
-    "resetLayout": "Reset layout"
+    "welcome": "Velkommen tilbage, {name}",
+    "addWidget": "Tilføj widget",
+    "editLayout": "Rediger layout",
+    "saveLayout": "Gem layout",
+    "resetLayout": "Nulstil layout",
+    "toolbar": {
+      "title": "Dashboard",
+      "subtitle": "Træk widgets for at omarrangere · hold musen over for at redigere",
+      "refresh": "Opdater",
+      "last30Days": "Sidste 30 dage",
+      "addWidget": "Tilføj widget"
+    },
+    "grid": {
+      "addWidget": "Tilføj widget"
+    },
+    "addPanel": {
+      "title": "Tilføj widget",
+      "subtitle": "Klik for at tilføje til dashboard"
+    },
+    "widget": {
+      "dragToReorder": "Træk for at omarrangere",
+      "vsLastPeriod": "vs. forrige periode"
+    },
+    "chart": {
+      "day": "Dag",
+      "daysAgo": "30 dage siden",
+      "today": "I dag"
+    },
+    "formula": {
+      "placeholder": "f.eks. SUM(orders.total, DATERANGE(-7d, today))",
+      "presets": "Forudindstillinger"
+    }
   },
   "media": {
-    "title": "Media",
-    "uploadFiles": "Upload Files",
-    "createFolder": "Create Folder",
-    "folderName": "Folder name",
-    "rootFolder": "Root",
-    "noFiles": "No files in this folder",
-    "dropToUpload": "Drop files here to upload",
-    "orClickToUpload": "or click to browse",
-    "gridView": "Grid view",
-    "listView": "List view",
-    "fileSize": "File size",
-    "fileType": "File type",
-    "uploadedAt": "Uploaded",
-    "deleteFileConfirm": "Are you sure you want to delete \"{name}\"?",
-    "deleteFolderConfirm": "Are you sure you want to delete the folder \"{name}\" and all its contents?",
-    "importFromUrl": "Import from URL",
-    "copyUrl": "Copy URL",
-    "urlCopied": "URL copied to clipboard",
-    "details": "File Details",
-    "selectFile": "Select a file to view details"
+    "title": "Medier",
+    "uploadFiles": "Upload filer",
+    "createFolder": "Opret mappe",
+    "folderName": "Mappenavn",
+    "rootFolder": "Rod",
+    "noFiles": "Ingen filer i denne mappe",
+    "dropToUpload": "Slip filer her for at uploade",
+    "orClickToUpload": "eller klik for at gennemse",
+    "gridView": "Gittervisning",
+    "listView": "Listevisning",
+    "fileSize": "Filstørrelse",
+    "fileType": "Filtype",
+    "uploadedAt": "Uploadet",
+    "deleteFileConfirm": "Er du sikker på, at du vil slette \"{name}\"?",
+    "deleteFolderConfirm": "Er du sikker på, at du vil slette mappen \"{name}\" og alt dens indhold?",
+    "importFromUrl": "Importer fra URL",
+    "copyUrl": "Kopiér URL",
+    "urlCopied": "URL kopieret til udklipsholder",
+    "details": "Fildetaljer",
+    "selectFile": "Vælg en fil for at se detaljer"
   },
   "settings": {
-    "title": "Settings",
+    "title": "Indstillinger",
     "overview": {
-      "title": "Overview",
-      "projectName": "Project Name",
-      "projectUrl": "Project URL",
-      "projectId": "Project ID",
-      "dbType": "Database Type",
-      "environment": "Environment",
-      "deploymentType": "Deployment Type",
-      "savedSuccess": "Settings saved successfully"
+      "title": "Oversigt",
+      "projectName": "Projektnavn",
+      "projectUrl": "Projekt-URL",
+      "projectId": "Projekt-ID",
+      "dbType": "Databasetype",
+      "environment": "Miljø",
+      "deploymentType": "Implementeringstype",
+      "savedSuccess": "Indstillinger gemt"
     },
     "apiKeys": {
-      "title": "API Keys",
-      "description": "Manage API keys for programmatic access to your project.",
-      "generateKey": "Generate New Key",
-      "keyName": "Name",
-      "keyPrefix": "Key prefix",
-      "lastUsed": "Last used",
-      "neverUsed": "Never used",
-      "revokeConfirm": "Are you sure you want to revoke \"{name}\"? This cannot be undone.",
-      "revoked": "Revoked",
-      "keyCopied": "Key copied to clipboard",
-      "newKeyGenerated": "New API key generated. Copy it now — it won't be shown again.",
-      "noKeys": "No API keys yet. Generate one to get started."
+      "heading": "API-nøgler",
+      "subheading": "Administrer nøgler, der bruges til at autentificere API-anmodninger fra dine apps.",
+      "title": "API-nøgler",
+      "description": "Administrer API-nøgler til programmatisk adgang til dit projekt.",
+      "generateKey": "Generer ny nøgle",
+      "keyName": "Navn",
+      "keyPrefix": "Nøglepræfiks",
+      "lastUsed": "Sidst brugt",
+      "neverUsed": "Aldrig brugt",
+      "revokeConfirm": "Er du sikker på, at du vil tilbagekalde \"{name}\"? Dette kan ikke fortrydes.",
+      "revoked": "Tilbagekaldt",
+      "keyCopied": "Nøgle kopieret til udklipsholder",
+      "newKeyGenerated": "Ny API-nøgle genereret. Kopiér den nu — den vises ikke igen.",
+      "noKeys": "Ingen API-nøgler endnu. Generer en for at komme i gang.",
+      "sectionTitle": "Aktive nøgler",
+      "createdDate": "Oprettet {{date}}",
+      "lastUsedDate": "Sidst brugt {{date}}",
+      "hideKey": "Skjul nøgle",
+      "revealKey": "Vis nøgle",
+      "copyKey": "Kopiér nøgle",
+      "revoke": "Tilbagekald",
+      "emptyTitle": "Ingen API-nøgler endnu",
+      "emptySubtitle": "Generer en nøgle nedenfor for at komme i gang."
     },
     "branding": {
       "title": "Branding",
-      "description": "Customise the look and feel of your Underpeaks console.",
+      "description": "Tilpas udseendet af din Underpeaks-konsol.",
       "logo": "Logo",
       "favicon": "Favicon",
-      "primaryColor": "Primary Color",
+      "primaryColor": "Primær farve",
       "uploadLogo": "Upload logo",
       "uploadFavicon": "Upload favicon",
-      "logoHint": "Recommended: 200×50px, PNG or SVG with transparent background.",
-      "faviconHint": "Recommended: 32×32px ICO, PNG, or SVG.",
-      "livePreview": "Live Preview",
-      "brandingSaved": "Branding updated successfully"
+      "logoHint": "Anbefalet: 200×50px, PNG eller SVG med gennemsigtig baggrund.",
+      "faviconHint": "Anbefalet: 32×32px ICO, PNG eller SVG.",
+      "livePreview": "Live-forhåndsvisning",
+      "brandingSaved": "Branding opdateret"
     },
     "smtp": {
       "title": "SMTP",
-      "host": "SMTP Host",
+      "host": "SMTP-vært",
       "port": "Port",
-      "username": "Username",
-      "fromEmail": "From Email",
-      "fromName": "From Name",
-      "encryption": "Encryption",
-      "testEmail": "Send test email",
-      "testEmailSuccess": "Test email sent successfully"
+      "username": "Brugernavn",
+      "fromEmail": "Afsender-e-mail",
+      "fromName": "Afsendernavn",
+      "encryption": "Kryptering",
+      "testEmail": "Send test-e-mail",
+      "testEmailSuccess": "Test-e-mail sendt"
     },
     "domains": {
-      "title": "Domains",
-      "addDomain": "Add domain",
-      "verified": "Verified",
-      "unverified": "Unverified",
-      "primary": "Primary",
-      "setPrimary": "Set as primary"
+      "title": "Domæner",
+      "addDomain": "Tilføj domæne",
+      "verified": "Bekræftet",
+      "unverified": "Ikke bekræftet",
+      "primary": "Primær",
+      "setPrimary": "Angiv som primær"
     }
   },
   "account": {
-    "title": "Account",
-    "fullName": "Full name",
-    "emailReadOnly": "Email address (read-only)",
-    "changePassword": "Change Password",
-    "currentPassword": "Current password",
-    "newPassword": "New password",
-    "confirmPassword": "Confirm new password",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "profileUpdated": "Profile updated successfully",
-    "passwordChanged": "Password changed successfully",
-    "memberSince": "Member since {date}"
+    "title": "Konto",
+    "fullName": "Fulde navn",
+    "emailReadOnly": "E-mailadresse (skrivebeskyttet)",
+    "changePassword": "Skift adgangskode",
+    "currentPassword": "Nuværende adgangskode",
+    "newPassword": "Ny adgangskode",
+    "confirmPassword": "Bekræft ny adgangskode",
+    "passwordsDoNotMatch": "Adgangskoderne matcher ikke",
+    "profileUpdated": "Profil opdateret",
+    "passwordChanged": "Adgangskode ændret",
+    "memberSince": "Medlem siden {date}"
   },
   "messages": {
-    "title": "Messages",
-    "newConversation": "New Conversation",
-    "noConversations": "No conversations yet",
-    "noMessages": "No messages in this conversation",
-    "typeMessage": "Type a message...",
+    "title": "Beskeder",
+    "newConversation": "Ny samtale",
+    "noConversations": "Ingen samtaler endnu",
+    "noMessages": "Ingen beskeder i denne samtale",
+    "typeMessage": "Skriv en besked...",
     "send": "Send",
-    "markAllRead": "Mark all as read",
-    "reply": "Reply",
-    "you": "You",
+    "markAllRead": "Markér alle som læst",
+    "reply": "Svar",
+    "you": "Dig",
     "system": "System"
   },
+  "apiKeys": {
+    "heading": "API-nøgler",
+    "subheading": "Administrer nøgler, der bruges til at autentificere API-anmodninger fra dine apps.",
+    "sectionTitle": "Aktive nøgler",
+    "createdDate": "Oprettet {date}",
+    "lastUsedDate": "Sidst brugt {date}",
+    "neverUsed": "Aldrig brugt",
+    "hideKey": "Skjul nøgle",
+    "revealKey": "Vis nøgle",
+    "copyKey": "Kopiér nøgle",
+    "revoke": "Tilbagekald",
+    "emptyTitle": "Ingen API-nøgler endnu",
+    "emptySubtitle": "Generer en nøgle nedenfor for at komme i gang.",
+    "errors": {
+      "loadFailed": "Kunne ikke indlæse API-nøgler",
+      "generateFailed": "Kunne ikke generere nøgle",
+      "revokeFailed": "Kunne ikke tilbagekalde nøgle"
+    }
+  },
   "notifications": {
-    "title": "Notifications",
-    "noNotifications": "No notifications",
-    "noUnread": "You're all caught up!",
-    "markAllRead": "Mark all as read",
-    "viewAll": "View all notifications",
+    "title": "Notifikationer",
+    "noNotifications": "Ingen notifikationer",
+    "noUnread": "Du er helt opdateret!",
+    "markAllRead": "Markér alle som læst",
+    "viewAll": "Se alle notifikationer",
     "filters": {
-      "all": "All",
-      "unread": "Unread",
-      "comment": "Comments",
+      "all": "Alle",
+      "unread": "Ulæst",
+      "comment": "Kommentarer",
       "system": "System",
-      "payment": "Payments",
-      "security": "Security",
-      "message": "Messages"
+      "payment": "Betalinger",
+      "security": "Sikkerhed",
+      "message": "Beskeder"
     },
     "priority": {
-      "low": "Low",
+      "low": "Lav",
       "normal": "Normal",
-      "high": "High",
-      "urgent": "Urgent"
+      "high": "Høj",
+      "urgent": "Presserende"
     }
   },
   "auth": {
-    "login": "Log in",
-    "logout": "Log out",
-    "email": "Email address",
-    "password": "Password",
-    "forgotPassword": "Forgot password?",
-    "resetPassword": "Reset password",
-    "sessionExpired": "Your session has expired. Please log in again.",
-    "idleWarning": "You've been inactive for a while.",
-    "idleLogoutIn": "You will be logged out in {seconds} seconds.",
-    "stayLoggedIn": "Stay logged in"
+    "login": "Log ind",
+    "logout": "Log ud",
+    "email": "E-mailadresse",
+    "password": "Adgangskode",
+    "forgotPassword": "Glemt adgangskode?",
+    "resetPassword": "Nulstil adgangskode",
+    "sessionExpired": "Din session er udløbet. Log venligst ind igen.",
+    "idleWarning": "Du har været inaktiv et stykke tid.",
+    "idleLogoutIn": "Du bliver logget ud om {seconds} sekunder.",
+    "stayLoggedIn": "Forbliv logget ind"
   },
   "errors": {
-    "notFound": "Page not found",
-    "serverError": "Server error",
-    "networkError": "Network error — please check your connection",
-    "sessionError": "Session error — please log in again",
-    "unknown": "An unexpected error occurred"
+    "notFound": "Side ikke fundet",
+    "serverError": "Serverfejl",
+    "networkError": "Netværksfejl — tjek venligst din forbindelse",
+    "sessionError": "Sessionsfejl — log venligst ind igen",
+    "unknown": "Der opstod en uventet fejl"
+  },
+  "grid": {
+    "addWidget": "Tilføj widget"
+  },
+  "addPanel": {
+    "title": "Tilføj widget",
+    "subtitle": "Klik for at tilføje til dashboard"
+  },
+  "widget": {
+    "dragToReorder": "Træk for at omarrangere",
+    "vsLastPeriod": "vs. forrige periode"
+  },
+  "chart": {
+    "day": "Dag",
+    "daysAgo": "30 dage siden",
+    "today": "I dag"
+  },
+  "formula": {
+    "placeholder": "f.eks. SUM(orders.total, DATERANGE(-7d, today))",
+    "presets": "Forudindstillinger"
+  },
+  "helpCenter": {
+    "header": {
+      "title": "Hjælpecenter",
+      "subtitle": "Find svar, læs dokumentationen, eller kontakt os.",
+      "searchPlaceholder": "Søg i ofte stillede spørgsmål…"
+    },
+    "resources": {
+      "title": "Ressourcer",
+      "links": {
+        "gettingStarted": {
+          "label": "Kom i gang",
+          "description": "Opsæt dit første projekt på få minutter."
+        },
+        "apiReference": {
+          "label": "API-reference",
+          "description": "Fuld reference til alle API-endpoints og operatorer."
+        },
+        "community": {
+          "label": "Community-forum",
+          "description": "Stil spørgsmål, og del projekter med fællesskabet."
+        }
+      }
+    },
+    "faq": {
+      "title": "Ofte stillede spørgsmål",
+      "resultCount": "{count} resultat(er)",
+      "noResults": "Ingen resultater for \"{query}\"",
+      "noResultsHint": "Prøv et andet søgeord, eller kontakt support nedenfor."
+    },
+    "api": {
+      "title": "API-hurtigreference",
+      "baseUrl": "Base-URL:",
+      "endpoints": {
+        "get": "Viser alle poster for en model. Understøtter filtrering, sortering, paginering.",
+        "post": "Opretter en ny post.",
+        "put": "Opdaterer en eksisterende post via ID.",
+        "delete": "Sletter en post via ID."
+      },
+      "operators": {
+        "title": "Forespørgselsoperatorer",
+        "list": "eq, neq, gt, gte, lt, lte, like, in",
+        "example": "?where=status:eq:active&orderBy=price:asc&limit=20&offset=0"
+      }
+    },
+    "contact": {
+      "title": "Kontakt support",
+      "submit": "Send besked",
+      "success": {
+        "title": "Besked sendt!",
+        "subtitle": "Vi vender tilbage til dig hurtigst muligt."
+      },
+      "fields": {
+        "name": "Navn",
+        "namePlaceholder": "Anders Jensen",
+        "email": "E-mail",
+        "emailPlaceholder": "dig@eksempel.com",
+        "message": "Besked",
+        "messagePlaceholder": "Beskriv dit problem eller spørgsmål…"
+      }
+    }
+  },
+  "integrations": {
+    "toolbar": {
+      "title": "Integrationer",
+      "connectedCount": "{count} tilsluttet",
+      "errorCount": "{count} fejl",
+      "infoBanner": "Tilsluttede integrationer er tilgængelige i brugerdefinerede endpoints og kodegenerering"
+    },
+    "categories": {
+      "all": "Alle",
+      "payments": "Betalinger",
+      "email": "E-mail & SMS",
+      "storage": "Lagring",
+      "ai": "AI",
+      "analytics": "Analyse",
+      "automation": "Automatisering"
+    },
+    "status": {
+      "connected": "Tilsluttet",
+      "disconnected": "Afbrudt",
+      "error": "Fejl"
+    },
+    "card": {
+      "viewDocs": "Se dokumentation",
+      "buttons": {
+        "saveAndConnect": "Gem & tilslut",
+        "saving": "Gemmer…",
+        "saved": "Gemt!",
+        "disconnect": "Afbryd",
+        "retryConnection": "Prøv forbindelse igen"
+      }
+    },
+    "empty": "Ingen integrationer i denne kategori"
+  },
+  "menuPage": {
+    "toolbar": {
+      "title": "Menu",
+      "subtitle": "{count} element(er) · træk for at omarrangere",
+      "addItem": "Tilføj element"
+    },
+    "preview": {
+      "title": "Nav-forhåndsvisning",
+      "subtitle": "Kun synlige elementer",
+      "empty": "Ingen synlige elementer endnu."
+    },
+    "list": {
+      "title": "Alle elementer",
+      "empty": "Ingen menuelementer endnu",
+      "emptyAction": "Tilføj dit første element"
+    },
+    "row": {
+      "hidden": "skjult",
+      "external": "Ekstern",
+      "actions": {
+        "moveUp": "Flyt op",
+        "moveDown": "Flyt ned",
+        "toggleVisibility": "Skift synlighed",
+        "edit": "Rediger",
+        "delete": "Slet",
+        "confirmDelete": "Bekræft sletning",
+        "cancelDelete": "Annuller"
+      }
+    },
+    "errors": {
+      "loadFailed": "Kunne ikke indlæse menuelementer",
+      "createFailed": "Kunne ikke oprette menuelement",
+      "updateFailed": "Kunne ikke opdatere menuelement",
+      "deleteFailed": "Kunne ikke slette menuelement"
+    },
+    "drawer": {
+      "titleAdd": "Tilføj menuelement",
+      "titleEdit": "Rediger menuelement",
+      "subtitle": "Konfigurer etiket, link, ikon og synlighed",
+      "sections": {
+        "labelVisibility": "Etiket & synlighed",
+        "link": "Link",
+        "icon": "Ikon",
+        "nesting": "Indlejring",
+        "preview": "Forhåndsvisning"
+      },
+      "fields": {
+        "pageRequired": "En side skal vælges, før et menuelement kan gemmes.",
+        "menuLabel": "Menuetiket",
+        "menuLabelPlaceholder": "f.eks. Produkter",
+        "menuLabelHint": "Dette er teksten, der vises i navigationsmenuen.",
+        "visibility": "Synlighed",
+        "visible": "Synlig",
+        "hidden": "Skjult",
+        "linkTypePage": "Side",
+        "linkTypeExternal": "Ekstern URL",
+        "selectPage": "Vælg side",
+        "selectPagePlaceholder": "— Vælg en side —",
+        "noPagesHint": "Ingen administratorsider fundet. Opret først en side med sidetype angivet til Admin.",
+        "externalUrl": "Ekstern URL",
+        "openIn": "Åbn i",
+        "sameTab": "Samme fane",
+        "newTab": "Ny fane",
+        "parentItem": "Overordnet element",
+        "parentItemPlaceholder": "— Øverste niveau —",
+        "parentItemHint": "Indlejrede elementer vises som rullebaserede underelementer i navigationen."
+      },
+      "icons": {
+        "home": "Hjem",
+        "grid": "Gitter",
+        "package": "Pakke",
+        "users": "Brugere",
+        "settings": "Indstillinger",
+        "file": "Fil",
+        "cart": "Kurv",
+        "mail": "Post",
+        "star": "Stjerne",
+        "info": "Info"
+      },
+      "preview": {
+        "hidden": "skjult"
+      },
+      "buttons": {
+        "cancel": "Annuller",
+        "saveChanges": "Gem ændringer",
+        "addItem": "Tilføj element",
+        "saving": "Gemmer…"
+      }
+    }
+  },
+  "detailPanel": {
+    "sections": {
+      "fileUrl": "Fil-URL",
+      "metadata": "Metadata",
+      "rename": "Omdøb",
+      "moveToFolder": "Flyt til mappe"
+    },
+    "altText": {
+      "placeholder": "Beskriv dette billede for tilgængelighed…",
+      "empty": "Ingen alt-tekst angivet"
+    },
+    "metadata": {
+      "folder": "Mappe",
+      "path": "Sti",
+      "size": "Størrelse",
+      "type": "Type",
+      "uploaded": "Uploadet",
+      "dimensions": "Dimensioner"
+    },
+    "actions": {
+      "save": "Gem",
+      "saving": "Gemmer…",
+      "cancel": "Annuller",
+      "move": "Flyt",
+      "moving": "Flytter…",
+      "deleteFile": "Slet fil"
+    },
+    "move": {
+      "currentlyIn": "Aktuelt i"
+    },
+    "errors": {
+      "renameFailed": "Omdøbning mislykkedes",
+      "moveFailed": "Flytning mislykkedes"
+    }
+  },
+  "flutterModelGenerator": {
+    "missingRequiredField": "Manglende påkrævet felt: {{fieldName}}"
+  },
+  "folderSidebar": {
+    "header": {
+      "title": "Mapper",
+      "all": "Alle",
+      "newFolderTitle": "Ny mappe",
+      "collapse": "Skjul",
+      "expand": "Udvid"
+    },
+    "folder": {
+      "selectTitle": "Vælg mappe"
+    }
+  },
+  "gridView": {
+    "folder": {
+      "deleteTitle": "Slet mappe",
+      "fileCount": "{count} filer"
+    },
+    "empty": {
+      "message": "Denne mappe er tom"
+    }
+  },
+  "listView": {
+    "empty": {
+      "message": "Denne mappe er tom"
+    },
+    "header": {
+      "name": "Navn",
+      "size": "Størrelse",
+      "type": "Type",
+      "uploaded": "Uploadet"
+    },
+    "row": {
+      "deleteTitle": "Slet fil"
+    }
+  },
+  "mediaToolbar": {
+    "breadcrumb": {
+      "root": "Medier"
+    },
+    "actions": {
+      "delete": "Slet ({count})",
+      "clear": "Ryd",
+      "upload": "Upload"
+    },
+    "viewMode": {
+      "grid": "Gittervisning",
+      "list": "Listevisning"
+    }
+  },
+  "newFolderPopup": {
+    "title": "Ny mappe",
+    "placeholder": "Mappenavn",
+    "buttons": {
+      "create": "Opret",
+      "cancel": "Annuller"
+    }
+  },
+  "uploadDialog": {
+    "srDescription": "Upload filer eller importer medier via URL til den valgte mappe.",
+    "title": "Tilføj medier",
+    "tabs": {
+      "upload": "Upload fil",
+      "url": "Tilføj via URL"
+    },
+    "uploadZone": {
+      "hint": "Enhver filtype — billeder, videoer, dokumenter"
+    },
+    "urlTab": {
+      "description": "Indsæt en offentlig URL for at importere filen direkte til lagring.",
+      "placeholder": "https://eksempel.com/fil.jpg",
+      "import": "Importer",
+      "importing": "Importerer…",
+      "previewAlt": "URL-forhåndsvisning"
+    },
+    "errors": {
+      "importFailed": "Import mislykkedes"
+    }
+  },
+  "mediaPage": {
+    "errors": {
+      "loadFolders": "Kunne ikke indlæse mapper",
+      "loadFiles": "Kunne ikke indlæse filer",
+      "createFolder": "Kunne ikke oprette mappe",
+      "deleteFailed": "Sletning mislykkedes"
+    },
+    "confirmDelete": {
+      "titleFolder": "Slet mappe",
+      "titleFile": "Slet fil",
+      "message": "Er du sikker på, at du vil slette",
+      "folderWarning": "Dette vil slette alle filer i mappen.",
+      "undoWarning": "Denne handling kan ikke fortrydes.",
+      "selectionLabel": "{count} elementer",
+      "cancel": "Annuller",
+      "confirm": "Slet",
+      "deleting": "Sletter…"
+    }
+  },
+  "conversationList": {
+    "empty": {
+      "message": "Ingen beskeder",
+      "subUnread": "Helt opdateret!",
+      "subAll": "Din indbakke er tom."
+    },
+    "avatar": {
+      "system": "SY"
+    },
+    "time": {
+      "justNow": "lige nu",
+      "minutesAgo": "{count}m siden",
+      "hoursAgo": "{count}t siden",
+      "daysAgo": "{count}d siden"
+    },
+    "unread": {
+      "badge": "{count} ulæste"
+    }
+  },
+  "conversationThread": {
+    "systemMessage": "Systembesked",
+    "from": "Fra: {name}",
+    "deleteButton": "Slet",
+    "deleteAriaLabel": "Slet samtale: {subject}",
+    "messagesAriaLabel": "Beskedtråd",
+    "loading": "Indlæser beskeder...",
+    "emptyTitle": "Ingen beskeder endnu",
+    "emptySub": "Send den første besked nedenfor."
+  },
+  "messageBubble": {
+    "justNow": "Lige nu",
+    "minutesAgo": "{count}m siden",
+    "hoursAgo": "{count}t siden",
+    "daysAgo": "{count}d siden"
+  },
+  "replyBar": {
+    "placeholder": "Skriv et svar… (Enter for at sende)",
+    "sendAriaLabel": "Send besked"
+  },
+  "messagesPage": {
+    "title": "Beskeder",
+    "unreadCount": "{count} ulæste besked(er)",
+    "filters": {
+      "all": "Alle",
+      "unread": "Ulæst"
+    },
+    "markAllRead": "Markér alle som læst",
+    "closeError": "Luk fejlbesked",
+    "empty": {
+      "title": "Vælg en samtale",
+      "sub": "Vælg en samtale fra listen for at læse den her."
+    },
+    "errors": {
+      "load": "Kunne ikke indlæse beskeder",
+      "delete": "Kunne ikke slette samtale",
+      "markAll": "Kunne ikke markere alle som læst"
+    }
+  },
+  "notificationCard": {
+    "priority": {
+      "urgent": "Presserende",
+      "high": "Høj"
+    },
+    "actions": {
+      "markRead": "Markér som læst",
+      "view": "Vis",
+      "delete": "Slet"
+    }
+  },
+  "notificationsHeader": {
+    "title": "Notifikationer",
+    "unreadCount": "{count} ulæste notifikation(er)",
+    "filters": {
+      "all": "Alle",
+      "unread": "Ulæst"
+    },
+    "markAllRead": "Markér alle som læst"
+  },
+  "notificationsList": {
+    "empty": {
+      "message": "Ingen notifikationer",
+      "subUnread": "Helt opdateret!",
+      "subAll": "Du har endnu ingen notifikationer."
+    }
+  },
+  "notificationsPage": {
+    "errors": {
+      "loadFailed": "Kunne ikke indlæse notifikationer",
+      "markReadFailed": "Kunne ikke markere som læst",
+      "markAllReadFailed": "Kunne ikke markere alle som læst",
+      "deleteFailed": "Kunne ikke slette notifikation"
+    }
+  },
+  "pagesPage": {
+    "visibility": {
+      "public": "Offentlig",
+      "admin": "Admin",
+      "draft": "Kladde",
+      "authenticated":"Authenticated"
+    },
+    "toolbar": {
+      "title": "Sider",
+      "pageCount": "{count} side(r) i alt",
+      "searchPlaceholder": "Søg sider…",
+      "newPage": "Ny side"
+    },
+    "filter": {
+      "all": "Alle"
+    },
+    "table": {
+      "page": "Side",
+      "model": "Model",
+      "template": "Skabelon",
+      "visibility": "Synlighed",
+      "actions": "Handlinger",
+      "seoPrefix": "SEO",
+      "systemBadge": "System",
+      "hiddenBadge": "Skjult"
+    },
+    "emptyState": {
+      "message": "Ingen sider fundet",
+      "cta": "Opret din første side"
+    },
+    "actions": {
+      "edit": "Rediger side",
+      "delete": "Slet side",
+      "view": "Vis side",
+      "confirmDelete": "Bekræft sletning",
+      "cancel": "Annuller",
+      "systemLocked": "Systemsider kan ikke redigeres eller slettes"
+    },
+    "errors": {
+      "loadFailed": "Kunne ikke indlæse sider",
+      "createFailed": "Kunne ikke oprette side",
+      "updateFailed": "Kunne ikke opdatere side",
+      "deleteFailed": "Kunne ikke slette side"
+    },
+    "drawer": {
+      "title": "Opret side",
+      "editTitle": "Rediger side",
+      "subtitle": "Definer en ny side, og tilknyt en model",
+      "sections": {
+        "basicInfo": "Grundlæggende info",
+        "modelTemplate": "Model & skabelon",
+        "seo": "SEO"
+      },
+      "fields": {
+        "hidden": {
+          "label": "Skjul side",
+          "hint": "Skjulte sider vises ikke i navigation eller sitemaps"
+        },
+        "name": {
+          "label": "Sidenavn",
+          "placeholder": "f.eks. Produktliste"
+        },
+        "slug": {
+          "label": "Slug / URL",
+          "placeholder": "/din-side-slug",
+          "hint": "Brug :id til dynamiske ruter, f.eks. /produkter/:id"
+        },
+        "visibility": {
+          "label": "Synlighed"
+        },
+        "model": {
+          "label": "Tilknyt model",
+          "noModel": "— Ingen model (brugerdefineret side) —",
+          "hint": "Én model kan bruges til flere sider."
+        },
+        "template": {
+          "label": "Skabelon"
+        },
+        "seoTitle": {
+          "label": "SEO-titel",
+          "placeholder": "Sidetitel til søgemaskiner",
+          "charCount": "{count}/60 tegn"
+        },
+        "seoDesc": {
+          "label": "Metabeskrivelse",
+          "placeholder": "Kort beskrivelse til søgeresultater…",
+          "charCount": "{count}/160 tegn"
+        }
+      },
+      "seoPreview": {
+        "label": "Søgeforhåndsvisning",
+        "titleFallback": "Sidetitel",
+        "urlPrefix": "dinside.dk",
+        "descFallback": "Ingen beskrivelse angivet."
+      },
+      "actions": {
+        "cancel": "Annuller",
+        "create": "Opret side",
+        "update": "Opdater side",
+        "saving": "Gemmer…"
+      }
+    }
+  },
+  "api-Keys": {},
+  "generateKeyForm": {
+    "sectionTitle": "Generer ny nøgle",
+    "keyNameLabel": "Nøglenavn",
+    "keyNameHint": "Giv den et beskrivende navn, så du kan huske, hvad den bruges til.",
+    "keyNamePlaceholder": "f.eks. Flutter-app — Produktion",
+    "buttonGenerating": "Genererer…",
+    "buttonIdle": "Generer nøgle"
+  },
+  "newKeyModal": {
+    "title": "API-nøgle genereret",
+    "instructions": "Din nøgle er blevet oprettet og er klar til brug. Klik på <eyeIcon>øjenikonet</eyeIcon> ved siden af nøglen på listen for at vise og kopiere den.",
+    "doneButton": "Færdig"
+  },
+  "revokeModal": {
+    "title": "Tilbagekald API-nøgle",
+    "message": "Alle apps, der bruger denne nøgle, vil øjeblikkeligt miste adgang:",
+    "cancelButton": "Annuller",
+    "revokeButtonIdle": "Tilbagekald nøgle",
+    "revokeButtonRevoking": "Tilbagekalder…"
+  },
+  "apiKeysPage": {
+    "errors": {
+      "loadFailed": "Kunne ikke indlæse API-nøgler",
+      "generateFailed": "Kunne ikke generere nøgle",
+      "revokeFailed": "Kunne ikke tilbagekalde nøgle"
+    },
+    "logs": {
+      "loadingKeys": "Indlæser API-nøgler...",
+      "keysLoaded": "API-nøgler indlæst",
+      "generatingKey": "Genererer ny API-nøgle...",
+      "keyGenerated": "API-nøgle genereret",
+      "revokingKey": "Tilbagekalder API-nøgle...",
+      "keyRevoked": "API-nøgle tilbagekaldt"
+    }
+  },
+  "brandingPage": {
+    "heading": "CMS-branding",
+    "subheading": "Tilpas, hvordan CMS'et ser ud for dit team.",
+    "errors": {
+      "saveFailed": "Kunne ikke gemme branding"
+    },
+    "logs": {
+      "savingBranding": "Gemmer brandingindstillinger...",
+      "brandingSaved": "Branding gemt"
+    },
+    "logoSection": {
+      "title": "CMS-logo",
+      "uploadLabel": "Logo",
+      "uploadHint": "PNG eller SVG med gennemsigtig baggrund",
+      "uploadRecommended": "200×60px",
+      "imageAlt": "Logoforhåndsvisning"
+    },
+    "faviconSection": {
+      "title": "Favicon",
+      "uploadLabel": "Favicon",
+      "uploadHint": "ICO, PNG eller SVG — vises i browserfaner",
+      "uploadRecommended": "32×32px eller 64×64px",
+      "imageAlt": "Faviconforhåndsvisning"
+    },
+    "preview": {
+      "label": "Forhåndsvisning af topnavigation",
+      "projectLabel": "Projekt:"
+    },
+    "saveSuccess": "Branding gemt",
+    "saveButtonIdle": "Gem branding",
+    "saveButtonSaving": "Gemmer…"
+  },
+  "overviewPage": {
+    "heading": "Projektoversigt",
+    "subheading": "Et øjebliksbillede af dit Underpeaks-projekt.",
+    "stats": {
+      "dbType": "DB-type",
+      "environment": "Miljø",
+      "deployment": "Implementering",
+      "status": "Status",
+      "statusActive": "Aktiv"
+    },
+    "userInfo": {
+      "sectionTitle": "Brugerinfo",
+      "fullName": "Fulde navn",
+      "email": "E-mail",
+      "role": "Rolle",
+      "status": "Status",
+      "verified": "Bekræftet",
+      "verifiedYes": "Ja",
+      "verifiedNo": "Nej",
+      "memberSince": "Medlem siden"
+    },
+    "licenseKey": {
+      "sectionTitle": "Underpeaks-licensnøgle",
+      "description": "Din licensnøgle autentificerer denne instans og muliggør skelnen mellem hostede og selv-hostede funktioner.",
+      "reveal": "Vis",
+      "hide": "Skjul",
+      "copy": "Kopiér",
+      "copied": "Kopieret",
+      "loading": "Indlæser…",
+      "notFound": "Ingen licensnøgle fundet"
+    }
+  },
+  "smtpPage": {
+    "heading": "SMTP-indstillinger",
+    "subheading": "Konfigurer udgående e-mail til dit projekt.",
+    "emailFeatures": {
+      "sectionTitle": "E-mailfunktioner",
+      "verifyEmailLabel": "Aktivér e-mailbekræftelse ved tilmelding",
+      "forgotPasswordLabel": "Aktivér e-mails til glemt adgangskode",
+      "builtInNotice": "{provider} håndterer e-mailbekræftelse og nulstilling af adgangskode nativt — ingen SMTP nødvendig til disse funktioner.",
+      "smtpToggleLabel": "Brug brugerdefineret SMTP-server"
+    },
+    "smtpConfig": {
+      "sectionTitle": "SMTP-konfiguration",
+      "hostLabel": "SMTP-vært",
+      "hostPlaceholder": "smtp.eksempel.com",
+      "portLabel": "Port",
+      "portPlaceholder": "587",
+      "fromAddressLabel": "Afsenderadresse",
+      "fromAddressPlaceholder": "no-reply@eksempel.com",
+      "usernameLabel": "Brugernavn",
+      "usernamePlaceholder": "SMTP-brugernavn",
+      "passwordLabel": "Adgangskode",
+      "passwordPlaceholder": "SMTP-adgangskode",
+      "showPassword": "Vis adgangskode",
+      "hidePassword": "Skjul adgangskode",
+      "encryptionLabel": "Kryptering",
+      "encryptionNone": "Ingen"
+    },
+    "logs": {
+      "savingSmtp": "Gemmer SMTP-indstillinger...",
+      "smtpSaved": "SMTP-indstillinger gemt"
+    }
+  },
+  "settingsPage": {
+    "sidebarTitle": "Indstillinger",
+    "toggleAriaLabel": "Skift indstillingsnavigation",
+    "nav": {
+      "overview": "Oversigt",
+      "api-keys": "API-nøgler",
+      "smtp": "SMTP-indstillinger",
+      "branding": "CMS-branding"
+    }
+  },
+  "pageLoader": {
+    "loadingMessage": "Indlæser indstillinger…"
+  },
+  "saveButton": {
+    "savedMessage": "Gemt",
+    "buttonSaving": "Gemmer…",
+    "buttonIdle": "Gem ændringer"
+  },
+  "coloursPage": {
+    "heading": "Farver",
+    "subheading": "Definer de farvetokens, der bruges i dine genererede Flutter- og Next.js-apps.",
+    "preview": {
+      "title": "Live-forhåndsvisning",
+      "primaryButton": "Primær knap",
+      "secondaryButton": "Sekundær",
+      "accentBadge": "Accentmærke",
+      "success": "✓ Succes",
+      "warning": "⚠ Advarsel",
+      "danger": "✕ Fare"
+    },
+    "tokensSectionTitle": "Farvetokens",
+    "resetTokenTitle": "Nulstil til standard",
+    "resetAllButton": "Nulstil alt til standard",
+    "savedMessage": "Gemt",
+    "saveButtonIdle": "Gem farver",
+    "saveButtonSaving": "Gemmer…",
+    "logs": {
+      "savingColours": "Gemmer farvetokens...",
+      "coloursSaved": "Farvetokens gemt"
+    },
+    "tokens": {
+      "primary":      { "label": "Primær",             "description": "Vigtigste brandfarve — knapper, links, fremhævelser" },
+      "primary-fg":   { "label": "Primær forgrund",  "description": "Tekst på primærfarvede baggrunde" },
+      "secondary":    { "label": "Sekundær",           "description": "Understøttende brandfarve" },
+      "secondary-fg": { "label": "Sekundær forgrund","description": "Tekst på sekundærfarvede baggrunde" },
+      "accent":       { "label": "Accent",              "description": "Fremhævelsesfarve til badges og tags" },
+      "background":   { "label": "Baggrund",          "description": "Appens hovedbaggrund" },
+      "surface":      { "label": "Overflade",             "description": "Baggrund for kort og paneler" },
+      "border":       { "label": "Kant",              "description": "Standard kantfarve" },
+      "success":      { "label": "Succes",             "description": "Positive tilstande og bekræftelser" },
+      "warning":      { "label": "Advarsel",             "description": "Advarsler og forsigtighedstilstande" },
+      "danger":       { "label": "Fare",              "description": "Fejl og destruktive handlinger" },
+      "text":         { "label": "Primær tekst",        "description": "Hovedbrødtekstfarve" },
+      "text-muted":   { "label": "Dæmpet tekst",          "description": "Sekundær tekst og pladsholdertekst" }
+    }
+  },
+  "featureFlagsPage": {
+    "heading": "Funktionsflag",
+    "comingSoonBadge": "KOMMER SNART",
+    "subheading": "Slå funktioner til, der vil blive inkluderet i dine genererede Flutter- og Next.js-apps.",
+    "paidBadge": "BETALT",
+    "savedMessage": "Gemt",
+    "saveButtonIdle": "Gem flag",
+    "saveButtonSaving": "Gemmer…",
+    "upgrade": {
+      "title": "Hostet plan påkrævet",
+      "description": "Disse funktioner kræver Underpeaks' hostede infrastruktur. Opgrader for at låse dem op.",
+      "button": "Opgrader"
+    },
+    "groups": {
+      "Appearance": "Udseende",
+      "Localisation": "Lokalisering",
+      "App Behaviour": "App-adfærd",
+      "Authentication — Paid": "Autentificering — Betalt",
+      "Advanced — Paid": "Avanceret — Betalt"
+    },
+    "flags": {
+      "dark-mode":          { "label": "Mørk tilstand",                 "description": "Tillad brugere at skifte mellem lys og mørk tema i appen" },
+      "system-theme":       { "label": "Følg systemtema",       "description": "Match automatisk enhedens lys/mørk-tilstandsindstilling" },
+      "multi-language":     { "label": "Understøttelse af flere sprog",    "description": "Aktivér understøttelse af flere sprog i den genererede app" },
+      "rtl-support":        { "label": "RTL-understøttelse",               "description": "Højre-til-venstre-layout til arabisk, hebraisk og lignende sprog" },
+      "offline-mode":       { "label": "Offline-tilstand",              "description": "Cache data lokalt, så appen fungerer uden internetforbindelse" },
+      "push-notifications": { "label": "Push-notifikationer",        "description": "Aktivér push-notifikationsunderstøttelse via FCM — du leverer nøglerne" },
+      "splash-screen":      { "label": "Splash-skærm",             "description": "Vis en brandet splash-skærm, når appen starter" },
+      "onboarding":         { "label": "Onboarding-flow",           "description": "Vis et velkomst-/onboarding-flow for nye brugere" },
+      "2fa":                { "label": "Tofaktorautentificering", "description": "Kræv OTP eller autentificeringsapp for at logge ind" },
+      "biometric":          { "label": "Biometrisk login",           "description": "Fingeraftryks- og Face ID-login på mobil" },
+      "social-login":       { "label": "Social login",              "description": "OAuth via Google, GitHub, Apple og Facebook" },
+      "magic-link":         { "label": "Magic link",                "description": "Adgangskodefrit login via e-maillink" },
+      "sso":                { "label": "SSO / SAML",                "description": "Integration af enterprise single sign-on" },
+      "analytics":          { "label": "Analyse i appen",          "description": "Spor skærmvisninger og hændelser i den genererede app" },
+      "ab-testing":         { "label": "A/B-test",               "description": "Kør funktionseksperimenter på tværs af din brugerbase" },
+      "feature-gating":     { "label": "Funktionslåsning",            "description": "Vis eller skjul funktioner baseret på brugerens plan eller rolle" }
+    },
+    "logs": {
+      "savingFlags": "Gemmer funktionsflag...",
+      "flagsSaved": "Funktionsflag gemt"
+    }
+  },
+  "spacingPage": {
+    "heading": "Afstand & radius",
+    "subheading": "Styr formen, densiteten og hævningen af komponenter i dine genererede apps.",
+    "preview": {
+      "title": "Live-forhåndsvisning",
+      "button": "Knap",
+      "card": "Kortkomponent",
+      "input": "Inputfelt"
+    },
+    "sections": {
+      "radius": {
+        "title": "Kantradius",
+        "description": "Anvendt på knapper, kort, input og modaler"
+      },
+      "density": {
+        "title": "Afstandsdensitet",
+        "description": "Styrer indre afstand i komponenter"
+      },
+      "shadow": {
+        "title": "Hævning / skygge",
+        "description": "Kort- og komponentskyggedybde"
+      }
+    },
+    "radius": {
+      "none": "Ingen",
+      "sm": "Lille",
+      "md": "Mellem",
+      "lg": "Stor",
+      "xl": "Ekstra stor",
+      "full": "Pille"
+    },
+    "density": {
+      "compact": { "label": "Kompakt", "desc": "Stram polstring, mere indhold synligt" },
+      "default": { "label": "Standard", "desc": "Afbalanceret afstand til de fleste anvendelsesscenarier" },
+      "relaxed": { "label": "Afslappet", "desc": "Generøs polstring, lettere at trykke på" }
+    },
+    "shadow": {
+      "none": "Ingen",
+      "sm": "Subtil",
+      "md": "Mellem",
+      "lg": "Stærk"
+    },
+    "save": {
+      "button": "Gem afstand",
+      "saving": "Gemmer…",
+      "savedConfirmation": "Gemt"
+    }
+  },
+  "typographyPage": {
+    "heading": "Typografi",
+    "subheading": "Vælg skrifttyper og skala til dine genererede apps. Skrifttyper indlæses fra Google Fonts.",
+    "preview": {
+      "title": "Live-forhåndsvisning",
+      "headingSuffix": "— Overskrift",
+      "bodySample": "Quizdeltagerne spiste jordbær med fløde, mens cirkusklovnen Walther spillede på xylofon. Eksempel på brødtekst i standardstørrelse.",
+      "monoSample": "const value = \"monospace\";"
+    },
+    "sections": {
+      "fonts": {
+        "title": "Skrifttypefamilier",
+        "description": "Vælg fra Google Fonts — inkluderes automatisk i kodegenerering"
+      },
+      "weights": {
+        "title": "Skrifttypevægte"
+      },
+      "scale": {
+        "title": "Skriftstørrelsesskala",
+        "description": "Styrer den overordnede tekststørrelse i hele appen"
+      }
+    },
+    "fonts": {
+      "headingFont": "Overskriftsskrifttype",
+      "bodyFont": "Brødtekstskrifttype",
+      "monoFont": "Monoskrifttype"
+    },
+    "weights": {
+      "headingWeight": "Overskriftsvægt",
+      "bodyWeight": "Brødtekstvægt"
+    },
+    "scale": {
+      "compact": { "label": "Kompakt", "desc": "Mindre tekst, strammere afstand" },
+      "default": { "label": "Standard", "desc": "Afbalanceret for de fleste apps" },
+      "relaxed": { "label": "Afslappet", "desc": "Større tekst, mere luft" }
+    },
+    "save": {
+      "button": "Gem typografi",
+      "saving": "Gemmer…",
+      "savedConfirmation": "Gemt"
+    }
+  },
+  "themingPage": {
+    "sidebarLabel": "Tema",
+    "nav": {
+      "colours": "Farver",
+      "typography": "Typografi",
+      "spacing": "Afstand & radius",
+      "featureFlags": "Funktionsflag",
+      "presets": "Forudindstillinger"
+    }
+  },
+  "consoleLayout": {
+    "idleModal": {
+      "title": "Inaktiv session",
+      "description": "Du har været inaktiv. Logger ud om:",
+      "logoutButton": "Log ud",
+      "keepAliveButton": "Forbliv logget ind"
+    },
+    "logs": {
+      "logoutFailed": "Log ud mislykkedes:"
+    }
+  },
+  "loader": {
+    "label": "Indlæser…"
+  },
+  "userStatus": {
+    "active": "Aktiv",
+    "needsEmailVerification": "Kræver e-mailbekræftelse",
+    "passwordResetRequested": "Nulstilling af adgangskode anmodet",
+    "blocked": "Blokeret",
+    "disabled": "Deaktiveret"
+  },
+  "createFlutterProject": {
+    "errors": {
+      "creationFailed": "Oprettelse af Flutter-projekt mislykkedes"
+    },
+    "logs": {
+      "skipped": "Oprettelse af Flutter-projekt sprunget over: {output}",
+      "created": "Flutter-projekt oprettet: {output}"
+    }
+  },
+  "createNextJSProject": {
+    "errors": {
+      "creationFailed": "Oprettelse af NextJS-projekt mislykkedes"
+    }
+  },
+  "installerSteps": {
+    "errors": {
+      "dbConfigNotFound": "Databasekonfiguration ikke fundet.",
+      "dbConfigMissing": "DB-konfiguration mangler",
+      "dbConfigMissingStore": "DB-konfiguration mangler i lager",
+      "adminEmailMissing": "Admin-brugerens e-mail mangler",
+      "adminEmailMissingStore": "Admin-brugerens e-mail mangler i lager",
+      "projectTypeMissing": "selectedProjectType mangler",
+      "createTablesFailed": "Kunne ikke oprette tabeller: {message}",
+      "createAdminFailed": "Kunne ikke oprette admin-bruger: {message}",
+      "createModelsFailed": "Kunne ikke oprette modeller: {message}",
+      "writeConfigFailed": "Kunne ikke skrive konfigurationsfil: {message}",
+      "setupStorageFailed": "Kunne ikke opsætte lagring: {message}",
+      "installDemoFailed": "Kunne ikke installere demoindhold: {message}",
+      "stepFailed": "Trin mislykkedes: {step} - {message}"
+    },
+    "logs": {
+      "tablesCreated": "Tabeller oprettet:",
+      "adminCreated": "Admin-bruger oprettet:",
+      "modelsCreated": "Svar på modeloprettelse:",
+      "modelsSkipped": "Oprettelse af modeller sprunget over: {message}",
+      "configWritten": "Konfigurationsfil skrevet:",
+      "storageCreated": "Lagerbuckets oprettet:",
+      "demoContentSkipped": "Demoindhold sprunget over",
+      "demoContentInstalled": "Demoindhold installeret:",
+      "creatingApiEndpoints": "Opretter API-endpoints...",
+      "settingUpAuth": "Opsætter autentificering...",
+      "configuringSession": "Konfigurerer sessionsstyring...",
+      "runningTests": "Kører tests...",
+      "finalizing": "Færdiggør installationsprogrammet...",
+      "noImplementation": "Ingen implementering til trin: {step}"
+    }
+  },
+  "adminSetupPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "heading": "Opsætning af admin-bruger",
+    "description": "Angiv admin-brugerens oplysninger for at sikre dit Underpeaks-system. Denne konto vil have fuld administrativ adgang inden for platformen.",
+    "disclaimer": "Bemærk: Dette opretter en admin-konto på Underpeaks-systemet og kan være forskellig fra din database-admin-konto.",
+    "fields": {
+      "fullName": {
+        "label": "Fulde navn",
+        "placeholder": "f.eks., Anders Jensen"
+      },
+      "email": {
+        "label": "E-mailadresse",
+        "placeholder": "admin@eksempel.com"
+      },
+      "password": {
+        "label": "Adgangskode",
+        "placeholder": "Opret en sikker adgangskode"
+      }
+    },
+    "errors": {
+      "nameRequired": "Fulde navn er påkrævet",
+      "emailRequired": "E-mail er påkrævet",
+      "passwordInvalid": "Adgangskode er påkrævet | Adgangskoden skal være 8 tegn lang | Skal indeholde et stort bogstav | Skal indeholde et specialtegn (f.eks. !@#$%^&*)"
+    },
+    "continueButton": "Fortsæt"
+  },
+  "stackConfigPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "heading": "Vælg din stack",
+    "description": "Vælg den teknologistack, der bedst passer til dine projektbehov. Du kan ændre dette senere, hvis du vil tilføje flere platforme eller skifte din tilgang.",
+    "stacks": {
+      "both": {
+        "title": "Next.js + Flutter",
+        "description": "Fuld kombination! Next.js til web og Flutter til tværplatforme mobil- og desktop-apps."
+      },
+      "next": {
+        "title": "Kun Next.js",
+        "description": "Brug Next.js som et kraftfuldt React SSR-framework og <strong>som et headless CMS til at administrere indhold og API'er.</strong>"
+      },
+      "flutter": {
+        "title": "Kun Flutter",
+        "description": "Byg tværplatforme mobil- og desktop-apps med Flutter ved hjælp af en delt kodebase, og <strong>brug det som headless CMS-backend, hvis det ønskes.</strong>"
+      },
+      "cms": {
+        "title": "Headless CMS",
+        "description": "Implementer kun som headless CMS-backend. Eksponer dine data via API'er, og forbind dem til enhver brugerdefineret frontend, mobilapp eller tredjepartstjeneste med fuld fleksibilitet."
+      }
+    },
+    "nextButton": "Næste"
+  },
+  "databaseConfigPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "heading": "Databasekonfiguration",
+    "selectPlaceholder": "Vælg database",
+    "fieldExample": "(f.eks. {placeholder})",
+    "savingWarning": "⚠️ Vær tålmodig, dette kan tage et øjeblik...",
+    "infoBlock": {
+      "whereLabel": "Hvor du finder det:"
+    },
+    "testSteps": {
+      "validating": "Validerer konfiguration...",
+      "sending": "Sender konfiguration til server...",
+      "testing": "Tester databaseforbindelse...",
+      "finalizing": "Færdiggør forbindelseskontrol..."
+    },
+    "errors": {
+      "serverRejected": "Serveren afviste forbindelsen",
+      "connectionFailed": "Forbindelse mislykkedes: {message}"
+    },
+    "buttons": {
+      "testConnection": "Test forbindelse",
+      "testing": "Tester...",
+      "saving": "Gemmer...",
+      "continue": "Fortsæt"
+    },
+    "logs": {
+      "firebaseParseError": "Analyse af Firebase-konfiguration mislykkedes"
+    }
+  },
+  "demoPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "projectType": {
+      "title": "Vælg projekttype",
+      "description": "Vælg en skabelon for automatisk at installere standardmodeller til dit projekt."
+    },
+    "projects": {
+      "ecommerce":   { "label": "E-handel",         "description": "Inkluderer produkter, kategorier, ordrer, kunder og butiksfrontsider." },
+      "marketplace": { "label": "Markedsplads",         "description": "Understøtter flere sælgere, opslag, provisioner og sælgerdashboards." },
+      "listing":     { "label": "Opslagsplatform",    "description": "Til ejendoms-, job- eller serviceopslag med kategorier, søgning og filtre." },
+      "blog":        { "label": "Blog / indholdswebsted", "description": "Indholdsdrevet websted med indlæg, kategorier, tags, forfattere og kommentarer." },
+      "social":      { "label": "Socialt netværk",      "description": "Brugerprofiler, opslag, kommentarer, likes, følgere, beskeder og notifikationer." },
+      "saas":        { "label": "SaaS / webapp",      "description": "Webapp-struktur med brugere, roller, tilladelser og abonnementsplaner." },
+      "blank":       { "label": "Tomt projekt",       "description": "Intet demoindhold; start med et tomt projektskelet." }
+    },
+    "demoContent": {
+      "title": "Opsæt demoindhold",
+      "description": "Forhåndsvis din butik med eksempeldata, der allerede er indlæst.",
+      "checkboxLabel": "Inkluder demoindhold for det valgte projekt",
+      "ecommerce": {
+        "item1": "Demoprodukter med kategorier og tags",
+        "item2": "Eksempelkunder og -ordrer",
+        "item3": "Butiksfrontsider (hjem, produkter, kurv, checkout)",
+        "item4": "Grundlæggende CMS-indhold",
+        "item5": "Forudkonfigurerede menuer og moduler"
+      }
+    },
+    "continueButtonIdle": "Fortsæt",
+    "continueButtonLoading": "Fortsætter...",
+    "logs": {
+      "navigatingToFinalise": "Gemmer installationsvalg og navigerer til afsluttende trin..."
+    }
+  },
+  "donePage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "installComplete": "🎉 Installation fuldført!",
+    "stack": {
+      "both": "Next.js + Flutter",
+      "next": "Next.js",
+      "flutter": "Flutter"
+    },
+    "projectInfo": {
+      "title": "Projektinfo",
+      "subtitle": "Grundlæggende information om din projektopsætning.",
+      "name": "Navn:",
+      "stack": "Stack:"
+    },
+    "database": {
+      "title": "Database",
+      "subtitle": "Din valgte database og konfiguration.",
+      "type": "Type:",
+      "noneSelected": "Ingen valgt"
+    },
+    "adminUser": {
+      "title": "Admin-bruger",
+      "subtitle": "Dine indledende admin-legitimationsoplysninger.",
+      "name": "Navn:",
+      "email": "E-mail:",
+      "password": "Adgangskode:"
+    },
+    "projectType": {
+      "title": "Valgt projekttype",
+      "subtitle": "Projektskabelon valgt under opsætningen."
+    },
+    "demoContent": {
+      "title": "Demoindhold",
+      "subtitle": "Om der skal forudindlæses eksempelbutiksdata.",
+      "installed": "Installeret",
+      "notInstalled": "Ikke installeret"
+    },
+    "continueButton": "Fortsæt til → Log ind"
+  },
+  "ecommercePage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "card": {
+      "title": "Tilpas dine e-handelsmoduler"
+    },
+    "options": {
+      "ecommerce": {
+        "label": "Aktivér e-handelsmodul",
+        "description": "Tilføjer produktkatalog, kurv, checkout og ordrestyring."
+      },
+      "physical": {
+        "label": "Inkluder fysiske produkter",
+        "description": "Understøtter lager, forsendelse, returneringer og sporing af fysiske varer."
+      },
+      "digital": {
+        "label": "Inkluder digitale produkter",
+        "description": "Sælg downloadbart indhold som PDF'er, videoer eller softwarelicenser."
+      }
+    },
+    "button": {
+      "next": "Næste",
+      "continuing": "Fortsætter..."
+    }
+  },
+  "finalizePage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "card": {
+      "title": "Færdiggør opsætning"
+    },
+    "summary": {
+      "project": "Projekt:",
+      "defaultProject": "MinApp",
+      "stack": "Stack:",
+      "stackBoth": "Flutter + Next.js",
+      "database": "Database:",
+      "notSelected": "Ikke valgt"
+    },
+    "steps": {
+      "heading": "Installationstrin:",
+      "skipped": "sprunget over!"
+    },
+    "progress": {
+      "finishing": "Færdiggør...",
+      "ready": "Klar til at installere dit projekt"
+    },
+    "errors": {
+      "label": "Fejl:",
+      "noDatabase": "Ingen database valgt, kan ikke gemme konfiguration.",
+      "saveFailed": "Kunne ikke gemme installationskonfiguration",
+      "unknown": "Der opstod en ukendt fejl"
+    },
+    "button": {
+      "start": "Start installation",
+      "installing": "Installerer..."
+    },
+    "logs": {
+      "sendingConfig": "Sender installationskonfiguration til server...",
+      "configSaved": "Installationskonfiguration gemt",
+      "installError": "Installationsfejl:"
+    }
+  },
+  "modelsSelectionPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "heading": "Vælg standardmodeller",
+    "subheading": "Vælg de standarddatamodeller, du vil inkludere i dit projekt. Du kan oprette eller redigere modeller senere.",
+    "required": "(påkrævet)",
+    "toggleAll": {
+      "deselect": "Fravælg alle",
+      "select": "Vælg alle"
+    },
+    "models": {
+      "users":      { "label": "Brugere",      "description": "Administrer applikationsbrugere og autentificering" },
+      "products":   { "label": "Produkter",   "description": "Katalog over produkter eller tjenester" },
+      "orders":     { "label": "Ordrer",     "description": "Spor kundeordrer og køb" },
+      "coupons":    { "label": "Kuponer",    "description": "Rabatkuponer og kampagner" },
+      "categories": { "label": "Kategorier", "description": "Organiser produkter eller indhold" },
+      "reviews":    { "label": "Anmeldelser",    "description": "Brugerfeedback og vurderinger" }
+    },
+    "button": {
+      "continue": "Fortsæt",
+      "continuing": "Fortsætter..."
+    }
+  },
+  "projectInfoPage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "heading": "Projektopsætning",
+    "subheading": "Indtast projektnavn, underdomæne og domæne til dit selv-hostede studie.",
+    "continueButton": "Fortsæt",
+    "fields": {
+      "name": {
+        "label": "Projektnavn",
+        "placeholder": "f.eks., MinApp Studio"
+      },
+      "domain": {
+        "label": "Domæne",
+        "placeholder": "f.eks., http://localhost:3000",
+        "hint": "Fuldt domæne til din app. Standard er"
+      },
+      "subdomain": {
+        "label": "Underdomæne",
+        "placeholder": "f.eks., console",
+        "hint": "Dette vil blive brugt til URL'en:"
+      }
+    },
+    "errors": {
+      "nameRequired": "Projektnavn er påkrævet",
+      "subdomainRequired": "Underdomæne er påkrævet",
+      "domainRequired": "Domæne er påkrævet"
+    }
+  },
+  "welcomePage": {
+    "logoAlt": "Underpeaks-logo",
+    "tagline": "Din alt-i-én SaaS-installer og kodegenerator",
+    "continueButton": "Fortsæt →",
+    "continueLoading": "Indlæser...",
+    "benefits": {
+      "heading": "Hvorfor Underpeaks?",
+      "item1": "🔧 Fuld kodebase-generator (Next.js + Flutter)",
+      "item2": "⚙️ Ikke mere boilerplate – kun produktionsklar kode",
+      "item3": "🌍 Klar til flersprogethed og multi-tenant",
+      "item4": "📦 Selv-hostet eller cloud-hostet – dit valg",
+      "item5": "🔐 Indbygget autentificering, roller, tilladelser, installer-UI",
+      "item6": "💼 Ideel til startups, bureauer og enterprise-projekter"
+    },
+    "license": {
+      "heading": "Licensaftale",
+      "loading": "Indlæser licens...",
+      "loadFailed": "Kunne ikke indlæse licensaftalen.",
+      "acceptLabel": "Accepter licensvilkårene."
+    }
+  },
+  "changePassword": {
+    "errors": {
+      "bothPasswordsRequired": "Nuværende og ny adgangskode er påkrævet",
+      "passwordTooShort": "Adgangskoden skal være mindst 8 tegn",
+      "unauthorized": "Uautoriseret",
+      "invalidToken": "Ugyldigt token",
+      "userNotFound": "Bruger ikke fundet",
+      "incorrectCurrentPassword": "Nuværende adgangskode er forkert",
+      "internalError": "Der opstod en uventet fejl"
+    },
+    "logs": {
+      "firebasePasswordUpdated": "[change-password] Firebase Auth-adgangskode opdateret",
+      "firebasePasswordUpdateFailed": "[change-password] Opdatering af Firebase Auth-adgangskode mislykkedes"
+    }
+  },
+  "createAdminUserRoute": {
+    "success": {
+      "adminCreated": "Admin-bruger oprettet"
+    },
+    "errors": {
+      "missingConfig": "DB-konfiguration mangler",
+      "missingAdminUser": "Admin-brugerdata mangler",
+      "genericFailure": "Kunne ikke oprette admin-bruger"
+    }
+  },
+  "createModelsRoute": {
+    "errors": {
+      "missingConfigOrEmail": "DB-konfiguration eller admin-e-mail mangler",
+      "adapterNotSupported": "Denne databaseadapter understøtter ikke oprettelse af datamodeller",
+      "genericFailure": "Kunne ikke indsætte datamodeller"
+    },
+    "logs": {
+      "createModelsError": "Fejl i create-data-models API:"
+    }
+  },
+  "createStorageBucketsRoute": {
+    "errors": {
+      "missingConfig": "DB-konfiguration/type mangler",
+      "adapterNotSupported": "{type}-adapter implementerer ikke lageropsætning"
+    }
+  },
+  "createSystemTablesRoute": {
+    "success": {
+      "tablesCreated": "Alle system-, bruger- og projekttabeller oprettet"
+    },
+    "errors": {
+      "missingConfig": "DB-konfiguration mangler",
+      "genericFailure": "Kunne ikke oprette tabeller"
+    },
+    "logs": {
+      "createTablesError": "[FEJL VED OPRETTELSE AF TABELLER]"
+    }
+  },
+  "firebaseConfigRoute": {
+    "errors": {
+      "missingEnvVariable": "Firebase-miljøvariabel mangler: {key}"
+    }
+  },
+  "flutterCreateRoute": {
+    "errors": {
+      "missingProjectName": "projectName mangler",
+      "flutterNotInstalled": "Flutter er ikke installeret eller ikke i PATH.",
+      "stepFailed": "Trin mislykkedes: Oprettelse af Flutter-projekt - {message}"
+    },
+    "logs": {
+      "projectAlreadyExists": "Flutter-projektet \"{projectName}\" findes allerede. Springer oprettelse over.",
+      "flutterStderr": "Flutter stderr:",
+      "flutterCreateFailed": "Flutter-oprettelse mislykkedes:"
+    }
+  },
+  "forgotPasswordRoute": {
+    "errors": {
+      "emailRequired": "E-mail er påkrævet",
+      "dbTypeNotSet": "NEXT_PUBLIC_DB_TYPE er ikke angivet",
+      "firebaseClientSide": "Firebase-nulstilling af adgangskode håndteres klientsidet",
+      "supabaseMissingMethod": "Supabase-adapter mangler sendResetEmail-metoden",
+      "unsupportedDbType": "Ikke-understøttet DB-type: {dbType}",
+      "adapterMissingMethods": "${dbType}-adapter mangler påkrævede metoder",
+      "userNotFound": "Bruger ikke fundet",
+      "genericFailure": "Kunne ikke sende nulstillingslink"
+    },
+    "notices": {
+      "smtpDisabled": "E-mailafsendelse er deaktiveret. Bed din administrator om at nulstille din adgangskode."
+    },
+    "email": {
+      "subject": "Anmodning om nulstilling af adgangskode",
+      "body": "<p>Hej {name},</p><p>Klik på linket nedenfor for at nulstille din adgangskode:</p><a href=\"{resetLink}\">{resetLink}</a><p>Hvis du ikke har anmodet om dette, kan du ignorere denne e-mail.</p>"
+    },
+    "logs": {
+      "supabaseResetSent": "Supabase-nulstillingsmail sendt",
+      "resetEmailSent": "Nulstillingsmail sendt",
+      "smtpDisabled": "SMTP/forgot-password deaktiveret — e-mail sprunget over",
+      "forgotPasswordError": "Fejl ved glemt adgangskode:"
+    }
+  },
+  "systemConfigRoute": {
+    "errors": {
+      "firebaseServiceAccountMissing": "Firebase-servicekonto mangler",
+      "unsupportedDbType": "Ikke-understøttet DB-type: {dbType}"
+    },
+    "logs": {
+      "systemConfigError": "[SYSTEMKONFIGURATIONSFEJL]"
+    }
+  },
+  "installDemoContentRoute": {
+    "errors": {
+      "missingConfig": "DB-konfiguration mangler",
+      "missingProjectType": "Projekttype mangler",
+      "adapterNotSupported": "installDemoContent er ikke implementeret til denne adapter"
+    },
+    "logs": {
+      "installDemoContentError": "install-demo-content-fejl:"
+    }
+  },
+  "logoutRoute": {
+    "success": {
+      "loggedOut": "Logget ud"
+    },
+    "errors": {
+      "tokenRequired": "Token er påkrævet",
+      "dbTypeNotSet": "NEXT_DB_TYPE er ikke angivet",
+      "firebaseServiceAccountMissing": "Firebase-servicekonto mangler",
+      "mysqlEnvMissing": "MySQL-miljøvariabler mangler",
+      "postgresEnvMissing": "Postgres-miljøvariabler mangler",
+      "unsupportedDbType": "Ikke-understøttet DB-type: {dbType}",
+      "tokenNotFound": "Token ikke fundet"
+    },
+    "logs": {
+      "logoutError": "LOGOUT-API-FEJL:"
+    }
+  },
+  "messagesDeleteRoute": {
+    "errors": {
+      "conversationIdRequired": "conversation_id er påkrævet",
+      "unauthorized": "Uautoriseret",
+      "invalidToken": "Ugyldigt token"
+    },
+    "logs": {
+      "deleteError": "[messages/delete]"
+    }
+  },
+  "listFiles": {
+    "errors": {
+      "folderRequired": "folder er påkrævet",
+      "internalError": "Der opstod en uventet fejl"
+    }
+  },
+  "listFolders": {
+    "logs": {
+      "foldersEnriched": "[list-folders] Mapper beriget med filantal"
+    },
+    "errors": {
+      "internalError": "Der opstod en uventet fejl"
+    }
+  },
+  "moveFile": {
+    "errors": {
+      "fieldsMissing": "fromFolder, toFolder og fileName er påkrævet",
+      "moveFileNotSupported": "moveFile understøttes ikke",
+      "internalError": "Der opstod en uventet fejl"
+    }
+  },
+  "renameFile": {
+    "errors": {
+      "fieldsMissing": "folder, oldName og newName er påkrævet",
+      "renameFileNotSupported": "renameFile understøttes ikke",
+      "internalError": "Der opstod en uventet fejl"
+    }
+  },
+  "uploadFile": {
+    "errors": {
+      "fileAndFolderRequired": "Fil og mappe er påkrævet",
+      "uploadFileNotSupported": "uploadFile understøttes ikke",
+      "internalError": "Upload mislykkedes"
+    },
+    "logs": {
+      "uploadMode": "[upload-file] tilstand:",
+      "projectIdLookupFailed": "[upload-file] opslag af project_id mislykkedes",
+      "metadataSaved": "[upload-file] metadata gemt i nxf_storage",
+      "metadataSaveFailed": "[upload-file] gemning af metadata mislykkedes",
+      "localUploadSuccess": "[upload-file] lokal upload gemt:"
+    }
+  },
+  "testDbConnection": {
+    "errors": {
+      "connectionFailed": "Kunne ikke teste databaseforbindelse"
+    }
+  },
+  "updateBranding": {
+    "errors": {
+      "userIdRequired": "user_id er påkrævet",
+      "firebaseServiceAccountMissing": "Firebase-servicekonto mangler",
+      "unsupportedDbType": "Ikke-understøttet databasetype",
+      "systemConfigNotFound": "Systemkonfiguration ikke fundet",
+      "internalError": "Intern serverfejl"
+    }
+  },
+  "updateProfile": {
+    "errors": {
+      "fullNameRequired": "Fulde navn er påkrævet",
+      "unauthorized": "Uautoriseret",
+      "invalidToken": "Ugyldigt token",
+      "internalError": "Der opstod en uventet fejl"
+    }
+  },
+  "updateProject": {
+    "errors": {
+      "requiredFieldsMissing": "user_id og project_name er påkrævet",
+      "firebaseServiceAccountMissing": "Firebase-servicekonto mangler",
+      "unsupportedDbType": "Ikke-understøttet databasetype",
+      "systemConfigNotFound": "Systemkonfiguration ikke fundet for denne bruger",
+      "internalError": "Intern serverfejl"
+    }
+  },
+  "updateSmtp": {
+    "errors": {
+      "userIdRequired": "user_id er påkrævet",
+      "firebaseServiceAccountMissing": "Firebase-servicekonto mangler",
+      "unsupportedDbType": "Ikke-understøttet databasetype",
+      "systemConfigNotFound": "Systemkonfiguration ikke fundet for denne bruger",
+      "internalError": "Intern serverfejl"
+    }
+  },
+  "writeConfig": {
+    "errors": {
+      "writeFailed": "Kunne ikke skrive konfigurationsfiler"
+    }
+  },
+  "adminUserFlow": {
+    "logs": {
+      "existingAuthUserFound": "Eksisterende autentificeringsbruger fundet:",
+      "newAuthUserCreated": "Ny autentificeringsbruger oprettet:",
+      "creatingAdminInDb": "Opretter admin-bruger i DB...",
+      "userAlreadyInDb": "Bruger findes allerede i DB:",
+      "existingProjectFound": "Eksisterende projekt fundet:",
+      "newProjectCreated": "Nyt projekt oprettet:",
+      "existingTenantFound": "Eksisterende lejer fundet:",
+      "newTenantCreated": "Ny lejer oprettet:"
+    }
+  },
+  "createUserDataModels": {
+    "logs": {
+      "skippingDuplicate": "Springer over duplikeret CreateDataModels-kørsel — dette projekt og typekombination er allerede blevet behandlet.",
+      "creatingTable": "Opretter tabel:"
+    }
+  },
+  "createSchemaTables": {
+    "logs": {
+      "createTableNotImplemented": "createTable ikke implementeret, springer tabelloprettelse over"
+    }
+  },
+  "uploadZone": {
+    "folderSelector": {
+      "label": "Uploadmappe",
+      "customFolder": "Brugerdefineret mappe…",
+      "enterFolderName": "Indtast mappenavn",
+      "placeholder": "f.eks. banners/sommer",
+      "uploadingTo": "Uploader til:"
+    },
+    "preview": {
+      "alt": "Forhåndsvisning",
+      "uploaded": "Uploadet",
+      "replace": "Erstat",
+      "clear": "Ryd fil"
+    },
+    "dropzone": {
+      "uploading": "Uploader…",
+      "idle": "Træk og slip eller",
+      "browse": "gennemse",
+      "recommended": "Anbefalet:"
+    },
+    "errors": {
+      "noFolder": "Vælg eller indtast en mappe, før du uploader.",
+      "uploadFailed": "Upload mislykkedes",
+      "uploadFailedStatus": "Upload mislykkedes:",
+      "networkError": "Netværksfejl"
+    }
+  },
+  "modelView": {
+    "systemBadge": "System",
+    "subtitle": "Skrivebeskyttet — dette er en beskyttet systemtabel.",
+    "fieldsHeading": "Felter",
+    "actions": {
+      "back": "Tilbage til modeller"
+    },
+    "stats": {
+      "fields": "Felter",
+      "created": "Oprettet",
+      "updated": "Sidst opdateret"
+    },
+    "table": {
+      "name": "Feltnavn",
+      "type": "Type",
+      "constraints": "Begrænsninger",
+      "nullable": "Påkrævet",
+      "default": "Standard",
+      "uiType": "UI-type"
+    },
+    "badges": {
+      "hidden": "Skjult",
+      "required": "Påkrævet",
+      "optional": "Valgfrit"
+    },
+    "errors": {
+      "loadFailed": "Kunne ikke indlæse model.",
+      "notFound": "Model ikke fundet."
+    }
+  },
+  "modelsListPage": {
+    "header": {
+      "title": "Modeller",
+      "subtitle": "Definer og administrer dit projekts datastruktur.",
+      "createButton": "Opret model"
+    },
+    "filter": {
+      "all": "Alle",
+      "user": "Bruger",
+      "system": "System"
+    },
+    "states": {
+      "empty": "Ingen modeller fundet.",
+      "emptyHint": "Opret din første model for at komme i gang."
+    },
+    "badges": {
+      "system": "System",
+      "partialSystem": "Redigerbar system"
+    },
+    "meta": {
+      "fields": "{count} felter",
+      "foreignKeys": "{count} FK"
+    },
+    "card": {
+      "editAriaLabel": "Rediger {name}",
+      "deleteAriaLabel": "Slet {name}"
+    },
+    "confirmDelete": {
+      "title": "Slet model?",
+      "description": "Er du sikker på, at du vil slette \"{name}\"? Alle data i denne tabel slettes permanent. Dette kan ikke fortrydes.",
+      "confirm": "Slet",
+      "deleting": "Sletter…",
+      "cancel": "Annuller"
+    },
+    "errors": {
+      "loadFailed": "Kunne ikke indlæse modeller.",
+      "deleteFailed": "Kunne ikke slette model."
+    }
+  },
+  "createModel": {
+    "title": "Opret model",
+    "subtitle": "Definer en ny datamodel og dens felter.",
+    "actions": {
+      "save": "Gem model",
+      "saving": "Gemmer…",
+      "back": "Tilbage til modeller"
+    },
+    "form": {
+      "modelNameLabel": "Modelnavn",
+      "modelNamePlaceholder": "f.eks. Produkt",
+      "fieldNamePlaceholder": "Feltnavn",
+      "required": "Påkrævet",
+      "unique": "Unik",
+      "primaryKey": "Primærnøgle",
+      "primaryKeyTaken": "allerede angivet",
+      "hidden": "Skjult",
+      "uiType": "UI-type",
+      "foreignKeyTable": "Fremmednøgle — tabel",
+      "foreignKeyColumn": "Fremmednøgle — kolonne",
+      "noForeignKey": "— Ingen fremmednøgle —",
+      "selectColumn": "— Vælg kolonne —",
+      "onDelete": "Ved sletning",
+      "addField": "Tilføj felt",
+      "removeField": "Fjern felt",
+      "expandField": "Vis avancerede indstillinger",
+      "collapseField": "Skjul avancerede indstillinger",
+      "foreignKey": "Fremmednøgle"
+    },
+    "validation": {
+      "modelNameRequired": "Modelnavn er påkrævet.",
+      "fieldsInvalid": "Alle felter skal have et navn.",
+      "fieldNameUnique": "Feltnavne skal være unikke.",
+      "singlePrimaryKey": "Kun én primærnøgle er tilladt pr. model."
+    },
+    "confirmDelete": {
+      "title": "Slet felt?",
+      "description": "Er du sikker på, at du vil fjerne dette felt?",
+      "confirm": "Slet",
+      "cancel": "Annuller"
+    },
+    "errors": {
+      "createFailed": "Kunne ikke oprette model."
+    }
+  },
+  "editModel": {
+    "title": "Rediger model",
+    "subtitle": "Opdater modelnavnet og dets feltdefinitioner.",
+    "actions": {
+      "save": "Gem ændringer",
+      "saving": "Gemmer…",
+      "back": "Tilbage til modeller"
+    },
+    "form": {
+      "modelNameLabel": "Modelnavn",
+      "modelNamePlaceholder": "Modelnavn",
+      "fieldNamePlaceholder": "Feltnavn",
+      "required": "Påkrævet",
+      "unique": "Unik",
+      "primaryKey": "Primærnøgle",
+      "primaryKeyTaken": "allerede angivet",
+      "hidden": "Skjult",
+      "uiType": "UI-type",
+      "foreignKeyTable": "Fremmednøgle — tabel",
+      "foreignKeyColumn": "Fremmednøgle — kolonne",
+      "noForeignKey": "— Ingen fremmednøgle —",
+      "selectColumn": "— Vælg kolonne —",
+      "onDelete": "Ved sletning",
+      "addField": "Tilføj felt",
+      "removeField": "Fjern felt",
+      "expandField": "Vis avancerede indstillinger",
+      "collapseField": "Skjul avancerede indstillinger",
+      "foreignKey": "Fremmednøgle"
+    },
+    "validation": {
+      "modelNameRequired": "Modelnavn er påkrævet.",
+      "fieldsInvalid": "Alle felter skal have et navn.",
+      "fieldNameUnique": "Feltnavne skal være unikke.",
+      "singlePrimaryKey": "Kun én primærnøgle er tilladt pr. model."
+    },
+    "confirmDelete": {
+      "title": "Slet felt?",
+      "description": "Er du sikker på, at du vil fjerne dette felt?",
+      "confirm": "Slet",
+      "cancel": "Annuller"
+    },
+    "warningDialog": {
+      "title": "Alvorlig advarsel",
+      "subtitle": "Du er ved at slette et beskyttet felt.",
+      "primaryKeyWarning": "Dette felt er primærnøglen til denne tabel. Sletning af det vil bryde alle relationer, der refererer til denne tabel, og kan permanent ødelægge eksisterende data på tværs af hele dit projekt.",
+      "foreignKeyWarning": "Dette felt er en fremmednøgle, der forbinder denne tabel til en anden. Sletning af det vil bryde relationen og kan forårsage dataintegritetsproblemer for eksisterende poster.",
+      "checkboxLabel": "Jeg forstår, at dette kan ødelægge mine data permanent og ikke kan fortrydes.",
+      "confirm": "Slet alligevel",
+      "cancel": "Annuller"
+    },
+    "errors": {
+      "loadModelFailed": "Kunne ikke indlæse model.",
+      "modelNotFound": "Model ikke fundet.",
+      "updateModelFailed": "Kunne ikke opdatere model."
+    }
+  },
+  "modelsRoute": {
+    "errors": {
+      "userIdRequired": "user_id er påkrævet",
+      "invalidBody": "Ugyldig eller tom anmodningsdata",
+      "missingFields": "Påkrævede felter mangler",
+      "projectNotFound": "Intet projekt fundet for denne bruger",
+      "nameAlreadyExists": "En model med dette navn findes allerede",
+      "fetchFailed": "Kunne ikke hente modeller",
+      "createFailed": "Kunne ikke oprette model",
+      "updateFailed": "Kunne ikke opdatere model",
+      "deleteFailed": "Kunne ikke slette model",
+      "multiplePrimaryKeys": "Kun én primærnøgle er tilladt pr. model",
+      "systemTableProtected": "Systemtabeller kan ikke oprettes, ændres eller slettes"
+    }
+  },
+  "foreignKeySelector": {
+    "placeholder": "— Vælg et felt —",
+    "clear": "Ryd fremmednøgle",
+    "searchPlaceholder": "Søg modeller…",
+    "noResults": "Ingen modeller fundet.",
+    "systemBadge": "System",
+    "fieldsLabel": "felter",
+    "onDelete": "Ved sletning",
+    "filter": {
+      "all": "Alle",
+      "user": "Bruger",
+      "system": "System"
+    }
+  },
+  "users": {
+    "page_title": "Brugere",
+    "page_description": "Administrer CMS-admin- og brugerkonti",
+    "edit_kpis": "Rediger KPI'er",
+    "editing_kpis": "Redigerer KPI'er",
+    "save_layout": "Gem layout",
+    "saving": "Gemmer…",
+    "search_placeholder": "Søg efter navn eller e-mail…",
+    "showing_count": "Viser {filtered} af {total} brugere",
+    "no_users_found": "Ingen brugere fundet",
+    "filter": "Filtrer",
+    "sort": "Sortér",
+    "clear_all": "Ryd alt",
+    "filters": "Filtre",
+    "role": "Rolle",
+    "all_roles": "Alle roller",
+    "all_statuses": "Alle statusser",
+    "status": "Status",
+    "joined_from": "Tilmeldt fra",
+    "joined_to": "Tilmeldt til",
+    "sort_by": "Sortér efter",
+    "direction": "Retning",
+    "asc": "Stigende (A → Z)",
+    "desc": "Faldende (Z → A)",
+    "col_name": "Navn",
+    "col_email": "E-mail",
+    "col_role": "Rolle",
+    "col_status": "Status",
+    "col_last_login": "Sidst logget ind",
+    "col_joined": "Tilmeldt",
+    "role_admin": "Admin",
+    "role_user": "Bruger",
+    "status_active": "Aktiv",
+    "status_suspended": "Suspenderet",
+    "status_disabled": "Deaktiveret",
+    "drawer_title": "Brugerdetaljer",
+    "actions": "Handlinger",
+    "change_role": "Rolle",
+    "change_status": "Status",
+    "send_reset": "Send e-mail til nulstilling af adgangskode",
+    "sending_reset": "Sender…",
+    "delete_user": "Slet bruger",
+    "delete_confirm": "Slet denne bruger permanent? Dette kan ikke fortrydes.",
+    "cancel": "Annuller",
+    "confirm_delete": "Ja, slet",
+    "deleting": "Sletter…",
+    "last_admin_warning": "Kan ikke degradere — dette er den sidste admin",
+    "login_history": "Loginhistorik",
+    "no_history": "Ingen loginhistorik registreret endnu",
+    "event_login": "Logget ind",
+    "event_logout": "Logget ud",
+    "event_online": "Online",
+    "event_offline": "Gik offline",
+    "joined": "Tilmeldt",
+    "last_login": "Sidst logget ind",
+    "toast_role_updated": "Rolle opdateret",
+    "toast_status_updated": "Status opdateret",
+    "toast_user_deleted": "Bruger slettet",
+    "toast_reset_sent": "Nulstilling af adgangskode sendt til {email}",
+    "toast_kpi_saved": "KPI-layout gemt",
+    "toast_load_failed": "Kunne ikke indlæse brugere",
+    "toast_save_failed": "Gemning mislykkedes",
+    "kpi_add": "Tilføj KPI",
+    "kpi_add_block": "Blok",
+    "kpi_edit": "Rediger KPI",
+    "kpi_label_required": "Etiket er påkrævet",
+    "kpi_select_field": "Vælg et felt",
+    "kpi_select_both_fields": "Vælg begge felter",
+    "kpi_select_field_and_value": "Vælg et felt, og indtast en værdi at matche",
+    "kpi_max_reached": "Maksimalt 5 KPI'er tilladt",
+    "kpi_label": "Etiket",
+    "kpi_formula": "Formel",
+    "kpi_format": "Visningsformat",
+    "kpi_icon": "Ikon",
+    "kpi_accent_colour": "Accentfarve",
+    "kpi_field": "Felt",
+    "kpi_field_a": "Felt A",
+    "kpi_field_b": "Felt B",
+    "kpi_numerator": "Tællerfelt (A)",
+    "kpi_denominator": "Nævnerfelt (B)",
+    "kpi_operator": "Operator",
+    "kpi_value_to_match": "Værdi at matche",
+    "kpi_make_wide": "Gør bred",
+    "kpi_make_compact": "Gør kompakt",
+    "kpi_add_to_block": "Tilføj",
+    "kpi_save": "Gem ændringer",
+    "kpi_cancel": "Annuller"
+  },
+  "notFound": {
+    "title": "Side ikke fundet",
+    "description": "Vi kan ikke finde den side, du leder efter. Den kan være blevet flyttet, omdøbt eller aldrig have eksisteret.",
+    "goHome": "Gå til startside",
+    "backToConsole": "Tilbage til konsol",
+    "helpfulLinks": "Leder du efter noget specifikt?",
+    "pages": "Sider",
+    "models": "Modeller",
+    "users": "Brugere",
+    "settings": "Indstillinger"
+  },
+  "noModelLinked": {
+    "title": "Ingen model tilknyttet",
+    "description": "{pageName} bruger en {templateName}-skabelon, men der er endnu ikke tilknyttet en datamodel til den.",
+    "instruction": "Rediger sideindstillingerne, og tildel en model, så den kan vise data.",
+    "openPages": "Åbn sider",
+    "manageModels": "Administrer modeller"
+  },
+  "lockedTemplate": {
+    "title": "Tilgængelig på den hostede plan",
+    "description": "Skabelonen {templateName} er en del af den hostede plan. Opgrader for at låse kanban, kalender, checkout og mere op.",
+    "upgradeButton": "Se hostet plan",
+    "backButton": "Tilbage til sider"
+  },
+  "CookieBanner": {
+    "eyebrow": "PRIVATLIV",
+    "title": "Vi værdsætter dit privatliv",
+    "description": "Vi bruger cookies til at holde dig logget ind, huske dit sprog og (med dit samtykke) forstå, hvordan besøgende bruger webstedet. Du kan ændre dine valg når som helst.",
+    "necessaryTitle": "Strengt nødvendige",
+    "necessaryDescription": "Påkrævet for login, sprogpræferencer og lagring af dit cookievalg. Kan ikke slås fra.",
+    "analyticsTitle": "Analyse",
+    "analyticsDescription": "Hjælper os med at forstå, hvilke sider folk besøger, og hvordan webstedet klarer sig. Ingen personlige data deles.",
+    "marketingTitle": "Markedsføring",
+    "marketingDescription": "Bruges til at vise relevante annoncer og måle kampagneeffektivitet på tværs af andre websteder.",
+    "alwaysOn": "Altid aktiveret",
+    "acceptAll": "Accepter alle",
+    "rejectAll": "Afvis alle",
+    "customise": "Tilpas",
+    "savePreferences": "Gem præferencer",
+    "cookiePreferences": "Cookiepræferencer",
+    "policyLink": "Privatlivspolitik"
   }
 }

@@ -193,12 +193,16 @@ export default function UserDropdown({ user }: { user: NXFUser }) {
 
             <DropdownMenuSeparator />
 
-            <Link href="/console/help-center" className="block">
-              <DropdownMenuItem className="cursor-pointer flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 focus:bg-gray-50">
-                <FiHelpCircle size={14} className="text-gray-400 shrink-0" aria-hidden="true" />
-                {t('menu.helpAndDocs')}
-              </DropdownMenuItem>
-            </Link>
+            <DropdownMenuItem asChild className="cursor-pointer flex items-center gap-2.5 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 focus:bg-gray-50">
+  <a
+    href="https://underpeaks.com/docs/getting-started/introduction"
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <FiHelpCircle size={14} className="text-gray-400 shrink-0" aria-hidden="true" />
+    {t('menu.helpAndDocs')}
+  </a>
+</DropdownMenuItem>
 
             <DropdownMenuSeparator />
 
