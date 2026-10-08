@@ -1558,10 +1558,28 @@ export class MySQLAdapter implements DBAdapter {
     }
   }
 
- async listFiles(folder: string): Promise<StorageFile[]> {
+  private localUploadsRoot(): string {
+    const path = require('path')
+    return path.resolve(process.cwd(), 'public', 'uploads')
+  }
+
+  private localDir(folder: string): string {
+    const path = require('path')
+    const root = this.localUploadsRoot()
+    if (!folder || folder === 'uploads') return root
+    const dir = path.resolve(root, folder)
+    if (dir !== root && !dir.startsWith(root + path.sep)) throw new Error('Invalid folder')
+    return dir
+  }
+
+  private localUrl(folder: string, fileName: string): string {
+    return !folder || folder === 'uploads' ? `/uploads/${fileName}` : `/uploads/${folder}/${fileName}`
+  }
+
+  async listFiles(folder: string): Promise<StorageFile[]> {
     try {
       const [rows] = await this.pool.execute(
-        'SELECT * FROM `nxf_storage` WHERE folder = ?',
+        "SELECT * FROM `nxf_storage` WHERE folder = ? AND IFNULL(file_name, '') <> ''",
         [folder]
       )
 
@@ -1605,11 +1623,12 @@ export class MySQLAdapter implements DBAdapter {
     const fs   = require('fs')
     const path = require('path')
 
-    const uploadsDir = path.resolve(process.cwd(), 'uploads', folder)
-    fs.mkdirSync(uploadsDir, { recursive: true })
-    fs.writeFileSync(path.join(uploadsDir, fileName), buffer)
+    const dir = this.localDir(folder)
+    fs.mkdirSync(dir, { recursive: true })
+    fs.writeFileSync(path.join(dir, fileName), buffer)
 
-    const url = `/uploads/${folder}/${fileName}`
+    const storedFolder = folder || 'uploads'
+    const url          = this.localUrl(folder, fileName)
 
     await this.pool.execute(
       `INSERT INTO \`nxf_storage\`
@@ -1618,8 +1637,8 @@ export class MySQLAdapter implements DBAdapter {
       [
         crypto.randomUUID(),
         fileName,
-        `${folder}/${fileName}`,
-        folder,
+        `${storedFolder}/${fileName}`,
+        storedFolder,
         url,
         mimeType,
         buffer.length,
@@ -1634,20 +1653,21 @@ export class MySQLAdapter implements DBAdapter {
     const fs   = require('fs')
     const path = require('path')
 
-    const filePath = path.resolve(process.cwd(), 'uploads', folder, fileName)
+    const filePath = path.join(this.localDir(folder), fileName)
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
 
     await this.pool.execute(
       'DELETE FROM `nxf_storage` WHERE file_path = ?',
-      [`${folder}/${fileName}`]
+      [`${folder || 'uploads'}/${fileName}`]
     )
   }
 
   async deleteFolder(folder: string): Promise<void> {
-    const fs   = require('fs')
-    const path = require('path')
+    const fs = require('fs')
 
-    const folderPath = path.resolve(process.cwd(), 'uploads', folder)
+    if (!folder || folder === 'uploads') throw new Error('Cannot delete the root folder')
+
+    const folderPath = this.localDir(folder)
     if (fs.existsSync(folderPath)) {
       fs.rmSync(folderPath, { recursive: true, force: true })
     }
@@ -1659,51 +1679,68 @@ export class MySQLAdapter implements DBAdapter {
   }
 
   async createFolder(folder: string): Promise<void> {
-    const fs   = require('fs')
-    const path = require('path')
-
-    const folderPath = path.resolve(process.cwd(), 'uploads', folder)
-    fs.mkdirSync(folderPath, { recursive: true })
+    const fs = require('fs')
+    fs.mkdirSync(this.localDir(folder), { recursive: true })
   }
 
   async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
     const fs   = require('fs')
     const path = require('path')
 
-    const oldPath = path.resolve(process.cwd(), 'uploads', folder, oldName)
-    const newPath = path.resolve(process.cwd(), 'uploads', folder, newName)
+    const storedFolder = folder || 'uploads'
+    const oldPath      = path.join(this.localDir(folder), oldName)
+    const newPath      = path.join(this.localDir(folder), newName)
+    const hadLocal     = fs.existsSync(oldPath)
 
-    if (fs.existsSync(oldPath)) fs.renameSync(oldPath, newPath)
+    if (hadLocal) fs.renameSync(oldPath, newPath)
 
-    const url = `/uploads/${folder}/${newName}`
-
-    await this.pool.execute(
-      `UPDATE \`nxf_storage\`
-       SET file_name = ?, file_path = ?, url = ?
-       WHERE file_path = ?`,
-      [newName, `${folder}/${newName}`, url, `${folder}/${oldName}`]
-    )
+    if (hadLocal) {
+      await this.pool.execute(
+        `UPDATE \`nxf_storage\`
+         SET file_name = ?, file_path = ?, url = ?
+         WHERE file_path = ?`,
+        [newName, `${storedFolder}/${newName}`, this.localUrl(folder, newName), `${storedFolder}/${oldName}`]
+      )
+    } else {
+      // External-URL rows: keep the url, only change name/path
+      await this.pool.execute(
+        `UPDATE \`nxf_storage\`
+         SET file_name = ?, file_path = ?
+         WHERE file_path = ?`,
+        [newName, `${storedFolder}/${newName}`, `${storedFolder}/${oldName}`]
+      )
+    }
   }
 
   async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
     const fs   = require('fs')
     const path = require('path')
 
-    const oldPath = path.resolve(process.cwd(), 'uploads', fromFolder, fileName)
-    const newDir  = path.resolve(process.cwd(), 'uploads', toFolder)
-    const newPath = path.join(newDir, fileName)
+    const fromStored = fromFolder || 'uploads'
+    const toStored   = toFolder || 'uploads'
+    const oldPath    = path.join(this.localDir(fromFolder), fileName)
+    const newDir     = this.localDir(toFolder)
+    const newPath    = path.join(newDir, fileName)
+    const hadLocal   = fs.existsSync(oldPath)
 
-    fs.mkdirSync(newDir, { recursive: true })
-    if (fs.existsSync(oldPath)) fs.renameSync(oldPath, newPath)
-
-    const url = `/uploads/${toFolder}/${fileName}`
-
-    await this.pool.execute(
-      `UPDATE \`nxf_storage\`
-       SET folder = ?, file_path = ?, url = ?
-       WHERE file_path = ?`,
-      [toFolder, `${toFolder}/${fileName}`, url, `${fromFolder}/${fileName}`]
-    )
+    if (hadLocal) {
+      fs.mkdirSync(newDir, { recursive: true })
+      fs.renameSync(oldPath, newPath)
+      await this.pool.execute(
+        `UPDATE \`nxf_storage\`
+         SET folder = ?, file_path = ?, url = ?
+         WHERE file_path = ?`,
+        [toStored, `${toStored}/${fileName}`, this.localUrl(toFolder, fileName), `${fromStored}/${fileName}`]
+      )
+    } else {
+      // External-URL rows: keep the url, only change folder/path
+      await this.pool.execute(
+        `UPDATE \`nxf_storage\`
+         SET folder = ?, file_path = ?
+         WHERE file_path = ?`,
+        [toStored, `${toStored}/${fileName}`, `${fromStored}/${fileName}`]
+      )
+    }
   }
 
   async importFromUrl(folder: string, url: string): Promise<StorageFile> {

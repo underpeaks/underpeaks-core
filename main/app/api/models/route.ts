@@ -1,38 +1,22 @@
+// app/api/models/route.ts
 /**
  * GET  /api/models  — Fetch all models for a user's project from nxf_system_models.
  * POST /api/models  — Create a new model in nxf_system_models and the real DB table.
  */
 
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { isPlatformTable }      from '@/app/lib/platformTables'
 import { NextRequest, NextResponse } from 'next/server'
 import { v4 as uuidv4 }             from 'uuid'
 
 // ---------------------------------------------------------------------------
-// Helper — normalise schema to always be an array
+// Helpers
 // ---------------------------------------------------------------------------
 
-/**
- * normaliseSchema
- *
- * The schema column in nxf_system_models is jsonb and may have been written
- * as either an array or an object depending on the source that created it.
- * This function ensures the console always works with a consistent ColumnDef[].
- *
- * @param schema - Raw schema value from the database.
- * @returns      A normalised array of column definition objects.
- */
-function normaliseSchema(schema: any): any[] {
-  if (!schema) return []
-  if (Array.isArray(schema)) return schema
-  if (typeof schema === 'object') {
-    return Object.entries(schema).map(([name, def]: [string, any]) => ({
-      name,
-      ...(typeof def === 'object' ? def : { type: def }),
-    }))
-  }
-  return []
-}
 function normaliseSchemaToVersioned(schema: any): any {
+  if (typeof schema === 'string') {
+    try { schema = JSON.parse(schema) } catch { schema = null }
+  }
   if (!schema) {
     return { version: '1.0', columns: [], hooks: [], integrations: [] }
   }
@@ -49,36 +33,11 @@ function normaliseSchemaToVersioned(schema: any): any {
   }
   return { version: '1.0', columns: [], hooks: [], integrations: [] }
 }
+
 /**
- * resolveDocumentId
- *
- * Resolves the correct document ID to use for update() and delete() calls.
- *
- * The problem:
- * When adapter.create() saves to Firestore, Firestore auto-generates its own
- * document ID (e.g. "abc123xyz"). We also store sm_id as a field inside the
- * document (e.g. "9f1340bb-5656-..."). These two IDs are different.
- *
- * adapter.update() and adapter.delete() need the real Firestore document ID,
- * not the sm_id UUID field. The adapter's read() method returns documents with
- * their Firestore document ID in the `id` field alongside all other fields.
- *
- * Fix:
- * We use the Firestore `id` field (real document ID) as the sm_id that gets
- * sent to the frontend. This way update() and delete() always use the correct ID.
- *
- * For non-Firebase adapters (SQL databases), the document/row ID is typically
- * stored in sm_id itself, so we fall back to sm_id if no separate `id` exists.
- *
- * @param doc - A raw document/row returned by adapter.read()
- * @returns   The correct ID to use for update() and delete() operations
+ * Firestore returns the real document ID in `doc.id`; SQL adapters use `sm_id`.
  */
 function resolveDocumentId(doc: any): string {
-  /**
-   * Firestore adapter returns the real document ID in `doc.id`.
-   * SQL adapters store the primary key in `doc.sm_id`.
-   * We prefer `doc.id` when it exists and differs from `doc.sm_id`.
-   */
   return doc.id || doc.sm_id
 }
 
@@ -116,18 +75,9 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       .filter((m: any) => m.project_id === projectId)
       .map((m: any) => ({
         ...m,
-        /**
-         * KEY FIX: Override sm_id with the real Firestore document ID.
-         *
-         * The frontend uses sm_id for all update() and delete() calls.
-         * By setting sm_id to the real document ID here, we ensure those
-         * calls use the correct ID that Firestore can actually find.
-         *
-         * For SQL adapters, doc.id and doc.sm_id are the same value so
-         * this assignment is harmless.
-         */
-        sm_id:  resolveDocumentId(m),
-       schema: normaliseSchemaToVersioned(m.schema),
+        sm_id:       resolveDocumentId(m),
+        schema:      normaliseSchemaToVersioned(m.schema),
+        is_platform: isPlatformTable(m.name),
       }))
 
     return NextResponse.json({ models })
@@ -159,8 +109,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const { user_id, name, schema } = body
 
-    // Schema is the versioned object: { version, columns, hooks, integrations }
-    // Extract columns for validation and table-creation logic
     const columns = Array.isArray(schema?.columns) ? schema.columns : null
 
     if (!user_id || !name || !columns || columns.length === 0) {
@@ -170,7 +118,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    if (name.toLowerCase().startsWith('nxf_system_')) {
+    // Only real platform tables are reserved
+    if (isPlatformTable(name)) {
       return NextResponse.json(
         { error: 'System tables cannot be modified' },
         { status: 403 }
@@ -201,6 +150,22 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
     const projectId = project.id || project.project_id
 
+    // tenant_id is NOT NULL on nxf_system_models. Take it from the project,
+    // otherwise fall back to the single tenant row (single-tenant Core).
+    let tenantId: string | undefined = project.tenant_id
+    if (!tenantId) {
+      const tenants = await adapter.read!(dbConfig, 'nxf_system_tenants')
+      const first   = (tenants ?? [])[0]
+      tenantId      = first?.ten_id || first?.id
+    }
+
+    if (!tenantId) {
+      return NextResponse.json(
+        { error: 'Tenant not found for this project' },
+        { status: 400 }
+      )
+    }
+
     const existingModels = await adapter.read!(dbConfig, 'nxf_system_models')
     const duplicate      = (existingModels ?? []).find(
       (m: any) =>
@@ -222,9 +187,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const now      = new Date().toISOString()
     const modelRow = {
       sm_id:      uuidv4(),
+      tenant_id:  tenantId,
       project_id: projectId,
       name,
-      schema,        // ← store the full versioned object
+      schema,
+      is_system:  false,
       created_at: now,
       updated_at: now,
     }

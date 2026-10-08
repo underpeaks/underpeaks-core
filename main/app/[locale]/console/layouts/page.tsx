@@ -1,3 +1,4 @@
+// app/[locale]/console/layouts/page.tsx
 'use client'
 
 import { useState, useEffect }                        from 'react'
@@ -231,7 +232,11 @@ export default function MenuPage() {
                   <div key={item.menu_id} className="relative group/nav">
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md hover:bg-gray-100 cursor-pointer transition">
                       <span className="text-gray-500">{getIcon(item.icon, 13)}</span>
-                      <span className="text-sm text-gray-700 font-medium">{item.label}</span>
+                      <span className={item.is_section
+                        ? 'text-xs text-gray-700 font-bold uppercase tracking-wide'
+                        : 'text-sm text-gray-700 font-medium'}>
+                        {item.label}
+                      </span>
                       {children.length > 0 && <FiChevronDown size={11} className="text-gray-400" />}
                     </div>
                     {children.length > 0 && (

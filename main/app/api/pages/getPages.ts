@@ -1,3 +1,4 @@
+// app/api/pages/getPages.ts
 import { NextRequest, NextResponse }  from 'next/server'
 import { resolveDocumentId }          from './resolveDocumentId'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
@@ -27,8 +28,12 @@ export async function handleGetPages(req: NextRequest): Promise<NextResponse> {
     .filter((p: any) => p.project_id === projectId)
     .map((p: any) => ({
       ...p,
-      page_id: resolveDocumentId(p),
-      name:    p.title ?? p.name ?? '',
+      page_id:  resolveDocumentId(p),
+      name:     p.title ?? p.name ?? '',
+      // The list and drawer read model_id / template; the table stores
+      // model and template_type. Expose both spellings.
+      model_id: p.model_id ?? p.model ?? null,
+      template: p.template_type ?? p.template ?? '',
     }))
 
   return NextResponse.json({ success: true, pages })

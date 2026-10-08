@@ -2,29 +2,18 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import crypto                        from 'crypto'
-import nodemailer                    from 'nodemailer'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { sendMailSafe }         from '@/app/lib/smtp'
 
 // ---------------------------------------------------------------------------
 // SMTP feature flags — read once at module load, don't change at runtime
 // ---------------------------------------------------------------------------
 
-const smtpEnabled        = (process.env.NEXT_PUBLIC_SMTP_ENABLED      ?? 'false') === 'true'
-const verifyEmailEnabled = (process.env.NEXT_PUBLIC_SMTP_VERIFY_EMAIL  ?? 'false') === 'true'
-const forgotPwEnabled    = (process.env.NEXT_PUBLIC_SMTP_FORGOT_PW     ?? 'false') === 'true'
-const canSendEmail       = smtpEnabled && forgotPwEnabled
+const smtpEnabled        = () => (process.env.NEXT_PUBLIC_SMTP_ENABLED      ?? 'false') === 'true'
+const verifyEmailEnabled = () => (process.env.NEXT_PUBLIC_SMTP_VERIFY_EMAIL ?? 'false') === 'true'
 
-function buildTransporter() {
-  return nodemailer.createTransport({
-    host:   process.env.NEXT_PUBLIC_SMTP_HOST,
-    port:   Number(process.env.NEXT_PUBLIC_SMTP_PORT),
-    secure: process.env.NEXT_PUBLIC_SMTP_ENCRYPTION === 'SSL',
-    auth: {
-      user: process.env.NEXT_PUBLIC_SMTP_USER,
-      pass: process.env.NEXT_SMTP_PASSWORD?.replace(/\\#/g, '#'),
-    },
-  })
-}
+const EMAIL_FAILED_NOTICE =
+  'Account created, but the verification email could not be sent. Please contact your administrator.'
 
 // ---------------------------------------------------------------------------
 // Route Handler
@@ -58,7 +47,9 @@ export async function POST(req: NextRequest) {
       const result = await adapter.registerUser(dbConfig, { full_name, email, password })
 
       // Custom SMTP path — generate link via adapter (no firebase-admin import in route)
-      if (smtpEnabled && verifyEmailEnabled) {
+      let emailSent: boolean | undefined
+
+      if (smtpEnabled() && verifyEmailEnabled()) {
         if (!adapter.generateEmailVerificationLink) {
           throw new Error('Firebase adapter does not implement generateEmailVerificationLink')
         }
@@ -69,20 +60,23 @@ export async function POST(req: NextRequest) {
           `${process.env.NEXT_PUBLIC_APP_DOMAIN}/signin`
         )
 
-        await buildTransporter().sendMail({
-          from:    process.env.NEXT_PUBLIC_SMTP_FROM || 'no-reply@example.com',
+        emailSent = await sendMailSafe({
           to:      email,
           subject: 'Verify your email',
           html:    `<p>Hi ${full_name},</p>
                     <p>Click below to verify your email:</p>
                     <a href="${link}">${link}</a>`,
         })
-        console.log('[Signup API] Firebase verification email sent via custom SMTP')
+        console.log(`[Signup API] Firebase verification email ${emailSent ? 'sent' : 'FAILED'} via custom SMTP`)
       } else {
         console.log('[Signup API] Custom SMTP disabled — Firebase client SDK will handle verification')
       }
 
-      return NextResponse.json({ success: true, userId: result.userId })
+      return NextResponse.json({
+        success: true,
+        userId:  result.userId,
+        ...(emailSent === false ? { emailSent: false, notice: EMAIL_FAILED_NOTICE } : {}),
+      })
     }
 
     // ── Supabase ────────────────────────────────────────────────────────────
@@ -123,25 +117,30 @@ export async function POST(req: NextRequest) {
         email_verified: false,
       })
 
-      if (smtpEnabled && verifyEmailEnabled) {
+      let emailSent: boolean | undefined
+
+      if (smtpEnabled() && verifyEmailEnabled()) {
         const verifyUrl =
           `${process.env.NEXT_PUBLIC_APP_DOMAIN}/verify-email` +
           `?token=${result.token}&email=${encodeURIComponent(email)}`
 
-        await buildTransporter().sendMail({
-          from:    process.env.NEXT_PUBLIC_SMTP_FROM || 'no-reply@example.com',
+        emailSent = await sendMailSafe({
           to:      email,
           subject: 'Verify your email',
           html:    `<p>Hi ${full_name},</p>
                     <p>Click below to verify your email (expires in 24h):</p>
                     <a href="${verifyUrl}">${verifyUrl}</a>`,
         })
-        console.log('[Signup API] Verification email sent (MongoDB)')
+        console.log(`[Signup API] Verification email ${emailSent ? 'sent' : 'FAILED'} (MongoDB)`)
       } else {
         console.log('[Signup API] Email verification disabled — skipping verification email')
       }
 
-      return NextResponse.json({ success: true, user_id: result.user_id })
+      return NextResponse.json({
+        success: true,
+        user_id: result.user_id,
+        ...(emailSent === false ? { emailSent: false, notice: EMAIL_FAILED_NOTICE } : {}),
+      })
     }
 
     // ── MySQL / PostgreSQL ──────────────────────────────────────────────────
@@ -168,25 +167,30 @@ export async function POST(req: NextRequest) {
         token_ttl: emailTTL,
       })
 
-      if (smtpEnabled && verifyEmailEnabled) {
+      let emailSent: boolean | undefined
+
+      if (smtpEnabled() && verifyEmailEnabled()) {
         const verifyUrl =
           `${process.env.NEXT_PUBLIC_APP_DOMAIN}/verify-email` +
           `?token=${emailToken}&email=${encodeURIComponent(email)}`
 
-        await buildTransporter().sendMail({
-          from:    process.env.NEXT_PUBLIC_SMTP_FROM || 'no-reply@example.com',
+        emailSent = await sendMailSafe({
           to:      email,
           subject: 'Verify your email',
           html:    `<p>Hi ${full_name},</p>
                     <p>Click below to verify your email (expires in 24h):</p>
                     <a href="${verifyUrl}">${verifyUrl}</a>`,
         })
-        console.log(`[Signup API] Verification email sent (${dbType})`)
+        console.log(`[Signup API] Verification email ${emailSent ? 'sent' : 'FAILED'} (${dbType})`)
       } else {
         console.log('[Signup API] Email verification disabled — skipping verification email')
       }
 
-      return NextResponse.json({ success: true, ...result })
+      return NextResponse.json({
+        success: true,
+        ...result,
+        ...(emailSent === false ? { emailSent: false, notice: EMAIL_FAILED_NOTICE } : {}),
+      })
     }
 
     throw new Error(`Unsupported DB type: ${dbType}`)

@@ -52,6 +52,14 @@ function patchEnvFile(updates: Record<string, string>) {
   fs.writeFileSync(envPath, content, 'utf-8')
 }
 
+function parseJson(v: any): Record<string, any> {
+  if (!v) return {}
+  if (typeof v === 'string') {
+    try { return JSON.parse(v) } catch { return {} }
+  }
+  return v
+}
+
 // ---------------------------------------------------------------------------
 // POST handler
 // ---------------------------------------------------------------------------
@@ -93,7 +101,9 @@ export async function POST(req: NextRequest) {
 
     const existing = await adapter.findSystemConfigByUserId(dbConfig, user_id)
 
-    if (!existing?.id) {
+    const configId = existing?.config_id ?? existing?.id ?? existing?._id?.toString()
+
+    if (!configId) {
       return NextResponse.json(
         { error: 'System config record not found for this user' },
         { status: 404 }
@@ -104,35 +114,66 @@ export async function POST(req: NextRequest) {
 
     const encryptionKey = deriveEncryptionKey({
       projectId: existing.project_id ?? user_id,
-      configId:  existing.config_id  ?? existing.id,
+      configId,
       userId:    user_id,
-      createdAt: existing.created_at ?? new Date().toISOString(),
+      createdAt: existing.created_at instanceof Date
+        ? existing.created_at.toISOString()
+        : (existing.created_at ?? new Date().toISOString()),
     })
 
-    // ── Build SMTP update payload ───────────────────────────────────────────
-    // Dot-notation keys update only nested smtp.* fields in Firestore
+    // ── Build + write SMTP update ───────────────────────────────────────────
+    // Firestore: dot-notation updates only nested smtp.* fields.
+    // Everything else: smtp is a JSON column — merge into the existing object
+    // (keeps the stored encrypted password when none is provided) and write
+    // it back whole.
 
-    const smtpUpdate: Record<string, any> = {
-      'smtp.enabled':         smtp_enabled    ?? false,
-      'smtp.verify_email':    verify_email    ?? false,
-      'smtp.forgot_password': forgot_password ?? false,
-      'smtp.host':            host            ?? '',
-      'smtp.port':            port            ?? '587',
-      'smtp.from_address':    from_address    ?? '',
-      'smtp.username':        username        ?? '',
-      'smtp.encryption':      encryption      ?? 'TLS',
-      updated_at:             new Date().toISOString(),
+    const idColumn = existing.config_id ? 'config_id' : undefined
+    const now      = new Date().toISOString()
+
+    if (dbConfig.type === 'firebase') {
+      const smtpUpdate: Record<string, any> = {
+        'smtp.enabled':         smtp_enabled    ?? false,
+        'smtp.verify_email':    verify_email    ?? false,
+        'smtp.forgot_password': forgot_password ?? false,
+        'smtp.host':            host            ?? '',
+        'smtp.port':            port            ?? '587',
+        'smtp.from_address':    from_address    ?? '',
+        'smtp.username':        username        ?? '',
+        'smtp.encryption':      encryption      ?? 'TLS',
+        updated_at:             now,
+      }
+
+      if (password) {
+        smtpUpdate['smtp.password_encrypted'] = encrypt(password, encryptionKey)
+      }
+
+      await adapter.update(dbConfig, 'nxf_system_config', configId, smtpUpdate)
+    } else {
+      const smtp: Record<string, any> = {
+        ...parseJson(existing.smtp),
+        enabled:         smtp_enabled    ?? false,
+        verify_email:    verify_email    ?? false,
+        forgot_password: forgot_password ?? false,
+        host:            host            ?? '',
+        port:            port            ?? '587',
+        from_address:    from_address    ?? '',
+        username:        username        ?? '',
+        encryption:      encryption      ?? 'TLS',
+      }
+
+      if (password) {
+        smtp.password_encrypted = encrypt(password, encryptionKey)
+      }
+
+      const value = dbConfig.type === 'postgres' || dbConfig.type === 'mysql'
+        ? JSON.stringify(smtp)
+        : smtp
+
+      await adapter.update(dbConfig, 'nxf_system_config', configId, {
+        smtp:       value,
+        updated_at: now,
+      }, idColumn)
     }
-
-    // Only encrypt and store password if one was provided —
-    // omitting it leaves the existing encrypted password untouched
-    if (password) {
-      smtpUpdate['smtp.password_encrypted'] = encrypt(password, encryptionKey)
-    }
-
-    // ── Write update to database ────────────────────────────────────────────
-
-    await adapter.update(dbConfig, 'nxf_system_config', existing.id, smtpUpdate)
 
     // ── Patch .env.local ────────────────────────────────────────────────────
     // NEXT_SMTP_PASSWORD has no NEXT_PUBLIC_ prefix — never exposed to browser

@@ -32,12 +32,18 @@ export async function DELETE(
   _req: NextRequest,
   { params }: { params: Promise<{ routeId: string }> }
 ) {
-  const { routeId } = await params
+  try {
+    const { routeId } = await params
 
-  const adapter  = getConfiguredAdapter()
-  const dbConfig = adapter.config
+    const adapter  = getConfiguredAdapter()
+    const dbConfig = adapter.config
 
-  await adapter.delete!(dbConfig, 'nxf_page_routes', routeId)
+    // Primary key of nxf_page_routes is route_id, not id.
+    await adapter.delete!(dbConfig, 'nxf_page_routes', routeId, 'route_id')
 
-  return NextResponse.json({ success: true })
+    return NextResponse.json({ success: true })
+  } catch (err: any) {
+    console.error('[DELETE /api/page-routes/:routeId]', err)
+    return NextResponse.json({ error: err.message }, { status: 500 })
+  }
 }

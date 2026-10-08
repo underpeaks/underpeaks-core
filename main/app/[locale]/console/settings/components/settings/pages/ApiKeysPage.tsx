@@ -10,7 +10,8 @@ import { ApiKey, NewKeyResult }  from './components/types'
 import { useTranslations } from 'next-intl'
 
 export default function ApiKeysPage() {
-  const t = useTranslations('apiKeysPage')
+  const t  = useTranslations('apiKeysPage')
+  const ts = useTranslations('settings.apiKeys')
 
   const [keys, setKeys] = useState<ApiKey[]>([])
   const [loading, setLoading] = useState(true)
@@ -117,10 +118,10 @@ export default function ApiKeysPage() {
 
       <div>
         <h2 className="text-lg font-bold text-gray-900">
-          {t('heading')}
+          {ts('heading')}
         </h2>
         <p className="text-sm text-gray-500 mt-0.5">
-          {t('subheading')}
+          {ts('subheading')}
         </p>
       </div>
 

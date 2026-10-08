@@ -1,5 +1,4 @@
-// File: app/[locale]/console/navigator/page.tsx
-
+// app/[locale]/console/navigator/page.tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -44,7 +43,17 @@ export default function NavigatorPage() {
       ])
       const pagesData  = await pagesRes.json()
       const routesData = await routesRes.json()
-      setPages((pagesData.pages ?? []).map((p: any) => ({ page_id: p.page_id, name: p.title, slug: p.slug })))
+
+      // The Navigator connects app pages only — admin console pages are excluded.
+      setPages(
+        (pagesData.pages ?? [])
+          .filter((p: any) => p.visibility !== 'admin')
+          .map((p: any) => ({
+            page_id: p.page_id,
+            name:    p.title ?? p.name ?? '',
+            slug:    p.slug,
+          }))
+      )
       setRoutes((routesData.routes ?? []).map((r: any) => ({ ...r, attach_to: r.attach_to ?? null })))
     } finally {
       setLoading(false)
@@ -72,8 +81,8 @@ export default function NavigatorPage() {
   }
 
   async function deleteRoute(routeId: string) {
-    await fetch(`/api/page-routes/${routeId}`, { method: 'DELETE' })
-    setRoutes((prev) => prev.filter((r) => r.route_id !== routeId))
+    const res = await fetch(`/api/page-routes/${routeId}`, { method: 'DELETE' })
+    if (res.ok) setRoutes((prev) => prev.filter((r) => r.route_id !== routeId))
   }
 
   if (loading) return <Loader />

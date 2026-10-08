@@ -154,27 +154,13 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ success: true, user: updatedUser?.[0] ?? null })
     }
 
-    if (dbConfig.type === 'mongodb') {
-      const allUsers  = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
-      const targetDoc = allUsers.find((u) => u.user_id === target_user_id)
-      if (!targetDoc) return NextResponse.json({ error: 'User not found' }, { status: 404 })
+    // Mongo / Postgres / MySQL / Firebase — key on user_id (the nxf_users PK)
+    const allUsers  = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
+    const targetDoc = allUsers.find((u) => u.user_id === target_user_id)
+    if (!targetDoc) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
-      const docId = (targetDoc as any)._id?.toString() ?? (targetDoc as any).id
-      await adapter.update!(dbConfig, 'nxf_users', docId, updates)
-      return NextResponse.json({ success: true, user: targetDoc })
-    }
-
-    if (dbConfig.type === 'postgres' || dbConfig.type === 'mysql') {
-      const allUsers  = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
-      const targetDoc = allUsers.find((u) => u.user_id === target_user_id)
-      if (!targetDoc) return NextResponse.json({ error: 'User not found' }, { status: 404 })
-
-      await adapter.update!(dbConfig, 'nxf_users', target_user_id, updates, 'user_id')
-      return NextResponse.json({ success: true, user: targetDoc })
-    }
-
-    return NextResponse.json({ error: 'Unsupported DB type' }, { status: 400 })
-
+    await adapter.update!(dbConfig, 'nxf_users', target_user_id, updates, 'user_id')
+    return NextResponse.json({ success: true, user: targetDoc })
   } catch (error: any) {
     console.error('[PATCH /api/cmsusers] unhandled error:', error.message)
     return NextResponse.json(
@@ -238,8 +224,7 @@ export async function DELETE(req: NextRequest) {
       return NextResponse.json({ success: true })
     }
 
-    const docId = (targetUser as any)._id?.toString() ?? (targetUser as any).id
-    await adapter.delete!(dbConfig, 'nxf_users', docId)
+    await adapter.delete!(dbConfig, 'nxf_users', target_user_id, 'user_id')
 
     return NextResponse.json({ success: true })
 

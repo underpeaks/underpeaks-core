@@ -1,5 +1,6 @@
+
 {
-  "table_name": "nxf_menu",
+  "table_name": "nxf_menus",
   "schema": "public",
   "columns": [
     {
@@ -31,7 +32,7 @@
       "name": "page_id",
       "type": "string",
       "nullable": true,
-      "description": "links to nxf_pages — the page this menu item navigates to",
+      "description": "links to nxf_pages — the page this menu item navigates to (null for section headers)",
       "foreign_key": {
         "references": "nxf_pages(page_id)"
       },
@@ -71,7 +72,7 @@
       "default": null,
       "description": "id of the parent menu item — null means top-level; child items appear as dropdowns",
       "foreign_key": {
-        "references": "nxf_menu(menu_id)"
+        "references": "nxf_menus(menu_id)"
       },
       "hidden": false,
       "ui_type": "select"
@@ -91,6 +92,15 @@
       "nullable": false,
       "default": true,
       "description": "whether this item is shown in the nav — hidden items are saved but not rendered",
+      "hidden": false,
+      "ui_type": "toggle"
+    },
+    {
+      "name": "is_section",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "true for a section header: a group label with no page link",
       "hidden": false,
       "ui_type": "toggle"
     },
@@ -134,7 +144,7 @@
       "type": "foreign_key",
       "fields": ["parent_id"],
       "references": {
-        "table": "nxf_menu",
+        "table": "nxf_menus",
         "field": "menu_id"
       }
     }

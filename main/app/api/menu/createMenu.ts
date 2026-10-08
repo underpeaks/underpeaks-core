@@ -1,3 +1,4 @@
+// app/api/menu/createMenu.ts
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -9,10 +10,12 @@ export async function handleCreateMenu(req: NextRequest): Promise<NextResponse> 
     return NextResponse.json({ success: false, error: 'errors.invalidBody' }, { status: 400 })
   }
 
-  const { user_id, page_id, label, icon, order, parent_id, target, visible } = body
+  const { user_id, page_id, label, icon, order, parent_id, target, visible, is_section } = body
 
   if (!user_id) return NextResponse.json({ success: false, error: 'errors.missingUserId' }, { status: 400 })
   if (!label)   return NextResponse.json({ success: false, error: 'errors.missingLabel' },  { status: 400 })
+
+  const isSection = !!is_section
 
   const adapter  = getConfiguredAdapter()
   const dbConfig = adapter.config
@@ -39,13 +42,14 @@ export async function handleCreateMenu(req: NextRequest): Promise<NextResponse> 
     menu_id,
     project_id: projectId,
     tenant_id:  tenantId,
-    page_id:    page_id ?? null,
+    page_id:    isSection ? null : (page_id ?? null),
     label:      label.trim(),
-    icon:       icon ?? 'FiFileText',
+    icon:       icon ?? (isSection ? 'FiFolder' : 'FiFileText'),
     order:      order ?? 0,
-    parent_id:  parent_id ?? null,
+    parent_id:  isSection ? null : (parent_id ?? null),
     target:     target ?? '_self',
     visible:    visible ?? true,
+    is_section: isSection,
     is_system:  false,
     created_at: now,
     updated_at: now,

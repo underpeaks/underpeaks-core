@@ -1,3 +1,4 @@
+// app/[locale]/console/models/components/ForeignKeySelector.tsx
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
@@ -8,7 +9,6 @@ import {
   FiLock,
   FiDatabase,
 }                                      from 'react-icons/fi'
-import { ON_DELETE_OPTIONS } from '../../../../api/models/uitypes'
 
 interface FieldSummary {
   name:         string
@@ -40,21 +40,25 @@ function parseReference(ref: string): { table: string; column: string } | null {
   return { table: match[1], column: match[2] }
 }
 
+/**
+ * The "On Delete" dropdown is NOT rendered here — the model create and edit
+ * pages render their own, so showing it here as well duplicated it.
+ * onDeleteValue / onDeleteChange are kept as optional props so existing
+ * callers keep compiling.
+ */
 interface Props {
-  models:         ModelSummary[]
-  value:          string | undefined
-  onDeleteValue:  string | undefined
-  onChange:       (references: string) => void
-  onDeleteChange: (onDelete: string)   => void
-  onClear:        ()                   => void
+  models:          ModelSummary[]
+  value:           string | undefined
+  onChange:        (references: string) => void
+  onClear:         ()                   => void
+  onDeleteValue?:  string | undefined
+  onDeleteChange?: (onDelete: string)   => void
 }
 
 export default function ForeignKeySelector({
   models,
   value,
-  onDeleteValue,
   onChange,
-  onDeleteChange,
   onClear,
 }: Props) {
   const [open,        setOpen]        = useState(false)
@@ -217,7 +221,7 @@ export default function ForeignKeySelector({
                         </span>
                       )}
                       <span className="ml-auto text-[10px] text-gray-400">
-                        {model.schema.length} fields
+                        {(model.schema ?? []).length} fields
                       </span>
                     </div>
 
@@ -266,24 +270,6 @@ export default function ForeignKeySelector({
               })
             )}
           </div>
-        </div>
-      )}
-
-      {/* On Delete selector */}
-      {parsed && (
-        <div className="mt-2">
-          <label className="block text-xs font-medium text-gray-500 mb-1">
-            On Delete
-          </label>
-          <select
-            value={onDeleteValue ?? 'CASCADE'}
-            onChange={(e) => onDeleteChange(e.target.value)}
-            className="w-full px-3 py-1.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-300"
-          >
-            {ON_DELETE_OPTIONS.map((opt) => (
-              <option key={opt} value={opt}>{opt}</option>
-            ))}
-          </select>
         </div>
       )}
     </div>

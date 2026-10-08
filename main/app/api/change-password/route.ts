@@ -35,6 +35,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import bcrypt                        from 'bcryptjs'
 import admin                         from 'firebase-admin'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { resolveUserIdFromToken } from '@/app/lib/resolveUserFromToken'
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -118,14 +119,9 @@ export async function POST(req: NextRequest) {
      * unique ID (uid or user_id depending on the adapter).
      * On failure (expired, tampered, unknown token), decoded will be null/undefined.
      */
-    const decoded = await adapter.validateBuiltInSession?.(adapter.config, token)
-
-    /**
-     * Extract the user's unique ID from the decoded token.
-     * We check both `uid` and `user_id` because different adapters use
-     * different field names for the same concept.
-     */
-    const uid = decoded?.uid ?? decoded?.user_id ?? null
+    // Works for every adapter: provider token (Firebase/Supabase) or the
+    // nxf_system_tokens lookup (Postgres/MySQL/Mongo).
+    const uid = await resolveUserIdFromToken(adapter, token)
 
     /**
      * If we could not extract a valid user ID the token is invalid or expired.
@@ -171,6 +167,12 @@ export async function POST(req: NextRequest) {
      * If they do not match, the user has entered the wrong current password.
      * Return 400 — do not allow the change to proceed.
      */
+    if (!user.password_hash)
+      return NextResponse.json(
+        { error: 'Password is managed by your authentication provider' },
+        { status: 400 }
+      )
+
     const passwordMatch = await bcrypt.compare(currentPassword, user.password_hash)
     if (!passwordMatch)
       return NextResponse.json(
@@ -201,7 +203,7 @@ export async function POST(req: NextRequest) {
     await adapter.update!(adapter.config, 'nxf_users', uid, {
       password_hash: newHash,
       updated_at:    new Date().toISOString(),
-    })
+    }, 'user_id')
 
     // ── Update Firebase Auth password ──────────────────────────────────────
 
@@ -231,7 +233,8 @@ export async function POST(req: NextRequest) {
      */
     return NextResponse.json({ success: true })
 
-  } catch {
+  } catch (err: any) {
+    console.error('[change-password] Error:', err?.message)
     /**
      * Catch-all for any unexpected errors (database down, JSON parse error,
      * adapter misconfiguration, etc.).

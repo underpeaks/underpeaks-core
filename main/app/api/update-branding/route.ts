@@ -19,6 +19,14 @@ function patchConfigFile(logoUrl: string, faviconUrl: string) {
   fs.writeFileSync(filePath, JSON.stringify(config, null, 2), 'utf-8')
 }
 
+function parseJson(v: any): Record<string, any> {
+  if (!v) return {}
+  if (typeof v === 'string') {
+    try { return JSON.parse(v) } catch { return {} }
+  }
+  return v
+}
+
 // ---------------------------------------------------------------------------
 // POST handler
 // ---------------------------------------------------------------------------
@@ -49,7 +57,9 @@ export async function POST(req: NextRequest) {
 
     const existing = await adapter.findSystemConfigByUserId(dbConfig, user_id)
 
-    if (!existing?.id) {
+    const configId = existing?.config_id ?? existing?.id ?? existing?._id?.toString()
+
+    if (!configId) {
       return NextResponse.json(
         { error: 'System config record not found for this user' },
         { status: 404 }
@@ -57,14 +67,31 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Update branding in database ─────────────────────────────────────────
-    // Dot-notation keys update only the nested branding fields in Firestore
-    // without overwriting the rest of the branding object
+    // Firestore: dot-notation updates only the nested branding fields.
+    // Everything else (Postgres/MySQL/Supabase/Mongo): branding is a JSON
+    // column, so merge into the existing object and write it back whole.
 
-    await adapter.update(dbConfig, 'nxf_system_config', existing.id, {
-      'branding.logo_url':    logo_url    ?? '',
-      'branding.favicon_url': favicon_url ?? '',
-      updated_at:             new Date().toISOString(),
-    })
+    const idColumn = existing.config_id ? 'config_id' : undefined
+    const now      = new Date().toISOString()
+
+    if (dbConfig.type === 'firebase') {
+      await adapter.update(dbConfig, 'nxf_system_config', configId, {
+        'branding.logo_url':    logo_url    ?? '',
+        'branding.favicon_url': favicon_url ?? '',
+        updated_at:             now,
+      })
+    } else {
+      const current  = parseJson(existing.branding)
+      const branding = { ...current, logo_url: logo_url ?? '', favicon_url: favicon_url ?? '' }
+      const value    = dbConfig.type === 'postgres' || dbConfig.type === 'mysql'
+        ? JSON.stringify(branding)
+        : branding
+
+      await adapter.update(dbConfig, 'nxf_system_config', configId, {
+        branding:   value,
+        updated_at: now,
+      }, idColumn)
+    }
 
     // ── Patch local config file ─────────────────────────────────────────────
 

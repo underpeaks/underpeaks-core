@@ -1,5 +1,5 @@
 // ============================================================
-// FILE: app/api/users/[id]/route.ts
+// FILE: app/api/cmsusers/[id]/route.ts
 // PURPOSE: GET single user. project resolved via user_id.
 //          Password reset handled client-side via Firebase SDK.
 // ============================================================
@@ -11,9 +11,11 @@ import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
+
     const adapter  = getConfiguredAdapter();
     const dbConfig = adapter.config;
     const { searchParams } = new URL(req.url);
@@ -27,7 +29,7 @@ export async function GET(
     }
 
     const allUsers = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[];
-    const user     = allUsers.find((u) => u.user_id === params.id);
+    const user     = allUsers.find((u) => u.user_id === id);
 
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -35,7 +37,7 @@ export async function GET(
 
     return NextResponse.json({ user });
   } catch (error) {
-    console.error('[GET /api/users/[id]]', error);
+    console.error('[GET /api/cmsusers/[id]]', error);
     return NextResponse.json(
       { error: 'Failed to fetch user' },
       { status: 500 }

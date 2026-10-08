@@ -839,8 +839,10 @@ async readAll(
    * @param data       - An object of field-value pairs to update.
    * @returns true on success.
    */
-  async update(config: DBConfig, collection: string, id: string, data: any) {
-    await this.firestore.collection(collection).doc(id).update(data)
+  async update(config: DBConfig, collection: string, id: string, data: any, idColumn: string = 'id') {
+    const ref = await this.resolveDocRef(collection, id, idColumn)
+    if (!ref) return false
+    await ref.update(data)
     return true
   }
 
@@ -854,9 +856,29 @@ async readAll(
    * @param id         - The document ID to delete.
    * @returns true on success.
    */
-  async delete(config: DBConfig, collection: string, id: string) {
-    await this.firestore.collection(collection).doc(id).delete()
+  async delete(config: DBConfig, collection: string, id: string, idColumn: string = 'id') {
+    const ref = await this.resolveDocRef(collection, id, idColumn)
+    if (!ref) return false
+    await ref.delete()
     return true
+  }
+
+  /**
+   * resolveDocRef
+   *
+   * Finds the Firestore document for a record. When idColumn is 'id' the value
+   * is the document ID. For any other key (menu_id, page_id, route_id, ...) the
+   * collection is queried on that field first, falling back to the document ID.
+   */
+  private async resolveDocRef(collection: string, id: string, idColumn: string) {
+    const col = this.firestore.collection(collection)
+    if (idColumn && idColumn !== 'id') {
+      const snap = await col.where(idColumn, '==', id).limit(1).get()
+      if (!snap.empty) return snap.docs[0].ref
+    }
+    const direct = col.doc(id)
+    const doc    = await direct.get()
+    return doc.exists ? direct : null
   }
 
   /**

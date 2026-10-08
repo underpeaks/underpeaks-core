@@ -1,4 +1,4 @@
-//app/api/pages/handlers/createPage.ts
+// app/api/pages/createPage.ts
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -11,9 +11,9 @@ export async function handleCreatePage(req: NextRequest): Promise<NextResponse> 
   }
 
   const {
-    user_id, title, slug, model, template_type,
+    user_id, title, slug, model, model_id, template_type,
     nav_settings,
-    visibility, seo_title, seo_description, is_system, hidden,
+    visibility, seo_title, seo_description,
   } = body
 
   if (!user_id) return NextResponse.json({ success: false, error: 'errors.missingUserId' }, { status: 400 })
@@ -32,14 +32,30 @@ export async function handleCreatePage(req: NextRequest): Promise<NextResponse> 
   }
 
   const projectId = project.id || project.project_id
-  const tenant    = adapter.findTenantByUserEmail
-    ? await adapter.findTenantByUserEmail(dbConfig, body.user_email ?? '')
-    : null
-  const tenantId  = tenant?.id ?? ''
-  const page_id   = `page_${Date.now()}`
-  const now       = new Date().toISOString()
 
-  // FIX: nxf_pages has no user_id column — the real column is created_by.
+  // tenant_id: project first, then email lookup, then the single tenant row.
+  let tenantId: string | undefined = project.tenant_id
+  if (!tenantId && adapter.findTenantByUserEmail && body.user_email) {
+    const tenant = await adapter.findTenantByUserEmail(dbConfig, body.user_email)
+    tenantId = tenant?.id ?? tenant?.ten_id
+  }
+  if (!tenantId && adapter.read) {
+    const tenants = await adapter.read(dbConfig, 'nxf_system_tenants')
+    const first   = (tenants ?? [])[0]
+    tenantId      = first?.ten_id ?? first?.id
+  }
+  if (!tenantId) {
+    return NextResponse.json({ success: false, error: 'errors.tenantNotFound' }, { status: 400 })
+  }
+
+  const page_id = `page_${Date.now()}`
+  const now     = new Date().toISOString()
+
+  // The drawer sends model_id; older callers send model. Write both columns
+  // (Update already writes model_id).
+  const modelValue = model_id ?? model ?? null
+
+  // nxf_pages has no user_id column — the real column is created_by.
   await adapter.create!(dbConfig, 'nxf_pages', {
     page_id,
     project_id:      projectId,
@@ -47,7 +63,8 @@ export async function handleCreatePage(req: NextRequest): Promise<NextResponse> 
     created_by:      user_id,
     title:           title.trim(),
     slug:            slug.trim(),
-    model:           model ?? null,
+    model:           modelValue,
+    model_id:        modelValue,
     template_type:   template_type ?? 'list',
     nav_settings:    nav_settings ?? {
       mobile: { header: 'none', bottom: 'none' },

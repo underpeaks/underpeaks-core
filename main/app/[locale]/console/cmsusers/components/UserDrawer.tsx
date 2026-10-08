@@ -97,7 +97,7 @@ export default function UserDrawer({
       setHistoryLoading(true);
       try {
         const res = await fetch(
-          `/api/users/${user.user_id}/login-history?user_id=${currentUserId}`
+          `/api/cmsusers/${user.user_id}/login-history?user_id=${currentUserId}`
         );
         const data = await res.json();
         setLoginHistory(data.history ?? []);

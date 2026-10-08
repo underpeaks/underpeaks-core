@@ -1,3 +1,4 @@
+// app/[locale]/console/models/[id]/view/page.tsx
 'use client'
 
 /**
@@ -79,7 +80,15 @@ export default function ModelViewPage() {
 
       const found = (data.models ?? []).find((m: any) => m.sm_id === id)
       if (!found) throw new Error(t('errors.notFound'))
-      setModel(found)
+
+      // API returns schema as { version, columns, ... } — unwrap to a field array
+      const raw  = found.schema
+      const cols = Array.isArray(raw)
+        ? raw
+        : Array.isArray(raw?.columns)
+          ? raw.columns
+          : []
+      setModel({ ...found, schema: cols })
     } catch (err: any) {
       setError(err.message || t('errors.loadFailed'))
     } finally {
@@ -89,7 +98,7 @@ export default function ModelViewPage() {
 
   // ── Loading state ──────────────────────────────────────────────────────
 
-if (loading) return <Loader />
+  if (loading) return <Loader />
 
   // ── Error state ────────────────────────────────────────────────────────
 

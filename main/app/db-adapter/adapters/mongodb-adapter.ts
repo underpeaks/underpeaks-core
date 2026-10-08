@@ -2032,12 +2032,30 @@ async listFolders(): Promise<string[]> {
   }
 }
 
+private localUploadsRoot(): string {
+  const path = require('path')
+  return path.resolve(process.cwd(), 'public', 'uploads')
+}
+
+private localDir(folder: string): string {
+  const path = require('path')
+  const root = this.localUploadsRoot()
+  if (!folder || folder === 'uploads') return root
+  const dir = path.resolve(root, folder)
+  if (dir !== root && !dir.startsWith(root + path.sep)) throw new Error('Invalid folder')
+  return dir
+}
+
+private localUrl(folder: string, fileName: string): string {
+  return !folder || folder === 'uploads' ? `/uploads/${fileName}` : `/uploads/${folder}/${fileName}`
+}
+
 async listFiles(folder: string): Promise<StorageFile[]> {
   try {
     const db  = await this.getDb()
     const docs = await db
       .collection('nxf_storage')
-      .find({ folder })
+      .find({ folder, file_name: { $nin: [null, '', '.keep'] } })
       .toArray()
 
     return docs.map((doc) => {
@@ -2080,24 +2098,21 @@ async uploadFile(
   const fs   = require('fs')
   const path = require('path')
 
-  // Write to local uploads directory — swap this block for S3/GCS in production
-  const uploadsDir = path.resolve(process.cwd(), 'uploads', folder)
-  fs.mkdirSync(uploadsDir, { recursive: true })
+  // Local files live in public/uploads so Next.js serves them at /uploads/...
+  const dir = this.localDir(folder)
+  fs.mkdirSync(dir, { recursive: true })
+  fs.writeFileSync(path.join(dir, fileName), buffer)
 
-  const filePath = path.join(uploadsDir, fileName)
-  fs.writeFileSync(filePath, buffer)
+  const storedFolder = folder || 'uploads'
+  const url          = this.localUrl(folder, fileName)
 
-  // Build a relative URL — serves via Next.js /uploads/ static route
-  const url = `/uploads/${folder}/${fileName}`
-
-  // Save metadata to nxf_storage
   const db = await this.getDb()
 
   await db.collection('nxf_storage').insertOne({
     storage_id: crypto.randomUUID(),
     file_name:  fileName,
-    file_path:  `${folder}/${fileName}`,
-    folder,
+    file_path:  `${storedFolder}/${fileName}`,
+    folder:     storedFolder,
     url,
     mime_type:  mimeType,
     size:       buffer.length,
@@ -2111,29 +2126,24 @@ async deleteFile(folder: string, fileName: string): Promise<void> {
   const fs   = require('fs')
   const path = require('path')
 
-  const filePath = path.resolve(process.cwd(), 'uploads', folder, fileName)
+  const filePath = path.join(this.localDir(folder), fileName)
+  if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
 
-  if (fs.existsSync(filePath)) {
-    fs.unlinkSync(filePath)
-  }
-
-  // Remove metadata record
-const db  = await this.getDb()
-  await db.collection('nxf_storage').deleteOne({ file_path: `${folder}/${fileName}` })
+  const db = await this.getDb()
+  await db.collection('nxf_storage').deleteOne({ file_path: `${folder || 'uploads'}/${fileName}` })
 }
 
 async deleteFolder(folder: string): Promise<void> {
-  const fs   = require('fs')
-  const path = require('path')
+  const fs = require('fs')
 
-  const folderPath = path.resolve(process.cwd(), 'uploads', folder)
+  if (!folder || folder === 'uploads') throw new Error('Cannot delete the root folder')
 
+  const folderPath = this.localDir(folder)
   if (fs.existsSync(folderPath)) {
     fs.rmSync(folderPath, { recursive: true, force: true })
   }
 
-  // Remove all metadata records for this folder
-const db  = await this.getDb()
+  const db = await this.getDb()
   await db.collection('nxf_storage').deleteMany({ folder })
 }
 
@@ -2141,39 +2151,32 @@ async createFolder(folder: string): Promise<void> {
   const fs   = require('fs')
   const path = require('path')
 
-  const folderPath = path.resolve(process.cwd(), 'uploads', folder)
+  const folderPath = this.localDir(folder)
   fs.mkdirSync(folderPath, { recursive: true })
 
-  // Write a .keep sentinel so the folder persists in nxf_storage too
+  // .keep sentinel so the empty folder survives on disk
   const keepPath = path.join(folderPath, '.keep')
-  if (!fs.existsSync(keepPath)) {
-    fs.writeFileSync(keepPath, '')
-  }
+  if (!fs.existsSync(keepPath)) fs.writeFileSync(keepPath, '')
 }
 
 async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
   const fs   = require('fs')
   const path = require('path')
 
-  const oldPath = path.resolve(process.cwd(), 'uploads', folder, oldName)
-  const newPath = path.resolve(process.cwd(), 'uploads', folder, newName)
+  const storedFolder = folder || 'uploads'
+  const oldPath      = path.join(this.localDir(folder), oldName)
+  const newPath      = path.join(this.localDir(folder), newName)
+  const hadLocal     = fs.existsSync(oldPath)
 
-  if (fs.existsSync(oldPath)) {
-    fs.renameSync(oldPath, newPath)
-  }
+  if (hadLocal) fs.renameSync(oldPath, newPath)
 
- const db  = await this.getDb()
-  const url = `/uploads/${folder}/${newName}`
+  const set: any = { file_name: newName, file_path: `${storedFolder}/${newName}` }
+  if (hadLocal) set.url = this.localUrl(folder, newName)
 
+  const db = await this.getDb()
   await db.collection('nxf_storage').updateOne(
-    { file_path: `${folder}/${oldName}` },
-    {
-      $set: {
-        file_name: newName,
-        file_path: `${folder}/${newName}`,
-        url,
-      },
-    }
+    { file_path: `${storedFolder}/${oldName}` },
+    { $set: set }
   )
 }
 
@@ -2181,28 +2184,25 @@ async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<
   const fs   = require('fs')
   const path = require('path')
 
-  const oldPath = path.resolve(process.cwd(), 'uploads', fromFolder, fileName)
-  const newDir  = path.resolve(process.cwd(), 'uploads', toFolder)
-  const newPath = path.join(newDir, fileName)
+  const fromStored = fromFolder || 'uploads'
+  const toStored   = toFolder || 'uploads'
+  const oldPath    = path.join(this.localDir(fromFolder), fileName)
+  const newDir     = this.localDir(toFolder)
+  const newPath    = path.join(newDir, fileName)
+  const hadLocal   = fs.existsSync(oldPath)
 
-  fs.mkdirSync(newDir, { recursive: true })
-
-  if (fs.existsSync(oldPath)) {
+  if (hadLocal) {
+    fs.mkdirSync(newDir, { recursive: true })
     fs.renameSync(oldPath, newPath)
   }
 
-  const db  = await this.getDb()
-  const url = `/uploads/${toFolder}/${fileName}`
+  const set: any = { folder: toStored, file_path: `${toStored}/${fileName}` }
+  if (hadLocal) set.url = this.localUrl(toFolder, fileName)
 
+  const db = await this.getDb()
   await db.collection('nxf_storage').updateOne(
-    { file_path: `${fromFolder}/${fileName}` },
-    {
-      $set: {
-        folder:    toFolder,
-        file_path: `${toFolder}/${fileName}`,
-        url,
-      },
-    }
+    { file_path: `${fromStored}/${fileName}` },
+    { $set: set }
   )
 }
 

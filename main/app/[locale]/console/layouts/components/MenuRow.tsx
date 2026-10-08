@@ -1,3 +1,4 @@
+// app/[locale]/console/layouts/components/MenuRow.tsx
 'use client'
 
 import {
@@ -26,10 +27,13 @@ export default function MenuRow({
   onToggleVisible, deletingId, setDeletingId,
   dragHandleProps, t,
 }: MenuRowProps) {
-  const linkedPage = pages.find((p) => p.page_id === item.page_id)
+  const isSection  = !!item.is_section
+  const linkedPage = isSection ? undefined : pages.find((p) => p.page_id === item.page_id)
 
   return (
-    <div className={`group flex items-center gap-3 px-4 py-3 border-b border-gray-100 last:border-0 bg-white hover:bg-gray-50 transition-colors ${isChild ? 'pl-10' : ''}`}>
+    <div className={`group flex items-center gap-3 px-4 py-3 border-b border-gray-100 last:border-0 transition-colors ${
+      isSection ? 'bg-gray-50 hover:bg-gray-100' : 'bg-white hover:bg-gray-50'
+    } ${isChild ? 'pl-10' : ''}`}>
 
       <div
         {...dragHandleProps}
@@ -47,15 +51,22 @@ export default function MenuRow({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className={`text-sm font-medium truncate ${item.visible ? 'text-gray-800' : 'text-gray-400'}`}>
+          <p className={`truncate ${
+            isSection ? 'text-xs font-bold uppercase tracking-wide' : 'text-sm font-medium'
+          } ${item.visible ? 'text-gray-800' : 'text-gray-400'}`}>
             {item.label}
           </p>
+          {isSection && (
+            <span className="text-[10px] text-gray-500 bg-white border border-gray-200 px-1.5 py-0.5 rounded shrink-0">
+              Section
+            </span>
+          )}
           {!item.visible && (
             <span className="text-[10px] text-gray-400 bg-gray-100 px-1.5 py-0.5 rounded shrink-0">
               {t('row.hidden')}
             </span>
           )}
-          {item.target === '_blank' && (
+          {!isSection && item.target === '_blank' && (
             <FiExternalLink size={11} className="text-gray-400 shrink-0" />
           )}
         </div>

@@ -1,3 +1,4 @@
+// app/[locale]/console/models/page.tsx
 'use client'
 
 /**
@@ -7,9 +8,14 @@
  *
  * Row click routing:
  *   nxf_system_* tables         → /console/models/[id]/view  (read-only)
+ *   Other platform tables and
  *   nxf_users / nxf_messages /
  *   nxf_notifications            → /console/models/[id]/edit  (partial edit)
  *   All other models             → /console/models/[id]/edit  (full edit)
+ *
+ * "Platform" tables are flagged by the API (is_platform): the tables the
+ * installer creates from the shared schema files. Names alone are not enough —
+ * a user model may legitimately start with nxf_.
  *
  * Filters: All | User | System (toggle buttons)
  *
@@ -61,12 +67,13 @@ interface VersionedSchema {
 }
 
 interface Model {
-  sm_id:      string
-  name:       string
-  project_id: string
-  schema:     VersionedSchema | ModelField[]   // versioned object (canonical) or legacy array
-  created_at: string
-  updated_at: string
+  sm_id:        string
+  name:         string
+  project_id:   string
+  schema:       VersionedSchema | ModelField[]   // versioned object (canonical) or legacy array
+  is_platform?: boolean                          // set by the API for installer-created tables
+  created_at:   string
+  updated_at:   string
 }
 
 type FilterType = 'all' | 'user' | 'system'
@@ -75,10 +82,12 @@ type FilterType = 'all' | 'user' | 'system'
 // Helpers
 // ---------------------------------------------------------------------------
 
-function isSystemTable(name: string): boolean {
+function isSystemTable(model: Model): boolean {
+  const n = model.name.toLowerCase()
   return (
-    name.toLowerCase().startsWith('nxf_system_') ||
-    EDITABLE_SYSTEM_TABLES.includes(name.toLowerCase())
+    n.startsWith('nxf_system_') ||
+    !!model.is_platform ||
+    EDITABLE_SYSTEM_TABLES.includes(n)
   )
 }
 
@@ -145,8 +154,8 @@ export default function ModelsListPage() {
   }
 
   const filteredModels = models.filter((m) => {
-    if (filter === 'system') return isSystemTable(m.name)
-    if (filter === 'user')   return !isSystemTable(m.name)
+    if (filter === 'system') return isSystemTable(m)
+    if (filter === 'user')   return !isSystemTable(m)
     return true
   })
 
@@ -227,8 +236,8 @@ export default function ModelsListPage() {
               {t(`filter.${f}`)}
               <span className="ml-1.5 opacity-60">
                 {f === 'all'    && `(${models.length})`}
-                {f === 'user'   && `(${models.filter((m) => !isSystemTable(m.name)).length})`}
-                {f === 'system' && `(${models.filter((m) => isSystemTable(m.name)).length})`}
+                {f === 'user'   && `(${models.filter((m) => !isSystemTable(m)).length})`}
+                {f === 'system' && `(${models.filter((m) => isSystemTable(m)).length})`}
               </span>
             </button>
           ))}
@@ -246,7 +255,7 @@ export default function ModelsListPage() {
         ) : (
           <div className="bg-white border border-gray-200 rounded-xl overflow-hidden">
             {filteredModels.map((model, idx) => {
-              const isSystem     = isSystemTable(model.name)
+              const isSystem     = isSystemTable(model)
               const isPureSystem = isPureSystemTable(model.name)
               const href         = getRowHref(model)
               const columns      = getColumns(model.schema)
