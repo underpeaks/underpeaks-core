@@ -1,5 +1,6 @@
+
 {
-  "table_name": "nxf_menu",
+  "table_name": "nxf_menus",
   "schema": "public",
   "columns": [
     {
@@ -7,9 +8,7 @@
       "type": "string",
       "nullable": false,
       "is_primary": true,
-      "hidden": true,
-      "options_mode": "manual",
-      "options": []
+      "hidden": true
     },
     {
       "name": "project_id",
@@ -18,9 +17,7 @@
       "foreign_key": {
         "references": "nxf_system_projects(project_id)"
       },
-      "hidden": true,
-      "options_mode": "manual",
-      "options": []
+      "hidden": true
     },
     {
       "name": "tenant_id",
@@ -29,15 +26,13 @@
       "foreign_key": {
         "references": "nxf_system_tenants(ten_id)"
       },
-      "hidden": true,
-      "options_mode": "manual",
-      "options": []
+      "hidden": true
     },
     {
       "name": "page_id",
       "type": "string",
       "nullable": true,
-      "description": "links to nxf_pages — the page this menu item navigates to",
+      "description": "links to nxf_pages — the page this menu item navigates to (null for section headers)",
       "foreign_key": {
         "references": "nxf_pages(page_id)"
       },
@@ -50,9 +45,7 @@
       "nullable": false,
       "description": "display text shown in the navigation menu",
       "hidden": false,
-      "ui_type": "textfield",
-      "options_mode": "manual",
-      "options": []
+      "ui_type": "textfield"
     },
     {
       "name": "icon",
@@ -61,9 +54,7 @@
       "default": "FiFileText",
       "description": "icon name from react-icons/fi (e.g. FiHome, FiPackage)",
       "hidden": false,
-      "ui_type": "icon-picker",
-      "options_mode": "manual",
-      "options": []
+      "ui_type": "icon-picker"
     },
     {
       "name": "order",
@@ -72,9 +63,7 @@
       "default": 0,
       "description": "sort order within the menu level — lower numbers appear first",
       "hidden": false,
-      "ui_type": "number-input",
-      "options_mode": "manual",
-      "options": []
+      "ui_type": "number-input"
     },
     {
       "name": "parent_id",
@@ -83,7 +72,7 @@
       "default": null,
       "description": "id of the parent menu item — null means top-level; child items appear as dropdowns",
       "foreign_key": {
-        "references": "nxf_menu(menu_id)"
+        "references": "nxf_menus(menu_id)"
       },
       "hidden": false,
       "ui_type": "select"
@@ -95,9 +84,7 @@
       "default": "_self",
       "description": "_self | _blank — whether the link opens in the same or a new tab",
       "hidden": false,
-      "ui_type": "select",
-      "options_mode": "manual",
-      "options": ["_self", "_blank"]
+      "ui_type": "select"
     },
     {
       "name": "visible",
@@ -106,9 +93,16 @@
       "default": true,
       "description": "whether this item is shown in the nav — hidden items are saved but not rendered",
       "hidden": false,
-      "ui_type": "toggle",
-      "options_mode": "manual",
-      "options": []
+      "ui_type": "toggle"
+    },
+    {
+      "name": "is_section",
+      "type": "boolean",
+      "nullable": false,
+      "default": false,
+      "description": "true for a section header: a group label with no page link",
+      "hidden": false,
+      "ui_type": "toggle"
     },
     {
       "name": "is_system",
@@ -116,25 +110,19 @@
       "nullable": false,
       "default": false,
       "description": "system menu items (Dashboard, Users) cannot be edited or deleted",
-      "hidden": true,
-      "options_mode": "manual",
-      "options": []
+      "hidden": true
     },
     {
       "name": "created_at",
       "type": "datetime",
       "nullable": false,
-      "hidden": true,
-      "options_mode": "manual",
-      "options": []
+      "hidden": true
     },
     {
       "name": "updated_at",
       "type": "datetime",
       "nullable": true,
-      "hidden": true,
-      "options_mode": "manual",
-      "options": []
+      "hidden": true
     }
   ],
   "indexes": [
@@ -156,7 +144,7 @@
       "type": "foreign_key",
       "fields": ["parent_id"],
       "references": {
-        "table": "nxf_menu",
+        "table": "nxf_menus",
         "field": "menu_id"
       }
     }

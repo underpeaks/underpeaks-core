@@ -223,9 +223,9 @@ async readAll(config: DBConfig, table: string): Promise<any[]> {
     return updated
   }
 
-  async delete(config: DBConfig, table: string, id: string) {
+  async delete(config: DBConfig, table: string, id: string, idColumn: string = 'id') {
     console.log(`[SupabaseAdapter] delete — table: ${table}`)
-    const { data: deleted, error } = await this.client.from(table).delete().eq('id', id).select()
+    const { data: deleted, error } = await this.client.from(table).delete().eq(idColumn, id).select()
     if (error) {
       console.error(`[SupabaseAdapter] delete failed — table: ${table}`)
       throw error

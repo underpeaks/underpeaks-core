@@ -1,3 +1,4 @@
+// app/[locale]/console/layouts/components/types.ts
 export type MenuTarget = '_self' | '_blank'
 
 export interface AdminPage {
@@ -9,14 +10,15 @@ export interface AdminPage {
 }
 
 export interface MenuItem {
-  menu_id:   string
-  label:     string
-  page_id:   string | null
-  icon:      string
-  target:    MenuTarget
-  visible:   boolean
-  parent_id: string | null
-  order:     number
+  menu_id:    string
+  label:      string
+  page_id:    string | null
+  icon:       string
+  target:     MenuTarget
+  visible:    boolean
+  parent_id:  string | null
+  order:      number
+  is_section: boolean
 }
 
 export const ICON_OPTIONS = [

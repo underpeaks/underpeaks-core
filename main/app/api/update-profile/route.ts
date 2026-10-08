@@ -29,6 +29,7 @@ import 'server-only'
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { resolveUserIdFromToken } from '@/app/lib/resolveUserFromToken'
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -103,14 +104,9 @@ export async function POST(req: NextRequest) {
      * unique ID. On failure (expired, tampered, unknown), decoded will be
      * null or undefined.
      */
-    const decoded = await adapter.validateBuiltInSession?.(adapter.config, token)
-
-    /**
-     * Extract the user's unique ID from the decoded token payload.
-     * We check both uid and user_id because different adapters use
-     * different field names for the same concept.
-     */
-    const uid = decoded?.uid ?? decoded?.user_id ?? null
+    // Works for every adapter: provider token (Firebase/Supabase) or the
+    // nxf_system_tokens lookup (Postgres/MySQL/Mongo).
+    const uid = await resolveUserIdFromToken(adapter, token)
 
     /**
      * If we could not extract a valid user ID, the token is invalid or
@@ -138,7 +134,7 @@ export async function POST(req: NextRequest) {
     await adapter.update!(adapter.config, 'nxf_users', uid, {
       full_name:  full_name.trim(),
       updated_at: new Date().toISOString(),
-    })
+    }, 'user_id')
 
     /**
      * The update completed successfully.
@@ -147,7 +143,8 @@ export async function POST(req: NextRequest) {
      */
     return NextResponse.json({ success: true })
 
-  } catch {
+  } catch (err: any) {
+    console.error('[update-profile] Error:', err?.message)
     /**
      * Catch-all for any unexpected errors (database down, adapter
      * misconfiguration, JSON parse error, token validation crash, etc.).

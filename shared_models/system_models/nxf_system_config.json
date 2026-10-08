@@ -126,6 +126,14 @@
       "ui_type": "code-editor"
     },
     {
+      "name": "smtp",
+      "type": "jsonb",
+      "nullable": false,
+      "default": "{}",
+      "comment": "SMTP settings (host, port, from_address, username, encryption, flags, password_encrypted)",
+      "hidden": true
+    },
+    {
       "name": "feature_flags",
       "type": "jsonb",
       "nullable": false,

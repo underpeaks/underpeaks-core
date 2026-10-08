@@ -44,7 +44,6 @@ import { useTranslations } from 'next-intl'
 import { FiLogIn, FiUserPlus } from 'react-icons/fi'
 import { Separator } from '@/components/ui/separator'
 import NotificationsDropdown from './NotificationsDropdown'
-import MessagesDropdown from './MessagesDropdown'
 import UserDropdown from './UserDropdown'
 import { TopNavbarProps } from './types'
 import { NXFUser } from '../../store/consoleStore'
@@ -60,27 +59,22 @@ export default function TopNavbar({ user: propUser, logoUrl, projectName }: TopN
   const t = useTranslations('topNavbar')
 
   const fetchData = useCallback(async () => {
-    const token = localStorage.getItem('authToken')
+    // Skip while the tab is in the background — no point polling a hidden page
+    if (typeof document !== 'undefined' && document.hidden) return
 
+    const token = localStorage.getItem('authToken')
     if (!token) return
 
-    const headers = {
-      'Authorization': `Bearer ${token}`,
-    }
-
     try {
-      const [notifRes, ] = await Promise.all([
-        fetch('/api/notifications/list', { headers }),
-      ])
+      const notifRes  = await fetch('/api/notifications/list', {
+        headers: { 'Authorization': `Bearer ${token}` },
+      })
+      if (!notifRes.ok) return
 
       const notifData = await notifRes.json()
-
-      console.log(notifData);
-
       if (notifData.notifications) setNotifications(notifData.notifications)
-
     } catch {
-      console.error('[TopNavbar] Failed to fetch notifications or messages. Check API connectivity.')
+      console.error('[TopNavbar] Failed to fetch notifications. Check API connectivity.')
     }
   }, [])
 
@@ -119,25 +113,25 @@ export default function TopNavbar({ user: propUser, logoUrl, projectName }: TopN
     setNotifications((prev) => prev.map((n) => ({ ...n, status: 'read' })))
   }
 
-  const handleMarkConversationRead = async (conversation_id: string) => {
-    const token = localStorage.getItem('authToken') ?? ''
-    await fetch('/api/messages/mark-read', {
-      method:  'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      body: JSON.stringify({ conversation_id }),
-    })
+  // const handleMarkConversationRead = async (conversation_id: string) => {
+  //   const token = localStorage.getItem('authToken') ?? ''
+  //   await fetch('/api/messages/mark-read', {
+  //     method:  'POST',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Bearer ${token}`,
+  //     },
+  //     body: JSON.stringify({ conversation_id }),
+  //   })
 
-    setConversations((prev) =>
-      prev.map((c) =>
-        (c.con_id ?? c.id) === conversation_id
-          ? { ...c, unread_count: 0 }
-          : c
-      )
-    )
-  }
+  //   setConversations((prev) =>
+  //     prev.map((c) =>
+  //       (c.con_id ?? c.id) === conversation_id
+  //         ? { ...c, unread_count: 0 }
+  //         : c
+  //     )
+  //   )
+  // }
 
   if (!mounted) return <div className="h-16 bg-white" aria-hidden="true" />
 

@@ -27,13 +27,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false }, { status: 404 })
     }
 
-    // Use doc.id (Firestore auto-ID) per the project pattern
-    const docId = (user as any).id ?? user.user_id
-
-    await adapter.update!(dbConfig, 'nxf_users', docId, {
+    // Key on user_id — the nxf_users primary key on every adapter
+    await adapter.update!(dbConfig, 'nxf_users', user.user_id, {
       is_logged_in: is_logged_in ?? false,
       updated_at:   new Date().toISOString(),
-    })
+    }, 'user_id')
 
     return NextResponse.json({ success: true })
 

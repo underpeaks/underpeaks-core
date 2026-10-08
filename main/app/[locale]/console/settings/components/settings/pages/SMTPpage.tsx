@@ -120,7 +120,7 @@ export default function SmtpPage() {
 
         {usesBuiltInEmail && (
           <p className="text-xs text-blue-500 bg-blue-50 border border-blue-100 rounded-md px-3 py-2 mb-3">
-            Built-in email features are enabled for {dbType.charAt(0).toUpperCase() + dbType.slice(1)}.
+            {t('emailFeatures.builtInNotice', { provider: dbType.charAt(0).toUpperCase() + dbType.slice(1) })}
           </p>
         )}
 

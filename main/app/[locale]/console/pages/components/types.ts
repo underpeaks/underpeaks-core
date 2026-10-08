@@ -1,3 +1,4 @@
+// app/[locale]/console/pages/components/types.ts
 import {
   FiList,
   FiFileText,
@@ -40,8 +41,15 @@ export type PageVisibility = 'public' | 'admin' | 'draft'
 
 export type MobileHeaderType = 'none' | 'app-bar'
 export type MobileBottomType = 'none' | 'bottom-nav' | 'drawer-nav'
-export type WebHeaderType    = 'none' | 'top-nav' | 'sidebar-nav'
-export type WebFooterType    = 'none' | 'footer'
+
+// 'top-nav-no-link': the nav bar renders on this page, but this page does not
+// appear as a clickable link inside it (e.g. a detail page that needs an id).
+// Distinct from 'none', which renders no header at all.
+export type WebHeaderType    = 'none' | 'top-nav' | 'sidebar-nav' | 'top-nav-no-link'
+
+// 'footer-no-link': the footer renders, but this page is excluded from any
+// footer nav links. Distinct from 'none', which renders no footer at all.
+export type WebFooterType    = 'none' | 'footer' | 'footer-no-link'
 
 export interface MobileNavSettings {
   header: MobileHeaderType
@@ -378,14 +386,16 @@ export const MOBILE_BOTTOM_TYPES: MobileBottomTypeDef[] = [
 ]
 
 export const WEB_HEADER_TYPES: WebHeaderTypeDef[] = [
-  { id: 'none',        name: 'None',        icon: FiCode },
-  { id: 'top-nav',     name: 'Top Nav',     icon: FiMenu },
-  { id: 'sidebar-nav', name: 'Sidebar Nav', icon: FiMenu },
+  { id: 'none',            name: 'None',              icon: FiCode },
+  { id: 'top-nav',         name: 'Top Nav',           icon: FiMenu },
+  { id: 'sidebar-nav',     name: 'Sidebar Nav',       icon: FiMenu },
+  { id: 'top-nav-no-link', name: 'Top Nav (No Link)', icon: FiMinus },
 ]
 
 export const WEB_FOOTER_TYPES: WebFooterTypeDef[] = [
-  { id: 'none',   name: 'None',   icon: FiCode },
-  { id: 'footer', name: 'Footer', icon: FiMinus },
+  { id: 'none',           name: 'None',             icon: FiCode },
+  { id: 'footer',         name: 'Footer',           icon: FiMinus },
+  { id: 'footer-no-link', name: 'Footer (No Link)', icon: FiMinus },
 ]
 
 // ---------------------------------------------------------------------------

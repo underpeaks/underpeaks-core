@@ -1,4 +1,4 @@
-//app/api/menu/pages/route.ts
+// app/api/menu/pages/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 
@@ -27,19 +27,18 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
       adapter.readAll!(dbConfig, 'nxf_system_models'),
     ])
 
+    // Only admin-visibility pages can be linked from the admin menu.
     const pages = (allPages ?? [])
-      .filter((p: any) => p.project_id === projectId && p.page_type === 'admin')
+      .filter((p: any) => p.project_id === projectId && p.visibility === 'admin')
       .map((p: any) => {
-        const model = (allModels ?? []).find((m: any) => (m.id || m.sm_id) === p.model_id)
+        const modelRef = p.model_id ?? p.model ?? null
+        const model = (allModels ?? []).find((m: any) => (m.id || m.sm_id) === modelRef)
         return {
-          // FIX: resolveDocumentId() only checks doc.id / doc.menu_id, but
-          // nxf_pages' real PK is page_id — neither field it checks exists
-          // on a page row, so every page_id came back undefined and the
-          // sidebar's menu-to-page matching silently failed for every item.
+          // nxf_pages' real PK is page_id.
           page_id:    p.page_id,
           title:      p.title ?? '',
           slug:       p.slug ?? '',
-          model_id:   p.model_id ?? null,
+          model_id:   modelRef,
           model_name: model?.name ?? null,
         }
       })

@@ -1,3 +1,4 @@
+// db-adapter/utils/create-data-models.ts
 /**
  * CreateUserDataModels
  *
@@ -7,16 +8,17 @@
  * `nxf_system_models` tracking table.
  *
  * Directories scanned (in order):
- *   1. shared_models/system_models     - always (core tables every project needs)
- *   2. shared_models/users_models      - always (user-related tables)
- *   3. shared_models/<type>_models     - always, for the selected project type.
- *                                        For 'blank' this is blank_models, which
- *                                        holds the minimum models every project
- *                                        needs (e.g. Pages and Menu).
+ *   1. shared_models/system_models     - core tables every project needs
+ *   2. shared_models/users_models      - user-related tables
+ *   3. shared_models/<type>_models     - the selected project type. For 'blank'
+ *                                        this holds Pages and Menus.
  *                                        A missing folder is skipped silently.
  *
- * A table that appears in more than one folder is only created and recorded
- * once per run.
+ * Rules:
+ *   - A table that appears in more than one folder is created and recorded once.
+ *   - Models from system_models / users_models are recorded with is_system: true.
+ *   - A model that is already registered for the project is not registered again,
+ *     so re-runs and retries never create duplicate rows.
  *
  * @param adapter             - DB adapter. Must implement `create`, `createTable`
  *                              and expose a `config` property.
@@ -58,8 +60,8 @@ const USER_MODELS_DIR = path.resolve(
 
 /**
  * Tracks "projectId-projectType" combinations already processed during the
- * current server process, so retries / hot reloads / parallel requests do not
- * create duplicate metadata rows. In-memory only; resets on server restart.
+ * current server process. In-memory only; resets on server restart. Cleared
+ * for a key if its run fails, so a retry is possible.
  */
 const RUN_CACHE = new Set<string>();
 
@@ -96,78 +98,103 @@ export async function CreateUserDataModels(
 
   RUN_CACHE.add(runKey);
 
-  // Step 4: build the list of directories to scan
-  const PROJECT_MODELS_DIR = path.resolve(
-    process.cwd(),
-    `../shared_models/${selectedProjectType}_models`
-  );
+  try {
+    // Step 4: build the list of directories to scan
+    const PROJECT_MODELS_DIR = path.resolve(
+      process.cwd(),
+      `../shared_models/${selectedProjectType}_models`
+    );
 
-  const dirs = [
-    SYSTEM_MODELS_DIR,
-    USER_MODELS_DIR,
-    PROJECT_MODELS_DIR,
-  ];
+    const dirs = [
+      { dir: SYSTEM_MODELS_DIR,  isSystem: true  },
+      { dir: USER_MODELS_DIR,    isSystem: true  },
+      { dir: PROJECT_MODELS_DIR, isSystem: false },
+    ];
 
-  // Step 5: iterate directories and create tables
-  const createdModels: any[] = [];
-  const seenTables = new Set<string>();
-
-  for (const dir of dirs) {
-    // A missing folder is normal (e.g. a type with no dedicated models yet).
-    if (!fs.existsSync(dir)) continue;
-
-    const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
-
-    for (const file of files) {
-      // 5a. Parse the schema file
-      const schema = JSON.parse(
-        fs.readFileSync(path.join(dir, file), 'utf-8')
-      );
-
-      const tableName = schema.table_name;
-
-      // Malformed file with no table name: skip.
-      if (!tableName) continue;
-
-      // Already created in this run (same table in more than one folder): skip.
-      if (seenTables.has(tableName)) continue;
-      seenTables.add(tableName);
-
-      // 5b. Apply the selectedModels allow-list filter
-      if (selectedModels.length > 0 && !selectedModels.includes(tableName)) {
-        continue;
+    // Step 5: find models already registered for this project (idempotency)
+    const registered = new Set<string>();
+    if (adapter.read) {
+      try {
+        const existing = await adapter.read(dbConfig, 'nxf_system_models');
+        for (const m of existing ?? []) {
+          if (m.project_id === projectId && m.name) {
+            registered.add(String(m.name).toLowerCase());
+          }
+        }
+      } catch {
+        // Registry not readable yet: treat as empty.
       }
-
-      // 5c. Normalize columns
-      const columns = normalizeColumns(schema.columns);
-      if (!columns?.length) continue;
-
-      // 5d. Create the physical table
-      console.log('logs.creatingTable', tableName);
-      await adapter.createTable(tableName, { columns });
-
-      // 5e. Record the model metadata in nxf_system_models
-      const modelData = {
-        sm_id:      uuidv4(),
-        tenant_id:  tenant_id,
-        project_id: projectId,
-        name:       tableName,
-        schema:     columns,
-        is_system:  false,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      };
-
-      await adapter.create(dbConfig, 'nxf_system_models', modelData);
-
-      createdModels.push(modelData);
     }
-  }
 
-  // Step 6: return summary
-  return {
-    skipped: false,
-    message: 'Models created successfully',
-    data:    createdModels,
-  };
+    // Step 6: iterate directories and create tables
+    const createdModels: any[] = [];
+    const seenTables = new Set<string>();
+
+    for (const { dir, isSystem } of dirs) {
+      // A missing folder is normal (e.g. a type with no dedicated models yet).
+      if (!fs.existsSync(dir)) continue;
+
+      const files = fs.readdirSync(dir).filter(f => f.endsWith('.json'));
+
+      for (const file of files) {
+        // 6a. Parse the schema file
+        const schema = JSON.parse(
+          fs.readFileSync(path.join(dir, file), 'utf-8')
+        );
+
+        const tableName = schema.table_name;
+
+        // Malformed file with no table name: skip.
+        if (!tableName) continue;
+
+        // Already handled in this run (same table in more than one folder): skip.
+        if (seenTables.has(tableName)) continue;
+        seenTables.add(tableName);
+
+        // 6b. Apply the selectedModels allow-list filter
+        if (selectedModels.length > 0 && !selectedModels.includes(tableName)) {
+          continue;
+        }
+
+        // 6c. Normalize columns
+        const columns = normalizeColumns(schema.columns);
+        if (!columns?.length) continue;
+
+        // 6d. Create the physical table
+        console.log('logs.creatingTable', tableName);
+        await adapter.createTable(tableName, { columns });
+
+        // 6e. Already registered for this project: do not insert a second row
+        if (registered.has(String(tableName).toLowerCase())) continue;
+
+        // 6f. Record the model metadata in nxf_system_models
+        const now = new Date().toISOString();
+        const modelData = {
+          sm_id:      uuidv4(),
+          tenant_id:  tenant_id,
+          project_id: projectId,
+          name:       tableName,
+          schema:     columns,
+          is_system:  isSystem,
+          created_at: now,
+          updated_at: now,
+        };
+
+        await adapter.create(dbConfig, 'nxf_system_models', modelData);
+
+        registered.add(String(tableName).toLowerCase());
+        createdModels.push(modelData);
+      }
+    }
+
+    // Step 7: return summary
+    return {
+      skipped: false,
+      message: 'Models created successfully',
+      data:    createdModels,
+    };
+  } catch (err) {
+    RUN_CACHE.delete(runKey);
+    throw err;
+  }
 }

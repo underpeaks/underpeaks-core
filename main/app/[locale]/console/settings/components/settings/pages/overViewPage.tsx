@@ -6,7 +6,9 @@ import { useConsoleStore }                        from '@/app/store/consoleStore
 import { useTranslations } from 'next-intl'
 
 export default function OverviewPage() {
-  const t = useTranslations('overviewPage')
+  const t  = useTranslations('overviewPage')
+  const ts = useTranslations('settings.overview')
+  const tc = useTranslations('common')
   const { config, user, loadConfig } = useConsoleStore()
 
   const [projectName,   setProjectName]   = useState('')
@@ -134,13 +136,13 @@ export default function OverviewPage() {
           {t('licenseKey.description')}
         </p>
 
-        <FormField label={t('licenseKey.inputLabel')}>
+        <FormField label={t('licenseKey.sectionTitle')}>
           <div className="flex gap-2 items-center">
             <div className="flex-1">
               <Input
                 value={nxfApiKey}
                 onChange={setNxfApiKey}
-                placeholder={t('licenseKey.inputPlaceholder')}
+                placeholder="nxf_live_xxxxxxxxxxxxxxxxxxxxxxxx"
               />
             </div>
 
@@ -150,12 +152,12 @@ export default function OverviewPage() {
               className="shrink-0 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-md hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
             >
               {apiKeySaving
-                ? t('licenseKey.buttonSaving')
+                ? tc('saving')
                 : apiKeySaved
-                  ? t('licenseKey.buttonSaved')
+                  ? tc('done')
                   : nxfApiKey && config?.nxf_api_key
-                    ? t('licenseKey.buttonUpdate')
-                    : t('licenseKey.buttonSave')
+                    ? tc('saveChanges')
+                    : tc('save')
               }
             </button>
           </div>
@@ -163,28 +165,25 @@ export default function OverviewPage() {
 
         {config?.nxf_api_key && (
           <p className="text-[11px] text-gray-400 mt-1">
-           License key on file: {config.nxf_api_key.slice(0, 12)}...
+            {t('licenseKey.sectionTitle')}: {config.nxf_api_key.slice(0, 12)}...
           </p>
         )}
       </SectionCard>
 
-      <SectionCard title={t('projectInfo.sectionTitle')}>
-        <FormField label={t('projectInfo.nameLabel')}>
+      <SectionCard title={ts('title')}>
+        <FormField label={ts('projectName')}>
           <Input
             value={projectName}
             onChange={setProjectName}
-            placeholder={t('projectInfo.namePlaceholder')}
+            placeholder=""
           />
         </FormField>
 
-        <FormField
-          label={t('projectInfo.urlLabel')}
-          hint={t('projectInfo.urlHint')}
-        >
+        <FormField label={ts('projectUrl')}>
           <Input
             value={projectUrl}
             onChange={setProjectUrl}
-            placeholder={t('projectInfo.urlPlaceholder')}
+            placeholder="https://example.com"
           />
         </FormField>
       </SectionCard>

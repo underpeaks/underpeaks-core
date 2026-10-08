@@ -240,13 +240,21 @@ export default function UsersPage() {
       if (DB_TYPE === 'firebase') {
         await firebaseSendPasswordReset(email);
       } else {
-        const res = await fetch('/api/auth/reset-password', {
+        // /api/forgot-password handles Supabase (provider email) and
+        // Postgres/MySQL/Mongo (token + SMTP) — it is not an admin-only route.
+        const res = await fetch('/api/forgot-password', {
           method:  'POST',
           headers: { 'Content-Type': 'application/json' },
           body:    JSON.stringify({ email }),
         });
-        const data = await res.json();
+        const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.error ?? 'Failed to send reset email');
+
+        // Token was created but SMTP is off — nothing was emailed
+        if (data.notice) {
+          showToast(data.notice, 'error');
+          return;
+        }
       }
       showToast(`Password reset sent to ${email}`, 'success');
     } catch (err) {

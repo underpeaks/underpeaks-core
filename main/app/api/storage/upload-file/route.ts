@@ -1,4 +1,4 @@
-//app/api/storage/upload-file/route.ts
+// app/api/storage/upload-file/route.ts
 import 'server-only'
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -26,15 +26,14 @@ export async function POST(req: NextRequest) {
 
     const folder = folderRaw === 'uploads' ? '' : folderRaw
 
-    // Base domain used to build absolute URLs for local storage — the route
-    // previously returned a relative path like "/uploads/x.png", which works
-    // fine for <img src> in-app but is useless when copied/pasted anywhere
-    // else. NEXT_PUBLIC_APP_DOMAIN is documented as always trailing-slash-free.
+    // Base domain used to build absolute URLs for local storage.
+    // NEXT_PUBLIC_APP_DOMAIN is documented as always trailing-slash-free.
     const appDomain = (process.env.NEXT_PUBLIC_APP_DOMAIN ?? '').replace(/\/$/, '')
 
     let project_id: string | null = null
     let tenant_id:  string | null = null
 
+    // 1. Resolve project/tenant from the Authorization header
     try {
       const authHeader = req.headers.get('Authorization')
       const token      = authHeader?.replace('Bearer ', '') ?? null
@@ -62,6 +61,21 @@ export async function POST(req: NextRequest) {
       }
     } catch (err: any) {
       console.warn('[upload-file] project_id/tenant_id lookup failed:', err?.message ?? err)
+    }
+
+    // 2. Single-tenant fallback: Core has exactly one project row
+    if (!project_id || !tenant_id) {
+      try {
+        const adapter  = getConfiguredAdapter()
+        const projects = adapter.read
+          ? await adapter.read(adapter.config, 'nxf_system_projects')
+          : []
+        const first    = (projects ?? [])[0]
+        project_id     = project_id ?? first?.project_id ?? first?.id ?? null
+        tenant_id      = tenant_id  ?? first?.tenant_id ?? null
+      } catch (err: any) {
+        console.warn('[upload-file] project fallback failed:', err?.message ?? err)
+      }
     }
 
     const buffer  = Buffer.from(await file.arrayBuffer())
@@ -201,7 +215,8 @@ export async function POST(req: NextRequest) {
       mimeType,
     })
 
-  } catch {
+  } catch (err: any) {
+    console.error('[upload-file] Unhandled error:', err)
     return NextResponse.json(
       { error: 'Internal server error' },
       { status: 500 }

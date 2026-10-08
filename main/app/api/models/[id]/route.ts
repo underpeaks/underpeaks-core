@@ -1,4 +1,4 @@
-//app/api/models/[id]/route.ts
+// app/api/models/[id]/route.ts
 /**
  * PUT    /api/models/[id] — Update a model's name and/or schema.
  * DELETE /api/models/[id] — Delete a model and drop the underlying table.
@@ -16,14 +16,16 @@
  * DELETE body (JSON):
  *   name {string} — Required. The table/collection name to drop.
  *
- * System table protection:
- *   Any model whose name starts with 'nxf_system_' is blocked from
- *   both PUT and DELETE at the API level, regardless of what the UI shows.
+ * Protection:
+ *   PUT    — nxf_system_* tables cannot be modified; platform tables cannot be
+ *            renamed, and nothing can be renamed to a platform table name.
+ *   DELETE — nxf_system_* and every platform table cannot be deleted.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { ColumnDef }                 from '@/app/db-adapter/types'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { isPlatformTable }      from '@/app/lib/platformTables'
 
 // ---------------------------------------------------------------------------
 // PUT — Update an existing model
@@ -67,9 +69,12 @@ export async function PUT(
       )
     }
 
+    const renamed = name !== old_name
+
     if (
       old_name.toLowerCase().startsWith('nxf_system_') ||
-      name.toLowerCase().startsWith('nxf_system_')
+      name.toLowerCase().startsWith('nxf_system_') ||
+      (renamed && (isPlatformTable(old_name) || isPlatformTable(name)))
     ) {
       return NextResponse.json(
         { error: 'System tables cannot be modified' },
@@ -89,7 +94,7 @@ export async function PUT(
     const dbConfig = adapter.config
 
     // Step 1 — Rename table if name changed
-    if (name !== old_name && adapter.renameTable) {
+    if (renamed && adapter.renameTable) {
       await adapter.renameTable(old_name, name)
     }
 
@@ -101,9 +106,7 @@ export async function PUT(
       await adapter.alterTable(name, { add: addedColumns })
     }
 
-    // Step 3 — Update the nxf_system_models record with the full versioned schema
-    // FIX: PK is sm_id, not id — missing idColumn 5th arg meant this always
-    // targeted a non-existent 'id' column.
+    // Step 3 — Update the nxf_system_models record (PK is sm_id)
     await adapter.update!(dbConfig, 'nxf_system_models', id, {
       name,
       schema,
@@ -151,7 +154,7 @@ export async function DELETE(
       )
     }
 
-    if (name.toLowerCase().startsWith('nxf_system_')) {
+    if (isPlatformTable(name)) {
       return NextResponse.json(
         { error: 'System tables cannot be deleted' },
         { status: 403 }
@@ -166,9 +169,8 @@ export async function DELETE(
       await adapter.dropTable(name)
     }
 
-    // Step 2 — Remove the model metadata from nxf_system_models
-    // FIX: PK is sm_id, not id — same missing idColumn issue as PUT above.
-    await adapter.delete!(dbConfig, 'nxf_system_models',  'sm_id')
+    // Step 2 — Remove the model metadata (PK is sm_id; id value comes first)
+    await adapter.delete!(dbConfig, 'nxf_system_models', id, 'sm_id')
 
     return NextResponse.json({ success: true })
 

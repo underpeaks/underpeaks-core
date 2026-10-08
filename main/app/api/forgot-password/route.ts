@@ -27,23 +27,7 @@
 
 import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 import { NextRequest, NextResponse } from 'next/server'
-import nodemailer                    from 'nodemailer'
-
-// ---------------------------------------------------------------------------
-// SMTP transporter factory
-// ---------------------------------------------------------------------------
-
-function buildTransporter() {
-  return nodemailer.createTransport({
-    host:   process.env.NEXT_PUBLIC_SMTP_HOST,
-    port:   Number(process.env.NEXT_PUBLIC_SMTP_PORT),
-    secure: process.env.NEXT_PUBLIC_SMTP_ENCRYPTION === 'SSL',
-    auth: {
-      user: process.env.NEXT_PUBLIC_SMTP_USER,
-      pass: process.env.NEXT_SMTP_PASSWORD?.replace(/\\#/g, '#'),
-    },
-  })
-}
+import { buildTransporter }          from '@/app/lib/smtp'
 
 // ---------------------------------------------------------------------------
 // Route handler
