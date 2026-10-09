@@ -1,3 +1,5 @@
+// app/[locale]/components_cus/UserDropdown.tsx
+
 /**
  * UserDropdown.tsx
  * -----------------
@@ -92,9 +94,30 @@ function UserAvatar({ user, size = 'sm' }: { user: NXFUser; size?: 'sm' | 'md' }
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────
 
+// Firebase keeps its own session in the browser, separate from our authToken,
+// so a real logout has to end that session too.
+async function signOutFirebaseClient(): Promise<void> {
+  if (process.env.NEXT_PUBLIC_DB_TYPE !== 'firebase') return
+
+  try {
+    const { getApps, initializeApp } = await import('firebase/app')
+    const { getAuth }                = await import('firebase/auth')
+    const { parseFirebaseWebConfig } = await import('@/app/lib/firebaseConfig')
+
+    if (!getApps().length) {
+      initializeApp(parseFirebaseWebConfig(process.env.NEXT_PUBLIC_FIREBASE_CONFIG))
+    }
+
+    await getAuth().signOut()
+  } catch {
+    console.error('UserDropdown: Firebase sign-out did not complete.')
+  }
+}
+
 export default function UserDropdown({ user }: { user: NXFUser }) {
   const router      = useRouter()
   const t           = useTranslations('userDropdown')
+  const ts          = useTranslations('sidebar')
 
   const { resetConsole, config } = useConsoleStore()
 
@@ -115,13 +138,16 @@ export default function UserDropdown({ user }: { user: NXFUser }) {
       await fetch('/api/logout', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ token, refreshToken }),
+        body:    JSON.stringify({ token, refreshToken, user_id: user.user_id }),
       })
 
     } catch {
       console.error('UserDropdown: Server-side logout did not complete. Local session will still be cleared.')
 
     } finally {
+      // End the Firebase browser session too (no-op on other databases)
+      await signOutFirebaseClient()
+
       localStorage.removeItem('authToken')
       localStorage.removeItem('refreshToken')
 
@@ -223,7 +249,7 @@ export default function UserDropdown({ user }: { user: NXFUser }) {
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
           <div className="bg-white rounded-xl shadow-xl px-8 py-6 flex flex-col items-center gap-3">
             <div className="h-6 w-6 border-2 border-gray-300 border-t-gray-800 rounded-full animate-spin" />
-            <div className="text-sm font-medium text-gray-800">{t('menu.loggingOut') ?? 'Logging out…'}</div>
+            <div className="text-sm font-medium text-gray-800">{ts('loggingOut')}</div>
           </div>
         </div>
       )}

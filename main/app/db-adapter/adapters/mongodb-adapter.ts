@@ -1542,11 +1542,11 @@ async installDemoContent(
 }
   // ─── Core CRUD ────────────────────────────────────────────────────────────────
 
-async readAll(config: DBConfig, collection: string): Promise<any[]> {
+async readAll(config: DBConfig, collection: string, filter?: Record<string, any>): Promise<any[]> {
   try {
-    console.log(`[MongoAdapter] readAll — collection: ${collection}`)
+    console.log(`[MongoAdapter] readAll — collection: ${collection}`, filter ? `filter: ${JSON.stringify(filter)}` : '')
     const db   = await this.getDb()  // ← use getDb() not this.db
-    const docs = await db.collection(collection).find({}).toArray()
+    const docs = await db.collection(collection).find(filter ?? {}).toArray()
     return docs.map((doc) => ({
       ...doc,
       id: doc._id?.toString() ?? doc.id,

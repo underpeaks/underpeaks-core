@@ -194,9 +194,15 @@ private sanitizeConnectionString(connectionString: string): string {
   return data
 }
 
-async readAll(config: DBConfig, table: string): Promise<any[]> {
-  console.log(`[SupabaseAdapter] readAll — table: ${table}`)
-  const { data, error } = await this.adminClient.from(table).select('*')
+async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Promise<any[]> {
+  console.log(`[SupabaseAdapter] readAll — table: ${table}`, filter ? `filter: ${JSON.stringify(filter)}` : '')
+  let qb = this.adminClient.from(table).select('*')
+  if (filter) {
+    Object.entries(filter).forEach(([key, value]) => {
+      if (value !== undefined) qb = qb.eq(key, value as any)
+    })
+  }
+  const { data, error } = await qb
   if (error) {
     console.error(`[SupabaseAdapter] readAll failed — table: ${table}`)
     throw error
@@ -211,7 +217,7 @@ async readAll(config: DBConfig, table: string): Promise<any[]> {
     idColumn: string = 'id'
   ) {
     console.log(`[SupabaseAdapter] update — table: ${table}`)
-    const { data: updated, error } = await this.client
+    const { data: updated, error } = await this.adminClient
       .from(table)
       .update(data)
       .eq(idColumn, id)
@@ -225,7 +231,7 @@ async readAll(config: DBConfig, table: string): Promise<any[]> {
 
   async delete(config: DBConfig, table: string, id: string, idColumn: string = 'id') {
     console.log(`[SupabaseAdapter] delete — table: ${table}`)
-    const { data: deleted, error } = await this.client.from(table).delete().eq(idColumn, id).select()
+    const { data: deleted, error } = await this.adminClient.from(table).delete().eq(idColumn, id).select()
     if (error) {
       console.error(`[SupabaseAdapter] delete failed — table: ${table}`)
       throw error

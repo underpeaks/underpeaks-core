@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import crypto                        from 'crypto'
 import nodemailer                    from 'nodemailer'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { canSignIn, lookupRole, NO_CONSOLE_ACCESS_MESSAGE } from '@/app/lib/assertCanSignIn'
 
 export async function POST(req: NextRequest) {
   console.log('[Signin API] Request received')
@@ -151,6 +152,26 @@ console.log(`SUPASBASE SIGNIN ******* : SIGN IN STARTED`)
       return NextResponse.json(
         { success: false, error: loginResult.error || 'Signin failed' },
         { status: 401 }
+      )
+    }
+
+    // ── Console access: only allowed roles may sign in ─────────────────────
+    // Supabase's auth user carries role "authenticated", so for Supabase the
+    // nxf_users role is always looked up. Fails closed if it can't be read.
+
+    const signinUserId = user.user_id ?? user.uid ?? user.id
+    let signinRole: string | null =
+      dbType === 'supabase' ? null : (user.role ?? null)
+
+    if (!signinRole) {
+      signinRole = await lookupRole(adapter, dbConfig, signinUserId)
+    }
+
+    if (!canSignIn(signinRole)) {
+      console.warn('[Signin API] Sign-in refused — role not allowed')
+      return NextResponse.json(
+        { success: false, error: NO_CONSOLE_ACCESS_MESSAGE },
+        { status: 403 }
       )
     }
 

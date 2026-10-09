@@ -44,6 +44,54 @@ interface ConsoleLayoutProps {
   children: ReactNode
 }
 
+// Firebase keeps its own session in the browser, separate from our authToken,
+// so a real logout has to end that session too (no-op on other databases).
+async function signOutFirebaseClient(): Promise<void> {
+  if (process.env.NEXT_PUBLIC_DB_TYPE !== 'firebase') return
+  try {
+    const { getApps, initializeApp } = await import('firebase/app')
+    const { getAuth }                = await import('firebase/auth')
+    const { parseFirebaseWebConfig } = await import('@/app/lib/firebaseConfig')
+    if (!getApps().length) {
+      initializeApp(parseFirebaseWebConfig(process.env.NEXT_PUBLIC_FIREBASE_CONFIG))
+    }
+    await getAuth().signOut()
+  } catch {
+    console.error('ConsoleLayout: Firebase sign-out did not complete.')
+  }
+}
+
+// Firebase ID tokens expire after one hour and the server cannot refresh them,
+// so ask the Firebase client for a current one (it renews silently when needed).
+// Returns null on other databases or if no Firebase session is available.
+async function getFreshFirebaseToken(): Promise<string | null> {
+  if (process.env.NEXT_PUBLIC_DB_TYPE !== 'firebase') return null
+  try {
+    const { getApps, initializeApp } = await import('firebase/app')
+    const { getAuth, onAuthStateChanged } = await import('firebase/auth')
+    const { parseFirebaseWebConfig } = await import('@/app/lib/firebaseConfig')
+
+    if (!getApps().length) {
+      initializeApp(parseFirebaseWebConfig(process.env.NEXT_PUBLIC_FIREBASE_CONFIG))
+    }
+
+    const auth = getAuth()
+    // currentUser is null until Firebase has restored the session from the browser
+    const fbUser = await new Promise<any>((resolve) => {
+      const timer = setTimeout(() => resolve(null), 3000)
+      const unsub = onAuthStateChanged(auth, (u) => {
+        clearTimeout(timer)
+        unsub()
+        resolve(u)
+      })
+    })
+
+    return fbUser ? await fbUser.getIdToken() : null
+  } catch {
+    return null
+  }
+}
+
 export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
   const t = useTranslations('consoleLayout')
 
@@ -61,6 +109,10 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
   const pathname     = usePathname()
   const prevPathname = useRef(pathname)
   const idleTimerRef = useRef<NodeJS.Timeout | null>(null)
+  // True once this mount's first session check has finished. Until then the
+  // store can still hold the logged-out state left by the previous logout, and
+  // the redirect effect must not act on it.
+  const authCheckedRef = useRef(false)
 
   const {
     user,
@@ -75,13 +127,20 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
 
   const refreshSession = async () => {
     try {
-      const token        = localStorage.getItem('authToken')
+      let token          = localStorage.getItem('authToken')
       const refreshToken = localStorage.getItem('refreshToken')
 
       if (!token) {
         setConsoleValue('user', null)
         setConsoleValue('checkingAuth', false)
         return
+      }
+
+      // Firebase: swap in a current ID token so the session outlives the 1h expiry
+      const freshToken = await getFreshFirebaseToken()
+      if (freshToken) {
+        token = freshToken
+        localStorage.setItem('authToken', freshToken)
       }
 
       const res = await fetch('/api/session', {
@@ -120,6 +179,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     } catch {
       setConsoleValue('user', null)
     } finally {
+      authCheckedRef.current = true
       setConsoleValue('checkingAuth', false)
     }
   }
@@ -137,6 +197,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
   // that window — the redirect effect can never see a stale "logged out"
   // state again.
   useEffect(() => {
+    authCheckedRef.current = false
     setConsoleValue('checkingAuth', true)
     refreshSession()
   }, [])
@@ -212,6 +273,9 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
   }
 
   useEffect(() => {
+    if (!authCheckedRef.current) {
+      return
+    }
     if (!checkingAuth && !user) {
       router.replace(`/signin?redirectedFrom=${pathname}`)
     }
@@ -271,14 +335,17 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
       await fetch('/api/logout', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify({ token, refreshToken }),
+        body:    JSON.stringify({ token, refreshToken, user_id: user?.user_id }),
       })
     } catch (err) {
       console.error(t('logs.logoutFailed'), err)
     } finally {
+      await signOutFirebaseClient()
+      if (idleTimerRef.current) clearTimeout(idleTimerRef.current)
       localStorage.removeItem('authToken')
       localStorage.removeItem('refreshToken')
       setShowIdleModal(false)
+      setCountdown(30)
       resetConsole()
       router.push('/signin')
     }
