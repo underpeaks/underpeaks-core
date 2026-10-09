@@ -360,6 +360,8 @@ useEffect(() => {
           isEditMode={isKpiEdit}
           onConfigChange={(newConfig) => {
             setKpiConfig(newConfig)
+            // Any change switches on edit mode so the Save layout button is visible.
+            setIsKpiEdit(true)
             const allKpis = newConfig.blocks.flatMap((b) => b.kpis)
             setKpiResults(computeAllKpis(records as Record<string, unknown>[], allKpis))
           }}

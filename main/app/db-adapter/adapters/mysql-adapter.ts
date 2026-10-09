@@ -1038,10 +1038,20 @@ export class MySQLAdapter implements DBAdapter {
 
   // ─── Core CRUD ─────────────────────────────────────────────────────────────
 
-  async readAll(config: DBConfig, table: string): Promise<any[]> {
+  async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Promise<any[]> {
     try {
-      console.log(`[MySQLAdapter] readAll — table: ${table}`)
-      const [rows] = await this.pool.execute(`SELECT * FROM \`${table}\``)
+      console.log(`[MySQLAdapter] readAll — table: ${table}`, filter ? `filter: ${JSON.stringify(filter)}` : '')
+
+      let sql = `SELECT * FROM \`${table}\``
+      const values: any[] = []
+
+      const keys = filter ? Object.keys(filter).filter((k) => filter[k] !== undefined) : []
+      if (keys.length) {
+        sql += ` WHERE ${keys.map((k) => `\`${k}\` = ?`).join(' AND ')}`
+        keys.forEach((k) => values.push(filter![k]))
+      }
+
+      const [rows] = await this.pool.execute(sql, values)
       return rows as any[]
     } catch (err: any) {
       console.error(`[MySQLAdapter] readAll failed — table: ${table}`)

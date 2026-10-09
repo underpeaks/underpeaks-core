@@ -1,6 +1,9 @@
+// app/api/session/route.ts
+
 import { NextRequest, NextResponse } from 'next/server'
 import mysql                         from 'mysql2/promise'
 import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
+import { canSignIn, NO_CONSOLE_ACCESS_MESSAGE } from '@/app/lib/assertCanSignIn'
 
 export async function POST(req: NextRequest) {
   console.log('[Sessions API] Request received')
@@ -74,6 +77,14 @@ export async function POST(req: NextRequest) {
               { status: 403 }
             )
           }
+        }
+
+        if (!canSignIn(result.user.role)) {
+          console.warn('[Sessions API] Role not allowed to use the console')
+          return NextResponse.json(
+            { user: null, error: NO_CONSOLE_ACCESS_MESSAGE },
+            { status: 403 }
+          )
         }
 
         return NextResponse.json({
@@ -159,6 +170,14 @@ export async function POST(req: NextRequest) {
           return NextResponse.json(
             { user: null, error: 'User profile not found' },
             { status: 404 }
+          )
+        }
+
+        if (!canSignIn(nxfUser.role)) {
+          console.warn('[Sessions API] Role not allowed to use the console')
+          return NextResponse.json(
+            { user: null, error: NO_CONSOLE_ACCESS_MESSAGE },
+            { status: 403 }
           )
         }
 
@@ -277,6 +296,14 @@ export async function POST(req: NextRequest) {
       }
     } catch (err: any) {
       console.error('[Sessions API] Failed to fetch full user profile:', err.message)
+    }
+
+    if (!canSignIn(user.role)) {
+      console.warn('[Sessions API] Role not allowed to use the console')
+      return NextResponse.json(
+        { user: null, error: NO_CONSOLE_ACCESS_MESSAGE },
+        { status: 403 }
+      )
     }
 
     console.log('[Sessions API] Session valid — returning user')

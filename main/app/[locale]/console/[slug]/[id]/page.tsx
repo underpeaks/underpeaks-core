@@ -27,12 +27,15 @@ async function loadPageAndModel(slug: string): Promise<{
     // app/[locale]/console/[slug]/page.tsx's convention.
     const cleanSlug = slug.startsWith('/') ? slug.slice(1) : slug
 
-    console.log('[DEBUG][detail] Incoming slug param:', slug)
-    console.log('[DEBUG][detail] Cleaned slug used for lookup:', cleanSlug)
-
-    const pages = await adapter.readAll!(dbConfig, 'nxf_pages', { slug: cleanSlug })
-
-    console.log('[DEBUG][detail] Pages found:', pages?.length ?? 0, JSON.stringify(pages))
+    // Filter in code, not through readAll's filter argument: only some
+    // adapters (Postgres, Firebase) honour it. MySQL, MongoDB and Supabase
+    // ignore it and return the whole table, which made pages[0] the wrong
+    // row. Prefer the admin page for this slug, fall back to any match.
+    const allPages = await adapter.readAll!(dbConfig, 'nxf_pages')
+    const matches  = (allPages ?? []).filter((p: any) => p.slug === cleanSlug)
+    const pages    = matches.some((p: any) => p.page_type === 'admin')
+      ? matches.filter((p: any) => p.page_type === 'admin')
+      : matches
 
     if (!pages || pages.length === 0) return { page: null, model: null, projectId: '', tenantId: '' }
 
@@ -44,13 +47,10 @@ async function loadPageAndModel(slug: string): Promise<{
       model_id:      rawPage.model_id      ?? rawPage.model      ?? null,
     }
 
-    console.log('[DEBUG][detail] Resolved page:', JSON.stringify(page))
-
     let model: ModelRecord | null = null
     if (page.model_id) {
-      const models = await adapter.readAll!(dbConfig, 'nxf_system_models', { sm_id: page.model_id })
-
-      console.log('[DEBUG][detail] Models found for model_id', page.model_id, ':', models?.length ?? 0)
+      const allModels = await adapter.readAll!(dbConfig, 'nxf_system_models')
+      const models    = (allModels ?? []).filter((m: any) => m.sm_id === page.model_id)
 
       if (models && models.length > 0) {
         const raw = models[0] as any
@@ -84,15 +84,10 @@ async function getAuthToken(): Promise<string> {
 export default async function ConsoleDetailPage({ params }: DetailPageProps) {
   const { slug, id } = await params
 
-  console.log('[DEBUG][detail] ConsoleDetailPage rendering for slug:', slug, 'id:', id)
-
   const { page, model, projectId, tenantId } = await loadPageAndModel(slug)
   const authToken = await getAuthToken()
 
-  console.log('[DEBUG][detail] page found:', !!page, '| model found:', !!model)
-
   if (!page || !model) {
-    console.log('[DEBUG][detail] Missing page or model — calling notFound()')
     notFound()
   }
 

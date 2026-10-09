@@ -140,6 +140,11 @@ function SignInPage() {
 
     } catch (err: any) {
       setError(err.message)
+
+      // Don't leave a Firebase browser session behind for a refused sign-in
+      if (process.env.NEXT_PUBLIC_DB_TYPE === 'firebase' && getApps().length) {
+        try { await getAuth().signOut() } catch { /* ignore */ }
+      }
     } finally {
       setLoading(false)
     }

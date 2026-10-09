@@ -339,6 +339,9 @@ export default function UsersPage() {
         isEditMode={isKpiEditMode}
         onConfigChange={(newConfig) => {
           setKpiConfig(newConfig);
+          // Any change (including the first KPI added from the empty state)
+          // switches on edit mode so the Save layout button is visible.
+          setIsKpiEditMode(true);
           const allKpiConfigs = newConfig.blocks.flatMap((b) => b.kpis);
           setKpiResults(
             computeAllKpis(

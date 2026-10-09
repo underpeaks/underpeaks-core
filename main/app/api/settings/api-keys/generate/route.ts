@@ -1,4 +1,4 @@
-//app/api/settings/api-keys/generate/route.ts
+// app/api/settings/api-keys/generate/route.ts
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
 import { encryptApiKey }             from '@/app/lib/apiKeyEncryption'
@@ -38,14 +38,25 @@ export async function POST(req: NextRequest) {
     if (!uid)
       return NextResponse.json({ error: 'Invalid token' }, { status: 401 })
 
-    const project    = await adapter.findProjectByOwnerId?.(adapter.config, uid)
-    const project_id = project?.id ?? project?.project_id ?? null
+    const project = await adapter.findProjectByOwnerId?.(adapter.config, uid)
+
+    // Same resolution order as list / reveal / revoke, so a key created here
+    // is always visible to them (project_id first, document id as fallback).
+    const project_id = project?.project_id ?? project?.id ?? null
     if (!project_id)
       return NextResponse.json({ error: 'Project not found' }, { status: 404 })
 
-    // tenant_id is NOT NULL on nxf_system_apis — resolve via the project
-    // row, same pattern used for nxf_storage inserts earlier.
-    const tenant_id = project?.tenant_id ?? null
+    // tenant_id is NOT NULL on nxf_system_apis. SQL adapters carry it on the
+    // project row; Firebase project documents do not, so fall back to the
+    // installation's tenant record (nxf_system_tenants), the same way the
+    // demo-content install and messages do.
+    let tenant_id: string | null = project?.tenant_id ?? null
+
+    if (!tenant_id && adapter.readAll) {
+      const tenants = await adapter.readAll(adapter.config, 'nxf_system_tenants') as Record<string, any>[]
+      tenant_id = tenants?.[0]?.ten_id ?? tenants?.[0]?.id ?? null
+    }
+
     if (!tenant_id)
       return NextResponse.json({ error: 'Tenant not found for project' }, { status: 404 })
 

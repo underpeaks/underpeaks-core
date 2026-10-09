@@ -3,7 +3,8 @@
 /**
  * POST /api/logout
  *
- * Logs out the current user by invalidating their session.
+ * Logs out the current user by invalidating their session. Also writes the
+ * logout activity entry and marks the user offline (is_logged_in = false).
  *
  * Logout flow by database type:
  * ──────────────────────────────
@@ -69,13 +70,20 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     // -----------------------------------------------------------------------
 
     if (adapter.supportsBuiltInAuth) {
-      if (user_id && adapter.writeActivityLog) {
-        await adapter.writeActivityLog(dbConfig, {
-          user_id,
-          action:  'user_logout',
-          context: { db_type: dbType },
-        })
+      // Prefer the uid from the verified ID token; fall back to the body's
+      // user_id if the token has already expired.
+      let uid: string | undefined = user_id
+
+      if (token && adapter.validateBuiltInSession) {
+        try {
+          const decoded = await adapter.validateBuiltInSession(dbConfig, token)
+          uid = decoded?.uid ?? uid
+        } catch {
+          /* expired or invalid token — keep the body's user_id */
+        }
       }
+
+      await finishLogout(adapter, dbConfig, dbType, uid)
 
       return NextResponse.json({
         success: true,
@@ -114,14 +122,8 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       updated_at: new Date().toISOString(),
     })
 
-    // Write activity log for custom token flow too
-    if (user_id && adapter.writeActivityLog) {
-      await adapter.writeActivityLog(dbConfig, {
-        user_id,
-        action:  'user_logout',
-        context: { db_type: dbType },
-      })
-    }
+    // The token record is the authority on who is logging out
+    await finishLogout(adapter, dbConfig, dbType, storedToken.user_id ?? user_id)
 
     return NextResponse.json({
       success: true,
@@ -134,5 +136,39 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       { success: false, error: err.message ?? 'An unexpected error occurred' },
       { status: 500 }
     )
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Helper — activity log + offline status
+// Never throws: a failure here must not turn a successful logout into an error.
+// ---------------------------------------------------------------------------
+
+async function finishLogout(
+  adapter:  any,
+  dbConfig: any,
+  dbType:   string,
+  userId?:  string
+): Promise<void> {
+  if (!userId) return
+
+  try {
+    if (adapter.writeActivityLog) {
+      await adapter.writeActivityLog(dbConfig, {
+        user_id: userId,
+        action:  'user_logout',
+        context: { db_type: dbType },
+      })
+    }
+  } catch (err: any) {
+    console.error('[logout] Could not write activity log:', err.message)
+  }
+
+  try {
+    if (adapter.update) {
+      await adapter.update(dbConfig, 'nxf_users', userId, { is_logged_in: false }, 'user_id')
+    }
+  } catch (err: any) {
+    console.error('[logout] Could not mark user offline:', err.message)
   }
 }

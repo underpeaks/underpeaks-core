@@ -225,13 +225,13 @@ export default function ForeignKeySelector({
                       </span>
                     </div>
 
-                    {(model.schema ?? []).map((field) => {
+                    {(model.schema ?? []).map((field, fieldIndex) => {
                       const isSelected =
                         parsed?.table === model.name &&
                         parsed?.column === field.name
                       return (
                         <button
-                          key={`${model.sm_id}-${field.name}`}
+                          key={`${model.sm_id}-${field.name}-${fieldIndex}`}
                           type="button"
                           onClick={() => handleSelectField(model.name, field.name)}
                           className={`w-full flex items-center gap-3 px-4 py-2 text-left hover:bg-blue-50 transition ${
