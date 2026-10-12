@@ -20,3 +20,10 @@ packages/**/dist/
 
 .next/
 main/.next/
+
+
+# Underpeaks local config
+/configs/
+.env.local
+.env*.local
+underpeaks.config.json

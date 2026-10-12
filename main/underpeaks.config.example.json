@@ -1,0 +1,16 @@
+{
+  "projectName": "My Project",
+  "subdomain": "my-project",
+  "selectedStack": "nextjs",
+  "selectedDb": "postgres",
+  "deploymentType": "self-hosted",
+  "studioUrl": "https://studio.underpeaks.com",
+  "dbConfig": { "type": "postgres" },
+  "ecommerceEnabled": false,
+  "demoContentEnabled": false,
+  "selectedPages": [],
+  "models": [],
+  "adminUser": { "fullName": "", "email": "" },
+  "featureFlags": { "ecommerce": false, "demoContent": false },
+  "installed": false
+}

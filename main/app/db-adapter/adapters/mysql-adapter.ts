@@ -274,7 +274,18 @@ export class MySQLAdapter implements DBAdapter {
 
   // ─── Table creation ────────────────────────────────────────────────────────
 
-   async createTable(
+     // Translate Postgres-style default expressions to MySQL/MariaDB equivalents
+  private mapDefaultExpr(expr: string): string {
+    const v = expr.trim()
+    const lower = v.toLowerCase()
+    if (lower === 'gen_random_uuid()' || lower === 'uuid_generate_v4()') return '(UUID())'
+    if (lower === 'now()' || lower === 'current_timestamp()' || lower === 'current_timestamp') {
+      return 'CURRENT_TIMESTAMP'
+    }
+    return v
+  }
+
+  async createTable(
     tableName: string,
     schema: { columns: ColumnDef[] | Record<string, ColumnDef> }
   ): Promise<void> {
@@ -295,7 +306,6 @@ export class MySQLAdapter implements DBAdapter {
     const columnsSql = columnsArray
       .map((col) => {
         let typeSql = ''
-        // FIX: added 'image', 'file', 'geo' — same gap as Postgres/Supabase.
         // image/file stored as TEXT (URL/path string), geo as JSON.
         switch (col.type.toLowerCase()) {
           case 'uuid':                       typeSql = 'CHAR(36)';      break
@@ -337,7 +347,7 @@ export class MySQLAdapter implements DBAdapter {
               col.default === 'false'   ||
               col.default === 'null'
             ) {
-              defaultClause = ` DEFAULT ${col.default}`
+              defaultClause = ` DEFAULT ${this.mapDefaultExpr(col.default)}`
             } else {
               defaultClause = ` DEFAULT '${col.default}'`
             }
