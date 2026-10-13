@@ -1,4 +1,4 @@
-// SignInPage.tsx  (app/[locale]/(auth)/signin/page.tsx)
+// app/[locale]/(auth)/signin/page.tsx
 'use client'
 
 /**
@@ -8,7 +8,7 @@
  *   1. Firebase – Firebase Authentication, then exchanges the ID token for a
  *      server-side session via /api/session.
  *   2. Custom (non-Firebase) – posts credentials to /api/signin and stores the
- *      returned access token in localStorage.
+ *      returned access token (and user id) in localStorage.
  *
  * After a successful sign-in the user is redirected to the page they originally
  * tried to visit (redirectedFrom), or /console. On success nxf_users is updated
@@ -117,6 +117,8 @@ function SignInPage() {
         }
 
         localStorage.setItem('authToken', idToken)
+        // Firebase's user id comes from the JWT; clear any id left by another backend
+        localStorage.removeItem('userId')
         await recordLogin(userCredential.user.uid)
 
       } else {
@@ -132,6 +134,8 @@ function SignInPage() {
         }
 
         localStorage.setItem('authToken', data.accessToken)
+        // Opaque tokens can't be decoded, so keep the user id for getUserId()
+        localStorage.setItem('userId', data.user.user_id)
 
         await recordLogin(data.user.user_id)
       }

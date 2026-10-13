@@ -1,3 +1,4 @@
+// app/[locale]/console/[slug]/components/admin/ListTemplate.tsx
 'use client'
 
 /**
@@ -241,14 +242,14 @@ export default function ListTemplate({
 
   useEffect(() => { fetchRecords(1) }, [])
 
-  // Load KPI config
+  // Load KPI config. The config is found by page, so it does not wait for the
+  // user id (which can be empty for some adapters' sessions).
   useEffect(() => {
-    if (!userId) return
-    fetch(`/api/kpi-config?page=${page.page_id}&user_id=${userId}`)
+    fetch(`/api/kpi-config?page=${encodeURIComponent(page.page_id)}`)
       .then((r) => r.json())
       .then((d) => setKpiConfig(d.config ?? null))
       .catch(() => {})
-  }, [userId, page.page_id])
+  }, [page.page_id])
 
   // Recompute KPIs when records change
   useEffect(() => {

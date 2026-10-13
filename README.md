@@ -20,8 +20,12 @@ Underpeaks is a self-hosted, developer-first headless CMS that compiles producti
 
 ![Underpeaks console dashboard](./main/public/images/assets/dash.png)
 
+[![Watch: Install Underpeaks Core](https://img.youtube.com/vi/VIDEO_ID/maxresdefault.jpg)](https://youtu.be/T6wojyT-XZQ?si=5QtbbIyQce3df_TM)
+
+▶ **[Watch the install video →](https://youtu.be/T6wojyT-XZQ?si=5QtbbIyQce3df_TM)** From clone to first sign-in, step by step.
+
 <!-- TODO: swap in a short GIF (model → nxf generate flutter → running app)
-     once recorded, and add the YouTube install video link here. -->
+     once recorded. -->
 
 ---
 
@@ -59,6 +63,8 @@ Not sure which one you need? Start with Core — you can always move to Studio l
 ---
 
 ## 1. Get the Code
+
+> Prefer to watch? The [install video](https://youtu.be/T6wojyT-XZQ?si=5QtbbIyQce3df_TM) walks through steps 1 to 5.
 
 ```bash
 git clone https://github.com/underpeaks/underpeaks-core.git

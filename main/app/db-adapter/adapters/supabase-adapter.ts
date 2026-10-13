@@ -37,22 +37,24 @@
 import { createClient, SupabaseClient }  from '@supabase/supabase-js'
 import bcrypt                            from 'bcrypt'
 import { Pool }                          from 'pg'
-import { ColumnDef, DBAdapter, DBConfig } from '../types'
+import { ColumnDef, DBAdapter, DBConfig, StorageFile } from '../types'
 import { randomBytes }                   from 'crypto'
 import nodemailer                        from 'nodemailer'
 import { loadAllModels }                 from '../utils/load-model'
 import { CreateUserDataModels }          from '../utils/create-data-models'
-
-interface StorageFile {
-  id:         string
-  name:       string
-  url:        string
-  size:       string
-  mimeType:   string
-  folder:     string
-  folderPath: string
-  uploaded:   string
-}
+import {
+  normalizeFolder,
+  folderVariants,
+  storedFolder,
+  storedPath,
+  pathVariants,
+  recordPathVariants,
+  formatSize,
+  formatDate,
+  fetchRemoteFile,
+  toImportedStorageFile,
+  SIGNED_URL_SECONDS,
+} from '../utils/storage-helpers'
 
 const DEFAULT_BUCKETS = [
   'system', 'themes', 'extensions', 'projects',
@@ -249,7 +251,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
         return null
       }
 
-      const { data, error } = await this.client
+      const { data, error } = await this.adminClient
         .from('nxf_system_config')
         .select('*')
         .eq('user_id', userId)
@@ -320,7 +322,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
 
       const user = data.user
 
-      const { data: userProfile, error: profileError } = await this.client
+      const { data: userProfile, error: profileError } = await this.adminClient
         .from('nxf_users')
         .select('role')
         .eq('user_id', user.id)
@@ -535,7 +537,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
 }
 
   async findUserByToken(token: string) {
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_users')
       .select('*')
       .eq('token', token)
@@ -603,7 +605,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
   }
 
   async findTokenByAccessToken(accessToken: string) {
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_system_tokens')
       .select('*')
       .eq('access_token', accessToken)
@@ -614,7 +616,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
   }
 
   async findTokenByRefreshToken(refreshToken: string) {
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_system_tokens')
       .select('*')
       .eq('refresh_token', refreshToken)
@@ -629,7 +631,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     updates: Partial<{ revoked: boolean; updated_at: string }>
   ) {
     const updateData = { ...updates, updated_at: new Date().toISOString() }
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_system_tokens')
       .update(updateData)
       .eq('token_id', tokenId)
@@ -659,6 +661,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     const user = await this.findUserByToken(token)
     if (!user) throw new Error('Invalid or expired token')
 
+    // Takes the plain-text password; hashing happens here, in the adapter.
     const hashed = await this.hashPassword(newPassword)
 
     await this.update(this.config, 'nxf_users', user.user_id, {
@@ -683,7 +686,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     if (!user)               return { success: false, error: 'User not found.' }
     if (!user.password_hash) return { success: false, error: 'Invalid password' }
 
-    const valid = await bcrypt.compare(password.trim(), user.password_hash.trim())
+    const valid = await bcrypt.compare(password, user.password_hash)
     if (!valid) return { success: false, error: 'Invalid email or password' }
 
     return { success: true, user }
@@ -733,7 +736,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
   async validateBuiltInSession(config: DBConfig, token: string) {
     console.log('[SupabaseAdapter] validateBuiltInSession started')
     try {
-      const { data, error } = await this.client.auth.getUser(token)
+      const { data, error } = await this.adminClient.auth.getUser(token)
       if (error) throw error
       return data.user
     } catch (err: any) {
@@ -800,7 +803,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     if (!email) return { success: false, error: 'Email is required' }
 
     try {
-      const { error } = await this.client.auth.resetPasswordForEmail(email, {
+      const { error } = await this.adminClient.auth.resetPasswordForEmail(email, {
         redirectTo: redirectUrl || `${process.env.NEXT_PUBLIC_APP_URL}/signin`,
       })
 
@@ -1359,7 +1362,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     try {
       if (!uid) return { error: 'UID is required' }
 
-      const { data, error } = await this.client
+      const { data, error } = await this.adminClient
         .from('nxf_users')
         .select('*')
         .eq('user_id', uid)
@@ -1384,7 +1387,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     try {
       if (!userId) return { allowed: false, reason: 'No user ID provided' }
 
-      const { data, error } = await this.client
+      const { data, error } = await this.adminClient
         .from('nxf_users')
         .select('*')
         .eq('user_id', userId)
@@ -1420,7 +1423,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       const tenants   = await this.readAll(config, 'nxf_system_tenants')
       const tenant_id = tenants[0]?.ten_id ?? tenants[0]?.id ?? null
 
-      const { error } = await this.client.from('nxf_system_activity_logs').insert({
+      const { error } = await this.adminClient.from('nxf_system_activity_logs').insert({
         log_id:     crypto.randomUUID(),
         project_id,
         tenant_id,
@@ -1447,7 +1450,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     uid:        string,
     limit       = 10
   ): Promise<Array<Record<string, any>>> {
-    const { data: conversations, error } = await this.client
+    const { data: conversations, error } = await this.adminClient
       .from('nxf_system_conversations')
       .select('*')
       .eq('project_id', project_id)
@@ -1473,7 +1476,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       deduped.map(async (conv) => {
         const con_id = conv.con_id ?? conv.id
 
-        const { count } = await this.client
+        const { count } = await this.adminClient
           .from('nxf_system_messages')
           .select('*', { count: 'exact', head: true })
           .eq('conversation_id', con_id)
@@ -1491,7 +1494,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     config:         DBConfig,
     conversationId: string
   ): Promise<Array<Record<string, any>>> {
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_system_messages')
       .select('*')
       .eq('conversation_id', conversationId)
@@ -1542,7 +1545,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       updated_at:      now,
     }
 
-    const { error: msgError } = await this.client
+    const { error: msgError } = await this.adminClient
       .from('nxf_system_messages')
       .insert(message)
 
@@ -1551,7 +1554,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       throw msgError
     }
 
-    const { error: convError } = await this.client
+    const { error: convError } = await this.adminClient
       .from('nxf_system_conversations')
       .update({
         last_message_preview: content.slice(0, 100),
@@ -1572,7 +1575,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     uid:            string,
     conversationId: string
   ): Promise<{ success: boolean }> {
-    const { error } = await this.client
+    const { error } = await this.adminClient
       .from('nxf_system_messages')
       .update({
         is_read:    true,
@@ -1594,7 +1597,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     config: DBConfig,
     uid:    string
   ): Promise<{ success: boolean }> {
-    const { error } = await this.client
+    const { error } = await this.adminClient
       .from('nxf_system_messages')
       .update({
         is_read:    true,
@@ -1615,7 +1618,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     config:         DBConfig,
     conversationId: string
   ): Promise<{ success: boolean }> {
-    const { error: msgError } = await this.client
+    const { error: msgError } = await this.adminClient
       .from('nxf_system_messages')
       .delete()
       .eq('conversation_id', conversationId)
@@ -1625,7 +1628,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       throw new Error(`Failed to delete messages: ${msgError.message}`)
     }
 
-    const { error: convError } = await this.client
+    const { error: convError } = await this.adminClient
       .from('nxf_system_conversations')
       .delete()
       .eq('con_id', conversationId)
@@ -1646,7 +1649,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     project_id: string,
     limit       = 20
   ): Promise<Array<Record<string, any>>> {
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_system_notifications')
       .select('*')
       .eq('project_id', project_id)
@@ -1668,7 +1671,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     notificationId: string,
     uid:            string
   ): Promise<{ success: boolean }> {
-    const { data, error: fetchError } = await this.client
+    const { data, error: fetchError } = await this.adminClient
       .from('nxf_system_notifications')
       .select('*')
       .eq('id', notificationId)
@@ -1679,7 +1682,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
 
     const now = new Date().toISOString()
 
-    const { error: updateError } = await this.client
+    const { error: updateError } = await this.adminClient
       .from('nxf_system_notifications')
       .update({
         status:     'read',
@@ -1704,7 +1707,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   ): Promise<{ success: boolean; updated: number }> {
     const now = new Date().toISOString()
 
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_system_notifications')
       .update({
         status:     'read',
@@ -1738,7 +1741,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     last_used_at: string | null
     created_at:   string
   }>> {
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_system_apis')
       .select('api_id, name, key_prefix, status, last_used_at, created_at')
       .eq('project_id', project_id)
@@ -1764,7 +1767,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     config: DBConfig,
     api_id: string
   ): Promise<Record<string, any> | null> {
-    const { data, error } = await this.client
+    const { data, error } = await this.adminClient
       .from('nxf_system_apis')
       .select('*')
       .eq('api_id', api_id)
@@ -1784,7 +1787,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     api_id:     string,
     project_id: string
   ): Promise<{ success: boolean }> {
-    const { data, error: fetchError } = await this.client
+    const { data, error: fetchError } = await this.adminClient
       .from('nxf_system_apis')
       .select('*')
       .eq('api_id', api_id)
@@ -1795,7 +1798,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
 
     const now = new Date().toISOString()
 
-    const { error: updateError } = await this.client
+    const { error: updateError } = await this.adminClient
       .from('nxf_system_apis')
       .update({
         status:     'revoked',
@@ -1815,11 +1818,12 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
 
   // ─── Storage file operations ───────────────────────────────────────────────
 
+  private readonly STORAGE_BUCKET = 'underpeaks_storage'
+
   async listFolders(): Promise<string[]> {
     try {
-      const bucketName  = 'underpeaks_storage'
       const { data, error } = await this.adminClient.storage
-        .from(bucketName)
+        .from(this.STORAGE_BUCKET)
         .list('', { limit: 1000 })
 
       if (error) {
@@ -1842,10 +1846,10 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
 
   async listFiles(folder: string): Promise<StorageFile[]> {
     try {
-      const bucketName = 'underpeaks_storage'
+      const dir = storedFolder(folder)
       const { data, error } = await this.adminClient.storage
-        .from(bucketName)
-        .list(folder, { limit: 1000 })
+        .from(this.STORAGE_BUCKET)
+        .list(dir, { limit: 1000 })
 
       if (error) {
         console.error('[SupabaseAdapter] listFiles failed')
@@ -1858,37 +1862,26 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
         if (item.id === null)            continue
         if (item.name.endsWith('.keep')) continue
 
-        const filePath = `${folder}/${item.name}`
+        const filePath = `${dir}/${item.name}`
 
         const { data: signedData, error: signedError } = await this.adminClient.storage
-          .from(bucketName)
-          .createSignedUrl(filePath, 7 * 24 * 60 * 60)
+          .from(this.STORAGE_BUCKET)
+          .createSignedUrl(filePath, SIGNED_URL_SECONDS)
 
         if (signedError) {
           console.warn(`[SupabaseAdapter] listFiles — could not sign URL for ${filePath}`)
           continue
         }
 
-        const sizeBytes = item.metadata?.size ?? 0
-        const sizeLabel = sizeBytes > 1024 * 1024
-          ? `${(sizeBytes / (1024 * 1024)).toFixed(1)} MB`
-          : `${Math.round(sizeBytes / 1024)} KB`
-
         results.push({
           id:         item.id ?? filePath,
           name:       item.name,
           url:        signedData.signedUrl,
-          size:       sizeLabel,
+          size:       formatSize(item.metadata?.size),
           mimeType:   item.metadata?.mimetype ?? 'application/octet-stream',
-          folder,
+          folder:     dir,
           folderPath: filePath,
-          uploaded:   item.created_at
-            ? new Date(item.created_at).toLocaleDateString('en-GB', {
-                day:   '2-digit',
-                month: 'short',
-                year:  'numeric',
-              })
-            : '—',
+          uploaded:   formatDate(item.created_at),
         })
       }
 
@@ -1908,15 +1901,11 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   ): Promise<string> {
     console.log('[SupabaseAdapter] uploadFile started')
 
-    const bucketName = 'underpeaks_storage'
-    const filePath   = `${folder}/${fileName}`
+    const filePath = `${storedFolder(folder)}/${fileName}`
 
     const { error: uploadError } = await this.adminClient.storage
-      .from(bucketName)
-      .upload(filePath, buffer, {
-        contentType: mimeType,
-        upsert:      false,
-      })
+      .from(this.STORAGE_BUCKET)
+      .upload(filePath, buffer, { contentType: mimeType, upsert: false })
 
     if (uploadError) {
       console.error('[SupabaseAdapter] uploadFile failed')
@@ -1924,8 +1913,8 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     }
 
     const { data: signedData, error: signedError } = await this.adminClient.storage
-      .from(bucketName)
-      .createSignedUrl(filePath, 7 * 24 * 60 * 60)
+      .from(this.STORAGE_BUCKET)
+      .createSignedUrl(filePath, SIGNED_URL_SECONDS)
 
     if (signedError) {
       throw new Error(`Upload succeeded but could not generate signed URL: ${signedError.message}`)
@@ -1934,13 +1923,71 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     return signedData.signedUrl
   }
 
+  /** Finds the real object path in the bucket ('uploads/<name>' or '<name>' for the root). */
+  private async findObjectPath(folder: string, fileName: string): Promise<string | null> {
+    const dirs = normalizeFolder(folder) ? [normalizeFolder(folder)] : ['uploads', '']
+
+    for (const dir of dirs) {
+      const { data, error } = await this.adminClient.storage
+        .from(this.STORAGE_BUCKET)
+        .list(dir, { search: fileName, limit: 100 })
+
+      if (error) continue
+
+      const hit = (data ?? []).find((item) => item.name === fileName && item.id !== null)
+      if (hit) return dir ? `${dir}/${fileName}` : fileName
+    }
+    return null
+  }
+
+  private async findStorageRecord(folder: string, fileName: string): Promise<any | null> {
+    try {
+      // Match on the saved path in any of its forms first.
+      const { data } = await this.adminClient
+        .from('nxf_storage')
+        .select('storage_id')
+        .in('file_path', pathVariants(folder, fileName))
+        .limit(1)
+
+      if (data?.[0]) return data[0]
+
+      // Fallback: match on name + folder.
+      const { data: byName } = await this.adminClient
+        .from('nxf_storage')
+        .select('storage_id')
+        .eq('file_name', fileName)
+        .in('folder', folderVariants(folder))
+        .limit(1)
+
+      if (!byName?.[0]) {
+        console.warn(`[SupabaseAdapter] findStorageRecord — no record for folder="${folder}" file="${fileName}"`)
+      }
+
+      return byName?.[0] ?? null
+    } catch {
+      return null
+    }
+  }
+
+  private async signedUrlForPath(filePath: string): Promise<string | null> {
+    const { data, error } = await this.adminClient.storage
+      .from(this.STORAGE_BUCKET)
+      .createSignedUrl(filePath, SIGNED_URL_SECONDS)
+
+    return error ? null : data.signedUrl
+  }
+
   async deleteFile(folder: string, fileName: string): Promise<void> {
-    const bucketName = 'underpeaks_storage'
-    const filePath   = `${folder}/${fileName}`
+    const objectPath = await this.findObjectPath(folder, fileName)
+
+    if (!objectPath) {
+      console.warn('[SupabaseAdapter] deleteFile — no object in the bucket, nothing to remove')
+      return
+    }
 
     const { error } = await this.adminClient.storage
-      .from(bucketName)
-      .remove([filePath])
+      .from(this.STORAGE_BUCKET)
+      .remove([objectPath])
 
     if (error) {
       console.error('[SupabaseAdapter] deleteFile failed')
@@ -1949,10 +1996,8 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   }
 
   async deleteFolder(folder: string): Promise<void> {
-    const bucketName = 'underpeaks_storage'
-
     const { data, error: listError } = await this.adminClient.storage
-      .from(bucketName)
+      .from(this.STORAGE_BUCKET)
       .list(folder, { limit: 1000 })
 
     if (listError) {
@@ -1965,7 +2010,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     const paths = data.map((item) => `${folder}/${item.name}`)
 
     const { error: removeError } = await this.adminClient.storage
-      .from(bucketName)
+      .from(this.STORAGE_BUCKET)
       .remove(paths)
 
     if (removeError) {
@@ -1975,10 +2020,8 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   }
 
   async createFolder(folder: string): Promise<void> {
-    const bucketName = 'underpeaks_storage'
-
     const { error } = await this.adminClient.storage
-      .from(bucketName)
+      .from(this.STORAGE_BUCKET)
       .upload(`${folder}/.keep`, new Blob(['']), {
         contentType: 'text/plain',
         upsert:      true,
@@ -1991,88 +2034,105 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   }
 
   async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
-    const bucketName = 'underpeaks_storage'
-    const oldPath    = `${folder}/${oldName}`
-    const newPath    = `${folder}/${newName}`
+    const objectPath = await this.findObjectPath(folder, oldName)
+    const record     = await this.findStorageRecord(folder, oldName)
 
-    const { error } = await this.adminClient.storage
-      .from(bucketName)
-      .move(oldPath, newPath)
+    if (!objectPath && !record) throw new Error('File not found')
 
-    if (error) {
-      console.error('[SupabaseAdapter] renameFile failed')
-      throw new Error(`Rename failed: ${error.message}`)
+    let newUrl: string | null = null
+
+    if (objectPath) {
+      // Keep the object where it is — only the last path segment changes.
+      const newPath = `${objectPath.slice(0, objectPath.lastIndexOf('/') + 1)}${newName}`
+
+      const { error } = await this.adminClient.storage
+        .from(this.STORAGE_BUCKET)
+        .move(objectPath, newPath)
+
+      if (error) {
+        console.error('[SupabaseAdapter] renameFile failed')
+        throw new Error(`Rename failed: ${error.message}`)
+      }
+
+      newUrl = await this.signedUrlForPath(newPath)
+    } else {
+      console.warn('[SupabaseAdapter] renameFile — no object in the bucket, renaming the record only')
     }
 
     try {
-      await this.client
-        .from('nxf_storage')
-        .update({ file_name: newName, file_path: newPath })
-        .eq('file_path', oldPath)
+      if (record) {
+        await this.adminClient
+          .from('nxf_storage')
+          .update({
+            file_name: newName,
+            file_path: storedPath(folder, newName),
+            ...(newUrl ? { url: newUrl } : {}),
+          })
+          .eq('storage_id', record.storage_id)
+      }
     } catch {
       console.warn('[SupabaseAdapter] renameFile — nxf_storage update failed')
     }
   }
 
   async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
-    const bucketName = 'underpeaks_storage'
-    const oldPath    = `${fromFolder}/${fileName}`
-    const newPath    = `${toFolder}/${fileName}`
+    const objectPath = await this.findObjectPath(fromFolder, fileName)
+    const record     = await this.findStorageRecord(fromFolder, fileName)
 
-    const { error } = await this.adminClient.storage
-      .from(bucketName)
-      .move(oldPath, newPath)
+    if (!objectPath && !record) throw new Error('File not found')
 
-    if (error) {
-      console.error('[SupabaseAdapter] moveFile failed')
-      throw new Error(`Move failed: ${error.message}`)
+    let newUrl: string | null = null
+
+    if (objectPath) {
+      const destPath = `${storedFolder(toFolder)}/${fileName}`
+
+      // Moving a file onto itself must never delete it.
+      if (destPath !== objectPath) {
+        const { error } = await this.adminClient.storage
+          .from(this.STORAGE_BUCKET)
+          .move(objectPath, destPath)
+
+        if (error) {
+          console.error('[SupabaseAdapter] moveFile failed')
+          throw new Error(`Move failed: ${error.message}`)
+        }
+      }
+
+      newUrl = await this.signedUrlForPath(destPath)
+    } else {
+      console.warn('[SupabaseAdapter] moveFile — no object in the bucket, moving the record only')
     }
 
     try {
-      await this.client
-        .from('nxf_storage')
-        .update({ folder: toFolder, file_path: newPath })
-        .eq('file_path', oldPath)
+      if (record) {
+        await this.adminClient
+          .from('nxf_storage')
+          .update({
+            folder:    storedFolder(toFolder),
+            file_path: storedPath(toFolder, fileName),
+            ...(newUrl ? { url: newUrl } : {}),
+          })
+          .eq('storage_id', record.storage_id)
+      }
     } catch {
       console.warn('[SupabaseAdapter] moveFile — nxf_storage update failed')
     }
   }
 
   async importFromUrl(folder: string, url: string): Promise<StorageFile> {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`Failed to fetch URL: ${url}`)
-
-    const buffer   = Buffer.from(await response.arrayBuffer())
-    const mimeType = response.headers.get('content-type') ?? 'application/octet-stream'
-    const ext      = mimeType.split('/')[1]?.split(';')[0] ?? 'bin'
-    const fileName = `imported_${Date.now()}.${ext}`
-
-    const signedUrl = await this.uploadFile(folder, fileName, buffer, mimeType)
-
-    return {
-      id:         `${folder}/${fileName}`,
-      name:       fileName,
-      url:        signedUrl,
-      size:       `${Math.round(buffer.length / 1024)} KB`,
-      mimeType,
-      folder,
-      folderPath: `${folder}/${fileName}`,
-      uploaded:   new Date().toLocaleDateString('en-GB', {
-        day:   '2-digit',
-        month: 'short',
-        year:  'numeric',
-      }),
-    }
+    const remote    = await fetchRemoteFile(url)
+    const signedUrl = await this.uploadFile(folder, remote.fileName, remote.buffer, remote.mimeType)
+    return toImportedStorageFile(folder, remote, signedUrl)
   }
 
   async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
     try {
       console.log('[SupabaseAdapter] deleteStorageRecordByFilePath started')
 
-      const { error } = await this.client
+      const { error } = await this.adminClient
         .from('nxf_storage')
         .delete()
-        .eq('file_path', filePath)
+        .in('file_path', recordPathVariants(filePath))
 
       if (error) {
         console.error('[SupabaseAdapter] deleteStorageRecordByFilePath failed')
@@ -2087,6 +2147,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     }
   }
 
+
   // ─── Sync ─────────────────────────────────────────────────────────────────
 
   async syncAuthUserToDatabase(
@@ -2096,7 +2157,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
     if (!user?.uid)      throw new Error('User UID is required')
     if (!user.full_name) throw new Error('Full name is required')
 
-    const { data: existing } = await this.client
+    const { data: existing } = await this.adminClient
       .from('nxf_users')
       .select('user_id')
       .eq('user_id', user.uid)
@@ -2104,7 +2165,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       .single()
 
     if (!existing) {
-      const { error } = await this.client.from('nxf_users').insert({
+      const { error } = await this.adminClient.from('nxf_users').insert({
         user_id:    user.uid,
         user_email: user.email || '',
         full_name:  user.full_name,
@@ -2116,7 +2177,7 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       })
       if (error) throw new Error(`syncAuthUserToDatabase insert failed: ${error.message}`)
     } else {
-      const { error } = await this.client
+      const { error } = await this.adminClient
         .from('nxf_users')
         .update({
           user_email: user.email || '',

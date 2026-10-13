@@ -57,6 +57,24 @@ import { ColumnDef, DBAdapter, DBConfig, StorageFile } from '../types'
 import bcrypt   from 'bcryptjs'
 import crypto   from 'crypto'
 import { CreateUserDataModels } from '../utils/create-data-models'
+import {
+  storedFolder,
+  storedPath,
+  pathVariants,
+  folderVariants,
+  recordPathVariants,
+  formatSize,
+  formatDate,
+  localUrl,
+  ensureLocalFolder,
+  writeLocalFile,
+  deleteLocalFile,
+  deleteLocalFolder,
+  renameLocalFile,
+  moveLocalFile,
+  fetchRemoteFile,
+  toImportedStorageFile,
+} from '../utils/storage-helpers'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -80,6 +98,77 @@ const DEFAULT_BUCKETS = [
   'logos',
   'uploads',
 ]
+
+// ---------------------------------------------------------------------------
+// Shared MongoClient cache
+// ---------------------------------------------------------------------------
+
+/**
+ * One MongoClient per connection string, shared by every adapter instance.
+ *
+ * Next.js creates adapters on many requests and re-evaluates modules on hot
+ * reload. A client per adapter opened a new connection pool each time and
+ * never closed it, which exhausted the Atlas connection limit. The cache lives
+ * on globalThis so it survives module reloads.
+ *
+ * maxPoolSize is capped so a single app instance cannot use a large share of
+ * a free-tier cluster (default driver pool is 100).
+ */
+interface SharedMongoEntry {
+  client:      MongoClient
+  connecting?: Promise<MongoClient>
+}
+
+const globalForMongo = globalThis as unknown as {
+  __underpeaksMongoClients?: Map<string, SharedMongoEntry>
+}
+
+function getSharedMongoClients(): Map<string, SharedMongoEntry> {
+  if (!globalForMongo.__underpeaksMongoClients) {
+    globalForMongo.__underpeaksMongoClients = new Map()
+  }
+  return globalForMongo.__underpeaksMongoClients
+}
+
+async function getConnectedMongoClient(connectionString: string): Promise<MongoClient> {
+  const clients = getSharedMongoClients()
+  let entry     = clients.get(connectionString)
+
+  if (!entry) {
+    entry = { client: new MongoClient(connectionString, { maxPoolSize: 10 }) }
+    clients.set(connectionString, entry)
+  }
+
+  if (!entry.connecting) {
+    const current = entry
+    current.connecting = current.client.connect().catch((err) => {
+      // Let the next call retry instead of caching a failed connection.
+      current.connecting = undefined
+      throw err
+    })
+  }
+
+  return entry.connecting as Promise<MongoClient>
+}
+
+// ---------------------------------------------------------------------------
+// Serialisation helper
+// ---------------------------------------------------------------------------
+
+/**
+ * serializeDoc
+ *
+ * Turns the ObjectId in `_id` into a plain string. Next.js refuses to pass
+ * ObjectId instances from Server Components to Client Components ("Only plain
+ * objects can be passed to Client Components"), so every document handed back
+ * to the app from read() / readAll() goes through this first.
+ */
+function serializeDoc<T extends Record<string, any>>(doc: T): T {
+  if (doc && doc._id !== undefined && typeof doc._id !== 'string') {
+    return { ...doc, _id: doc._id.toString() }
+  }
+  return doc
+}
 
 // ---------------------------------------------------------------------------
 // ID filter helper
@@ -127,13 +216,6 @@ export class MongoDBAdapter implements DBAdapter {
   private _config: DBConfig
 
   /**
-   * client
-   * The MongoClient instance used for all database operations. Created once
-   * in the constructor and reused for the lifetime of this adapter instance.
-   */
-  private client: MongoClient
-
-  /**
    * db
    * The resolved Db instance, populated lazily on the first call to getDb().
    * Undefined until the first database operation is performed.
@@ -148,9 +230,9 @@ export class MongoDBAdapter implements DBAdapter {
    * constructor
    *
    * Initialises the adapter with the provided database configuration.
-   * Validates that a connectionString is present (required by MongoClient)
-   * and creates the MongoClient instance. The actual network connection is
-   * not established here — it is deferred to the first call to getDb().
+   * Validates that a connectionString is present (required by MongoClient).
+   * No client is created here: all adapter instances share one cached
+   * MongoClient per connection string, connected on the first getDb() call.
    *
    * @param config — The database configuration object. Must include
    *                 connectionString and databaseName.
@@ -160,7 +242,6 @@ export class MongoDBAdapter implements DBAdapter {
     if (!config.connectionString)
       throw new Error('[MongoDBAdapter] connectionString is required')
     this._config = config
-    this.client  = new MongoClient(config.connectionString)
   }
 
   // -------------------------------------------------------------------------
@@ -199,13 +280,12 @@ export class MongoDBAdapter implements DBAdapter {
    */
   private async getDb(): Promise<Db> {
     if (!this.db) {
-      await this.client.connect()
-
       if (!this._config.databaseName) {
         throw new Error('[MongoDBAdapter] Missing database name in config')
       }
 
-      this.db = this.client.db(this._config.databaseName)
+      const client = await getConnectedMongoClient(this._config.connectionString as string)
+      this.db      = client.db(this._config.databaseName)
     }
 
     return this.db
@@ -365,7 +445,8 @@ async testConnection() {
    */
   async read(config: DBConfig, collection: string, query: any = {}): Promise<any[]> {
     const db = await this.getDb()
-    return db.collection(collection).find(query).toArray()
+    const docs = await db.collection(collection).find(query).toArray()
+    return docs.map((doc) => serializeDoc(doc))
   }
 
   /**
@@ -681,12 +762,11 @@ async testConnection() {
    * After updating the password hash, the token and its TTL are cleared so
    * the same reset link cannot be used a second time.
    *
-   * Note: The newPassword value received here is expected to already be hashed
-   * by the caller. See the commented-out hashPassword call for context — if
-   * the caller sends a plain-text password in future, uncomment that line.
+   * Note: newPassword is the PLAIN-TEXT password. Hashing happens here, in the
+   * adapter, the same as createUser — callers must not hash it first.
    *
    * @param token       — The reset token from the user's email link.
-   * @param newPassword — The new password value (pre-hashed by the caller).
+   * @param newPassword — The new plain-text password.
    * @returns { success: true } on completion.
    * @throws If the token is missing, not found, or expired.
    */
@@ -711,17 +791,13 @@ async testConnection() {
 
     if (!user) throw new Error('Invalid or expired token')
 
-    /*
-     * NOTE: newPassword is currently expected to arrive pre-hashed.
-     * If the caller is updated to send plain text, uncomment the line below:
-     * const hashed = await this.hashPassword(newPassword)
-     * and replace `password_hash: newPassword` with `password_hash: hashed`.
-     */
+    const hashed = await this.hashPassword(newPassword)
+
     await db.collection('nxf_users').updateOne(
       { _id: user._id },
       {
         $set: {
-          password_hash: newPassword,
+          password_hash: hashed,
           token:         null,
           token_ttl:     null,
           updated_at:    now,
@@ -1548,7 +1624,7 @@ async readAll(config: DBConfig, collection: string, filter?: Record<string, any>
     const db   = await this.getDb()  // ← use getDb() not this.db
     const docs = await db.collection(collection).find(filter ?? {}).toArray()
     return docs.map((doc) => ({
-      ...doc,
+      ...serializeDoc(doc),
       id: doc._id?.toString() ?? doc.id,
     }))
   } catch (err: any) {
@@ -2013,18 +2089,13 @@ async revokeApiKey(
 
 // ─── Storage ──────────────────────────────────────────────────────────────────
 // MongoDB has no built-in file storage.
-// Files are stored on the local filesystem or a cloud provider (S3/GCS).
-// The nxf_storage collection tracks metadata; actual files go to disk.
-// All signed URLs below are plain public paths — swap for S3 presigned
-// URLs when a cloud bucket is wired up.
+// Files are stored on the local filesystem (public/uploads).
+// The nxf_storage collection tracks metadata.
 
 async listFolders(): Promise<string[]> {
   try {
-    const db  = await this.getDb()
-    const docs = await db
-      .collection('nxf_storage')
-      .distinct('folder')
-
+    const db   = await this.getDb()
+    const docs = await db.collection('nxf_storage').distinct('folder')
     return (docs ?? []).filter(Boolean)
   } catch {
     console.error('[MongoAdapter] listFolders failed')
@@ -2032,55 +2103,24 @@ async listFolders(): Promise<string[]> {
   }
 }
 
-private localUploadsRoot(): string {
-  const path = require('path')
-  return path.resolve(process.cwd(), 'public', 'uploads')
-}
-
-private localDir(folder: string): string {
-  const path = require('path')
-  const root = this.localUploadsRoot()
-  if (!folder || folder === 'uploads') return root
-  const dir = path.resolve(root, folder)
-  if (dir !== root && !dir.startsWith(root + path.sep)) throw new Error('Invalid folder')
-  return dir
-}
-
-private localUrl(folder: string, fileName: string): string {
-  return !folder || folder === 'uploads' ? `/uploads/${fileName}` : `/uploads/${folder}/${fileName}`
-}
-
 async listFiles(folder: string): Promise<StorageFile[]> {
   try {
-    const db  = await this.getDb()
+    const db   = await this.getDb()
     const docs = await db
       .collection('nxf_storage')
-      .find({ folder, file_name: { $nin: [null, '', '.keep'] } })
+      .find({ folder: { $in: folderVariants(folder) }, file_name: { $nin: [null, '', '.keep'] } })
       .toArray()
 
-    return docs.map((doc) => {
-      const bytes = Number(doc.size ?? 0)
-      const sizeLabel = bytes > 1024 * 1024
-        ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-        : `${Math.round(bytes / 1024)} KB`
-
-      return {
-        id:         doc.storage_id ?? doc._id?.toString(),
-        name:       doc.file_name,
-        url:        doc.url,
-        size:       sizeLabel,
-        mimeType:   doc.mime_type ?? 'application/octet-stream',
-        folder:     doc.folder,
-        folderPath: doc.file_path,
-        uploaded:   doc.created_at
-          ? new Date(doc.created_at).toLocaleDateString('en-GB', {
-              day:   '2-digit',
-              month: 'short',
-              year:  'numeric',
-            })
-          : '—',
-      }
-    })
+    return docs.map((doc) => ({
+      id:         doc.storage_id ?? doc._id?.toString(),
+      name:       doc.file_name,
+      url:        doc.url,
+      size:       formatSize(doc.size),
+      mimeType:   doc.mime_type ?? 'application/octet-stream',
+      folder:     doc.folder,
+      folderPath: doc.file_path,
+      uploaded:   formatDate(doc.created_at),
+    }))
   } catch {
     console.error('[MongoAdapter] listFiles failed')
     return []
@@ -2095,24 +2135,15 @@ async uploadFile(
 ): Promise<string> {
   console.log('[MongoAdapter] uploadFile started')
 
-  const fs   = require('fs')
-  const path = require('path')
-
-  // Local files live in public/uploads so Next.js serves them at /uploads/...
-  const dir = this.localDir(folder)
-  fs.mkdirSync(dir, { recursive: true })
-  fs.writeFileSync(path.join(dir, fileName), buffer)
-
-  const storedFolder = folder || 'uploads'
-  const url          = this.localUrl(folder, fileName)
+  writeLocalFile(folder, fileName, buffer)
+  const url = localUrl(folder, fileName)
 
   const db = await this.getDb()
-
   await db.collection('nxf_storage').insertOne({
     storage_id: crypto.randomUUID(),
     file_name:  fileName,
-    file_path:  `${storedFolder}/${fileName}`,
-    folder:     storedFolder,
+    file_path:  storedPath(folder, fileName),
+    folder:     storedFolder(folder),
     url,
     mime_type:  mimeType,
     size:       buffer.length,
@@ -2123,122 +2154,81 @@ async uploadFile(
 }
 
 async deleteFile(folder: string, fileName: string): Promise<void> {
-  const fs   = require('fs')
-  const path = require('path')
-
-  const filePath = path.join(this.localDir(folder), fileName)
-  if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+  deleteLocalFile(folder, fileName)
 
   const db = await this.getDb()
-  await db.collection('nxf_storage').deleteOne({ file_path: `${folder || 'uploads'}/${fileName}` })
+  await db.collection('nxf_storage').deleteOne({ file_path: { $in: pathVariants(folder, fileName) } })
 }
 
 async deleteFolder(folder: string): Promise<void> {
-  const fs = require('fs')
-
-  if (!folder || folder === 'uploads') throw new Error('Cannot delete the root folder')
-
-  const folderPath = this.localDir(folder)
-  if (fs.existsSync(folderPath)) {
-    fs.rmSync(folderPath, { recursive: true, force: true })
-  }
+  deleteLocalFolder(folder)
 
   const db = await this.getDb()
   await db.collection('nxf_storage').deleteMany({ folder })
 }
 
 async createFolder(folder: string): Promise<void> {
-  const fs   = require('fs')
-  const path = require('path')
+  ensureLocalFolder(folder)
+}
 
-  const folderPath = this.localDir(folder)
-  fs.mkdirSync(folderPath, { recursive: true })
+private async findStorageRecord(folder: string, fileName: string): Promise<any | null> {
+  const db = await this.getDb()
 
-  // .keep sentinel so the empty folder survives on disk
-  const keepPath = path.join(folderPath, '.keep')
-  if (!fs.existsSync(keepPath)) fs.writeFileSync(keepPath, '')
+  // Match on the saved path in any of its forms, or on name + folder as a fallback.
+  const record = await db.collection('nxf_storage').findOne({
+    $or: [
+      { file_path: { $in: pathVariants(folder, fileName) } },
+      { file_name: fileName, folder: { $in: folderVariants(folder) } },
+    ],
+  })
+
+  if (!record) {
+    console.warn(`[MongoAdapter] findStorageRecord — no record for folder="${folder}" file="${fileName}"`)
+  }
+
+  return record
 }
 
 async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
-  const fs   = require('fs')
-  const path = require('path')
+  const db     = await this.getDb()
+  const record = await this.findStorageRecord(folder, oldName)
+  const hadLocal = renameLocalFile(folder, oldName, newName)
 
-  const storedFolder = folder || 'uploads'
-  const oldPath      = path.join(this.localDir(folder), oldName)
-  const newPath      = path.join(this.localDir(folder), newName)
-  const hadLocal     = fs.existsSync(oldPath)
+  if (!hadLocal && !record) throw new Error('File not found')
+  if (!record) return
 
-  if (hadLocal) fs.renameSync(oldPath, newPath)
+  const set: any = { file_name: newName, file_path: storedPath(folder, newName) }
+  if (hadLocal) set.url = localUrl(folder, newName)
 
-  const set: any = { file_name: newName, file_path: `${storedFolder}/${newName}` }
-  if (hadLocal) set.url = this.localUrl(folder, newName)
-
-  const db = await this.getDb()
-  await db.collection('nxf_storage').updateOne(
-    { file_path: `${storedFolder}/${oldName}` },
-    { $set: set }
-  )
+  await db.collection('nxf_storage').updateOne({ _id: record._id }, { $set: set })
 }
 
 async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
-  const fs   = require('fs')
-  const path = require('path')
+  const db     = await this.getDb()
+  const record = await this.findStorageRecord(fromFolder, fileName)
+  const hadLocal = moveLocalFile(fromFolder, toFolder, fileName)
 
-  const fromStored = fromFolder || 'uploads'
-  const toStored   = toFolder || 'uploads'
-  const oldPath    = path.join(this.localDir(fromFolder), fileName)
-  const newDir     = this.localDir(toFolder)
-  const newPath    = path.join(newDir, fileName)
-  const hadLocal   = fs.existsSync(oldPath)
+  if (!hadLocal && !record) throw new Error('File not found')
+  if (!record) return
 
-  if (hadLocal) {
-    fs.mkdirSync(newDir, { recursive: true })
-    fs.renameSync(oldPath, newPath)
-  }
+  const set: any = { folder: storedFolder(toFolder), file_path: storedPath(toFolder, fileName) }
+  if (hadLocal) set.url = localUrl(toFolder, fileName)
 
-  const set: any = { folder: toStored, file_path: `${toStored}/${fileName}` }
-  if (hadLocal) set.url = this.localUrl(toFolder, fileName)
-
-  const db = await this.getDb()
-  await db.collection('nxf_storage').updateOne(
-    { file_path: `${fromStored}/${fileName}` },
-    { $set: set }
-  )
+  await db.collection('nxf_storage').updateOne({ _id: record._id }, { $set: set })
 }
 
 async importFromUrl(folder: string, url: string): Promise<StorageFile> {
-  const response = await fetch(url)
-  if (!response.ok) throw new Error(`Failed to fetch URL: ${url}`)
-
-  const buffer   = Buffer.from(await response.arrayBuffer())
-  const mimeType = response.headers.get('content-type') ?? 'application/octet-stream'
-  const ext      = mimeType.split('/')[1]?.split(';')[0] ?? 'bin'
-  const fileName = `imported_${Date.now()}.${ext}`
-
-  const signedUrl = await this.uploadFile(folder, fileName, buffer, mimeType)
-
-  return {
-    id:         `${folder}/${fileName}`,
-    name:       fileName,
-    url:        signedUrl,
-    size:       `${Math.round(buffer.length / 1024)} KB`,
-    mimeType,
-    folder,
-    folderPath: `${folder}/${fileName}`,
-    uploaded:   new Date().toLocaleDateString('en-GB', {
-      day:   '2-digit',
-      month: 'short',
-      year:  'numeric',
-    }),
-  }
+  const remote    = await fetchRemoteFile(url)
+  const signedUrl = await this.uploadFile(folder, remote.fileName, remote.buffer, remote.mimeType)
+  return toImportedStorageFile(folder, remote, signedUrl)
 }
 
 async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
   try {
     console.log('[MongoAdapter] deleteStorageRecordByFilePath started')
 
-    const db  = await this.getDb()
-    await db.collection('nxf_storage').deleteOne({ file_path: filePath })
+    const db = await this.getDb()
+    await db.collection('nxf_storage').deleteOne({ file_path: { $in: recordPathVariants(filePath) } })
 
     console.log('[MongoAdapter] deleteStorageRecordByFilePath completed')
   } catch {
@@ -2246,6 +2236,7 @@ async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
     throw new Error('Failed to delete storage record')
   }
 }
+
 
 // ─── installDemoContent — folder order fix ────────────────────────────────────
 

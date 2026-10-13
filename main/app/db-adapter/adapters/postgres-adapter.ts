@@ -3,6 +3,24 @@ import bcrypt               from 'bcrypt'
 import crypto               from 'crypto'
 import { DBAdapter, DBConfig, ColumnDef, StorageFile } from '../types'
 import { CreateUserDataModels } from '../utils/create-data-models'
+import {
+  storedFolder,
+  storedPath,
+  pathVariants,
+  folderVariants,
+  recordPathVariants,
+  formatSize,
+  formatDate,
+  localUrl,
+  ensureLocalFolder,
+  writeLocalFile,
+  deleteLocalFile,
+  deleteLocalFolder,
+  renameLocalFile,
+  moveLocalFile,
+  fetchRemoteFile,
+  toImportedStorageFile,
+} from '../utils/storage-helpers'
 
 export class PostgresAdapter implements DBAdapter {
 
@@ -52,7 +70,7 @@ export class PostgresAdapter implements DBAdapter {
   }
 
   async comparePassword(password: string, hash: string): Promise<boolean> {
-    return bcrypt.compare(password.trim(), hash.trim())
+    return bcrypt.compare(password, hash)
   }
 
   // ─── Basic CRUD ────────────────────────────────────────────────────────────
@@ -387,11 +405,14 @@ export class PostgresAdapter implements DBAdapter {
     const user = await this.findUserByToken(token)
     if (!user) throw new Error('Invalid or expired token')
 
+    // Takes the plain-text password; hashing happens here, in the adapter.
+    const hashed = await this.hashPassword(newPassword)
+
     await this.pool.query(
       `UPDATE nxf_users
        SET password_hash=$1, token=NULL, token_ttl=NULL, updated_at=NOW()
        WHERE user_id=$2`,
-      [newPassword, user.user_id]
+      [hashed, user.user_id]
     )
 
     return { success: true }
@@ -424,7 +445,7 @@ export class PostgresAdapter implements DBAdapter {
     if (!user)               return { success: false, error: 'User not found.' }
     if (!user.password_hash) return { success: false, error: 'Invalid password' }
 
-    const valid = await bcrypt.compare(password.trim(), user.password_hash.trim())
+    const valid = await bcrypt.compare(password, user.password_hash)
     if (!valid) return { success: false, error: 'Invalid email or password' }
 
     if (emailVerifiedRequired && !user.email_verified)
@@ -1421,61 +1442,25 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
   async listFiles(folder: string): Promise<StorageFile[]> {
     try {
       const result = await this.pool.query(
-        'SELECT * FROM "nxf_storage" WHERE folder = $1',
-        [folder]
+        `SELECT * FROM "nxf_storage"
+         WHERE folder = ANY($1::text[]) AND COALESCE(file_name, '') <> ''`,
+        [folderVariants(folder)]
       )
 
-      return result.rows.map((row: any) => {
-        const bytes = Number(row.size ?? 0)
-        const sizeLabel = bytes > 1024 * 1024
-          ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-          : `${Math.round(bytes / 1024)} KB`
-
-        return {
-          id:         row.storage_id?.toString(),
-          name:       row.file_name,
-          url:        row.url,
-          size:       sizeLabel,
-          mimeType:   row.mime_type ?? 'application/octet-stream',
-          folder:     row.folder,
-          folderPath: row.file_path,
-          uploaded:   row.created_at
-            ? new Date(row.created_at).toLocaleDateString('en-GB', {
-                day:   '2-digit',
-                month: 'short',
-                year:  'numeric',
-              })
-            : '—',
-        }
-      })
+      return result.rows.map((row: any) => ({
+        id:         row.storage_id?.toString(),
+        name:       row.file_name,
+        url:        row.url,
+        size:       formatSize(row.size),
+        mimeType:   row.mime_type ?? 'application/octet-stream',
+        folder:     row.folder,
+        folderPath: row.file_path,
+        uploaded:   formatDate(row.created_at),
+      }))
     } catch {
       console.error('[PostgresAdapter] listFiles failed')
       return []
     }
-  }
-
-  // Local files live in <project>/public/uploads so Next.js serves them at /uploads/...
-  // The folder "uploads" means the root of that directory.
-  private localUploadsRoot(): string {
-    const path = require('path')
-    return path.resolve(process.cwd(), 'public', 'uploads')
-  }
-
-  private localDir(folder: string): string {
-    const path = require('path')
-    const root = this.localUploadsRoot()
-    if (!folder || folder === 'uploads') return root
-    const dir = path.resolve(root, folder)
-    if (dir !== root && !dir.startsWith(root + path.sep)) {
-      throw new Error('Invalid folder')
-    }
-    return dir
-  }
-
-  private localUrl(folder: string, fileName: string): string {
-    return !folder || folder === 'uploads'
-      ? `/uploads/${fileName}`
-      : `/uploads/${folder}/${fileName}`
   }
 
   async uploadFile(
@@ -1486,50 +1471,40 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
   ): Promise<string> {
     console.log('[PostgresAdapter] uploadFile started')
 
-    const fs   = require('fs')
-    const path = require('path')
-
-    const dir = this.localDir(folder)
-    fs.mkdirSync(dir, { recursive: true })
-    fs.writeFileSync(path.join(dir, fileName), buffer)
-
-    const url = this.localUrl(folder, fileName)
+    writeLocalFile(folder, fileName, buffer)
+    const url = localUrl(folder, fileName)
 
     await this.pool.query(
       `INSERT INTO "nxf_storage"
        (storage_id, file_name, file_path, folder, url, mime_type, size, created_at)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,
-      [crypto.randomUUID(), fileName, `${folder}/${fileName}`, folder, url, mimeType, buffer.length, new Date().toISOString()]
+      [
+        crypto.randomUUID(),
+        fileName,
+        storedPath(folder, fileName),
+        storedFolder(folder),
+        url,
+        mimeType,
+        buffer.length,
+        new Date().toISOString(),
+      ]
     )
 
     return url
   }
 
   async deleteFile(folder: string, fileName: string): Promise<void> {
-    const fs   = require('fs')
-    const path = require('path')
-
-    // Files imported from an external URL have no local copy — skipped by existsSync.
-    const filePath = path.join(this.localDir(folder), fileName)
-    if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
+    // Files imported from an external URL have no local copy: skipped quietly.
+    deleteLocalFile(folder, fileName)
 
     await this.pool.query(
-      'DELETE FROM "nxf_storage" WHERE file_path = $1',
-      [`${folder}/${fileName}`]
+      'DELETE FROM "nxf_storage" WHERE file_path = ANY($1::text[])',
+      [pathVariants(folder, fileName)]
     )
   }
 
   async deleteFolder(folder: string): Promise<void> {
-    const fs = require('fs')
-
-    if (!folder || folder === 'uploads') {
-      throw new Error('The root uploads folder cannot be deleted')
-    }
-
-    const folderPath = this.localDir(folder)
-    if (fs.existsSync(folderPath)) {
-      fs.rmSync(folderPath, { recursive: true, force: true })
-    }
+    deleteLocalFolder(folder)
 
     await this.pool.query(
       'DELETE FROM "nxf_storage" WHERE folder = $1',
@@ -1538,109 +1513,94 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
   }
 
   async createFolder(folder: string): Promise<void> {
-    const fs = require('fs')
-    fs.mkdirSync(this.localDir(folder), { recursive: true })
+    ensureLocalFolder(folder)
+  }
+
+  private async findStorageRecord(folder: string, fileName: string): Promise<any | null> {
+    // Match on the saved path in any of its forms, or on name + folder as a fallback.
+    const result = await this.pool.query(
+      `SELECT storage_id FROM "nxf_storage"
+       WHERE file_path = ANY($1::text[])
+          OR (file_name = $2 AND folder = ANY($3::text[]))
+       LIMIT 1`,
+      [pathVariants(folder, fileName), fileName, folderVariants(folder)]
+    )
+
+    if (!result.rows[0]) {
+      console.warn(`[PostgresAdapter] findStorageRecord — no record for folder="${folder}" file="${fileName}"`)
+    }
+
+    return result.rows[0] ?? null
   }
 
   async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
-    const fs   = require('fs')
-    const path = require('path')
+    const record   = await this.findStorageRecord(folder, oldName)
+    const hadLocal = renameLocalFile(folder, oldName, newName)
 
-    const dir     = this.localDir(folder)
-    const oldPath = path.join(dir, oldName)
-    const newPath = path.join(dir, newName)
+    if (!hadLocal && !record) throw new Error('File not found')
+    if (!record) return
 
-    const hadLocalFile = fs.existsSync(oldPath)
-    if (hadLocalFile) fs.renameSync(oldPath, newPath)
-
-    if (hadLocalFile) {
+    if (hadLocal) {
       await this.pool.query(
         `UPDATE "nxf_storage"
          SET file_name = $1, file_path = $2, url = $3
-         WHERE file_path = $4`,
-        [newName, `${folder}/${newName}`, this.localUrl(folder, newName), `${folder}/${oldName}`]
+         WHERE storage_id = $4`,
+        [newName, storedPath(folder, newName), localUrl(folder, newName), record.storage_id]
       )
     } else {
       // External-URL row (no local copy): keep its url, update name and path only.
       await this.pool.query(
         `UPDATE "nxf_storage"
          SET file_name = $1, file_path = $2
-         WHERE file_path = $3`,
-        [newName, `${folder}/${newName}`, `${folder}/${oldName}`]
+         WHERE storage_id = $3`,
+        [newName, storedPath(folder, newName), record.storage_id]
       )
     }
   }
 
   async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
-    const fs   = require('fs')
-    const path = require('path')
+    const record   = await this.findStorageRecord(fromFolder, fileName)
+    const hadLocal = moveLocalFile(fromFolder, toFolder, fileName)
 
-    const oldPath = path.join(this.localDir(fromFolder), fileName)
-    const newDir  = this.localDir(toFolder)
-    const newPath = path.join(newDir, fileName)
+    if (!hadLocal && !record) throw new Error('File not found')
+    if (!record) return
 
-    const hadLocalFile = fs.existsSync(oldPath)
-    if (hadLocalFile) {
-      fs.mkdirSync(newDir, { recursive: true })
-      fs.renameSync(oldPath, newPath)
-    }
-
-    if (hadLocalFile) {
+    if (hadLocal) {
       await this.pool.query(
         `UPDATE "nxf_storage"
          SET folder = $1, file_path = $2, url = $3
-         WHERE file_path = $4`,
-        [toFolder, `${toFolder}/${fileName}`, this.localUrl(toFolder, fileName), `${fromFolder}/${fileName}`]
+         WHERE storage_id = $4`,
+        [storedFolder(toFolder), storedPath(toFolder, fileName), localUrl(toFolder, fileName), record.storage_id]
       )
     } else {
       // External-URL row (no local copy): keep its url, update folder and path only.
       await this.pool.query(
         `UPDATE "nxf_storage"
          SET folder = $1, file_path = $2
-         WHERE file_path = $3`,
-        [toFolder, `${toFolder}/${fileName}`, `${fromFolder}/${fileName}`]
+         WHERE storage_id = $3`,
+        [storedFolder(toFolder), storedPath(toFolder, fileName), record.storage_id]
       )
     }
   }
 
   async importFromUrl(folder: string, url: string): Promise<StorageFile> {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`Failed to fetch URL: ${url}`)
-
-    const buffer   = Buffer.from(await response.arrayBuffer())
-    const mimeType = response.headers.get('content-type') ?? 'application/octet-stream'
-    const ext      = mimeType.split('/')[1]?.split(';')[0] ?? 'bin'
-    const fileName = `imported_${Date.now()}.${ext}`
-
-    const signedUrl = await this.uploadFile(folder, fileName, buffer, mimeType)
-
-    return {
-      id:         `${folder}/${fileName}`,
-      name:       fileName,
-      url:        signedUrl,
-      size:       `${Math.round(buffer.length / 1024)} KB`,
-      mimeType,
-      folder,
-      folderPath: `${folder}/${fileName}`,
-      uploaded:   new Date().toLocaleDateString('en-GB', {
-        day:   '2-digit',
-        month: 'short',
-        year:  'numeric',
-      }),
-    }
+    const remote    = await fetchRemoteFile(url)
+    const signedUrl = await this.uploadFile(folder, remote.fileName, remote.buffer, remote.mimeType)
+    return toImportedStorageFile(folder, remote, signedUrl)
   }
 
   async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
     try {
       await this.pool.query(
-        'DELETE FROM "nxf_storage" WHERE file_path = $1',
-        [filePath]
+        'DELETE FROM "nxf_storage" WHERE file_path = ANY($1::text[])',
+        [recordPathVariants(filePath)]
       )
     } catch {
       console.error('[PostgresAdapter] deleteStorageRecordByFilePath failed')
       throw new Error('Failed to delete storage record')
     }
   }
+
 }
 
 // ─── Factory ───────────────────────────────────────────────────────────────

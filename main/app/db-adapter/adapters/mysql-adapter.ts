@@ -36,6 +36,26 @@ import bcrypt                   from 'bcrypt'
 import crypto                   from 'crypto'
 import { DBConfig, DBAdapter, ColumnDef, StorageFile } from '../types'
 import { CreateUserDataModels } from '../utils/create-data-models'
+import {
+  storedFolder,
+  storedPath,
+  pathVariants,
+  folderVariants,
+  recordPathVariants,
+  sqlPlaceholders,
+  formatSize,
+  formatDate,
+  sqlDate,
+  localUrl,
+  ensureLocalFolder,
+  writeLocalFile,
+  deleteLocalFile,
+  deleteLocalFolder,
+  renameLocalFile,
+  moveLocalFile,
+  fetchRemoteFile,
+  toImportedStorageFile,
+} from '../utils/storage-helpers'
 
 export class MySQLAdapter implements DBAdapter {
   private pool: mysql.Pool
@@ -585,6 +605,9 @@ export class MySQLAdapter implements DBAdapter {
     const user = rows?.[0]
     if (!user) throw new Error('Invalid or expired token')
 
+    // Takes the plain-text password; hashing happens here, in the adapter.
+    const hashed = await this.hashPassword(newPassword)
+
     await pool.query(
       `UPDATE nxf_users
        SET password_hash = ?,
@@ -592,7 +615,7 @@ export class MySQLAdapter implements DBAdapter {
            token_ttl     = NULL,
            updated_at    = ?
        WHERE user_id = ?`,
-      [newPassword, now, user.user_id]
+      [hashed, now, user.user_id]
     )
 
     return { success: true }
@@ -1578,54 +1601,26 @@ export class MySQLAdapter implements DBAdapter {
     }
   }
 
-  private localUploadsRoot(): string {
-    const path = require('path')
-    return path.resolve(process.cwd(), 'public', 'uploads')
-  }
-
-  private localDir(folder: string): string {
-    const path = require('path')
-    const root = this.localUploadsRoot()
-    if (!folder || folder === 'uploads') return root
-    const dir = path.resolve(root, folder)
-    if (dir !== root && !dir.startsWith(root + path.sep)) throw new Error('Invalid folder')
-    return dir
-  }
-
-  private localUrl(folder: string, fileName: string): string {
-    return !folder || folder === 'uploads' ? `/uploads/${fileName}` : `/uploads/${folder}/${fileName}`
-  }
-
   async listFiles(folder: string): Promise<StorageFile[]> {
     try {
-      const [rows] = await this.pool.execute(
-        "SELECT * FROM `nxf_storage` WHERE folder = ? AND IFNULL(file_name, '') <> ''",
-        [folder]
+      const folders = folderVariants(folder)
+      const [rows]  = await this.pool.execute(
+        `SELECT * FROM \`nxf_storage\`
+         WHERE folder IN (${sqlPlaceholders(folders.length)})
+         AND IFNULL(file_name, '') <> ''`,
+        folders
       )
 
-      return (rows as any[]).map((row) => {
-        const bytes = Number(row.size ?? 0)
-        const sizeLabel = bytes > 1024 * 1024
-          ? `${(bytes / (1024 * 1024)).toFixed(1)} MB`
-          : `${Math.round(bytes / 1024)} KB`
-
-        return {
-          id:         row.storage_id?.toString(),
-          name:       row.file_name,
-          url:        row.url,
-          size:       sizeLabel,
-          mimeType:   row.mime_type ?? 'application/octet-stream',
-          folder:     row.folder,
-          folderPath: row.file_path,
-          uploaded:   row.created_at
-            ? new Date(row.created_at).toLocaleDateString('en-GB', {
-                day:   '2-digit',
-                month: 'short',
-                year:  'numeric',
-              })
-            : '—',
-        }
-      })
+      return (rows as any[]).map((row) => ({
+        id:         row.storage_id?.toString(),
+        name:       row.file_name,
+        url:        row.url,
+        size:       formatSize(row.size),
+        mimeType:   row.mime_type ?? 'application/octet-stream',
+        folder:     row.folder,
+        folderPath: row.file_path,
+        uploaded:   formatDate(row.created_at),
+      }))
     } catch {
       console.error('[MySQLAdapter] listFiles failed')
       return []
@@ -1640,15 +1635,8 @@ export class MySQLAdapter implements DBAdapter {
   ): Promise<string> {
     console.log('[MySQLAdapter] uploadFile started')
 
-    const fs   = require('fs')
-    const path = require('path')
-
-    const dir = this.localDir(folder)
-    fs.mkdirSync(dir, { recursive: true })
-    fs.writeFileSync(path.join(dir, fileName), buffer)
-
-    const storedFolder = folder || 'uploads'
-    const url          = this.localUrl(folder, fileName)
+    writeLocalFile(folder, fileName, buffer)
+    const url = localUrl(folder, fileName)
 
     await this.pool.execute(
       `INSERT INTO \`nxf_storage\`
@@ -1657,12 +1645,12 @@ export class MySQLAdapter implements DBAdapter {
       [
         crypto.randomUUID(),
         fileName,
-        `${storedFolder}/${fileName}`,
-        storedFolder,
+        storedPath(folder, fileName),
+        storedFolder(folder),
         url,
         mimeType,
         buffer.length,
-        new Date().toISOString().slice(0, 19).replace('T', ' '),
+        sqlDate(),
       ]
     )
 
@@ -1670,27 +1658,17 @@ export class MySQLAdapter implements DBAdapter {
   }
 
   async deleteFile(folder: string, fileName: string): Promise<void> {
-    const fs   = require('fs')
-    const path = require('path')
+    deleteLocalFile(folder, fileName)
 
-    const filePath = path.join(this.localDir(folder), fileName)
-    if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
-
+    const variants = pathVariants(folder, fileName)
     await this.pool.execute(
-      'DELETE FROM `nxf_storage` WHERE file_path = ?',
-      [`${folder || 'uploads'}/${fileName}`]
+      `DELETE FROM \`nxf_storage\` WHERE file_path IN (${sqlPlaceholders(variants.length)})`,
+      variants
     )
   }
 
   async deleteFolder(folder: string): Promise<void> {
-    const fs = require('fs')
-
-    if (!folder || folder === 'uploads') throw new Error('Cannot delete the root folder')
-
-    const folderPath = this.localDir(folder)
-    if (fs.existsSync(folderPath)) {
-      fs.rmSync(folderPath, { recursive: true, force: true })
-    }
+    deleteLocalFolder(folder)
 
     await this.pool.execute(
       'DELETE FROM `nxf_storage` WHERE folder = ?',
@@ -1699,108 +1677,98 @@ export class MySQLAdapter implements DBAdapter {
   }
 
   async createFolder(folder: string): Promise<void> {
-    const fs = require('fs')
-    fs.mkdirSync(this.localDir(folder), { recursive: true })
+    ensureLocalFolder(folder)
+  }
+
+  private async findStorageRecord(folder: string, fileName: string): Promise<any | null> {
+    // Match on the saved path in any of its forms, or on name + folder as a fallback.
+    const variants = pathVariants(folder, fileName)
+    const folders  = folderVariants(folder)
+    const [rows]   = await this.pool.execute(
+      `SELECT storage_id FROM \`nxf_storage\`
+       WHERE file_path IN (${sqlPlaceholders(variants.length)})
+          OR (file_name = ? AND folder IN (${sqlPlaceholders(folders.length)}))
+       LIMIT 1`,
+      [...variants, fileName, ...folders]
+    )
+
+    const record = (rows as any[])[0] ?? null
+    if (!record) {
+      console.warn(`[MySQLAdapter] findStorageRecord — no record for folder="${folder}" file="${fileName}"`)
+    }
+
+    return record
   }
 
   async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
-    const fs   = require('fs')
-    const path = require('path')
+    const record   = await this.findStorageRecord(folder, oldName)
+    const hadLocal = renameLocalFile(folder, oldName, newName)
 
-    const storedFolder = folder || 'uploads'
-    const oldPath      = path.join(this.localDir(folder), oldName)
-    const newPath      = path.join(this.localDir(folder), newName)
-    const hadLocal     = fs.existsSync(oldPath)
-
-    if (hadLocal) fs.renameSync(oldPath, newPath)
+    if (!hadLocal && !record) throw new Error('File not found')
+    if (!record) return
 
     if (hadLocal) {
       await this.pool.execute(
         `UPDATE \`nxf_storage\`
          SET file_name = ?, file_path = ?, url = ?
-         WHERE file_path = ?`,
-        [newName, `${storedFolder}/${newName}`, this.localUrl(folder, newName), `${storedFolder}/${oldName}`]
+         WHERE storage_id = ?`,
+        [newName, storedPath(folder, newName), localUrl(folder, newName), record.storage_id]
       )
     } else {
-      // External-URL rows: keep the url, only change name/path
+      // External-URL row (no local copy): keep its url, update name and path only.
       await this.pool.execute(
         `UPDATE \`nxf_storage\`
          SET file_name = ?, file_path = ?
-         WHERE file_path = ?`,
-        [newName, `${storedFolder}/${newName}`, `${storedFolder}/${oldName}`]
+         WHERE storage_id = ?`,
+        [newName, storedPath(folder, newName), record.storage_id]
       )
     }
   }
 
   async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
-    const fs   = require('fs')
-    const path = require('path')
+    const record   = await this.findStorageRecord(fromFolder, fileName)
+    const hadLocal = moveLocalFile(fromFolder, toFolder, fileName)
 
-    const fromStored = fromFolder || 'uploads'
-    const toStored   = toFolder || 'uploads'
-    const oldPath    = path.join(this.localDir(fromFolder), fileName)
-    const newDir     = this.localDir(toFolder)
-    const newPath    = path.join(newDir, fileName)
-    const hadLocal   = fs.existsSync(oldPath)
+    if (!hadLocal && !record) throw new Error('File not found')
+    if (!record) return
 
     if (hadLocal) {
-      fs.mkdirSync(newDir, { recursive: true })
-      fs.renameSync(oldPath, newPath)
       await this.pool.execute(
         `UPDATE \`nxf_storage\`
          SET folder = ?, file_path = ?, url = ?
-         WHERE file_path = ?`,
-        [toStored, `${toStored}/${fileName}`, this.localUrl(toFolder, fileName), `${fromStored}/${fileName}`]
+         WHERE storage_id = ?`,
+        [storedFolder(toFolder), storedPath(toFolder, fileName), localUrl(toFolder, fileName), record.storage_id]
       )
     } else {
-      // External-URL rows: keep the url, only change folder/path
+      // External-URL row (no local copy): keep its url, update folder and path only.
       await this.pool.execute(
         `UPDATE \`nxf_storage\`
          SET folder = ?, file_path = ?
-         WHERE file_path = ?`,
-        [toStored, `${toStored}/${fileName}`, `${fromStored}/${fileName}`]
+         WHERE storage_id = ?`,
+        [storedFolder(toFolder), storedPath(toFolder, fileName), record.storage_id]
       )
     }
   }
 
   async importFromUrl(folder: string, url: string): Promise<StorageFile> {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`Failed to fetch URL: ${url}`)
-
-    const buffer   = Buffer.from(await response.arrayBuffer())
-    const mimeType = response.headers.get('content-type') ?? 'application/octet-stream'
-    const ext      = mimeType.split('/')[1]?.split(';')[0] ?? 'bin'
-    const fileName = `imported_${Date.now()}.${ext}`
-
-    const signedUrl = await this.uploadFile(folder, fileName, buffer, mimeType)
-
-    return {
-      id:         `${folder}/${fileName}`,
-      name:       fileName,
-      url:        signedUrl,
-      size:       `${Math.round(buffer.length / 1024)} KB`,
-      mimeType,
-      folder,
-      folderPath: `${folder}/${fileName}`,
-      uploaded:   new Date().toLocaleDateString('en-GB', {
-        day:   '2-digit',
-        month: 'short',
-        year:  'numeric',
-      }),
-    }
+    const remote    = await fetchRemoteFile(url)
+    const signedUrl = await this.uploadFile(folder, remote.fileName, remote.buffer, remote.mimeType)
+    return toImportedStorageFile(folder, remote, signedUrl)
   }
 
   async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
     try {
+      const variants = recordPathVariants(filePath)
       await this.pool.execute(
-        'DELETE FROM `nxf_storage` WHERE file_path = ?',
-        [filePath]
+        `DELETE FROM \`nxf_storage\` WHERE file_path IN (${sqlPlaceholders(variants.length)})`,
+        variants
       )
     } catch {
       console.error('[MySQLAdapter] deleteStorageRecordByFilePath failed')
       throw new Error('Failed to delete storage record')
     }
   }
+
 }
 
 // ─── Factory ───────────────────────────────────────────────────────────────

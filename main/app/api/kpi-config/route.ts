@@ -20,18 +20,19 @@ async function getProject(
   }
 }
 
-// ── GET /api/kpi-config?page=xxx&user_id=xxx ───────────────
+// ── GET /api/kpi-config?page=xxx ───────────────────────────
 export async function GET(req: NextRequest) {
   try {
     const adapter  = getConfiguredAdapter();
     const dbConfig = adapter.config;
     const { searchParams } = new URL(req.url);
     const page    = searchParams.get('page');
-    const user_id = searchParams.get('user_id');
 
-    if (!page || !user_id) {
+    // user_id is accepted but not required: it is not used to find the config,
+    // and not every adapter's session carries it under the same name.
+    if (!page) {
       return NextResponse.json(
-        { error: 'page and user_id are required' },
+        { error: 'page is required' },
         { status: 400 }
       );
     }
@@ -68,7 +69,7 @@ export async function POST(req: NextRequest) {
     const dbConfig = adapter.config;
 
     const body = await req.json();
-    const { user_id, page } = body;
+    const { page } = body;
 
     // Always read from 'blocks'. Dashboard previously sent 'kpi_blocks'
     // as well — support both so old saved docs still work on load,
@@ -76,16 +77,16 @@ export async function POST(req: NextRequest) {
     const kpiBlocks: unknown[] = body.blocks ?? body.kpi_blocks ?? [];
     const widgets:   unknown[] = body.widgets ?? [];
 
-    if (!page || !user_id) {
+    if (!page) {
       return NextResponse.json(
-        { error: 'page and user_id are required' },
+        { error: 'page is required' },
         { status: 400 }
       );
     }
 
     // Validate KPI bar limits
-    const totalKpis = (kpiBlocks as { kpis: unknown[] }[]).reduce(
-      (sum, b) => sum + b.kpis.length, 0
+    const totalKpis = (kpiBlocks as { kpis?: unknown[] }[]).reduce(
+      (sum, b) => sum + (b.kpis?.length ?? 0), 0
     );
     if (totalKpis > 5) {
       return NextResponse.json(
@@ -93,8 +94,8 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-    for (const block of kpiBlocks as { kpis: unknown[]; block_id: string }[]) {
-      if (block.kpis.length > 4) {
+    for (const block of kpiBlocks as { kpis?: unknown[]; block_id: string }[]) {
+      if ((block.kpis?.length ?? 0) > 4) {
         return NextResponse.json(
           { error: `Block ${block.block_id} exceeds 4 KPIs maximum` },
           { status: 400 }
@@ -118,14 +119,26 @@ export async function POST(req: NextRequest) {
       null;
 
     if (existing) {
-      // Use Firestore doc ID (existing.id) not the stored config_id field
+      // Firestore rows carry a document ID (existing.id) and are updated by it.
+      // Postgres, MySQL and Mongo rows have no such ID, so they are updated by
+      // their business key (config_id).
       const docId = existing.id ?? existing.config_id;
-      await adapter.update!(
-        dbConfig,
-        'nxf_system_kpi_configs',
-        docId,
-        { blocks: kpiBlocks, widgets, updated_at: now }
-      );
+      if (existing.id) {
+        await adapter.update!(
+          dbConfig,
+          'nxf_system_kpi_configs',
+          docId,
+          { blocks: kpiBlocks, widgets, updated_at: now }
+        );
+      } else {
+        await adapter.update!(
+          dbConfig,
+          'nxf_system_kpi_configs',
+          docId,
+          { blocks: kpiBlocks, widgets, updated_at: now },
+          'config_id'
+        );
+      }
       console.info(`[POST /api/kpi-config] Updated "${docId}" for page "${page}"`);
       return NextResponse.json({ config_id: existing.config_id, updated: true });
     }

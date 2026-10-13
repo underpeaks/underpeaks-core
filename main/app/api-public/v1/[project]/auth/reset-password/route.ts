@@ -1,47 +1,83 @@
-// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api-public\v1\[project]\auth\reset-password\route.ts
+// app/api/auth/reset-password/route.ts
 
-import { NextRequest, NextResponse } from 'next/server'
-import bcrypt from 'bcrypt'
+/**
+ * POST /api/auth/reset-password
+ *
+ * Resets a user's password using a token issued by /api/forgot-password.
+ *
+ * Firebase and Supabase handle password reset entirely through their own
+ * flows (the link in the email goes directly to their reset page).
+ * This endpoint is only needed for MongoDB / MySQL / PostgreSQL where
+ * tokens are managed manually.
+ *
+ * Request body: { token: string, password: string }
+ *
+ * Responses:
+ *   200 { success: true }
+ *   400 { error: string } — Missing fields or invalid/expired token.
+ *   500 { error: string } — Server error.
+ */
+
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
-import { validateCoreApiKey } from '@/app/lib/coreApiAuth'
-import { coreCors } from '@/app/lib/customerAuthCore'
-
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: coreCors() })
-}
+import { NextRequest, NextResponse } from 'next/server'
 
 export async function POST(req: NextRequest) {
-  const apiKey = req.headers.get('x-api-key') ?? ''
-  const auth = await validateCoreApiKey(apiKey)
-  if (!auth.ok) {
-    return NextResponse.json({ error: auth.message }, { status: auth.status, headers: coreCors() })
+  try {
+    // ── Validate body ───────────────────────────────────────────────────────
+
+    const { token, password } = await req.json()
+
+    if (!token || !password) {
+      return NextResponse.json(
+        { error: 'Token and password are required' },
+        { status: 400 }
+      )
+    }
+
+    // ── Resolve adapter ─────────────────────────────────────────────────────
+
+    const adapter  = getConfiguredAdapter()
+    const dbConfig = adapter.config
+    const dbType   = dbConfig.type
+
+    // Firebase and Supabase reset via their own SDK flows — not this endpoint
+    if (dbType === 'firebase' || dbType === 'supabase') {
+      return NextResponse.json(
+        { error: `Password reset for ${dbType} is handled via the provider's own reset flow` },
+        { status: 400 }
+      )
+    }
+
+    // ── Capability check ────────────────────────────────────────────────────
+
+    if (!adapter.findUserByToken || !adapter.updatePasswordByToken || !adapter.hashPassword) {
+      throw new Error(`${dbType} adapter is missing required methods: findUserByToken, updatePasswordByToken, hashPassword`)
+    }
+
+    // ── Validate token ──────────────────────────────────────────────────────
+
+    const user = await adapter.findUserByToken(token)
+
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Invalid or expired token' },
+        { status: 400 }
+      )
+    }
+
+    // ── Update password ─────────────────────────────────────────────────────
+    // The adapter hashes the plain password itself — never in the route.
+
+    await adapter.updatePasswordByToken(token, password)
+
+    console.log('[reset-password] Password reset completed successfully')
+    return NextResponse.json({ success: true })
+
+  } catch (err: any) {
+    console.error('[reset-password] Error:', err.message)
+    return NextResponse.json(
+      { error: err.message || 'Failed to reset password' },
+      { status: 500 }
+    )
   }
-
-  let body: any
-  try { body = await req.json() } catch {
-    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: coreCors() })
-  }
-
-  const token       = body.token ?? ''
-  const newPassword = body.password ?? ''
-  if (!token || !newPassword) {
-    return NextResponse.json({ error: 'Token and password are required' }, { status: 400, headers: coreCors() })
-  }
-
-  const adapter  = getConfiguredAdapter()
-  const dbConfig = adapter.config
-
-  // findUserByToken checks token_ttl > NOW() (from the adapter you pasted).
-  const user = await (adapter as any).findUserByToken(token)
-
-  if (!user || user.user_type !== 'customer') {
-    return NextResponse.json({ error: 'Invalid or expired token' }, { status: 400, headers: coreCors() })
-  }
-
-  const password_hash = await bcrypt.hash(newPassword, 10)
-  await (adapter as any).update(dbConfig, 'nxf_users', user.user_id, {
-    password_hash, token: null, token_ttl: null, updated_at: new Date(),
-  })
-
-  return NextResponse.json({ success: true }, { headers: coreCors() })
 }

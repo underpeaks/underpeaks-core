@@ -35,6 +35,17 @@ import bcrypt                                  from 'bcryptjs'
 import { CreateUserDataModels }                from '../utils/create-data-models'
 import admin                                   from 'firebase-admin'
 import { parseFirebaseServiceAccount }         from '@/app/lib/firebaseConfig'
+import {
+  normalizeFolder,
+  folderVariants,
+  storedFolder,
+  storedPath,
+  pathVariants,
+  recordPathVariants,
+  fetchRemoteFile,
+  toImportedStorageFile,
+  SIGNED_URL_SECONDS,
+} from '../utils/storage-helpers'
 
 /**
  * DEFAULT_BUCKETS
@@ -1436,7 +1447,7 @@ async installDemoContent(
        * the root therefore has to look at both layouts, otherwise a file moved
        * to the root disappears from the list.
        */
-      const isRoot   = this.normalizeFolder(folder) === ''
+      const isRoot   = normalizeFolder(folder) === ''
       const prefixes = isRoot ? ['/', 'uploads/'] : [`${folder}/`]
       const seen     = new Set<string>()
       const files: any[] = []
@@ -1543,21 +1554,14 @@ async installDemoContent(
 
   // ─── Storage path helpers ───────────────────────────────────────────────────
   //
-  // The media library calls the bucket root "uploads", while the upload route
-  // stores root files with an empty folder. Files uploaded to the root end up
-  // as '/<name>' (uploadFile writes '<folder>/<name>'), and their nxf_storage
-  // record has folder 'uploads' and file_path '<name>'. These helpers make
-  // rename / move / delete understand that, instead of looking for
-  // 'uploads/<name>' which does not exist.
-
-  private normalizeFolder(folder: string): string {
-    const f = (folder ?? '').replace(/^\/+|\/+$/g, '')
-    return f === 'uploads' ? '' : f
-  }
+  // The media library calls the bucket root "uploads". Objects are written as
+  // '<folder>/<name>' (root files: '/<name>'); their nxf_storage record has
+  // folder 'uploads' and file_path '<name>'. The shared rules in
+  // storage-helpers.ts decide the folder and path forms.
 
   /** Same layout uploadFile() writes: '<folder>/<name>' (root files: '/<name>'). */
   private objectName(folder: string, fileName: string): string {
-    return `${this.normalizeFolder(folder)}/${fileName}`
+    return `${normalizeFolder(folder)}/${fileName}`
   }
 
   /** Finds the real object in the bucket, trying the layouts a root file can have. */
@@ -1565,7 +1569,7 @@ async installDemoContent(
     const bucket = this.storage.bucket(this.getBucketName())
     const names  = [this.objectName(folder, fileName)]
 
-    if (this.normalizeFolder(folder) === '') {
+    if (normalizeFolder(folder) === '') {
       names.push(fileName, `uploads/${fileName}`)
     }
 
@@ -1579,38 +1583,40 @@ async installDemoContent(
 
   /** Finds the nxf_storage record for a file, whichever way its path was saved. */
   private async findStorageRecord(folder: string, fileName: string) {
-    const f     = this.normalizeFolder(folder)
-    const paths = f ? [`${f}/${fileName}`] : [fileName, `uploads/${fileName}`]
-
+    // Match on the saved path in any of its forms first.
     const snapshot = await this.firestore
       .collection('nxf_storage')
-      .where('file_path', 'in', paths)
+      .where('file_path', 'in', pathVariants(folder, fileName))
       .limit(1)
       .get()
 
-    return snapshot.empty ? null : snapshot.docs[0]
+    if (!snapshot.empty) return snapshot.docs[0]
+
+    // Fallback: match on name + folder (filtered in memory, so no composite index is needed).
+    const byName = await this.firestore
+      .collection('nxf_storage')
+      .where('file_name', '==', fileName)
+      .limit(50)
+      .get()
+
+    const folders = folderVariants(folder)
+    const hit     = byName.docs.find((d) => folders.includes(d.data().folder))
+
+    if (!hit) {
+      console.warn(`[FirebaseAdapter] findStorageRecord — no record for folder="${folder}" file="${fileName}"`)
+    }
+
+    return hit ?? null
   }
 
   private async signedUrlFor(file: any): Promise<string> {
     const [url] = await file.getSignedUrl({
       action:  'read',
-      expires: Date.now() + 7 * 24 * 60 * 60 * 1000,
+      expires: Date.now() + SIGNED_URL_SECONDS * 1000,
     })
     return url
   }
 
-  /**
-   * deleteFile
-   *
-   * Permanently deletes a single file from Firebase Cloud Storage.
-   * If no object exists in the bucket (for example demo records that only
-   * point at an external URL) there is nothing to remove, so it returns
-   * without error and the caller can still clean up the record.
-   *
-   * @param folder   - The folder containing the file (e.g. 'avatars', or
-   *                   'uploads' / '' for the root).
-   * @param fileName - The filename to delete (e.g. 'profile.png').
-   */
   async deleteFile(folder: string, fileName: string): Promise<void> {
     const found = await this.findObject(folder, fileName)
 
@@ -1622,30 +1628,12 @@ async installDemoContent(
     await found.file.delete()
   }
 
-  /**
-   * deleteFolder
-   *
-   * Permanently deletes all files inside a folder from Firebase Cloud Storage.
-   * Since Cloud Storage has no real folders, this lists all files with the
-   * folder prefix and deletes them in parallel.
-   *
-   * @param folder - The folder to delete (e.g. 'avatars').
-   */
   async deleteFolder(folder: string): Promise<void> {
     const bucket  = this.storage.bucket(this.getBucketName())
     const [files] = await bucket.getFiles({ prefix: `${folder}/` })
     await Promise.all(files.map((f) => f.delete()))
   }
 
-  /**
-   * createFolder
-   *
-   * Creates a new folder in Firebase Cloud Storage by writing a .keep
-   * sentinel file into it. Cloud Storage folders only exist while they
-   * contain at least one file.
-   *
-   * @param folder - The folder name to create (e.g. 'documents').
-   */
   async createFolder(folder: string): Promise<void> {
     await this.storage
       .bucket(this.getBucketName())
@@ -1653,80 +1641,19 @@ async installDemoContent(
       .save('', { contentType: 'text/plain', resumable: false })
   }
 
-  /**
-   * importFromUrl
-   *
-   * Downloads a file from a remote URL and uploads it to Firebase Cloud Storage.
-   * Useful for importing assets from external sources into the media library.
-   *
-   * Steps:
-   * 1. Fetches the file from the remote URL.
-   * 2. Determines the MIME type from the response headers.
-   * 3. Generates a timestamped filename to avoid collisions.
-   * 4. Uploads the buffer via uploadFile.
-   * 5. Returns a StorageFile object with the signed URL and metadata.
-   *
-   * @param folder - The destination folder in Cloud Storage.
-   * @param url    - The remote URL to import from.
-   * @returns A StorageFile object representing the imported file.
-   * @throws Error if the remote URL cannot be fetched.
-   */
   async importFromUrl(folder: string, url: string): Promise<StorageFile> {
-    const response = await fetch(url)
-    if (!response.ok) throw new Error(`Failed to fetch URL: ${url}`)
-
-    const buffer   = Buffer.from(await response.arrayBuffer())
-    const mimeType = response.headers.get('content-type') ?? 'application/octet-stream'
-    const ext      = mimeType.split('/')[1]?.split(';')[0] ?? 'bin'
-    const fileName = `imported_${Date.now()}.${ext}`
-
-    const signedUrl = await this.uploadFile(folder, fileName, buffer, mimeType)
-
-    return {
-      id:         `${folder}/${fileName}`,
-      name:       fileName,
-      url:        signedUrl,
-      size:       `${Math.round(buffer.length / 1024)} KB`,
-      mimeType,
-      folder,
-      folderPath: `${folder}/${fileName}`,
-      uploaded:   new Date().toLocaleDateString('en-GB', {
-        day:   '2-digit',
-        month: 'short',
-        year:  'numeric',
-      }),
-    }
+    const remote    = await fetchRemoteFile(url)
+    const signedUrl = await this.uploadFile(folder, remote.fileName, remote.buffer, remote.mimeType)
+    return toImportedStorageFile(folder, remote, signedUrl)
   }
 
-  /**
-   * deleteStorageRecordByFilePath
-   *
-   * Deletes the nxf_storage metadata record whose file_path matches the
-   * given path string. This is called when a file is deleted from Cloud
-   * Storage so the media library record is also removed.
-   *
-   * Root files are saved with a bare file_path ('photo.png') while callers
-   * pass 'uploads/photo.png', so both forms are tried.
-   *
-   * Note: This only deletes the Firestore metadata record — the actual file
-   * in Cloud Storage must be deleted separately via deleteFile().
-   *
-   * @param filePath - The file path to match (e.g. 'avatars/profile.png').
-   * @throws Error if the Firestore query or delete operation fails.
-   */
   async deleteStorageRecordByFilePath(filePath: string): Promise<void> {
     try {
       console.log('[FirebaseAdapter] deleteStorageRecordByFilePath started')
 
-      const paths = [filePath]
-      if (filePath.startsWith('uploads/')) {
-        const rest = filePath.slice('uploads/'.length)
-        if (rest && !rest.includes('/')) paths.push(rest)
-      }
-
       const snapshot = await this.firestore
         .collection('nxf_storage')
-        .where('file_path', 'in', paths)
+        .where('file_path', 'in', recordPathVariants(filePath))
         .limit(1)
         .get()
 
@@ -1744,24 +1671,6 @@ async installDemoContent(
     }
   }
 
-  /**
-   * renameFile
-   *
-   * Renames a file in Firebase Cloud Storage by copying it to the new name
-   * and deleting the original (Cloud Storage has no native rename operation).
-   * Also updates the matching nxf_storage record.
-   *
-   * Two cases, like the other adapters:
-   *  - the object exists in the bucket: it is copied, the old one deleted,
-   *    and the record gets the new name, path and a fresh signed URL;
-   *  - there is only a record (for example demo data pointing at an external
-   *    URL): only the record is renamed and its URL is left alone.
-   *
-   * @param folder   - The folder containing the file ('uploads' or '' = root).
-   * @param oldName  - The current filename.
-   * @param newName  - The new filename.
-   * @throws Error if neither the object nor a record exists.
-   */
   async renameFile(folder: string, oldName: string, newName: string): Promise<void> {
     const bucket = this.storage.bucket(this.getBucketName())
     const found  = await this.findObject(folder, oldName)
@@ -1774,10 +1683,7 @@ async installDemoContent(
     let newUrl: string | null = null
 
     if (found) {
-      /**
-       * Keep the object in the same place it already is — only the last
-       * path segment changes — then copy and delete the original.
-       */
+      // Keep the object where it is — only the last path segment changes.
       const dir     = found.name.slice(0, found.name.lastIndexOf('/') + 1)
       const newFile = bucket.file(`${dir}${newName}`)
 
@@ -1789,16 +1695,11 @@ async installDemoContent(
       console.warn('[FirebaseAdapter] renameFile — no object in the bucket, renaming the record only')
     }
 
-    /**
-     * Update the metadata record. Non-fatal when an object was renamed:
-     * the file has already been renamed in storage.
-     */
     try {
       if (record) {
-        const f = this.normalizeFolder(folder)
         await record.ref.update({
           file_name: newName,
-          file_path: f ? `${f}/${newName}` : newName,
+          file_path: storedPath(folder, newName),
           ...(newUrl ? { url: newUrl } : {}),
         })
         console.log('[FirebaseAdapter] renameFile — nxf_storage record updated')
@@ -1808,20 +1709,6 @@ async installDemoContent(
     }
   }
 
-  /**
-   * moveFile
-   *
-   * Moves a file from one storage folder to another by copying it to the
-   * new path and deleting the original. Also updates the nxf_storage
-   * record to reflect the new folder, path and (when an object was moved)
-   * a fresh signed URL. Records with no object in the bucket, such as demo
-   * data, are moved on the record only.
-   *
-   * @param fromFolder - The source folder ('uploads' or '' = root).
-   * @param toFolder   - The destination folder ('uploads' or '' = root).
-   * @param fileName   - The filename to move.
-   * @throws Error if neither the object nor a record exists.
-   */
   async moveFile(fromFolder: string, toFolder: string, fileName: string): Promise<void> {
     const bucket = this.storage.bucket(this.getBucketName())
     const found  = await this.findObject(fromFolder, fileName)
@@ -1836,10 +1723,7 @@ async installDemoContent(
     if (found) {
       const destName = this.objectName(toFolder, fileName)
 
-      /**
-       * Copying a file onto itself and then deleting the original would
-       * destroy it, so only copy when the destination really differs.
-       */
+      // Copying a file onto itself and then deleting the original would destroy it.
       if (destName !== found.name) {
         const newFile = bucket.file(destName)
 
@@ -1854,10 +1738,9 @@ async installDemoContent(
 
     try {
       if (record) {
-        const tf = this.normalizeFolder(toFolder)
         await record.ref.update({
-          folder:    tf || 'uploads',
-          file_path: tf ? `${tf}/${fileName}` : fileName,
+          folder:    storedFolder(toFolder),
+          file_path: storedPath(toFolder, fileName),
           ...(newUrl ? { url: newUrl } : {}),
         })
         console.log('[FirebaseAdapter] moveFile — nxf_storage record updated')
@@ -1866,6 +1749,7 @@ async installDemoContent(
       console.warn('[FirebaseAdapter] moveFile — nxf_storage update failed')
     }
   }
+
 
   /**
  * alterTable
