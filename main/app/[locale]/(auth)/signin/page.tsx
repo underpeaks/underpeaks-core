@@ -33,6 +33,7 @@ import { getAuth, signInWithEmailAndPassword }       from 'firebase/auth'
 import { initializeApp, getApps }                    from 'firebase/app'
 import { parseFirebaseWebConfig }                    from '@/app/lib/firebaseConfig'
 import { logActivity }                               from '@/app/lib/logActivity'
+import { authHeader }                                from '@/app/lib/clientAuth'
 import AuthShell                                     from '@/core/AuthShell'
 import { CARD, PRIMARY_BUTTON, INPUT_CLASS }         from '@/core/InstallerShell'
 
@@ -69,7 +70,8 @@ function SignInPage() {
     await Promise.allSettled([
       fetch('/api/cmsusers', {
         method:  'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        // The token is saved to localStorage before this runs, so authHeader() has it
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({
           user_id:        userId,
           target_user_id: userId,

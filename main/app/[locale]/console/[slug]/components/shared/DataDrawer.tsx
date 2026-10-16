@@ -1,3 +1,4 @@
+// main\app\[locale]\console\[slug]\components\shared\DataDrawer.tsx
 'use client'
 
 /**
@@ -18,7 +19,7 @@
  *   - Delete calls /api-cms/data/[table] DELETE with confirmation
  */
 
-import { useState, useEffect, useCallback, useMemo } from 'react'
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react'
 import { FiX, FiTrash2, FiSave, FiAlertTriangle }    from 'react-icons/fi'
 import FieldRenderer    from './FieldRenderer'
 import { getAuthToken } from '@/app/lib/clientAuth'
@@ -119,14 +120,22 @@ export default function DataDrawer({
     [columns, mode]
   )
 
-  // Reset state when drawer opens / mode or record changes
+  // Keep the latest columns without making them a reset trigger
+  const columnsRef = useRef(columns)
+  columnsRef.current = columns
+
+  const recordKey = record ? resolveRecordId(record, columns) : ''
+
+  // Reset only when the drawer opens, the mode changes, or a different record is selected.
+  // A parent re-render (for example after an image upload) must not wipe the form.
   useEffect(() => {
     if (!open) return
     setError(null)
     setShowDeleteConf(false)
-    if (mode === 'create') setFormData(buildEmptyRecord(columns))
+    if (mode === 'create') setFormData(buildEmptyRecord(columnsRef.current))
     else                   setFormData(record ? { ...record } : {})
-  }, [open, mode, record, columns])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open, mode, recordKey])
 
   // Load dynamic select options
   useEffect(() => {
@@ -154,7 +163,7 @@ export default function DataDrawer({
         }))
         setDynamicOptions((prev) => ({ ...prev, [col.name]: opts }))
       } catch {
-        // Field renders with no options on failure — acceptable graceful fallback
+        // Field renders with no options on failure - acceptable graceful fallback
       }
     })
   }, [open, columns, projectId])
@@ -332,7 +341,7 @@ export default function DataDrawer({
                     className="flex-1 px-3 py-1.5 text-xs rounded-lg bg-red-500
                                text-white hover:bg-red-600 transition disabled:opacity-50"
                   >
-                    {deleting ? 'Deleting…' : 'Yes, delete'}
+                    {deleting ? 'Deleting...' : 'Yes, delete'}
                   </button>
                 </div>
               </div>
@@ -364,7 +373,7 @@ export default function DataDrawer({
                            hover:opacity-90 transition disabled:opacity-50"
               >
                 <FiSave size={14} />
-                {saving ? 'Saving…' : mode === 'create' ? 'Create' : 'Save'}
+                {saving ? 'Saving...' : mode === 'create' ? 'Create' : 'Save'}
               </button>
             </div>
           </div>

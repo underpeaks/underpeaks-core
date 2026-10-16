@@ -216,7 +216,7 @@ export class MySQLAdapter implements DBAdapter {
     })
   }
 
-  async update(
+   async update(
     config:   DBConfig,
     table:    string,
     id:       string,
@@ -234,6 +234,7 @@ export class MySQLAdapter implements DBAdapter {
       ) {
         return new Date(value).toISOString().slice(0, 19).replace('T', ' ')
       }
+      if (value !== null && typeof value === 'object') return JSON.stringify(value)
       return value
     })
 

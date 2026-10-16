@@ -45,6 +45,9 @@
 import { writeFile }  from 'fs/promises'
 import path           from 'path'
 import crypto         from 'crypto'
+import { NextRequest }              from 'next/server'
+import { envSafe }                  from '@/app/lib/envFile'
+import { requireInstallerAccess }   from '@/app/lib/installLock'
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -67,34 +70,6 @@ console.log('[write-env] Target .env.local path:', ENV_FILE_PATH)
 // Safe value helpers
 // ---------------------------------------------------------------------------
 
-/**
- * envSafe
- *
- * Converts any value into a safely quoted string for use in a `.env` file.
- *
- * Rules:
- * - `undefined` or `null` → empty quoted string `""`
- * - Numbers              → unquoted numeric string (e.g. `3306`)
- * - Strings              → wrapped in double quotes with internal quotes escaped
- *
- * Why quote strings?
- * - Unquoted env values can break if they contain spaces, special characters,
- *   or `=` signs. Wrapping in quotes makes the file robust across all values.
- *
- * @param value - The value to format for the .env file.
- * @returns       A safely formatted string for a .env file line value.
- *
- * @example
- * envSafe('my"password')  // → '"my\\"password"'
- * envSafe(3306)            // → '3306'
- * envSafe(null)            // → '""'
- */
-function envSafe(value: any): string {
-  if (value === undefined || value === null) return '""'
-  if (typeof value === 'number') return String(value)
-  const str = String(value)
-  return `"${str.replace(/"/g, '\\"')}"`
-}
 
 /**
  * ensureHttp
@@ -283,9 +258,7 @@ async function writeEnvFileFromObject(env: Record<string, any>): Promise<void> {
   lines.push(
     `NEXT_PUBLIC_APP_DOMAIN=${envSafe(ensureHttp(env.domain || 'localhost:3000'))}`
   )
-lines.push(
-    `NEXT_PUBLIC_STUDIO_URL=${'https://studio.underpeaks.com'}`
-  )
+lines.push(`NEXT_PUBLIC_STUDIO_URL=${envSafe('https://studio.underpeaks.com')}`)
   lines.push(`NXF_LICENSE_GRACE_UNTIL=${envSafe('')}`)
   /**
    * NXF_API_KEY_SECRET
@@ -461,8 +434,12 @@ lines.push(`JWT_REFRESH_SECRET=${envSafe(jwtRefreshSecret)}`)
  * @param req - The incoming request containing the database config.
  * @returns    A Response with { success: true } or { success: false, error }.
  */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    // Open on a fresh install; admin-only once the app is installed.
+    const gate = await requireInstallerAccess(req)
+    if (!gate.ok) return gate.response
+
     const body = await req.json()
 
     console.log(`[write-env] Writing .env.local for db type: ${body.type}`)

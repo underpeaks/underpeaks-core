@@ -11,12 +11,33 @@
  *     public /uploads/... path — redirect to it.
  *   - supabase/firebase: fetch a fresh signed url via listFiles(folder) and
  *     stream the bytes back (bucket stays private).
+ *
+ * SECURITY HARDENING (Oct 2026): files are served from your own domain, so the
+ * type the uploader chose must not be trusted. Only images (not SVG), audio,
+ * video and PDF display inline; everything else is a download. Every response
+ * carries nosniff and a sandbox CSP, so an uploaded HTML or SVG file cannot run
+ * script on your domain.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 
 type Params = { project: string; id: string }
+
+const INLINE_OK = /^(image\/(png|jpe?g|gif|webp|avif|bmp|x-icon)|audio\/[a-z0-9.+-]+|video\/[a-z0-9.+-]+|application\/pdf)$/i
+
+function safeHeaders(mime: string, fileName: string): Record<string, string> {
+  const inline = INLINE_OK.test(mime)
+  const name   = (fileName || 'file').replace(/[^a-zA-Z0-9._-]/g, '_')
+  return {
+    'Content-Type':                inline ? mime : 'application/octet-stream',
+    'Content-Disposition':         `${inline ? 'inline' : 'attachment'}; filename="${name}"`,
+    'X-Content-Type-Options':      'nosniff',
+    'Content-Security-Policy':     "default-src 'none'; sandbox",
+    'Cache-Control':               'public, max-age=31536000, immutable',
+    'Access-Control-Allow-Origin': '*',
+  }
+}
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<Params> }) {
   const { project: projectId, id } = await params
@@ -49,11 +70,7 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<Param
     const arrayBuf = await upstream.arrayBuffer()
     return new NextResponse(Buffer.from(arrayBuf), {
       status: 200,
-      headers: {
-        'Content-Type':                row.mime_type ?? 'application/octet-stream',
-        'Cache-Control':               'public, max-age=31536000, immutable',
-        'Access-Control-Allow-Origin': '*',
-      },
+      headers: safeHeaders(row.mime_type ?? '', row.file_name ?? ''),
     })
   } catch (err: any) {
     console.error('[api-public] storage file serve failed:', err.message)

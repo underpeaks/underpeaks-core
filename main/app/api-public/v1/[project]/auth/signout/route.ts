@@ -1,4 +1,4 @@
-// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api-public\v1\[project]\auth\signout\route.ts
+// File: app/api-public/v1/[project]/auth/signout/route.ts
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
@@ -21,18 +21,26 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing customer token' }, { status: 401, headers: coreCors() })
   }
 
-  const adapter  = getConfiguredAdapter()
-  const dbConfig = adapter.config
+  try {
+    const adapter  = getConfiguredAdapter()
+    const dbConfig = adapter.config
 
-  // Find the token row and revoke it.
-  const tokenRows: any[] = await (adapter as any).readAllAdmin(dbConfig, 'nxf_system_tokens')
-  const tokenRow = (tokenRows ?? []).find((t: any) => t.access_token === customerToken)
+    // Find the token row and revoke it.
+    // NOTE: this used the hosted-only readAllAdmin(), which Core's adapters do
+    // not implement, so sign-out always failed with a 500. It now uses readAll().
+    // The update also names the token_id column (the default is 'id').
+    const tokenRows: any[] = await (adapter as any).readAll(dbConfig, 'nxf_system_tokens')
+    const tokenRow = (tokenRows ?? []).find((t: any) => t.access_token === customerToken)
 
-  if (tokenRow) {
-    await (adapter as any).update(dbConfig, 'nxf_system_tokens', tokenRow.token_id, {
-      revoked: true, updated_at: new Date(),
-    })
+    if (tokenRow) {
+      await (adapter as any).update(dbConfig, 'nxf_system_tokens', tokenRow.token_id, {
+        revoked: true, updated_at: new Date(),
+      }, 'token_id')
+    }
+
+    return NextResponse.json({ success: true }, { headers: coreCors() })
+  } catch (err: any) {
+    console.error('[api-public] signout failed:', err?.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: coreCors() })
   }
-
-  return NextResponse.json({ success: true }, { headers: coreCors() })
 }

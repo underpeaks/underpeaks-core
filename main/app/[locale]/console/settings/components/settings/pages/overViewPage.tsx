@@ -4,6 +4,7 @@ import { useState, useEffect }                    from 'react'
 import { SectionCard, Input, SaveButton, FormField } from '../../ui'
 import { useConsoleStore }                        from '@/app/store/consoleStore'
 import { useTranslations } from 'next-intl'
+import { authHeader } from '@/app/lib/clientAuth'
 
 export default function OverviewPage() {
   const t  = useTranslations('overviewPage')
@@ -28,7 +29,7 @@ export default function OverviewPage() {
   }, [config])
 
   const capitalize = (s?: string) =>
-    s ? s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : '—'
+    s ? s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase()) : '-'
 
   const dbType = process.env.NEXT_PUBLIC_DB_TYPE ?? config?.db_type
   const env = process.env.NODE_ENV ?? config?.environment
@@ -41,10 +42,10 @@ export default function OverviewPage() {
   ]
 
   const userInfo = [
-    { label: t('userInfo.fullName'),    value: user?.full_name  ?? '—' },
-    { label: t('userInfo.email'),       value: user?.user_email ?? '—' },
-    { label: t('userInfo.role'),        value: user?.role       ?? '—' },
-    { label: t('userInfo.status'),      value: user?.status     ?? '—' },
+    { label: t('userInfo.fullName'),    value: user?.full_name  ?? '-' },
+    { label: t('userInfo.email'),       value: user?.user_email ?? '-' },
+    { label: t('userInfo.role'),        value: user?.role       ?? '-' },
+    { label: t('userInfo.status'),      value: user?.status     ?? '-' },
     {
       label: t('userInfo.verified'),
       value: user?.email_verified ? t('userInfo.verifiedYes') : t('userInfo.verifiedNo'),
@@ -53,7 +54,7 @@ export default function OverviewPage() {
       label: t('userInfo.memberSince'),
       value: user?.created_at
         ? new Date(user.created_at).toLocaleDateString()
-        : '—',
+        : '-',
     },
   ]
 
@@ -66,7 +67,7 @@ export default function OverviewPage() {
     try {
       const res = await fetch('/api/update-project-settings', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({
           user_id:      user?.user_id,
           project_name: projectName || config?.project_name || '',
@@ -92,7 +93,7 @@ export default function OverviewPage() {
     try {
       const res = await fetch('/api/update-project-settings', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({
           user_id:      user?.user_id,
           project_name: projectName,

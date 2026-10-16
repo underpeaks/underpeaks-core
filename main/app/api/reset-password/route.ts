@@ -50,8 +50,8 @@ export async function POST(req: NextRequest) {
 
     // ── Capability check ────────────────────────────────────────────────────
 
-    if (!adapter.findUserByToken || !adapter.updatePasswordByToken || !adapter.hashPassword) {
-      throw new Error(`${dbType} adapter is missing required methods: findUserByToken, updatePasswordByToken, hashPassword`)
+    if (!adapter.findUserByToken || !adapter.updatePasswordByToken) {
+      throw new Error(`${dbType} adapter is missing required methods: findUserByToken, updatePasswordByToken`)
     }
 
     // ── Validate token ──────────────────────────────────────────────────────
@@ -65,13 +65,10 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // ── Hash password via adapter — never in the route ──────────────────────
-
-    const hashedPassword = await adapter.hashPassword(password)
-
     // ── Update password ─────────────────────────────────────────────────────
+    // The adapter hashes the plain password itself — never in the route.
 
-    await adapter.updatePasswordByToken(token, hashedPassword)
+    await adapter.updatePasswordByToken(token, password)
 
     console.log('[reset-password] Password reset completed successfully')
     return NextResponse.json({ success: true })

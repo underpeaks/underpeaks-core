@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs                            from 'fs'
 import path                          from 'path'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { requireAdmin }         from '@/app/lib/requireAdmin'
 
 // ---------------------------------------------------------------------------
 // Helper: patch local config file
@@ -35,13 +36,19 @@ export async function POST(req: NextRequest) {
   try {
     // ── Validate body ───────────────────────────────────────────────────────
 
-    const { user_id, logo_url, favicon_url } = await req.json()
+    // Admin only; the caller comes from the Bearer token.
+    const auth = await requireAdmin(req)
+    if (!auth.ok) return auth.response
+    const user_id = auth.userId
 
-    if (!user_id) {
-      return NextResponse.json(
-        { error: 'user_id is required' },
-        { status: 400 }
-      )
+    const { logo_url, favicon_url } = await req.json()
+
+    // Only http(s) URLs or site-relative paths (no javascript:, data:, etc.)
+    const okUrl = (v: any) =>
+      v === undefined || v === null || v === '' ||
+      (typeof v === 'string' && v.length < 2048 && /^(https?:\/\/|\/(?!\/))/i.test(v))
+    if (!okUrl(logo_url) || !okUrl(favicon_url)) {
+      return NextResponse.json({ error: 'Invalid URL' }, { status: 400 })
     }
 
     // ── Resolve adapter ─────────────────────────────────────────────────────

@@ -18,6 +18,15 @@
  * streams the bytes. No per-file token (Core is public by design).
  *
  * Auth: X-API-Key header → validateCoreApiKey (carries project_id + tenant_id).
+ *
+ * SECURITY HARDENING (Oct 2026):
+ *  - `folder` must be plain path segments (letters, digits, - and _). Before,
+ *    it went straight to the adapter, so "../../x" could write outside the
+ *    uploads folder on disk adapters.
+ *  - Size limit: NXF_MAX_UPLOAD_MB (default 50).
+ *  - Executable / script / HTML file types are refused (they would be served
+ *    from your own domain).
+ *  - 500 responses no longer return internal error messages.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -27,6 +36,21 @@ import { validateCoreApiKey }        from '@/app/lib/coreApiAuth'
 import { coreCors }                  from '@/app/lib/customerAuthCore'
 
 type Params = { project: string }
+
+const MAX_BYTES = Math.max(1, Number(process.env.NXF_MAX_UPLOAD_MB ?? 50)) * 1024 * 1024
+
+// Up to 4 path segments of letters, digits, '-' and '_'.
+const FOLDER_RE = /^[A-Za-z0-9_-]{1,64}(\/[A-Za-z0-9_-]{1,64}){0,3}$/
+
+const BLOCKED_EXT = new Set([
+  'html', 'htm', 'xhtml', 'shtml', 'js', 'mjs', 'cjs', 'jsp', 'php', 'phtml',
+  'asp', 'aspx', 'exe', 'dll', 'msi', 'bat', 'cmd', 'com', 'sh', 'ps1', 'jar',
+])
+
+function hasBlockedExt(name: string): boolean {
+  // Check every dot-separated part, so "shell.php.jpg" is caught too.
+  return name.toLowerCase().split('.').slice(1).some((p) => BLOCKED_EXT.has(p))
+}
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: coreCors() })
@@ -55,9 +79,24 @@ export async function POST(req: NextRequest, { params }: { params: Promise<Param
     return NextResponse.json({ error: 'file field is required' }, { status: 400, headers: coreCors() })
   }
 
-  const folder   = (form.get('folder') as string) || 'uploads'
+  const rawFolder = form.get('folder')
+  const folder    = (typeof rawFolder === 'string' && rawFolder.trim()) ? rawFolder.trim() : 'uploads'
+  if (!FOLDER_RE.test(folder)) {
+    return NextResponse.json({ error: 'Invalid folder name' }, { status: 400, headers: coreCors() })
+  }
+
+  if (file.size > MAX_BYTES) {
+    return NextResponse.json(
+      { error: `File too large (max ${Math.round(MAX_BYTES / 1024 / 1024)} MB)` },
+      { status: 413, headers: coreCors() }
+    )
+  }
+  if (hasBlockedExt(file.name || '') || /html|javascript|php/i.test(file.type || '')) {
+    return NextResponse.json({ error: 'This file type is not allowed' }, { status: 400, headers: coreCors() })
+  }
+
   const buffer   = Buffer.from(await file.arrayBuffer())
-  const mimeType = file.type || 'application/octet-stream'
+  const mimeType = /^[a-z0-9.+-]+\/[a-z0-9.+-]+$/i.test(file.type || '') ? file.type : 'application/octet-stream'
   const safeName = `${crypto.randomUUID()}_${(file.name || 'file').replace(/[^a-zA-Z0-9._-]/g, '_')}`
 
   try {
@@ -135,6 +174,6 @@ export async function POST(req: NextRequest, { params }: { params: Promise<Param
     )
   } catch (err: any) {
     console.error('[api-public] storage upload failed:', err.message)
-    return NextResponse.json({ error: err.message }, { status: 500, headers: coreCors() })
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500, headers: coreCors() })
   }
 }

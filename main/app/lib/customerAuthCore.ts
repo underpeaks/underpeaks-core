@@ -1,11 +1,10 @@
-// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\lib\customerAuthCore.ts
+// File: app/lib/customerAuthCore.ts
 
+import 'server-only'
 import crypto from 'crypto'
 import jwt from 'jsonwebtoken'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { signJwt } from '@/app/lib/jwt'
-
-const JWT_SECRET = process.env.JWT_ACCESS_SECRET;
 
 export function coreCors(): Record<string, string> {
   return {
@@ -20,8 +19,20 @@ export function safeCustomer(row: any): Record<string, unknown> {
   return safe
 }
 
+/**
+ * Verify a customer access token.
+ *  - the secret is read when called (not at import) and must be set;
+ *  - only HS256 is accepted;
+ *  - the token must be a customer token — a token of any other kind that
+ *    happens to share the secret is rejected here, not left to each route.
+ */
 export function verifyAccessToken(token: string): any {
-  return jwt.verify(token, JWT_SECRET!)
+  const secret = process.env.JWT_ACCESS_SECRET
+  if (!secret) throw new Error('JWT_ACCESS_SECRET is not set')
+
+  const decoded: any = jwt.verify(token, secret, { algorithms: ['HS256'] })
+  if (decoded?.user_type !== 'customer') throw new Error('Not a customer token')
+  return decoded
 }
 
 export async function issueCoreCustomerToken(input: {

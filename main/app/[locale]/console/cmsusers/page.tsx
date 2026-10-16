@@ -1,3 +1,4 @@
+// app/[locale]/console/cmsusers/page.tsx
 'use client';
 
 import { useState, useEffect, useMemo, useCallback } from 'react';
@@ -11,6 +12,7 @@ import { computeAllKpis }                          from '../kpi/kpiEngine';
 import { UserListRow, FilterState, SortState }     from '../types/users';
 import { useAuth }                                 from '../layout';
 import { logActivity }                             from '@/app/lib/logActivity';
+import { authHeader }                              from '@/app/lib/clientAuth';
 
 const USER_KPI_FIELDS = [
   { value: 'role',         label: 'Role' },
@@ -64,12 +66,13 @@ export default function UsersPage() {
   }, [user]);
 
   // ── Load users ─────────────────────────────────────────
+  // The server works out who is calling from the Bearer token.
   useEffect(() => {
     if (!currentUserId) return;
     async function load() {
       setIsLoading(true);
       try {
-        const res = await fetch(`/api/cmsusers?user_id=${currentUserId}`);
+        const res = await fetch('/api/cmsusers', { headers: { ...authHeader() } });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const data = await res.json();
         setAllUsers(data.users ?? []);
@@ -170,8 +173,8 @@ export default function UsersPage() {
   async function handleRoleChange(targetUserId: string, role: 'admin' | 'user') {
     const res = await fetch('/api/cmsusers', {
       method:  'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ user_id: currentUserId, target_user_id: targetUserId, role }),
+      headers: { 'Content-Type': 'application/json', ...authHeader() },
+      body:    JSON.stringify({ target_user_id: targetUserId, role }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? 'Failed');
@@ -197,8 +200,8 @@ export default function UsersPage() {
   ) {
     const res = await fetch('/api/cmsusers', {
       method:  'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({ user_id: currentUserId, target_user_id: targetUserId, status }),
+      headers: { 'Content-Type': 'application/json', ...authHeader() },
+      body:    JSON.stringify({ target_user_id: targetUserId, status }),
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? 'Failed');
@@ -219,8 +222,8 @@ export default function UsersPage() {
 
   async function handleDelete(targetUserId: string) {
     const res = await fetch(
-      `/api/cmsusers?user_id=${currentUserId}&target_user_id=${targetUserId}`,
-      { method: 'DELETE' }
+      `/api/cmsusers?target_user_id=${encodeURIComponent(targetUserId)}`,
+      { method: 'DELETE', headers: { ...authHeader() } }
     );
     const data = await res.json();
     if (!res.ok) throw new Error(data.error ?? 'Failed');

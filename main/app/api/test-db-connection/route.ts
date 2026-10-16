@@ -17,8 +17,9 @@
  * 3. Calls the adapter's testConnection method to attempt a real connection.
  * 4. Returns the result of the test — typically { success: true/false, message }.
  *
- * Authentication: None — this route is intentionally public because it is
- *                 called during the installer before any auth system exists.
+ * Authentication: Open only while nothing is installed yet (the installer runs
+ *                 before any user exists). Once users exist, an admin session
+ *                 is required — see requireInstallerAccess.
  * Method:         POST
  * Body:           DBConfig object (type, host, port, credentials, etc.)
  * Success:        { success: true, message?: string }
@@ -33,7 +34,21 @@
 
 import { getAdapter }   from '@/app/db-adapter'
 import { DBConfig }     from '@/app/db-adapter/types'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { requireInstallerAccess }       from '@/app/lib/installLock'
+
+const ALLOWED_TYPES = ['firebase', 'supabase', 'mysql', 'postgres', 'mongodb']
+
+/**
+ * Never let this route probe cloud metadata endpoints. Local and private
+ * hosts stay allowed on purpose: self-hosted installs often use a database
+ * on the same machine or network.
+ */
+function hitsMetadataHost(config: Record<string, any>): boolean {
+  return Object.values(config).some(
+    (v) => typeof v === 'string' && /169\.254\.|metadata\.google\.internal|fd00:ec2::254/i.test(v)
+  )
+}
 
 // ---------------------------------------------------------------------------
 // POST handler
@@ -51,8 +66,11 @@ import { NextResponse } from 'next/server'
  * @returns A NextResponse with the connection test result on success,
  *          or { success: false, message: string } on failure.
  */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
+    const gate = await requireInstallerAccess(req)
+    if (!gate.ok) return gate.response
+
     // ── Parse request body ─────────────────────────────────────────────────
 
     /**
@@ -72,6 +90,19 @@ export async function POST(req: Request) {
      * which fields it requires.
      */
     const config: DBConfig = await req.json()
+
+    if (!config || !ALLOWED_TYPES.includes((config as any).type)) {
+      return NextResponse.json(
+        { success: false, message: 'Unsupported database type' },
+        { status: 400 }
+      )
+    }
+    if (hitsMetadataHost(config as any)) {
+      return NextResponse.json(
+        { success: false, message: 'That host is not allowed' },
+        { status: 400 }
+      )
+    }
     
 
 

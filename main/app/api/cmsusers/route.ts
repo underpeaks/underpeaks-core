@@ -4,6 +4,7 @@ import { NextRequest, NextResponse }              from 'next/server'
 import { getAvatarColour, getAvatarInitials }     from '@/app/lib/avatarColour'
 import { NxfUser, UpdateUserPayload, UserListRow } from '@/app/[locale]/console/types/users'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }   from '@/app/lib/getSessionUser'
 
 async function getSupabaseAdminClient(dbConfig: any) {
   const { createClient } = await import('@supabase/supabase-js')
@@ -13,21 +14,23 @@ async function getSupabaseAdminClient(dbConfig: any) {
   )
 }
 
-// ── GET /api/cmsusers?user_id=xxx ──────────────────────────────────────────
+/** Never send credentials or reset tokens back to the browser. */
+function stripSecrets<T extends Record<string, any>>(user: T | null | undefined) {
+  if (!user) return null
+  const { password_hash, token, token_ttl, ...safe } = user
+  return safe
+}
+
+// ── GET /api/cmsusers ──────────────────────────────────────────────────────
+// Caller identity comes from the Bearer token, not from a user_id parameter.
 
 export async function GET(req: NextRequest) {
   try {
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
+
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
-    const { searchParams } = new URL(req.url)
-    const user_id = searchParams.get('user_id')
-
-    if (!user_id) {
-      return NextResponse.json(
-        { error: 'user_id is required' },
-        { status: 400 }
-      )
-    }
 
     const allUsers = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
 
@@ -92,30 +95,46 @@ export async function GET(req: NextRequest) {
 }
 
 // ── PATCH /api/cmsusers ────────────────────────────────────────────────────
+// Body: { target_user_id, role?, status?, is_logged_in?, last_login? }
+//   - Any signed-in user may update their OWN is_logged_in / last_login
+//     (the sign-in page does this right after login).
+//   - Changing role or status, or touching another user, needs an admin.
 
 export async function PATCH(req: NextRequest) {
   try {
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
+
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
     const body = (await req.json()) as UpdateUserPayload & {
-      user_id:        string
+      user_id?:       string   // ignored: the caller is taken from the token
       target_user_id: string
       is_logged_in?:  boolean
       last_login?:    string
     }
 
-    const { user_id, target_user_id, role, status, is_logged_in, last_login } = body
+    const { target_user_id, role, status, is_logged_in, last_login } = body
 
-    if (!user_id || !target_user_id) {
+    if (!target_user_id) {
       return NextResponse.json(
-        { error: 'user_id and target_user_id are required' },
+        { error: 'target_user_id is required' },
         { status: 400 }
       )
     }
 
+    const allUsers = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
+    const caller   = allUsers.find((u) => u.user_id === session.userId)
+    const isAdmin  = caller?.role === 'admin'
+    const isSelf   = target_user_id === session.userId
+    const changesAccess = role !== undefined || status !== undefined
+
+    if (!isAdmin && (!isSelf || changesAccess)) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     if (role && role !== 'admin') {
-      const allUsers = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
       const remainingAdmins = allUsers.filter(
         (u) => u.role === 'admin' && u.user_id !== target_user_id
       ).length
@@ -151,16 +170,15 @@ export async function PATCH(req: NextRequest) {
         throw new Error(error.message)
       }
 
-      return NextResponse.json({ success: true, user: updatedUser?.[0] ?? null })
+      return NextResponse.json({ success: true, user: stripSecrets(updatedUser?.[0]) })
     }
 
     // Mongo / Postgres / MySQL / Firebase — key on user_id (the nxf_users PK)
-    const allUsers  = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
     const targetDoc = allUsers.find((u) => u.user_id === target_user_id)
     if (!targetDoc) return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
     await adapter.update!(dbConfig, 'nxf_users', target_user_id, updates, 'user_id')
-    return NextResponse.json({ success: true, user: targetDoc })
+    return NextResponse.json({ success: true, user: stripSecrets(targetDoc) })
   } catch (error: any) {
     console.error('[PATCH /api/cmsusers] unhandled error:', error.message)
     return NextResponse.json(
@@ -170,25 +188,34 @@ export async function PATCH(req: NextRequest) {
   }
 }
 
-// ── DELETE /api/cmsusers?user_id=xxx&target_user_id=yyy ───────────────────
+// ── DELETE /api/cmsusers?target_user_id=yyy ────────────────────────────────
+// Admin only. The caller comes from the Bearer token.
 
 export async function DELETE(req: NextRequest) {
   try {
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
+
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
     const { searchParams } = new URL(req.url)
-    const user_id        = searchParams.get('user_id')
     const target_user_id = searchParams.get('target_user_id')
 
-    if (!user_id || !target_user_id) {
+    if (!target_user_id) {
       return NextResponse.json(
-        { error: 'user_id and target_user_id are required' },
+        { error: 'target_user_id is required' },
         { status: 400 }
       )
     }
 
-    const allUsers   = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
+    const allUsers = (await adapter.readAll!(dbConfig, 'nxf_users')) as NxfUser[]
+    const caller   = allUsers.find((u) => u.user_id === session.userId)
+
+    if (caller?.role !== 'admin') {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+    }
+
     const targetUser = allUsers.find((u) => u.user_id === target_user_id)
 
     if (!targetUser) {

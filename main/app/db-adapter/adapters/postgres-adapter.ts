@@ -1,3 +1,4 @@
+// main\app\db-adapter\adapters\PostgresAdapter.ts
 import { Pool, PoolConfig } from 'pg'
 import bcrypt               from 'bcrypt'
 import crypto               from 'crypto'
@@ -26,6 +27,12 @@ export class PostgresAdapter implements DBAdapter {
 
   private pool: Pool
   public  config: DBConfig
+
+  // table name -> set of json/jsonb column names (cleared on any schema change)
+  private jsonColumnCache = new Map<string, Set<string>>()
+
+  // table name -> auto-generatable primary key column name, or null (cleared on any schema change)
+  private pkColumnCache = new Map<string, string | null>()
 
   private readonly DEFAULT_BUCKETS = [
     'system', 'themes', 'extensions', 'projects',
@@ -63,7 +70,7 @@ export class PostgresAdapter implements DBAdapter {
     }
   }
 
-  // ─── Password ──────────────────────────────────────────────────────────────
+  // --- Password ---------------------------------------------------------------
 
   async hashPassword(password: string): Promise<string> {
     return bcrypt.hash(password, 10)
@@ -73,23 +80,108 @@ export class PostgresAdapter implements DBAdapter {
     return bcrypt.compare(password, hash)
   }
 
-  // ─── Basic CRUD ────────────────────────────────────────────────────────────
+  // --- Schema helpers ---------------------------------------------------------
 
-  // db-adapter/adapters/PostgresAdapter.ts  (replace the whole create() method)
+  private clearSchemaCaches(): void {
+    this.jsonColumnCache.clear()
+    this.pkColumnCache.clear()
+  }
+
+  // Returns the json/jsonb column names of a table. Cached until the schema changes.
+  private async getJsonColumns(table: string): Promise<Set<string>> {
+    const cached = this.jsonColumnCache.get(table)
+    if (cached) return cached
+
+    try {
+      const res = await this.pool.query(
+        `SELECT column_name
+         FROM information_schema.columns
+         WHERE table_schema = 'public'
+           AND table_name = $1
+           AND data_type IN ('json', 'jsonb')`,
+        [table]
+      )
+      const cols = new Set<string>(res.rows.map((r: any) => r.column_name))
+      this.jsonColumnCache.set(table, cols)
+      return cols
+    } catch {
+      // Do not cache a failed lookup
+      return new Set<string>()
+    }
+  }
+
+  // Returns the primary key column name if it is a single uuid/text column with
+  // no database default (so the adapter must supply the value). Otherwise null.
+  private async getAutoPkColumn(table: string): Promise<string | null> {
+    if (this.pkColumnCache.has(table)) return this.pkColumnCache.get(table) ?? null
+
+    try {
+      const quoted = `"${table.replace(/"/g, '""')}"`
+      const res = await this.pool.query(
+        `SELECT a.attname                         AS column_name,
+                format_type(a.atttypid, a.atttypmod) AS data_type,
+                pg_get_expr(d.adbin, d.adrelid)   AS default_expr
+         FROM pg_index i
+         JOIN pg_attribute a
+           ON a.attrelid = i.indrelid AND a.attnum = ANY(i.indkey)
+         LEFT JOIN pg_attrdef d
+           ON d.adrelid = a.attrelid AND d.adnum = a.attnum
+         WHERE i.indrelid = $1::regclass AND i.indisprimary`,
+        [quoted]
+      )
+
+      let result: string | null = null
+      if (res.rows.length === 1) {
+        const row  = res.rows[0]
+        const type = String(row.data_type || '').toLowerCase()
+        const textual = type === 'uuid' || type === 'text' || type.startsWith('character varying')
+        if (textual && !row.default_expr) result = row.column_name
+      }
+
+      this.pkColumnCache.set(table, result)
+      return result
+    } catch {
+      // Do not cache a failed lookup
+      return null
+    }
+  }
+
+  // Converts one JS value into something Postgres will accept for its column type.
+  private prepareValue(value: any, isJson: boolean): any {
+    if (value instanceof Date) return value.toISOString()
+
+    if (isJson) {
+      if (value === undefined || value === null || value === '') return null
+      if (typeof value === 'string') {
+        // Already valid JSON text: keep it. Otherwise store it as a JSON string.
+        try { JSON.parse(value); return value } catch { return JSON.stringify(value) }
+      }
+      return JSON.stringify(value)
+    }
+
+    if (value !== null && typeof value === 'object') return JSON.stringify(value)
+    return value
+  }
+
+  // --- Basic CRUD -------------------------------------------------------------
+
   async create(_config: DBConfig, table: string, data: Record<string, any>): Promise<any> {
     await this.connect()
 
+    const jsonCols = await this.getJsonColumns(table)
+    const pkCol    = await this.getAutoPkColumn(table)
+
+    const source: Record<string, any> = { ...data }
+    if (pkCol && (source[pkCol] === undefined || source[pkCol] === null || source[pkCol] === '')) {
+      source[pkCol] = crypto.randomUUID()
+    }
+
     const cleaned: Record<string, any> = {}
-    for (const key in data) {
-      let value = data[key]
+    for (const key in source) {
+      let value = source[key]
       if (value === undefined && key.toLowerCase().includes('id'))
         value = crypto.randomUUID()
-      if (value instanceof Date)
-        cleaned[key] = value.toISOString()
-      else if (typeof value === 'object' && value !== null)
-        cleaned[key] = JSON.stringify(value)
-      else
-        cleaned[key] = value
+      cleaned[key] = this.prepareValue(value, jsonCols.has(key))
     }
 
     const keys         = Object.keys(cleaned)
@@ -128,21 +220,14 @@ export class PostgresAdapter implements DBAdapter {
     return res.rows
   }
 
-  async update(
-    _config:  DBConfig,
-    table:    string,
-    id:       string,
-    data:     any,
-    idColumn: string = 'id'
-  ): Promise<any> {
+  async update(_config: DBConfig, table: string, id: string, data: any, idColumn: string = 'id'): Promise<any> {
     await this.connect()
 
-    const keys   = Object.keys(data)
-    const values = Object.values(data).map(v =>
-      v instanceof Date ? v.toISOString() : v
-    )
+    const jsonCols  = await this.getJsonColumns(table)
+    const keys      = Object.keys(data)
+    const values    = keys.map(k => this.prepareValue(data[k], jsonCols.has(k)))
     const setClause = keys.map((k, i) => `"${k}" = $${i + 1}`).join(', ')
-    const sql = `UPDATE "${table}" SET ${setClause} WHERE "${idColumn}" = $${keys.length + 1} RETURNING *`
+    const sql       = `UPDATE "${table}" SET ${setClause} WHERE "${idColumn}" = $${keys.length + 1} RETURNING *`
 
     const res = await this.pool.query(sql, [...values, id])
     return res.rows[0]
@@ -162,7 +247,7 @@ export class PostgresAdapter implements DBAdapter {
     return res.rows[0]
   }
 
-  // ─── System Config ─────────────────────────────────────────────────────────
+  // --- System Config ----------------------------------------------------------
 
   async findSystemConfigByUserId(config: DBConfig, userId: string): Promise<any> {
     try {
@@ -195,7 +280,7 @@ export class PostgresAdapter implements DBAdapter {
     }
   }
 
-  // ─── Table Creation ────────────────────────────────────────────────────────
+  // --- Table Creation ---------------------------------------------------------
 
     async createTable(
     tableName: string,
@@ -212,7 +297,7 @@ export class PostgresAdapter implements DBAdapter {
     const columnsSql = columnsArray
       .map((col) => {
         let typeSql = ''
-        // FIX: added 'image', 'file', 'geo' — these field types were added
+        // FIX: added 'image', 'file', 'geo' - these field types were added
         // to the model editor's FIELD_TYPES this session but this switch
         // never got matching cases, so creating a field of any of these
         // types threw "Unsupported column type" and silently failed the
@@ -231,7 +316,7 @@ export class PostgresAdapter implements DBAdapter {
           default: throw new Error(`Unsupported Postgres column type: ${col.type}`)
         }
 
-        // ── DEFAULT clause ─────────────────────────────────────────────────
+        // --- DEFAULT clause ---------------------------------------------------
         let defaultClause = ''
         if (col.default !== undefined && col.default !== null) {
           if (typeof col.default === 'boolean' || typeof col.default === 'number') {
@@ -250,7 +335,7 @@ export class PostgresAdapter implements DBAdapter {
           }
         }
 
-        // ── Constraints ────────────────────────────────────────────────────
+        // --- Constraints ------------------------------------------------------
         const constraints: string[] = []
         if (col.is_primary) constraints.push('PRIMARY KEY')
         if (col.unique)     constraints.push('UNIQUE')
@@ -265,8 +350,9 @@ export class PostgresAdapter implements DBAdapter {
     await this.pool.query(
       `CREATE TABLE IF NOT EXISTS "${tableName}" (${columnsSql})`
     )
+    this.clearSchemaCaches()
   }
-  // ─── Data Models ───────────────────────────────────────────────────────────
+  // --- Data Models ------------------------------------------------------------
 
   async CreateDataModels(projectId: string, selectedProjectType: string): Promise<any> {
     if (!projectId) throw new Error('Project ID is required')
@@ -293,7 +379,7 @@ export class PostgresAdapter implements DBAdapter {
     const project = await this.findProjectByOwnerId(this.config, user.user_id)
     if (!project?.project_id) throw new Error('Project not found')
 
-    // Look up tenant — try by user_id first, fall back to email
+    // Look up tenant - try by user_id first, fall back to email
     let tenant = await this.findTenantByUserID(this.config, user.user_id)
     if (!tenant) {
       tenant = await this.findTenantByUserEmail(this.config, email)
@@ -309,7 +395,7 @@ export class PostgresAdapter implements DBAdapter {
     )
   }
 
-  // ─── User Helpers ──────────────────────────────────────────────────────────
+  // --- User Helpers -----------------------------------------------------------
 
   async createAdminUser(config: DBConfig, data: any): Promise<any> {
     const { user_id, user_email, password, role = 'admin', ...rest } = data
@@ -317,7 +403,7 @@ export class PostgresAdapter implements DBAdapter {
     // Skip if user already exists
     const existing = await this.findUserByEmail(config, user_email)
     if (existing) {
-      console.log('[PostgresAdapter] createAdminUser — user already exists, skipping')
+      console.log('[PostgresAdapter] createAdminUser - user already exists, skipping')
       return existing
     }
 
@@ -433,7 +519,7 @@ export class PostgresAdapter implements DBAdapter {
     return token
   }
 
-  // ─── Login ─────────────────────────────────────────────────────────────────
+  // --- Login ------------------------------------------------------------------
 
   async loginBasic(
     config:                DBConfig,
@@ -519,7 +605,7 @@ export class PostgresAdapter implements DBAdapter {
     }
   }
 
-  // ─── Registration ──────────────────────────────────────────────────────────
+  // --- Registration -----------------------------------------------------------
 
   async registerUser(
     config: DBConfig,
@@ -568,7 +654,7 @@ export class PostgresAdapter implements DBAdapter {
     return { success: true, user_id, project_id, token: data.token, token_ttl: data.token_ttl }
   }
 
-  // ─── Token Helpers ─────────────────────────────────────────────────────────
+  // --- Token Helpers ----------------------------------------------------------
 
   async findTokenByAccessToken(accessToken: string): Promise<any> {
     await this.connect()
@@ -619,7 +705,7 @@ export class PostgresAdapter implements DBAdapter {
     return true
   }
 
-  // ─── Projects and Tenants ──────────────────────────────────────────────────
+  // --- Projects and Tenants ---------------------------------------------------
 
   async createProject(
     config: DBConfig,
@@ -649,7 +735,7 @@ export class PostgresAdapter implements DBAdapter {
     // Check if tenant already exists for this email
     const existing = await this.findTenantByUserEmail(config, data.user_email)
     if (existing) {
-      console.log('[PostgresAdapter] createTenant — tenant already exists, skipping')
+      console.log('[PostgresAdapter] createTenant - tenant already exists, skipping')
       return existing.ten_id
     }
 
@@ -685,7 +771,7 @@ export class PostgresAdapter implements DBAdapter {
     return config_id
   }
 
-  // ─── Storage Buckets ───────────────────────────────────────────────────────
+  // --- Storage Buckets --------------------------------------------------------
 
   async setupStorageBuckets(): Promise<{ success: boolean; buckets: string[] }> {
     await this.connect()
@@ -737,7 +823,7 @@ export class PostgresAdapter implements DBAdapter {
     })
   }
 
-  // ─── Demo Content ──────────────────────────────────────────────────────────
+  // --- Demo Content -----------------------------------------------------------
 
   async installDemoContent(
   config: DBConfig,
@@ -767,9 +853,9 @@ export class PostgresAdapter implements DBAdapter {
     if (!tenantResult.rows.length) return { success: false, error: 'No tenant found' }
     const tenantId = tenantResult.rows[0].ten_id
 
-    console.log('[PostgresAdapter] installDemoContent — adminUserId:', adminUserId)
-    console.log('[PostgresAdapter] installDemoContent — projectId:', projectId)
-    console.log('[PostgresAdapter] installDemoContent — tenantId:', tenantId)
+    console.log('[PostgresAdapter] installDemoContent - adminUserId:', adminUserId)
+    console.log('[PostgresAdapter] installDemoContent - projectId:', projectId)
+    console.log('[PostgresAdapter] installDemoContent - tenantId:', tenantId)
 
     const modelNameToId = new Map<string, string>()
     try {
@@ -780,7 +866,7 @@ export class PostgresAdapter implements DBAdapter {
       for (const m of modelResult.rows) {
         if (m.name && m.sm_id) modelNameToId.set(m.name, m.sm_id)
       }
-      console.log(`[PostgresAdapter] Built model resolver map — ${modelNameToId.size} models indexed`)
+      console.log(`[PostgresAdapter] Built model resolver map - ${modelNameToId.size} models indexed`)
     } catch (err: any) {
       console.warn('[PostgresAdapter] Failed to build model resolver map:', err.message)
     }
@@ -827,31 +913,31 @@ export class PostgresAdapter implements DBAdapter {
         )
 
         if (!colResult.rows.length) {
-          console.log(`[PostgresAdapter] Skipping ${tableName} — table does not exist`)
+          console.log(`[PostgresAdapter] Skipping ${tableName} - table does not exist`)
           continue
         }
 
         const tableColumns = colResult.rows.map((c: any) => c.column_name)
 
-        console.log(`[PostgresAdapter] Inserting into ${tableName} — ${rows.length} rows`)
+        console.log(`[PostgresAdapter] Inserting into ${tableName} - ${rows.length} rows`)
 
         for (const row of rows) {
           try {
             const enriched = { ...row }
 
-            // ── Step 1: Resolve model name → model_id for nxf_pages ──────
+            // --- Step 1: Resolve model name -> model_id for nxf_pages ----------
             if (tableName === 'nxf_pages' && enriched.model) {
               const resolvedId = modelNameToId.get(enriched.model)
               if (resolvedId) {
                 enriched.model_id = resolvedId
               } else {
                 console.warn(
-                  `[PostgresAdapter] Page "${enriched.slug}" references model "${enriched.model}" which does not exist — model_id left null`
+                  `[PostgresAdapter] Page "${enriched.slug}" references model "${enriched.model}" which does not exist - model_id left null`
                 )
               }
             }
 
-            // ── Step 2: Null out remaining {{placeholders}} except ownership fields ──
+            // --- Step 2: Null out remaining {{placeholders}} except ownership fields
             for (const key of Object.keys(enriched)) {
               if (
                 typeof enriched[key] === 'string' &&
@@ -865,7 +951,7 @@ export class PostgresAdapter implements DBAdapter {
               }
             }
 
-            // ── Step 3: Always inject ownership IDs unconditionally ───────
+            // --- Step 3: Always inject ownership IDs unconditionally -----------
             // The tableColumns filter in Step 4 will strip these out
             // for tables that don't have these columns.
             enriched.project_id = projectId
@@ -875,7 +961,7 @@ export class PostgresAdapter implements DBAdapter {
 
             if (!enriched.created_at) enriched.created_at = new Date().toISOString()
 
-            // ── Step 4: Filter to only columns that exist in the table ────
+            // --- Step 4: Filter to only columns that exist in the table --------
             const filtered: Record<string, any> = {}
             for (const key of Object.keys(enriched)) {
               if (tableColumns.includes(key)) {
@@ -885,7 +971,7 @@ export class PostgresAdapter implements DBAdapter {
 
             if (!Object.keys(filtered).length) continue
 
-            // ── Step 5: Serialize objects to JSON strings ─────────────────
+            // --- Step 5: Serialize objects to JSON strings ---------------------
             for (const key of Object.keys(filtered)) {
               if (filtered[key] !== null && typeof filtered[key] === 'object') {
                 filtered[key] = JSON.stringify(filtered[key])
@@ -910,7 +996,7 @@ export class PostgresAdapter implements DBAdapter {
       }
     }
 
-    console.log(`[PostgresAdapter] installDemoContent complete — total inserted: ${totalInserted}`)
+    console.log(`[PostgresAdapter] installDemoContent complete - total inserted: ${totalInserted}`)
     return { success: true, inserted: totalInserted }
 
   } catch (err: any) {
@@ -918,10 +1004,10 @@ export class PostgresAdapter implements DBAdapter {
     return { success: false, inserted: 0, error: 'Failed to install demo content' }
   }
 }
-  // ─── Core CRUD ─────────────────────────────────────────────────────────────
+  // --- Core CRUD --------------------------------------------------------------
 async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Promise<any[]> {
     try {
-      console.log(`[PostgresAdapter] readAll — table: ${table}`, filter ? `filter: ${JSON.stringify(filter)}` : '')
+      console.log(`[PostgresAdapter] readAll - table: ${table}`, filter ? `filter: ${JSON.stringify(filter)}` : '')
 
       let sql = `SELECT * FROM "${table}"`
       const values: any[] = []
@@ -935,26 +1021,26 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
       }
 
       const result = await this.pool.query(sql, values)
-      console.log(`[PostgresAdapter] readAll — table: ${table} — returned ${result.rows.length} rows`)
+      console.log(`[PostgresAdapter] readAll - table: ${table} - returned ${result.rows.length} rows`)
       return result.rows
     } catch (err: any) {
-      console.error(`[PostgresAdapter] readAll FAILED — table: ${table} — ${err.message}`)
+      console.error(`[PostgresAdapter] readAll FAILED - table: ${table} - ${err.message}`)
       throw new Error(`readAll failed on table "${table}": ${err.message}`)
     }
   }
   // async readAll(config: DBConfig, table: string): Promise<any[]> {
   //   try {
-  //     console.log(`[PostgresAdapter] readAll — table: ${table}`)
+  //     console.log(`[PostgresAdapter] readAll - table: ${table}`)
   //     const result = await this.pool.query(`SELECT * FROM "${table}"`)
-  //     console.log(`[PostgresAdapter] readAll — table: ${table} — returned ${result.rows.length} rows`)
+  //     console.log(`[PostgresAdapter] readAll - table: ${table} - returned ${result.rows.length} rows`)
   //     return result.rows
   //   } catch (err: any) {
-  //     console.error(`[PostgresAdapter] readAll FAILED — table: ${table} — ${err.message}`)
+  //     console.error(`[PostgresAdapter] readAll FAILED - table: ${table} - ${err.message}`)
   //     throw new Error(`readAll failed on table "${table}": ${err.message}`)
   //   }
   // }
 
-  // ─── Users & Auth ──────────────────────────────────────────────────────────
+  // --- Users & Auth -----------------------------------------------------------
 
   async getUserById(uid: string): Promise<{ user?: any; error?: string }> {
     try {
@@ -1070,13 +1156,13 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     }
   }
 
-  // ─── Table / Schema Management ─────────────────────────────────────────────
+  // --- Table / Schema Management ----------------------------------------------
 
     async alterTable(
     tableName: string,
     changes: { add?: ColumnDef[]; drop?: string[]; rename?: { from: string; to: string } }
   ): Promise<any> {
-    console.log(`[PostgresAdapter] alterTable — ${tableName}`)
+    console.log(`[PostgresAdapter] alterTable - ${tableName}`)
 
     const statements: string[] = []
 
@@ -1084,7 +1170,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
       for (const col of changes.add) {
         let typeSql = ''
         // FIX: same 'image'/'file'/'geo' cases added here as in
-        // createTable above — alterTable had the identical gap.
+        // createTable above - alterTable had the identical gap.
         switch (col.type.toLowerCase()) {
           case 'uuid':                      typeSql = 'UUID';             break
           case 'string': case 'text':
@@ -1125,25 +1211,29 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
       await this.pool.query(sql)
     }
 
+    this.clearSchemaCaches()
+
     console.log(`[PostgresAdapter] alterTable completed for ${tableName}`)
     return true
   }
 
   async dropTable(tableName: string): Promise<any> {
-    console.log(`[PostgresAdapter] dropTable — ${tableName}`)
+    console.log(`[PostgresAdapter] dropTable - ${tableName}`)
     await this.pool.query(`DROP TABLE IF EXISTS "${tableName}"`)
-    console.log(`[PostgresAdapter] dropTable completed — ${tableName}`)
+    this.clearSchemaCaches()
+    console.log(`[PostgresAdapter] dropTable completed - ${tableName}`)
     return true
   }
 
   async renameTable(oldName: string, newName: string): Promise<any> {
-    console.log(`[PostgresAdapter] renameTable — ${oldName} → ${newName}`)
+    console.log(`[PostgresAdapter] renameTable - ${oldName} -> ${newName}`)
     await this.pool.query(`ALTER TABLE "${oldName}" RENAME TO "${newName}"`)
-    console.log(`[PostgresAdapter] renameTable completed — ${oldName} → ${newName}`)
+    this.clearSchemaCaches()
+    console.log(`[PostgresAdapter] renameTable completed - ${oldName} -> ${newName}`)
     return true
   }
 
-  // ─── Messages ──────────────────────────────────────────────────────────────
+  // --- Messages ---------------------------------------------------------------
 
   async listConversations(
     config:     DBConfig,
@@ -1241,7 +1331,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
         [content.slice(0, 100), now, now, conversationId]
       )
     } catch {
-      console.warn('[PostgresAdapter] sendMessage — conversation preview update failed')
+      console.warn('[PostgresAdapter] sendMessage - conversation preview update failed')
     }
 
     return {
@@ -1305,7 +1395,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     }
   }
 
-  // ─── Notifications ─────────────────────────────────────────────────────────
+  // --- Notifications ----------------------------------------------------------
 
   async listNotifications(
     config:     DBConfig,
@@ -1334,7 +1424,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     )
 
     if (!existing.rows.length) throw new Error('Notification not found')
-    if (existing.rows[0].user_id !== uid) throw new Error('Forbidden — notification does not belong to this user')
+    if (existing.rows[0].user_id !== uid) throw new Error('Forbidden - notification does not belong to this user')
 
     const now = new Date().toISOString()
 
@@ -1365,7 +1455,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     return { success: true, updated: result.rowCount ?? 0 }
   }
 
-  // ─── API Keys ──────────────────────────────────────────────────────────────
+  // --- API Keys ---------------------------------------------------------------
 
   async listApiKeys(
     config:     DBConfig,
@@ -1421,11 +1511,11 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
       [now, now, api_id]
     )
 
-    console.log(`[PostgresAdapter] revokeApiKey — key ${api_id} revoked`)
+    console.log(`[PostgresAdapter] revokeApiKey - key ${api_id} revoked`)
     return { success: true }
   }
 
-  // ─── Storage ───────────────────────────────────────────────────────────────
+  // --- Storage ----------------------------------------------------------------
 
   async listFolders(): Promise<string[]> {
     try {
@@ -1527,7 +1617,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     )
 
     if (!result.rows[0]) {
-      console.warn(`[PostgresAdapter] findStorageRecord — no record for folder="${folder}" file="${fileName}"`)
+      console.warn(`[PostgresAdapter] findStorageRecord - no record for folder="${folder}" file="${fileName}"`)
     }
 
     return result.rows[0] ?? null
@@ -1603,7 +1693,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
 
 }
 
-// ─── Factory ───────────────────────────────────────────────────────────────
+// --- Factory ------------------------------------------------------------------
 
 export function getPostgresAdapter(config: DBConfig): PostgresAdapter {
   return new PostgresAdapter(config)

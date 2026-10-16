@@ -1,11 +1,11 @@
-// app/api/settings/update-smtp/route.ts
+// app/api/update-smtp-settings/route.ts  (the URL SMTPpage.tsx calls)
 
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
 import crypto                        from 'crypto'
-import fs                            from 'fs'
-import path                          from 'path'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { requireAdmin }         from '@/app/lib/requireAdmin'
+import { patchEnvFile }         from '@/app/lib/envFile'
 
 // ---------------------------------------------------------------------------
 // Constants + helpers — all unchanged
@@ -39,19 +39,6 @@ function encrypt(data: any, key: Buffer) {
   }
 }
 
-function patchEnvFile(updates: Record<string, string>) {
-  const envPath = path.resolve(process.cwd(), '.env.local')
-  let content   = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf-8') : ''
-
-  for (const [key, value] of Object.entries(updates)) {
-    const line  = `${key}="${value}"`
-    const regex = new RegExp(`^${key}=.*$`, 'm')
-    content     = regex.test(content) ? content.replace(regex, line) : content + `\n${line}`
-  }
-
-  fs.writeFileSync(envPath, content, 'utf-8')
-}
-
 function parseJson(v: any): Record<string, any> {
   if (!v) return {}
   if (typeof v === 'string') {
@@ -68,8 +55,13 @@ export async function POST(req: NextRequest) {
   try {
     // ── Validate body ───────────────────────────────────────────────────────
 
+    // Admin only. The caller comes from the Bearer token — a user_id in the
+    // body is ignored.
+    const auth = await requireAdmin(req)
+    if (!auth.ok) return auth.response
+    const user_id = auth.userId
+
     const {
-      user_id,
       verify_email,
       forgot_password,
       smtp_enabled,
@@ -81,11 +73,15 @@ export async function POST(req: NextRequest) {
       encryption,
     } = await req.json()
 
-    if (!user_id) {
-      return NextResponse.json(
-        { error: 'user_id is required' },
-        { status: 400 }
-      )
+    // ── Validate input ──────────────────────────────────────────────────────
+    const str = (v: any) => v === undefined || v === null || typeof v === 'string'
+    const portNum = Number(port ?? 587)
+    if (
+      !str(host) || !str(from_address) || !str(username) || !str(password) ||
+      !Number.isInteger(portNum) || portNum < 1 || portNum > 65535 ||
+      (encryption !== undefined && !['TLS', 'SSL', 'None'].includes(encryption))
+    ) {
+      return NextResponse.json({ error: 'Invalid SMTP settings' }, { status: 400 })
     }
 
     // ── Resolve adapter ─────────────────────────────────────────────────────

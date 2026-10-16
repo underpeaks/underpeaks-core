@@ -41,7 +41,8 @@
  * hashing it (e.g. with bcrypt) before writing it to the database.
  */
 
-import { NextResponse }          from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireInstallerAccess }   from '@/app/lib/installLock';
 import { createAdminUserFlow }   from '@/app/db-adapter/utils/create-admin-user-flow';
 
 /**
@@ -53,8 +54,16 @@ import { createAdminUserFlow }   from '@/app/db-adapter/utils/create-admin-user-
  * @param request — The incoming Next.js API request containing the JSON body.
  * @returns A NextResponse JSON object indicating success or failure.
  */
-export async function POST(request: Request): Promise<NextResponse> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    /**
+     * Open only while nothing is installed. Once users exist, only a signed-in
+     * admin may call this. Without this check anyone could create an admin
+     * account on a live installation.
+     */
+    const gate = await requireInstallerAccess(request);
+    if (!gate.ok) return gate.response;
+
     /**
      * Parse the incoming request body.
      * Destructure only the fields we need — any extra fields are ignored.
@@ -83,6 +92,16 @@ export async function POST(request: Request): Promise<NextResponse> {
     if (!adminUser) {
       return NextResponse.json(
         { success: false, message: 'Admin user details are required' },
+        { status: 400 },
+      );
+    }
+
+    if (
+      typeof adminUser.email    !== 'string' || !adminUser.email.trim() ||
+      typeof adminUser.password !== 'string' || !adminUser.password
+    ) {
+      return NextResponse.json(
+        { success: false, message: 'Admin email and password are required' },
         { status: 400 },
       );
     }

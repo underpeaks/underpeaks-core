@@ -42,6 +42,17 @@
  * foreign keys too) must never be stripped from the API response, only
  * from admin-form rendering. Both the single-record and list fetch below
  * now explicitly exempt the primary key column from the hidden-field set.
+ *
+ * SECURITY HARDENING (Oct 2026):
+ *  - PATCH and DELETE now run the same model check as GET/POST. Before, they
+ *    accepted ANY table name, so a public API key could edit or delete rows in
+ *    nxf_users, nxf_system_apis, nxf_system_tokens and so on.
+ *  - Table, column and id_column names must be plain identifiers. The adapters
+ *    put these straight into SQL, so a crafted key name was an injection.
+ *  - id_column must be a real column of the model.
+ *  - Responses from POST/PATCH strip hidden fields, like GET does.
+ *  - 500 responses no longer return internal error messages.
+ *  - page/limit are clamped.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -69,6 +80,53 @@ function corsHeaders(): Record<string, string> {
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: corsHeaders() })
+}
+
+// ---------------------------------------------------------------------------
+// Identifier + model helpers
+// ---------------------------------------------------------------------------
+
+const IDENT = /^[A-Za-z_][A-Za-z0-9_]{0,62}$/
+
+/** System tables are never reachable through this generic CRUD route. */
+function isBlockedTable(name: string): boolean {
+  return (
+    !IDENT.test(name) ||
+    name.startsWith('nxf_system_') ||
+    name === 'nxf_users' ||
+    name === 'nxf_storage'
+  )
+}
+
+function modelColumns(model: any): any[] {
+  const schema = model?.schema ?? {}
+  return Array.isArray(schema) ? schema : (schema.columns ?? [])
+}
+
+/** Every key of a request body must be a plain identifier. */
+function badKeys(obj: Record<string, unknown>): string | null {
+  for (const k of Object.keys(obj)) {
+    if (!IDENT.test(k)) return k
+  }
+  return null
+}
+
+/** Drop hidden columns (never the primary key) from a record before it leaves. */
+function stripHidden(model: any, record: any): any {
+  if (!record || typeof record !== 'object') return record
+  const columns = modelColumns(model)
+  const pk      = columns.find((c: any) => c.is_primary || c.primary_key)
+  const hidden  = new Set(
+    columns.filter((c: any) => c.hidden && c.name !== pk?.name).map((c: any) => c.name)
+  )
+  const safe: Record<string, unknown> = {}
+  Object.entries(record).forEach(([k, v]) => { if (!hidden.has(k)) safe[k] = v })
+  return safe
+}
+
+function serverError(label: string, err: any) {
+  console.error(`[api-public] ${label} failed:`, err?.message)
+  return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: corsHeaders() })
 }
 
 // ---------------------------------------------------------------------------
@@ -155,6 +213,7 @@ async function getModelForTable(
   projectId: string
 ): Promise<any | null> {
   try {
+    if (isBlockedTable(tableName)) return null
     const adapter   = getConfiguredAdapter()
     const dbConfig  = adapter.config
     const allModels = await adapter.readAll!(dbConfig, 'nxf_system_models')
@@ -205,8 +264,8 @@ export async function GET(
     const search    = searchParams.get('search')     ?? ''
     const sortField = searchParams.get('sort_field') ?? ''
     const sortDir   = searchParams.get('sort_dir')   ?? 'asc'
-    const pageNum   = parseInt(searchParams.get('page')  ?? '1')
-    const limitNum  = Math.min(parseInt(searchParams.get('limit') ?? '20'), 100)
+    const pageNum   = Math.max(1, parseInt(searchParams.get('page') ?? '1') || 1)
+    const limitNum  = Math.min(Math.max(1, parseInt(searchParams.get('limit') ?? '20') || 20), 100)
 
     // Single record fetch
     if (recordId) {
@@ -313,8 +372,7 @@ export async function GET(
     }, { headers: corsHeaders() })
 
   } catch (err: any) {
-    console.error('[api-public] GET failed:', err.message)
-    return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders() })
+    return serverError('GET', err)
   }
 }
 
@@ -345,7 +403,18 @@ export async function POST(
       )
     }
 
-    const body = await req.json()
+    let body: any
+    try { body = await req.json() } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: corsHeaders() })
+    }
+    if (!body || typeof body !== 'object' || Array.isArray(body)) {
+      return NextResponse.json({ error: 'Invalid body' }, { status: 400, headers: corsHeaders() })
+    }
+    const bad = badKeys(body)
+    if (bad) {
+      return NextResponse.json({ error: `Invalid field name '${bad.slice(0, 40)}'` }, { status: 400, headers: corsHeaders() })
+    }
+
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
     const now      = new Date().toISOString()
@@ -361,12 +430,11 @@ export async function POST(
     const created = await adapter.create!(dbConfig, table, record)
 
     return NextResponse.json(
-      { success: true, record: created ?? record },
+      { success: true, record: stripHidden(model, typeof created === 'object' ? created : record) },
       { status: 201, headers: corsHeaders() }
     )
   } catch (err: any) {
-    console.error('[api-public] POST failed:', err.message)
-    return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders() })
+    return serverError('POST', err)
   }
 }
 
@@ -389,8 +457,19 @@ export async function PATCH(
       )
     }
 
-    const body = await req.json()
-    const { id, id_column, ...data } = body
+    const model = await getModelForTable(table, projectId)
+    if (!model) {
+      return NextResponse.json(
+        { error: `Table '${table}' not found` },
+        { status: 404, headers: corsHeaders() }
+      )
+    }
+
+    let body: any
+    try { body = await req.json() } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: corsHeaders() })
+    }
+    const { id, id_column, ...data } = body ?? {}
 
     if (!id) {
       return NextResponse.json(
@@ -399,9 +478,18 @@ export async function PATCH(
       )
     }
 
+    const idCol = id_column ?? 'id'
+    const cols  = modelColumns(model).map((c: any) => c.name)
+    if (!IDENT.test(idCol) || (idCol !== 'id' && !cols.includes(idCol))) {
+      return NextResponse.json({ error: 'Invalid id_column' }, { status: 400, headers: corsHeaders() })
+    }
+    const bad = badKeys(data)
+    if (bad) {
+      return NextResponse.json({ error: `Invalid field name '${bad.slice(0, 40)}'` }, { status: 400, headers: corsHeaders() })
+    }
+
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
-    const idCol    = id_column ?? 'id'
 
     const updated = await adapter.update!(dbConfig, table, id, {
       ...data,
@@ -409,12 +497,11 @@ export async function PATCH(
     }, idCol)
 
     return NextResponse.json(
-      { success: true, record: updated },
+      { success: true, record: stripHidden(model, updated) },
       { headers: corsHeaders() }
     )
   } catch (err: any) {
-    console.error('[api-public] PATCH failed:', err.message)
-    return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders() })
+    return serverError('PATCH', err)
   }
 }
 
@@ -437,8 +524,19 @@ export async function DELETE(
       )
     }
 
-    const body = await req.json()
-    const { id } = body
+    const model = await getModelForTable(table, projectId)
+    if (!model) {
+      return NextResponse.json(
+        { error: `Table '${table}' not found` },
+        { status: 404, headers: corsHeaders() }
+      )
+    }
+
+    let body: any
+    try { body = await req.json() } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: corsHeaders() })
+    }
+    const { id, id_column } = body ?? {}
 
     if (!id) {
       return NextResponse.json(
@@ -447,17 +545,20 @@ export async function DELETE(
       )
     }
 
+    // Optional id_column (e.g. route_id), validated against the model.
+    const idCol = id_column ?? 'id'
+    const cols  = modelColumns(model).map((c: any) => c.name)
+    if (!IDENT.test(idCol) || (idCol !== 'id' && !cols.includes(idCol))) {
+      return NextResponse.json({ error: 'Invalid id_column' }, { status: 400, headers: corsHeaders() })
+    }
+
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
-    // NOTE: adapter.delete only supports the default id column. Tables with a
-    // non-'id' primary key (e.g. route_id) won't match — tracked as
-    // "DELETE hardening — id_column for route_id on Postgres/MySQL".
-    await adapter.delete!(dbConfig, table, id)
+    await adapter.delete!(dbConfig, table, id, idCol)
 
     return NextResponse.json({ success: true }, { headers: corsHeaders() })
   } catch (err: any) {
-    console.error('[api-public] DELETE failed:', err.message)
-    return NextResponse.json({ error: err.message }, { status: 500, headers: corsHeaders() })
+    return serverError('DELETE', err)
   }
 }

@@ -6,6 +6,7 @@ import { CMSToggle }                                from '../../ui/CMSToggle'
 import { useConsoleStore }                          from '@/app/store/consoleStore'
 import { FiEye, FiEyeOff }                         from 'react-icons/fi'
 import { useTranslations } from 'next-intl'
+import { authHeader }      from '@/app/lib/clientAuth'
 
 export default function SmtpPage() {
   const t = useTranslations('smtpPage')
@@ -54,7 +55,7 @@ export default function SmtpPage() {
     try {
       const res = await fetch('/api/update-smtp-settings', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({
           user_id:         user?.user_id,
           verify_email:    verifyEmail,

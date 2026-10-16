@@ -1,4 +1,4 @@
-// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api-public\v1\[project]\auth\anonymous\route.ts
+// File: app/api-public/v1/[project]/auth/anonymous/route.ts
 
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcrypt'
@@ -6,6 +6,7 @@ import crypto from 'crypto'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { validateCoreApiKey } from '@/app/lib/coreApiAuth'
 import { coreCors, safeCustomer, issueCoreCustomerToken } from '@/app/lib/customerAuthCore'
+import { clientIp, rateLimit } from '@/app/lib/rateLimit'
 
 export async function OPTIONS() {
   return new NextResponse(null, { status: 204, headers: coreCors() })
@@ -20,11 +21,25 @@ export async function OPTIONS() {
 // is_anonymous — so signin/signup here (and hosted) must explicitly
 // reject any row where is_anonymous is true, rather than relying on the
 // lookup itself to exclude them.
+//
+// Each call creates a database row, so it is rate limited per IP: without
+// that, anyone with the (public) API key could fill the user table.
+const ANON_LIMIT     = 30                 // new anonymous sessions
+const ANON_WINDOW_MS = 60 * 60 * 1000     // per hour, per IP
+
 export async function POST(req: NextRequest) {
   const apiKey = req.headers.get('x-api-key') ?? ''
   const auth = await validateCoreApiKey(apiKey)
   if (!auth.ok) {
     return NextResponse.json({ error: auth.message }, { status: auth.status, headers: coreCors() })
+  }
+
+  const rl = rateLimit(`anon:${clientIp(req)}`, ANON_LIMIT, ANON_WINDOW_MS)
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: 'Too many requests. Try again later.' },
+      { status: 429, headers: { ...coreCors(), 'Retry-After': String(rl.retryAfter) } },
+    )
   }
 
   const adapter  = getConfiguredAdapter()

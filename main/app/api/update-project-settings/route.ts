@@ -4,15 +4,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import fs                            from 'fs'
 import path                          from 'path'
 import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
-
-function patchEnvFile(key: string, value: string) {
-  const envPath = path.resolve(process.cwd(), '.env.local')
-  let content   = fs.existsSync(envPath) ? fs.readFileSync(envPath, 'utf-8') : ''
-  const line    = `${key}="${value}"`
-  const regex   = new RegExp(`^${key}=.*$`, 'm')
-  content       = regex.test(content) ? content.replace(regex, line) : content + `\n${line}`
-  fs.writeFileSync(envPath, content, 'utf-8')
-}
+import { requireAdmin }              from '@/app/lib/requireAdmin'
+import { patchEnvFile }              from '@/app/lib/envFile'
 
 function patchConfigFile(projectName: string) {
   const filePath = path.resolve(process.cwd(), 'underpeaks.config.json')
@@ -24,13 +17,25 @@ function patchConfigFile(projectName: string) {
 
 export async function POST(req: NextRequest) {
   try {
-    const { user_id, project_name, project_url, nxf_api_key } = await req.json()
+    // Admin only; the caller comes from the Bearer token, not the body.
+    const auth = await requireAdmin(req)
+    if (!auth.ok) return auth.response
+    const user_id = auth.userId
 
-    if (!user_id || !project_name) {
+    const { project_name, project_url, nxf_api_key } = await req.json()
+
+    if (typeof project_name !== 'string' || !project_name.trim() || project_name.length > 200) {
       return NextResponse.json(
-        { error: 'user_id and project_name are required' },
+        { error: 'project_name is required' },
         { status: 400 }
       )
+    }
+    if (project_url !== undefined && project_url !== '' &&
+        (typeof project_url !== 'string' || !/^https?:\/\/[^\s"'\\]+$/i.test(project_url))) {
+      return NextResponse.json({ error: 'Invalid project_url' }, { status: 400 })
+    }
+    if (nxf_api_key !== undefined && (typeof nxf_api_key !== 'string' || nxf_api_key.length > 500)) {
+      return NextResponse.json({ error: 'Invalid nxf_api_key' }, { status: 400 })
     }
 
     const adapter  = getConfiguredAdapter()
@@ -38,9 +43,8 @@ export async function POST(req: NextRequest) {
 
     const now = new Date().toISOString()
 
-    // FIX: nxf_system_config has no project_url column — dropped from the
-    // payload entirely (was causing every save to fail). nxf_api_key maps
-    // to the real column hosted_api_key.
+    // nxf_system_config has no project_url column — it is only written to the
+    // local files below. nxf_api_key maps to the real column hosted_api_key.
     const updatePayload: Record<string, any> = {
       project_name,
       updated_at:  now,
@@ -63,9 +67,10 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    // project_url only patched into local files — not stored in DB.
-    if (project_url) patchEnvFile('NEXT_PUBLIC_APP_DOMAIN', project_url)
-    if (nxf_api_key) patchEnvFile('NXF_LICENSE_KEY', nxf_api_key)
+    const envUpdates: Record<string, string> = {}
+    if (project_url) envUpdates.NEXT_PUBLIC_APP_DOMAIN = project_url
+    if (nxf_api_key) envUpdates.NXF_LICENSE_KEY        = nxf_api_key
+    if (Object.keys(envUpdates).length) patchEnvFile(envUpdates)
     patchConfigFile(project_name)
 
     return NextResponse.json({ success: true })

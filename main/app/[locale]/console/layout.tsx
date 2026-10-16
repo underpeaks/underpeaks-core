@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/dialog'
 import Loader              from './Loading'
 import { useConsoleStore } from '../../store/consoleStore'
+import { authHeader } from '@/app/lib/clientAuth'
 
 interface AuthContextType {
   user:           any | null
@@ -171,7 +172,9 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
 
         const userId = data.user.user_id
         if (userId) {
-          const configRes  = await fetch(`/api/get-db-config?user_id=${userId}`)
+          const configRes  = await fetch(`/api/get-db-config?user_id=${userId}`, {
+            headers: { ...authHeader() },
+          })
           const configData = await configRes.json()
           if (configData?.config) loadConfig(configData.config)
         }
@@ -184,17 +187,17 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
     }
   }
 
-  // FIX: the Zustand store is a module-level singleton — it is NOT reset on
+  // FIX: the Zustand store is a module-level singleton - it is NOT reset on
   // client-side navigation, only on full page reload or explicit logout.
   // If the user was previously redirected away from /console while
   // unauthenticated (checkingAuth: false, user: null), that stale state is
   // still sitting in the store the instant this component mounts again
-  // after a successful sign-in — BEFORE the fresh refreshSession() call
+  // after a successful sign-in - BEFORE the fresh refreshSession() call
   // below has had a chance to resolve. The redirect effect further down
   // was firing on that one stale render and bouncing the user straight
   // back to /signin, even though a valid new token had just been stored.
   // Forcing checkingAuth back to true synchronously on every mount closes
-  // that window — the redirect effect can never see a stale "logged out"
+  // that window - the redirect effect can never see a stale "logged out"
   // state again.
   useEffect(() => {
     authCheckedRef.current = false
@@ -237,13 +240,13 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
       const validateData = await validateRes.json()
 
       if (!validateRes.ok || !validateData.valid) {
-        setLicenseError(validateData.error ?? 'Invalid license key — please check and try again.')
+        setLicenseError(validateData.error ?? 'Invalid license key - please check and try again.')
         return
       }
 
       const saveRes = await fetch('/api/update-project-settings', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body:    JSON.stringify({
           user_id:      user?.user_id,
           project_name: config?.project_name ?? '',
@@ -382,7 +385,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
         </div>
       </div>
 
-      {/* ── License Gate Modal ─────────────────────────────────────────────── */}
+      {/* License Gate Modal */}
       <Dialog open={showLicenseGate} onOpenChange={() => {}}>
         <DialogContent className="sm:max-w-[480px]">
           <DialogHeader>
@@ -392,7 +395,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
             <DialogDescription className="mt-2 text-sm text-gray-500">
               Enter your Underpeaks license key to activate this installation.
               You can find your key in your Underpeaks Studio account under
-              Settings → License Keys.
+              Settings, License Keys.
             </DialogDescription>
           </DialogHeader>
 
@@ -418,7 +421,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
               disabled={!licenseInput.trim() || licenseSaving || licenseSuccess}
               className="w-full"
             >
-              {licenseSaving ? 'Validating…' : 'Activate'}
+              {licenseSaving ? 'Validating...' : 'Activate'}
             </Button>
             <Button
               variant="outline"
@@ -431,7 +434,7 @@ export default function ConsoleLayout({ children }: ConsoleLayoutProps) {
         </DialogContent>
       </Dialog>
 
-      {/* ── Idle Session Modal ─────────────────────────────────────────────── */}
+      {/* Idle Session Modal */}
       <Dialog open={showIdleModal} onOpenChange={() => {}}>
         <DialogContent className="sm:max-w-[400px] text-center flex flex-col items-center">
           <DialogHeader>

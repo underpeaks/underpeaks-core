@@ -6,6 +6,7 @@ import { useConsoleStore }                    from '@/app/store/consoleStore'
 import { UploadZone }                         from '@/app/lib/uploads/UploadZone'
 import { UploadResult }                       from '@/app/lib/uploads/types'
 import { useTranslations } from 'next-intl'
+import { authHeader } from '@/app/lib/clientAuth'
 
 function SectionCard({
   title,
@@ -51,7 +52,7 @@ export default function BrandingPage() {
     try {
       const res = await fetch('/api/update-branding', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify({
           user_id:     user?.user_id,
           logo_url:    logoUrl,

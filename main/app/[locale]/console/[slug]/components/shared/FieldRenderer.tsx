@@ -1,3 +1,4 @@
+// main\app\[locale]\console\[slug]\components\shared\FieldRenderer.tsx
 'use client'
 
 /**
@@ -15,8 +16,8 @@
  * rating, slider, autocomplete, stepper, hidden.
  *
  * Image fields:
- *   - column.type === 'array' → multi-image mode with drag-to-reorder and carousel intent
- *   - column.type === 'string' → single image, replaces on new upload
+ *   - column.type === 'array' -> multi-image mode with drag-to-reorder and carousel intent
+ *   - column.type === 'string' -> single image, replaces on new upload
  *   - All variants support file upload, URL paste, replace, delete
  *
  * Dynamic select/multi-select options are passed in as SelectOption[]
@@ -85,7 +86,7 @@ function formatDate(v: unknown): string {
 // ---------------------------------------------------------------------------
 
 function TagsInput({
-  value, onChange, disabled, placeholder = 'Add tag…',
+  value, onChange, disabled, placeholder = 'Add tag...',
 }: {
   value: string[]; onChange: (v: string[]) => void; disabled?: boolean; placeholder?: string
 }) {
@@ -208,7 +209,7 @@ function StarRating({
           onMouseLeave={() => setHover(0)}
           className="text-2xl leading-none transition disabled:cursor-not-allowed"
         >
-          <span className={(hover || value) >= star ? 'text-amber-400' : 'text-gray-200'}>★</span>
+          <span className={(hover || value) >= star ? 'text-amber-400' : 'text-gray-200'}>&#9733;</span>
         </button>
       ))}
     </div>
@@ -216,7 +217,7 @@ function StarRating({
 }
 
 // ---------------------------------------------------------------------------
-// Image field — handles single and multi via column.type
+// Image field - handles single and multi via column.type
 // ---------------------------------------------------------------------------
 
 function ImageField({
@@ -237,17 +238,17 @@ function ImageField({
   const [urlInput,    setUrlInput]    = useState('')
   const [dragIdx,     setDragIdx]     = useState<number | null>(null)
 
-  // ── Helper to write back the correct shape ─────────────────────────────
+  // -- Helper to write back the correct shape -------------------------------
   const writeUrls = (next: string[]) => {
     if (isMulti) {
       onChange(next)
     } else {
-      // Single mode — store as string (first URL only) or null
+      // Single mode - store as string (first URL only) or null
       onChange(next[0] ?? null)
     }
   }
 
-  // ── Upload one or more files ───────────────────────────────────────────
+  // -- Upload one or more files ---------------------------------------------
   const uploadFiles = async (files: FileList) => {
     setUploadError(null)
     setUploading(true)
@@ -264,9 +265,10 @@ function ImageField({
         const formData = new FormData()
         formData.append('file',   file)
         formData.append('folder', 'products')
+        formData.append('mode',   'storage')
 
         const token = getAuthToken()
-        const res = await fetch('/api/storage/upload', {
+        const res = await fetch('/api/storage/upload-file', {
           method:  'POST',
           headers: { Authorization: `Bearer ${token}` },
           body:    formData,
@@ -332,7 +334,7 @@ function ImageField({
     fileInputRef.current?.click()
   }
 
-  // ── Drag-to-reorder (multi mode only) ──────────────────────────────────
+  // -- Drag-to-reorder (multi mode only) ------------------------------------
   const handleDragStart = (idx: number) => {
     setDragIdx(idx)
   }
@@ -355,7 +357,7 @@ function ImageField({
     setDragIdx(null)
   }
 
-  // ── Render thumbnails ──────────────────────────────────────────────────
+  // -- Render thumbnails ----------------------------------------------------
   const thumbnails = (
     <div className={isMulti
       ? 'grid grid-cols-3 gap-2'
@@ -425,7 +427,7 @@ function ImageField({
     </div>
   )
 
-  // ── Hide upload UI when single + already has an image (replace via hover) ──
+  // -- Hide upload UI when single + already has an image (replace via hover) --
   const canAddMore = isMulti || urls.length === 0
 
   return (
@@ -453,7 +455,7 @@ function ImageField({
             </div>
             <p className="text-xs font-medium text-gray-700">
               {uploading
-                ? 'Uploading…'
+                ? 'Uploading...'
                 : isMulti
                   ? (urls.length === 0 ? 'Upload images' : 'Add more images')
                   : 'Upload image'}
@@ -483,7 +485,7 @@ function ImageField({
                   handleUrlAdd()
                 }
               }}
-              placeholder="https://…"
+              placeholder="https://..."
               disabled={uploading}
               className="flex-1 px-3 py-2 text-sm border border-gray-200 rounded-lg
                          focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]
@@ -502,7 +504,7 @@ function ImageField({
         </>
       )}
 
-      {/* Hidden file input — shared between "add new" and "replace" paths */}
+      {/* Hidden file input - shared between "add new" and "replace" paths */}
       <input
         ref={fileInputRef}
         type="file"
@@ -547,7 +549,7 @@ export default function FieldRenderer({
     bg-white text-[var(--color-text)]
     disabled:opacity-50 disabled:cursor-not-allowed`
 
-  // Hidden — never render
+  // Hidden - never render
   if (uiType === 'hidden' || column.hidden) return null
 
   // Toggle / checkbox
@@ -601,7 +603,7 @@ export default function FieldRenderer({
         onChange={(e) => onChange(e.target.value)}
         className={baseInput}
       >
-        <option value="">Select…</option>
+        <option value="">Select...</option>
         {selectOptions.map((opt) => (
           <option key={opt.value} value={opt.value}>{opt.label}</option>
         ))}
@@ -715,7 +717,7 @@ export default function FieldRenderer({
     )
   }
 
-  // ── IMAGE FIELDS — delegated to ImageField component ─────────────────
+  // -- IMAGE FIELDS - delegated to ImageField component -------------------
   if (uiType === 'image-upload' || uiType === 'image-url' || uiType === 'media-picker') {
     return (
       <ImageField
@@ -758,7 +760,7 @@ export default function FieldRenderer({
           rows={6}
           onChange={(e) => onChange(e.target.value)}
           className={`${baseInput} resize-y`}
-          placeholder="Enter rich text content…"
+          placeholder="Enter rich text content..."
         />
         <p className="text-[11px] text-gray-400">
           Full rich text editor available on the hosted plan
@@ -906,7 +908,7 @@ export default function FieldRenderer({
       disabled={disabled}
       onChange={(e) => onChange(e.target.value)}
       className={baseInput}
-      placeholder={`Enter ${label}…`}
+      placeholder={`Enter ${label}...`}
     />
   )
 }

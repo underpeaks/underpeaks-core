@@ -5,44 +5,14 @@
  * Used by dynamic page templates to get the schema field definitions
  * so they can render the correct columns, form fields, and drawer inputs.
  *
- * Auth: session token (same pattern as api-cms/data).
+ * Auth: console session token, checked by the shared requireSessionUser
+ * helper. This file used to carry its own copy of the check, which accepted
+ * any token in nxf_system_tokens, including customer tokens.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
-
-async function getSessionUser(req: NextRequest): Promise<{ user_id: string } | null> {
-  try {
-    const authHeader = req.headers.get('Authorization')
-    const token      = authHeader?.replace('Bearer ', '').trim()
-    if (!token) return null
-
-    const adapter  = getConfiguredAdapter()
-    const dbConfig = adapter.config
-    const dbType   = dbConfig.type
-
-    if (dbType === 'firebase') {
-      const decoded = await adapter.validateBuiltInSession?.(dbConfig, token)
-      if (!decoded) return null
-      return { user_id: decoded.uid ?? decoded.id ?? decoded.user_id }
-    }
-
-    if (dbType === 'supabase') {
-      const user = await adapter.validateBuiltInSession?.(dbConfig, token)
-      if (!user) return null
-      return { user_id: user.id ?? user.uid ?? user.user_id }
-    }
-
-    if (!adapter.findTokenByAccessToken) return null
-    const storedToken = await adapter.findTokenByAccessToken(token)
-    if (!storedToken)                                               return null
-    if (storedToken.revoked)                                        return null
-    if (new Date(storedToken.expires_at).getTime() < Date.now())   return null
-    return { user_id: storedToken.user_id }
-  } catch {
-    return null
-  }
-}
+import { requireSessionUser }        from '@/app/lib/getSessionUser'
 
 export async function GET(
   req:     NextRequest,
@@ -51,10 +21,8 @@ export async function GET(
   try {
     const { id } = await context.params
 
-    const sessionUser = await getSessionUser(req)
-    if (!sessionUser) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
 
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
@@ -99,6 +67,6 @@ export async function GET(
     })
   } catch (err: any) {
     console.error('[api-cms/models] GET failed:', err.message)
-    return NextResponse.json({ error: err.message }, { status: 500 })
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

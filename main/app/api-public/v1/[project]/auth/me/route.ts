@@ -1,4 +1,4 @@
-// File: D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api-public\v1\[project]\auth\me\route.ts
+// File: app/api-public/v1/[project]/auth/me/route.ts
 
 import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
@@ -23,32 +23,39 @@ export async function GET(req: NextRequest) {
 
   let decoded: any
   try {
-    decoded = verifyAccessToken(customerToken)
+    decoded = verifyAccessToken(customerToken)   // also rejects non-customer tokens
   } catch {
     return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401, headers: coreCors() })
   }
 
-  if (decoded?.user_type !== 'customer') {
-    return NextResponse.json({ error: 'Invalid token' }, { status: 401, headers: coreCors() })
+  try {
+    const adapter  = getConfiguredAdapter()
+    const dbConfig = adapter.config
+
+    // Confirm token not revoked.
+    const tokenRows: any[] = await (adapter as any).readAll(dbConfig, 'nxf_system_tokens')
+    const tokenRow = (tokenRows ?? []).find((t: any) => t.access_token === customerToken)
+    if (!tokenRow || tokenRow.revoked) {
+      return NextResponse.json({ error: 'Session revoked' }, { status: 401, headers: coreCors() })
+    }
+
+    const userId = decoded.sub ?? decoded.user_id
+    const users: any[] = await (adapter as any).read(dbConfig, 'nxf_users', { user_id: userId })
+    const user = users?.[0]
+
+    if (!user || user.user_type !== 'customer') {
+      return NextResponse.json({ error: 'User not found' }, { status: 404, headers: coreCors() })
+    }
+
+    // A suspended or disabled customer loses access straight away, not when
+    // the token expires.
+    if (user.status === 'suspended' || user.status === 'inactive' || user.status === 'disabled') {
+      return NextResponse.json({ error: 'Account is not active' }, { status: 403, headers: coreCors() })
+    }
+
+    return NextResponse.json({ user: safeCustomer(user) }, { headers: coreCors() })
+  } catch (err: any) {
+    console.error('[api-public] me failed:', err?.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500, headers: coreCors() })
   }
-
-  const adapter  = getConfiguredAdapter()
-  const dbConfig = adapter.config
-
-  // Confirm token not revoked.
-  const tokenRows: any[] = await (adapter as any).readAll(dbConfig, 'nxf_system_tokens')
-  const tokenRow = (tokenRows ?? []).find((t: any) => t.access_token === customerToken)
-  if (!tokenRow || tokenRow.revoked) {
-    return NextResponse.json({ error: 'Session revoked' }, { status: 401, headers: coreCors() })
-  }
-
-  const userId = decoded.sub ?? decoded.user_id
-  const users: any[] = await (adapter as any).read(dbConfig, 'nxf_users', { user_id: userId })
-  const user = users?.[0]
-
-  if (!user || user.user_type !== 'customer') {
-    return NextResponse.json({ error: 'User not found' }, { status: 404, headers: coreCors() })
-  }
-
-  return NextResponse.json({ user: safeCustomer(user) }, { headers: coreCors() })
 }
