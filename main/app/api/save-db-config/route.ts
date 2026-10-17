@@ -1,3 +1,5 @@
+// app/api/save-db-config/route.ts
+
 /**
  * POST D:\NXTFLUTTER_CORE\underpeaks-core\main\app\api\save-db-config\route.ts
  *
@@ -14,6 +16,8 @@
  * - Validates and normalises the config values (adding https://, escaping
  *   special characters, extracting MongoDB database names, etc.).
  * - Generates a cryptographically secure API key secret.
+ * - Generates (or keeps) the NXF_ENCRYPTION_KEY used to encrypt stored
+ *   credentials.
  * - Writes a `.env.local` file at the project root containing all the
  *   environment variables needed for the selected database type.
  *
@@ -37,7 +41,7 @@
  *
  * Security notes:
  * - Database passwords, connection strings, service account keys, and the
- *   generated API key secret are written to `.env.local` but are NEVER logged.
+ *   generated secrets are written to `.env.local` but are NEVER logged.
  * - The only console output is the file write path (logged at module load
  *   time) and a success confirmation after writing — no credential values.
  */
@@ -211,6 +215,22 @@ function generateApiKeySecret(): string {
   return result
 }
 
+/**
+ * resolveEncryptionKey
+ *
+ * Returns the NXF_ENCRYPTION_KEY to write: the existing one when the server
+ * already has a valid key (so re-running the installer never makes stored
+ * credentials unreadable), otherwise a fresh random 32-byte key as 64 hex
+ * characters.
+ *
+ * SECURITY: Never logged.
+ */
+function resolveEncryptionKey(): string {
+  const existing = process.env.NXF_ENCRYPTION_KEY
+  if (existing && /^[0-9a-fA-F]{64}$/.test(existing)) return existing
+  return crypto.randomBytes(32).toString('hex')
+}
+
 // ---------------------------------------------------------------------------
 // Main env file writer
 // ---------------------------------------------------------------------------
@@ -222,12 +242,12 @@ function generateApiKeySecret(): string {
  *
  * Steps:
  * 1. Validates that the required `type` field is present.
- * 2. Writes global variables (DB type, app domain, API key secret).
+ * 2. Writes global variables (DB type, app domain, secrets).
  * 3. Writes database-specific variables based on `env.type`.
  * 4. Writes the file to `ENV_FILE_PATH`.
  *
  * SECURITY: Database passwords, connection strings, private keys, and the
- * generated API key secret are written to the file but never logged.
+ * generated secrets are written to the file but never logged.
  *
  * @param env - The database config object from the installer request body.
  * @throws     If required fields for the selected database type are missing.
@@ -258,7 +278,7 @@ async function writeEnvFileFromObject(env: Record<string, any>): Promise<void> {
   lines.push(
     `NEXT_PUBLIC_APP_DOMAIN=${envSafe(ensureHttp(env.domain || 'localhost:3000'))}`
   )
-lines.push(`NEXT_PUBLIC_STUDIO_URL=${envSafe('https://studio.underpeaks.com')}`)
+  lines.push(`NEXT_PUBLIC_STUDIO_URL=${envSafe('https://studio.underpeaks.com')}`)
   lines.push(`NXF_LICENSE_GRACE_UNTIL=${envSafe('')}`)
   /**
    * NXF_API_KEY_SECRET
@@ -267,10 +287,20 @@ lines.push(`NEXT_PUBLIC_STUDIO_URL=${envSafe('https://studio.underpeaks.com')}`)
    */
   const apiKeySecret = generateApiKeySecret()
   const jwtAccessSecret  = crypto.randomBytes(48).toString("hex");
-const jwtRefreshSecret = crypto.randomBytes(48).toString("hex");
+  const jwtRefreshSecret = crypto.randomBytes(48).toString("hex");
   lines.push(`NXF_API_KEY_SECRET=${envSafe(apiKeySecret)}`)
-lines.push(`JWT_ACCESS_SECRET=${envSafe(jwtAccessSecret)}`)
-lines.push(`JWT_REFRESH_SECRET=${envSafe(jwtRefreshSecret)}`)
+  lines.push(`JWT_ACCESS_SECRET=${envSafe(jwtAccessSecret)}`)
+  lines.push(`JWT_REFRESH_SECRET=${envSafe(jwtRefreshSecret)}`)
+
+  /**
+   * NXF_ENCRYPTION_KEY
+   * Random 32-byte key (64 hex chars) that encrypts stored database and SMTP
+   * credentials. Kept if the server already has a valid one.
+   * SECURITY: Never logged. Losing it makes stored encrypted values
+   * unreadable, so back up .env.local.
+   */
+  lines.push(`NXF_ENCRYPTION_KEY=${envSafe(resolveEncryptionKey())}`)
+
   // -------------------------------------------------------------------------
   // MongoDB variables
   // -------------------------------------------------------------------------
@@ -338,28 +368,28 @@ lines.push(`JWT_REFRESH_SECRET=${envSafe(jwtRefreshSecret)}`)
   // -------------------------------------------------------------------------
 
   if (env.type === 'supabase') {
-  const url = env.supabaseUrl || env.url
-  if (!url) throw new Error('Supabase URL missing')
+    const url = env.supabaseUrl || env.url
+    if (!url) throw new Error('Supabase URL missing')
 
-  lines.push(`NEXT_PUBLIC_SUPABASE_URL=${envSafe(ensureHttp(url))}`)
+    lines.push(`NEXT_PUBLIC_SUPABASE_URL=${envSafe(ensureHttp(url))}`)
 
-  if (env.anonKey) {
-    lines.push(`NEXT_PUBLIC_SUPABASE_ANON_KEY=${envSafe(env.anonKey)}`)
+    if (env.anonKey) {
+      lines.push(`NEXT_PUBLIC_SUPABASE_ANON_KEY=${envSafe(env.anonKey)}`)
+    }
+
+    if (env.serviceRoleKey) {
+      lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.serviceRoleKey)}`)
+    }
+
+    if (env.storageUrl) {
+      lines.push(`NEXT_DB_STORAGE_URL=${envSafe(ensureHttp(env.storageUrl))}`)
+    }
+
+    // ── NEW — write the direct Postgres connection string for DDL operations
+    if (env.connectionString) {
+      lines.push(`NEXT_DB_SUPABASE_CONNECTION_STRING=${envSafe(env.connectionString)}`)
+    }
   }
-
-  if (env.serviceRoleKey) {
-    lines.push(`NEXT_PUBLIC_SUPABASE_SERVICE_KEY=${envSafe(env.serviceRoleKey)}`)
-  }
-
-  if (env.storageUrl) {
-    lines.push(`NEXT_DB_STORAGE_URL=${envSafe(ensureHttp(env.storageUrl))}`)
-  }
-
-  // ── NEW — write the direct Postgres connection string for DDL operations
-  if (env.connectionString) {
-    lines.push(`NEXT_DB_SUPABASE_CONNECTION_STRING=${envSafe(env.connectionString)}`)
-  }
-}
 
   // -------------------------------------------------------------------------
   // Firebase variables

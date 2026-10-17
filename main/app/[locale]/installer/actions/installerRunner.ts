@@ -1,3 +1,5 @@
+// app/[locale]/installer/actions/installerRunner.ts
+
 /**
  * Installer Steps Utility
  *
@@ -29,9 +31,13 @@
  * configuration down through every layer.
  *
  * Exports:
- *   - INSTALL_STEPS      : ordered array of step name strings.
- *   - runInstallerSteps  : runs all steps in sequence, reporting progress.
- *   - writeConfigFile    : exported separately so the UI can call it on demand.
+ *   - INSTALL_STEPS       : ordered array of step name strings.
+ *   - runInstallerSteps   : runs all steps in sequence, reporting progress.
+ *   - writeConfigFile     : exported separately so the UI can call it on demand.
+ *   - getInstallHeaders   : headers (incl. install token) for installer calls
+ *                           made outside this file, e.g. /api/save-config.
+ *   - endInstallSession   : ends the install session. Call it once the last
+ *                           installer request (save-config) has succeeded.
  */
 
 import { useInstallerStore }    from '../../../store/useInstallerStore'
@@ -58,6 +64,47 @@ function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms))
 }
 
+/**
+ * Install session token. create-system-tables hands it back when this install
+ * starts; every later step sends it as x-install-token, because from the moment
+ * the admin account exists the installer routes are otherwise admin-only.
+ */
+let installToken = ''
+
+function installHeaders(): Record<string, string> {
+  return installToken
+    ? { 'Content-Type': 'application/json', 'x-install-token': installToken }
+    : { 'Content-Type': 'application/json' }
+}
+
+/**
+ * getInstallHeaders
+ *
+ * Same headers the installer steps use. For installer calls made outside this
+ * file (the finalise page's /api/save-config call).
+ */
+export function getInstallHeaders(): Record<string, string> {
+  return installHeaders()
+}
+
+/**
+ * endInstallSession
+ *
+ * Ends the install session: the server deletes the token and the installer
+ * routes become admin-only again. Call this AFTER the last installer request
+ * (save-config) has succeeded. Safe to call more than once.
+ */
+export async function endInstallSession(): Promise<void> {
+  if (installToken) {
+    try {
+      await fetch('/api/installer/status', { method: 'DELETE', headers: installHeaders() })
+    } catch {
+      // The token also expires by itself after an hour.
+    }
+  }
+  installToken = ''
+}
+
 // ---------------------------------------------------------------------------
 // Individual installer step functions
 // ---------------------------------------------------------------------------
@@ -74,13 +121,11 @@ function delay(ms: number): Promise<void> {
 async function createDatabaseSchemaAndTables(): Promise<void> {
   const { dbConfig, selectedProjectType } = useInstallerStore.getState()
 
-  console.log('[installer] dbConfig being sent:', JSON.stringify(dbConfig, null, 2))  // ← add this
-
   if (!dbConfig) throw new Error('Database config not found in installer store')
 
   const response = await fetch('/api/create-system-tables', {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: installHeaders(),
     body:    JSON.stringify({ config: dbConfig, selectedProjectType }),
   })
 
@@ -90,7 +135,8 @@ async function createDatabaseSchemaAndTables(): Promise<void> {
   }
 
   const data = await response.json()
-  console.log('[installer] System tables created:', data)
+  if (data?.installToken) installToken = data.installToken
+  console.log('[installer] System tables created')
   return data
 }
 
@@ -119,7 +165,7 @@ async function createAdminUser(
 
   const response = await fetch('/api/create-admin-user', {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: installHeaders(),
     body:    JSON.stringify({ config: dbConfig, adminUser, projectName, subdomain }),
   })
 
@@ -129,7 +175,7 @@ async function createAdminUser(
   }
 
   const data = await response.json()
-  console.log('[installer] Admin user created:', data)
+  console.log('[installer] Admin user created')
   return data
 }
 
@@ -154,7 +200,7 @@ async function createModels(): Promise<any> {
 
   const response = await fetch('/api/models/create-models', {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: installHeaders(),
     body:    JSON.stringify({
       config:    dbConfig,
       adminUser: {
@@ -172,7 +218,7 @@ async function createModels(): Promise<any> {
   }
 
   const data = await response.json()
-  console.log('[installer] Data models created:', data)
+  console.log('[installer] Data models created')
   return data
 }
 
@@ -196,7 +242,7 @@ export async function writeConfigFile(): Promise<any> {
 
   const response = await fetch('/api/write-config', {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: installHeaders(),
     body:    JSON.stringify({
       projectName:         store.projectName,
       subdomain:           store.subdomain,
@@ -223,7 +269,7 @@ export async function writeConfigFile(): Promise<any> {
   }
 
   const data = await response.json()
-  console.log('[installer] Config file written:', data)
+  console.log('[installer] Config file written')
   return data
 }
 
@@ -243,7 +289,7 @@ async function setupStorage(): Promise<any> {
 
   const response = await fetch('/api/create-storage-buckets', {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: installHeaders(),
     body:    JSON.stringify({ dbConfig }),
   })
 
@@ -253,7 +299,7 @@ async function setupStorage(): Promise<any> {
   }
 
   const data = await response.json()
-  console.log('[installer] Storage buckets created:', data)
+  console.log('[installer] Storage buckets created')
   return data
 }
 
@@ -285,7 +331,7 @@ async function installDemoContent(): Promise<any> {
 
   const response = await fetch('/api/install-demo-content', {
     method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: installHeaders(),
     body:    JSON.stringify({ config: dbConfig, selectedProjectType }),
   })
 
@@ -295,7 +341,7 @@ async function installDemoContent(): Promise<any> {
   }
 
   const data = await response.json()
-  console.log('[installer] Demo content installed:', data)
+  console.log('[installer] Demo content installed')
   return data
 }
 
@@ -378,12 +424,11 @@ async function runTests(): Promise<void> {
 /**
  * finalizeInstaller
  *
- * Clears sensitive data from the installer store and redirects to the
- * console dashboard now that installation is complete.
+ * Clears sensitive data from the installer store and issues the CodeGen
+ * license. It does NOT end the install session: the finalise page still has to
+ * call /api/save-config afterwards, so it ends the session itself (via
+ * endInstallSession) once that call has succeeded.
  */
-// File: app/[locale]/installer/steps/installerSteps.ts (Core)
-// Replace the finalizeInstaller function with:
-
 async function finalizeInstaller(): Promise<void> {
   // ── Clear sensitive data from memory ────────────────────────────────────
   useInstallerStore.setState((state) => ({
@@ -413,7 +458,7 @@ async function finalizeInstaller(): Promise<void> {
       // Write the license key to .env.local
       await fetch('/api/installer/write-env', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: installHeaders(),
         body:    JSON.stringify({
           NXF_CODEGEN_LICENSE_KEY: data.license_key,
         }),
@@ -425,7 +470,7 @@ async function finalizeInstaller(): Promise<void> {
     console.warn('[installer] CodeGen license issue failed — user can run nxf login manually')
   }
 
-  console.log('[installer] Installer finalized — redirecting to dashboard')
+  console.log('[installer] Installer finalized')
 }
 
 // ---------------------------------------------------------------------------
@@ -515,7 +560,6 @@ export async function runInstallerSteps(
         case 'Installing Flutter project':
           console.log('[installer] Installing Flutter project')
           if (selectedStack === 'flutter' || selectedStack === 'both') {
-            console.log(`FLUTTER PROJECT NAME INSTALLER: ${projectName} `)
             await createFlutterProject(projectName)
           }
           console.log('[installer] Flutter project installation complete')

@@ -1,15 +1,21 @@
+// app/api/dashboard/kpi/route.ts
+
 // ============================================================
 // FILE: app/api/dashboard/kpi/route.ts
+// The caller comes from the Bearer token (a user_id in the body is
+// ignored). The collection must be on the dashboard allow-list.
 // ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { KpiFormula, KpiFormat } from '@/app/[locale]/console/kpi/kpi';
 import { computeKpi } from '@/app/[locale]/console/kpi/kpiEngine';
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
+import { requireSessionUser }   from '@/app/lib/getSessionUser';
+import { isAllowedCollection, areFieldsAllowed } from '@/app/lib/dashboardAccess';
 
 
 type KpiComputeRequest = {
-  user_id:       string;
+  user_id?:      string;
   collection:    string;
   formula:       KpiFormula;
   format?:       KpiFormat;
@@ -23,22 +29,35 @@ type KpiComputeRequest = {
 
 export async function POST(req: NextRequest) {
   try {
+    const session = await requireSessionUser(req);
+    if (!session.ok) return session.response;
+
     const body = (await req.json()) as KpiComputeRequest;
     const {
-      user_id, collection, formula,
+      collection, formula,
       field, field_a, field_b, operator,
       filter_field, filter_value,
     } = body;
 
-    if (!user_id || !collection || !formula) {
+    if (!collection || !formula) {
       return NextResponse.json(
-        { error: 'user_id, collection, and formula are required' },
+        { error: 'collection and formula are required' },
         { status: 400 }
       );
     }
 
     const adapter  = getConfiguredAdapter();
     const dbConfig = adapter.config;
+
+    // Only allow-listed collections ever reach the database. Anything else
+    // answers like a missing table did before: an empty result.
+    if (!(await isAllowedCollection(adapter, dbConfig, collection))) {
+      return NextResponse.json({ value: 0, formatted: '0' });
+    }
+
+    if (!areFieldsAllowed(collection, [field, field_a, field_b, filter_field])) {
+      return NextResponse.json({ error: 'Field not available' }, { status: 400 });
+    }
 
     let data: Record<string, unknown>[] = [];
     try {

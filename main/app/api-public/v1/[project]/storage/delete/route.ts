@@ -7,6 +7,9 @@
  * file_name), then removes the nxf_storage row.
  *
  * Auth: X-API-Key header → validateCoreApiKey.
+ *
+ * Hardening (Oct 2026): id must be a plain string, and 500 responses no longer
+ * return internal error messages.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
@@ -38,10 +41,11 @@ export async function POST(req: NextRequest, { params }: { params: Promise<Param
     return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400, headers: coreCors() })
   }
 
-  const id = body.id ?? body.storage_id
-  if (!id) {
+  const rawId = body?.id ?? body?.storage_id
+  if (typeof rawId !== 'string' || !rawId || rawId.length > 200) {
     return NextResponse.json({ error: 'id is required' }, { status: 400, headers: coreCors() })
   }
+  const id = rawId
 
   try {
     const adapter  = getConfiguredAdapter()
@@ -59,7 +63,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<Param
 
     return NextResponse.json({ success: true }, { headers: coreCors() })
   } catch (err: any) {
-    console.error('[api-public] storage delete failed:', err.message)
-    return NextResponse.json({ error: err.message }, { status: 500, headers: coreCors() })
+    console.error('[api-public] storage delete failed:', err?.message)
+    return NextResponse.json({ error: 'Delete failed' }, { status: 500, headers: coreCors() })
   }
 }

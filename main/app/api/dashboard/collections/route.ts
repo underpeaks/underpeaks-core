@@ -1,6 +1,8 @@
+// app/api/dashboard/collections/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { DashboardCollection } from '@/app/[locale]/console/types/dashboard';
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
+import { requireSessionUser }   from '@/app/lib/getSessionUser';
 
 
 // System collections always available
@@ -8,16 +10,16 @@ const SYSTEM_COLLECTIONS: DashboardCollection[] = [
   { key: 'nxf_users',                   label: 'Users',          system: true },
   { key: 'nxf_pages',                   label: 'Pages',          system: true },
   { key: 'nxf_system_models',           label: 'Models',         system: true },
-  { key: 'nxf_menu',                    label: 'Menu Items',     system: true },
+  { key: 'nxf_menus',                   label: 'Menu Items',     system: true },
   { key: 'nxf_storage',                 label: 'Media Files',    system: true },
   { key: 'nxf_system_activity_logs',    label: 'Activity Logs',  system: true },
   { key: 'nxf_themes',                  label: 'Themes',         system: true },
 ];
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get('user_id');
-  if (!userId) return NextResponse.json({ error: 'user_id required' }, { status: 400 });
+  // The caller comes from the Bearer token — a user_id in the URL is ignored.
+  const session = await requireSessionUser(req);
+  if (!session.ok) return session.response;
 
   try {
     const adapter  = getConfiguredAdapter();

@@ -1,11 +1,14 @@
 // app/api/models/route.ts
 /**
- * GET  /api/models  — Fetch all models for a user's project from nxf_system_models.
+ * GET  /api/models  — Fetch all models for the signed-in user's project from nxf_system_models.
  * POST /api/models  — Create a new model in nxf_system_models and the real DB table.
+ *
+ * The caller comes from the Bearer token — a user_id in the URL or body is ignored.
  */
 
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { isPlatformTable }      from '@/app/lib/platformTables'
+import { requireSessionUser }   from '@/app/lib/getSessionUser'
 import { NextRequest, NextResponse } from 'next/server'
 import { v4 as uuidv4 }             from 'uuid'
 
@@ -47,14 +50,9 @@ function resolveDocumentId(doc: any): string {
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
-    const userId = req.nextUrl.searchParams.get('user_id')
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'user_id is required' },
-        { status: 400 }
-      )
-    }
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
+    const userId = session.userId
 
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
@@ -83,11 +81,8 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ models })
 
   } catch (err: any) {
-    console.error('GET /api/models error:', err.message)
-    return NextResponse.json(
-      { error: err.message || 'Failed to fetch models' },
-      { status: 500 }
-    )
+    console.error('GET /api/models error:', err?.message)
+    return NextResponse.json({ error: 'Failed to fetch models' }, { status: 500 })
   }
 }
 
@@ -97,6 +92,10 @@ export async function GET(req: NextRequest): Promise<NextResponse> {
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
+    const user_id = session.userId
+
     let body: any
     try {
       body = await req.json()
@@ -107,19 +106,28 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       )
     }
 
-    const { user_id, name, schema } = body
+    const { name, schema } = body
 
     const columns = Array.isArray(schema?.columns) ? schema.columns : null
 
-    if (!user_id || !name || !columns || columns.length === 0) {
+    if (!name || typeof name !== 'string' || !columns || columns.length === 0) {
       return NextResponse.json(
-        { error: 'Missing required fields: user_id, name, schema' },
+        { error: 'Missing required fields: name, schema' },
         { status: 400 }
       )
     }
 
-    // Only real platform tables are reserved
-    if (isPlatformTable(name)) {
+    if (name.length > 128 || name.includes('\0')) {
+      return NextResponse.json({ error: 'Invalid model name' }, { status: 400 })
+    }
+
+    // Column names must be strings too (they are quoted into the CREATE TABLE).
+    if (columns.some((c: any) => !c || typeof c.name !== 'string' || !c.name || c.name.length > 128 || c.name.includes('\0'))) {
+      return NextResponse.json({ error: 'Invalid column name' }, { status: 400 })
+    }
+
+    // nxf_system_* is reserved, and so is every real platform table
+    if (name.toLowerCase().startsWith('nxf_system_') || isPlatformTable(name)) {
       return NextResponse.json(
         { error: 'System tables cannot be modified' },
         { status: 403 }
@@ -201,10 +209,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return NextResponse.json({ success: true, model: modelRow })
 
   } catch (err: any) {
-    console.error('POST /api/models error:', err.message)
-    return NextResponse.json(
-      { error: err.message || 'Failed to create model' },
-      { status: 500 }
-    )
+    console.error('POST /api/models error:', err?.message)
+    return NextResponse.json({ error: 'Failed to create model' }, { status: 500 })
   }
 }

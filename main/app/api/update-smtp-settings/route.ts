@@ -1,43 +1,15 @@
-// app/api/update-smtp-settings/route.ts  (the URL SMTPpage.tsx calls)
+// app/api/update-smtp-settings/route.ts
 
 import 'server-only'
 import { NextRequest, NextResponse } from 'next/server'
-import crypto                        from 'crypto'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { requireAdmin }         from '@/app/lib/requireAdmin'
 import { patchEnvFile }         from '@/app/lib/envFile'
+import { encryptJson }          from '@/app/lib/encryptionKey'
 
 // ---------------------------------------------------------------------------
-// Constants + helpers — all unchanged
+// Helpers
 // ---------------------------------------------------------------------------
-
-const IV_LENGTH = 16
-
-function deriveEncryptionKey({
-  projectId, configId, userId, createdAt,
-}: {
-  projectId: string
-  configId:  string
-  userId:    string
-  createdAt: string
-}) {
-  const rawKey = projectId + configId + userId + createdAt
-  return crypto.createHash('sha256').update(rawKey).digest()
-}
-
-function encrypt(data: any, key: Buffer) {
-  const iv        = crypto.randomBytes(IV_LENGTH)
-  const cipher    = crypto.createCipheriv('aes-256-gcm', key, iv)
-  const encrypted = Buffer.concat([
-    cipher.update(JSON.stringify(data), 'utf8'),
-    cipher.final(),
-  ])
-  return {
-    iv:      iv.toString('hex'),
-    content: encrypted.toString('hex'),
-    tag:     cipher.getAuthTag().toString('hex'),
-  }
-}
 
 function parseJson(v: any): Record<string, any> {
   if (!v) return {}
@@ -106,18 +78,10 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    // ── Derive encryption key ───────────────────────────────────────────────
-
-    const encryptionKey = deriveEncryptionKey({
-      projectId: existing.project_id ?? user_id,
-      configId,
-      userId:    user_id,
-      createdAt: existing.created_at instanceof Date
-        ? existing.created_at.toISOString()
-        : (existing.created_at ?? new Date().toISOString()),
-    })
-
     // ── Build + write SMTP update ───────────────────────────────────────────
+    // The password is encrypted with the server's random NXF_ENCRYPTION_KEY
+    // (see app/lib/encryptionKey). It throws if the key is not configured.
+    //
     // Firestore: dot-notation updates only nested smtp.* fields.
     // Everything else: smtp is a JSON column — merge into the existing object
     // (keeps the stored encrypted password when none is provided) and write
@@ -140,7 +104,7 @@ export async function POST(req: NextRequest) {
       }
 
       if (password) {
-        smtpUpdate['smtp.password_encrypted'] = encrypt(password, encryptionKey)
+        smtpUpdate['smtp.password_encrypted'] = encryptJson(password)
       }
 
       await adapter.update(dbConfig, 'nxf_system_config', configId, smtpUpdate)
@@ -158,7 +122,7 @@ export async function POST(req: NextRequest) {
       }
 
       if (password) {
-        smtp.password_encrypted = encrypt(password, encryptionKey)
+        smtp.password_encrypted = encryptJson(password)
       }
 
       const value = dbConfig.type === 'postgres' || dbConfig.type === 'mysql'

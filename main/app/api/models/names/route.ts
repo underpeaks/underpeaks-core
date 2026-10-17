@@ -2,9 +2,10 @@
 /**
  * GET /api/models/names
  *
- * Returns a lightweight list of all models for the current user's project.
+ * Returns a lightweight list of all models for the signed-in user's project.
  * Used by the FK dropdown and the dynamic select-options source in the
- * model editor.
+ * model editor. The caller comes from the Bearer token — a user_id in the URL
+ * is ignored.
  *
  * schema is always returned as a plain array of column definitions, whatever
  * shape it is stored in (versioned object, bare array, legacy object map).
@@ -15,6 +16,7 @@
 
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
 import { isPlatformTable }      from '@/app/lib/platformTables'
+import { requireSessionUser }   from '@/app/lib/getSessionUser'
 import { NextRequest, NextResponse } from 'next/server'
 
 function normaliseSchema(schema: any): any[] {
@@ -44,14 +46,9 @@ function normaliseSchema(schema: any): any[] {
 
 export async function GET(req: NextRequest): Promise<NextResponse> {
   try {
-    const userId = req.nextUrl.searchParams.get('user_id')
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'user_id is required' },
-        { status: 400 }
-      )
-    }
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
+    const userId = session.userId
 
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config

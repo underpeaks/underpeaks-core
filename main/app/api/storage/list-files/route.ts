@@ -1,119 +1,51 @@
+// app/api/storage/list-files/route.ts
 import 'server-only'
 
 /**
- * API Route: GET /api/storage/list-files
+ * GET /api/storage/list-files?folder=uploads/avatars
+ * Returns { files } for one storage folder through the configured adapter.
+ * If the adapter cannot list files, returns { files: [] }.
  *
- * A server-side endpoint that returns a list of files stored inside a
- * specified folder in the project's configured storage backend.
- *
- * What this route does:
- * 1. Reads the `folder` query parameter from the request URL.
- *    Example URL: /api/storage/list-files?folder=uploads/avatars
- * 2. Resolves the correct storage adapter for the project (e.g. Firebase
- *    Storage, S3, local filesystem — whatever is configured).
- * 3. If the adapter does not support file listing, returns an empty array
- *    gracefully instead of throwing an error.
- * 4. Calls the adapter's listFiles method with the requested folder path
- *    and returns the resulting file list as JSON.
- *
- * Authentication: None enforced at this layer (handled upstream/middleware)
- * Method:         GET
- * Query params:   folder (string, required) — the folder path to list
- * Success:        { files: string[] }
- * Errors:         { error: string } with appropriate HTTP status codes
- *
- * NOTE: This file is marked 'server-only' which means Next.js will throw
- * a build error if it is ever accidentally imported by a client component.
- * This ensures file system and storage credentials are never exposed to
- * the browser.
+ * SECURITY (Oct 2026): signed-in console user required; the folder must be a
+ * plain string path with no "..", ".", backslash or null byte; 500 responses
+ * are generic.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }        from '@/app/lib/getSessionUser'
 
-// ---------------------------------------------------------------------------
-// GET handler
-// ---------------------------------------------------------------------------
+/** A folder path: string, <= 300 chars, no "..", ".", backslash or null byte. */
+function validFolder(v: unknown): v is string {
+  if (typeof v !== 'string' || !v || v.length > 300) return false
+  if (v.includes('\\') || v.includes('\0')) return false
+  return !v.split('/').some((seg) => seg === '..' || seg === '.')
+}
 
-/**
- * GET
- *
- * Lists all files inside a given storage folder.
- * See the file-level JSDoc above for the full description.
- *
- * @param req - The incoming Next.js server request. The `folder` query
- *              parameter is read from the URL search params.
- * @returns A NextResponse containing { files: string[] } on success,
- *          or { error: string } on failure.
- */
 export async function GET(req: NextRequest) {
-  try {
-    // ── Read and validate query parameter ─────────────────────────────────
+  const auth = await requireSessionUser(req)
+  if (!auth.ok) return auth.response
 
-    /**
-     * Extract the `folder` query parameter from the request URL.
-     * This tells the adapter which folder to list files from.
-     * Example: /api/storage/list-files?folder=uploads/avatars
-     *          → folder = 'uploads/avatars'
-     *
-     * If the parameter is missing or empty, we cannot proceed — return 400.
-     */
+  try {
     const folder = req.nextUrl.searchParams.get('folder')
-    if (!folder)
+
+    if (!validFolder(folder)) {
       return NextResponse.json(
-        { error: 'folder query parameter is required' },
+        { error: 'A valid folder query parameter is required' },
         { status: 400 }
       )
+    }
 
-    // ── Resolve storage adapter ────────────────────────────────────────────
-
-    /**
-     * getStorageAdapter — Returns the storage adapter configured for this
-     * project (e.g. Firebase Storage, AWS S3, local disk, etc.).
-     * All file operations go through this adapter so the route works
-     * regardless of which storage backend the project uses.
-     */
     const adapter = getConfiguredAdapter()
 
-    // ── Guard: adapter may not support listing ─────────────────────────────
+    if (!adapter.listFiles) return NextResponse.json({ files: [] })
 
-    /**
-     * Not all storage adapters implement the listFiles method — for example,
-     * a minimal or read-only adapter might omit it.
-     *
-     * Rather than throwing an error, we return an empty files array so the
-     * calling code can handle the "no files" case gracefully without needing
-     * to know whether the adapter supports listing or not.
-     */
-    if (!adapter.listFiles)
-      return NextResponse.json({ files: [] })
-
-    // ── List files ─────────────────────────────────────────────────────────
-
-    /**
-     * Ask the adapter to list all files inside the requested folder.
-     * The return value is an array of file paths or URLs, depending on
-     * the adapter implementation.
-     */
     const files = await adapter.listFiles(folder)
 
-    /**
-     * Return the file list to the client as JSON.
-     */
     return NextResponse.json({ files })
 
-  } catch {
-    /**
-     * Catch-all for any unexpected errors (storage service down, bad
-     * credentials, network timeout, etc.).
-     *
-     * We return a generic 500 without echoing back the raw error object or
-     * its message — leaking internal storage paths, credentials, or stack
-     * traces is a security risk.
-     */
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+  } catch (err: any) {
+    console.error('[list-files] failed:', err?.message)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

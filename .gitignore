@@ -7,7 +7,7 @@ packages/**/node_modules/
 build/
 packages/**/.next/
 packages/**/dist/
-
+.install-session
 # IDE & OS
 .vscode/
 .idea/

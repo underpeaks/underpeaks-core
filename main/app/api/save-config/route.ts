@@ -1,9 +1,13 @@
-// app/api/installer/save-config/route.ts
+// app/api/save-config/route.ts
 
 /**
- * POST /api/installer/save-config
+ * POST /api/save-config
  *
  * Saves the completed installer configuration to the database.
+ *
+ * ACCESS: installer route. Allowed on a fresh install, with a valid
+ * x-install-token (issued by create-system-tables), with
+ * NXF_ALLOW_REINSTALL=true, or for a signed-in admin. See app/lib/installLock.
  *
  * WHY THIS ROUTE RECEIVES CONFIG IN THE REQUEST BODY:
  * ─────────────────────────────────────────────────────
@@ -16,12 +20,13 @@
  * 1. Validates all required fields.
  * 2. Creates the admin user if one doesn't already exist.
  * 3. Creates the project if one doesn't already exist.
- * 4. Encrypts the database config (AES-256-GCM) before storing.
+ * 4. Encrypts the database config (AES-256-GCM, key from NXF_ENCRYPTION_KEY).
  * 5. Saves the full installer config to the database.
  *
  * Response:
  *   200 { success: true, project_id, config_id }
  *   400 { error, missingFields? }
+ *   401/403 — installer access refused.
  *   404 { error }  — Admin user could not be created or found.
  *   500 { error }
  */
@@ -29,50 +34,15 @@
 import { NextResponse }  from 'next/server'
 import { getAdapter }    from '@/app/db-adapter'
 import { DBType }        from '@/app/db-adapter/types'
+import { encryptJson }   from '@/app/lib/encryptionKey'
+import { requireInstallerAccess } from '@/app/lib/installLock'
 import crypto            from 'crypto'
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
 
-const IV_LENGTH = 16
-
 const VALID_DB_TYPES: DBType[] = ['firebase', 'supabase', 'mongodb', 'mysql', 'postgres']
-
-// ---------------------------------------------------------------------------
-// Encryption helpers
-// ---------------------------------------------------------------------------
-
-function deriveEncryptionKey({
-  projectId,
-  configId,
-  userId,
-  createdAt,
-}: {
-  projectId:  string
-  configId:   string
-  userId:     string
-  createdAt:  string
-}) {
-  const rawKey = projectId + configId + userId + createdAt
-  return crypto.createHash('sha256').update(rawKey).digest()
-}
-
-function encrypt(data: any, key: Buffer) {
-  const iv     = crypto.randomBytes(IV_LENGTH)
-  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv)
-
-  const encrypted = Buffer.concat([
-    cipher.update(JSON.stringify(data), 'utf8'),
-    cipher.final(),
-  ])
-
-  return {
-    iv:      iv.toString('hex'),
-    content: encrypted.toString('hex'),
-    tag:     cipher.getAuthTag().toString('hex'),
-  }
-}
 
 // ---------------------------------------------------------------------------
 // Validation helper
@@ -89,6 +59,9 @@ function getMissingFields(fields: Record<string, any>): string[] {
 // ---------------------------------------------------------------------------
 
 export async function POST(req: Request) {
+  const gate = await requireInstallerAccess(req)
+  if (!gate.ok) return gate.response
+
   try {
     const {
       projectName,
@@ -222,12 +195,13 @@ export async function POST(req: Request) {
     console.log('[save-config] Project resolved successfully')
 
     // ── Encrypt the database config ────────────────────────────────────────
+    // Uses the server's random NXF_ENCRYPTION_KEY (see app/lib/encryptionKey).
+    // Throws if the key is missing — the installer writes it to .env.local.
 
-    const createdAt      = new Date().toISOString()
-    const configIdForKey = crypto.randomUUID()
+    const createdAt  = new Date().toISOString()
+    const newConfigId = crypto.randomUUID()
 
-    const encryptionKey     = deriveEncryptionKey({ projectId, configId: configIdForKey, userId, createdAt })
-    const encryptedDbConfig = encrypt(dbConfig, encryptionKey)
+    const encryptedDbConfig = encryptJson(dbConfig)
 
     console.log('[save-config] Database config encrypted')
 
@@ -244,7 +218,7 @@ export async function POST(req: Request) {
     console.log('[save-config] Saving installer config to database')
 
     const configId = await adapter.saveInstallerConfig!(adapter.config, {
-      config_id:             configIdForKey,
+      config_id:             newConfigId,
       tenant_id:             tenantId,
       project_id:            projectId,
       project_name:          projectName || `${adminUser.full_name}'s Project`,
@@ -279,9 +253,9 @@ export async function POST(req: Request) {
     })
 
   } catch (err: any) {
-    console.error('[save-config] Unexpected error:', err.message)
+    console.error('[save-config] Unexpected error:', err?.message)
     return NextResponse.json(
-      { error: err.message ?? 'Internal Server Error' },
+      { error: 'Internal Server Error' },
       { status: 500 }
     )
   }

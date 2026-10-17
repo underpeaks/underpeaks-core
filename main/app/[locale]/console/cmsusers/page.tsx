@@ -286,121 +286,125 @@ export default function UsersPage() {
   }
 
   // ── Render ─────────────────────────────────────────────
+  // The console layout clips its content area at the screen height, so this
+  // page scrolls itself: h-full + overflow-y-auto on the outer wrapper.
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-[1400px] mx-auto">
+    <div className="h-full overflow-y-auto">
+      <div className="flex flex-col gap-6 p-6 max-w-[1400px] mx-auto">
 
-      {/* Page header */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-[var(--color-primary)]/10">
-            <Users size={20} className="text-[var(--color-primary)]" />
+        {/* Page header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-xl bg-[var(--color-primary)]/10">
+              <Users size={20} className="text-[var(--color-primary)]" />
+            </div>
+            <div>
+              <h1 className="text-xl font-bold text-[var(--color-text)]">Users</h1>
+              <p className="text-sm text-[var(--color-text-muted)]">
+                Manage CMS admin and user accounts
+              </p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-xl font-bold text-[var(--color-text)]">Users</h1>
-            <p className="text-sm text-[var(--color-text-muted)]">
-              Manage CMS admin and user accounts
-            </p>
-          </div>
-        </div>
 
-        <div className="flex items-center gap-2">
-          {isKpiEditMode && (
+          <div className="flex items-center gap-2">
+            {isKpiEditMode && (
+              <button
+                disabled={isSavingKpi}
+                onClick={() => {
+                  if (kpiConfig) handleSaveKpiConfig(kpiConfig);
+                  setIsKpiEditMode(false);
+                }}
+                className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg
+                           bg-[var(--color-primary)] text-white hover:opacity-90
+                           transition-opacity disabled:opacity-50"
+              >
+                <Save size={14} />
+                {isSavingKpi ? 'Saving…' : 'Save layout'}
+              </button>
+            )}
             <button
-              disabled={isSavingKpi}
-              onClick={() => {
-                if (kpiConfig) handleSaveKpiConfig(kpiConfig);
-                setIsKpiEditMode(false);
-              }}
-              className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg
-                         bg-[var(--color-primary)] text-white hover:opacity-90
-                         transition-opacity disabled:opacity-50"
+              onClick={() => setIsKpiEditMode((p) => !p)}
+              className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg
+                          border transition-colors ${
+                isKpiEditMode
+                  ? 'border-[var(--color-primary)] text-[var(--color-primary)] bg-[var(--color-primary)]/10'
+                  : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
+              }`}
             >
-              <Save size={14} />
-              {isSavingKpi ? 'Saving…' : 'Save layout'}
+              <Settings2 size={14} />
+              {isKpiEditMode ? 'Editing KPIs' : 'Edit KPIs'}
             </button>
-          )}
-          <button
-            onClick={() => setIsKpiEditMode((p) => !p)}
-            className={`flex items-center gap-2 px-3 py-2 text-sm rounded-lg
-                        border transition-colors ${
-              isKpiEditMode
-                ? 'border-[var(--color-primary)] text-[var(--color-primary)] bg-[var(--color-primary)]/10'
-                : 'border-[var(--color-border)] text-[var(--color-text-muted)] hover:text-[var(--color-text)]'
-            }`}
-          >
-            <Settings2 size={14} />
-            {isKpiEditMode ? 'Editing KPIs' : 'Edit KPIs'}
-          </button>
+          </div>
         </div>
-      </div>
 
-      {/* KPI bar — sits on page background (grey) */}
-     <UserKpiBar
-        config={kpiConfig}
-        results={kpiResults}
-        availableFields={USER_KPI_FIELDS}
-        isEditMode={isKpiEditMode}
-        onConfigChange={(newConfig) => {
-          setKpiConfig(newConfig);
-          // Any change (including the first KPI added from the empty state)
-          // switches on edit mode so the Save layout button is visible.
-          setIsKpiEditMode(true);
-          const allKpiConfigs = newConfig.blocks.flatMap((b) => b.kpis);
-          setKpiResults(
-            computeAllKpis(
-              allUsers as unknown as Record<string, unknown>[],
-              allKpiConfigs
-            )
-          );
-        }}
-        projectId=""
-        tenantId=""
-        page="users"
-      />
-
-      {/* White card — search, filters, table */}
-      <div
-        className="rounded-2xl border border-gray-200 flex flex-col gap-5 p-5"
-        style={{ backgroundColor: '#ffffff' }}
-      >
-        <UserFilters
-          search={search}
-          onSearchChange={setSearch}
-          filter={filter}
-          onFilterChange={setFilter}
-          sort={sort}
-          onSortChange={setSort}
-          totalCount={allUsers.length}
-          filteredCount={processedUsers.length}
+        {/* KPI bar — sits on page background (grey) */}
+        <UserKpiBar
+          config={kpiConfig}
+          results={kpiResults}
+          availableFields={USER_KPI_FIELDS}
+          isEditMode={isKpiEditMode}
+          onConfigChange={(newConfig) => {
+            setKpiConfig(newConfig);
+            // Any change (including the first KPI added from the empty state)
+            // switches on edit mode so the Save layout button is visible.
+            setIsKpiEditMode(true);
+            const allKpiConfigs = newConfig.blocks.flatMap((b) => b.kpis);
+            setKpiResults(
+              computeAllKpis(
+                allUsers as unknown as Record<string, unknown>[],
+                allKpiConfigs
+              )
+            );
+          }}
+          projectId=""
+          tenantId=""
+          page="users"
         />
-        <UserTable
-          users={processedUsers}
-          sort={sort}
-          onSortChange={setSort}
-          onRowClick={setSelectedUser}
-          isLoading={isLoading}
-        />
-      </div>
 
-      <UserDrawer
-        user={selectedUser}
-        isLastAdmin={selectedUser ? isLastAdmin(selectedUser.user_id) : false}
-        currentUserId={currentUserId}
-        onClose={() => setSelectedUser(null)}
-        onRoleChange={handleRoleChange}
-        onStatusChange={handleStatusChange}
-        onDelete={handleDelete}
-        onPasswordReset={handlePasswordReset}
-      />
-
-      {toast && (
-        <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-lg
-                         text-sm font-medium text-white transition-all ${
-          toast.type === 'success' ? 'bg-emerald-600' : 'bg-red-500'
-        }`}>
-          {toast.message}
+        {/* White card — search, filters, table */}
+        <div
+          className="rounded-2xl border border-gray-200 flex flex-col gap-5 p-5"
+          style={{ backgroundColor: '#ffffff' }}
+        >
+          <UserFilters
+            search={search}
+            onSearchChange={setSearch}
+            filter={filter}
+            onFilterChange={setFilter}
+            sort={sort}
+            onSortChange={setSort}
+            totalCount={allUsers.length}
+            filteredCount={processedUsers.length}
+          />
+          <UserTable
+            users={processedUsers}
+            sort={sort}
+            onSortChange={setSort}
+            onRowClick={setSelectedUser}
+            isLoading={isLoading}
+          />
         </div>
-      )}
+
+        <UserDrawer
+          user={selectedUser}
+          isLastAdmin={selectedUser ? isLastAdmin(selectedUser.user_id) : false}
+          currentUserId={currentUserId}
+          onClose={() => setSelectedUser(null)}
+          onRoleChange={handleRoleChange}
+          onStatusChange={handleStatusChange}
+          onDelete={handleDelete}
+          onPasswordReset={handlePasswordReset}
+        />
+
+        {toast && (
+          <div className={`fixed bottom-6 right-6 z-50 px-4 py-3 rounded-xl shadow-lg
+                           text-sm font-medium text-white transition-all ${
+            toast.type === 'success' ? 'bg-emerald-600' : 'bg-red-500'
+          }`}>
+            {toast.message}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

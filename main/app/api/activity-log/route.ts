@@ -1,11 +1,16 @@
+// app/api/activity-log/route.ts
+
 /**
  * POST /api/activity-log
  *
  * Reusable activity logging endpoint. Writes one event to
  * nxf_system_activity_logs. Resolves project_id and tenant_id
- * server-side — callers only need to supply user_id + action.
+ * server-side — callers only need to supply action (+ optional context).
  *
- * Body: { user_id, action, context? }
+ * The user comes from the Bearer token. A user_id in the body is ignored,
+ * so nobody can write log entries for another user.
+ *
+ * Body: { action, context? }   (user_id is accepted but ignored)
  *
  * Copy-paste usage from any page:
  *   await logActivity(userId, 'model_created', { model_name: 'Product' })
@@ -13,15 +18,33 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import crypto                        from 'crypto'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }        from '@/app/lib/getSessionUser'
+
+const MAX_ACTION_LENGTH  = 100
+const MAX_CONTEXT_BYTES  = 5 * 1024
 
 export async function POST(req: NextRequest) {
   try {
-    const { user_id, action, context = {} } = await req.json()
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
 
-    if (!user_id || !action) {
+    const { action, context = {} } = await req.json()
+
+    if (!action || typeof action !== 'string' || action.length > MAX_ACTION_LENGTH) {
       return NextResponse.json(
-        { success: false, error: 'Missing required fields: user_id, action' },
+        { success: false, error: 'Invalid or missing action' },
+        { status: 400 }
+      )
+    }
+
+    if (
+      context === null ||
+      typeof context !== 'object' ||
+      Buffer.byteLength(JSON.stringify(context)) > MAX_CONTEXT_BYTES
+    ) {
+      return NextResponse.json(
+        { success: false, error: 'Invalid context' },
         { status: 400 }
       )
     }
@@ -45,7 +68,7 @@ export async function POST(req: NextRequest) {
 
     await adapter.create!(dbConfig, 'nxf_system_activity_logs', {
       sal_id:     crypto.randomUUID(),
-      user_id,
+      user_id:    session.userId,
       project_id,
       tenant_id,
       action,
@@ -58,7 +81,7 @@ export async function POST(req: NextRequest) {
   } catch (err: any) {
     console.error('[activity-log] Error:', err.message)
     return NextResponse.json(
-      { success: false, error: err.message ?? 'Internal Server Error' },
+      { success: false, error: 'Internal Server Error' },
       { status: 500 }
     )
   }

@@ -9,7 +9,9 @@
 
 import fs from 'fs'
 import path from 'path'
+import crypto from 'crypto'
 import type { StorageFile } from '../types'
+import { safeFetch } from '@/app/lib/safeFetch'
 
 export const ROOT_FOLDER = 'uploads'
 
@@ -108,6 +110,26 @@ export function localDir(folder?: string | null): string {
   return dir
 }
 
+/**
+ * Joins a file name onto a folder and makes sure the result stays INSIDE that
+ * folder. A name such as '../../x' (or an absolute path) would otherwise let a
+ * caller write, rename, move or delete files anywhere on disk. Throws if the
+ * name is empty, contains a null byte, or escapes the folder.
+ */
+function resolveInside(baseDir: string, name: string): string {
+  if (typeof name !== 'string' || !name || name.includes('\0')) {
+    throw new Error('Invalid file name')
+  }
+
+  const base   = path.resolve(baseDir)
+  const target = path.resolve(base, name)
+
+  if (target === base || !target.startsWith(base + path.sep)) {
+    throw new Error('Invalid file name')
+  }
+  return target
+}
+
 export function localUrl(folder: string | null | undefined, fileName: string): string {
   const f = normalizeFolder(folder)
   return f ? `/uploads/${f}/${fileName}` : `/uploads/${fileName}`
@@ -118,13 +140,14 @@ export function ensureLocalFolder(folder: string): void {
 }
 
 export function writeLocalFile(folder: string, fileName: string, buffer: Buffer): void {
-  const dir = localDir(folder)
+  const dir    = localDir(folder)
+  const target = resolveInside(dir, fileName)
   fs.mkdirSync(dir, { recursive: true })
-  fs.writeFileSync(path.join(dir, fileName), buffer)
+  fs.writeFileSync(target, buffer)
 }
 
 export function deleteLocalFile(folder: string, fileName: string): void {
-  const filePath = path.join(localDir(folder), fileName)
+  const filePath = resolveInside(localDir(folder), fileName)
   if (fs.existsSync(filePath)) fs.unlinkSync(filePath)
 }
 
@@ -137,19 +160,20 @@ export function deleteLocalFolder(folder: string): void {
 /** Renames on disk. Returns false when there is no local file (external-URL rows). */
 export function renameLocalFile(folder: string, oldName: string, newName: string): boolean {
   const dir     = localDir(folder)
-  const oldPath = path.join(dir, oldName)
+  const oldPath = resolveInside(dir, oldName)
+  const newPath = resolveInside(dir, newName)
   if (!fs.existsSync(oldPath)) return false
-  fs.renameSync(oldPath, path.join(dir, newName))
+  fs.renameSync(oldPath, newPath)
   return true
 }
 
 /** Moves on disk. Returns false when there is no local file (external-URL rows). */
 export function moveLocalFile(fromFolder: string, toFolder: string, fileName: string): boolean {
-  const oldPath = path.join(localDir(fromFolder), fileName)
+  const oldPath = resolveInside(localDir(fromFolder), fileName)
   if (!fs.existsSync(oldPath)) return false
 
   const newDir  = localDir(toFolder)
-  const newPath = path.join(newDir, fileName)
+  const newPath = resolveInside(newDir, fileName)
 
   // Moving a file onto itself must never delete it.
   if (path.resolve(oldPath) === path.resolve(newPath)) return true
@@ -167,15 +191,42 @@ export interface RemoteFile {
   fileName: string
 }
 
+/** Content types an import may bring in, and the extension each one gets. */
+const IMPORT_EXT_BY_MIME: Record<string, string> = {
+  'image/png':        'png',
+  'image/jpeg':       'jpg',
+  'image/gif':        'gif',
+  'image/webp':       'webp',
+  'image/avif':       'avif',
+  'application/pdf':  'pdf',
+  'text/plain':       'txt',
+  'text/csv':         'csv',
+  'application/json': 'json',
+  'application/zip':  'zip',
+  'video/mp4':        'mp4',
+  'video/webm':       'webm',
+  'audio/mpeg':       'mp3',
+  'audio/wav':        'wav',
+  'audio/ogg':        'ogg',
+}
+
+/**
+ * Downloads a remote file. Goes through safeFetch: private / internal /
+ * cloud-metadata addresses are refused, redirects are re-checked, the size is
+ * capped while streaming, and only the content types above are accepted (no
+ * HTML, scripts or SVG).
+ */
 export async function fetchRemoteFile(url: string): Promise<RemoteFile> {
-  const response = await fetch(url)
-  if (!response.ok) throw new Error(`Failed to fetch URL: ${url}`)
+  const { buffer, contentType } = await safeFetch(url, { maxBytes: 25 * 1024 * 1024 })
 
-  const buffer   = Buffer.from(await response.arrayBuffer())
-  const mimeType = response.headers.get('content-type') ?? 'application/octet-stream'
-  const ext      = mimeType.split('/')[1]?.split(';')[0] ?? 'bin'
+  const ext = IMPORT_EXT_BY_MIME[contentType]
+  if (!ext) throw new Error('This file type is not allowed')
 
-  return { buffer, mimeType, fileName: `imported_${Date.now()}.${ext}` }
+  return {
+    buffer,
+    mimeType: contentType,
+    fileName: `imported_${Date.now()}_${crypto.randomBytes(4).toString('hex')}.${ext}`,
+  }
 }
 
 export function toImportedStorageFile(

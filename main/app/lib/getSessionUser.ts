@@ -10,13 +10,19 @@ import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
  * Server-side: works out WHO is calling from the Bearer token, so routes never
  * have to trust a user_id sent by the browser.
  *
- *   Firebase (supportsBuiltInAuth): token is verified by the adapter.
- *   Postgres / MySQL / MongoDB / Supabase: token is looked up in
- *   nxf_system_tokens and must not be revoked.
+ *   Firebase / Supabase (supportsBuiltInAuth): token is verified by the adapter.
+ *     Firebase returns the user id as `uid`, Supabase as `id`.
+ *   Postgres / MySQL / MongoDB: token is looked up in
+ *     nxf_system_tokens and must not be revoked.
  *
  * The token must belong to a CONSOLE user (a row in nxf_users that is not a
  * customer account). Customer tokens are stored in the same tokens table,
  * so without this check a customer's token would work as a console token.
+ *
+ * The status is compared case-insensitively: some databases store 'Active',
+ * others 'active'.
+ *
+ * Every refusal logs the reason (never the token) so a 401 can be traced.
  *
  * NOTE: expires_at is not checked yet (same as the existing routes) - adding
  * it needs a per-adapter timezone check first. Tracked separately.
@@ -38,7 +44,10 @@ export async function getSessionUser(req: NextRequest): Promise<SessionUser | nu
   const authHeader = req.headers.get('Authorization')
   const token      = authHeader?.replace('Bearer ', '').trim() || null
 
-  if (!token) return null
+  if (!token) {
+    console.warn('[session] refused: no Bearer token on', req.nextUrl?.pathname)
+    return null
+  }
 
   try {
     const adapter  = getConfiguredAdapter()
@@ -47,25 +56,51 @@ export async function getSessionUser(req: NextRequest): Promise<SessionUser | nu
     let uid: string | null = null
 
     if (adapter.supportsBuiltInAuth) {
-      const decoded = await adapter.validateBuiltInSession?.(dbConfig, token)
-      uid = decoded?.uid ?? decoded?.user_id ?? null
+      const decoded: any = await adapter.validateBuiltInSession?.(dbConfig, token)
+      // Firebase: uid. Supabase: id. Some adapters: user_id.
+      uid = decoded?.uid ?? decoded?.user_id ?? decoded?.id ?? null
     } else {
-      const storedToken = await adapter.findTokenByAccessToken?.(token)
-      uid = (storedToken && !storedToken.revoked) ? storedToken.user_id : null
+      if (!adapter.findTokenByAccessToken) {
+        console.warn('[session] refused: adapter has no findTokenByAccessToken')
+        return null
+      }
+      const storedToken = await adapter.findTokenByAccessToken(token)
+      if (!storedToken) {
+        console.warn('[session] refused: token not found in tokens table')
+        return null
+      }
+      if (storedToken.revoked) {
+        console.warn('[session] refused: token is revoked')
+        return null
+      }
+      uid = storedToken.user_id ?? null
     }
 
-    if (!uid) return null
+    if (!uid) {
+      console.warn('[session] refused: token has no user id')
+      return null
+    }
 
     // Must be a console user: present in nxf_users and not a customer.
     const users  = (await adapter.readAll!(dbConfig, 'nxf_users')) as any[]
     const person = users.find((u) => u.user_id === uid)
 
-    if (!person) return null
-    if (person.user_type === 'customer' || person.role === 'customer') return null
-    if (person.status && person.status !== 'active') return null
+    if (!person) {
+      console.warn('[session] refused: user', uid, 'not found in nxf_users (rows read:', users.length + ')')
+      return null
+    }
+    if (person.user_type === 'customer' || person.role === 'customer') {
+      console.warn('[session] refused: user', uid, 'is a customer account')
+      return null
+    }
+    if (person.status && String(person.status).toLowerCase() !== 'active') {
+      console.warn('[session] refused: user', uid, 'status is', person.status)
+      return null
+    }
 
     return { userId: uid, token }
-  } catch {
+  } catch (err: any) {
+    console.error('[session] refused: error while checking token:', err?.message)
     return null
   }
 }

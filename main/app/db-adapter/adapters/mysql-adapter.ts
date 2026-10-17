@@ -36,6 +36,7 @@ import bcrypt                   from 'bcrypt'
 import crypto                   from 'crypto'
 import { DBConfig, DBAdapter, ColumnDef, StorageFile } from '../types'
 import { CreateUserDataModels } from '../utils/create-data-models'
+import { myIdent, safeInt, ddlDefault } from '../utils/sql-identifiers'
 import {
   storedFolder,
   storedPath,
@@ -171,7 +172,8 @@ export class MySQLAdapter implements DBAdapter {
     const keys         = Object.keys(cleaned)
     const placeholders = keys.map(() => '?').join(',')
     const values       = Object.values(cleaned)
-    const sql          = `INSERT INTO \`${table}\` (${keys.join(',')}) VALUES (${placeholders})`
+    const columns      = keys.map((k) => myIdent(k, 'column name')).join(',')
+    const sql          = `INSERT INTO ${myIdent(table, 'table name')} (${columns}) VALUES (${placeholders})`
 
     const [result] = await pool.query(sql, values)
     return result
@@ -180,7 +182,7 @@ export class MySQLAdapter implements DBAdapter {
   async read(config: DBConfig, table: string, query?: any): Promise<any> {
     const pool = await this.getPool(config)
 
-    let sql         = `SELECT * FROM \`${table}\``
+    let sql         = `SELECT * FROM ${myIdent(table, 'table name')}`
     const values:   any[] = []
     let limitClause = ''
 
@@ -189,10 +191,11 @@ export class MySQLAdapter implements DBAdapter {
 
       for (const key of Object.keys(query)) {
         if (key === 'limit') {
-          limitClause = ` LIMIT ${Number(query[key])}`
+          const limit = safeInt(query[key])
+          if (limit) limitClause = ` LIMIT ${limit}`
           continue
         }
-        whereParts.push(`\`${key}\` = ?`)
+        whereParts.push(`${myIdent(key, 'column name')} = ?`)
         values.push(query[key])
       }
 
@@ -238,10 +241,10 @@ export class MySQLAdapter implements DBAdapter {
       return value
     })
 
-    const setClause = keys.map((k) => `\`${k}\` = ?`).join(', ')
+    const setClause = keys.map((k) => `${myIdent(k, 'column name')} = ?`).join(', ')
     values.push(id)
 
-    const sql = `UPDATE \`${table}\` SET ${setClause} WHERE \`${idColumn}\` = ?`
+    const sql = `UPDATE ${myIdent(table, 'table name')} SET ${setClause} WHERE ${myIdent(idColumn, 'column name')} = ?`
     const [result] = await pool.query(sql, values)
     return result
   }
@@ -253,7 +256,7 @@ export class MySQLAdapter implements DBAdapter {
     idColumn: string = 'id'
   ): Promise<any> {
     const pool     = await this.getPool(config)
-    const sql      = `DELETE FROM \`${table}\` WHERE \`${idColumn}\` = ?`
+    const sql      = `DELETE FROM ${myIdent(table, 'table name')} WHERE ${myIdent(idColumn, 'column name')} = ?`
     const [result] = await pool.query(sql, [id])
     return result
   }
@@ -357,23 +360,8 @@ export class MySQLAdapter implements DBAdapter {
         }
 
         // ── DEFAULT clause ─────────────────────────────────────────────────
-        let defaultClause = ''
-        if (col.default !== undefined && col.default !== null) {
-          if (typeof col.default === 'boolean' || typeof col.default === 'number') {
-            defaultClause = ` DEFAULT ${col.default}`
-          } else if (typeof col.default === 'string') {
-            if (
-              col.default.includes('(') ||
-              col.default === 'true'    ||
-              col.default === 'false'   ||
-              col.default === 'null'
-            ) {
-              defaultClause = ` DEFAULT ${this.mapDefaultExpr(col.default)}`
-            } else {
-              defaultClause = ` DEFAULT '${col.default}'`
-            }
-          }
-        }
+        // Written by ddlDefault: a model default can never add SQL of its own.
+        const defaultClause = ddlDefault(col.default, 'mysql', (e) => this.mapDefaultExpr(e))
 
         // ── Constraints ────────────────────────────────────────────────────
         const constraints: string[] = []
@@ -383,11 +371,11 @@ export class MySQLAdapter implements DBAdapter {
           constraints.push('NOT NULL')
         }
 
-        return `\`${col.name}\` ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
+        return `${myIdent(col.name, 'column name')} ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
       })
       .join(', ')
 
-    const sql = `CREATE TABLE IF NOT EXISTS \`${tableName}\` (${columnsSql})`
+    const sql = `CREATE TABLE IF NOT EXISTS ${myIdent(tableName, 'table name')} (${columnsSql})`
     await this.pool.query(sql)
   }
   // ─── Data models ───────────────────────────────────────────────────────────
@@ -771,7 +759,7 @@ export class MySQLAdapter implements DBAdapter {
       return value
     })
 
-    const setClause = keys.map((k) => `\`${k}\` = ?`).join(', ')
+    const setClause = keys.map((k) => `${myIdent(k, 'column name')} = ?`).join(', ')
     values.push(tokenId)
 
     await this.pool.query(
@@ -1044,12 +1032,12 @@ export class MySQLAdapter implements DBAdapter {
                 }
               }
 
-              const columns      = Object.keys(filtered).map((c) => `\`${c}\``).join(', ')
+              const columns      = Object.keys(filtered).map((c) => myIdent(c, 'column name')).join(', ')
               const placeholders = Object.keys(filtered).map(() => '?').join(', ')
               const values       = Object.values(filtered)
 
               await this.pool.execute(
-                `INSERT IGNORE INTO \`${tableName}\` (${columns}) VALUES (${placeholders})`,
+                `INSERT IGNORE INTO ${myIdent(tableName, 'table name')} (${columns}) VALUES (${placeholders})`,
                 values
               )
 
@@ -1076,12 +1064,12 @@ export class MySQLAdapter implements DBAdapter {
     try {
       console.log(`[MySQLAdapter] readAll — table: ${table}`, filter ? `filter: ${JSON.stringify(filter)}` : '')
 
-      let sql = `SELECT * FROM \`${table}\``
+      let sql = `SELECT * FROM ${myIdent(table, 'table name')}`
       const values: any[] = []
 
       const keys = filter ? Object.keys(filter).filter((k) => filter[k] !== undefined) : []
       if (keys.length) {
-        sql += ` WHERE ${keys.map((k) => `\`${k}\` = ?`).join(' AND ')}`
+        sql += ` WHERE ${keys.map((k) => `${myIdent(k, 'column name')} = ?`).join(' AND ')}`
         keys.forEach((k) => values.push(filter![k]))
       }
 
@@ -1264,20 +1252,20 @@ export class MySQLAdapter implements DBAdapter {
         }
         const notNull = col.nullable === false ? ' NOT NULL' : ''
         statements.push(
-          `ALTER TABLE \`${tableName}\` ADD COLUMN IF NOT EXISTS \`${col.name}\` ${typeSql}${notNull};`
+          `ALTER TABLE ${myIdent(tableName, 'table name')} ADD COLUMN IF NOT EXISTS ${myIdent(col.name, 'column name')} ${typeSql}${notNull};`
         )
       }
     }
 
     if (changes.drop?.length) {
       for (const colName of changes.drop) {
-        statements.push(`ALTER TABLE \`${tableName}\` DROP COLUMN \`${colName}\`;`)
+        statements.push(`ALTER TABLE ${myIdent(tableName, 'table name')} DROP COLUMN ${myIdent(colName, 'column name')};`)
       }
     }
 
     if (changes.rename) {
       statements.push(
-        `ALTER TABLE \`${tableName}\` RENAME COLUMN \`${changes.rename.from}\` TO \`${changes.rename.to}\`;`
+        `ALTER TABLE ${myIdent(tableName, 'table name')} RENAME COLUMN ${myIdent(changes.rename.from, 'column name')} TO ${myIdent(changes.rename.to, 'column name')};`
       )
     }
 
@@ -1292,14 +1280,14 @@ export class MySQLAdapter implements DBAdapter {
 
   async dropTable(tableName: string): Promise<any> {
     console.log(`[MySQLAdapter] dropTable — ${tableName}`)
-    await this.pool.execute(`DROP TABLE IF EXISTS \`${tableName}\``)
+    await this.pool.execute(`DROP TABLE IF EXISTS ${myIdent(tableName, 'table name')}`)
     console.log(`[MySQLAdapter] dropTable completed — ${tableName}`)
     return true
   }
 
   async renameTable(oldName: string, newName: string): Promise<any> {
     console.log(`[MySQLAdapter] renameTable — ${oldName} → ${newName}`)
-    await this.pool.execute(`RENAME TABLE \`${oldName}\` TO \`${newName}\``)
+    await this.pool.execute(`RENAME TABLE ${myIdent(oldName, 'table name')} TO ${myIdent(newName, 'table name')}`)
     console.log(`[MySQLAdapter] renameTable completed — ${oldName} → ${newName}`)
     return true
   }

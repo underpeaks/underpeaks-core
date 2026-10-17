@@ -1,4 +1,4 @@
-// app/api/create-models/route.ts
+// app/api/models/create-models/route.ts
 
 /**
  * POST /api/create-models
@@ -18,6 +18,9 @@
  * database before the app can function. The exact models created depend on the
  * selectedProjectType (e.g. 'ecommerce', 'cms', 'saas') and are scoped to the
  * admin user's email so they can be associated with the correct account.
+ *
+ * Access: installer routes only (fresh install, install session, or a
+ * signed-in admin; see installLock.ts).
  *
  * Request body (JSON):
  * ────────────────────
@@ -48,6 +51,7 @@
  */
 
 import { NextResponse } from 'next/server';
+import { requireInstallerAccess } from '@/app/lib/installLock';
 import { getAdapter }   from '@/app/db-adapter';
 import { DBAdapter }    from '@/app/db-adapter/types';
 
@@ -63,6 +67,9 @@ import { DBAdapter }    from '@/app/db-adapter/types';
  */
 export async function POST(request: Request): Promise<NextResponse> {
   try {
+    const gate = await requireInstallerAccess(request);
+    if (!gate.ok) return gate.response as NextResponse;
+
     /**
      * Parse the incoming request body.
      * Destructure only the fields this route requires.

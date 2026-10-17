@@ -1,5 +1,5 @@
 /**
- * API Route: POST /api/installer/write-config
+ * API Route: POST /api/write-config
  *
  * A server-side endpoint that takes the completed installer state and writes
  * it out to the project's local configuration files (e.g. .env.local,
@@ -20,8 +20,11 @@
  * The installer wizard runs in the browser as a client-side React app, so it
  * must call this server-side route to perform the final config file writes.
  *
- * Authentication: None — this route is intentionally public because it is
- *                 called during the installer before any auth system exists.
+ * Authentication: installer access (see app/lib/installLock.ts) — open on a
+ *                 fresh install, or with the install session token, the
+ *                 NXF_ALLOW_REINSTALL override, or a signed-in admin. It
+ *                 used to be public, which let anyone overwrite the config
+ *                 of a running installation.
  * Method:         POST
  * Body:           InstallerState — the full accumulated installer wizard state
  * Success:        Result object from writeConfigFromStore (typically { success: true })
@@ -30,6 +33,7 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { InstallerState }            from '@/app/store/useInstallerStore'
+import { requireInstallerAccess }    from '@/app/lib/installLock'
 import { writeConfigFromStore }      from '@/app/db-adapter/utils/writeConfigFiles'
 
 // ---------------------------------------------------------------------------
@@ -50,6 +54,9 @@ import { writeConfigFromStore }      from '@/app/db-adapter/utils/writeConfigFil
  */
 export async function POST(req: NextRequest) {
   try {
+    const gate = await requireInstallerAccess(req)
+    if (!gate.ok) return gate.response
+
     // ── Parse request body ─────────────────────────────────────────────────
 
     /**

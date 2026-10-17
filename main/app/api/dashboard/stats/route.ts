@@ -1,10 +1,12 @@
+// app/api/dashboard/stats/route.ts
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
+import { requireSessionUser }   from '@/app/lib/getSessionUser';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
-  const userId = searchParams.get('user_id');
-  if (!userId) return NextResponse.json({ error: 'user_id required' }, { status: 400 });
+  // The caller comes from the Bearer token — a user_id in the URL is ignored.
+  const session = await requireSessionUser(req);
+  if (!session.ok) return session.response;
 
   try {
     const adapter  = getConfiguredAdapter();

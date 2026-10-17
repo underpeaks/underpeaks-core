@@ -1,13 +1,13 @@
+// app/api/menu/getMenu.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { resolveDocumentId }         from './resolveDocumentId'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }   from '@/app/lib/getSessionUser'
 
 export async function handleGetMenu(req: NextRequest): Promise<NextResponse> {
-  const { searchParams } = new URL(req.url)
-  const userId = searchParams.get('user_id')
-  if (!userId) {
-    return NextResponse.json({ success: false, error: 'errors.missingUserId' }, { status: 400 })
-  }
+  // The caller comes from the Bearer token — a user_id in the URL is ignored.
+  const session = await requireSessionUser(req)
+  if (!session.ok) return session.response
 
   const adapter  = getConfiguredAdapter()
   const dbConfig = adapter.config

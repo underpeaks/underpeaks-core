@@ -1,3 +1,4 @@
+// app/components/ClientPresence.tsx
 'use client'
 
 /**
@@ -8,10 +9,12 @@
  *
  * Handles two things:
  *
- * 1. beforeunload — fires sendBeacon to /api/cmsusers/presence and
- *    logActivity beacon on tab/browser close. Best-effort: if it
- *    doesn't fire, the user just stays shown as online until their
- *    next login. No errors are thrown either way.
+ * 1. beforeunload — fires a keepalive fetch to /api/cmsusers/presence and the
+ *    logActivity offline event on tab/browser close. keepalive lets the
+ *    request finish while the page is closing (like sendBeacon) but, unlike
+ *    sendBeacon, it can carry the Authorization header. Best-effort: if it
+ *    doesn't fire, the user just stays shown as online until their next
+ *    login. No errors are thrown either way.
  *
  * 2. Firebase onDisconnect — sets a presence doc in Firestore that
  *    marks the user offline if the client loses its connection.
@@ -19,8 +22,9 @@
  *    Falls back gracefully if Firebase isn't the active DB type.
  */
 
-import { useEffect }  from 'react'
+import { useEffect }   from 'react'
 import { logActivity } from '@/app/lib/logActivity'
+import { authHeader }  from '@/app/lib/clientAuth'
 
 interface ClientPresenceProps {
   userId: string
@@ -34,16 +38,16 @@ export function ClientPresence({ userId }: ClientPresenceProps) {
     // Best-effort. If it doesn't complete, nothing breaks — the user just
     // stays marked as online until their next login clears the stale state.
     function handleUnload() {
-      // Mark offline in nxf_users
-      navigator.sendBeacon(
-        '/api/cmsusers/presence',
-        new Blob(
-          [JSON.stringify({ user_id: userId, is_logged_in: false })],
-          { type: 'application/json' },
-        ),
-      )
+      // Mark offline in nxf_users (the server takes the user from the token)
+      fetch('/api/cmsusers/presence', {
+        method:    'POST',
+        keepalive: true,
+        headers:   { 'Content-Type': 'application/json', ...authHeader() },
+        body:      JSON.stringify({ is_logged_in: false }),
+      }).catch(() => {})
+
       // Log the offline event
-      logActivity(userId, 'user_offline', {}, true /* beacon */)
+      logActivity(userId, 'user_offline', {}, true /* keepalive */)
     }
 
     window.addEventListener('beforeunload', handleUnload)

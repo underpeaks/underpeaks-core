@@ -1,6 +1,12 @@
+// app/api/dashboard/chart/route.ts
+// The caller comes from the Bearer token (a user_id in the body is
+// ignored). The collection must be on the dashboard allow-list.
+
 import { NextRequest, NextResponse } from 'next/server';
 import { ChartComputeRequest, ChartDataPoint } from '@/app/[locale]/console/types/dashboard';
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
+import { requireSessionUser }   from '@/app/lib/getSessionUser';
+import { isAllowedCollection, areFieldsAllowed } from '@/app/lib/dashboardAccess';
 
 
 // ── Date helpers ──────────────────────────────────────────────
@@ -59,18 +65,31 @@ function buildEmptyBuckets(
 
 export async function POST(req: NextRequest) {
   try {
-    const body = (await req.json()) as ChartComputeRequest;
-    const { user_id, collection, date_field, value_field, formula, group_by, range } = body;
+    const session = await requireSessionUser(req);
+    if (!session.ok) return session.response;
 
-    if (!user_id || !collection || !date_field) {
+    const body = (await req.json()) as ChartComputeRequest;
+    const { collection, date_field, value_field, formula, group_by, range } = body;
+
+    if (!collection || !date_field) {
       return NextResponse.json(
-        { error: 'user_id, collection, and date_field are required' },
+        { error: 'collection and date_field are required' },
         { status: 400 }
       );
     }
 
     const adapter  = getConfiguredAdapter();
     const dbConfig = adapter.config;
+
+    // Only allow-listed collections ever reach the database. Anything else
+    // answers like a missing table did before: an empty result.
+    if (!(await isAllowedCollection(adapter, dbConfig, collection))) {
+      return NextResponse.json({ data: [], total: 0, max: 0 });
+    }
+
+    if (!areFieldsAllowed(collection, [date_field, value_field])) {
+      return NextResponse.json({ error: 'Field not available' }, { status: 400 });
+    }
 
     let data: Record<string, unknown>[] = [];
     try {

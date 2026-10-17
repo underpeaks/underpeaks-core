@@ -1,4 +1,4 @@
-// WelcomePage.tsx  (installer step 1: replaces the version I sent earlier)
+// WelcomePage.tsx  (installer step 1)
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -6,6 +6,14 @@ import { useRouter }           from 'next/navigation'
 import { useTranslations }     from 'next-intl'
 import { Checkbox }            from '@/components/ui/checkbox'
 import { Button }              from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from '@/components/ui/dialog'
 import { Check, Loader2, ArrowRight, LifeBuoy } from 'lucide-react'
 import InstallerShell, { PRIMARY_BUTTON } from '@/core/InstallerShell'
 import { HelpDialog }          from '@/core/HelpCenter'
@@ -20,6 +28,13 @@ export default function WelcomePage() {
   const [loading,     setLoading]     = useState(false)
   const [helpOpen,    setHelpOpen]    = useState(false)
 
+  // Is there already an installation on this server? (/api/installer/status)
+  //   installed:  a database with users exists
+  //   canProceed: this browser may re-run the installer (signed-in admin, or
+  //               the owner set NXF_ALLOW_REINSTALL=true)
+  const [status,      setStatus]      = useState<{ installed: boolean; canProceed: boolean } | null>(null)
+  const [confirmOpen, setConfirmOpen] = useState(false)
+
   useEffect(() => {
     fetch('/license.txt')
       .then((res) => res.text())
@@ -27,11 +42,36 @@ export default function WelcomePage() {
       .catch(() => setLicenseText(t('license.loadFailed')))
   }, [])
 
-  const handleContinue = () => {
+  useEffect(() => {
+    // If the check fails, do not block a normal first install.
+    fetch('/api/installer/status')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && typeof data.installed === 'boolean') {
+          setStatus({ installed: data.installed, canProceed: !!data.canProceed })
+        }
+      })
+      .catch(() => {})
+  }, [])
+
+  const blocked = !!status?.installed && !status.canProceed
+
+  const goToNextStep = () => {
+    setConfirmOpen(false)
     setLoading(true)
     setTimeout(() => {
       router.push('/installer/project')
     }, 100)
+  }
+
+  const handleContinue = () => {
+    if (blocked) return
+    // An installation already exists: ask before anything is overwritten.
+    if (status?.installed) {
+      setConfirmOpen(true)
+      return
+    }
+    goToNextStep()
   }
 
   const benefits = [
@@ -142,11 +182,24 @@ export default function WelcomePage() {
         </label>
       </section>
 
+      {/* Existing installation, signed out: explain how to continue */}
+      {blocked && (
+        <section className="mt-8 rounded-2xl border border-amber-300 bg-amber-50 p-5 text-sm leading-relaxed text-amber-900">
+          <p className="font-semibold">An existing installation was detected.</p>
+          <p className="mt-1">
+            To re-install, sign in to the console as an admin and open this page again.
+            If you cannot sign in, set <code className="font-mono">NXF_ALLOW_REINSTALL=true</code> in
+            your <code className="font-mono">.env.local</code>, restart the server, and
+            reload this page. Remove the setting when you are done.
+          </p>
+        </section>
+      )}
+
       {/* Continue */}
       <div className="mt-8 flex justify-end">
         <Button
           size="lg"
-          disabled={!accepted || loading}
+          disabled={!accepted || loading || blocked}
           onClick={handleContinue}
           className={`${PRIMARY_BUTTON} w-full px-8 sm:w-auto`}
         >
@@ -165,6 +218,29 @@ export default function WelcomePage() {
       </div>
 
       <HelpDialog open={helpOpen} onOpenChange={setHelpOpen} />
+
+      {/* Re-install confirmation */}
+      <Dialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <DialogContent className="sm:max-w-[460px]">
+          <DialogHeader>
+            <DialogTitle>Existing installation detected</DialogTitle>
+            <DialogDescription className="mt-2 leading-relaxed">
+              This server already has an Underpeaks installation. If you continue,
+              the installer will set everything up again and your current
+              configuration will be overwritten. Back up your database first if
+              you need to keep your data.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4 gap-2 sm:gap-2">
+            <Button variant="outline" onClick={() => setConfirmOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={goToNextStep}>
+              Yes, re-install everything
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </InstallerShell>
   )
 }

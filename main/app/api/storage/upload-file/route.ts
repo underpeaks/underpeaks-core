@@ -2,68 +2,117 @@
 import 'server-only'
 
 import { NextRequest, NextResponse } from 'next/server'
-import fs                            from 'fs'
 import path                          from 'path'
+import fs                            from 'fs'
 import sharp                         from 'sharp'
 import { v4 as uuidv4 }              from 'uuid'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }        from '@/app/lib/getSessionUser'
+import { writeLocalFile }            from '@/app/db-adapter/utils/storage-helpers'
+
+// Largest file accepted. Override with NXF_MAX_UPLOAD_MB in .env.local.
+const MAX_BYTES = (Number(process.env.NXF_MAX_UPLOAD_MB) || 50) * 1024 * 1024
+
+// Files that a browser or server could run or render as a page. Refused.
+const BLOCKED_EXT = new Set([
+  'html', 'htm', 'xhtml', 'shtml', 'js', 'mjs', 'cjs', 'jsp', 'php', 'phtml',
+  'asp', 'aspx', 'exe', 'dll', 'msi', 'bat', 'cmd', 'com', 'sh', 'ps1', 'jar',
+  'svg', 'xml', 'xsl',
+])
+
+const FIT_OPTIONS = new Set(['cover', 'contain', 'fill', 'inside', 'outside'])
+
+/** Returns the folder without leading/trailing slashes, or null if it is not safe. */
+function cleanFolder(raw: unknown): string | null {
+  if (typeof raw !== 'string' || !raw || raw.length > 300) return null
+  if (raw.includes('\0') || raw.includes('\\')) return null
+
+  const parts = raw.split('/').filter(Boolean)
+  if (parts.some((p) => p === '.' || p === '..')) return null
+
+  return parts.join('/')
+}
+
+type Resize = { width?: number; height?: number; fit: 'cover' | 'contain' | 'fill' | 'inside' | 'outside' }
+
+/** null = no resize asked for, false = the resize value is invalid. */
+function parseResize(raw: unknown): Resize | null | false {
+  if (typeof raw !== 'string' || !raw) return null
+
+  try {
+    const r = JSON.parse(raw)
+    if (!r || typeof r !== 'object') return false
+
+    const dim = (v: unknown): number | undefined | false => {
+      if (v === undefined || v === null) return undefined
+      return Number.isInteger(v) && (v as number) > 0 && (v as number) <= 8000 ? (v as number) : false
+    }
+
+    const width  = dim(r.width)
+    const height = dim(r.height)
+    if (width === false || height === false) return false
+
+    const fit = r.fit === undefined ? 'inside' : r.fit
+    if (typeof fit !== 'string' || !FIT_OPTIONS.has(fit)) return false
+
+    return { width, height, fit: fit as Resize['fit'] }
+  } catch {
+    return false
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
-    const formData  = await req.formData()
-    const file      = formData.get('file')   as File   | null
-    const folderRaw = formData.get('folder') as string | null
-    const resizeRaw = formData.get('resize') as string | null
-    const mode      = formData.get('mode')   as 'local' | 'storage' | null
+    // Only signed-in console users may upload.
+    const auth = await requireSessionUser(req)
+    if (!auth.ok) return auth.response
 
-    console.log('[upload-file] Upload mode:', mode)
+    let formData: FormData
+    try {
+      formData = await req.formData()
+    } catch {
+      return NextResponse.json({ error: 'Invalid form data' }, { status: 400 })
+    }
 
-    if (!file || !folderRaw)
-      return NextResponse.json(
-        { error: 'file and folder are required' },
-        { status: 400 }
-      )
+    const file      = formData.get('file')
+    const folderRaw = formData.get('folder')
+    const resizeRaw = formData.get('resize')
+    const mode      = formData.get('mode') === 'storage' ? 'storage' : 'local'
 
-    const folder = folderRaw === 'uploads' ? '' : folderRaw
+    if (!file || typeof file === 'string' || !folderRaw)
+      return NextResponse.json({ error: 'file and folder are required' }, { status: 400 })
+
+    const folderClean = cleanFolder(folderRaw)
+    if (folderClean === null)
+      return NextResponse.json({ error: 'Invalid folder' }, { status: 400 })
+
+    if (file.size > MAX_BYTES)
+      return NextResponse.json({ error: 'File is too large' }, { status: 413 })
+
+    const resize = parseResize(resizeRaw)
+    if (resize === false)
+      return NextResponse.json({ error: 'Invalid resize options' }, { status: 400 })
+
+    // The media library calls the root "uploads"; it is stored as ''.
+    const folder = folderClean === 'uploads' ? '' : folderClean
 
     // Base domain used to build absolute URLs for local storage.
-    // NEXT_PUBLIC_APP_DOMAIN is documented as always trailing-slash-free.
     const appDomain = (process.env.NEXT_PUBLIC_APP_DOMAIN ?? '').replace(/\/$/, '')
 
+    // ── Project / tenant of the signed-in user ───────────────────────────────
     let project_id: string | null = null
     let tenant_id:  string | null = null
 
-    // 1. Resolve project/tenant from the Authorization header
     try {
-      const authHeader = req.headers.get('Authorization')
-      const token      = authHeader?.replace('Bearer ', '') ?? null
-
-      if (token) {
-        const adapter = getConfiguredAdapter()
-
-        let uid: string | null = null
-
-        const decoded = await adapter.validateBuiltInSession?.(adapter.config, token)
-        uid = decoded?.uid ?? decoded?.user_id ?? decoded?.id ?? null
-
-        if (!uid && adapter.findTokenByAccessToken) {
-          const tokenRow = await adapter.findTokenByAccessToken(token)
-          if (tokenRow && !tokenRow.revoked && (!tokenRow.expires_at || new Date(tokenRow.expires_at) > new Date())) {
-            uid = tokenRow.uid ?? tokenRow.user_id ?? tokenRow.id ?? null
-          }
-        }
-
-        if (uid) {
-          const project = await adapter.findProjectByOwnerId?.(adapter.config, uid)
-          project_id     = project?.id ?? project?.project_id ?? null
-          tenant_id      = project?.tenant_id ?? null
-        }
-      }
+      const adapter = getConfiguredAdapter()
+      const project = await adapter.findProjectByOwnerId?.(adapter.config, auth.userId)
+      project_id    = project?.id ?? project?.project_id ?? null
+      tenant_id     = project?.tenant_id ?? null
     } catch (err: any) {
-      console.warn('[upload-file] project_id/tenant_id lookup failed:', err?.message ?? err)
+      console.warn('[upload-file] project lookup failed:', err?.message ?? err)
     }
 
-    // 2. Single-tenant fallback: Core has exactly one project row
+    // Single-tenant fallback: Core has exactly one project row
     if (!project_id || !tenant_id) {
       try {
         const adapter  = getConfiguredAdapter()
@@ -78,39 +127,58 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const buffer  = Buffer.from(await file.arrayBuffer())
-    const isImage = file.type.startsWith('image/')
-    const resize  = resizeRaw ? JSON.parse(resizeRaw) : null
+    // ── File name and type ───────────────────────────────────────────────────
+    const isImage = (file.type ?? '').startsWith('image/')
 
-    let processed: Buffer = buffer
-
-    if (isImage && resize) {
-      processed = await sharp(buffer)
-        .resize({
-          width:              resize.width,
-          height:             resize.height,
-          fit:                resize.fit ?? 'inside',
-          withoutEnlargement: true,
-        })
-        .png({ compressionLevel: 9 })
-        .toBuffer()
-    } else if (isImage) {
-      processed = await sharp(buffer)
-        .png({ compressionLevel: 9 })
-        .toBuffer()
-    }
-
-    const ext = isImage
-      ? 'png'
-      : (path.extname(file.name) || '').replace('.', '')
-
-    const baseName = path
-      .basename(file.name, path.extname(file.name))
-      .replace(/[^a-z0-9_-]/gi, '_')
+    const rawExt = path
+      .extname(file.name || '')
+      .replace('.', '')
       .toLowerCase()
+      .replace(/[^a-z0-9]/g, '')
+      .slice(0, 10)
+
+    // Images are always re-encoded as PNG, so their original extension is ignored.
+    const ext = isImage ? 'png' : rawExt
+
+    if (BLOCKED_EXT.has(ext))
+      return NextResponse.json({ error: 'This file type is not allowed' }, { status: 400 })
+
+    // Dots in the base name become underscores, so 'a.php.png' cannot hide a second extension.
+    const baseName =
+      path
+        .basename(file.name || '', path.extname(file.name || ''))
+        .replace(/[^a-z0-9_-]/gi, '_')
+        .toLowerCase()
+        .slice(0, 100) || 'file'
 
     const filename = ext ? `${baseName}.${ext}` : baseName
-    const mimeType = isImage ? 'image/png' : file.type
+    const mimeType = isImage
+      ? 'image/png'
+      : (file.type || 'application/octet-stream').slice(0, 100)
+
+    // ── Process ──────────────────────────────────────────────────────────────
+    const buffer = Buffer.from(await file.arrayBuffer())
+    let processed: Buffer = buffer
+
+    if (isImage) {
+      try {
+        processed = resize
+          ? await sharp(buffer)
+              .resize({
+                width:              resize.width,
+                height:             resize.height,
+                fit:                resize.fit,
+                withoutEnlargement: true,
+              })
+              .png({ compressionLevel: 9 })
+              .toBuffer()
+          : await sharp(buffer)
+              .png({ compressionLevel: 9 })
+              .toBuffer()
+      } catch {
+        return NextResponse.json({ error: 'Could not process this image' }, { status: 400 })
+      }
+    }
 
     const sizeLabel = processed.length > 1024 * 1024
       ? `${(processed.length / (1024 * 1024)).toFixed(1)} MB`
@@ -138,13 +206,12 @@ export async function POST(req: NextRequest) {
           size:       processed.length,
           created_at: new Date().toISOString(),
         })
-
-        console.log('[upload-file] Metadata saved successfully')
       } catch (err: any) {
         console.warn('[upload-file] Metadata save failed:', err?.message ?? err)
       }
     }
 
+    // ── Storage mode: cloud adapters or public/uploads ───────────────────────
     if (mode === 'storage') {
       const dbType = process.env.NEXT_PUBLIC_DB_TYPE
 
@@ -157,7 +224,7 @@ export async function POST(req: NextRequest) {
             { status: 400 }
           )
 
-        // Cloud adapters already return a full public URL — no domain prefix needed.
+        // Cloud adapters already return a full public URL.
         const url      = await adapter.uploadFile(folder, filename, processed, mimeType)
         const filePath = folder ? `${folder}/${filename}` : filename
 
@@ -173,13 +240,8 @@ export async function POST(req: NextRequest) {
         })
       }
 
-      const dirPath  = folder
-        ? path.resolve(process.cwd(), 'public', 'uploads', folder)
-        : path.resolve(process.cwd(), 'public', 'uploads')
-      const filePath = path.join(dirPath, filename)
-
-      if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true })
-      fs.writeFileSync(filePath, processed)
+      // writeLocalFile keeps the file inside public/uploads
+      writeLocalFile(folder, filename, processed)
 
       const relativeUrl = folder ? `/uploads/${folder}/${filename}` : `/uploads/${filename}`
       const url         = appDomain ? `${appDomain}${relativeUrl}` : relativeUrl
@@ -196,30 +258,32 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    const dirPath  = path.resolve(process.cwd(), 'public', folderRaw)
-    const filePath = path.join(dirPath, filename)
+    // ── Local mode: public/<folder> ──────────────────────────────────────────
+    const publicRoot = path.resolve(process.cwd(), 'public')
+    const dirName    = folderClean || 'uploads'
+    const dirPath    = path.resolve(publicRoot, dirName)
+
+    // The folder must stay inside /public
+    if (!dirPath.startsWith(publicRoot + path.sep))
+      return NextResponse.json({ error: 'Invalid folder' }, { status: 400 })
 
     if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true })
-    fs.writeFileSync(filePath, processed)
+    fs.writeFileSync(path.join(dirPath, filename), processed)
 
-    const relativeUrl = `/${folderRaw}/${filename}`
+    const relativeUrl = `/${dirName}/${filename}`
     const url         = appDomain ? `${appDomain}${relativeUrl}` : relativeUrl
-    console.log('[upload-file] Local upload saved:', url)
 
     return NextResponse.json({
       success:  true,
       url,
       name:     filename,
       size:     sizeLabel,
-      folder:   folderRaw,
+      folder:   dirName,
       mimeType,
     })
 
   } catch (err: any) {
     console.error('[upload-file] Unhandled error:', err)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

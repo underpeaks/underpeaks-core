@@ -1,3 +1,4 @@
+// app/db-adapter/adapters/supabase-adapter.ts
 /**
  * SupabaseAdapter
  *
@@ -23,10 +24,11 @@
  * - Demo content installation from local JSON files.
  *
  * DDL operations (CREATE TABLE, ALTER TABLE, DROP TABLE, RENAME TABLE):
- * - Uses a direct pg Pool via the Session pooler connection string when
- *   available. This bypasses PostgREST entirely and requires no custom
- *   functions on the Supabase project.
- * - Falls back to rpc('pg_execute_sql') if no connection string is provided.
+ * - Uses a direct pg Pool via the Session pooler connection string. This
+ *   bypasses PostgREST entirely and requires no custom functions on the
+ *   Supabase project. A connection string is required for DDL.
+ * - Table and column names are always quoted with pgIdent, and column
+ *   defaults are written by ddlDefault, so a model can never add SQL.
  *
  * Two Supabase clients are maintained:
  *   - client      — Used for standard database and auth operations.
@@ -40,6 +42,7 @@ import { Pool }                          from 'pg'
 import { ColumnDef, DBAdapter, DBConfig, StorageFile } from '../types'
 import { randomBytes }                   from 'crypto'
 import nodemailer                        from 'nodemailer'
+import { pgIdent, ddlDefault }          from '../utils/sql-identifiers'
 import { loadAllModels }                 from '../utils/load-model'
 import { CreateUserDataModels }          from '../utils/create-data-models'
 import {
@@ -935,27 +938,25 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
   /**
    * executeDdl
    *
-   * Runs raw DDL SQL against the database. Uses the direct pg Pool when a
-   * connectionString is available, bypassing PostgREST entirely. Falls back
-   * to rpc('pg_execute_sql') if no connection string was provided.
+   * Runs raw DDL SQL against the database through the direct pg Pool,
+   * bypassing PostgREST entirely. A connectionString must be configured.
    *
    * @param sql - The DDL statement to execute.
    */
   private async executeDdl(sql: string): Promise<void> {
-  if (this.pgPool) {
-    console.log('[SupabaseAdapter] executeDdl — using direct Postgres pool')
-    const client = await this.pgPool.connect()
-    try {
-      await client.query(sql)
-    } finally {
-      client.release()
-    }
-    return
+  if (!this.pgPool) {
+    throw new Error(
+      'A Postgres connection string is required to create or change tables on Supabase'
+    )
   }
 
-  console.log('[SupabaseAdapter] executeDdl — falling back to rpc pg_execute_sql')
-  const { error } = await this.adminClient.rpc('pg_execute_sql', { sql } as any)
-  if (error) throw new Error(`SQL execution failed: ${error.message}`)
+  console.log('[SupabaseAdapter] executeDdl — using direct Postgres pool')
+  const client = await this.pgPool.connect()
+  try {
+    await client.query(sql)
+  } finally {
+    client.release()
+  }
 }
 
   // ─── DDL methods ───────────────────────────────────────────────────────────
@@ -1009,26 +1010,8 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
       }
 
       // ── DEFAULT clause ───────────────────────────────────────────────────
-      let defaultClause = ''
-      if (col.default !== undefined && col.default !== null) {
-        if (
-          typeof col.default === 'boolean' ||
-          typeof col.default === 'number'
-        ) {
-          defaultClause = ` DEFAULT ${col.default}`
-        } else if (typeof col.default === 'string') {
-          if (
-            col.default.includes('(')  ||
-            col.default === 'true'     ||
-            col.default === 'false'    ||
-            col.default === 'null'
-          ) {
-            defaultClause = ` DEFAULT ${col.default}`
-          } else {
-            defaultClause = ` DEFAULT '${col.default}'`
-          }
-        }
-      }
+      // Written by ddlDefault: a model default can never add SQL of its own.
+      const defaultClause = ddlDefault(col.default, 'postgres')
 
       // ── Constraints ───────────────────────────────────────────────────────
       const constraints: string[] = []
@@ -1038,11 +1021,11 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
         constraints.push('NOT NULL')
       }
 
-      return `"${col.name}" ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
+      return `${pgIdent(col.name, 'column name')} ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
     })
     .join(', ')
 
-  const sql = `CREATE TABLE IF NOT EXISTS "${schema.schema || 'public'}"."${tableName}" (${columnsSql});`
+  const sql = `CREATE TABLE IF NOT EXISTS ${pgIdent(schema.schema || 'public', 'schema name')}.${pgIdent(tableName, 'table name')} (${columnsSql});`
 
   console.log(`[SupabaseAdapter] Executing SQL for table: ${tableName}`)
   await this.executeDdl(sql)
@@ -1087,20 +1070,20 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
         }
         const notNull = col.nullable === false ? ' NOT NULL' : ''
         statements.push(
-          `ALTER TABLE "${tableName}" ADD COLUMN IF NOT EXISTS "${col.name}" ${typeSql}${notNull};`
+          `ALTER TABLE ${pgIdent(tableName, 'table name')} ADD COLUMN IF NOT EXISTS ${pgIdent(col.name, 'column name')} ${typeSql}${notNull};`
         )
       }
     }
 
     if (changes.drop?.length) {
       for (const colName of changes.drop) {
-        statements.push(`ALTER TABLE "${tableName}" DROP COLUMN IF EXISTS "${colName}";`)
+        statements.push(`ALTER TABLE ${pgIdent(tableName, 'table name')} DROP COLUMN IF EXISTS ${pgIdent(colName, 'column name')};`)
       }
     }
 
     if (changes.rename) {
       statements.push(
-        `ALTER TABLE "${tableName}" RENAME COLUMN "${changes.rename.from}" TO "${changes.rename.to}";`
+        `ALTER TABLE ${pgIdent(tableName, 'table name')} RENAME COLUMN ${pgIdent(changes.rename.from, 'column name')} TO ${pgIdent(changes.rename.to, 'column name')};`
       )
     }
 
@@ -1115,14 +1098,14 @@ async createDataModelsFromUserEmail(email: string, selectedProjectType: string) 
 
   async dropTable(tableName: string): Promise<any> {
     console.log(`[SupabaseAdapter] dropTable — ${tableName}`)
-    await this.executeDdl(`DROP TABLE IF EXISTS "${tableName}";`)
+    await this.executeDdl(`DROP TABLE IF EXISTS ${pgIdent(tableName, 'table name')};`)
     console.log(`[SupabaseAdapter] dropTable completed — ${tableName}`)
     return true
   }
 
   async renameTable(oldName: string, newName: string): Promise<any> {
     console.log(`[SupabaseAdapter] renameTable — ${oldName} → ${newName}`)
-    await this.executeDdl(`ALTER TABLE "${oldName}" RENAME TO "${newName}";`)
+    await this.executeDdl(`ALTER TABLE ${pgIdent(oldName, 'table name')} RENAME TO ${pgIdent(newName, 'table name')};`)
     console.log(`[SupabaseAdapter] renameTable completed — ${oldName} → ${newName}`)
     return true
   }

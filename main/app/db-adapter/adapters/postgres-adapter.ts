@@ -1,9 +1,10 @@
-// main\app\db-adapter\adapters\PostgresAdapter.ts
+// app/db-adapter/adapters/postgres-adapter.ts
 import { Pool, PoolConfig } from 'pg'
 import bcrypt               from 'bcrypt'
 import crypto               from 'crypto'
 import { DBAdapter, DBConfig, ColumnDef, StorageFile } from '../types'
 import { CreateUserDataModels } from '../utils/create-data-models'
+import { pgIdent, safeInt, ddlDefault } from '../utils/sql-identifiers'
 import {
   storedFolder,
   storedPath,
@@ -116,7 +117,7 @@ export class PostgresAdapter implements DBAdapter {
     if (this.pkColumnCache.has(table)) return this.pkColumnCache.get(table) ?? null
 
     try {
-      const quoted = `"${table.replace(/"/g, '""')}"`
+      const quoted = pgIdent(table, 'table name')
       const res = await this.pool.query(
         `SELECT a.attname                         AS column_name,
                 format_type(a.atttypid, a.atttypmod) AS data_type,
@@ -186,9 +187,9 @@ export class PostgresAdapter implements DBAdapter {
 
     const keys         = Object.keys(cleaned)
     const values       = Object.values(cleaned)
-    const columns      = keys.map(k => `"${k.replace(/"/g, '""')}"`).join(',')
+    const columns      = keys.map(k => pgIdent(k, 'column name')).join(',')
     const placeholders = keys.map((_, i) => `$${i + 1}`).join(',')
-    const sql          = `INSERT INTO "${table}" (${columns}) VALUES (${placeholders}) RETURNING *`
+    const sql          = `INSERT INTO ${pgIdent(table, 'table name')} (${columns}) VALUES (${placeholders}) RETURNING *`
 
     const res = await this.pool.query(sql, values)
     return res.rows[0]
@@ -197,7 +198,7 @@ export class PostgresAdapter implements DBAdapter {
   async read(_config: DBConfig, table: string, query?: any): Promise<any> {
     await this.connect()
 
-    let sql             = `SELECT * FROM "${table}"`
+    let sql             = `SELECT * FROM ${pgIdent(table, 'table name')}`
     const values: any[] = []
 
     if (query && Object.keys(query).length) {
@@ -206,15 +207,17 @@ export class PostgresAdapter implements DBAdapter {
         .filter(k => !ignoredKeys.includes(k))
         .map((k, i) => {
           values.push(query[k])
-          return `"${k}" = $${i + 1}`
+          return `${pgIdent(k, 'column name')} = $${i + 1}`
         })
         .join(' AND ')
 
       if (where) sql += ` WHERE ${where}`
     }
 
-    if (query?.limit)  sql += ` LIMIT ${Number(query.limit)}`
-    if (query?.offset) sql += ` OFFSET ${Number(query.offset)}`
+    const limit  = safeInt(query?.limit)
+    const offset = safeInt(query?.offset)
+    if (limit)  sql += ` LIMIT ${limit}`
+    if (offset) sql += ` OFFSET ${offset}`
 
     const res = await this.pool.query(sql, values)
     return res.rows
@@ -226,8 +229,8 @@ export class PostgresAdapter implements DBAdapter {
     const jsonCols  = await this.getJsonColumns(table)
     const keys      = Object.keys(data)
     const values    = keys.map(k => this.prepareValue(data[k], jsonCols.has(k)))
-    const setClause = keys.map((k, i) => `"${k}" = $${i + 1}`).join(', ')
-    const sql       = `UPDATE "${table}" SET ${setClause} WHERE "${idColumn}" = $${keys.length + 1} RETURNING *`
+    const setClause = keys.map((k, i) => `${pgIdent(k, 'column name')} = $${i + 1}`).join(', ')
+    const sql       = `UPDATE ${pgIdent(table, 'table name')} SET ${setClause} WHERE ${pgIdent(idColumn, 'column name')} = $${keys.length + 1} RETURNING *`
 
     const res = await this.pool.query(sql, [...values, id])
     return res.rows[0]
@@ -241,7 +244,7 @@ export class PostgresAdapter implements DBAdapter {
   ): Promise<any> {
     await this.connect()
     const res = await this.pool.query(
-      `DELETE FROM "${table}" WHERE "${idColumn}" = $1 RETURNING *`,
+      `DELETE FROM ${pgIdent(table, 'table name')} WHERE ${pgIdent(idColumn, 'column name')} = $1 RETURNING *`,
       [id]
     )
     return res.rows[0]
@@ -317,23 +320,8 @@ export class PostgresAdapter implements DBAdapter {
         }
 
         // --- DEFAULT clause ---------------------------------------------------
-        let defaultClause = ''
-        if (col.default !== undefined && col.default !== null) {
-          if (typeof col.default === 'boolean' || typeof col.default === 'number') {
-            defaultClause = ` DEFAULT ${col.default}`
-          } else if (typeof col.default === 'string') {
-            if (
-              col.default.includes('(') ||
-              col.default === 'true'    ||
-              col.default === 'false'   ||
-              col.default === 'null'
-            ) {
-              defaultClause = ` DEFAULT ${col.default}`
-            } else {
-              defaultClause = ` DEFAULT '${col.default}'`
-            }
-          }
-        }
+        // Written by ddlDefault: a model default can never add SQL of its own.
+        const defaultClause = ddlDefault(col.default, 'postgres')
 
         // --- Constraints ------------------------------------------------------
         const constraints: string[] = []
@@ -343,12 +331,12 @@ export class PostgresAdapter implements DBAdapter {
           constraints.push('NOT NULL')
         }
 
-        return `"${col.name}" ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
+        return `${pgIdent(col.name, 'column name')} ${typeSql}${defaultClause} ${constraints.join(' ')}`.trim()
       })
       .join(',')
 
     await this.pool.query(
-      `CREATE TABLE IF NOT EXISTS "${tableName}" (${columnsSql})`
+      `CREATE TABLE IF NOT EXISTS ${pgIdent(tableName, 'table name')} (${columnsSql})`
     )
     this.clearSchemaCaches()
   }
@@ -979,12 +967,12 @@ export class PostgresAdapter implements DBAdapter {
             }
 
             const keys   = Object.keys(filtered)
-            const cols   = keys.map((k) => `"${k}"`).join(', ')
+            const cols   = keys.map((k) => pgIdent(k, 'column name')).join(', ')
             const params = keys.map((_, i) => `$${i + 1}`).join(', ')
             const values = Object.values(filtered)
 
             await this.pool.query(
-              `INSERT INTO "${tableName}" (${cols}) VALUES (${params}) ON CONFLICT DO NOTHING`,
+              `INSERT INTO ${pgIdent(tableName, 'table name')} (${cols}) VALUES (${params}) ON CONFLICT DO NOTHING`,
               values
             )
 
@@ -1009,13 +997,13 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
     try {
       console.log(`[PostgresAdapter] readAll - table: ${table}`, filter ? `filter: ${JSON.stringify(filter)}` : '')
 
-      let sql = `SELECT * FROM "${table}"`
+      let sql = `SELECT * FROM ${pgIdent(table, 'table name')}`
       const values: any[] = []
 
       if (filter && Object.keys(filter).length > 0) {
         const conditions = Object.keys(filter).map((key, i) => {
           values.push(filter[key])
-          return `"${key}" = $${i + 1}`
+          return `${pgIdent(key, 'column name')} = $${i + 1}`
         })
         sql += ` WHERE ${conditions.join(' AND ')}`
       }
@@ -1189,20 +1177,20 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
         }
         const notNull = col.nullable === false ? ' NOT NULL' : ''
         statements.push(
-          `ALTER TABLE "${tableName}" ADD COLUMN IF NOT EXISTS "${col.name}" ${typeSql}${notNull};`
+          `ALTER TABLE ${pgIdent(tableName, 'table name')} ADD COLUMN IF NOT EXISTS ${pgIdent(col.name, 'column name')} ${typeSql}${notNull};`
         )
       }
     }
 
     if (changes.drop?.length) {
       for (const colName of changes.drop) {
-        statements.push(`ALTER TABLE "${tableName}" DROP COLUMN IF EXISTS "${colName}";`)
+        statements.push(`ALTER TABLE ${pgIdent(tableName, 'table name')} DROP COLUMN IF EXISTS ${pgIdent(colName, 'column name')};`)
       }
     }
 
     if (changes.rename) {
       statements.push(
-        `ALTER TABLE "${tableName}" RENAME COLUMN "${changes.rename.from}" TO "${changes.rename.to}";`
+        `ALTER TABLE ${pgIdent(tableName, 'table name')} RENAME COLUMN ${pgIdent(changes.rename.from, 'column name')} TO ${pgIdent(changes.rename.to, 'column name')};`
       )
     }
 
@@ -1219,7 +1207,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
 
   async dropTable(tableName: string): Promise<any> {
     console.log(`[PostgresAdapter] dropTable - ${tableName}`)
-    await this.pool.query(`DROP TABLE IF EXISTS "${tableName}"`)
+    await this.pool.query(`DROP TABLE IF EXISTS ${pgIdent(tableName, 'table name')}`)
     this.clearSchemaCaches()
     console.log(`[PostgresAdapter] dropTable completed - ${tableName}`)
     return true
@@ -1227,7 +1215,7 @@ async readAll(config: DBConfig, table: string, filter?: Record<string, any>): Pr
 
   async renameTable(oldName: string, newName: string): Promise<any> {
     console.log(`[PostgresAdapter] renameTable - ${oldName} -> ${newName}`)
-    await this.pool.query(`ALTER TABLE "${oldName}" RENAME TO "${newName}"`)
+    await this.pool.query(`ALTER TABLE ${pgIdent(oldName, 'table name')} RENAME TO ${pgIdent(newName, 'table name')}`)
     this.clearSchemaCaches()
     console.log(`[PostgresAdapter] renameTable completed - ${oldName} -> ${newName}`)
     return true

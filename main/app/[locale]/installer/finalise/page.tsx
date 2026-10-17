@@ -1,3 +1,4 @@
+// app/[locale]/installer/finalise/page.tsx
 // FinalizePage.tsx  (installer step 7: summary + run installation)
 'use client'
 
@@ -6,7 +7,12 @@ import { useTranslations }          from 'next-intl'
 import { Button }                   from '@/components/ui/button'
 import { useRouter }                from 'next/navigation'
 import { CheckCircle2 }             from 'lucide-react'
-import { INSTALL_STEPS, runInstallerSteps } from '../actions/installerRunner'
+import {
+  INSTALL_STEPS,
+  runInstallerSteps,
+  getInstallHeaders,
+  endInstallSession,
+} from '../actions/installerRunner'
 import { useInstallerStore }        from '../../../store/useInstallerStore'
 import InstallerShell, { CARD, PRIMARY_BUTTON } from '@/core/InstallerShell'
 
@@ -68,7 +74,7 @@ export default function FinalizePage() {
 
       const res = await fetch('/api/save-config', {
         method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getInstallHeaders(),
         body: JSON.stringify({
           projectName:         installerState.projectName,
           subdomain:           installerState.subdomain,
@@ -92,6 +98,9 @@ export default function FinalizePage() {
       }
 
       console.log(t('logs.configSaved'))
+
+      // Last installer request is done — close the install session.
+      await endInstallSession()
 
       router.push('/installer/done')
     } catch (error: unknown) {

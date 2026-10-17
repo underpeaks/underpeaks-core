@@ -1,3 +1,5 @@
+// app/api/nextjs/create/route.ts
+
 /**
  * POST /api/installer/create-nextjs
  *
@@ -10,7 +12,8 @@
  *   occur when npx tries to create temp folders that already exist.
  * - It runs `npx create-next-app@latest` to scaffold the project.
  * This means it should ONLY be accessible in a trusted installer environment,
- * never exposed as a public API endpoint.
+ * never exposed as a public API endpoint. The project name is validated
+ * before it reaches the shell (letters, digits, '.', '_' and '-' only).
  *
  * Request:
  * - Method:  POST
@@ -24,7 +27,7 @@
  * - 200 { success: true, skipped: true, message: string, path: string }
  *
  * Response (error):
- * - 400 { error: 'Invalid project name.' }  — Missing or non-string project name.
+ * - 400 { error: 'Invalid project name.' }  — Missing, non-string or unsafe project name.
  * - 500 { error: string, details: any }     — Shell command or file system failure.
  *
  * How it works (step by step):
@@ -53,6 +56,15 @@ import os                from 'os'
 import fs                from 'fs/promises'
 import fsSync            from 'fs'
 import { mkdirp }        from 'mkdirp'
+import { requireInstallerAccess } from '@/app/lib/installLock'
+
+/**
+ * Letters, digits, '.', '_' and '-' only, starting with a letter or digit.
+ * This keeps shell metacharacters, spaces, path separators and a leading '-'
+ * (which would be read as a command-line flag) out of the shell command and
+ * the folder name. create-next-app applies its own npm-name rules on top.
+ */
+const SAFE_PROJECT_NAME = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/
 
 /**
  * POST handler
@@ -65,6 +77,10 @@ import { mkdirp }        from 'mkdirp'
  */
 export async function POST(req: Request) {
   try {
+    // Open on a fresh install; admin-only once installed (see installLock.ts).
+    const gate = await requireInstallerAccess(req)
+    if (!gate.ok) return gate.response
+
     // -----------------------------------------------------------------------
     // Step 1: Parse and validate the request body
     // -----------------------------------------------------------------------
@@ -73,11 +89,11 @@ export async function POST(req: Request) {
     const { projectName } = body
 
     /**
-     * Validate that `projectName` is a non-empty string.
-     * A missing or non-string project name would cause the shell command
-     * to fail in unpredictable ways, so we reject early with a clear error.
+     * Validate that `projectName` is a non-empty string made only of safe
+     * characters. It is placed in a shell command, so anything else is
+     * rejected early with a clear error.
      */
-    if (!projectName || typeof projectName !== 'string') {
+    if (!projectName || typeof projectName !== 'string' || !SAFE_PROJECT_NAME.test(projectName)) {
       return NextResponse.json(
         { error: 'Invalid project name.' },
         { status: 400 }
@@ -178,6 +194,9 @@ export async function POST(req: Request) {
      *                so the project is created in the right location.
      * - `shell: true` — Runs the command through the system shell, required
      *                   for npx to work correctly on all platforms.
+     *
+     * projectName has been validated above, so it contains no characters
+     * that the shell could interpret.
      *
      * `stdout` is destructured but intentionally not logged to avoid
      * printing potentially large scaffolding output to the server log.

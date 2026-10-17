@@ -1,179 +1,345 @@
-// app/api-public/v1/[project]/storage/upload/route.ts
+// app/api/storage/upload-file/route.ts
 /**
- * api-public/v1/[project]/storage/upload/route.ts
+ * POST /api/storage/upload-file
+ * Multipart form: file, folder, optional resize (JSON), optional mode.
  *
- * Core (self-hosted) — Payload-model file upload.
- *
- * Accepts multipart/form-data (`file`, optional `folder`). Delegates to the
- * configured adapter's uploadFile(), then makes sure exactly ONE nxf_storage
- * row exists for the file, tagged with project_id / tenant_id.
- *
- * Disk adapters (postgres/mysql/mongodb): uploadFile() already inserts its own
- * nxf_storage row, so we find that row and tag it instead of inserting a
- * duplicate. supabase/firebase don't insert, so we create the row here.
- *
- * URL model: disk adapters return a permanent public /uploads/... path.
- * supabase/firebase return a signed URL that expires — so for those the
- * permanent URL served to apps points at this API's file/[id] route, which
- * streams the bytes. No per-file token (Core is public by design).
- *
- * Auth: X-API-Key header → validateCoreApiKey (carries project_id + tenant_id).
+ * Console file upload (media library, field uploads, branding).
  *
  * SECURITY HARDENING (Oct 2026):
- *  - `folder` must be plain path segments (letters, digits, - and _). Before,
- *    it went straight to the adapter, so "../../x" could write outside the
- *    uploads folder on disk adapters.
+ *  - Signed-in console users only (the installer may also use it on a fresh
+ *    install, for the logo step). Before, anyone could upload.
+ *  - `folder` must be plain path segments. Before, "../../x" was joined into a
+ *    disk path, so a file could be written anywhere on the server.
  *  - Size limit: NXF_MAX_UPLOAD_MB (default 50).
- *  - Executable / script / HTML file types are refused (they would be served
- *    from your own domain).
- *  - 500 responses no longer return internal error messages.
+ *  - Images are re-encoded as PNG. Other files keep their name, but script,
+ *    HTML, SVG and executable types are refused (they would run from your own
+ *    domain). The extension comes from a safe list of characters only.
+ *  - `resize` and `mode` are validated.
  */
 
-import { NextRequest, NextResponse } from 'next/server'
-import crypto                        from 'crypto'
-import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
-import { validateCoreApiKey }        from '@/app/lib/coreApiAuth'
-import { coreCors }                  from '@/app/lib/customerAuthCore'
+import 'server-only'
 
-type Params = { project: string }
+import { NextRequest, NextResponse } from 'next/server'
+import fs                            from 'fs'
+import path                          from 'path'
+import sharp                         from 'sharp'
+import { v4 as uuidv4 }              from 'uuid'
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }        from '@/app/lib/getSessionUser'
+import { requireInstallerAccess }    from '@/app/lib/installLock'
 
 const MAX_BYTES = Math.max(1, Number(process.env.NXF_MAX_UPLOAD_MB ?? 50)) * 1024 * 1024
 
-// Up to 4 path segments of letters, digits, '-' and '_'.
-const FOLDER_RE = /^[A-Za-z0-9_-]{1,64}(\/[A-Za-z0-9_-]{1,64}){0,3}$/
-
 const BLOCKED_EXT = new Set([
-  'html', 'htm', 'xhtml', 'shtml', 'js', 'mjs', 'cjs', 'jsp', 'php', 'phtml',
-  'asp', 'aspx', 'exe', 'dll', 'msi', 'bat', 'cmd', 'com', 'sh', 'ps1', 'jar',
+  'html', 'htm', 'xhtml', 'shtml', 'xht', 'js', 'mjs', 'cjs', 'jsp', 'php',
+  'phtml', 'php3', 'php4', 'php5', 'asp', 'aspx', 'exe', 'dll', 'msi', 'bat',
+  'cmd', 'com', 'sh', 'ps1', 'jar', 'svg', 'svgz', 'xml', 'xsl', 'xslt',
+  'swf', 'hta', 'vbs', 'scr',
 ])
 
+const FIT_VALUES = new Set(['cover', 'contain', 'fill', 'inside', 'outside'])
+
+/** Every dot-separated part is checked, so "shell.php.jpg" is caught too. */
 function hasBlockedExt(name: string): boolean {
-  // Check every dot-separated part, so "shell.php.jpg" is caught too.
   return name.toLowerCase().split('.').slice(1).some((p) => BLOCKED_EXT.has(p))
 }
 
-export async function OPTIONS() {
-  return new NextResponse(null, { status: 204, headers: coreCors() })
+/**
+ * Up to 5 path segments, each starting with a letter or digit and made of
+ * letters, digits, space, '_', '.' and '-'. No "..", no backslashes.
+ */
+function cleanFolder(raw: string): string | null {
+  if (raw.includes('\\') || raw.includes('\0')) return null
+  const f = raw.trim().replace(/^\/+|\/+$/g, '')
+  if (!f || f.length > 200) return null
+  const parts = f.split('/')
+  if (parts.length > 5) return null
+  for (const p of parts) {
+    if (!/^[A-Za-z0-9][A-Za-z0-9 _.-]{0,63}$/.test(p) || p.includes('..')) return null
+  }
+  return parts.join('/')
 }
 
-export async function POST(req: NextRequest, { params }: { params: Promise<Params> }) {
-  await params
+/** A path inside baseDir, or an error. */
+function resolveInside(baseDir: string, relative: string): string {
+  const base   = path.resolve(baseDir)
+  const target = path.resolve(base, relative)
+  if (target !== base && !target.startsWith(base + path.sep)) throw new Error('Invalid folder')
+  return target
+}
 
-  const apiKey = req.headers.get('X-API-Key') ?? req.headers.get('x-api-key')
-  if (!apiKey) {
-    return NextResponse.json({ error: 'X-API-Key header is required' }, { status: 401, headers: coreCors() })
-  }
-
-  const auth = await validateCoreApiKey(apiKey)
-  if (!auth.ok) {
-    return NextResponse.json({ error: 'Invalid or revoked API key' }, { status: 401, headers: coreCors() })
-  }
-
-  let form: FormData
-  try { form = await req.formData() } catch {
-    return NextResponse.json({ error: 'multipart/form-data required' }, { status: 400, headers: coreCors() })
-  }
-
-  const file = form.get('file') as File | null
-  if (!file) {
-    return NextResponse.json({ error: 'file field is required' }, { status: 400, headers: coreCors() })
-  }
-
-  const rawFolder = form.get('folder')
-  const folder    = (typeof rawFolder === 'string' && rawFolder.trim()) ? rawFolder.trim() : 'uploads'
-  if (!FOLDER_RE.test(folder)) {
-    return NextResponse.json({ error: 'Invalid folder name' }, { status: 400, headers: coreCors() })
-  }
-
-  if (file.size > MAX_BYTES) {
-    return NextResponse.json(
-      { error: `File too large (max ${Math.round(MAX_BYTES / 1024 / 1024)} MB)` },
-      { status: 413, headers: coreCors() }
-    )
-  }
-  if (hasBlockedExt(file.name || '') || /html|javascript|php/i.test(file.type || '')) {
-    return NextResponse.json({ error: 'This file type is not allowed' }, { status: 400, headers: coreCors() })
-  }
-
-  const buffer   = Buffer.from(await file.arrayBuffer())
-  const mimeType = /^[a-z0-9.+-]+\/[a-z0-9.+-]+$/i.test(file.type || '') ? file.type : 'application/octet-stream'
-  const safeName = `${crypto.randomUUID()}_${(file.name || 'file').replace(/[^a-zA-Z0-9._-]/g, '_')}`
-
+function parseResize(raw: string | null):
+  | { ok: true;  value: { width?: number; height?: number; fit?: any } | null }
+  | { ok: false } {
+  if (!raw) return { ok: true, value: null }
   try {
-    const adapter  = getConfiguredAdapter()
-    const dbConfig = adapter.config
+    const r = JSON.parse(raw)
+    if (!r || typeof r !== 'object') return { ok: false }
+    const dim = (v: unknown) =>
+      v === undefined || v === null
+        ? undefined
+        : (Number.isInteger(v) && (v as number) >= 1 && (v as number) <= 8000 ? (v as number) : NaN)
+    const width  = dim(r.width)
+    const height = dim(r.height)
+    if (Number.isNaN(width) || Number.isNaN(height)) return { ok: false }
+    const fit = r.fit === undefined ? undefined : r.fit
+    if (fit !== undefined && !FIT_VALUES.has(fit)) return { ok: false }
+    return { ok: true, value: { width, height, fit } }
+  } catch {
+    return { ok: false }
+  }
+}
 
-    // adapter uploads to its backend and returns a url
-    // (disk: permanent /uploads/... ; supabase/firebase: 7-day signed url)
-    const adapterUrl = await (adapter as any).uploadFile(folder, safeName, buffer, mimeType)
-
-    const isDisk = dbConfig.type === 'postgres' || dbConfig.type === 'mysql' || dbConfig.type === 'mongodb'
-    const file_path = `${folder}/${safeName}`
-
-    if (isDisk) {
-      // The adapter already inserted the row. Find it and tag it.
-      const rows = (await (adapter as any).readAll(dbConfig, 'nxf_storage')) ?? []
-      const existing = rows.find((r: any) => r.file_name === safeName)
-
-      if (existing) {
-        await (adapter as any).update(
-          dbConfig,
-          'nxf_storage',
-          existing.storage_id,
-          { project_id: auth.projectId, tenant_id: auth.tenantId },
-          'storage_id'
-        )
-
-        return NextResponse.json(
-          { storage_id: existing.storage_id, url: existing.url ?? adapterUrl, file_name: safeName, size: buffer.length },
-          { status: 201, headers: coreCors() }
-        )
-      }
-
-      // Safety net: adapter row not found, create one so the file is never untracked.
-      const storage_id = crypto.randomUUID()
-      await (adapter as any).create(dbConfig, 'nxf_storage', {
-        storage_id,
-        project_id: auth.projectId,
-        tenant_id:  auth.tenantId,
-        folder,
-        file_name:  safeName,
-        file_path,
-        url:        adapterUrl,
-        mime_type:  mimeType,
-        size:       buffer.length,
-        created_at: new Date().toISOString(),
-      })
-
-      return NextResponse.json(
-        { storage_id, url: adapterUrl, file_name: safeName, size: buffer.length },
-        { status: 201, headers: coreCors() }
-      )
+export async function POST(req: NextRequest) {
+  try {
+    // Signed-in console users; on a fresh install the installer may upload too.
+    const session = await requireSessionUser(req)
+    if (!session.ok) {
+      const gate = await requireInstallerAccess(req)
+      if (!gate.ok) return session.response
     }
 
-    // supabase / firebase: signed url expires, so store our own permanent serve url.
-    const storage_id = crypto.randomUUID()
-    const url = `${process.env.NEXT_PUBLIC_APP_DOMAIN}/api-public/v1/${auth.projectId}/storage/file/${storage_id}`
+    const formData  = await req.formData()
+    const file      = formData.get('file')   as File   | null
+    const folderRaw = formData.get('folder') as string | null
+    const resizeRaw = formData.get('resize') as string | null
+    const modeRaw   = formData.get('mode')   as string | null
 
-    await (adapter as any).create(dbConfig, 'nxf_storage', {
-      storage_id,
-      project_id: auth.projectId,
-      tenant_id:  auth.tenantId,
-      folder,
-      file_name:  safeName,
-      file_path,
+    if (!file || !folderRaw || typeof folderRaw !== 'string')
+      return NextResponse.json(
+        { error: 'file and folder are required' },
+        { status: 400 }
+      )
+
+    const mode = modeRaw === 'local' || modeRaw === 'storage' ? modeRaw : null
+    if (modeRaw && !mode)
+      return NextResponse.json({ error: 'Invalid mode' }, { status: 400 })
+
+    const cleanedFolder = cleanFolder(folderRaw)
+    if (!cleanedFolder)
+      return NextResponse.json({ error: 'Invalid folder name' }, { status: 400 })
+
+    if (file.size > MAX_BYTES)
+      return NextResponse.json(
+        { error: `File too large (max ${Math.round(MAX_BYTES / 1024 / 1024)} MB)` },
+        { status: 413 }
+      )
+
+    const parsedResize = parseResize(typeof resizeRaw === 'string' ? resizeRaw : null)
+    if (!parsedResize.ok)
+      return NextResponse.json({ error: 'Invalid resize options' }, { status: 400 })
+    const resize = parsedResize.value
+
+    const isImage = (file.type || '').startsWith('image/')
+
+    // Non-image files keep their type, so script / HTML / SVG types are refused.
+    // Images are re-encoded as PNG below, so their original name does not matter.
+    if (!isImage && (hasBlockedExt(file.name || '') || /html|javascript|php|svg|xml/i.test(file.type || '')))
+      return NextResponse.json({ error: 'This file type is not allowed' }, { status: 400 })
+
+    console.log('[upload-file] Upload mode:', mode)
+
+    const folder = cleanedFolder === 'uploads' ? '' : cleanedFolder
+
+    // Base domain used to build absolute URLs for local storage.
+    // NEXT_PUBLIC_APP_DOMAIN is documented as always trailing-slash-free.
+    const appDomain = (process.env.NEXT_PUBLIC_APP_DOMAIN ?? '').replace(/\/$/, '')
+
+    let project_id: string | null = null
+    let tenant_id:  string | null = null
+
+    // 1. Resolve project/tenant from the Authorization header
+    try {
+      const authHeader = req.headers.get('Authorization')
+      const token      = authHeader?.replace('Bearer ', '') ?? null
+
+      if (token) {
+        const adapter = getConfiguredAdapter()
+
+        let uid: string | null = null
+
+        const decoded = await adapter.validateBuiltInSession?.(adapter.config, token)
+        uid = decoded?.uid ?? decoded?.user_id ?? decoded?.id ?? null
+
+        if (!uid && adapter.findTokenByAccessToken) {
+          const tokenRow = await adapter.findTokenByAccessToken(token)
+          if (tokenRow && !tokenRow.revoked && (!tokenRow.expires_at || new Date(tokenRow.expires_at) > new Date())) {
+            uid = tokenRow.uid ?? tokenRow.user_id ?? tokenRow.id ?? null
+          }
+        }
+
+        if (uid) {
+          const project = await adapter.findProjectByOwnerId?.(adapter.config, uid)
+          project_id     = project?.id ?? project?.project_id ?? null
+          tenant_id      = project?.tenant_id ?? null
+        }
+      }
+    } catch (err: any) {
+      console.warn('[upload-file] project_id/tenant_id lookup failed:', err?.message ?? err)
+    }
+
+    // 2. Single-tenant fallback: Core has exactly one project row
+    if (!project_id || !tenant_id) {
+      try {
+        const adapter  = getConfiguredAdapter()
+        const projects = adapter.read
+          ? await adapter.read(adapter.config, 'nxf_system_projects')
+          : []
+        const first    = (projects ?? [])[0]
+        project_id     = project_id ?? first?.project_id ?? first?.id ?? null
+        tenant_id      = tenant_id  ?? first?.tenant_id ?? null
+      } catch (err: any) {
+        console.warn('[upload-file] project fallback failed:', err?.message ?? err)
+      }
+    }
+
+    const buffer = Buffer.from(await file.arrayBuffer())
+
+    let processed: Buffer = buffer
+
+    if (isImage) {
+      try {
+        processed = resize
+          ? await sharp(buffer)
+              .resize({
+                width:              resize.width,
+                height:             resize.height,
+                fit:                resize.fit ?? 'inside',
+                withoutEnlargement: true,
+              })
+              .png({ compressionLevel: 9 })
+              .toBuffer()
+          : await sharp(buffer)
+              .png({ compressionLevel: 9 })
+              .toBuffer()
+      } catch {
+        // The file says it is an image but it cannot be read as one.
+        return NextResponse.json({ error: 'The image could not be read' }, { status: 400 })
+      }
+    }
+
+    // Extension: png for images, otherwise letters and digits only.
+    const rawExt = (path.extname(file.name || '') || '').replace('.', '').toLowerCase()
+    const ext    = isImage ? 'png' : (/^[a-z0-9]{1,10}$/.test(rawExt) ? rawExt : '')
+
+    const baseName = path
+      .basename(file.name || 'file', path.extname(file.name || ''))
+      .replace(/[^a-z0-9_-]/gi, '_')
+      .toLowerCase() || 'file'
+
+    const filename = ext ? `${baseName}.${ext}` : baseName
+    const mimeType = isImage
+      ? 'image/png'
+      : (/^[a-z0-9.+-]+\/[a-z0-9.+-]+$/i.test(file.type || '') ? file.type : 'application/octet-stream')
+
+    const sizeLabel = processed.length > 1024 * 1024
+      ? `${(processed.length / (1024 * 1024)).toFixed(1)} MB`
+      : `${Math.round(processed.length / 1024)} KB`
+
+    const saveMetadata = async (url: string, filePath: string) => {
+      try {
+        const adapter = getConfiguredAdapter()
+        if (!adapter.create) return
+
+        if (!project_id || !tenant_id) {
+          console.warn('[upload-file] Missing project_id or tenant_id — skipping metadata save (both are NOT NULL on nxf_storage)')
+          return
+        }
+
+        await adapter.create(adapter.config, 'nxf_storage', {
+          storage_id: uuidv4(),
+          project_id,
+          tenant_id,
+          folder:     folder || 'uploads',
+          file_name:  filename,
+          file_path:  filePath,
+          url,
+          mime_type:  mimeType,
+          size:       processed.length,
+          created_at: new Date().toISOString(),
+        })
+
+        console.log('[upload-file] Metadata saved successfully')
+      } catch (err: any) {
+        console.warn('[upload-file] Metadata save failed:', err?.message ?? err)
+      }
+    }
+
+    if (mode === 'storage') {
+      const dbType = process.env.NEXT_PUBLIC_DB_TYPE
+
+      if (dbType === 'firebase' || dbType === 'supabase') {
+        const adapter = getConfiguredAdapter()
+
+        if (!adapter.uploadFile)
+          return NextResponse.json(
+            { error: 'File upload is not supported by the current storage adapter' },
+            { status: 400 }
+          )
+
+        // Cloud adapters already return a full public URL — no domain prefix needed.
+        const url      = await adapter.uploadFile(folder, filename, processed, mimeType)
+        const filePath = folder ? `${folder}/${filename}` : filename
+
+        await saveMetadata(url, filePath)
+
+        return NextResponse.json({
+          success:  true,
+          url,
+          name:     filename,
+          size:     sizeLabel,
+          folder:   folder || 'uploads',
+          mimeType,
+        })
+      }
+
+      const uploadsRoot = path.resolve(process.cwd(), 'public', 'uploads')
+      const dirPath     = folder ? resolveInside(uploadsRoot, folder) : uploadsRoot
+      const filePath    = path.join(dirPath, filename)
+
+      if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true })
+      fs.writeFileSync(filePath, processed)
+
+      const relativeUrl = folder ? `/uploads/${folder}/${filename}` : `/uploads/${filename}`
+      const url         = appDomain ? `${appDomain}${relativeUrl}` : relativeUrl
+
+      await saveMetadata(url, relativeUrl)
+
+      return NextResponse.json({
+        success:  true,
+        url,
+        name:     filename,
+        size:     sizeLabel,
+        folder:   folder || 'uploads',
+        mimeType,
+      })
+    }
+
+    const publicRoot = path.resolve(process.cwd(), 'public')
+    const dirPath    = resolveInside(publicRoot, cleanedFolder)
+    const filePath   = path.join(dirPath, filename)
+
+    if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath, { recursive: true })
+    fs.writeFileSync(filePath, processed)
+
+    const relativeUrl = `/${cleanedFolder}/${filename}`
+    const url         = appDomain ? `${appDomain}${relativeUrl}` : relativeUrl
+    console.log('[upload-file] Local upload saved:', url)
+
+    return NextResponse.json({
+      success:  true,
       url,
-      mime_type:  mimeType,
-      size:       buffer.length,
-      created_at: new Date().toISOString(),
+      name:     filename,
+      size:     sizeLabel,
+      folder:   cleanedFolder,
+      mimeType,
     })
 
-    return NextResponse.json(
-      { storage_id, url, file_name: safeName, size: buffer.length },
-      { status: 201, headers: coreCors() }
-    )
   } catch (err: any) {
-    console.error('[api-public] storage upload failed:', err.message)
-    return NextResponse.json({ error: 'Upload failed' }, { status: 500, headers: coreCors() })
+    console.error('[upload-file] Unhandled error:', err)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

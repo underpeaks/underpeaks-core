@@ -14,6 +14,9 @@
  * This is the ONE legitimate exception to the rule that API routes must
  * use getConfiguredAdapter(). Do not change this pattern for installer routes.
  *
+ * Access: installer routes only (fresh install, install session, or a
+ * signed-in admin; see app/lib/installLock.ts).
+ *
  * Request body:
  *   config              {DBConfig} — Full database connection config from the installer.
  *   selectedProjectType {string}   — The project template to seed (e.g. 'ecommerce').
@@ -27,12 +30,16 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getAdapter }                from '@/app/db-adapter'
 import { DBType }                    from '@/app/db-adapter/types'
+import { requireInstallerAccess }    from '@/app/lib/installLock'
 
 // Valid DB types — used to validate the client-supplied config.type
 const VALID_DB_TYPES: DBType[] = ['firebase', 'supabase', 'mongodb', 'mysql', 'postgres']
 
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    const gate = await requireInstallerAccess(req)
+    if (!gate.ok) return gate.response as NextResponse
+
     const { config, selectedProjectType } = await req.json()
 
     if (!config) {

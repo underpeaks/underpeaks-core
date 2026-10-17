@@ -1,4 +1,4 @@
-// app/api/create-system-tables/route.ts
+// File: app/api/create-system-tables/route.ts
 
 /**
  * POST /api/create-system-tables
@@ -10,6 +10,9 @@
  * schema and tables" step. It runs a fixed sequence of table-creation
  * utilities against the project's database, ensuring the schema is fully
  * prepared before the admin user and data models are created in later steps.
+ *
+ * Access: open on a fresh install; admin-only once the app is installed
+ * (same gate as /api/save-db-config, via requireInstallerAccess).
  *
  * Table creation sequence:
  * ─────────────────────────
@@ -38,12 +41,16 @@
  *
  * Responses:
  * ──────────
- *   200 { success: true,  message } — All tables created successfully.
+ *   200 { success: true,  message, installToken } — All tables created
+ *       successfully. installToken starts the install session: the wizard
+ *       sends it as x-install-token on its later steps (see installLock.ts).
  *   400 { success: false, message } — DB config missing from request body.
+ *   401/403                         — Installer gate refused the request.
  *   500 { success: false, message } — Unexpected error during table creation.
  */
 
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireInstallerAccess, issueInstallToken } from '@/app/lib/installLock';
 import {
   createSystemTables,
   createUsersTables,
@@ -64,16 +71,20 @@ import {
  * POST
  *
  * Handles POST requests to /api/create-system-tables.
- * Validates the config, then runs the table-creation sequence in order.
+ * Checks installer access, validates the config, then runs the
+ * table-creation sequence in order.
  *
  * @param request — The incoming Next.js API request containing the JSON body.
  * @returns A NextResponse JSON object indicating success or failure.
  */
-export async function POST(request: Request): Promise<NextResponse> {
+export async function POST(request: NextRequest): Promise<NextResponse> {
   try {
+    // Open on a fresh install; admin-only once the app is installed.
+    const gate = await requireInstallerAccess(request)
+    if (!gate.ok) return gate.response as NextResponse
+
     const { config, selectedProjectType } = await request.json()
 
-  
     // -----------------------------------------------------------------------
     // Validation
     // -----------------------------------------------------------------------
@@ -128,16 +139,21 @@ export async function POST(request: Request): Promise<NextResponse> {
      * }
      */
 
+    // Start the install session so the wizard can finish its later steps
+    // (create admin, models, config, storage, demo content) after users exist.
+    const installToken = issueInstallToken();
+
     return NextResponse.json({
       success: true,
       message: 'System tables created successfully',
+      installToken,
     });
 
   } catch (error: any) {
     /**
      * Catch-all for any unexpected errors thrown during request parsing or
-     * any of the table-creation steps. The error message is logged server-side
-     * for debugging and returned to the caller so the installer UI can display
+     * any of the table-creation steps. The error is logged server-side for
+     * debugging and the message is returned so the installer UI can display
      * a meaningful failure reason.
      */
     console.error('[create-system-tables] Error:', error);

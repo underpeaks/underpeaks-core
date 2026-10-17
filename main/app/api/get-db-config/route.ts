@@ -5,6 +5,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
 import { requireSessionUser }        from '@/app/lib/getSessionUser'
 
+// Nothing in this list is ever needed by the browser.
+//  - db_config / hosted_api_key: stored connection settings and the license key.
+//  - smtp passwords: the encrypted SMTP password.
 function stripSecrets(config: any): any {
   if (!config || typeof config !== 'object') return config
   const out: any = { ...config }
@@ -14,6 +17,8 @@ function stripSecrets(config: any): any {
   }
   delete out.smtp_password_encrypted
   delete out.password_encrypted
+  delete out.db_config
+  delete out.hosted_api_key
   return out
 }
 

@@ -1,9 +1,14 @@
-//app/api/menus/handlers/handleUpdateMenu.ts
+// app/api/menu/updateMenu.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { resolveDocumentId }         from './resolveDocumentId'
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }   from '@/app/lib/getSessionUser'
 
 export async function handleUpdateMenu(req: NextRequest): Promise<NextResponse> {
+  // The caller comes from the Bearer token — a user_id in the body is ignored.
+  const session = await requireSessionUser(req)
+  if (!session.ok) return session.response
+
   let body: any
   try {
     body = await req.json()
@@ -11,10 +16,17 @@ export async function handleUpdateMenu(req: NextRequest): Promise<NextResponse> 
     return NextResponse.json({ success: false, error: 'errors.invalidBody' }, { status: 400 })
   }
 
-  const { menu_id, user_id, ...updates } = body
+  const { menu_id, user_id: _ignoredUserId, ...updates } = body
 
   if (!menu_id) return NextResponse.json({ success: false, error: 'errors.missingMenuId' }, { status: 400 })
-  if (!user_id) return NextResponse.json({ success: false, error: 'errors.missingUserId' }, { status: 400 })
+
+  // These can never be changed through an update.
+  delete updates.id
+  delete updates.menu_id
+  delete updates.project_id
+  delete updates.tenant_id
+  delete updates.is_system
+  delete updates.created_at
 
   const adapter  = getConfiguredAdapter()
   const dbConfig = adapter.config
@@ -25,8 +37,7 @@ export async function handleUpdateMenu(req: NextRequest): Promise<NextResponse> 
     return NextResponse.json({ success: false, error: 'errors.systemItemProtected' }, { status: 403 })
   }
 
-  // FIX: real PK is menu_id, not id — missing idColumn 5th arg meant this
-  // always targeted a non-existent 'id' column.
+  // Real PK is menu_id, not id — the idColumn arg is required.
   await adapter.update!(dbConfig, 'nxf_menus', menu_id, {
     ...updates,
     updated_at: new Date().toISOString(),

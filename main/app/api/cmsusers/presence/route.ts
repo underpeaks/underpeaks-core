@@ -1,35 +1,32 @@
+// app/api/cmsusers/presence/route.ts
+
 /**
  * POST /api/cmsusers/presence
  *
- * Called by sendBeacon on beforeunload to mark a user offline.
- * Intentionally unauthenticated — beforeunload cannot send auth headers.
+ * Called on tab close (fetch with keepalive) to mark the signed-in user
+ * offline. The user comes from the Bearer token — a user_id in the body is
+ * ignored, so nobody can change another user's presence.
  * Only updates is_logged_in, nothing else.
  */
 
 import { NextRequest, NextResponse } from 'next/server'
-import { NxfUser }                   from '@/app/[locale]/console/types/users'
-import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { getConfiguredAdapter }      from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }        from '@/app/lib/getSessionUser'
 
 export async function POST(req: NextRequest) {
   try {
-    const { user_id, is_logged_in } = await req.json()
-    if (!user_id) {
-      return NextResponse.json({ success: false }, { status: 400 })
-    }
+    const session = await requireSessionUser(req)
+    if (!session.ok) return session.response
+
+    let body: any = {}
+    try { body = await req.json() } catch { /* empty body is fine */ }
 
     const adapter  = getConfiguredAdapter()
     const dbConfig = adapter.config
 
-    const allUsers = await adapter.readAll!(dbConfig, 'nxf_users') as NxfUser[]
-    const user     = allUsers.find((u) => u.user_id === user_id)
-
-    if (!user) {
-      return NextResponse.json({ success: false }, { status: 404 })
-    }
-
     // Key on user_id — the nxf_users primary key on every adapter
-    await adapter.update!(dbConfig, 'nxf_users', user.user_id, {
-      is_logged_in: is_logged_in ?? false,
+    await adapter.update!(dbConfig, 'nxf_users', session.userId, {
+      is_logged_in: body?.is_logged_in === true,
       updated_at:   new Date().toISOString(),
     }, 'user_id')
 

@@ -18,7 +18,8 @@
  *     3. Uploads the file via XMLHttpRequest so real upload progress
  *        can be tracked and displayed as a percentage.
  *     4. Calls `onUploaded` with the result on success, or `onError`
- *        with a message on failure.
+ *        with a message on failure. The same message is also shown
+ *        under the drop zone, so the user always sees why an upload failed.
  * - After a successful upload, switches to an "uploaded state" UI showing
  *   the preview, file name, folder path, and Replace / Clear buttons.
  *
@@ -40,8 +41,8 @@
  *
  * onError(msg)
  *   Called when an error occurs (validation failure, network error, or
- *   a non-2xx response from the upload API). The parent component should
- *   display this message to the user.
+ *   a non-2xx response from the upload API). The component also shows the
+ *   message itself; the parent can use this to react (for example a toast).
  *
  * onClear()
  *   Called when the user clicks the clear (X) button to remove the current
@@ -59,11 +60,12 @@
  *   │   ├── Image preview or file icon
  *   │   ├── File name + folder path
  *   │   └── Replace button + Clear (X) button
- *   └── [Drop zone state] — shown before upload or while uploading
- *       ├── Upload icon / spinner
- *       ├── "Drag & drop or browse" text + hint
- *       ├── Progress bar (while uploading)
- *       └── Recommended spec label (when config.recommended is set)
+ *   ├── [Drop zone state] — shown before upload or while uploading
+ *   │   ├── Upload icon / spinner
+ *   │   ├── "Drag & drop or browse" text + hint
+ *   │   ├── Progress bar (while uploading)
+ *   │   └── Recommended spec label (when config.recommended is set)
+ *   └── Error message (shown when the last upload failed)
  */
 
 'use client'
@@ -157,6 +159,13 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
   const [fileName,     setFileName]     = useState<string | null>(null)
 
   /**
+   * The message from the last failed upload, shown under the drop zone.
+   * Null when there is no error. Cleared when a new upload starts or the
+   * user clears the current upload.
+   */
+  const [errorMsg,     setErrorMsg]     = useState<string | null>(null)
+
+  /**
    * The list of existing storage folders fetched from the API.
    * Only populated when config.allowFolderSelect is true.
    */
@@ -237,13 +246,17 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
    * 4. Builds a FormData payload and sends it via XMLHttpRequest so that
    *    real upload progress can be tracked and shown.
    * 5. On success: updates the preview with the returned URL and calls onUploaded.
-   * 6. On failure: calls onError with a human-readable message.
+   * 6. On failure: shows the message under the drop zone and calls onError.
    *
    * @param file - The File object selected by the user.
    */
   const processFile = async (file: File) => {
+    setErrorMsg(null)
+
     if (!effectiveFolder.trim()) {
-      onError(t('errors.noFolder'))
+      const msg = t('errors.noFolder')
+      setErrorMsg(msg)
+      onError(msg)
       return
     }
 
@@ -343,8 +356,10 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
       onUploaded(result)
 
     } catch (err: any) {
-      /** Upload failed — notify parent and reset visual state. */
-      onError(err.message ?? t('errors.uploadFailed'))
+      /** Upload failed — show the message, notify parent and reset visual state. */
+      const msg = err.message ?? t('errors.uploadFailed')
+      setErrorMsg(msg)
+      onError(msg)
       setPreview(null)
       setProgress(0)
     } finally {
@@ -386,6 +401,7 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
     setPreview(null)
     setFileName(null)
     setProgress(0)
+    setErrorMsg(null)
     onClear()
   }
 
@@ -609,6 +625,16 @@ export function UploadZone({ config, initialPreview, onUploaded, onError, onClea
             onChange={handleChange}
           />
         </div>
+      )}
+
+      {/* ── Error message ───────────────────────────────────────────────
+        * Shown when the last upload failed (wrong file type, too large,
+        * session expired, network error). Cleared on the next attempt.
+        * ──────────────────────────────────────────────────────────────── */}
+      {errorMsg && (
+        <p role="alert" className="text-xs text-red-600">
+          {errorMsg}
+        </p>
       )}
     </div>
   )

@@ -10,9 +10,13 @@
  * project" step. Because the Flutter SDK is a server-side tool (it cannot run
  * in the browser), all scaffolding work must happen here in an API route.
  *
+ * Access: open on a fresh install; once installed, only a signed-in admin
+ * (or an install session / NXF_ALLOW_REINSTALL, see installLock.ts).
+ *
  * What this route does:
  * ──────────────────────
- * 1. Validates the incoming projectName.
+ * 1. Validates the incoming projectName (letters, digits and underscores only,
+ *    starting with a letter — it goes into a shell command and a folder name).
  * 2. Ensures the parent Flutter projects directory exists (creates it if not).
  * 3. Checks that the Flutter CLI is installed and on the system PATH.
  *    If not, returns a clear 400 so the user knows what to install.
@@ -32,10 +36,10 @@
  *
  * Request body (JSON):
  * ────────────────────
- *   projectName {string} — Name of the Flutter project to create. Must follow
- *                          Flutter naming rules: lowercase letters, digits, and
- *                          underscores only (enforced by the flutter create CLI).
- *                          Required.
+ *   projectName {string} — Name of the Flutter project to create. Letters,
+ *                          digits and underscores only, starting with a
+ *                          letter (the flutter create CLI also requires a
+ *                          valid Dart package name). Required.
  *
  * Responses:
  * ──────────
@@ -52,6 +56,14 @@ import { NextRequest, NextResponse } from 'next/server';
 import { execaCommand }              from 'execa';
 import path                          from 'path';
 import fs                            from 'fs-extra';
+import { requireInstallerAccess }    from '@/app/lib/installLock';
+
+/**
+ * Letters, digits and underscores only, starting with a letter. This keeps
+ * shell metacharacters, spaces and path separators out of the command line
+ * and out of the folder name.
+ */
+const SAFE_PROJECT_NAME = /^[A-Za-z][A-Za-z0-9_]{0,63}$/;
 
 /**
  * POST
@@ -64,19 +76,22 @@ import fs                            from 'fs-extra';
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    const gate = await requireInstallerAccess(req);
+    if (!gate.ok) return gate.response as NextResponse;
+
     /**
      * Parse the incoming request body and extract the project name.
      */
     const { projectName } = await req.json();
-console.log(`FLUTTER PROJECT NAME: ${projectName} `)
+
     // -----------------------------------------------------------------------
     // Validation
     // -----------------------------------------------------------------------
 
     /**
-     * projectName must be a non-empty string. The flutter create CLI will
-     * further enforce naming rules (lowercase, digits, underscores), but we
-     * catch obviously invalid values here before shelling out.
+     * projectName must be a non-empty string made only of letters, digits
+     * and underscores. It is placed in a shell command, so anything else is
+     * refused before shelling out.
      */
     if (!projectName || typeof projectName !== 'string') {
       return NextResponse.json(
@@ -84,6 +99,19 @@ console.log(`FLUTTER PROJECT NAME: ${projectName} `)
         { status: 400 },
       );
     }
+
+    if (!SAFE_PROJECT_NAME.test(projectName)) {
+      return NextResponse.json(
+        {
+          success: false,
+          skipped: false,
+          error:   'Project name may only contain letters, digits and underscores, and must start with a letter',
+        },
+        { status: 400 },
+      );
+    }
+
+    console.log(`FLUTTER PROJECT NAME: ${projectName} `)
 
     // -----------------------------------------------------------------------
     // Resolve paths
@@ -164,6 +192,9 @@ console.log(`FLUTTER PROJECT NAME: ${projectName} `)
      * The full installPath is passed as the target directory so the project
      * is created in the correct location regardless of the current working
      * directory.
+     *
+     * projectName has been validated above, so it contains no characters
+     * that the shell could interpret.
      */
     const createCmd = `flutter create --project-name ${projectName.toLowerCase()} ${installPath}`;
     const { stdout, stderr } = await execaCommand(createCmd, { shell: true });

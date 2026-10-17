@@ -24,6 +24,9 @@
  * implement setupStorageBuckets(), this route returns a 400 with a clear
  * message rather than crashing with a runtime "is not a function" error.
  *
+ * Access: installer routes only (fresh install, install session, or a
+ * signed-in admin; see app/lib/installLock.ts).
+ *
  * Request body (JSON):
  * ────────────────────
  *   dbConfig      {object} — Database connection configuration. Must include:
@@ -43,6 +46,7 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getAdapter }                from '@/app/db-adapter';
+import { requireInstallerAccess }    from '@/app/lib/installLock';
 
 /**
  * POST
@@ -56,6 +60,9 @@ import { getAdapter }                from '@/app/db-adapter';
  */
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
+    const gate = await requireInstallerAccess(req);
+    if (!gate.ok) return gate.response as NextResponse;
+
     /**
      * Parse the incoming request body and extract the database config.
      * All other fields in the body are ignored.

@@ -5,7 +5,8 @@ import { NextIntlClientProvider }        from 'next-intl'
 
 import './globals.css'
 import 'flag-icons/css/flag-icons.min.css'
-import { AuthProvider } from './providers/AuthProvider'
+import { AuthProvider }     from './providers/AuthProvider'
+import { ClientAuthFetch }  from './components/ClientAuthFetch'
 
 // FIX: app/layout.tsx and app/[locale]/layout.tsx were BOTH rendering their
 // own <html>/<body> — Next.js only supports one root document shell, so the
@@ -17,6 +18,9 @@ import { AuthProvider } from './providers/AuthProvider'
 // NextIntlClientProvider, and AuthProvider. Both bodies' styling is merged
 // below (margin:0 plus the flex/overflow classes) rather than picking one
 // over the other, since neither was flagged as safe to drop.
+//
+// ClientAuthFetch is mounted first in <body>: importing it installs the
+// fetch wrapper that adds the Bearer token to same-origin /api/ calls.
 
 export default async function RootLayout({
   children,
@@ -61,6 +65,7 @@ export default async function RootLayout({
         />
       </head>
       <body style={{ margin: 0 }} className="flex-1 overflow-y-auto">
+        <ClientAuthFetch />
         <NextIntlClientProvider messages={messages}>
           <AuthProvider>
             {children}

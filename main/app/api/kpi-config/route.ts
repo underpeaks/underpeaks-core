@@ -1,6 +1,8 @@
+// app/api/kpi-config/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { KpiPageConfig }             from '@/app/[locale]/console/kpi/kpi';
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
+import { requireSessionUser }   from '@/app/lib/getSessionUser';
 
 interface StoredKpiConfig extends KpiPageConfig {
   id?:      string;
@@ -20,16 +22,35 @@ async function getProject(
   }
 }
 
+/**
+ * Finds the config for this page in THIS project only. Rows saved without a
+ * project_id (older saves) still match; a config that belongs to another
+ * project never does.
+ */
+function findConfig(
+  allConfigs: StoredKpiConfig[],
+  page:       string,
+  projectId:  string
+): StoredKpiConfig | null {
+  return (
+    allConfigs.find(
+      (c) => c.page === page && (c.project_id === projectId || !c.project_id)
+    ) ?? null
+  );
+}
+
 // ── GET /api/kpi-config?page=xxx ───────────────────────────
 export async function GET(req: NextRequest) {
   try {
+    // Signed-in console users only. A user_id in the URL is ignored.
+    const session = await requireSessionUser(req);
+    if (!session.ok) return session.response;
+
     const adapter  = getConfiguredAdapter();
     const dbConfig = adapter.config;
     const { searchParams } = new URL(req.url);
     const page    = searchParams.get('page');
 
-    // user_id is accepted but not required: it is not used to find the config,
-    // and not every adapter's session carries it under the same name.
     if (!page) {
       return NextResponse.json(
         { error: 'page is required' },
@@ -47,10 +68,7 @@ export async function GET(req: NextRequest) {
       'nxf_system_kpi_configs'
     )) as StoredKpiConfig[];
 
-    const config =
-      allConfigs.find((c) => c.page === page && c.project_id === projectId) ??
-      allConfigs.find((c) => c.page === page) ??
-      null;
+    const config = findConfig(allConfigs, page, projectId);
 
     return NextResponse.json({ config });
   } catch (error) {
@@ -65,6 +83,10 @@ export async function GET(req: NextRequest) {
 // ── POST /api/kpi-config ───────────────────────────────────
 export async function POST(req: NextRequest) {
   try {
+    // Signed-in console users only. A user_id in the body is ignored.
+    const session = await requireSessionUser(req);
+    if (!session.ok) return session.response;
+
     const adapter  = getConfiguredAdapter();
     const dbConfig = adapter.config;
 
@@ -113,10 +135,7 @@ export async function POST(req: NextRequest) {
       'nxf_system_kpi_configs'
     )) as StoredKpiConfig[];
 
-    const existing =
-      allConfigs.find((c) => c.page === page && c.project_id === projectId) ??
-      allConfigs.find((c) => c.page === page) ??
-      null;
+    const existing = findConfig(allConfigs, page, projectId);
 
     if (existing) {
       // Firestore rows carry a document ID (existing.id) and are updated by it.

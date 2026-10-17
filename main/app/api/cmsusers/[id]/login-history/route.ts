@@ -1,13 +1,18 @@
+// app/api/cmsusers/[id]/login-history/route.ts
+
 // ============================================================
 // FILE: app/api/cmsusers/[id]/login-history/route.ts
 // PURPOSE: GET login/logout/online events for a specific user
 //          from nxf_system_activity_logs. Uses correct
 //          readAll(config, collection) signature.
+//          The caller is taken from the Bearer token — a user_id
+//          in the URL is ignored.
 // ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { LoginHistoryEvent } from '@/app/[locale]/console/types/users';
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter';
+import { requireSessionUser }   from '@/app/lib/getSessionUser';
 
 
 const AUTH_ACTIONS = new Set([
@@ -22,19 +27,13 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const session = await requireSessionUser(req);
+    if (!session.ok) return session.response;
+
     const { id } = await params;
 
     const adapter  = getConfiguredAdapter();
     const dbConfig = adapter.config;
-    const { searchParams } = new URL(req.url);
-    const user_id = searchParams.get('user_id'); // requestor
-
-    if (!user_id) {
-      return NextResponse.json(
-        { error: 'user_id is required' },
-        { status: 400 }
-      );
-    }
 
     const allLogs = (await adapter.readAll!(
       dbConfig,

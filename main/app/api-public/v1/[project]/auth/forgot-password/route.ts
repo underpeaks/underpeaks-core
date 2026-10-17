@@ -113,10 +113,11 @@ export async function POST(req: NextRequest) {
 
     const sent = await sendResetEmail(email, token)
 
-    // The token is NEVER returned in production: anyone with the public API
-    // key could otherwise reset any customer's password. In development
-    // (npm run dev) it is still returned so you can test without SMTP.
-    if (!sent && process.env.NODE_ENV !== 'production') {
+    // The token is NEVER returned unless the server is running in development
+    // mode (npm run dev), where it lets you test without SMTP. Any other
+    // NODE_ENV value (production, test, unset) never returns it: anyone with
+    // the public API key could otherwise reset any customer's password.
+    if (!sent && process.env.NODE_ENV === 'development') {
       return NextResponse.json({ success: true, reset_token: token }, { headers: coreCors() })
     }
   }

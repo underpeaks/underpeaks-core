@@ -1,8 +1,14 @@
 // app/api/pages/createPage.ts
 import { getConfiguredAdapter } from '@/app/lib/getConfiguredAdapter'
+import { requireSessionUser }   from '@/app/lib/getSessionUser'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function handleCreatePage(req: NextRequest): Promise<NextResponse> {
+  // The caller comes from the Bearer token — a user_id in the body is ignored.
+  const session = await requireSessionUser(req)
+  if (!session.ok) return session.response
+  const user_id = session.userId
+
   let body: any
   try {
     body = await req.json()
@@ -11,14 +17,13 @@ export async function handleCreatePage(req: NextRequest): Promise<NextResponse> 
   }
 
   const {
-    user_id, title, slug, model, model_id, template_type,
+    title, slug, model, model_id, template_type,
     nav_settings,
     visibility, seo_title, seo_description,
   } = body
 
-  if (!user_id) return NextResponse.json({ success: false, error: 'errors.missingUserId' }, { status: 400 })
-  if (!title)   return NextResponse.json({ success: false, error: 'errors.missingName' },   { status: 400 })
-  if (!slug)    return NextResponse.json({ success: false, error: 'errors.missingSlug' },   { status: 400 })
+  if (!title) return NextResponse.json({ success: false, error: 'errors.missingName' }, { status: 400 })
+  if (!slug)  return NextResponse.json({ success: false, error: 'errors.missingSlug' }, { status: 400 })
 
   const adapter  = getConfiguredAdapter()
   const dbConfig = adapter.config

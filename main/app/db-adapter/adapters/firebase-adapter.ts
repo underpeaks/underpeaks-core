@@ -1,3 +1,4 @@
+// app/db-adapter/adapters/firebase-adapter.ts
 /**
  * FirebaseAdapter
  *
@@ -34,6 +35,7 @@ import { ColumnDef, DBAdapter, DBConfig, StorageFile }    from '../types'
 import bcrypt                                  from 'bcryptjs'
 import { CreateUserDataModels }                from '../utils/create-data-models'
 import admin                                   from 'firebase-admin'
+import crypto                                  from 'crypto'
 import { parseFirebaseServiceAccount }         from '@/app/lib/firebaseConfig'
 import {
   normalizeFolder,
@@ -55,6 +57,42 @@ import {
  * the folder exists in Cloud Storage (which has no concept of empty folders).
  */
 const DEFAULT_BUCKETS = ['uploads', 'products', 'avatars', 'reports']
+
+/**
+ * Credential identity helpers.
+ *
+ * Reduce a service account to a SHA-256 fingerprint of its client_email +
+ * private_key, so two sets of credentials can be compared without ever
+ * logging or storing the key itself. Returns null if the account can't be
+ * read (the caller then refuses to reuse the app).
+ */
+function identityOf(clientEmail?: string, privateKey?: string): string | null {
+  if (!clientEmail || !privateKey) return null
+  return crypto
+    .createHash('sha256')
+    .update(`${clientEmail}\n${privateKey.replace(/\\n/g, '\n')}`)
+    .digest('hex')
+}
+
+/** Fingerprint of the service account passed in a DBConfig (string or object). */
+function credentialIdentity(raw: any): string | null {
+  try {
+    const sa = typeof raw === 'string' ? parseFirebaseServiceAccount(raw) : raw
+    return identityOf(sa?.client_email, sa?.private_key)
+  } catch {
+    return null
+  }
+}
+
+/** Fingerprint of the service account an initialised Firebase app is using. */
+function appIdentity(app: admin.app.App): string | null {
+  try {
+    const cred: any = app.options?.credential
+    return identityOf(cred?.clientEmail, cred?.privateKey)
+  } catch {
+    return null
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Class
@@ -242,6 +280,22 @@ export class FirebaseAdapter implements DBAdapter {
       } else {
         console.log('[FirebaseAdapter] Reusing existing Firebase app')
         app = admin.app()
+
+        /**
+         * SECURITY: only reuse the app if the credentials passed in are the
+         * ones it was initialised with. Before this check, any config at all
+         * (even a fake key) got the real, already-authenticated app — so the
+         * installer endpoints worked without real credentials.
+         */
+        const incomingId = credentialIdentity(_config.firebaseConfigJson)
+        const existingId = appIdentity(app)
+
+        if (!incomingId || !existingId || incomingId !== existingId) {
+          throw new Error(
+            'Firebase credentials do not match the app already running. ' +
+            'To switch to different credentials, restart the server.'
+          )
+        }
       }
 
       this.firebaseAdmin = app
