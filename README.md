@@ -57,8 +57,43 @@ Not sure which one you need? Start with Core — you can always move to Studio l
 
 ## Requirements
 
-- **Node.js 20 or newer** (18.18 is the minimum)
+- **Node.js 20 or newer** (18.18 is the minimum), or **Docker Desktop** if you use the Docker route below
 - A database from the list in step 2
+
+---
+
+## Quick Start with Docker
+
+The fastest way to try Core. You need [Docker Desktop](https://www.docker.com/products/docker-desktop/) (or Docker Engine with the Compose plugin), running. Prefer to run from source? Skip to [step 1](#1-get-the-code).
+
+```bash
+git clone https://github.com/underpeaks/underpeaks-core.git
+cd underpeaks-core/main
+docker compose up --build
+```
+
+The first build can take 10–25 minutes on a slower machine. Later starts take seconds. Wait until the terminal shows **Ready**, then open **[http://localhost:3000](http://localhost:3000)** and follow the installer ([step 4](#4-run-the-installer)).
+
+When the installer asks for the database, use the bundled Postgres:
+
+| Setting  | Value              |
+|----------|--------------------|
+| Type     | PostgreSQL         |
+| Host     | `db`               |
+| Port     | `5432`             |
+| User     | `underpeaks`       |
+| Database | `underpeaks`       |
+| Password | `underpeaks_local` |
+
+Use `db` as the host, not `localhost`: inside the container, `localhost` is the app itself. To use Supabase or Firebase instead, enter your details as usual. For MySQL or MongoDB running on your own machine, use `host.docker.internal` as the host (Docker Desktop on Windows/Mac).
+
+When the installer finishes, restart the app (`docker compose restart app`), then sign in and enter your license key ([step 5](#5-first-sign-in--license-key)).
+
+- **Stop:** `Ctrl+C`. **Start again:** `docker compose up`. Your settings and data are kept.
+- **Update:** `git pull`, then `docker compose up --build`.
+- **Start over:** `docker compose down -v` (this deletes your data).
+
+This setup is for trying Core on your own machine. Before exposing it to the internet, set your own `DB_PASSWORD` in a `.env` file next to `docker-compose.yml` and put HTTPS in front.
 
 ---
 
@@ -182,11 +217,14 @@ Install the latest LTS version of Node.js from [nodejs.org](https://nodejs.org),
 **The first start or first sign-in is very slow**
 The first run compiles the app. Wait for the terminal to show **Ready** before opening the browser. Later starts are much faster.
 
+**Docker: `failed to connect to the docker API` / daemon not running**
+Docker Desktop isn't running. Start it, wait for it to say the engine is running, then try again.
+
 ### Errors after the server starts
 
 **Sign-in sends you straight back to the sign-in page after installing**
 Symptom: you sign in and land back on the sign-in page, and the browser console shows `POST /api/session 401 (Unauthorized)`.
-Fix: stop the dev server (`Ctrl+C`), run `npm run dev` again, then sign in. Next.js only reads `.env.local` when the server starts, so a server that was running during the install still has the old configuration. This only happens on localhost.
+Fix: stop the dev server (`Ctrl+C`), run `npm run dev` again, then sign in. Next.js only reads `.env.local` when the server starts, so a server that was running during the install still has the old configuration. This only happens on localhost. (With Docker, run `docker compose restart app` instead.)
 
 **The installer won't get past the database screen**
 Symptom: the connection test or **Continue** doesn't move on, or sends you back to the same screen.
@@ -199,6 +237,9 @@ Fix: stop the dev server (`Ctrl+C`), run `npm run dev` again, open [http://local
 **License key is rejected or can't be checked:** make sure you copied the full key from your Underpeaks dashboard and that the machine can reach the internet.
 
 **Something looks off after setup:** check that your `.env.local` values match your database exactly.
+
+**Docker: `port is already allocated` (port 3000)**
+Something else is using port 3000, often an older container. Run `docker ps`, stop it with `docker stop <name>`, then `docker compose up` again. Or change `"3000:3000"` to `"3001:3000"` in `docker-compose.yml` and open http://localhost:3001.
 
 **Stuck?** Ask in [Discord](https://discord.gg/XRNXyNHBg) or [open an issue](https://github.com/underpeaks/underpeaks-core/issues).
 
