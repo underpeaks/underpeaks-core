@@ -1,28 +1,33 @@
-# Base image
-FROM node:20-bullseye
+# Dockerfile
+FROM node:22-bookworm-slim
 
-# Set working directory inside container
+# Build tools for native modules (bcrypt etc.)
+RUN apt-get update && apt-get install -y --no-install-recommends python3 make g++ \
+ && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
+RUN chown node:node /app && mkdir /data && chown node:node /data
+USER node
 
-# Copy package files first for caching
-COPY package.json package-lock.json tsconfig.json ./
+ENV NEXT_TELEMETRY_DISABLED=1
 
-# Install dependencies
-RUN npm install
+COPY --chown=node:node package.json package-lock.json ./
+RUN npm ci
 
-# Copy source code into container
-COPY app ./app
-COPY components ./components
-COPY nxf-ui ./nxf-ui
-
-# Ensure globals.css is in the right place
-COPY app/globals.css ./app/globals.css
-
-# Build the Next.js app
+COPY --chown=node:node . .
 RUN npm run build
 
-# Expose Next.js default port
-EXPOSE 3000
+# Added last so editing these doesn't invalidate the slow layers above.
+# The installer looks for /shared_models (one level above the app folder).
+# sed strips Windows line endings, which would otherwise break the script.
+USER root
+COPY --from=shared --chown=node:node . /shared_models
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN sed -i 's/\r$//' /usr/local/bin/docker-entrypoint.sh && chmod 755 /usr/local/bin/docker-entrypoint.sh
+USER node
 
-# Start the app
+ENV NODE_ENV=production HOSTNAME=0.0.0.0 PORT=3000 DATA_DIR=/data
+VOLUME ["/data"]
+EXPOSE 3000
+ENTRYPOINT ["docker-entrypoint.sh"]
 CMD ["npm", "start"]

@@ -1,6 +1,15 @@
+# .dockerignore
+docker-compose.yml
 node_modules
 .next
-/app/.next
 dist
+.git
+.gitignore
+.env
+.env.*
+!.env.example
+underpeaks.config.json
+*.log
+tsconfig.tsbuildinfo
 Dockerfile
 .dockerignore
